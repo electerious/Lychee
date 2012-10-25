@@ -16,7 +16,6 @@ if((isset($_POST["function"])&&$_POST["function"]!="")||(isset($_GET["function"]
     // Security
     if(isset($_POST["albumID"])&&($_POST["albumID"]==""||$_POST["albumID"]<0)) exit("Wrong parameter type for 'albumID'!");
     if(isset($_POST["photoID"])&&$_POST["photoID"]=="") exit("Wrong parameter type for 'photoID'!");
-    if(isset($_POST["title"])&&$_POST["title"]=="") exit("Wrong parameter type for 'title'!");
 
     if($_SESSION["login"]==true) {
 
@@ -48,8 +47,11 @@ if((isset($_POST["function"])&&$_POST["function"]!="")||(isset($_GET["function"]
         // Upload Function
 		if($_POST["function"]=="upload"&&isset($_FILES)&&isset($_POST["albumID"])) echo upload($_FILES, $_POST["albumID"]);
 		
-		// Upload Function
+		// Search Function
 		if($_POST["function"]=="search"&&isset($_POST["term"])) echo array2json(search($_POST["term"]));
+		
+		// Sync Function
+		if($_POST["function"]=="syncFolder") echo syncFolder();
                 
 		// Session Functions
 		if($_POST["function"]=="logout") logout();

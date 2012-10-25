@@ -140,6 +140,7 @@ function buildSignInModal() {
 	modal += 			"<label>Username:</label><input id='username' type='text' name='' value=''>";
 	modal += 			"<label>Password:</label><input id='password' type='password' name='' value=''>";
 	modal += 		"</div>";
+	modal +=	"<div id='version'>Version " + version + "</div>";
 	modal += 	"<a onclick='login()' class='button active'>Sign in</a>";
 	modal += 	"</div>";
 	modal += "</div>";

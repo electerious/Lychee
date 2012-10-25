@@ -11,16 +11,16 @@ include("config.php");
 
 // Database Functions
 function dbConnect() {
-    global $db, $dbUser, $dbPassword;
-    $connect = mysql_connect("localhost", $dbUser, $dbPassword);
+    global $db, $dbUser, $dbPassword, $dbHost;
+    $connect = mysql_connect($dbHost, $dbUser, $dbPassword);
     if(!$connect) {
         echo "No connection: ".mysql_error();
         return false;
     }
     $dbSelect = mysql_select_db($db);
     if(!$dbSelect) {
-        echo "Can not find Database!";
-        return false;
+	    if(createDatabase($db)){$dbSelect = mysql_select_db($db);}
+	    else {echo "Can not create Database!"; return false;}
     }
     $query = "SELECT * FROM photos, albums;";
     if(!mysql_query($query)) createTables();
@@ -33,6 +33,12 @@ function dbClose() {
         return false;
     }
     return true;
+}
+function createDatabase($db) {
+	$query = "CREATE DATABASE $db;";
+	$result = mysql_query($query);
+	if(!$result) return false;
+	return true;
 }
 function createTables() {
     $query = "CREATE TABLE IF NOT EXISTS `albums` (
@@ -524,7 +530,7 @@ function movePhoto($photoID, $newAlbum) {
 }
 function setPhotoTitle($photoID, $title) {
     $title = mysql_real_escape_string(urldecode($title));
-    if(strlen($title)<3||strlen($title)>30) return false;
+    if(strlen($title)>30) return false;
     $query = "UPDATE photos SET title = '$title' WHERE id = '$photoID';";
     $result = mysql_query($query);
     if(!$result) return false;

@@ -2,7 +2,10 @@
 
 #### A great looking and easy-to-use Photo-Management-System.
 
-Lychee is open-source and free to use wherever you want. Just download the source and follow the instructions to install Lychee on your server.
+![Lychee ImageView](http://lychee.electerious.com/uploads/big/13511584079432.png)
+![Lychee ImageView](http://lychee.electerious.com/uploads/big/13497110451270.png)
+
+Lychee is a free, easy to use and great looking photo-management-system you can run on your server to manage and share photos. Just download the source and follow the instructions to install Lychee wherever you want.
 
 ## Installation
 
@@ -20,15 +23,18 @@ To use Lychee without restrictions, we recommend to increase the values of the f
 	upload_max_filesize = 100M
 	max_file_uploads = 100	post_max_size = 100M
 
-#### MySQL configuration
+#### Folder permissions
 
-Create a new Database and remember the name.
-	
+Change the permissions of `/lychee/uploads` to 777, including all subfolders:
+
+	chmod -R 777 /lychee/uploads
+
 #### Lychee configuration `lychee/php/config.php`
 
 Change the following properties with your MySQL information:
 
-	$db = The name of the Database you want to use  	$dbUser = Your MySQL username  	$dbPassword = Your MySQL password
+	$db = The name of the Database you want to use
+	-> Lychee will create the Database for you	$dbUser = Your MySQL username  	$dbPassword = Your MySQL password	$dbHost = Your MySQL host (in most cases you can use localhost)
 
 Your photos are protected by a username and password you need to set:
 

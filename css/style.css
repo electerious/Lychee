@@ -349,6 +349,11 @@ header {
 	#tools_albums, #tools_album, #tools_photo {
 		display: none;
 	}
+	
+	/* Button Custom ------------------------------------------------*/
+	header .button.icon-refresh {
+		padding:  7px 10px 4px 10px;
+	}
 
 	/* Button Divider ------------------------------------------------*/
 	header .button_divider {
@@ -854,6 +859,13 @@ header {
 	.sign_in input.error:focus {
 		box-shadow: 0px 1px 0px #777, inset 0px 0px 3px #333, 0px 0px 5px #cc0007;
 	}
+	.message #version {
+		display: inline-block;
+		margin-top: 23px;
+		margin-left: 19px;
+		color: #888;
+		text-shadow: 0px -1px 0px #111;
+	}
 	
 	/* Sign in ------------------------------------------------*/
 	.copylink {
@@ -891,7 +903,7 @@ header {
 	background-repeat: no-repeat;
 	background-position: 50% 50%;
 	background-size: contain;
-	-webkit-transition: top .3s, bottom .3s;
+	-webkit-transition: top .3s, bottom .3s, margin-top .3s;
 	
 	-webkit-animation-name: zoomIn;
 	-webkit-animation-duration: .3s;
@@ -905,6 +917,12 @@ header {
 	animation-name: zoomIn;
 	animation-duration: .3s;
 	animation-fill-mode: forwards;
+}
+#image_view #image.small {
+	top: 50%;
+	right: auto;
+	bottom: auto;
+	left: 50%;
 }
 	
 	/* Previous/Next Buttons ------------------------------------------------*/

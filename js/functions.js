@@ -68,21 +68,39 @@ function setURL(website_url) {
 }
 
 function getURL() {
+
 	closeContextMenu();
 	hash = document.location.hash.replace("#", "");
-	if (hash.indexOf("a")!=-1) {
-		if (hash.indexOf("p")!=-1) {
-			hash = hash.split("p");
-			content.hide();
-			showImageview(hash[1]);
-			if (content.html()=="") loadPhotos(hash[0].replace("a", ""), true);
-		} else {
-			if (visibleImageview()) hideImageview();
-			else loadPhotos(hash.replace("a", ""), false);
-		}
-	} else {
+	
+	albumID = "";
+	photoID = "";
+	
+	if (hash.indexOf("a")!=-1) albumID = hash.split("p")[0].replace("a", "");
+	if (hash.indexOf("p")!=-1) photoID = hash.split("p")[1];
+
+	if (hash=="upload") {
+	
 		loadAlbums();
+		$("body").append(buildAddModal);
+	
+	} else if (albumID&&photoID) {
+	
+		content.hide();
+		showImageview(photoID);
+		if (content.html()=="") loadPhotos(albumID, true);
+	
+	} else if (albumID) {
+	
+		if (!visibleControls()) showControls();
+		if (visibleImageview()) hideImageview();
+		else loadPhotos(albumID, false);
+		
+	} else {
+	
+		loadAlbums();
+	
 	}
+	
 }
 
 /*
@@ -190,12 +208,18 @@ function showControls() {
 		image_view.css("background-color", "rgba(30,30,30,.99)");
 		loading.css("opacity", 1);
 		header.css("margin-Top", "0px");
-		$("#image_view #image").css({
-			top: 70,
-			right: 30,
-			bottom: 30,
-			left: 30
-		});
+		if ($("#image_view #image.small").length>0) {
+			$("#image_view #image").css({
+				marginTop: -1*($("#image_view #image").height()/2)+20
+			});
+		} else {
+			$("#image_view #image").css({
+				top: 70,
+				right: 30,
+				bottom: 30,
+				left: 30
+			});
+		}
 	}
 }
 function hideControls() {
@@ -207,12 +231,18 @@ function hideControls() {
 			image_view.css("background-color", "#111");
 			loading.css("opacity", 0);
 			header.css("margin-Top", "-45px");
-			$("#image_view #image").css({
-				top: 0,
-				right: 0,
-				bottom: 0,
-				left: 0
-			});
+			if ($("#image_view #image.small").length>0) {
+				$("#image_view #image").css({
+					marginTop: -1*($("#image_view #image").height()/2)
+				});
+			} else {
+				$("#image_view #image").css({
+					top: 0,
+					right: 0,
+					bottom: 0,
+					left: 0
+				});
+			}
 		}, 500));
 	}
 }
@@ -354,6 +384,21 @@ function visibleInfobox() {
 	else return true;
 }
 
+function isPhotoSmall(photo) {
+
+	size = [
+		["width", false],
+		["height", false]
+	];
+
+	if (photo.width<$(window).width()-60) size["width"] = true;
+	if (photo.height<$(window).height()-100) size["height"] = true;
+	
+	if (size["width"]&&size["height"]) return true;
+	else return false;
+
+}
+
 /*
 	Key Function
 	This function triggers events when a special key is pressed.
@@ -447,7 +492,7 @@ function renamePhoto(photoID) {
 	
 	newTitle = prompt("Please enter a new title for this photo:", oldTitle);
 
-	if (photoID!=""&&photoID!=null&&photoID!=undefined&&newTitle.length>2&&newTitle.length<31) {
+	if (photoID!=null&&photoID!=undefined&&newTitle.length<31) {
 
 		loadingFadeIn("loading");
 
@@ -680,8 +725,10 @@ function loadPhotoInfo(photoID) {
 		}
 
 		image_view.attr("data-id", photoID);
-		if (visibleControls()) image_view.html("").append("<a id='previous' class='icon-caret-left'></a><a id='next' class='icon-caret-right'></a><div id='image_wrapper'><div id='image' style='background-image: url(" + data.url + ")'></div></div>");
-		else image_view.html("").append("<a id='previous' style='left: -50px' class='icon-caret-left'></a><a id='next' style='right: -50px' class='icon-caret-right'></a><div id='image_wrapper'><div id='image' style='background-image: url(" + data.url + "); top: 0px; right: 0px; bottom: 0px; left: 0px;'></div></div>");
+		if (visibleControls()&&isPhotoSmall(data)) image_view.html("").append("<a id='previous' class='icon-caret-left'></a><a id='next' class='icon-caret-right'></a><div id='image' class='small' style='background-image: url(" + data.url + "); width: " + data.width + "px; height: " + data.height + "px; margin-top: -" + parseInt(data.height/2-20) + "px; margin-left: -" + data.width/2 + "px;'></div>");
+		else if (visibleControls()) image_view.html("").append("<a id='previous' class='icon-caret-left'></a><a id='next' class='icon-caret-right'></a><div id='image' style='background-image: url(" + data.url + ")'></div>");
+		else if (isPhotoSmall(data)) image_view.html("").append("<a id='previous' style='left: -50px' class='icon-caret-left'></a><a id='next' style='right: -50px' class='icon-caret-right'></a><div id='image' class='small' style='background-image: url(" + data.url + "); width: " + data.width + "px; height: " + data.height + "px; margin-top: -" + parseInt(data.height/2) + "px; margin-left: -" + data.width/2 + "px;'></div>");
+		else image_view.html("").append("<a id='previous' style='left: -50px' class='icon-caret-left'></a><a id='next' style='right: -50px' class='icon-caret-right'></a><div id='image' style='background-image: url(" + data.url + "); top: 0px; right: 0px; bottom: 0px; left: 0px;'></div>");
 		image_view.removeClass("fadeOut").addClass("fadeIn").show();
 		
 		if (!visibleControls()) hideControls(true);
@@ -909,6 +956,18 @@ function loadNextPhoto() {
 	$.ajax({type: "POST", url: api_path, data: params, dataType: "json", success: function(data) {
 
 		if (data) setURL("a" + albumID + "p" + data.id);
+
+	}, error: ajaxError });
+
+}
+
+function syncFolder() {
+
+	params = "function=syncFolder";
+	$.ajax({type: "POST", url: api_path, data: params, success: function(data) {
+
+		if (data==1) setURL("a0");
+		else loadingFadeIn("error");
 
 	}, error: ajaxError });
 

@@ -11,7 +11,8 @@ var header = $("header"),
 	image_view = $("#image_view"),
 	loading = $("#loading"),
 	infobox = $("#infobox"),
-	api_path = "php/api.php";
+	api_path = "php/api.php",
+	version = "1.0.1";
 
 $(document).ready(function(){
 
@@ -46,6 +47,7 @@ $(document).ready(function(){
 	$("#button_edit").live("click", function() { renamePhoto() });
 	$("#button_info").live("click", function() { showInfobox() });
 	$("#button_archive").live("click", function() { getAlbumArchive() });
+	$("#button_sync").live("click", function() { syncFolder() });
 
 	/* Rename Album/Photo via Titlebar */
 	$("#title.editable").live("click", function() {

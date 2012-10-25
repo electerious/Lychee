@@ -4,13 +4,14 @@
  * @name        config.php
  * @author      Philipp Maurer
  * @author      Tobias Reich
- * @copyright   2012 by Philipp Maurer, Tobias Reich 
+ * @copyright   2012 by Philipp Maurer, Tobias Reich
  */
 
 //Database configurations
 $db = "lychee"; //Database name
-$dbUser = ""; //Username of the database
-$dbPassword = ""; //Password of the Database
+$dbUser = "lychee"; //Username of the database
+$dbPassword = "lychee_passwd"; //Password of the Database
+$dbHost = "localhost"; //Host of the Database
 
 //lychee user configuration
 $user = "lychee"; //lychee username
