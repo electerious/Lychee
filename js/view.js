@@ -83,7 +83,7 @@ function loadPhotoInfo(photoID) {
 		headerTitle.html(data.title);
 
 		image_view.attr("data-id", photoID);
-		if (isPhotoSmall(data)) image_view.html("").append("<div id='image' class='small' style='background-image: url(" + data.url + "); width: " + data.width + "px; height: " + data.height + "px; margin-top: -" + parseInt(data.height/2) + "px; margin-left: -" + data.width/2 + "px;'></div>");
+		if (isPhotoSmall(data)) image_view.html("").append("<div id='image' class='small' style='background-image: url(" + data.url + "); width: " + data.width + "px; height: " + data.height + "px; margin-top: -" + parseInt((data.height/2)-20) + "px; margin-left: -" + data.width/2 + "px;'></div>");
 		else image_view.html("").append("<div id='image' style='background-image: url(" + data.url + "); top: 70px; right: 30px; bottom: 30px; left: 30px;'></div>");
 		image_view.removeClass("fadeOut").addClass("fadeIn").show();
 		
