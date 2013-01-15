@@ -118,6 +118,48 @@
 	}
 }
 
+/* moveUp ------------------------------------------------*/
+@-webkit-keyframes moveUp {
+	0% {
+		-webkit-transform: translateY(1000px);
+	}
+	100% {
+		-webkit-transform: translateY(0px);
+	}
+}
+@-moz-keyframes moveUp {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+@-ms-keyframes moveUp {
+	0% {
+		-ms-transform: translateY(1000px);
+	}
+	100% {
+		-ms-transform: translateY(0px);
+	}
+}
+@-o-keyframes moveUp {
+	0% {
+		-o-transform: translateY(1000px);
+	}
+	100% {
+		-o-transform: translateY(0px);
+	}
+}
+@keyframes moveUp {
+	0% {
+		transform: translateY(1000px);
+	}
+	100% {
+		transform: translateY(0px);
+	}
+}
+
 /* moveDown ------------------------------------------------*/
 @-webkit-keyframes moveDown {
 	0% {

@@ -13,7 +13,7 @@
 function init() {
 
 	$("#tools_albums").show();
-	$(".tools").tipsy({gravity: 'n'});
+	if (!mobileBrowser()) $(".tools").tipsy({gravity: 'n'});
 	params = "function=loggedIn";
 	$.ajax({type: "POST", url: api_path, data: params, success: function(data) {
 		if (data!=1) {
@@ -23,7 +23,7 @@ function init() {
 			if (headerTitle.html().length<1&&BrowserDetect.browser=="Firefox") getURL();
 		}
 	}});
-	
+
 }
 
 /*
@@ -71,36 +71,38 @@ function getURL() {
 
 	closeContextMenu();
 	hash = document.location.hash.replace("#", "");
-	
+
 	albumID = "";
 	photoID = "";
-	
+
 	if (hash.indexOf("a")!=-1) albumID = hash.split("p")[0].replace("a", "");
 	if (hash.indexOf("p")!=-1) photoID = hash.split("p")[1];
 
 	if (hash=="upload") {
-	
+
 		loadAlbums();
 		$("body").append(buildAddModal);
-	
+
 	} else if (albumID&&photoID) {
-	
-		content.hide();
+
+		if (content.html()=="") {
+			content.hide();
+			loadPhotos(albumID, true);
+		}
 		showImageview(photoID);
-		if (content.html()=="") loadPhotos(albumID, true);
-	
+
 	} else if (albumID) {
-	
+
 		if (!visibleControls()) showControls();
 		if (visibleImageview()) hideImageview();
 		else loadPhotos(albumID, false);
-		
+
 	} else {
-	
+
 		loadAlbums();
-	
+
 	}
-	
+
 }
 
 /*
@@ -260,7 +262,7 @@ function showContextMenuPhoto(photoID, mouse_x, mouse_y) {
 		["Move to Album", "showContextMenuMove(" + photoID + ", " + (mouse_x+150) + ", " + (mouse_y+$(document).scrollTop()) + ")"],
 		["Delete", "deletePhoto(" + photoID + ")"]
 	];
-	
+
 	closeContextMenu();
 	$("body").css("overflow", "hidden");
 	$(".photo[data-id='" + photoID + "']").addClass("active");
@@ -269,15 +271,15 @@ function showContextMenuPhoto(photoID, mouse_x, mouse_y) {
 		"top": mouse_y,
 		"left": mouse_x
 	});
-	
+
 }
 function showContextMenuMove(photoID, mouse_x, mouse_y) {
 
 	mouse_y -= $(document).scrollTop();
-	
+
 	params = "function=getAlbums";
 	$.ajax({type: "POST", url: api_path, data: params, dataType: "json", success: function(data) {
-	
+
 		if (content.attr("data-id")==0) {
 			items = new Array();
 		} else {
@@ -285,7 +287,7 @@ function showContextMenuMove(photoID, mouse_x, mouse_y) {
 				["Unsorted", "loadMovePhoto(" + photoID + ", 0)"]
 			];
 		}
-		
+
 		$.each(data, function(index) {
 			if (this.id!=content.attr("data-id")) {
 				if(!this.title) this.title = "Untitled";
@@ -294,13 +296,13 @@ function showContextMenuMove(photoID, mouse_x, mouse_y) {
 				items[items.length] = new Array("", "");
 			}
 		});
-		
+
 		if (items.length==0) {
 			items = [
 				["Create new Album", "addAlbum()"]
 			];
 		}
-		
+
 		closeContextMenu();
 		$("body").css("overflow", "hidden");
 		$(".photo[data-id='" + photoID + "']").addClass("active");
@@ -309,14 +311,14 @@ function showContextMenuMove(photoID, mouse_x, mouse_y) {
 			"top": mouse_y,
 			"left": mouse_x-150
 		});
-		
+
 	}, error: ajaxError });
-		
+
 }
 function showContextMenuShare(photoID, mouse_x, mouse_y) {
 
 	mouse_y -= $(document).scrollTop();
-	
+
 	items = [
 		["<a class='icon-eye-close'></a> Make Private", "setPhotoPublic()"],
 		["<a class='icon-twitter'></a> Twitter", "loadSharePhoto(0, " + photoID + ")"],
@@ -327,7 +329,7 @@ function showContextMenuShare(photoID, mouse_x, mouse_y) {
 		["<a class='icon-link'></a> Copy Link", "loadSharePhoto(5, " + photoID + ")"],
 		["<a class='icon-link'></a> Copy Shortlink", "loadSharePhoto(6, " + photoID + ")"]
 	];
-			
+
 	closeContextMenu();
 	$("body").css("overflow", "hidden");
 	$(".photo[data-id='" + photoID + "']").addClass("active");
@@ -336,7 +338,7 @@ function showContextMenuShare(photoID, mouse_x, mouse_y) {
 		"top": mouse_y,
 		"left": mouse_x
 	});
-				
+
 }
 function closeContextMenu() {
 	$(".contextmenu_bg, .contextmenu").remove();
@@ -393,7 +395,7 @@ function isPhotoSmall(photo) {
 
 	if (photo.width<$(window).width()-60) size["width"] = true;
 	if (photo.height<$(window).height()-100) size["height"] = true;
-	
+
 	if (size["width"]&&size["height"]) return true;
 	else return false;
 
@@ -407,9 +409,9 @@ function isPhotoSmall(photo) {
 function key(e) {
 
 	code = (e.keyCode ? e.keyCode : e.which);
-	
+
 	if (code==13||code==37||code==39||code==32||code==27) e.preventDefault();
-	
+
 	if (code==13&&$(".message .button.active").length) $(".message .button.active").addClass("pressed").click();
 	if (code==37&&visibleImageview()) loadPreviousPhoto();
 	if (code==39&&visibleImageview()) loadNextPhoto();
@@ -483,13 +485,13 @@ function renameAlbum() {
 function renamePhoto(photoID) {
 
 	if (photoID==undefined) {
-	
+
 		// Function called from ImageViewer
 		oldTitle = headerTitle.html();
 		photoID = image_view.attr("data-id");
-		
+
 	} else oldTitle = "";
-	
+
 	newTitle = prompt("Please enter a new title for this photo:", oldTitle);
 
 	if (photoID!=null&&photoID!=undefined&&newTitle.length<31) {
@@ -518,15 +520,15 @@ function loadAlbums() {
 
 	loadingFadeIn("loading");
 	$(".album, .photo").removeClass("contentZoomIn").addClass("contentZoomOut");
-	
+
 	startTime = new Date().getTime();
 
 	params = "function=getAlbums";
 	$.ajax({type: "POST", url: api_path, data: params, dataType: "json", success: function(data) {
-	
+
 		durationTime = (new Date().getTime() - startTime);
 		if (durationTime>300) waitTime = 0; else waitTime = 300 - durationTime;
-		
+
 		$.timer(waitTime,function(){
 
 			$("#tools_album, #tools_photo").hide();
@@ -561,16 +563,16 @@ function loadAlbums() {
 				albums = "";
 				$.each(data, function() { albums += buildAlbum(this); });
 				content.append(buildDivider("Albums") + albums);
-	
+
 				$(".album, .photo").removeClass("contentZoomOut").addClass("contentZoomIn");
-			
+
 			}
 
 			document.title = "Lychee";
 			headerTitle.html("Albums").removeClass("editable");
 
 			loadSmartAlbums();
-			
+
 		});
 
 	}, error: ajaxError });
@@ -581,24 +583,24 @@ function loadSmartAlbums() {
 
 	params = "function=getSmartInfo";
 	$.ajax({type: "POST", url: api_path, data: params, dataType: "json", success: function(data) {
-			
+
 		$(".album[data-id='0'] img:nth-child(1)").attr("src", data.unsortThumb2);
 		$(".album[data-id='0'] img:nth-child(2)").attr("src", data.unsortThumb1);
 		$(".album[data-id='0'] img:nth-child(3)").attr("src", data.unsortThumb0);
 		$(".album[data-id='0'] .overlay a").html(data.unsortNum + " photos");
-		
+
 		$(".album[data-id='s'] img:nth-child(1)").attr("src", data.publicThumb2);
 		$(".album[data-id='s'] img:nth-child(2)").attr("src", data.publicThumb1);
 		$(".album[data-id='s'] img:nth-child(3)").attr("src", data.publicThumb0);
 		$(".album[data-id='s'] .overlay a").html(data.publicNum + " photos");
-		
+
 		$(".album[data-id='f'] img:nth-child(1)").attr("src", data.starredThumb2);
 		$(".album[data-id='f'] img:nth-child(2)").attr("src", data.starredThumb1);
 		$(".album[data-id='f'] img:nth-child(3)").attr("src", data.starredThumb0);
 		$(".album[data-id='f'] .overlay a").html(data.starredNum + " photos");
-		
+
 		loadingFadeOut();
-	
+
 	}, error: ajaxError });
 
 }
@@ -613,15 +615,15 @@ function loadPhotos(albumID, refresh) {
 		$(".album, .photo").removeClass("contentZoomIn").addClass("contentZoomOut");
 		$(".divider").removeClass("fadeIn").addClass("fadeOut");
 	}
-	
+
 	startTime = new Date().getTime();
-	
+
 	params = "function=getPhotos&albumID=" + albumID;
 	$.ajax({type: "POST", url: api_path, data: params, dataType: "json", success: function(data) {
-	
+
 		durationTime = (new Date().getTime() - startTime);
 		if (durationTime>300) waitTime = 0; else if (refresh) waitTime = 0; else waitTime = 300 - durationTime;
-		
+
 		$.timer(waitTime,function(){
 
 			content.attr("data-id", albumID);
@@ -639,7 +641,7 @@ function loadPhotos(albumID, refresh) {
 				loadAlbumInfo(albumID);
 
 			}
-		
+
 		});
 
 	}, error: ajaxError });
@@ -649,10 +651,10 @@ function loadPhotos(albumID, refresh) {
 function loadAlbumInfo(albumID) {
 
 	if (albumID=="f"||albumID=="s"||albumID==0) {
-	
+
 		params = "function=getSmartInfo";
 		$.ajax({type: "POST", url: api_path, data: params, dataType: "json", success: function(data) {
-		
+
 			switch (albumID) {
 				case "f":
 					document.title = "Lychee - Starred";
@@ -662,7 +664,7 @@ function loadAlbumInfo(albumID) {
 				case "s":
 					document.title = "Lychee - Public";
 					headerTitle.html("Public<span> - " + data.publicNum + " photos</span>");
-					$("#button_edit_album, #button_trash_album .button_divider").hide();
+					$("#button_edit_album, #button_trash_album, .button_divider").hide();
 					break;
 				case "0":
 					document.title = "Lychee - Unsorted";
@@ -671,27 +673,27 @@ function loadAlbumInfo(albumID) {
 					$("#button_trash_album, .button_divider").show();
 					break;
 			}
-			
+
 			loadingFadeOut();
-			
+
 		}, error: ajaxError });
-	
+
 	} else {
-	
+
 		params = "function=getAlbumInfo&albumID=" + albumID;
 		$.ajax({type: "POST", url: api_path, data: params, dataType: "json", success: function(data) {
-		
+
 			$("#button_edit_album, #button_trash_album, .button_divider").show();
-	
+
 			if (!data.title) data.title = "Untitled";
 			document.title = "Lychee - " + data.title;
 			headerTitle.html(data.title + "<span> - " + data.num + " photos</span>").addClass("editable");
-	
+
 			loadingFadeOut();
-	
+
 		}, error: ajaxError });
-	
-	}	
+
+	}
 
 }
 
@@ -730,13 +732,13 @@ function loadPhotoInfo(photoID) {
 		else if (isPhotoSmall(data)) image_view.html("").append("<a id='previous' style='left: -50px' class='icon-caret-left'></a><a id='next' style='right: -50px' class='icon-caret-right'></a><div id='image' class='small' style='background-image: url(" + data.url + "); width: " + data.width + "px; height: " + data.height + "px; margin-top: -" + parseInt(data.height/2) + "px; margin-left: -" + data.width/2 + "px;'></div>");
 		else image_view.html("").append("<a id='previous' style='left: -50px' class='icon-caret-left'></a><a id='next' style='right: -50px' class='icon-caret-right'></a><div id='image' style='background-image: url(" + data.url + "); top: 0px; right: 0px; bottom: 0px; left: 0px;'></div>");
 		image_view.removeClass("fadeOut").addClass("fadeIn").show();
-		
+
 		if (!visibleControls()) hideControls(true);
-		
+
 		infobox.html(buildInfobox(data)).show();
-		
+
 		$.timer(300,function(){ content.show(); });
-		
+
 		loadingFadeOut();
 
 	}, error: ajaxError });
@@ -801,12 +803,12 @@ function setPhotoPublic(e) {
 }
 
 function setPhotoDescription() {
-	
+
 	description = prompt("Please enter a description for this photo:", "");
 	photoID = image_view.attr("data-id");
-	
+
 	if (description.length>0&&description.length<160) {
-	
+
 		loadingFadeIn("loading");
 
 		params = "function=setPhotoDescription&photoID=" + photoID + "&description=" + escape(description);
@@ -859,7 +861,7 @@ function loadSharePhoto(service, photoID) {
 
 	params = "function=sharePhoto&photoID=" + photoID + "&url=" + getViewLink(photoID);
 	$.ajax({type: "POST", url: api_path, data: params, dataType: "json", success: function(data) {
-	
+
 		switch (service) {
 			case 0:
 				link = data.twitter;
@@ -898,7 +900,7 @@ function loadSharePhoto(service, photoID) {
 			location.href = link;
 			loadingFadeOut();
 		} else loadingFadeIn("error");
-		
+
 	}, error: ajaxError });
 
 }
@@ -937,12 +939,12 @@ function loadPreviousPhoto() {
 
 	albumID = content.attr("data-id");
 	photoID = image_view.attr("data-id");
-	
+
 	params = "function=previousPhoto&photoID=" + photoID + "&albumID=" + albumID;
 	$.ajax({type: "POST", url: api_path, data: params, dataType: "json", success: function(data) {
-	
+
 		if (data!=false) setURL("a" + albumID + "p" + data.id);
-	
+
 	}, error: ajaxError });
 
 }
@@ -951,7 +953,7 @@ function loadNextPhoto() {
 
 	albumID = content.attr("data-id");
 	photoID = image_view.attr("data-id");
-	
+
 	params = "function=nextPhoto&photoID=" + photoID + "&albumID=" + albumID;
 	$.ajax({type: "POST", url: api_path, data: params, dataType: "json", success: function(data) {
 
@@ -977,19 +979,19 @@ function search(term) {
 
 	clearTimeout($(window).data("timeout"));
 	$(window).data("timeout", setTimeout(function() {
-	
+
 		if ($("#search").val().length<=2) {
-		
+
 			$(".divider").removeClass("fadeIn").addClass("fadeOut");
 			loadAlbums();
-			
+
 		} else {
-		
+
 			$(".album, .photo").removeClass("contentZoomIn").addClass("contentZoomOut");
 			$(".divider").removeClass("fadeIn").addClass("fadeOut");
-			
+
 			startTime = new Date().getTime();
-		
+
 			params = "function=search&term=" + term;
 			$.ajax({type: "POST", url: api_path, data: params, dataType: "json", success: function(data) {
 				console.log(data);
@@ -998,12 +1000,12 @@ function search(term) {
 
 				photos = "";
 				if (data.photos!=undefined&&data.photos!=null) $.each(data.photos, function() { photos += buildPhoto(this); });
-		
+
 				durationTime = (new Date().getTime() - startTime);
 				if (durationTime>300) waitTime = 0; else waitTime = 300 - durationTime;
-				
+
 				$.timer(waitTime,function(){
-				
+
 					if (albums==""&&photos=="") code = "";
 					else if (albums=="") code = buildDivider("Photos")+photos;
 					else if (photos=="") code = buildDivider("Albums")+albums;
@@ -1012,13 +1014,13 @@ function search(term) {
 					content.html("").append(code);
 
 					$(".album, .photo").removeClass("contentZoomOut").addClass("contentZoomIn");
-					
+
 				});
-		
+
 			}, error: ajaxError });
-		
+
 		}
-		
+
 	}, 250));
 
 }

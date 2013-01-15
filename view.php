@@ -16,17 +16,17 @@
 		<link rel="shortcut icon" href="img/favicon.png">
 
 		<meta name="apple-mobile-web-app-status-bar-style" content="black" >
-		<meta name="viewport" content="width=device-width, user-scalable=no">
+		<meta name="viewport" content="user-scalable=no, initial-scale=1">
 		<meta name="apple-mobile-web-app-capable" content="yes">
-		
+
 		<?php if(isset($_GET['p'])) echo facebookHeader($_GET['p']); ?>
-                
+
 	</head>
 	<body>
 
 	<!-- Loading -->
 	<div id="loading"></div>
-	
+
 	<!-- Header -->
 	<header>
 
@@ -37,10 +37,10 @@
 		<a id="title"></a>
 
 	</header>
-	
+
 	<!-- ImageView -->
 	<div id="image_view"></div>
-	
+
 	<!-- Infobox -->
 	<div id="infobox"></div>
 

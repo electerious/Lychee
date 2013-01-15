@@ -30,7 +30,7 @@ if((isset($_POST["function"])&&$_POST["function"]!="")||(isset($_GET["function"]
 		if($_POST["function"]=="setAlbumTitle"&&isset($_POST["albumID"])&&isset($_POST["title"])) echo setAlbumTitle($_POST["albumID"], $_POST["title"]);
 		if($_POST["function"]=="deleteAlbum"&&isset($_POST["albumID"])&&isset($_POST["delAll"])) echo deleteAlbum($_POST["albumID"], $_POST["delAll"]);
 		if($_GET["function"]=="getAlbumArchive"&&isset($_GET["albumID"])) getAlbumArchive($_GET["albumID"]);
-		
+
 		// Photo Functions
 		if($_POST["function"]=="getPhotos"&&isset($_POST["albumID"])) echo array2json(getPhotos($_POST["albumID"]));
 		if($_POST["function"]=="getPhotoInfo"&&isset($_POST["photoID"])) echo array2json(getPhotoInfo($_POST["photoID"]));
@@ -43,31 +43,31 @@ if((isset($_POST["function"])&&$_POST["function"]!="")||(isset($_GET["function"]
 		if($_POST["function"]=="sharePhoto"&&isset($_POST["photoID"])&&isset($_POST["url"])) echo array2json(sharePhoto($_POST["photoID"], $_POST["url"]));
 		if($_POST["function"]=="previousPhoto"&&isset($_POST["photoID"])&&isset($_POST["albumID"])) echo array2json(previousPhoto($_POST["photoID"], $_POST["albumID"]));
 		if($_POST["function"]=="nextPhoto"&&isset($_POST["photoID"])&&isset($_POST["albumID"])) echo array2json(nextPhoto($_POST["photoID"], $_POST["albumID"]));
-                
+
         // Upload Function
 		if($_POST["function"]=="upload"&&isset($_FILES)&&isset($_POST["albumID"])) echo upload($_FILES, $_POST["albumID"]);
-		
+
 		// Search Function
 		if($_POST["function"]=="search"&&isset($_POST["term"])) echo array2json(search($_POST["term"]));
-		
+
 		// Sync Function
 		if($_POST["function"]=="syncFolder") echo syncFolder();
-                
+
 		// Session Functions
 		if($_POST["function"]=="logout") logout();
 		if($_POST["function"]=="loggedIn") echo true;
 
    } else {
-   
+
 		dbConnect();
-		
+
 		// Photo Functions
 	    if($_POST["function"]=="getPhotoInfo"&&isset($_POST["photoID"])&&isPhotoPublic($_POST["photoID"])) echo array2json(getPhotoInfo($_POST["photoID"]));
-	
+
 	    // Session Functions
 	    if($_POST["function"]=="login") echo login($_POST['user'], $_POST['password']);
 	    if($_POST["function"]=="loggedIn") echo false;
-		  		
+
    }
 
 } else echo "Error: No permission!";

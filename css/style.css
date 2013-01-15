@@ -9,10 +9,39 @@ table { border-collapse:collapse; border-spacing:0; }
 
 /* Screen behavior -------------------------------------------------*/
 @media only screen and (max-width: 900px) {
+
 	#title span { display: none; }
+	
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 640px) {
+
 	#title { display: none; }
+	
+	#button_move { display: none; }
+	
+	.center {
+		top: 0px !important;
+		left: 0px !important;
+	}
+	
+	.message {
+		position: fixed !important;
+		width: 100% !important;
+		height: 100% !important;
+		margin: 1px 0px 0px 0px !important;
+		border-radius: 0px !important;
+		
+		/* Animation */
+		-webkit-animation-name: moveUp !important;
+		-webkit-animation-duration: .3s !important;
+		-moz-animation-name: moveUp !important;
+		-moz-animation-duration: .3s !important;
+		-o-animation-name: moveUp !important;
+		-o-animation-duration: .3s !important;
+		animation-name: moveUp !important;
+		animation-duration: .3s !important;
+	}
+	
 }
 
 /* Basics -------------------------------------------------*/
@@ -60,7 +89,7 @@ body { background-color: #222; background-image: url(../img/background.jpg); fon
 	text-align: center;
     text-shadow: 0 -1px 0 #000;
 	background: #000;
-	box-shadow: 0 1px 2px hsla(0, 0%, 0%, .29);
+	box-shadow: 0 1px 2px hsla(0, 0%, 0%, .25);
 	border-radius: 3px;
 }
 .tipsy-arrow { position: absolute; width: 0; height: 0; line-height: 0; border: 5px dashed #000; }
@@ -349,7 +378,7 @@ header {
 	#tools_albums, #tools_album, #tools_photo {
 		display: none;
 	}
-	
+
 	/* Button Custom ------------------------------------------------*/
 	header .button.icon-refresh {
 		padding:  7px 10px 4px 10px;
@@ -399,7 +428,7 @@ header {
 	#search:focus {
 		box-shadow: 0px 1px 0px #555, inset 0px 0px 2px #333;
 		opacity: 1;
-		width: 180px;
+		width: 150px;
 	}
 
 	/* Tools ------------------------------------------------*/
@@ -690,14 +719,11 @@ header {
 		float: left;
 		width: 100%;
 		padding: 12px 0px;
-		background-color: rgba(0, 0, 0, .2);
 		color: #fff;
 		font-size: 16px;
 		font-weight: bold;
 		text-shadow: 0px -1px 0px #000;
 		text-align: center;
-		border-bottom: 1px solid #111;
-		box-shadow: 0px 1px 0px rgba(255,255,255,.2);
 	}
 	.message .close {
 		position: absolute;
@@ -710,16 +736,13 @@ header {
 	}
 	.message p {
 		float: left;
-		width: 470px;
+		width: 90%;
 		margin-top: 1px;
-		padding: 12px 15px 15px 15px;
+		padding: 12px 5% 15px 5%;
 		color: #eee;
 		font-size: 14px;
-		background-color: #555;
 		text-shadow: 0px -1px 0px #222;
 		line-height: 20px;
-		border-bottom: 1px solid #111;
-		box-shadow: 0px 1px 0px rgba(255,255,255,.1);
 	}
 	.message .button {
 		float: right;
@@ -742,6 +765,9 @@ header {
 		border: 1px solid #111;
 		box-shadow: inset 0px 1px 0px rgba(255,255,255,.2), 0px 1px 0px rgba(255,255,255,.1);
 		cursor: pointer;
+	}
+	.message .button:first-of-type {
+		margin: 15px 5% 18px 0px !important;
 	}
 	.message .button.active {
 		color: #fff;
@@ -818,35 +844,25 @@ header {
 	/* Sign in ------------------------------------------------*/
 	.sign_in {
 		float: left;
-		width: 500px;
+		width: 100%;
 		margin-top: 1px;
-		padding: 20px 0px;
+		padding: 5px 0px;
 		color: #eee;
 		font-size: 14px;
-		background-color: #555;
 		text-shadow: 0px -1px 0px #222;
 		line-height: 20px;
-		border-bottom: 1px solid #111;
-		box-shadow: 0px 1px 0px rgba(255,255,255,.1);
-	}
-	.sign_in label {
-		float: left;
-		width: 20%;
-		margin: 6px 0px 0px 10%;
-	}
-	.sign_in label:first-of-type {
-		margin-bottom: 10px;
 	}
 	.sign_in input {
 		float: left;
-		width: 55%;
-		padding: 7px 10px 9px 10px;
+		width: 86%;
+		padding: 7px 2% 9px 2%;
+		margin: 0px 5%;
 		background-color: #444;
 		color: #fff;
 		text-shadow: 0px 1px 0px #222;
 		border: none;
 		border: 1px solid #111;
-		box-shadow: 0px 1px 0px #777;
+		box-shadow: 0px 1px 0px #555;
 		outline: none;
 		border-radius: 5px;
 	}
@@ -854,19 +870,19 @@ header {
 		margin-bottom: 10px;
 	}
 	.sign_in input:focus {
-		box-shadow: 0px 1px 0px #777, inset 0px 0px 3px #333, 0px 0px 5px #005ecc;
+		box-shadow: 0px 1px 0px #666, inset 0px 0px 3px #333, 0px 0px 5px #005ecc;
 	}
 	.sign_in input.error:focus {
-		box-shadow: 0px 1px 0px #777, inset 0px 0px 3px #333, 0px 0px 5px #cc0007;
+		box-shadow: 0px 1px 0px #666, inset 0px 0px 3px #333, 0px 0px 5px #cc0007;
 	}
 	.message #version {
 		display: inline-block;
 		margin-top: 23px;
-		margin-left: 19px;
+		margin-left: 5%;
 		color: #888;
 		text-shadow: 0px -1px 0px #111;
 	}
-	
+
 	/* Sign in ------------------------------------------------*/
 	.copylink {
 		float: left;
@@ -904,7 +920,7 @@ header {
 	background-position: 50% 50%;
 	background-size: contain;
 	-webkit-transition: top .3s, bottom .3s, margin-top .3s;
-	
+
 	-webkit-animation-name: zoomIn;
 	-webkit-animation-duration: .3s;
 	-webkit-animation-fill-mode: forwards;
@@ -924,7 +940,7 @@ header {
 	bottom: auto;
 	left: 50%;
 }
-	
+
 	/* Previous/Next Buttons ------------------------------------------------*/
 	#image_view a {
 		position: fixed;
@@ -948,7 +964,7 @@ header {
 		right: 20px;
 		-webkit-transition: right .3s
 	}
-	
+
 	/* InfoBox ------------------------------------------------*/
 	#infobox_overlay {
 		z-index: 2;
@@ -978,12 +994,12 @@ header {
 		background-color: rgba(20,20,20,0.98);
 		box-shadow: -1px 0px 2px #000;
 		display: none;
-		
+
 		-webkit-user-select: text;
 		-moz-user-select: text;
 		-o-user-select: text;
 		user-select: text;
-		
+
 		-webkit-transition: right .5s ease-out;
 		-moz-transition: right .5s;
 		-o-transition: right .5s;
@@ -998,7 +1014,7 @@ header {
 		float: left;
 		height: 41px;
 		width: 100%;
-	
+
 		background-color: #1d1d1d;
 		background-image: -webkit-gradient(linear, left top, left bottom, from(#1d1d1d), to(#050505));
 		background-image: -webkit-linear-gradient(top, #1d1d1d, #050505);
@@ -1006,7 +1022,7 @@ header {
 		background-image: -o-linear-gradient(top, #1d1d1d, #050505);
 		background-image: -ms-linear-gradient(top, #1d1d1d, #050505);
 		background-image: linear-gradient(top, #1d1d1d, #050505);
-	
+
 		box-shadow: inset 0px 1px 0px #111, inset 0px -1px 0px #000;
 		border-top: 1px solid #000;
 	}
@@ -1207,7 +1223,7 @@ header {
 	font-size: 80px;
 	text-shadow: 0px 1px 2px #000;
 	z-index: 2;
-	
+
 	/* Animation */
 	-webkit-animation-name: pulse;
 	-webkit-animation-duration: 2s;
@@ -1249,7 +1265,7 @@ header {
 	border: 1px solid #000;
 	box-shadow: 0 1px 0 rgba(255,255,255,.2), inset 0px 0px 2px #111;
 	border-radius: 5px;
-	
+
 	/* Animation */
 	-webkit-animation-name: moveBackground;
 	-webkit-animation-duration: .6s;
@@ -1281,7 +1297,7 @@ header {
 	background: -ms-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(241,241,241,1) 50%,rgba(225,225,225,1) 51%,rgba(246,246,246,1) 100%); /* IE10+ */
 	background: linear-gradient(top, rgba(255,255,255,1) 0%,rgba(241,241,241,1) 50%,rgba(225,225,225,1) 51%,rgba(246,246,246,1) 100%); /* W3C */
 	border-radius: 5px;
-	
+
 	-webkit-transition: width .2s;
 	-moz-transition: width .2s;
 	-o-transition: width .2s;

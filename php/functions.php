@@ -6,7 +6,7 @@
  * @author      Tobias Reich
  * @copyright   2012 by Philipp Maurer, Tobias Reich
  */
- 
+
 include("config.php");
 
 // Database Functions
@@ -49,7 +49,7 @@ function createTables() {
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;";
     $result = mysql_query($query);
     if(!$result) return false;
-    
+
     $query = "CREATE TABLE IF NOT EXISTS `photos` (
   `id` bigint(14) NOT NULL,
   `title` varchar(50) NOT NULL,
@@ -151,9 +151,9 @@ function getCamera($photoID) {
         $return['size'] = $size;
         $return['date'] = date("d.m.Y",filectime($url));
         $return['time'] = date("H:i:s",filectime($url));
-        
+
         echo $exif['FileDateTime']."<br/>".$exif['DateTimeOriginal'];
-        
+
         // Camera Information
         if(isset($exif['ISOSpeedRatings'])){$return['iso']="ISO-".$exif['ISOSpeedRatings'];}
         if(isset($exif['COMPUTED']['ApertureFNumber'])){$return['aperture']=$exif['COMPUTED']['ApertureFNumber'];}
@@ -274,7 +274,7 @@ function getSmartInfo() {
         $i++;
     }
     $return['unsortNum'] = $i;
-    
+
     $query2 = "SELECT * FROM photos WHERE public = 1 ORDER BY id DESC;";
     $result2 = mysql_query($query2);
     $i = 0;
@@ -283,7 +283,7 @@ function getSmartInfo() {
         $i++;
     }
     $return['publicNum'] = $i;
-    
+
     $query3 = "SELECT * FROM photos WHERE star = 1 ORDER BY id DESC;";
     $result3 = mysql_query($query3);
     $i = 0;
@@ -293,7 +293,7 @@ function getSmartInfo() {
     }
     $return['starredNum'] = $i;
     return $return;
-    
+
 }
 function getAlbumInfo($albumID) {
     $return = array();
@@ -365,26 +365,26 @@ function getAlbumArchive($albumID) {
     $row = mysql_fetch_object($result);
     if($albumID!=0&&is_numeric($albumID))$zipTitle = $row->title;
     $filename = "./".$zipTitle.".zip";
-    
+
     $zip = new ZipArchive();
-    
+
     if ($zip->open($filename, ZIPARCHIVE::CREATE)!==TRUE) {
         return false;
     }
-    
+
     foreach($files AS $zipFile) {
         $newFile = explode("/",$zipFile);
         $newFile = array_reverse($newFile);
         $zip->addFile($zipFile, $zipTitle."/".$newFile[0]);
     }
-    
+
     $zip->close();
-    
+
     header("Content-Type: application/zip");
     header("Content-Disposition: attachment; filename=\"$zipTitle.zip\"");
     readfile($filename);
     unlink($filename);
-    
+
     return true;
 }
 
@@ -417,15 +417,15 @@ function downloadPhoto($photoID) {
     $query = "SELECT * FROM photos WHERE id = '$photoID';";
     $result = mysql_query($query);
     $row = mysql_fetch_object($result);
-    
+
     $photo = "../".$row->url;
     $title = $row->title;
     $type = "appcication/zip";
     $filename = "./imageDownload.zip";
-    
+
     $zip = new ZipArchive();
     if ($zip->open($filename, ZIPARCHIVE::CREATE)!==TRUE) return false;
-    
+
     $newFile = explode("/",$photo);
     $newFile = array_reverse($newFile);
     $zip->addFile($photo, $title.$newFile[0]);
@@ -454,7 +454,7 @@ function setPhotoPublic($photoID, $url) {
         $shortlink = "";
     }else{
         if($row->shortlink==""){
-            $shortlink = urlShortner($url); 
+            $shortlink = urlShortner($url);
         }else{
             $shortlink = $row->shortlink;
         }
@@ -497,7 +497,7 @@ function nextPhoto($photoID, $albumID) {
         $result = mysql_query($query);
         $return = mysql_fetch_array($result);
     }
-    return $return;    
+    return $return;
 }
 function previousPhoto($photoID, $albumID) {
     switch($albumID) {
@@ -564,9 +564,9 @@ function urlShortner($url) {
     if($bitlyUsername==""||$bitlyApi=="") return false;
     $url = urlencode($url);
     $bitlyAPI = "http://api.bit.ly/shorten?version=2.0.1&format=xml&longUrl=$url&login=$bitlyUsername&apiKey=$bitlyApi";
-    
+
     $data = file_get_contents($bitlyAPI);
-    
+
     $xml = simplexml_load_string($data);
     $shortlink = $xml->results->nodeKeyVal->shortUrl;
     return $shortlink;
@@ -575,18 +575,18 @@ function sharePhoto($photoID, $url) {
     $query = "SELECT * FROM photos WHERE id = '$photoID'";
     $result = mysql_query($query);
     $row = mysql_fetch_object($result);
-    
+
     $thumb = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']."/../../".$row->thumbUrl;
     $title = $row->title;
     $description = $row->description;
     $shortlink = $row->shortlink;
-    
+
     $twitterUrl = "https://twitter.com/share?url=".urlencode("$url");
     $facebookUrl = "http://www.facebook.com/sharer.php?u=".urlencode("$url")."&t=".urlencode($title);
     $tumblrUrl = "http://www.tumblr.com/share/link?url=".urlencode("$url")."&name=".  urlencode($title)."&description=".urlencode($description);
     $pinterestUrl = "http://pinterest.com/pin/create/button/?url=".urlencode("$url")."&media=".urlencode($thumb);
     $mailUrl = "mailto:?subject=".rawurlencode($title)."&body=".rawurlencode("Hey guy! Check this out: $url");
-    
+
     $share = array();
     $share['twitter'] = $twitterUrl;
     $share['facebook'] = $facebookUrl;
@@ -594,7 +594,7 @@ function sharePhoto($photoID, $url) {
     $share['pinterest'] = $pinterestUrl;
     $share['mail'] = $mailUrl;
     $share['shortlink'] = $shortlink;
-    
+
     return $share;
 }
 function facebookHeader($photoID) {
@@ -603,14 +603,14 @@ function facebookHeader($photoID) {
     $query = "SELECT * FROM photos WHERE id = '$photoID';";
     $result = mysql_query($query);
     $row = mysql_fetch_object($result);
-    
+
     $parseUrl = parse_url("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
     $thumb = $parseUrl['scheme']."://".$parseUrl['host'].$parseUrl['path']."/../".$row->thumbUrl;
-    
+
     $return  = '<meta name="title" content="'.$row->title.'" />';
     $return .= '<meta name="description" content="'.$row->description.' - via Lychee" />';
     $return .= '<link rel="image_src"  type="image/jpeg" href="'. $thumb .'" />';
-    
+
     return $return;
 }
 function isPhotoPublic($photoID) {
@@ -624,19 +624,19 @@ function isPhotoPublic($photoID) {
 // Search Function
 function search($term) {
     $term = mysql_real_escape_string($term);
-    
+
     $query = "SELECT * FROM photos WHERE title like '%$term%' OR description like '%$term%';";
     $result = mysql_query($query);
     while($row = mysql_fetch_array($result)) {
         $return['photos'][] = $row;
     }
-    
+
     $query = "SELECT * FROM albums WHERE title like '%$term%';";
     $result = mysql_query($query);
     $i=0;
     while($row = mysql_fetch_array($result)) {
         $return['albums'][$i] = $row;
-        
+
         $query = "SELECT thumbUrl FROM photos WHERE album = '".$row['id']."' ORDER BY id DESC LIMIT 0, 3;";
         $result2 = mysql_query($query);
         $k = 0;
@@ -644,7 +644,7 @@ function search($term) {
             $return['albums'][$i]["thumb$k"] = $row2->thumbUrl;
             $k++;
         }
-        
+
     }
     return $return;
 }
