@@ -4,13 +4,18 @@
  * @name        api.php
  * @author      Philipp Maurer
  * @author      Tobias Reich
- * @copyright   2012 by Philipp Maurer, Tobias Reich
+ * @copyright   2013 by Philipp Maurer, Tobias Reich
  */
+
+if(floatval(phpversion())<5.2) die("Please upgrade to PHP 5.2 or higher!");
 
 if((isset($_POST["function"])&&$_POST["function"]!="")||(isset($_GET["function"])&&$_GET["function"]!="")) {
 
     session_start();
+    define("LYCHEE", true);
+
     include("array2json.php");
+    include("config.php");
     include("functions.php");
 
     // Security
@@ -20,7 +25,7 @@ if((isset($_POST["function"])&&$_POST["function"]!="")||(isset($_GET["function"]
     if($_SESSION["login"]==true) {
 
 		//Connect to DB
-		dbConnect();
+		$database = dbConnect();
 
 		// Album Functions
 		if($_POST["function"]=="getAlbums") echo array2json(getAlbums());
@@ -54,12 +59,13 @@ if((isset($_POST["function"])&&$_POST["function"]!="")||(isset($_GET["function"]
 		if($_POST["function"]=="syncFolder") echo syncFolder();
 
 		// Session Functions
+		if($_POST["function"]=="login") echo login($_POST['user'], $_POST['password']);
 		if($_POST["function"]=="logout") logout();
 		if($_POST["function"]=="loggedIn") echo true;
 
    } else {
 
-		dbConnect();
+		$database = dbConnect();
 
 		// Photo Functions
 	    if($_POST["function"]=="getPhotoInfo"&&isset($_POST["photoID"])&&isPhotoPublic($_POST["photoID"])) echo array2json(getPhotoInfo($_POST["photoID"]));
@@ -70,6 +76,11 @@ if((isset($_POST["function"])&&$_POST["function"]!="")||(isset($_GET["function"]
 
    }
 
-} else echo "Error: No permission!";
+} else {
+
+	header('HTTP/1.1 401 Unauthorized');
+	die("Error: No permission!");
+
+}
 
 ?>

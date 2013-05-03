@@ -2,7 +2,7 @@
  * @name        view.js
  * @author      Philipp Maurer
  * @author      Tobias Reich
- * @copyright   2012 by Philipp Maurer, Tobias Reich
+ * @copyright   2013 by Philipp Maurer, Tobias Reich
  */
 
 var header = $("header"),
@@ -13,15 +13,20 @@ var header = $("header"),
 
 $(document).ready(function(){
 
+	/* Event Name */
+	if (mobileBrowser()) event_name = "touchend";
+	else event_name = "click";
+
 	/* Window */
 	$(window).keydown(key);
 
 	/* Infobox */
-	$("#infobox_overlay, #infobox .header a").live("click", function() { hideInfobox() });
-	$("#button_info").live("click", function() { showInfobox() });
+	$(document).on(event_name, "#infobox .header a", function() { hideInfobox() });
+	$(document).on(event_name, "#infobox_overlay", function() { hideInfobox() });
+	$("#button_info").on(event_name, function() { showInfobox() });
 
 	/* Download */
-	$("#button_download").live("click", function() {
+	$("#button_download").on(event_name, function() {
 		link = $("#image_view #image").css("background-image").replace(/"/g,"").replace(/url\(|\)$/ig, "");
 		window.open(link,"_newtab");
 	});
@@ -83,11 +88,11 @@ function loadPhotoInfo(photoID) {
 		headerTitle.html(data.title);
 
 		image_view.attr("data-id", photoID);
-		if (isPhotoSmall(data)) image_view.html("").append("<div id='image' class='small' style='background-image: url(" + data.url + "); width: " + data.width + "px; height: " + data.height + "px; margin-top: -" + parseInt((data.height/2)-20) + "px; margin-left: -" + data.width/2 + "px;'></div>");
-		else image_view.html("").append("<div id='image' style='background-image: url(" + data.url + "); top: 70px; right: 30px; bottom: 30px; left: 30px;'></div>");
+		if (isPhotoSmall(data)) image_view.html("<div id='image' class='small' style='background-image: url(" + data.url + "); width: " + data.width + "px; height: " + data.height + "px; margin-top: -" + parseInt((data.height/2)-20) + "px; margin-left: -" + data.width/2 + "px;'></div>");
+		else image_view.html("<div id='image' style='background-image: url(" + data.url + "); top: 70px; right: 30px; bottom: 30px; left: 30px;'></div>");
 		image_view.removeClass("fadeOut").addClass("fadeIn").show();
 
-		infobox.html(buildInfobox(data)).show();
+		infobox.html(build.infobox(data, true)).show();
 
 	}, error: ajaxError });
 

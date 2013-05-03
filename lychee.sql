@@ -6,15 +6,14 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
 
-
-CREATE TABLE IF NOT EXISTS `albums` (
+CREATE TABLE IF NOT EXISTS `lychee_albums` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(50) NOT NULL,
   `sysdate` varchar(10) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
-CREATE TABLE IF NOT EXISTS `photos` (
+CREATE TABLE IF NOT EXISTS `lychee_photos` (
   `id` bigint(14) NOT NULL,
   `title` varchar(50) NOT NULL,
   `description` varchar(160) NOT NULL,
@@ -36,8 +35,9 @@ CREATE TABLE IF NOT EXISTS `photos` (
   `takedate` varchar(10) NOT NULL,
   `taketime` varchar(8) NOT NULL,
   `star` tinyint(1) NOT NULL,
-  `album` varchar(30) NOT NULL DEFAULT '0',
   `thumbUrl` varchar(50) NOT NULL,
+  `album` varchar(30) NOT NULL DEFAULT '0',
+  `import_name` varchar(100) DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 

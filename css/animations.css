@@ -1,3 +1,10 @@
+/**
+ * @name        animations.css
+ * @author      Philipp Maurer
+ * @author      Tobias Reich
+ * @copyright   2013 by Philipp Maurer, Tobias Reich
+ */
+
 /* bounceInDown ------------------------------------------------*/
 @-webkit-keyframes bounceInDown {
 	0% {
@@ -350,21 +357,17 @@
 @-ms-keyframes zoomOut {
 	0% {
 		opacity: 1;
-		-ms-transform: scale(1);
 	}
 	100% {
 		opacity: 0;
-		-ms-transform: scale(.5);
 	}
 }
 @-o-keyframes zoomOut {
 	0% {
 		opacity: 1;
-		-o-transform: scale(1);
 	}
 	100% {
 		opacity: 0;
-		-o-transform: scale(.5);
 	}
 }
 @keyframes zoomOut {
@@ -400,21 +403,17 @@
 @-ms-keyframes zoomIn {
 	0% {
 		opacity: 0;
-		-ms-transform: scale(.5);
 	}
 	100% {
 		opacity: 1;
-		-ms-transform: scale(1);
 	}
 }
 @-o-keyframes zoomIn {
 	0% {
 		opacity: 0;
-		-o-transform: scale(.5);
 	}
 	100% {
 		opacity: 1;
-		-o-transform: scale(1);
 	}
 }
 @keyframes zoomIn {

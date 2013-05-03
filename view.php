@@ -1,4 +1,3 @@
-<?php require_once("php/functions.php"); ?>
 <!DOCTYPE HTML>
 <html>
 	<head>
@@ -19,22 +18,32 @@
 		<meta name="viewport" content="user-scalable=no, initial-scale=1">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 
-		<?php if(isset($_GET['p'])) echo facebookHeader($_GET['p']); ?>
+		<?php
+		
+			if(isset($_GET['p'])) {
+		
+				define("LYCHEE", true);
+				
+				include("php/config.php");
+				include("php/functions.php");
+				
+				echo facebookHeader($_GET['p']);
+				
+			}
+		
+		?>
 
 	</head>
 	<body>
-
-	<!-- Loading -->
-	<div id="loading"></div>
 
 	<!-- Header -->
 	<header>
 
 		<!-- Buttons -->
-		<div class="tools" id="button_download" title="Download Photo"><a class="icon-download"></a></div>
+		<div class="tools" id="button_download" title="Full Photo"><a class="icon-resize-full"></a></div>
 		<div class="tools" id="button_info" title="Show Info"><a class="icon-info-sign"></a></div>
 
-		<a id="title"></a>
+		<a id="title" class="view"></a>
 
 	</header>
 
@@ -46,7 +55,7 @@
 
 	<!-- JS -->
 	<script type="text/javascript" src="js/frameworks.js"></script>
-	<script type="text/javascript" src="js/build.js"></script>
+	<script type="text/javascript" src="js/modules/build.js"></script>
 	<script type="text/javascript" src="js/view.js"></script>
 
 

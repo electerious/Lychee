@@ -1,3 +1,10 @@
+/**
+ * @name        style.css
+ * @author      Philipp Maurer
+ * @author      Tobias Reich
+ * @copyright   2013 by Philipp Maurer, Tobias Reich
+ */
+
 /* Reset -------------------------------------------------*/
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video { margin:0; padding:0; border:0; font-size:100%; font:inherit; vertical-align:baseline; }
 article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section { display:block; }
@@ -6,43 +13,6 @@ ol,ul { list-style:none; }
 blockquote,q { quotes:none; }
 blockquote:before,blockquote:after,q:before,q:after { content:''; content:none; }
 table { border-collapse:collapse; border-spacing:0; }
-
-/* Screen behavior -------------------------------------------------*/
-@media only screen and (max-width: 900px) {
-
-	#title span { display: none; }
-	
-}
-@media only screen and (max-width: 640px) {
-
-	#title { display: none; }
-	
-	#button_move { display: none; }
-	
-	.center {
-		top: 0px !important;
-		left: 0px !important;
-	}
-	
-	.message {
-		position: fixed !important;
-		width: 100% !important;
-		height: 100% !important;
-		margin: 1px 0px 0px 0px !important;
-		border-radius: 0px !important;
-		
-		/* Animation */
-		-webkit-animation-name: moveUp !important;
-		-webkit-animation-duration: .3s !important;
-		-moz-animation-name: moveUp !important;
-		-moz-animation-duration: .3s !important;
-		-o-animation-name: moveUp !important;
-		-o-animation-duration: .3s !important;
-		animation-name: moveUp !important;
-		animation-duration: .3s !important;
-	}
-	
-}
 
 /* Basics -------------------------------------------------*/
 html, body {
@@ -106,7 +76,7 @@ body { background-color: #222; background-image: url(../img/background.jpg); fon
 .tipsy-e .tipsy-arrow { right: 0; top: 50%; margin-top: -5px; border-left-style: solid; border-right: none; border-top-color: transparent; border-bottom-color: transparent; }
 .tipsy-w .tipsy-arrow { left: 0; top: 50%; margin-top: -5px; border-right-style: solid; border-left: none; border-top-color: transparent; border-bottom-color: transparent; }
 
-/* Overlay ------------------------------------------------*/
+/* Animations ------------------------------------------------*/
 .fadeIn {
 	-webkit-animation-name: fadeIn;
 	-webkit-animation-duration: .3s;
@@ -344,7 +314,7 @@ header {
 		background-image: -o-linear-gradient(top, #555 0%, #333 100%);
 		background: linear-gradient(top, #555 0%, #333 100%);
 
-		border: 1px solid #252525;
+		border: 1px solid #222;
 		border-radius: 3px;
 		box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0px 1px 0px #444;
 		cursor: pointer;
@@ -462,6 +432,7 @@ header {
 	position: absolute;
 	padding: 41px 0px 33px 0px;
 	width: 100%;
+	-webkit-overflow-scrolling: touch;
 }
 
 	/* Photo ------------------------------------------------*/
@@ -525,7 +496,7 @@ header {
 		box-shadow: 0px 1px 5px #111;
 		border: 3px solid #ccc;
 	}
-	.album:hover img {
+	.album:hover img, .album.active img {
 		box-shadow: 0px 0px 10px #005ecc;
 	}
 
@@ -909,6 +880,9 @@ header {
 	box-shadow: 0px 2px 4px #000;
 	-webkit-transition: background-color .3s;
 }
+#image_view.full {
+	background-color: #111;
+}
 
 #image_view #image {
 	position: absolute;
@@ -960,9 +934,15 @@ header {
 		left: 20px;
 		-webkit-transition: left .3s;
 	}
+	#image_view.full a#previous {
+		left: -50px;
+	}
 	#image_view a#next {
 		right: 20px;
 		-webkit-transition: right .3s
+	}
+	#image_view.full a#next {
+		right: -50px;
 	}
 
 	/* InfoBox ------------------------------------------------*/
@@ -1094,6 +1074,7 @@ header {
 		width: 100%;
 		height: 35px;
 	}
+	#infobox #edit_title,
 	#infobox #edit_description {
 		display: inline;
 		margin-left: 3px;
@@ -1289,17 +1270,75 @@ header {
 	width: 0%;
 	height: 100%;
 	box-shadow: 0 1px 0 #000, 1px 0px 2px #000;
-	background: rgb(255,255,255); /* Old browsers */
-	background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(241,241,241,1) 50%, rgba(225,225,225,1) 51%, rgba(246,246,246,1) 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(50%,rgba(241,241,241,1)), color-stop(51%,rgba(225,225,225,1)), color-stop(100%,rgba(246,246,246,1))); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(241,241,241,1) 50%,rgba(225,225,225,1) 51%,rgba(246,246,246,1) 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(241,241,241,1) 50%,rgba(225,225,225,1) 51%,rgba(246,246,246,1) 100%); /* Opera11.10+ */
-	background: -ms-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(241,241,241,1) 50%,rgba(225,225,225,1) 51%,rgba(246,246,246,1) 100%); /* IE10+ */
-	background: linear-gradient(top, rgba(255,255,255,1) 0%,rgba(241,241,241,1) 50%,rgba(225,225,225,1) 51%,rgba(246,246,246,1) 100%); /* W3C */
+	background-color: #f5f2f7;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#f5f2f7), to(#c7c6c8));
+	background-image: -webkit-linear-gradient(top, #f5f2f7, #c7c6c8);
+	background-image: -moz-linear-gradient(top, #f5f2f7, #c7c6c8);
+	background-image: -o-linear-gradient(top, #f5f2f7, #c7c6c8);
+	background-image: -ms-linear-gradient(top, #f5f2f7, #c7c6c8);
+	background-image: linear-gradient(top, #f5f2f7, #c7c6c8);
 	border-radius: 5px;
+	-webkit-transition: width .2s, opacity .5;
+	-moz-transition: width .2s, opacity .5;
+	-o-transition: width .2s, opacity .5;
+	transition: width .2s, opacity .5;
+}
 
-	-webkit-transition: width .2s;
-	-moz-transition: width .2s;
-	-o-transition: width .2s;
-	transition: width .2s;
+/* Screen behavior -------------------------------------------------*/
+@media only screen and (max-width: 900px) {
+
+	#title {
+		margin: 11px 30% 0px 20%;
+		width: 50%;
+	}
+	#title.view { margin: 11px 20% 0px 20%; width: 60%;	}
+	#title span { display: none; }
+
+}
+@media only screen and (max-width: 640px) {
+
+	#title { display: none; }
+	#title.view { display: block; margin: 11px 20% 0px 15%; width: 65%;	}
+	#button_move { display: none; }
+	#button_archive { display: none; }
+
+	.center {
+		top: 0px;
+		left: 0px;
+	}
+
+	.message {
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		margin: 1px 0px 0px 0px !important;
+		border-radius: 0px;
+
+		/* Animation */
+		-webkit-animation-name: moveUp;
+		-webkit-animation-duration: .3s;
+		-moz-animation-name: moveUp;
+		-moz-animation-duration: .3s;
+		-o-animation-name: moveUp;
+		-o-animation-duration: .3s;
+		animation-name: moveUp;
+		animation-duration: .3s;
+	}
+
+	.album {
+		margin: 40px 0px 0px 50px;
+	}
+
+	.photo {
+		margin: 40px 0px 0px 50px;
+	}
+
+	.message.add {
+		margin-top: 0px;
+	}
+
+	.add_album {
+		margin: 30px 0px -10px 55px;
+	}
+
 }

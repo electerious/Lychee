@@ -32,7 +32,6 @@
 		<div id="tools_albums">
 			<a class="button" id="button_signout">Sign Out</a>
 			<a class="button icon icon-plus-sign button_add"></a>
-			<!--<a class="button icon icon-refresh" id="button_sync"></a>-->
 			<a class="button_divider"></a>
 			<input id="search" type="text" name="search" placeholder="Search …">
 		</div>
@@ -48,7 +47,7 @@
 			<a class="button" id="button_back">Back</a>
 			<div class="tools" id="button_trash" title="Delete"><a class="icon-trash"></a></div>
 			<div class="tools" id="button_move" title="Move to Album"><a class="icon-folder-open"></a></div>
-			<div class="tools" id="button_download" title="Download Photo"><a class="icon-download"></a></div>
+			<div class="tools" id="button_download" title="Full Photo"><a class="icon-resize-full"></a></div>
 			<a class="button_divider less"></a>
 			<div class="tools" id="button_info" title="Show Info"><a class="icon-info-sign"></a></div>
 			<div class="tools" id="button_edit" title="Edit Title"><a class="icon-edit"></a></div>
@@ -79,9 +78,20 @@
 
 	<!-- JS -->
 	<script type="text/javascript" src="js/frameworks.js"></script>
-	<script type="text/javascript" src="js/upload.js"></script>
-	<script type="text/javascript" src="js/build.js"></script>
-	<script type="text/javascript" src="js/functions.js"></script>
+
+		<!-- Development
+		<script type="text/javascript" src="js/modules/lychee.js"></script>
+		<script type="text/javascript" src="js/modules/build.js"></script>
+		<script type="text/javascript" src="js/modules/albums.js"></script>
+		<script type="text/javascript" src="js/modules/photos.js"></script>
+		<script type="text/javascript" src="js/modules/visible.js"></script>
+		<script type="text/javascript" src="js/modules/loadingBar.js"></script>
+		<script type="text/javascript" src="js/modules/contextMenu.js"></script>
+		<script type="text/javascript" src="js/modules/search.js"></script> -->
+
+		<!-- Production -->
+		<script type="text/javascript" src="js/functions.js"></script>
+
 	<script type="text/javascript" src="js/main.js"></script>
 
 	</body>
