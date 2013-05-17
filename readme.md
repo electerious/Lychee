@@ -2,8 +2,8 @@
 
 #### A great looking and easy-to-use Photo-Management-System.
 
-![Lychee ImageView](http://lychee.electerious.com/uploads/big/13582806160093.png)
-![Lychee ImageView](http://lychee.electerious.com/uploads/big/13582805615704.png)
+![Lychee ImageView](http://l.electerious.com/uploads/big/13582806160093.png)
+![Lychee ImageView](http://l.electerious.com/uploads/big/13582805615704.png)
 
 Lychee is a free, easy to use and great looking photo-management-system you can run on your server to manage and share photos. Just download the source and follow the instructions to install Lychee wherever you want.
 
@@ -25,16 +25,16 @@ To use Lychee without restrictions, we recommend to increase the values of the f
 
 #### Folder permissions
 
-Change the permissions of `/lychee/uploads` to 777, including all subfolders:
+Change the permissions of `uploads/` to 777, including all subfolders:
 
-	chmod -R 777 lychee/uploads/
+	chmod -R 777 uploads/
 
-#### Lychee configuration `lychee/php/config.php`
+#### Lychee configuration `php/config.php`
 
 Change the following properties with your MySQL information:
 
 	$db = The name of the Database you want to use
-	-> Lychee will create the Database for you	$dbUser = Your MySQL username  	$dbPassword = Your MySQL password	$dbHost = Your MySQL host (in most cases you can use localhost)
+	-> Lychee will create the Database and Tables for you	$dbUser = Your MySQL username  	$dbPassword = Your MySQL password	$dbHost = Your MySQL host (in most cases you can use localhost)
 
 Your photos are protected by a username and password you need to set:
 
@@ -52,11 +52,17 @@ This settings are optional and doesn't need to be changed:
 
 ## How to use
 
-After the configuration, navigate your browser to the place where Lychee is located. Everything should work now. If not, try the installation again.
+After the configuration, navigate your browser to the place where Lychee is located. Everything should work now.
 
 ### FTP Upload
 
-You can upload and share photos directly from every FTP client with Lychee. To do so, upload images to `uploads/import/` and navigate your browser to the place where Lychee is located (e.g. `http://example.com/view.php?p=filename.png`). `filename.png` must be replaced by the filename of your uploaded file. [Sample configuration](http://lychee.electerious.com/view.php?p=13657692738813).
+You can upload photos directly with every FTP client into Lychee. This feature helps you to share single images quickly with others.
+
+1. Upload an image to `uploads/import/`
+2. Navigate your browser to the place where Lychee is located (e.g. `http://example.com/view.php?p=filename.png`). `filename.png` must be replaced by the filename of your uploaded file.
+3. Share the link.
+
+Lychee will import the file as an public image, delete the original (unused) file and show it in the browser. [Sample FTP configuration](http://l.electerious.com/view.php?p=13657692738813).
 
 ### Keyboard Shortcuts
 
@@ -76,6 +82,15 @@ You can upload and share photos directly from every FTP client with Lychee. To d
 ## Browser Support
 
 Lychee supports the latest versions of Google Chrome, Apple Safari and Mozilla Firefox. Photos you share with others can be viewed from every browser.
+
+## Update
+
+To update Lychee, simply replace all files, excluding the following ones:
+`uploads/`, `php/config.php`
+
+## Troubleshooting
+
+If Lychee is not working properly, try to open `php/check.php`. This file will take a look at your configuration and displays all errors it can find. Everything should work if you can see the message "Lychee is ready!".
 
 ## About
 
