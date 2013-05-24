@@ -118,14 +118,9 @@ $(document).ready(function(){
 		.bind("mouseleave", lychee.hideControls);
 
 	/* Upload */
-	document.documentElement.ondrop = function (e) {
-
-		e.stopPropagation();
-		e.preventDefault();
-		lychee.upload(event.dataTransfer.files);
-		return true;
-
-	}
+	$(document.documentElement)
+		.on("dragover", function(event) { event.preventDefault();}, false)
+		.on("drop", function (e) { e.stopPropagation(); e.preventDefault(); lychee.upload(event.dataTransfer.files); return true;});
 
 	/* Init */
 	lychee.ready();
