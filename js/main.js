@@ -119,8 +119,8 @@ $(document).ready(function(){
 
 	/* Upload */
 	$(document.documentElement)
-		.on("dragover", function(event) { event.preventDefault();}, false)
-		.on("drop", function (e) { e.stopPropagation(); e.preventDefault(); lychee.upload(event.dataTransfer.files); return true;});
+		.on("dragover", function(e) { e.preventDefault();}, false)
+		.on("drop", function (e) { e.stopPropagation(); e.preventDefault(); lychee.upload(e.originalEvent.dataTransfer.files); return true; });
 
 	/* Init */
 	lychee.ready();
