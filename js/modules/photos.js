@@ -14,6 +14,15 @@ photos = {
 
 		// If refresh is true the function will only refresh the content and not change the toolbar buttons either the title
 
+		/*password = localStorage.getItem("album" + albumID);
+		if (password==null) {
+			 if (lychee.publicMode) password = prompt("Please enter a password for this album:", ""); else password = "";
+			 if (password!="") password = hex_md5(password);
+			 localStorage.setItem("album" + albumID, password);
+		}*/
+
+		password = "";
+
 		if (!refresh) {
 			loadingBar.show();
 			if (visible.imageview()) photos.hideView();
@@ -23,8 +32,14 @@ photos = {
 
 		startTime = new Date().getTime();
 
-		params = "getPhotos&albumID=" + albumID;
+		params = "getPhotos&albumID=" + albumID + "&password=" + password;
 		lychee.api(params, "json", function(data) {
+
+			if (data=="HTTP/1.1 403 Wrong password!") {
+				localStorage.removeItem("album" + albumID);
+				photos.load(albumID, refresh);
+				return false;
+			}
 
 			durationTime = (new Date().getTime() - startTime);
 			if (durationTime>300) waitTime = 0; else if (refresh) waitTime = 0; else waitTime = 300 - durationTime;
@@ -42,24 +57,37 @@ photos = {
 					$("#tools_album").show();
 					$("img").retina();
 
-					albums.loadInfo(albumID);
+					albums.loadInfo(albumID, password);
 
 				}
 
-			});
+			}, false);
 
 		});
 
 	},
 
-	loadInfo: function(photoID) {
+	loadInfo: function(photoID, albumID) {
+
+		/*password = localStorage.getItem("album" + albumID);
+		if (password==null) {
+			 if (lychee.publicMode) password = prompt("Please enter a password for this album:", ""); else password = "";
+			 if (password!="") password = hex_md5(password);
+			 localStorage.setItem("album" + albumID, password);
+		}*/
+
+		password = "";
 
 		photos.showView();
 
-		loadingBar.show();
-
-		params = "getPhotoInfo&photoID=" + photoID;
+		params = "getPhotoInfo&photoID=" + photoID + "&password=" + password;
 		lychee.api(params, "json", function(data) {
+
+			if (data=="HTTP/1.1 403 Wrong password!") {
+				localStorage.removeItem("album" + albumID);
+				photos.loadInfo(photoID, albumID);
+				return false;
+			}
 
 			if (!data.title) data.title = "Untitled";
 
@@ -77,10 +105,10 @@ photos = {
 
 			if (data.public=="1") {
 				$("#button_share a").addClass("active");
-				$("#button_share").attr("title", "Make Photo Private");
+				$("#button_share").attr("title", "Share Photo");
 			} else {
 				$("#button_share a").removeClass("active");
-				$("#button_share").attr("title", "Share Photo");
+				$("#button_share").attr("title", "Make Public");
 			}
 
 			data.url = lychee.upload_path + data.url;
@@ -98,8 +126,6 @@ photos = {
 			lychee.infobox.html(build.infobox(data)).show();
 
 			$.timer(300,function(){ lychee.content.show(); });
-
-			loadingBar.hide();
 
 		});
 
@@ -180,8 +206,6 @@ photos = {
 
 	delete: function(photoID) {
 
-		loadingBar.show();
-
 		params = "deletePhoto&photoID=" + photoID;
 		lychee.api(params, "text", function(data) {
 
@@ -189,7 +213,6 @@ photos = {
 
 				photos.hide(photoID);
 				lychee.goto("a" + lychee.content.attr("data-id"));
-				loadingBar.hide();
 
 			} else loadingBar.show("error");
 
@@ -212,7 +235,7 @@ photos = {
 
 	},
 
-	rename: function(photoID) {
+	setTitle: function(photoID) {
 
 		if (!photoID) oldTitle = lychee.title(); else oldTitle = "";
 		if (!photoID) photoID = lychee.image_view.attr("data-id");
@@ -220,8 +243,6 @@ photos = {
 		newTitle = prompt("Please enter a new title for this photo:", oldTitle);
 
 		if (photoID!=null&&photoID&&newTitle.length<31) {
-
-			loadingBar.show();
 
 			if (newTitle=="") newTitle = "Untitled";
 
@@ -235,7 +256,6 @@ photos = {
 						document.title = "Lychee - " + newTitle;
 					}
 					$(".photo[data-id='" + photoID + "'] .overlay h1").html(newTitle);
-					loadingBar.hide();
 				} else loadingBar.show("error");
 
 			});
@@ -244,19 +264,16 @@ photos = {
 
 	},
 
-	move: function(photoID, albumID) {
+	setAlbum: function(photoID, albumID) {
 
 		if (albumID>=0) {
 
-			loadingBar.show();
-
-			params = "movePhoto&photoID=" + photoID + "&albumID=" + albumID;
+			params = "setAlbum&photoID=" + photoID + "&albumID=" + albumID;
 			lychee.api(params, "text", function(data) {
 
 				if (data) {
 					photos.hide(photoID);
 					lychee.goto("a" + lychee.content.attr("data-id"));
-					loadingBar.hide();
 				} else loadingBar.show("error");
 
 			});
@@ -266,8 +283,6 @@ photos = {
 	},
 
 	setStar: function() {
-
-		loadingBar.show();
 
 		photoID = lychee.image_view.attr("data-id");
 
@@ -285,7 +300,6 @@ photos = {
 				}
 
 				photos.load(lychee.content.attr("data-id"), true);
-				loadingBar.hide();
 
 			} else loadingBar.show("error");
 
@@ -294,8 +308,6 @@ photos = {
 	},
 
 	setPublic: function(e) {
-
-		loadingBar.show();
 
 		photoID = lychee.image_view.attr("data-id");
 
@@ -306,15 +318,16 @@ photos = {
 
 				if ($("#button_share a.active").length) {
 					$("#button_share a").removeClass("active");
-					$("#button_share").attr("title", "Make Private");
+					$("#button_share").attr("title", "Make Public");
+					$("#infobox .attr_visibility").html("Private");
 				} else {
 					$("#button_share a").addClass("active");
 					$("#button_share").attr("title", "Share Photo");
+					$("#infobox .attr_visibility").html("Public");
 					contextMenu.share(photoID, e.pageX, e.pageY);
 				}
 
 				photos.load(lychee.content.attr("data-id"), true);
-				loadingBar.hide();
 
 			} else loadingBar.show("error");
 
@@ -329,13 +342,12 @@ photos = {
 
 		if (description.length>0&&description.length<160) {
 
-			loadingBar.show();
-
 			params = "setPhotoDescription&photoID=" + photoID + "&description=" + escape(description);
 			lychee.api(params, "text", function(data) {
 
-				if (data) photos.loadInfo(photoID);
-				else loadingBar.show("error");
+				if (data) {
+					$("#infobox .attr_description").html(description + " <div id='edit_description'><a class='icon-pencil'></a></div>");
+				} else loadingBar.show("error");
 
 			});
 
@@ -345,45 +357,39 @@ photos = {
 
 	share: function(service, photoID) {
 
-		loadingBar.show();
+		link = "";
+		url = photos.getViewLink(photoID);
 
-		params = "sharePhoto&photoID=" + photoID + "&url=" + photos.getViewLink(photoID);
-		lychee.api(params, "json", function(data) {
-
-			switch (service) {
-				case 0:
-					link = data.twitter;
-					break;
-				case 1:
-					link = data.facebook;
-					break;
-				case 2:
-					link = data.mail;
-					break;
-				case 3:
-					link = "copy";
-					modal = build.modal("Copy Link", "You can use this link to share your image with other people: <input class='copylink' value='" + photos.getViewLink(photoID) + "'>", ["Close"], [""]);
+		switch (service) {
+			case 0:
+				link = "https://twitter.com/share?url=" + encodeURI(url);
+				break;
+			case 1:
+				link = "http://www.facebook.com/sharer.php?u=" + encodeURI(url) + "&t=" + encodeURI(lychee.title());
+				break;
+			case 2:
+				link = "mailto:?subject=" + encodeURI(lychee.title()) + "&body=" + encodeURI("Hi! Check this out: " + url);
+				break;
+			case 3:
+				modal = build.modal("Copy Link", "Everyone can view your public photos, but only you can edit them. Use this link to share your photo with others: <input class='copylink' value='" + url + "'>", ["Close"], [""]);
+				$("body").append(modal);
+				$(".copylink").focus();
+				break;
+			case 4:
+				params = "getShortlink&photoID=" + photoID;
+				lychee.api(params, "text", function(data) {
+					if (data=="") data = "Something went wrong!";
+					modal = build.modal("Copy Shortlink", "Everyone can view your public photos, but only you can edit them. Use this link to share your photo with others: <input class='copylink' value='" + data + "'>", ["Close"], [""]);
 					$("body").append(modal);
 					$(".copylink").focus();
-					break;
-				case 4:
-					link = "copy";
-					modal = build.modal("Copy Shortlink", "You can use this link to share your image with other people: <input class='copylink' value='" + data.shortlink + "'>", ["Close"], [""]);
-					$("body").append(modal);
-					$(".copylink").focus();
-					break;
-				default:
-					link = "";
-					break;
-			}
+				});
+				break;
+			default:
+				link = "";
+				break;
+		}
 
-			if (link=="copy") loadingBar.hide();
-			else if (link.length>5) {
-				location.href = link;
-				loadingBar.hide();
-			} else loadingBar.show("error");
-
-		});
+		if (link.length>5) location.href = link;
 
 	},
 

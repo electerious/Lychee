@@ -18,26 +18,38 @@ build = {
 
 	album: function(albumJSON) {
 
+		var album = "";
+
 		if(!albumJSON) return "";
-		if(!albumJSON.thumb0) albumJSON.thumb0 = "img/no_images.png";
-		if(!albumJSON.thumb1) albumJSON.thumb1 = "img/no_images.png";
-		if(!albumJSON.thumb2) albumJSON.thumb2 = "img/no_images.png";
+
+		if (albumJSON.password&&lychee.publicMode) {
+			albumJSON.thumb0 = "img/password.png";
+			albumJSON.thumb1 = "img/password.png";
+			albumJSON.thumb2 = "img/password.png";
+		} else {
+			if(!albumJSON.thumb0) albumJSON.thumb0 = "img/no_images.png";
+			if(!albumJSON.thumb1) albumJSON.thumb1 = "img/no_images.png";
+			if(!albumJSON.thumb2) albumJSON.thumb2 = "img/no_images.png";
+		}
+
 		if(!albumJSON.title) albumJSON.title = "Untitled";
 		if(albumJSON.title.length>18) albumJSON.title = albumJSON.title.substr(0, 18) + "...";
 
-		var album = "";
-		album += "<div class='album' data-id='" + albumJSON.id + "'>";
+		album += "<div  class='album' data-id='" + albumJSON.id + "' data-password='" + albumJSON.password + "'>";
 		album +=	"<img src='" + lychee.upload_path + albumJSON.thumb2 + "' width='200' height='200' alt='thumb'>";
 		album +=	"<img src='" + lychee.upload_path + albumJSON.thumb1 + "' width='200' height='200' alt='thumb'>";
 		album +=	"<img src='" + lychee.upload_path + albumJSON.thumb0 + "' width='200' height='200' alt='thumb'>";
 		album += 	"<div class='overlay'>";
-		album += 		"<h1>" + albumJSON.title + "</h1>";
+
+		if (albumJSON.password&&!lychee.publicMode) album += "<h1><span class='icon-lock' title='Public album with password'></span> " + albumJSON.title + "</h1>";
+		else album += "<h1>" + albumJSON.title + "</h1>";
+
 		album += 		"<a>" + albumJSON.sysdate + "</a>";
 		album += 	"</div>";
 
-		if(albumJSON.star=="1") album += "<a class='badge red icon-star'></a>";
-		if(albumJSON.public=="1") album += "<a class='badge red icon-rss'></a>";
-		if(albumJSON.unsorted=="1") album += "<a class='badge red icon-reorder'></a>";
+		if(!lychee.publicMode&&albumJSON.star=="1") album += "<a class='badge red icon-star'></a>";
+		if(!lychee.publicMode&&albumJSON.public=="1") album += "<a class='badge red icon-share'></a>";
+		if(!lychee.publicMode&&albumJSON.unsorted=="1") album += "<a class='badge red icon-reorder'></a>";
 
 		album += "</div>";
 
@@ -47,12 +59,13 @@ build = {
 
 	photo: function(photoJSON) {
 
+		var photo = "";
+
 		if(photoJSON=="") return "";
 		if(!photoJSON.title) photoJSON.title = "";
 		if(!photoJSON.thumbUrl) photoJSON.thumbUrl = "img/no_image.png";
 		if(photoJSON.title.length>18) photoJSON.title = photoJSON.title.substr(0, 18) + "...";
 
-		var photo = "";
 		photo += "<div class='photo' data-album-id='" + photoJSON.album + "' data-id='" + photoJSON.id + "'>";
 		photo +=	"<img src='" + lychee.upload_path + photoJSON.thumbUrl + "' width='200' height='200' alt='thumb'>";
 		photo += 	"<div class='overlay'>";
@@ -61,7 +74,7 @@ build = {
 		photo += 	"</div>";
 
 		if(photoJSON.star=="1") photo += "<a class='badge red icon-star'></a>";
-		if(photoJSON.public=="1") photo += "<a class='badge red icon-rss'></a>";
+		if(!lychee.publicMode&&photoJSON.public=="1") photo += "<a class='badge red icon-share'></a>";
 
 		photo += "</div>";
 
@@ -69,9 +82,26 @@ build = {
 
 	},
 
+	no_content: function(typ) {
+
+		var no_content = "";
+
+		no_content += "<div class='no_content fadeIn'>";
+		no_content += 	"<a class='icon icon-" + typ + "'></a>";
+
+		if (typ=="search") no_content += "<p>No results</p>";
+		else if (typ=="picture") no_content += "<p>No public albums</p>";
+
+		no_content += "</div>";
+
+		return no_content;
+
+	},
+
 	modal: function(title, text, button, func) {
 
 		var modal = "";
+
 		modal += "<div class='message_overlay fadeIn'>";
 		modal += 	"<div class='message center'>";
 		modal += 		"<h1>" + title + "</h1>";
@@ -117,11 +147,15 @@ build = {
 		modal += 		"<a class='close icon-remove-sign'></a>";
 		modal +=		"<div id='add_album' class='add_album'>";
 		modal +=			"<div class='icon icon-folder-close'></div>";
-		modal +=			"<a>Add new Album</a>";
+		modal +=			"<a>New Album</a>";
+		modal +=		"</div>";
+		modal +=		"<div id='add_link' class='add_album'>";
+		modal +=			"<div class='icon icon-link'></div>";
+		modal +=			"<a>Import Link</a>";
 		modal +=		"</div>";
 		modal +=		"<div id='add_photo' class='add_album'>";
 		modal +=			"<div class='icon icon-picture'></div>";
-		modal +=			"<a>Upload new Photo</a>";
+		modal +=			"<a>Upload Photo</a>";
 		modal +=		"</div>";
 		modal += 	"</div>";
 		modal += "</div>";
@@ -135,13 +169,13 @@ build = {
 		var modal = "";
 		modal += "<div class='message_overlay'>";
 		modal += 	"<div class='message center'>";
-		modal += 		"<h1><a class='icon-lock'></a> Sign in</h1>";
+		modal += 		"<h1><a class='icon-lock'></a> Sign In</h1>";
 		modal += 		"<div class='sign_in'>";
 		modal += 			"<input id='username' type='text' name='' value='' placeholder='username'>";
 		modal += 			"<input id='password' type='password' name='' value='' placeholder='password'>";
 		modal += 		"</div>";
-		modal +=	"<div id='version'>Version " + lychee.version + "</div>";
-		modal += 	"<a onclick='lychee.login()' class='button active'>Sign in</a>";
+		modal +=		"<div id='version'>Version " + lychee.version + "<span> &#8211; <a target='_blank' href='" + lychee.updateURL + "'>Update available!</a><span></div>";
+		modal += 		"<a onclick='lychee.login()' class='button active'>Sign in</a>";
 		modal += 	"</div>";
 		modal += "</div>";
 
@@ -173,9 +207,8 @@ build = {
 
 		$.each(items, function(index) {
 
-			if (items[index][1].length!=0) {
-				menu += "<tr><td onclick='" + items[index][1] + "; contextMenu.close();'>" + items[index][0] + "</td></tr>";
-			}
+			if (items[index][0]=="separator"&&items[index][1].length==0) menu += "<tr class='separator'></tr>";
+			else if (items[index][1].length!=0) menu += "<tr><td onclick='" + items[index][1] + "; contextMenu.close();'>" + items[index][0] + "</td></tr>";
 
 		});
 
@@ -194,8 +227,8 @@ build = {
 		infobox += "<div class='wrapper'>";
 
 		if (photo.public==1) photo.public = "Public"; else photo.public = "Private";
-		if (forView==true) editTitleHTML = ""; else editTitleHTML = " <div id='edit_title'><a class='icon-pencil'></a></div>";
-		if (forView==true) editDescriptionHTML = ""; else editDescriptionHTML = " <div id='edit_description'><a class='icon-pencil'></a></div>";
+		if (forView==true||lychee.publicMode) editTitleHTML = ""; else editTitleHTML = " <div id='edit_title'><a class='icon-pencil'></a></div>";
+		if (forView==true||lychee.publicMode) editDescriptionHTML = ""; else editDescriptionHTML = " <div id='edit_description'><a class='icon-pencil'></a></div>";
 
 		infos = [
 			["", "Basics"],
@@ -215,7 +248,7 @@ build = {
 			["Focal Length", photo.focal],
 			["ISO", photo.iso],
 			["", "Share"],
-			["Privacy", photo.public],
+			["Visibility", photo.public],
 			["Short Link", photo.shortlink]
 		];
 

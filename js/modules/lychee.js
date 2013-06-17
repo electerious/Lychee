@@ -12,9 +12,15 @@ lychee = {
 
 	init: function(api_path, upload_path) {
 
-		this.version = "1.1";
+		this.version = "1.2";
 		this.api_path = api_path;
 		this.upload_path = upload_path;
+		this.update_path = "http://lychee.electerious.com/version/index.php";
+		this.updateURL = "https://github.com/electerious/Lychee";
+		this.publicMode = false;
+
+		this.checkForUpdates = false;
+		this.bitlyUsername = "";
 
 		this.loadingBar = $("#loading");
 		this.header = $("header");
@@ -27,38 +33,67 @@ lychee = {
 
 	ready: function() {
 
-		$("#tools_albums").show();
 		if (!mobileBrowser()) $(".tools").tipsy({gravity: 'n'});
-		if (window.webkitNotifications) { window.webkitNotifications.requestPermission() };
+		if (window.webkitNotifications) window.webkitNotifications.requestPermission();
 
-		lychee.api("loggedIn", "text", function(data) {
-			if (data!=1) {
-				$("body").append(build.signInModal());
-				$("#username").focus();
-				if (localStorage) {
-					local_username = localStorage.getItem("username");
-					if (local_username==null) return false;
-					if (local_username.length>1) $("#username").val(local_username);
-					$("#password").focus();
-				}
-			} else if (data) {
-				$(window).bind("popstate", lychee.load);
-				lychee.load();
-			}
+		lychee.api("init", "json", function(data) {
+			lychee.checkForUpdates = data.config.checkForUpdates;
+			lychee.bitlyUsername = data.config.bitlyUsername;
+			if (!data.loggedIn) lychee.setPublicMode();
+			$(window).bind("popstate", lychee.load);
+			lychee.load();
 		});
 
 	},
 
-	api: function(params, type, callback) {
+	setPublicMode: function() {
+
+		this.publicMode = true;
+
+		$("#button_signout, #search, #button_trash_album, #button_share_album, #button_edit_album, .button_add, #button_archive, .button_divider").remove();
+		$("#button_trash, #button_move, #button_edit, #button_share, #button_star").remove();
+
+		$(document)
+			.on("mouseenter", "#title.editable", function() { $(this).removeClass("editable") })
+			.off(event_name, "#title.editable")
+			.off("contextmenu", ".photo")
+			.off("contextmenu", ".album")
+			.off("drop");
+
+		$("#button_signin").show();
+
+	},
+
+	api: function(params, type, callback, loading) {
+
+		if (loading==undefined) loadingBar.show();
 
 		$.ajax({
 			type: "POST",
 			url: lychee.api_path,
 			data: "function=" + params,
 			dataType: type,
-			success: callback,
+			success:
+				function(data) {
+					$.timer(100, function(){ loadingBar.hide() });
+					callback(data);
+				},
 			error: lychee.error
 		});
+
+	},
+
+	showLogin: function() {
+
+		$("body").append(build.signInModal());
+		$("#username").focus();
+		if (localStorage) {
+			local_username = localStorage.getItem("username");
+			if (local_username==null) return false;
+			if (local_username.length>0) $("#username").val(local_username);
+			$("#password").focus();
+		}
+		if (lychee.checkForUpdates) lychee.update();
 
 	},
 
@@ -70,10 +105,8 @@ lychee = {
 		params = "login&user=" + user + "&password=" + password;
 		lychee.api(params, "text", function(data) {
 			if (data) {
-				if (localStorage) { localStorage.setItem("username", user); }
-				$(window).bind("popstate", lychee.load);
-				lychee.load();
-				lychee.closeModal();
+				localStorage.setItem("username", user);
+				window.location.reload();
 			} else {
 				$("#password").val("").addClass("error");
 				$(".message .button.active").removeClass("pressed");
@@ -86,6 +119,15 @@ lychee = {
 
 		lychee.api("logout", "text", function(data) {
 			window.location.reload();
+		});
+
+	},
+
+	update: function() {
+
+		$.ajax({
+			url: lychee.update_path,
+			success: function(data) { if (data!=lychee.version) $("#version span").show(); }
 		});
 
 	},
@@ -151,6 +193,30 @@ lychee = {
 
 	},
 
+	importUrl: function() {
+
+		link = prompt("Please enter the direct link to a photo to import it:", "");
+		if (lychee.content.attr("data-id")=="") albumID = 0;
+		else albumID = lychee.content.attr("data-id");
+
+		lychee.closeModal();
+
+		if (link.length>3) {
+
+			params = "importUrl&url=" + escape(link) + "&albumID=" + albumID;
+			lychee.api(params, "text", function(data) {
+
+				if (data) {
+					if (lychee.content.attr("data-id")=="") lychee.goto("a0");
+					else photos.load(lychee.content.attr("data-id"));
+				} else loadingBar.show("error");
+
+			});
+
+		} else if (link.length>0) loadingBar.show("error", "Error", "Link to short or too long. Please try another one!");
+
+	},
+
 	load: function() {
 
 		contextMenu.close();
@@ -168,11 +234,11 @@ lychee = {
 		if (albumID&&photoID) {
 
 			// Show ImageView
-			if (lychee.content.html()==""||$("#search").val().length!=0) {
+			if (lychee.content.html()==""||($("#search").length&&$("#search").val().length!=0)) {
 				lychee.content.hide();
 				photos.load(albumID, true);
 			}
-			photos.loadInfo(photoID);
+			photos.loadInfo(photoID, albumID);
 
 		} else if (albumID) {
 
@@ -232,7 +298,7 @@ lychee = {
 
 	hideControls: function() {
 
-		if (visible.imageview()) {
+		if (visible.imageview()&&!visible.infobox()) {
 			clearTimeout($(window).data("timeout"));
 			$(window).data("timeout", setTimeout(function() {
 				lychee.image_view.addClass("full");

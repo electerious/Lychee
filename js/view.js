@@ -80,7 +80,7 @@ function hideInfobox() {
 
 function loadPhotoInfo(photoID) {
 
-	params = "function=getPhotoInfo&photoID=" + photoID;
+	params = "function=getPhotoInfo&photoID=" + photoID + "&password=''";
 	$.ajax({type: "POST", url: api_path, data: params, dataType: "json", success: function(data) {
 
 		if (!data.title) data.title = "Untitled";

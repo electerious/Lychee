@@ -10,48 +10,56 @@
 
 loadingBar = {
 
+	status: null,
+
 	show: function(status, errorTitle, errorText) {
 
-		if (!status) status = "loading";
+		clearTimeout(lychee.loadingBar.data("timeout"));
 
-		switch (status) {
+		if (status=="error"&&loadingBar.status!="error") {
 
-			case "error":
-				if (!errorTitle||!errorText) {
-					errorTitle = "Error";
-					errorText = "Whoops, it looks like something went wrong. Please reload the site and try again!"
-				}
+			loadingBar.status = "error";
+
+			if (!errorTitle) errorTitle = "Error";
+			if (!errorText) errorText = "Whoops, it looks like something went wrong. Please reload the site and try again!"
+
+			lychee.loadingBar
+				.removeClass("loading uploading error")
+				.addClass(status)
+				.html("<h1>" + errorTitle + ": <span>" + errorText + "</span></h1>")
+				.show()
+				.css("height", "40px");
+			if (visible.controls()) lychee.header.css("margin-Top", "40px");
+
+			lychee.loadingBar.data("timeout", setTimeout(function () { loadingBar.hide(true) }, 3000));
+
+		} else if (loadingBar.status==null) {
+
+			loadingBar.status = "loading";
+
+			lychee.loadingBar.data("timeout", setTimeout(function () {
 				lychee.loadingBar
-					.removeClass("loading uploading error")
-					.addClass(status)
-					.html("<h1>" + errorTitle + ": <span>" + errorText + "</span></h1>")
 					.show()
-					.css("height", "40px");
-				lychee.header.css("margin-Top", "40px");
-				$.timer(3000,function(){ loadingBar.hide() });
-				break;
-
-			case "loading":
-				clearTimeout(lychee.loadingBar.data("timeout"));
-				lychee.loadingBar.data("timeout", setTimeout(function () {
-					lychee.loadingBar
-						.show()
-						.removeClass("loading uploading error")
-						.addClass(status);
-					if (visible.controls()) lychee.header.css("margin-Top", "3px");
-				}, 1000));
-				break;
+					.removeClass("loading uploading error")
+					.addClass("loading");
+				if (visible.controls()) lychee.header.css("margin-Top", "3px");
+			}, 1000));
 
 		}
 
 	},
 
-	hide: function() {
+	hide: function(force_hide) {
 
-		clearTimeout(lychee.loadingBar.data("timeout"));
-		lychee.loadingBar.html("").css("height", "3px");
-		if (visible.controls()) lychee.header.css("marginTop", "0px");
-		$.timer(300,function(){ lychee.loadingBar.hide(); });
+		if ((loadingBar.status!="error"&&loadingBar.status!=null)||force_hide) {
+
+			loadingBar.status = null;
+			clearTimeout(lychee.loadingBar.data("timeout"));
+			lychee.loadingBar.html("").css("height", "3px");
+			if (visible.controls()) lychee.header.css("marginTop", "0px");
+			$.timer(300,function(){ lychee.loadingBar.hide(); });
+
+		}
 
 	}
 

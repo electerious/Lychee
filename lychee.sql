@@ -10,6 +10,8 @@ CREATE TABLE IF NOT EXISTS `lychee_albums` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(50) NOT NULL,
   `sysdate` varchar(10) NOT NULL,
+  `public` TINYINT(1) DEFAULT '0',
+  `password` VARCHAR(100),
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 

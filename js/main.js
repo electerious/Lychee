@@ -15,10 +15,7 @@ $(document).ready(function(){
 	else event_name = "click";
 
 	/* Toolbar */
-	$("#button_signout").on(event_name, function() {
-		modal = build.modal("Sign Out", "Are you sure you want to leave and log out?", ["Sign out", "Stay here"], ["lychee.logout();", ""]);
-		$("body").append(modal);
-	});
+	$("#button_signout").on(event_name, lychee.logout);
 	$("#button_download").on(event_name, function() {
 		link = $("#image_view #image").css("background-image").replace(/"/g,"").replace(/url\(|\)$/ig, "");
 		window.open(link,"_newtab");
@@ -27,11 +24,15 @@ $(document).ready(function(){
 		if ($("#button_share a.active").length) contextMenu.share(lychee.image_view.attr("data-id"), e.pageX, e.pageY);
 		else photos.setPublic(e);
 	});
+	$("#button_share_album").on(event_name, function(e) {
+		if ($("#button_share_album a.active").length) contextMenu.share_album(lychee.content.attr("data-id"), e.pageX, e.pageY);
+		else albums.setPublic(e);
+	});
 	$("#button_trash_album").on(event_name, function() { albums.deleteDialog(lychee.content.attr("data-id")) });
 	$("#button_move").on(event_name, function(e) { contextMenu.move(lychee.image_view.attr("data-id"), e.pageX, e.pageY) });
 	$("#button_trash").on(event_name, function() { photos.deleteDialog() });
-	$("#button_edit_album").on(event_name, function() { albums.rename() });
-	$("#button_edit").on(event_name, function() { photos.rename() });
+	$("#button_edit_album").on(event_name, function() { albums.setTitle() });
+	$("#button_edit").on(event_name, function() { photos.setTitle() });
 	$("#button_info").on(event_name, function() { photos.showInfobox() });
 	$("#button_archive").on(event_name, function() { albums.getArchive() });
 	$("#button_star").on(event_name, function() { photos.setStar() });
@@ -52,7 +53,7 @@ $(document).ready(function(){
 	/* Infobox */
 	$("#infobox")
 		.on(event_name, ".header a", function() { photos.hideInfobox() })
-		.on(event_name, "#edit_title", function() { photos.rename() })
+		.on(event_name, "#edit_title", function() { photos.setTitle() })
 		.on(event_name, "#edit_description", function() { photos.setDescription() });
 
 	/* Keyboard */
@@ -72,7 +73,7 @@ $(document).ready(function(){
 
 	Mousetrap.bindGlobal('esc', function(e) {
 		e.preventDefault();
-		if ($(".message").length&&$(".sign_in").length==0) lychee.closeModal();
+		if ($(".message").length) lychee.closeModal();
 		else if (visible.infobox()) photos.hideInfobox();
 		else if (visible.imageview()) lychee.goto("a" + lychee.content.attr("data-id"));
 		else if (visible.albums()&&$("#search").val().length!=0) search.reset();
@@ -82,10 +83,11 @@ $(document).ready(function(){
 	$(document)
 
 		/* Login */
+		.on(event_name, "#button_signin", function() { lychee.showLogin() })
 		.on("keyup", "#password", function() { if ($(this).val().length>0) $(this).removeClass("error") })
 
 		/* Toolbar */
-		.on(event_name, "#title.editable", function() { if (visible.imageview()) photos.rename(); else albums.rename(); })
+		.on(event_name, "#title.editable", function() { if (visible.imageview()) photos.setTitle(); else albums.setTitle(); })
 
 		/* Navigation */
 		.on("click", ".album", function() { lychee.goto("a" + $(this).attr("data-id")) })
@@ -100,6 +102,7 @@ $(document).ready(function(){
 		/* Add Dialog */
 		.on(event_name, ".button_add", function() { $("body").append(build.addModal) })
 		.on(event_name, "#add_album", albums.add)
+		.on(event_name, "#add_link", lychee.importUrl)
 		.on(event_name, "#add_photo", function() { $("#auswahl").html(""); $("#upload_files").click() })
 
 		/* Upload */
@@ -115,12 +118,16 @@ $(document).ready(function(){
 
 		/* Controls */
 		.bind("mouseenter", lychee.showControls)
-		.bind("mouseleave", lychee.hideControls);
+		.bind("mouseleave", lychee.hideControls)
 
-	/* Upload */
-	$(document.documentElement)
-		.on("dragover", function(e) { e.preventDefault();}, false)
-		.on("drop", function (e) { e.stopPropagation(); e.preventDefault(); lychee.upload(e.originalEvent.dataTransfer.files); return true; });
+		/* Upload */
+		.on("dragover", function(e) { e.preventDefault(); }, false)
+		.on("drop", function(e) {
+			e.stopPropagation();
+			e.preventDefault();
+			lychee.upload(e.originalEvent.dataTransfer.files);
+			return true;
+		});
 
 	/* Init */
 	lychee.ready();

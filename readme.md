@@ -33,8 +33,13 @@ Lychee supports the latest versions of Google Chrome, Apple Safari and Mozilla F
 
 ## Update
 
-To update Lychee, simply replace all files, excluding the following ones:
-`uploads/`, `php/config.php`
+####From version 1.0/1.1 to 1.2:  
+1. Replace all files, excluding `uploads/`  
+2. Open `php/config.php` and reconfigure your installation  
+3. Open `php/update.php` in your browser  
+
+####From version 1.2 to 1.2.x:  
+Replace all files, excluding `uploads/` and `php/config.php`.
 
 ## Troubleshooting
 

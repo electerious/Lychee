@@ -7,7 +7,7 @@
  * @copyright   2013 by Philipp Maurer, Tobias Reich
  */
 
-if(!defined('LYCHEE')) die("Direct access is not allowed!");
+if(!defined('LYCHEE')) die('Direct access is not allowed!');
 
 // Database Functions
 function dbConnect() {
@@ -26,16 +26,14 @@ function dbConnect() {
 }
 function dbClose() {
 	global $database;
-    $close = $database->close();
-    if(!$close) {
+    if(!$database->close()) {
         echo "Closing the connection failed!";
         return false;
     }
     return true;
 }
 function createDatabase($db, $database) {
-	$query = "CREATE DATABASE IF NOT EXISTS $db;";
-	$result = $database->query($query);
+	$result = $database->query("CREATE DATABASE IF NOT EXISTS $db;");
 	$database->select_db($db);
 	if(!$result) return false;
 	return true;
@@ -45,6 +43,8 @@ function createTables($database) {
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(50) NOT NULL,
   `sysdate` varchar(10) NOT NULL,
+  `public` TINYINT(1) DEFAULT '0',
+  `password` VARCHAR(100),
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;";
     $result = $database->query($query);
@@ -147,7 +147,6 @@ function upload($files, $albumID) {
 }
 function getCamera($photoID) {
 	global $database;
-    $return = array();
     $url = "../uploads/big/$photoID";
     $type = getimagesize($url);
     $type = $type['mime'];
@@ -236,17 +235,22 @@ function createThumb($photoName, $width = 200, $width2x = 400, $height = 200, $h
 }
 
 // Session Functions
+function init($mode) {
+	global $checkForUpdates, $bitlyUsername;
+	$return["config"]["checkForUpdates"] = $checkForUpdates;
+	$return["config"]["bitlyUsername"] = $bitlyUsername;
+	if ($mode=="admin") $return["loggedIn"] = true;
+	else $return["loggedIn"] = false;
+	return $return;
+}
 function login($loginUser, $loginPassword) {
 	global $database, $user, $password;
-    if(($loginUser == $user) && ($loginPassword == md5($password))){
+    if ($loginUser==$user&&$loginPassword==md5($password)) {
+    	// Admin Login
         $_SESSION['login'] = true;
-        ini_set("session.cookie_lifetime","86400");
-        ini_set("session.gc_maxlifetime", 86400);
-        ini_set("session.gc_probability",1);
-        ini_set("session.gc_divisor",1);
         return true;
     } else {
-        return false;
+    	return false;
     }
 }
 function logout() {
@@ -258,38 +262,46 @@ function logout() {
 function addAlbum($title) {
 	global $database;
     $title = mysqli_real_escape_string($database, $title);
+    if(strlen($title)<1||strlen($title)>30) return false;
     $sysdate = date("d.m.Y");
     $query = "INSERT INTO lychee_albums (title, sysdate) VALUES ('$title', '$sysdate');";
     $result = $database->query($query);
     if(!$result) return false;
     return $database->insert_id;
 }
-function getAlbums() {
-	global $database;
-	$return = array(array(array()));
+function getAlbums($public) {
+	global $database, $sorting;
 
     // Smart Albums
-    $return = getSmartInfo();
+    if (!$public) $return = getSmartInfo();
 
     // Albums
-    $query = "SELECT id, title, sysdate FROM lychee_albums ORDER BY id DESC;";
+    if ($public) $query = "SELECT * FROM lychee_albums WHERE public = 1 ORDER BY id $sorting;";
+    else $query = "SELECT * FROM lychee_albums ORDER BY id $sorting;";
     $result = $database->query($query) OR die("Error: $result <br>".$database->error);
     $i=0;
     while($row = $result->fetch_object()) {
     	$return["album"][$i]['id'] = $row->id;
         $return["album"][$i]['title'] = $row->title;
+        $return["album"][$i]['public'] = $row->public;
         $return["album"][$i]['sysdate'] = $row->sysdate;
-        $albumID = $row->id;
-        $query = "SELECT thumbUrl FROM lychee_photos WHERE album = '$albumID' ORDER BY id DESC LIMIT 0, 3;";
-        $result2 = $database->query($query);
-        $k = 0;
-        while($row2 = $result2->fetch_object()){
-            $return["album"][$i]["thumb$k"] = $row2->thumbUrl;
-            $k++;
+        if ($row->password=="") $return["album"][$i]['password'] = false;
+        else $return["album"][$i]['password'] = true;
+
+        // Thumbs
+        if (($public&&$row->password=="")||(!$public)) {
+	        $albumID = $row->id;
+	        $query = "SELECT thumbUrl FROM lychee_photos WHERE album = '$albumID' ORDER BY id $sorting LIMIT 0, 3;";
+	        $result2 = $database->query($query);
+	        $k = 0;
+	        while($row2 = $result2->fetch_object()){
+	            $return["album"][$i]["thumb$k"] = $row2->thumbUrl;
+	            $k++;
+	        }
+	        if(!isset($return["album"][$i]["thumb0"]))$return["album"][$i]["thumb0"]="";
+	        if(!isset($return["album"][$i]["thumb1"]))$return["album"][$i]["thumb1"]="";
+	        if(!isset($return["album"][$i]["thumb2"]))$return["album"][$i]["thumb2"]="";
         }
-        if(!isset($return["album"][$i]["thumb0"]))$return[$i]["thumb0"]="";
-        if(!isset($return["album"][$i]["thumb1"]))$return[$i]["thumb1"]="";
-        if(!isset($return["album"][$i]["thumb2"]))$return[$i]["thumb2"]="";
         $i++;
     }
     if($i==0) $return["albums"] = false;
@@ -297,9 +309,8 @@ function getAlbums() {
     return $return;
 }
 function getSmartInfo() {
-	global $database;
-    $return = array(array());
-    $query = "SELECT * FROM lychee_photos WHERE album = 0 ORDER BY id DESC;";
+	global $database, $sorting;
+    $query = "SELECT * FROM lychee_photos WHERE album = 0 ORDER BY id $sorting;";
     $result = $database->query($query);
     $i = 0;
     while($row = $result->fetch_object()) {
@@ -308,7 +319,7 @@ function getSmartInfo() {
     }
     $return['unsortNum'] = $i;
 
-    $query2 = "SELECT * FROM lychee_photos WHERE public = 1 ORDER BY id DESC;";
+    $query2 = "SELECT * FROM lychee_photos WHERE public = 1 ORDER BY id $sorting;";
     $result2 = $database->query($query2);
     $i = 0;
     while($row2 = $result2->fetch_object()) {
@@ -317,7 +328,7 @@ function getSmartInfo() {
     }
     $return['publicNum'] = $i;
 
-    $query3 = "SELECT * FROM lychee_photos WHERE star = 1 ORDER BY id DESC;";
+    $query3 = "SELECT * FROM lychee_photos WHERE star = 1 ORDER BY id $sorting;";
     $result3 = $database->query($query3);
     $i = 0;
     while($row3 = $result3->fetch_object()) {
@@ -329,13 +340,11 @@ function getSmartInfo() {
 }
 function getAlbumInfo($albumID) {
 	global $database;
-    $return = array();
     $query = "SELECT * FROM lychee_albums WHERE id = '$albumID';";
     $result = $database->query($query);
     $row = $result->fetch_object();
     $return['title'] = $row->title;
     $return['date'] = $row->sysdate;
-    $return['star'] = $row->star;
     $return['public'] = $row->public;
     $query = "SELECT COUNT(*) AS num FROM lychee_photos WHERE album = '$albumID';";
     $result = $database->query($query);
@@ -346,7 +355,7 @@ function getAlbumInfo($albumID) {
 function setAlbumTitle($albumID, $title) {
 	global $database;
     $title = mysqli_real_escape_string($database, urldecode($title));
-    if(strlen($title)<3||strlen($title)>30) return false;
+    if(strlen($title)<1||strlen($title)>30) return false;
     $query = "UPDATE lychee_albums SET title = '$title' WHERE id = '$albumID';";
     $result = $database->query($query);
     if(!$result) return false;
@@ -400,7 +409,7 @@ function getAlbumArchive($albumID) {
     $result = $database->query($query);
     $row = $result->fetch_object();
     if($albumID!=0&&is_numeric($albumID))$zipTitle = $row->title;
-    $filename = "./".$zipTitle.".zip";
+    $filename = "../uploads/".$zipTitle.".zip";
 
     $zip = new ZipArchive();
 
@@ -418,24 +427,57 @@ function getAlbumArchive($albumID) {
 
     header("Content-Type: application/zip");
     header("Content-Disposition: attachment; filename=\"$zipTitle.zip\"");
+    header("Content-Length: ".filesize($filename));
     readfile($filename);
     unlink($filename);
 
     return true;
 }
+function setAlbumPublic($albumID) {
+	global $database;
+	$query = "SELECT public FROM lychee_albums WHERE id = '$albumID';";
+	$result = $database->query($query);
+	$row = $result->fetch_object();
+	if($row->public == 0){
+	    $public = 1;
+	}else{
+	    $public = 0;
+	}
+	$query = "UPDATE lychee_albums SET public = '$public', password = NULL WHERE id = '$albumID';";
+	$result = $database->query($query);
+	if(!$result) return false;
+	return true;
+}
+function setAlbumPassword($albumID, $password) {
+	global $database;
+	$query = "UPDATE lychee_albums SET password = '$password' WHERE id = '$albumID';";
+	$result = $database->query($query);
+	if(!$result) return false;
+	return true;
+}
+function isAlbumPublic($albumID, $password) {
+	global $database;
+	$query = "SELECT public, password FROM lychee_albums WHERE id = '$albumID';";
+	$result = $database->query($query);
+	$row = $result->fetch_object();
+	if(($row->public == 1) && ($row->password == $password)){
+		return true;
+	}else{
+	    return false;
+	}
+}
 
 // Photo Functions
 function getPhotos($albumID) {
-	global $database;
+	global $database, $sorting;
     switch($albumID) {
-        case "f": $query = "SELECT * FROM lychee_photos WHERE star = 1 ORDER BY id DESC;";
+        case "f": $query = "SELECT id, title, sysdate, public, star, album, thumbUrl FROM lychee_photos WHERE star = 1 ORDER BY id $sorting;";
             break;
-        case "s": $query = "SELECT * FROM lychee_photos WHERE public = 1 ORDER BY id DESC;";
+        case "s": $query = "SELECT id, title, sysdate, public, star, album, thumbUrl FROM lychee_photos WHERE public = 1 ORDER BY id $sorting;";
             break;
-        default: $query = "SELECT * FROM lychee_photos WHERE album = '$albumID' ORDER BY id DESC;";
+        default: $query = "SELECT id, title, sysdate, public, star, album, thumbUrl FROM lychee_photos WHERE album = '$albumID' ORDER BY id $sorting;";
     }
     $result = $database->query($query);
-    $return = array(array());
     $i = 0;
     while($row = $result->fetch_array()) {
         $return[$i] = $row;
@@ -451,10 +493,10 @@ function getPhotoInfo($photoID) {
 		$result = $database->query($query);
 		$row = $result->fetch_object();
 		if($row->quantity == 0) {
-			importPhoto($photoID);
+			importPhoto($photoID, 's');
 		}
 		if(is_file("../uploads/import/$photoID")) {
-			importPhoto($photoID);
+			importPhoto($photoID, 's');
 		}
 		$query = "SELECT * FROM lychee_photos WHERE import_name = '../uploads/import/$photoID' ORDER BY ID DESC;";
 	} else {
@@ -487,13 +529,6 @@ function downloadPhoto($photoID) {
     readfile($filename);
     unlink($filename);
     return true;
-}
-function countPhotos() {
-	global $database;
-    $query = "SELECT COUNT(*) AS num FROM lychee_photos;";
-    $result = $database->query($query);
-    $row = $result->fetch_object();
-    return $row->num;
 }
 function setPhotoPublic($photoID, $url) {
 	global $database;
@@ -533,8 +568,9 @@ function setPhotoStar($photoID) {
     $result = $database->query($query);
     return true;
 }
-function nextPhoto($photoID, $albumID) {
-	global $database;
+function nextPhoto($photoID, $albumID, $innerCall) {
+	global $database, $sorting;
+	if (!$innerCall&&$sorting=="ASC") return previousPhoto($photoID, $albumID, true);
     switch($albumID) {
         case 'f': $query = "SELECT * FROM lychee_photos WHERE id < '$photoID' AND star = '1' ORDER BY id DESC LIMIT 0, 1;";
             break;
@@ -557,14 +593,15 @@ function nextPhoto($photoID, $albumID) {
     }
     return $return;
 }
-function previousPhoto($photoID, $albumID) {
-	global $database;
+function previousPhoto($photoID, $albumID, $innerCall) {
+	global $database, $sorting;
+	if (!$innerCall&&$sorting=="ASC") return nextPhoto($photoID, $albumID, true);
     switch($albumID) {
-        case 'f': $query = "SELECT * FROM lychee_photos WHERE id > '$photoID' AND star = '1' LIMIT 0, 1;";
+        case 'f': $query = "SELECT * FROM lychee_photos WHERE id > '$photoID' AND star = '1' ORDER BY id LIMIT 0, 1;";
             break;
-        case 's': $query = "SELECT * FROM lychee_photos WHERE id > '$photoID' AND public = '1' LIMIT 0, 1;";
+        case 's': $query = "SELECT * FROM lychee_photos WHERE id > '$photoID' AND public = '1' ORDER BY id LIMIT 0, 1;";
             break;
-        default: $query = "SELECT * FROM lychee_photos WHERE id > '$photoID' AND album = '$albumID' LIMIT 0, 1;";
+        default: $query = "SELECT * FROM lychee_photos WHERE id > '$photoID' AND album = '$albumID' ORDER BY id LIMIT 0, 1;";
     }
     $result = $database->query($query);
     $return = $result->fetch_array();
@@ -581,7 +618,7 @@ function previousPhoto($photoID, $albumID) {
     }
     return $return;
 }
-function movePhoto($photoID, $newAlbum) {
+function setAlbum($photoID, $newAlbum) {
 	global $database;
     $query = "UPDATE lychee_photos SET album = '$newAlbum' WHERE id = '$photoID';";
     $result = $database->query($query);
@@ -622,8 +659,7 @@ function deletePhoto($photoID) {
     if(!$result) return false;
     return true;
 }
-function importPhoto($name) {
-	global $database;
+function importPhoto($name, $albumID) {
 	$tmp_name = "../uploads/import/$name";
 	$details = getimagesize($tmp_name);
 	$size = filesize($tmp_name);
@@ -633,8 +669,19 @@ function importPhoto($name) {
 	$nameFile[0]['tmp_name'] = $tmp_name;
 	$nameFile[0]['error'] = 0;
 	$nameFile[0]['size'] = $size;
-	if(!upload($nameFile, 's')) return false;
+	if(!upload($nameFile, $albumID)) return false;
 	else return true;
+}
+function importUrl($url, $albumID) {
+	if (@getimagesize($url)) {
+		$pathinfo = pathinfo($url);
+		$filename = $pathinfo['filename'].".".$pathinfo['extension'];
+		$tmp_name = "../uploads/import/$filename";
+		copy($url, $tmp_name);
+		return importPhoto($filename, $albumID);
+	} else {
+		return false;
+	}
 }
 
 // Share Functions
@@ -650,30 +697,12 @@ function urlShortner($url) {
     $shortlink = $xml->results->nodeKeyVal->shortUrl;
     return $shortlink;
 }
-function sharePhoto($photoID, $url) {
+function getShortlink($photoID) {
 	global $database;
     $query = "SELECT * FROM lychee_photos WHERE id = '$photoID';";
     $result = $database->query($query);
     $row = $result->fetch_object();
-
-    $thumb = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']."/../../".$row->thumbUrl;
-    $title = $row->title;
-    $description = $row->description;
-    $shortlink = $row->shortlink;
-
-    $twitterUrl = "https://twitter.com/share?url=".urlencode("$url");
-    $facebookUrl = "http://www.facebook.com/sharer.php?u=".urlencode("$url")."&t=".urlencode($title);
-    $mailUrl = "mailto:?subject=".rawurlencode($title)."&body=".rawurlencode("Hey guy! Check this out: $url");
-
-    $share = array();
-    $share['twitter'] = $twitterUrl;
-    $share['facebook'] = $facebookUrl;
-    $share['tumblr'] = $tumblrUrl;
-    $share['pinterest'] = $pinterestUrl;
-    $share['mail'] = $mailUrl;
-    $share['shortlink'] = $shortlink;
-
-    return $share;
+    return $row->shortlink;
 }
 function facebookHeader($photoID) {
 	$database = dbConnect();
@@ -691,7 +720,7 @@ function facebookHeader($photoID) {
 
     return $return;
 }
-function isPhotoPublic($photoID) {
+function isPhotoPublic($photoID, $password) {
 	global $database;
 	$photoID = mysqli_real_escape_string($database, $photoID);
 	if(is_numeric($photoID)) {
@@ -702,16 +731,13 @@ function isPhotoPublic($photoID) {
     $result = $database->query($query);
     $row = $result->fetch_object();
     if (!is_numeric($photoID)&&!$row) return true;
-    if($row->public == 1) {
-	    return true;
-    } else {
-	    return false;
-    }
+    if($row->public == 1) return true;
+    else return isAlbumPublic($row->album, $password);
 }
 
 // Search Function
 function search($term) {
-	global $database;
+	global $database, $sorting;
     $term = mysqli_real_escape_string($database, $term);
 
     $query = "SELECT * FROM lychee_photos WHERE title like '%$term%' OR description like '%$term%';";
@@ -725,7 +751,7 @@ function search($term) {
     $i=0;
     while($row = $result->fetch_array()) {
         $return['albums'][$i] = $row;
-        $query2 = "SELECT thumbUrl FROM lychee_photos WHERE album = '".$row['id']."' ORDER BY id DESC LIMIT 0, 3;";
+        $query2 = "SELECT thumbUrl FROM lychee_photos WHERE album = '".$row['id']."' ORDER BY id $sorting LIMIT 0, 3;";
         $result2 = $database->query($query2);
         $k = 0;
         while($row2 = $result2->fetch_object()){

@@ -19,18 +19,18 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 
 		<?php
-		
+
 			if(isset($_GET['p'])) {
-		
+
 				define("LYCHEE", true);
-				
-				include("php/config.php");
-				include("php/functions.php");
-				
+
+				require("php/config.php");
+				require("php/functions.php");
+
 				echo facebookHeader($_GET['p']);
-				
+
 			}
-		
+
 		?>
 
 	</head>
