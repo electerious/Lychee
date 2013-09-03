@@ -23,7 +23,5 @@ $password = '1234'; //Admin Password
 $checkForUpdates = true;
 $thumbQuality = 95; //Quality of the Thumbs (0-100). Default: 95
 $sorting = 'DESC'; //ASC or DESC sorting of albums and photos
-$bitlyUsername = ''; //Your Bit.ly Username
-$bitlyApi = ''; //Your Bit.ly API Key
 
 ?>

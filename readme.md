@@ -2,8 +2,8 @@
 
 #### A great looking and easy-to-use Photo-Management-System.
 
-![Lychee ImageView](http://l.electerious.com/uploads/big/13582806160093.png)
-![Lychee ImageView](http://l.electerious.com/uploads/big/13582805615704.png)
+![Lychee](http://l.electerious.com/uploads/big/13582806160093.png)
+![Lychee](http://l.electerious.com/uploads/big/13582805615704.png)
 
 Lychee is a free, easy to use and great looking photo-management-system you can run on your server to manage and share photos. Just download the source and follow the instructions to install Lychee wherever you want.
 
@@ -29,17 +29,14 @@ This shortcuts will help you to use Lychee even faster. [Keyboard Shortcuts &#18
 
 ## Browser Support
 
-Lychee supports the latest versions of Google Chrome, Apple Safari and Mozilla Firefox. Photos you share with others can be viewed from every browser. For the best experience we are recommending to use Google Chrome or Apple Safari.
+Lychee supports the latest versions of Google Chrome, Apple Safari, Mozilla Firefox and Opera. Photos you share with others can be viewed from every browser. For the best experience we are recommending to use Google Chrome or Apple Safari.
 
 ## Update
 
-####From version 1.0/1.1 to 1.2:  
+####From version 1.0/1.1/1.2 to 1.3:  
 1. Replace all files, excluding `uploads/`  
 2. Open `php/config.php` and reconfigure your installation  
 3. Open `php/update.php` in your browser  
-
-####From version 1.2 to 1.2.x:  
-Replace all files, excluding `uploads/` and `php/config.php`.
 
 ## Troubleshooting
 
@@ -60,4 +57,4 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.SE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

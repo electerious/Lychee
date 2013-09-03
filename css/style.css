@@ -167,23 +167,6 @@ body { background-color: #222; background-image: url(../img/background.jpg); fon
 	animation-duration: .3s;
 	animation-fill-mode: forwards;
 }
-.shake {
-	-webkit-animation-name: shake;
-	-webkit-animation-duration: 1s;
-	-webkit-animation-timing-function: ease-out;
-	-webkit-animation-fill-mode: forwards;
-	-moz-animation-name: shake;
-	-moz-animation-duration: .3s;
-	-moz-animation-fill-mode: forwards;
-	-o-animation-name: shake;
-	-o-animation-duration: 1s;
-	-o-animation-timing-function: ease-out;
-	-o-animation-fill-mode: forwards;
-	animation-name: shake;
-	animation-duration: 1s;
-	animation-timing-function: ease-out;
-	animation-fill-mode: forwards;
-}
 
 /* Loading ------------------------------------------------*/
 #loading {
@@ -440,7 +423,7 @@ header {
 		position: absolute;
 		width: 200px;
 		height: 200px;
-		background-image: url(../img/checks.png);
+		background-color: #222;
 		border-radius: 3px;
 		box-shadow: 0px 1px 5px #111;
 		border: 3px solid #ccc;
@@ -483,7 +466,7 @@ header {
 		position: absolute;
 		width: 200px;
 		height: 200px;
-		background-image: url(../img/checks.png);
+		background-color: #222;
 		border-radius: 3px;
 		box-shadow: 0px 1px 5px #111;
 		border: 3px solid #ccc;
@@ -504,7 +487,6 @@ header {
 		background: -o-linear-gradient(top, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 20%,rgba(0,0,0,0.9) 100%); /* Opera 11.10+ */
 		background: -ms-linear-gradient(top, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 20%,rgba(0,0,0,0.9) 100%); /* IE10+ */
 		background: linear-gradient(top, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 20%,rgba(0,0,0,0.9) 100%); /* W3C */
-		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#e6000000',GradientType=0 ); /* IE6-9 */
 	}
 	.photo .overlay {
 		opacity: 0;
@@ -569,7 +551,6 @@ header {
 		background: -o-linear-gradient(top, rgba(0,0,0,1) 0%,rgba(0,0,0,0) 100%); /* Opera 11.10+ */
 		background: -ms-linear-gradient(top, rgba(0,0,0,1) 0%,rgba(0,0,0,0) 100%); /* IE10+ */
 		background: linear-gradient(top, rgba(0,0,0,1) 0%,rgba(0,0,0,0) 100%); /* W3C */
-		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#00000000',GradientType=0 ); /* IE6-9 */
 		opacity: .4;
 	}
 	.album .badge.icon-star::after {
@@ -740,6 +721,9 @@ header {
 		text-shadow: 0px -1px 0px #222;
 		line-height: 20px;
 	}
+	.message p b {
+		font-weight: bold;
+	}
 	.message .button {
 		float: right;
 		margin: 15px 15px 15px 0px;
@@ -882,24 +866,27 @@ header {
 		color: #888;
 	}
 
-	/* Copy Link ------------------------------------------------*/
-	.copylink {
+	/* Copy Link, Password ------------------------------------------------*/
+	.message .copylink, .message .password {
 		float: left;
 		width: 95%;
 		padding: 7px 10px 9px 10px;
-		margin-top: 10px;
+		margin-top: 20px;
 		background-color: #444;
 		color: #fff;
 		text-shadow: 0px 1px 0px #222;
 		border: none;
 		border: 1px solid #111;
-		box-shadow: 0px 1px 0px #777;
+		box-shadow: 0px 1px 0px #666, inset 0px 0px 3px #333, 0px 0px 5px #005ecc;
 		outline: none;
 		border-radius: 5px;
 	}
+	.message .copylink {
+		margin-bottom: 20px;
+	}
 
 /* Image View ------------------------------------------------*/
-#image_view {
+#imageview {
 	position: fixed;
 	display: none;
 	width: 100%;
@@ -908,11 +895,11 @@ header {
 	box-shadow: 0px 2px 4px #000;
 	-webkit-transition: background-color .3s;
 }
-#image_view.full {
+#imageview.full {
 	background-color: #111;
 }
 
-#image_view #image {
+#imageview #image {
 	position: absolute;
 	top: 70px;
 	right: 30px;
@@ -936,7 +923,7 @@ header {
 	animation-duration: .3s;
 	animation-fill-mode: forwards;
 }
-#image_view #image.small {
+#imageview #image.small {
 	top: 50%;
 	right: auto;
 	bottom: auto;
@@ -944,7 +931,7 @@ header {
 }
 
 	/* Previous/Next Buttons ------------------------------------------------*/
-	#image_view a {
+	#imageview a {
 		position: fixed;
 		top:  50%;
 		margin-top: -10px;
@@ -955,21 +942,21 @@ header {
 		opacity: .1;
 		z-index: 1;
 	}
-	#image_view a:hover {
+	#imageview a:hover {
 		opacity: .9;
 	}
-	#image_view a#previous {
+	#imageview a#previous {
 		left: 20px;
 		-webkit-transition: left .3s;
 	}
-	#image_view.full a#previous {
+	#imageview.full a#previous {
 		left: -50px;
 	}
-	#image_view a#next {
+	#imageview a#next {
 		right: 20px;
 		-webkit-transition: right .3s
 	}
-	#image_view.full a#next {
+	#imageview.full a#next {
 		right: -50px;
 	}
 
@@ -1153,6 +1140,11 @@ header {
 		background-image: -ms-linear-gradient(top, #6a84f2, #3959ef);
 		background-image: linear-gradient(top, #6a84f2, #3959ef);
 	}
+	.contextmenu tr.no_hover:hover {
+		cursor: inherit;
+		background-color: inherit;
+		background-image: none;
+	}
 	.contextmenu tr.separator {
 		float: left;
 		height: 1px;
@@ -1178,11 +1170,32 @@ header {
 		box-shadow: inset 0px 1px 0px rgba(255,255,255,.1);
 		text-shadow: 0px -1px 0px rgba(0,0,0,.7);
 	}
+	.contextmenu tr.no_hover:hover td {
+		box-shadow: none;
+	}
 	.contextmenu tr a {
 		float: left;
 		width: 10px;
 		margin-right: 10px;
 		text-align: center;
+	}
+
+	/* Direct Link Input ------------------------------------------------*/
+	.contextmenu #link {
+		float: right;
+		width: 140px;
+		margin: 0px -10px -1px 0px;
+		padding: 4px 6px 5px 6px;
+		background-color: #444;
+		color: #fff;
+		border: none;
+		border: 1px solid #111;
+		box-shadow: 0px 1px 0px rgba(255,255,255,.1);
+		outline: none;
+		border-radius: 5px;
+	}
+	.contextmenu tr a#link_icon {
+		padding-top: 4px;
 	}
 
 /* Upload ------------------------------------------------*/
@@ -1327,7 +1340,7 @@ header {
 /* Screen behavior -------------------------------------------------*/
 @media only screen and (max-width: 900px) {
 
-	#title { margin: 0px 30%; width: 50%; }
+	#title { margin: 0px 20%; width: 40%; }
 	#title.view { margin: 11px 20% 0px 20%; width: 60%;	}
 	#title span { display: none; }
 
@@ -1372,7 +1385,7 @@ header {
 		height: 100px;
 		margin: 30px 5% -10px 5%;
 	}
-	
+
 	.add_album .icon {
 		margin-top: 18px;
 		font-size: 50px;

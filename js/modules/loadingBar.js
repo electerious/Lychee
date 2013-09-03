@@ -14,9 +14,7 @@ loadingBar = {
 
 	show: function(status, errorTitle, errorText) {
 
-		clearTimeout(lychee.loadingBar.data("timeout"));
-
-		if (status=="error"&&loadingBar.status!="error") {
+		if (status=="error") {
 
 			loadingBar.status = "error";
 
@@ -31,13 +29,15 @@ loadingBar = {
 				.css("height", "40px");
 			if (visible.controls()) lychee.header.css("margin-Top", "40px");
 
-			lychee.loadingBar.data("timeout", setTimeout(function () { loadingBar.hide(true) }, 3000));
+			clearTimeout(lychee.loadingBar.data("timeout"));
+			lychee.loadingBar.data("timeout", setTimeout(function() { loadingBar.hide(true) }, 3000));
 
 		} else if (loadingBar.status==null) {
 
 			loadingBar.status = "loading";
 
-			lychee.loadingBar.data("timeout", setTimeout(function () {
+			clearTimeout(lychee.loadingBar.data("timeout"));
+			lychee.loadingBar.data("timeout", setTimeout(function() {
 				lychee.loadingBar
 					.show()
 					.removeClass("loading uploading error")

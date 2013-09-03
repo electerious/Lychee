@@ -7,7 +7,7 @@
 
 var header = $("header"),
 	headerTitle = $("#title"),
-	image_view = $("#image_view"),
+	imageview = $("#imageview"),
 	api_path = "php/api.php",
 	infobox = $("#infobox");
 
@@ -27,7 +27,7 @@ $(document).ready(function(){
 
 	/* Download */
 	$("#button_download").on(event_name, function() {
-		link = $("#image_view #image").css("background-image").replace(/"/g,"").replace(/url\(|\)$/ig, "");
+		link = $("#imageview #image").css("background-image").replace(/"/g,"").replace(/url\(|\)$/ig, "");
 		window.open(link,"_newtab");
 	});
 
@@ -80,17 +80,19 @@ function hideInfobox() {
 
 function loadPhotoInfo(photoID) {
 
-	params = "function=getPhotoInfo&photoID=" + photoID + "&password=''";
+	params = "function=getPhoto&photoID=" + photoID + "&albumID=0&password=''";
 	$.ajax({type: "POST", url: api_path, data: params, dataType: "json", success: function(data) {
 
 		if (!data.title) data.title = "Untitled";
 		document.title = "Lychee - " + data.title;
 		headerTitle.html(data.title);
 
-		image_view.attr("data-id", photoID);
-		if (isPhotoSmall(data)) image_view.html("<div id='image' class='small' style='background-image: url(" + data.url + "); width: " + data.width + "px; height: " + data.height + "px; margin-top: -" + parseInt((data.height/2)-20) + "px; margin-left: -" + data.width/2 + "px;'></div>");
-		else image_view.html("<div id='image' style='background-image: url(" + data.url + "); top: 70px; right: 30px; bottom: 30px; left: 30px;'></div>");
-		image_view.removeClass("fadeOut").addClass("fadeIn").show();
+		data.url = "uploads/big/" + data.url;
+
+		imageview.attr("data-id", photoID);
+		if (isPhotoSmall(data)) imageview.html("<div id='image' class='small' style='background-image: url(" + data.url + "); width: " + data.width + "px; height: " + data.height + "px; margin-top: -" + parseInt((data.height/2)-20) + "px; margin-left: -" + data.width/2 + "px;'></div>");
+		else imageview.html("<div id='image' style='background-image: url(" + data.url + "); top: 70px; right: 30px; bottom: 30px; left: 30px;'></div>");
+		imageview.removeClass("fadeOut").addClass("fadeIn").show();
 
 		infobox.html(build.infobox(data, true)).show();
 

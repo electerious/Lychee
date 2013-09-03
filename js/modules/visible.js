@@ -15,8 +15,13 @@ visible = {
 		else return false;
 	},
 
-	imageview: function() {
-		if ($("#image_view.fadeIn").length>0) return true;
+	album: function() {
+		if ($("#tools_album").css("display")=="block") return true;
+		else return false;
+	},
+
+	photo: function() {
+		if ($("#imageview.fadeIn").length>0) return true;
 		else return false;
 	},
 
@@ -26,7 +31,17 @@ visible = {
 	},
 
 	controls: function() {
-		if (lychee.loadingBar.css("opacity")>0) return true;
+		if (lychee.loadingBar.css("opacity")<1) return false;
+		else return true;
+	},
+
+	message: function() {
+		if ($(".message").length>0) return true;
+		else return false;
+	},
+
+	contextMenu: function() {
+		if ($(".contextmenu").length>0) return true;
 		else return false;
 	}
 

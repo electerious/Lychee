@@ -1,5 +1,5 @@
 /**
- * @name        photos.js
+ * @name        search.js
  * @author      Philipp Maurer
  * @author      Tobias Reich
  * @copyright   2013 by Philipp Maurer, Tobias Reich
@@ -10,7 +10,14 @@
 
 search = {
 
+	code: null,
+
 	find: function(term) {
+
+		var params,
+			albumsData = "",
+			photosData = "",
+			code;
 
 		clearTimeout($(window).data("timeout"));
 		$(window).data("timeout", setTimeout(function() {
@@ -20,27 +27,37 @@ search = {
 				params = "search&term=" + term;
 				lychee.api(params, "json", function(data) {
 
-					albumsData = "";
-					if (data&&data.albums) $.each(data.albums, function() { albumsData += build.album(this); });
+					if (data&&data.albums) {
+						albums.json = { content: data.albums };
+						$.each(albums.json.content, function() {
+							albums.parse(this);
+							albumsData += build.album(this);
+						});
+					}
 
-					photosData = "";
-					if (data&&data.photos) $.each(data.photos, function() { photosData += build.photo(this); });
+					if (data&&data.photos) {
+						album.json = { content: data.photos };
+						$.each(album.json.content, function() {
+							album.parse(this);
+							photosData += build.photo(this);
+						});
+					}
 
 					if (albumsData==""&&photosData=="") code = "error";
 					else if (albumsData=="") code = build.divider("Photos")+photosData;
 					else if (photosData=="") code = build.divider("Albums")+albumsData;
 					else code = build.divider("Photos")+photosData+build.divider("Albums")+albumsData;
 
-					if (lychee.content.attr("data-search")!=code) {
+					if (search.code!=hex_md5(code)) {
 
 						$(".no_content").remove();
 
 						lychee.animate(".album, .photo", "contentZoomOut");
 						lychee.animate(".divider", "fadeOut");
 
-						$.timer(300,function(){
+						search.code = hex_md5(code);
 
-							lychee.content.attr("data-search", code);
+						$.timer(300,function(){
 
 							if (code=="error") $("body").append(build.no_content("search"));
 							else {
@@ -65,9 +82,9 @@ search = {
 		$("#search").val("");
 		$(".no_content").remove();
 
-		if (lychee.content.attr("data-search")!="") {
+		if (search.code!="") {
 
-			lychee.content.attr("data-search", "");
+			search.code = "";
 			lychee.animate(".divider", "fadeOut");
 			albums.load();
 

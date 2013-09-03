@@ -48,7 +48,7 @@
 	</header>
 
 	<!-- ImageView -->
-	<div id="image_view"></div>
+	<div id="imageview"></div>
 
 	<!-- Infobox -->
 	<div id="infobox"></div>
@@ -60,4 +60,4 @@
 
 
 	</body>
-</html>
+</html>>
