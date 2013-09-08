@@ -57,7 +57,7 @@ search = {
 
 						search.code = hex_md5(code);
 
-						$.timer(300,function(){
+						setTimeout(function() {
 
 							if (code=="error") $("body").append(build.no_content("search"));
 							else {
@@ -65,7 +65,7 @@ search = {
 								lychee.animate(".album, .photo", "contentZoomIn");
 							}
 
-						});
+						}, 300);
 
 					}
 

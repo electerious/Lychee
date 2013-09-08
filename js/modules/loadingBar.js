@@ -57,7 +57,7 @@ loadingBar = {
 			clearTimeout(lychee.loadingBar.data("timeout"));
 			lychee.loadingBar.html("").css("height", "3px");
 			if (visible.controls()) lychee.header.css("marginTop", "0px");
-			$.timer(300,function(){ lychee.loadingBar.hide(); });
+			setTimeout(function() { lychee.loadingBar.hide() }, 300);
 
 		}
 

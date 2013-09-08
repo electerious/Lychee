@@ -310,7 +310,7 @@ view = {
 
 			// Hide Photo
 			lychee.animate(lychee.imageview, "fadeOut");
-			$.timer(300,function(){ lychee.imageview.hide() });
+			setTimeout(function() { lychee.imageview.hide() }, 300);
 
 		},
 

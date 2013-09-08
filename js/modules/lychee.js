@@ -12,7 +12,7 @@ var lychee = {
 
 	init: function() {
 
-		this.version = "1.3";
+		this.version = "1.3.1";
 		this.api_path = "php/api.php";
 		this.update_path = "http://lychee.electerious.com/version/index.php";
 		this.updateURL = "https://github.com/electerious/Lychee";
@@ -57,7 +57,7 @@ var lychee = {
 			dataType: type,
 			success:
 				function(data) {
-					$.timer(100, function(){ loadingBar.hide() });
+					setTimeout(function() { loadingBar.hide() }, 100);
 					callback(data);
 				},
 			error: lychee.error

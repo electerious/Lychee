@@ -445,7 +445,7 @@ function getAlbumArchive($albumID) {
     $files = array();
     $i=0;
     while($row = $result->fetch_object()) {
-        $files[$i] = "../".$row->url;
+        $files[$i] = "../uploads/big/".$row->url;
         $i++;
     }
     $query = "SELECT * FROM lychee_albums WHERE id = '$albumID';";
@@ -476,7 +476,7 @@ function getAlbumArchive($albumID) {
 
     return true;
 }
-function setAlbumPublic($albumID) {
+function setAlbumPublic($albumID, $password) {
 	global $database;
 	$query = "SELECT public FROM lychee_albums WHERE id = '$albumID';";
 	$result = $database->query($query);
@@ -494,7 +494,8 @@ function setAlbumPublic($albumID) {
 		$result = $database->query($query);
 		if (!$result) return false;
 	}
-	return true;
+	if (strlen($password)>0) return setAlbumPassword($albumID, $password);
+	else return true;
 }
 function setAlbumPassword($albumID, $password) {
 	global $database;
@@ -567,30 +568,6 @@ function getPhoto($photoID, $albumID) {
 	unset($return['album_public']);
 
     return $return;
-}
-function downloadPhoto($photoID) {
-	global $database;
-    $query = "SELECT * FROM lychee_photos WHERE id = '$photoID';";
-    $result = $database->query($query);
-    $row = $result->fetch_object();
-
-    $photo = "../".$row->url;
-    $title = $row->title;
-    $type = "appcication/zip";
-    $filename = "./imageDownload.zip";
-
-    $zip = new ZipArchive();
-    if ($zip->open($filename, ZIPARCHIVE::CREATE)!==TRUE) return false;
-
-    $newFile = explode("/",$photo);
-    $newFile = array_reverse($newFile);
-    $zip->addFile($photo, $title.$newFile[0]);
-    $zip->close();
-    header("Content-Type: $type");
-    header("Content-Disposition: attachment; filename=\"$title.zip\"");
-    readfile($filename);
-    unlink($filename);
-    return true;
 }
 function setPhotoPublic($photoID, $url) {
 	global $database;
@@ -746,11 +723,21 @@ function facebookHeader($photoID) {
     $row = $result->fetch_object();
 
     $parseUrl = parse_url("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-    $thumb = $parseUrl['scheme']."://".$parseUrl['host'].$parseUrl['path']."/../".$row->thumbUrl;
+    $thumb = $parseUrl['scheme']."://".$parseUrl['host'].$parseUrl['path']."/../uploads/big/".$row->thumbUrl;
 
-    $return  = '<meta name="title" content="'.$row->title.'" />';
-    $return .= '<meta name="description" content="'.$row->description.' - via Lychee" />';
-    $return .= '<link rel="image_src"  type="image/jpeg" href="'. $thumb .'" />';
+	$return .= '<!-- General Meta Data -->';
+	$return  = '<meta name="title" content="'.$row->title.'" />';
+	$return .= '<meta name="description" content="'.$row->description.' - via Lychee" />';
+	$return .= '<link rel="image_src"  type="image/jpeg" href="'.$thumb.'" />';
+	
+	$return .= '<!-- Twitter Meta Data -->';
+	$return .= '<meta name="twitter:card" content="photo">';
+	$return .= '<meta name="twitter:title" content="'.$row->title.'">';
+	$return .= '<meta name="twitter:image:src" content="'.$thumb.'">';
+	
+	$return .= '<!-- Facebook Meta Data -->';
+	$return .= '<meta property="og:title" content="'.$row->title.'">';
+	$return .= '<meta property="og:image" content="'.$thumb.'">';
 
     return $return;
 }

@@ -30,7 +30,7 @@ modal = {
 
 		modal.fns = null;
 		$(".message_overlay").removeClass("fadeIn").css("opacity", 0);
-		$.timer(300,function(){ $(".message_overlay").remove() });
+		setTimeout(function() { $(".message_overlay").remove() }, 300);
 
 	}
 

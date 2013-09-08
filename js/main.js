@@ -26,7 +26,7 @@ $(document).ready(function(){
 	});
 	$("#button_share_album").on(event_name, function(e) {
 		if (album.json.public==1) contextMenu.shareAlbum(album.getID(), e);
-		else modal.show("Share Album", "All photos inside this album will be public and visible for everyone. Existing public photos will have the same sharing permission as this album. Are your sure you want to share this album?", [["Share Album", function() { album.setPublic(album.getID(), e) }], ["Cancel", function() {}]]);
+		else modal.show("Share Album", "All photos inside this album will be public and visible for everyone. Existing public photos will have the same sharing permission as this album. Are your sure you want to share this album? <input class='password' type='password' placeholder='password (optional)' value=''>", [["Share Album", function() { album.setPublic(album.getID(), e) }], ["Cancel", function() {}]]);
 	});
 	$("#button_signout").on(event_name, lychee.logout);
 	$("#button_download").on(event_name, function() { window.open(photo.getDirectLink(),"_newtab") });

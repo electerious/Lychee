@@ -65,16 +65,16 @@ album = {
 				if (durationTime>300) waitTime = 0; else if (refresh) waitTime = 0; else waitTime = 300 - durationTime;
 				if (!visible.albums()&&!visible.photo()&&!visible.album()) waitTime = 0;
 
-				$.timer(waitTime, function() {
-
+				setTimeout(function() {
+				
 					view.album.init();
-
+					
 					if (!refresh) {
 						lychee.animate(".album, .photo", "contentZoomIn");
 						view.header.mode("album");
 					}
-
-				}, false);
+				
+				}, waitTime);
 
 			});
 
@@ -188,17 +188,27 @@ album = {
 	setPublic: function(albumID, e) {
 
 		var params;
+		
+		if ($("input.password").length>0&&$("input.password").val().length>0) {
+		
+			params = "setAlbumPublic&albumID=" + albumID + "&password=" + hex_md5($("input.password").val());
+			album.json.password = true;
+			
+		} else {
+		
+			params = "setAlbumPublic&albumID=" + albumID;
+			album.json.password = false;
+			
+		}
 
 		if (visible.album()) {
 
 			album.json.public = (album.json.public==0) ? 1 : 0;
-			album.json.password = (album.json.public==false) ? true : false;
 			view.album.public();
 			if (album.json.public==1) contextMenu.shareAlbum(albumID, e);
 
 		}
-
-		params = "setAlbumPublic&albumID=" + albumID;
+		
 		lychee.api(params, "text", function(data) {
 
 			if (!data) loadingBar.show("error");

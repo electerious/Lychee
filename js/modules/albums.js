@@ -66,13 +66,13 @@ albums = {
 			if (durationTime>300) waitTime = 0; else waitTime = 300 - durationTime;
 			if (!visible.albums()&&!visible.photo()&&!visible.album()) waitTime = 0;
 
-			$.timer(waitTime,function(){
+			setTimeout(function() {
 
 				view.header.mode("albums");
 				view.albums.init();
 				lychee.animate(".album, .photo", "contentZoomIn");
 
-			});
+			}, waitTime);
 
 		})
 

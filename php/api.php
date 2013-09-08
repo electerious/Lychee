@@ -37,7 +37,7 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 		if ($_POST['function']=='getAlbum'&&isset($_POST['albumID'])) echo json_encode(getAlbum($_POST['albumID']));
 		if ($_POST['function']=='addAlbum'&&isset($_POST['title'])) echo addAlbum($_POST['title']);
 		if ($_POST['function']=='setAlbumTitle'&&isset($_POST['albumID'])&&isset($_POST['title'])) echo setAlbumTitle($_POST['albumID'], $_POST['title']);
-		if ($_POST['function']=='setAlbumPublic'&&isset($_POST['albumID'])) echo setAlbumPublic($_POST['albumID']);
+		if ($_POST['function']=='setAlbumPublic'&&isset($_POST['albumID'])) echo setAlbumPublic($_POST['albumID'], $_POST['password']);
 		if ($_POST['function']=='setAlbumPassword'&&isset($_POST['albumID'])&&isset($_POST['password'])) echo setAlbumPassword($_POST['albumID'], $_POST['password']);
 		if ($_POST['function']=='deleteAlbum'&&isset($_POST['albumID'])&&isset($_POST['delAll'])) echo deleteAlbum($_POST['albumID'], $_POST['delAll']);
 		if (isset($_GET['function'])&&$_GET['function']=='getAlbumArchive'&&isset($_GET['albumID'])) getAlbumArchive($_GET['albumID']);

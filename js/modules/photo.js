@@ -45,7 +45,7 @@ photo = {
 			view.photo.init();
 
 			lychee.imageview.show();
-			$.timer(300, function() { lychee.content.show(); });
+			setTimeout(function() { lychee.content.show() }, 300);
 
 		});
 
@@ -87,7 +87,7 @@ photo = {
 
 		    		$(".progressbar div").css("width", "100%");
 					$(".upload_overlay").removeClass("fadeIn").css("opacity", 0);
-					$.timer(300, function() { $(".upload_overlay").remove() });
+					setTimeout(function() { $(".upload_overlay").remove() }, 300);
 
 					if (window.webkitNotifications&&BrowserDetect.browser=="Safari") {
 						popup = window.webkitNotifications.createNotification("", "Upload complete", "You can now manage your new photo.");
@@ -148,7 +148,7 @@ photo = {
 				lychee.api(params, "text", function(data) {
 
 					$(".upload_overlay").removeClass("fadeIn").css("opacity", 0);
-					$.timer(300, function() { $(".upload_overlay").remove() });
+					setTimeout(function() { $(".upload_overlay").remove() }, 300);
 
 					if (data) {
 						if (album.getID()=="") lychee.goto("a0");
