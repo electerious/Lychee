@@ -15,6 +15,8 @@ To run Lychee, everything you need is a web-server with PHP 5.3 or later and a M
 
 Settings are located inside the `php/config.php`. All settings are optional and doesn't need to be changed. [Settings &#187;](https://github.com/electerious/Lychee/wiki/Settings)
 
+If you experience problems uploading large amounts of photos, you might want to change the PHP parameters in `.htaccess` (if you are using the PHP Apache module) or in `.user.ini` (if you are using PHP >= 5.3 with CGI or FastCGI).
+
 ## How to use
 
 After the configuration, navigate your browser to the place where Lychee is located. Everything should work now.
