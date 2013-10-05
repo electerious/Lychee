@@ -117,7 +117,7 @@ function upload($files, $albumID) {
 	    $data = $data[0];
 
 	    // Import if not uploaded via web
-	    if (!is_uploaded_file($file)) {
+	    if (!is_uploaded_file($tmp_name)) {
 	    	if (copy($tmp_name, "../uploads/big/" . md5($id) . ".$data")) {
 				unlink($tmp_name);
 				$import_name = $tmp_name;
