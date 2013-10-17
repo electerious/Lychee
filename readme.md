@@ -27,6 +27,10 @@ You can upload photos directly with every FTP client into Lychee. This feature h
 
 This shortcuts will help you to use Lychee even faster. [Keyboard Shortcuts &#187;](https://github.com/electerious/Lychee/wiki/Keyboard-Shortcuts)
 
+#### Twitter Cards
+
+Lychee supports [Twitter Cards](https://dev.twitter.com/docs/cards) and [Open Graph](http://opengraphprotocol.org) for shared images (not albums). In order to use Twitter Cards you need to request an approval for your domain. Simply share an image with Lychee, copy its link and paste it in [Twitters Card Validator](https://dev.twitter.com/docs/cards/validation/validator).
+
 ## Browser Support
 
 Lychee supports the latest versions of Google Chrome, Apple Safari, Mozilla Firefox and Opera. Photos you share with others can be viewed from every browser. For the best experience we are recommending to use Google Chrome or Apple Safari.
