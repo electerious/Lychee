@@ -147,7 +147,7 @@ function upload($files, $albumID) {
 	    if (isset($info['focal'])){$focal=$info['focal'];} else {$focal="";}
 	    if (isset($info['takeDate'])){$takeDate=$info['takeDate'];} else {$takeDate="";}
 	    if (isset($info['takeTime'])){$takeTime=$info['takeTime'];} else {$takeTime="";}
-	    $query = "INSERT INTO lychee_photos (id, title, description, url, type, width, height, size, sysdate, systime, iso, aperture, make, model, shutter, focal, takedate, taketime, thumbUrl, album, public, star, import_name)
+	    $query = "INSERT INTO lychee_photos (id, title, url, description, type, width, height, size, sysdate, systime, iso, aperture, make, model, shutter, focal, takedate, taketime, thumbUrl, album, public, star, import_name)
 	        VALUES ('$id', '$title', '" . md5($id) . ".$data', '', '$type', '$width', '$height', '$size', '$sysdate', '$systime', '$iso', '$aperture', '$make', '$model', '$shutter', '$focal', '$takeDate', '$takeTime', '" . md5($id) . ".$data', '$albumID', '$public', '$star', '$import_name');";
 	    $result = $database->query($query);
 
