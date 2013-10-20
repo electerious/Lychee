@@ -66,7 +66,7 @@ function createTables($database) {
   `aperture` varchar(10) NOT NULL,
   `make` varchar(20) NOT NULL,
   `model` varchar(50) NOT NULL,
-  `shutter` varchar(10) NOT NULL,
+  `shutter` varchar(20) NOT NULL,
   `focal` varchar(10) NOT NULL,
   `takedate` varchar(10) NOT NULL,
   `taketime` varchar(8) NOT NULL,
@@ -117,7 +117,7 @@ function upload($files, $albumID) {
 	    $data = $data[0];
 
 	    // Import if not uploaded via web
-	    if (!is_uploaded_file($tmp_name)) {
+	    if (!is_uploaded_file($file)) {
 	    	if (copy($tmp_name, "../uploads/big/" . md5($id) . ".$data")) {
 				unlink($tmp_name);
 				$import_name = $tmp_name;
@@ -147,8 +147,8 @@ function upload($files, $albumID) {
 	    if (isset($info['focal'])){$focal=$info['focal'];} else {$focal="";}
 	    if (isset($info['takeDate'])){$takeDate=$info['takeDate'];} else {$takeDate="";}
 	    if (isset($info['takeTime'])){$takeTime=$info['takeTime'];} else {$takeTime="";}
-	    $query = "INSERT INTO lychee_photos (id, title, url, type, width, height, size, sysdate, systime, iso, aperture, make, model, shutter, focal, takedate, taketime, thumbUrl, album, public, star, import_name)
-	        VALUES ('$id', '$title', '" . md5($id) . ".$data', '$type', '$width', '$height', '$size', '$sysdate', '$systime', '$iso', '$aperture', '$make', '$model', '$shutter', '$focal', '$takeDate', '$takeTime', '" . md5($id) . ".$data', '$albumID', '$public', '$star', '$import_name');";
+	    $query = "INSERT INTO lychee_photos (id, title, description, url, type, width, height, size, sysdate, systime, iso, aperture, make, model, shutter, focal, takedate, taketime, thumbUrl, album, public, star, import_name)
+	        VALUES ('$id', '$title', '" . md5($id) . ".$data', '', '$type', '$width', '$height', '$size', '$sysdate', '$systime', '$iso', '$aperture', '$make', '$model', '$shutter', '$focal', '$takeDate', '$takeTime', '" . md5($id) . ".$data', '$albumID', '$public', '$star', '$import_name');";
 	    $result = $database->query($query);
 
     }
@@ -729,12 +729,12 @@ function facebookHeader($photoID) {
 	$return  = '<meta name="title" content="'.$row->title.'" />';
 	$return .= '<meta name="description" content="'.$row->description.' - via Lychee" />';
 	$return .= '<link rel="image_src"  type="image/jpeg" href="'.$thumb.'" />';
-	
+
 	$return .= '<!-- Twitter Meta Data -->';
 	$return .= '<meta name="twitter:card" content="photo">';
 	$return .= '<meta name="twitter:title" content="'.$row->title.'">';
 	$return .= '<meta name="twitter:image:src" content="'.$thumb.'">';
-	
+
 	$return .= '<!-- Facebook Meta Data -->';
 	$return .= '<meta property="og:title" content="'.$row->title.'">';
 	$return .= '<meta property="og:image" content="'.$thumb.'">';

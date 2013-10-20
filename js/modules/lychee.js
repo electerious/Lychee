@@ -12,7 +12,7 @@ var lychee = {
 
 	init: function() {
 
-		this.version = "1.3.1";
+		this.version = "1.3.2";
 		this.api_path = "php/api.php";
 		this.update_path = "http://lychee.electerious.com/version/index.php";
 		this.updateURL = "https://github.com/electerious/Lychee";
