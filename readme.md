@@ -42,6 +42,12 @@ Lychee supports the latest versions of Google Chrome, Apple Safari, Mozilla Fire
 2. Open `php/config.php` and reconfigure your installation  
 3. Open `php/update.php` in your browser  
 
+## Extensions
+
+| Name | Description | Link |
+|:-----------|:------------|:------------|
+| lycheesync | Command line interface tool to sync lychee with any directory containing photos | https://github.com/GustavePate/lycheesync |
+
 ## Troubleshooting
 
 If Lychee is not working properly, try to open `php/check.php`. This file will take a look at your configuration and displays all errors it can find. Everything should work if you can see the message "Lychee is ready!".
