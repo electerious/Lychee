@@ -643,6 +643,8 @@ header {
 	position: fixed;
 	width: 100%;
 	height: 100%;
+	top: 0px;
+	left: 0px;
 	background-color: rgba(0,0,0,.3);
 	background-image: -webkit-gradient(radial, 50% 50%,0,50% 50%,200, from(rgba(0, 0, 0, 0.85)), to(rgba(0, 0, 0, 0.50)));
 	background-image: -webkit-radial-gradient(50% 50%, rgba(0, 0, 0, 0.50), rgba(0, 0, 0, 0.85));
@@ -966,6 +968,8 @@ header {
 		position: fixed;
 		width: 100%;
 		height: 100%;
+		top: 0px;
+		left: 0px;
 		background-color: rgba(0,0,0,.7);
 		-webkit-animation-name: fadeIn;
 		-webkit-animation-duration: .5s;
