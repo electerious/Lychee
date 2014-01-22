@@ -1,0 +1,173 @@
+/**
+ * @name        infobox.css
+ * @author      Tobias Reich
+ * @copyright   2014 by Tobias Reich
+ */
+
+#infobox_overlay {
+	z-index: 3;
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0px;
+	left: 0px;
+	background-color: rgba(0,0,0,.85);
+}
+#infobox {
+	z-index: 4;
+	position: fixed;
+	right: 0px;
+	width: 300px;
+	height: 100%;
+	background-color: rgba(20,20,20,0.98);
+	box-shadow: -1px 0px 2px rgba(0,0,0,.8);
+	display: none;
+
+	-webkit-transform: translateX(320px);
+	-moz-transform: translateX(320px);
+	transform: translateX(320px);
+
+	-webkit-user-select: text;
+	-moz-user-select: text;
+	user-select: text;
+
+	-webkit-transition: -webkit-transform .5s cubic-bezier(.225,.5,.165,1);
+	-moz-transition: -moz-transform .5s cubic-bezier(.225,.5,.165,1);
+	transition: transform .5s cubic-bezier(.225,.5,.165,1);
+}
+#infobox.active {
+	-webkit-transform: translateX(0px);
+	-moz-transform: translateX(0px);
+	transform: translateX(0px);
+}
+
+	/* Misc ------------------------------------------------*/
+	#infobox .wrapper {
+		float: left;
+		height: 100%;
+		overflow: scroll;
+	}
+	#infobox .edit {
+		display: inline;
+		margin-left: 3px;
+		width: 20px;
+		height: 5px;
+		cursor: pointer;
+	}
+	#infobox .bumper {
+		float: left;
+		width: 100%;
+		height: 50px;
+	}
+
+	/* Header ------------------------------------------------*/
+	#infobox .header {
+		float: left;
+		height: 49px;
+		width: 100%;
+		background-color: #1d1d1d;
+		background-image: -webkit-linear-gradient(top, #2A2A2A, #131313);
+		background-image: -moz-linear-gradient(top, #2A2A2A, #131313);
+		background-image: -ms-linear-gradient(top, #2A2A2A, #131313);
+		background-image: linear-gradient(top, #2A2A2A, #131313);
+		border-bottom: 1px solid #000;
+	}
+	#infobox .header h1 {
+		position: absolute;
+		margin: 15px 30%;
+		width: 40%;
+		color: #fff;
+		font-size: 16px;
+		font-weight: bold;
+		text-align: center;
+		text-shadow: 0px -1px 0px #000;
+	}
+	#infobox .header a {
+		float: right;
+		padding: 15px 15px;
+		color: #fff;
+		font-size: 20px;
+		font-weight: bold;
+		text-shadow: 0px -1px 0px #000;
+		opacity: .5;
+		cursor: pointer;
+	}
+	#infobox .header a:hover {
+		opacity: 1;
+	}
+
+	/* Seperator ------------------------------------------------*/
+	#infobox .separator {
+		float: left;
+		width: 100%;
+		border-top: 1px solid rgba(255,255,255,.04);
+		box-shadow: 0px -1px 0px #000;
+	}
+	#infobox .separator h1 {
+		margin: 20px 0px 5px 20px;
+		color: #fff;
+		font-size: 14px;
+		font-weight: bold;
+		text-shadow: 0px -1px 0px #000;
+	}
+
+	/* Table ------------------------------------------------*/
+	#infobox table {
+		float: left;
+		margin: 10px 0px 15px 20px;
+	}
+	#infobox table tr td {
+		padding: 5px 0px;
+		color: #fff;
+		font-size: 14px;
+		line-height: 19px;
+	}
+	#infobox table tr td:first-child {
+		width: 110px;
+	}
+	#infobox table tr td:last-child {
+		padding-right: 10px;
+	}
+
+	/* Tags ------------------------------------------------*/
+	#infobox #tags {
+		margin: 20px 20px 15px 20px;
+		color: #fff;
+		display: inline-block;
+	}
+	#infobox .tag {
+		float: left;
+		padding: 4px 7px;
+		margin: 0px 6px 8px 0px;
+		background-color: rgba(0,0,0,.5);
+		border: 2px solid rgba(255,255,255,.3);
+		border-radius: 100px;
+		font-size: 12px;
+		-webkit-transition: border .3s;
+		-moz-transition: border .3s;
+		transition: border .3s;
+	}
+	#infobox .tag:hover {
+		border: 2px solid #aaa;
+	}
+	#infobox .tag span {
+		float: right;
+		width: 0px;
+		padding: 0px;
+		margin: 0px 0px -2px 0px;
+		color: red;
+		font-size: 12px;
+		cursor: pointer;
+		overflow: hidden;
+		-webkit-transform: scale(0);
+		transform: scale(0);
+		-webkit-transition: width .3s, margin .3s, -webkit-transform .3s;
+		-moz-transition: width .3s, margin .3s;
+		transition: width .3s, margin .3s, transform .3s;
+	}
+	#infobox .tag:hover span {
+		width: 10px;
+		margin: 0px 0px -2px 6px;
+		-webkit-transform: scale(1);
+		transform: scale(1);
+	}

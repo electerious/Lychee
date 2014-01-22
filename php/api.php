@@ -1,67 +1,194 @@
 <?php
 
 /**
- * @name        api.php
+ * @name        API
  * @author      Philipp Maurer
  * @author      Tobias Reich
- * @copyright   2013 by Philipp Maurer, Tobias Reich
+ * @copyright   2014 by Philipp Maurer, Tobias Reich
  */
 
-if (floatval(phpversion())<5.2) die('Please upgrade to PHP 5.2 or higher!');
+@ini_set('max_execution_time', '200');
+@ini_set('post_max_size', '200M');
+@ini_set('upload_max_size', '200M');
+@ini_set('upload_max_filesize', '20M');
+@ini_set('max_file_uploads', '100');
 
 if (!empty($_POST['function'])||!empty($_GET['function'])) {
 
 	session_start();
 	define('LYCHEE', true);
 
-	require('config.php');
-	require('functions.php');
+	require('modules/db.php');
+	require('modules/session.php');
+	require('modules/settings.php');
+	require('modules/upload.php');
+	require('modules/album.php');
+	require('modules/photo.php');
+	require('modules/misc.php');
+
+	if (file_exists('config.php')) require('config.php');
+	else {
+
+		/**
+		 * Installation Mode
+		 * Limited access to configure Lychee. Only available when the config.php file is missing.
+		 */
+
+		switch ($_POST['function']) {
+
+			case 'createConfig':	if (isset($_POST['dbHost'])&&isset($_POST['dbUser'])&&isset($_POST['dbPassword'])&&isset($_POST['dbName']))
+										echo createConfig($_POST['dbHost'], $_POST['dbUser'], $_POST['dbPassword'], $_POST['dbName']);
+									break;
+
+			default:				echo 'Warning: No configuration!';
+									break;
+
+		}
+
+		exit();
+
+	}
+
+	// Connect to DB
+	$database = dbConnect();
+
+	// Get Settings
+	$settings = getSettings();
 
 	// Security
-	if (isset($_POST['albumID'])&&($_POST['albumID']==''||$_POST['albumID']<0)) exit('Wrong parameter type for albumID!');
-	if (isset($_POST['photoID'])&&$_POST['photoID']=='') exit('Wrong parameter type for photoID!');
-
-	//Connect to DB
-	$database = dbConnect();
+	if (isset($_POST['albumID'])&&($_POST['albumID']==''||$_POST['albumID']<0)) exit('Error: Wrong parameter type for albumID!');
+	if (isset($_POST['photoID'])&&$_POST['photoID']=='') exit('Error: Wrong parameter type for photoID!');
+	foreach(array_keys($_POST) as $key) $_POST[$key] = mysqli_real_escape_string($database, urldecode($_POST[$key]));
 
 	if (isset($_SESSION['login'])&&$_SESSION['login']==true) {
 
 		/**
 		 * Admin Mode
-		 * Full access to Lychee. Only with correct password.
+		 * Full access to Lychee. Only with correct password/session.
 		 */
 
-		// Album Functions
-		if ($_POST['function']=='getAlbums') echo json_encode(getAlbums(false));
-		if ($_POST['function']=='getSmartInfo') echo json_encode(getSmartInfo());
-		if ($_POST['function']=='getAlbum'&&isset($_POST['albumID'])) echo json_encode(getAlbum($_POST['albumID']));
-		if ($_POST['function']=='addAlbum'&&isset($_POST['title'])) echo addAlbum($_POST['title']);
-		if ($_POST['function']=='setAlbumTitle'&&isset($_POST['albumID'])&&isset($_POST['title'])) echo setAlbumTitle($_POST['albumID'], $_POST['title']);
-		if ($_POST['function']=='setAlbumPublic'&&isset($_POST['albumID'])) echo setAlbumPublic($_POST['albumID'], $_POST['password']);
-		if ($_POST['function']=='setAlbumPassword'&&isset($_POST['albumID'])&&isset($_POST['password'])) echo setAlbumPassword($_POST['albumID'], $_POST['password']);
-		if ($_POST['function']=='deleteAlbum'&&isset($_POST['albumID'])&&isset($_POST['delAll'])) echo deleteAlbum($_POST['albumID'], $_POST['delAll']);
-		if (isset($_GET['function'])&&$_GET['function']=='getAlbumArchive'&&isset($_GET['albumID'])) getAlbumArchive($_GET['albumID']);
+		switch ($_POST['function']) {
 
-		// Photo Functions
-		if ($_POST['function']=='getPhoto'&&isset($_POST['photoID'])&&isset($_POST['albumID'])) echo json_encode(getPhoto($_POST['photoID'], $_POST['albumID']));
-		if ($_POST['function']=='deletePhoto'&&isset($_POST['photoID'])) echo deletePhoto($_POST['photoID']);
-		if ($_POST['function']=='setAlbum'&&isset($_POST['photoID'])&&isset($_POST['albumID'])) echo setAlbum($_POST['photoID'], $_POST['albumID']);
-		if ($_POST['function']=='setPhotoTitle'&&isset($_POST['photoID'])&&isset($_POST['title'])) echo setPhotoTitle($_POST['photoID'], $_POST['title']);
-		if ($_POST['function']=='setPhotoStar'&&isset($_POST['photoID'])) echo setPhotoStar($_POST['photoID']);
-		if ($_POST['function']=='setPhotoPublic'&&isset($_POST['photoID'])&&isset($_POST['url'])) echo setPhotoPublic($_POST['photoID'], $_POST['url']);
-		if ($_POST['function']=='setPhotoDescription'&&isset($_POST['photoID'])&&isset($_POST['description'])) echo setPhotoDescription($_POST['photoID'], $_POST['description']);
+			// Album Functions
 
-        // Add Function
-		if ($_POST['function']=='upload'&&isset($_FILES)&&isset($_POST['albumID'])) echo upload($_FILES, $_POST['albumID']);
-		if ($_POST['function']=='importUrl'&&isset($_POST['url'])&&isset($_POST['albumID'])) echo importUrl($_POST['url'], $_POST['albumID']);
+			case 'getAlbums':		echo json_encode(getAlbums(false));
+									break;
 
-		// Search Function
-		if ($_POST['function']=='search'&&isset($_POST['term'])) echo json_encode(search($_POST['term']));
+			case 'getAlbum':		if (isset($_POST['albumID']))
+										echo json_encode(getAlbum($_POST['albumID']));
+									break;
 
-		// Session Functions
-		if ($_POST['function']=='init') echo json_encode(init('admin'));
-		if ($_POST['function']=='login') echo login($_POST['user'], $_POST['password']);
-		if ($_POST['function']=='logout') logout();
+			case 'addAlbum':		if (isset($_POST['title']))
+										echo addAlbum($_POST['title']);
+									break;
+
+			case 'setAlbumTitle':	if (isset($_POST['albumID'])&&isset($_POST['title']))
+										echo setAlbumTitle($_POST['albumID'], $_POST['title']);
+									break;
+
+			case 'setAlbumDescription':	if (isset($_POST['albumID'])&&isset($_POST['description']))
+											echo setAlbumDescription($_POST['albumID'], $_POST['description']);
+										break;
+
+			case 'setAlbumPublic': 	if (isset($_POST['albumID']))
+										echo setAlbumPublic($_POST['albumID'], $_POST['password']);
+									break;
+
+			case 'setAlbumPassword':if (isset($_POST['albumID'])&&isset($_POST['password']))
+										echo setAlbumPassword($_POST['albumID'], $_POST['password']);
+									break;
+
+			case 'deleteAlbum':		if (isset($_POST['albumID'])&&isset($_POST['delAll']))
+										echo deleteAlbum($_POST['albumID'], $_POST['delAll']);
+									break;
+
+			// Photo Functions
+
+			case 'getPhoto':		if (isset($_POST['photoID'])&&isset($_POST['albumID']))
+										echo json_encode(getPhoto($_POST['photoID'], $_POST['albumID']));
+									break;
+
+			case 'deletePhoto':		if (isset($_POST['photoID']))
+										echo deletePhoto($_POST['photoID']);
+									break;
+
+			case 'setAlbum':		if (isset($_POST['photoID'])&&isset($_POST['albumID']))
+										echo setAlbum($_POST['photoID'], $_POST['albumID']);
+									break;
+
+			case 'setPhotoTitle':	if (isset($_POST['photoID'])&&isset($_POST['title']))
+										echo setPhotoTitle($_POST['photoID'], $_POST['title']);
+									break;
+
+			case 'setPhotoStar':	if (isset($_POST['photoID']))
+										echo setPhotoStar($_POST['photoID']);
+									break;
+
+			case 'setPhotoPublic':	if (isset($_POST['photoID'])&&isset($_POST['url']))
+										echo setPhotoPublic($_POST['photoID'], $_POST['url']);
+									break;
+
+			case 'setPhotoDescription':	if (isset($_POST['photoID'])&&isset($_POST['description']))
+											echo setPhotoDescription($_POST['photoID'], $_POST['description']);
+										break;
+
+			// Add Functions
+
+			case 'upload':			if (isset($_FILES)&&isset($_POST['albumID']))
+										echo upload($_FILES, $_POST['albumID']);
+									break;
+
+			case 'importUrl':		if (isset($_POST['url'])&&isset($_POST['albumID']))
+										echo importUrl($_POST['url'], $_POST['albumID']);
+									break;
+
+			case 'importServer':	if (isset($_POST['albumID']))
+										echo importServer($_POST['albumID']);
+									break;
+
+			// Search Function
+
+			case 'search':			if (isset($_POST['term']))
+										echo json_encode(search($_POST['term']));
+									break;
+
+			// Session Function
+
+			case 'init':			echo json_encode(init('admin'));
+									break;
+
+			case 'login':			if (isset($_POST['user'])&&isset($_POST['password']))
+										echo login($_POST['user'], $_POST['password']);
+									break;
+
+			case 'logout':			logout();
+									break;
+
+			// Settings
+
+			case 'setLogin':		if (isset($_POST['username'])&&isset($_POST['password']))
+										echo setLogin($_POST['oldPassword'], $_POST['username'], $_POST['password']);
+									break;
+
+			case 'setSorting':		if (isset($_POST['type'])&&isset($_POST['order']))
+										echo setSorting($_POST['type'], $_POST['order']);
+									break;
+
+			// Miscellaneous
+
+			case 'update':			echo update();
+
+			default:				if (isset($_GET['function'])&&$_GET['function']=='getAlbumArchive'&&isset($_GET['albumID']))
+										// Album Archive
+										getAlbumArchive($_GET['albumID']);
+									else if (isset($_GET['function'])&&$_GET['function']=='update')
+										// Update Lychee
+										echo update();
+									else
+										exit('Error: Function not found! Please check the spelling of the called function.');
+									break;
+
+		}
 
 	} else {
 
@@ -70,45 +197,85 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 		 * Access to view all public folders and photos in Lychee.
 		 */
 
-		// Album Functions
-		if ($_POST['function']=='getAlbums') echo json_encode(getAlbums(true));
-		if ($_POST['function']=='getAlbum'&&isset($_POST['albumID'])&&isset($_POST['password'])) {
-			if (isAlbumPublic($_POST['albumID'])) {
-				// Album Public
-				if (checkAlbumPassword($_POST['albumID'], $_POST['password'])) echo json_encode(getAlbum($_POST['albumID']));
-				else echo json_encode('HTTP/1.1 403 Wrong password!');
-			} else {
-				// Album Private
-				echo json_encode('HTTP/1.1 403 Album private!');
-			}
-		}
-		if ($_POST['function']=='checkAlbumAccess'&&isset($_POST['albumID'])&&isset($_POST['password'])) {
-			if (isAlbumPublic($_POST['albumID'])) {
-				// Album Public
-				if (checkAlbumPassword($_POST['albumID'], $_POST['password'])) echo true;
-				else echo false;
-			} else {
-				// Album Private
-				echo false;
-			}
-		}
+		switch ($_POST['function']) {
 
-		// Photo Functions
-		if ($_POST['function']=='getPhoto'&&isset($_POST['photoID'])&&isset($_POST['albumID'])&&isset($_POST['password'])) {
-			if (isPhotoPublic($_POST['photoID'], $_POST['password'])) echo json_encode(getPhoto($_POST['photoID'], $_POST['albumID']));
-			else echo json_encode('HTTP/1.1 403 Wrong password!');
-		}
+			// Album Functions
 
-		// Session Functions
-		if ($_POST['function']=='init') echo json_encode(init('public'));
-		if ($_POST['function']=='login') echo login($_POST['user'], $_POST['password']);
+			case 'getAlbums':		echo json_encode(getAlbums(true));
+									break;
+
+			case 'getAlbum':		if (isset($_POST['albumID'])&&isset($_POST['password'])) {
+										if (isAlbumPublic($_POST['albumID'])) {
+											// Album Public
+											if (checkAlbumPassword($_POST['albumID'], $_POST['password']))
+												echo json_encode(getAlbum($_POST['albumID']));
+											else
+												echo 'Warning: Wrong password!';
+										} else {
+											// Album Private
+											echo 'Warning: Album private!';
+										}
+									}
+									break;
+
+			case 'checkAlbumAccess':if (isset($_POST['albumID'])&&isset($_POST['password'])) {
+										if (isAlbumPublic($_POST['albumID'])) {
+											// Album Public
+											if (checkAlbumPassword($_POST['albumID'], $_POST['password']))
+												echo true;
+											else
+												echo false;
+										} else {
+											// Album Private
+											echo false;
+										}
+									}
+									break;
+
+			// Photo Functions
+
+			case 'getPhoto':		if (isset($_POST['photoID'])&&isset($_POST['albumID'])&&isset($_POST['password'])) {
+										if (isPhotoPublic($_POST['photoID'], $_POST['password']))
+											echo json_encode(getPhoto($_POST['photoID'], $_POST['albumID']));
+										else
+											echo 'Warning: Wrong password!';
+									}
+									break;
+
+			// Session Functions
+
+			case 'init':			echo json_encode(init('public'));
+									break;
+
+			case 'login':			if (isset($_POST['user'])&&isset($_POST['password']))
+										echo login($_POST['user'], $_POST['password']);
+									break;
+
+			// Miscellaneous
+
+			default:				if (isset($_GET['function'])&&$_GET['function']=='getAlbumArchive'&&isset($_GET['albumID'])&&isset($_GET['password'])) {
+										if (isAlbumPublic($_GET['albumID'])) {
+											// Album Public
+											if (checkAlbumPassword($_GET['albumID'], $_GET['password']))
+												getAlbumArchive($_GET['albumID']);
+											else
+												echo 'Warning: Wrong password!';
+										} else {
+											// Album Private
+											echo 'Warning: Album private or not downloadable!';
+										}
+									} else {
+										exit('Error: Function not found! Please check the spelling of the called function.');
+									}
+									break;
+
+		}
 
 	}
 
 } else {
 
-	header('HTTP/1.1 401 Unauthorized');
-	die('Error: No permission!');
+	exit('Error: No permission!');
 
 }
 

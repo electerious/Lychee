@@ -9,10 +9,10 @@
 		<meta name="keywords" content="">
 		<meta name="description" content="">
 
-		<link type="text/css" rel="stylesheet" href="css/animations.css">
-		<link type="text/css" rel="stylesheet" href="css/font-awesome.css">
-		<link type="text/css" rel="stylesheet" href="css/style.css">
-		<link rel="shortcut icon" href="img/favicon.png">
+		<link type="text/css" rel="stylesheet" href="assets/css/min/reset.css">
+		<link type="text/css" rel="stylesheet" href="assets/css/min/main.css">
+
+		<link rel="shortcut icon" href="assets/img/favicon.ico">
 
 		<meta name="apple-mobile-web-app-status-bar-style" content="black" >
 		<meta name="viewport" content="user-scalable=no, initial-scale=1">
@@ -25,19 +25,22 @@
 				define("LYCHEE", true);
 
 				require("php/config.php");
-				require("php/functions.php");
+				require("php/modules/db.php");
+				require("php/modules/misc.php");
 
-				echo facebookHeader($_GET['p']);
+				$database = dbConnect();
+
+				echo openGraphHeader($_GET['p']);
 
 			}
 
 		?>
 
 	</head>
-	<body>
+	<body class="view">
 
 	<!-- Header -->
-	<header>
+	<header class="view">
 
 		<!-- Buttons -->
 		<div class="tools" id="button_download" title="Full Photo"><a class="icon-resize-full"></a></div>
@@ -48,16 +51,16 @@
 	</header>
 
 	<!-- ImageView -->
-	<div id="imageview"></div>
+	<div id="imageview" class="view"></div>
 
 	<!-- Infobox -->
 	<div id="infobox"></div>
 
 	<!-- JS -->
-	<script type="text/javascript" src="js/frameworks.js"></script>
-	<script type="text/javascript" src="js/modules/build.js"></script>
-	<script type="text/javascript" src="js/view.js"></script>
+	<script type="text/javascript" src="assets/js/min/frameworks.js"></script>
+	<script type="text/javascript" src="assets/js/modules/build.js"></script>
+	<script type="text/javascript" src="assets/js/view.js"></script>
 
 
 	</body>
-</html>>
+</html>

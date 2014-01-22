@@ -1,0 +1,198 @@
+/**
+ * @name        message.css
+ * @author      Tobias Reich
+ * @copyright   2014 by Tobias Reich
+ */
+
+.message_overlay {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0px;
+	left: 0px;
+	background-color: rgba(0,0,0,.85);
+	z-index: 1000;
+}
+.message {
+	position: absolute;
+	display: inline-block;
+	width: 500px;
+	margin-left: -250px;
+	margin-top: -95px;
+	background-color: #444;
+	background-image: -webkit-linear-gradient(top, rgb(75, 75, 75), rgb(45, 45, 45));
+	background-image: -moz-linear-gradient(top, rgb(75, 75, 75), rgb(45, 45, 45));
+	background-image: -ms-linear-gradient(top, rgb(75, 75, 75), rgb(45, 45, 45));
+	background-image: linear-gradient(top, rgb(75, 75, 75), rgb(45, 45, 45));
+	border-radius: 5px;
+	box-shadow: 0px 0px 5px #000, inset 0px 1px 0px rgba(255,255,255,.08), inset 1px 0px 0px rgba(255,255,255,.03), inset -1px 0px 0px rgba(255,255,255,.03);
+
+	/* Animation */
+	-webkit-animation-name: moveUp;
+	-webkit-animation-duration: .3s;
+	-webkit-animation-timing-function: ease-out;
+	-moz-animation-name: moveUp;
+	-moz-animation-duration: .3s;
+	-moz-animation-timing-function: ease-out;
+	animation-name: moveUp;
+	animation-duration: .3s;
+	animation-timing-function: ease-out;
+}
+
+	/* Header ------------------------------------------------*/
+	.message h1 {
+		float: left;
+		width: 100%;
+		padding: 12px 0px;
+		color: #fff;
+		font-size: 16px;
+		font-weight: bold;
+		text-shadow: 0px -1px 0px #222;
+		text-align: center;
+	}
+	.message .close {
+		position: absolute;
+		top: 0px;
+		right: 0px;
+		padding: 12px 14px 6px 7px;
+		color: #aaa;
+		font-size: 20px;
+		text-shadow: 0px -1px 0px #222;
+		cursor: pointer;
+	}
+	.message .close:hover {
+		color: #fff;
+	}
+
+	/* Text ------------------------------------------------*/
+	.message p {
+		float: left;
+		width: 90%;
+		margin-top: 1px;
+		padding: 12px 5% 15px 5%;
+		color: #eee;
+		font-size: 14px;
+		text-shadow: 0px -1px 0px #222;
+		line-height: 20px;
+	}
+	.message p b {
+		font-weight: bold;
+	}
+	.message p a {
+		color: #eee;
+		text-decoration: none;
+		border-bottom: 1px dashed #888;
+	}
+
+	/* Button ------------------------------------------------*/
+	.message .button {
+		float: right;
+		margin: 15px 15px 15px 0px;
+		padding: 6px 10px 8px 10px;
+		background-color: #4e4e4e;
+		background-image: -webkit-linear-gradient(top, rgb(60, 60, 60), rgb(45, 45, 45));
+		background-image: -moz-linear-gradient(top, rgb(60, 60, 60), rgb(45, 45, 45));
+		background-image: -ms-linear-gradient(top, rgb(60, 60, 60), rgb(45, 45, 45));
+		background-image: linear-gradient(top, rgb(60, 60, 60), rgb(45, 45, 45));
+		color: #ccc;
+		font-size: 14px;
+		font-weight: bold;
+		text-align: center;
+		text-shadow: 0px -1px 0px #222;
+		border-radius: 5px;
+		border: 1px solid #191919;
+		box-shadow: inset 0px 1px 0px rgba(255,255,255,.1), 0px 1px 0px rgba(255,255,255,.1);
+		cursor: pointer;
+	}
+	.message .button:first-of-type {
+		margin: 15px 5% 18px 0px !important;
+	}
+	.message .button.active {
+		color: #fff;
+		box-shadow: inset 0px 1px 0px rgba(255,255,255,.1), 0px 1px 0px rgba(255,255,255,.1), 0px 0px 4px #005ecc;
+	}
+	.message .button:hover {
+		background-color: #565757;
+		background-image: -webkit-linear-gradient(top, rgb(80, 80, 80), rgb(57, 57, 57));
+		background-image: -moz-linear-gradient(top, rgb(80, 80, 80), rgb(57, 57, 57));
+		background-image: -ms-linear-gradient(top, rgb(80, 80, 80), rgb(57, 57, 57));
+		background-image: linear-gradient(top, rgb(80, 80, 80), rgb(57, 57, 57));
+	}
+	.message .button:active,
+	.message .button.pressed {
+		background-color: #393939;
+		background-image: -webkit-linear-gradient(top, rgb(57, 57, 57), rgb(70, 70, 70));
+		background-image: -moz-linear-gradient(top, rgb(57, 57, 57), rgb(70, 70, 70));
+		background-image: -ms-linear-gradient(top, rgb(57, 57, 57), rgb(70, 70, 70));
+		background-image: linear-gradient(top, rgb(57, 57, 57), rgb(70, 70, 70));
+	}
+
+	/* Sign in ------------------------------------------------*/
+	.sign_in {
+		float: left;
+		width: 100%;
+		margin-top: 1px;
+		padding: 5px 0px;
+		color: #eee;
+		font-size: 14px;
+		text-shadow: 0px -1px 0px #222;
+		line-height: 20px;
+	}
+	.sign_in input {
+		float: left;
+		width: 88%;
+		padding: 7px 1% 9px 1%;
+		margin: 0px 5%;
+		background-color: transparent;
+		color: #fff;
+		text-shadow: 0px -1px 0px #222;
+		border: none;
+		border-bottom: 1px solid #222;
+		box-shadow: 0px 1px 0px rgba(255,255,255,.1);
+		border-radius: 0px;
+		outline: none;
+	}
+	.sign_in input:first-of-type {
+		margin-bottom: 10px;
+	}
+	.sign_in input.error:focus {
+		box-shadow: 0px 1px 0px rgba(204, 0, 7, 0.6);
+	}
+	.message #version {
+		display: inline-block;
+		margin-top: 23px;
+		margin-left: 5%;
+		color: #888;
+		text-shadow: 0px -1px 0px #111;
+	}
+	.message #version span {
+		display: none;
+	}
+	.message #version span a {
+		color: #888;
+	}
+
+	/* Input Misc ------------------------------------------------*/
+	.message input.text {
+		float: left;
+		width: calc(100% - 10px);
+		padding: 17px 5px 9px 5px;
+		margin-top: 10px;
+		background-color: transparent;
+		color: #fff;
+		text-shadow: 0px -1px 0px #222;
+		border: none;
+		box-shadow: 0px 1px 0px rgba(255,255,255,.1);
+		border-bottom: 1px solid #222;
+		border-radius: 0px;
+		outline: none;
+	}
+	.message input.less {
+		margin-bottom: -10px;
+	}
+	.message input.more {
+		margin-bottom: 30px;
+	}
+	.message .copylink {
+		margin-bottom: 20px;
+	}

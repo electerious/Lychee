@@ -1,0 +1,35 @@
+/**
+ * @name        misc.css
+ * @author      Tobias Reich
+ * @copyright   2014 by Tobias Reich
+ */
+
+html,
+body {
+	min-height: 100%;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+}
+body {
+	background-color: #222;
+	font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	-webkit-font-smoothing: antialiased;
+	-moz-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-smoothing: antialiased;
+}
+body.view {
+	background-color: #0f0f0f;
+}
+.center {
+	position: absolute;
+	left: 50%;
+	top:50%;
+}
+* {
+	-webkit-transition: color .3s, opacity .3s ease-out, -webkit-transform .3s ease-out, box-shadow .3s;
+	-moz-transition: opacity .3s ease-out, -moz-transform .3s ease-out, box-shadow .3s;
+	transition: color .3s, opacity .3s ease-out, transform .3s ease-out, box-shadow .3s;
+}

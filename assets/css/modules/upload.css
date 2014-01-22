@@ -1,0 +1,123 @@
+/**
+ * @name        upload.css
+ * @author      Tobias Reich
+ * @copyright   2014 by Tobias Reich
+ */
+
+#upload {
+	display: none;
+}
+.upload_overlay {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0px;
+	left: 0px;
+	background-color: rgba(0,0,0,.85);
+	z-index: 1000;
+}
+.upload_message {
+	position: absolute;
+	display: inline-block;
+	width: 200px;
+	margin-left: -100px;
+	margin-top: -85px;
+	background-color: #444;
+	background-image: -webkit-linear-gradient(top, rgb(75, 75, 75), rgb(45, 45, 45));
+	background-image: -moz-linear-gradient(top, rgb(75, 75, 75), rgb(45, 45, 45));
+	background-image: -ms-linear-gradient(top, rgb(75, 75, 75), rgb(45, 45, 45));
+	background-image: linear-gradient(top, rgb(75, 75, 75), rgb(45, 45, 45));
+	border-radius: 5px;
+	box-shadow: 0px 0px 5px #000, inset 0px 1px 0px rgba(255,255,255,.08), inset 1px 0px 0px rgba(255,255,255,.03), inset -1px 0px 0px rgba(255,255,255,.03);
+
+	/* Animation */
+	-webkit-animation-name: moveUp;
+	-webkit-animation-duration: .3s;
+	-webkit-animation-timing-function: ease-out;
+	-moz-animation-name: moveUp;
+	-moz-animation-duration: .3s;
+	-moz-animation-timing-function: ease-out;
+	animation-name: moveUp;
+	animation-duration: .3s;
+	animation-timing-function: ease-out;
+}
+
+	/* Icon ------------------------------------------------*/
+	.upload_message a {
+		float: left;
+		width: 100%;
+		margin: 35px 0px 5px 0px;
+		color: #fff;
+		font-size: 70px;
+		text-shadow: 0px 1px 2px rgba(0,0,0,.5);
+		text-align: center;
+
+		-webkit-animation-name: pulse;
+		-webkit-animation-duration: 2s;
+		-webkit-animation-timing-function: ease-in-out;
+		-webkit-animation-iteration-count: infinite;
+		-moz-animation-name: pulse;
+		-moz-animation-duration: 2s;
+		-moz-animation-timing-function: ease-in-out;
+		-moz-animation-iteration-count: infinite;
+		animation-name: pulse;
+		animation-duration: 2s;
+		animation-timing-function: ease-in-out;
+		animation-iteration-count: infinite;
+	}
+
+	/* Text ------------------------------------------------*/
+	.upload_message p {
+		float: left;
+		width: 100%;
+		margin: 10px 0px 35px 0px;
+		color: #fff;
+		font-size: 14px;
+		text-align: center;
+		text-shadow: 0px -1px 0px rgba(0,0,0,.5);
+	}
+
+	/* Progress ------------------------------------------------*/
+	.upload_message .progressbar {
+		float: left;
+		width: 170px;
+		height: 25px;
+		margin: 15px;
+		background-size: 50px 25px;
+		background-repeat: repeat-x;
+		background-image: -webkit-linear-gradient(left, #191919 0%, #191919 47%, #1D1D1D 53%, #1D1D1D 100%);
+		background-image: -moz-linear-gradient(left, #191919 0%, #191919 47%, #1D1D1D 53%, #1D1D1D 100%);
+		background-image: linear-gradient(left right, #191919 0%, #191919 47%, #1D1D1D 53%, #1D1D1D 100%);
+		border: 1px solid #090909;
+		box-shadow: 0 1px 0 rgba(255,255,255,.06), inset 0px 0px 2px #222;
+		border-radius: 50px;
+
+		/* Animation */
+		-webkit-animation-name: moveBackground;
+		-webkit-animation-duration: 1s;
+		-webkit-animation-timing-function: linear;
+		-webkit-animation-iteration-count: infinite;
+		-moz-animation-name: moveBackground;
+		-moz-animation-duration: 1s;
+		-moz-animation-timing-function: linear;
+		-moz-animation-iteration-count: infinite;
+		animation-name: moveBackground;
+		animation-duration: 1s;
+		animation-timing-function: linear;
+		animation-iteration-count: infinite;
+	}
+	.upload_message .progressbar div {
+		float: left;
+		width: 0%;
+		height: 100%;
+		box-shadow: 0 1px 0 #000, 1px 0px 2px #000;
+		background-color: #f5f2f7;
+		background-image: -webkit-linear-gradient(top, #f5f2f7, #c7c6c8);
+		background-image: -moz-linear-gradient(top, #f5f2f7, #c7c6c8);
+		background-image: -ms-linear-gradient(top, #f5f2f7, #c7c6c8);
+		background-image: linear-gradient(top, #f5f2f7, #c7c6c8);
+		border-radius: 50px;
+		-webkit-transition: width .2s, opacity .5;
+		-moz-transition: width .2s, opacity .5;
+		transition: width .2s, opacity .5;
+	}

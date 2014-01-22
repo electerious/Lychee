@@ -1,0 +1,61 @@
+/**
+ * @name        mediaquery.css
+ * @author      Tobias Reich
+ * @copyright   2014 by Tobias Reich
+ */
+
+@media only screen and (max-width: 900px) {
+
+	#title {
+		margin: 0px 20% !important;
+		width: 40% !important;
+	}
+	#title.view {
+		margin: 0px 20% !important;
+		width: 60% !important;
+	}
+	#title span {
+		display: none !important;
+	}
+
+}
+@media only screen and (max-width: 640px) {
+
+	#title {
+		display: none !important;
+	}
+	#title.view {
+		display: block !important;
+		width: 70% !important;
+		margin: 0px 20% 0px 10% !important;
+	}
+	#button_move {
+		display: none !important;
+	}
+	#button_archive {
+		display: none !important;
+	}
+
+	.center {
+		top: 0px !important;
+		left: 0px !important;
+	}
+
+	.album, .photo {
+		margin: 40px 0px 0px 50px !important;
+	}
+
+	.message {
+		position: fixed !important;
+		width: 100% !important;
+		height: 100% !important;
+		margin: 1px 0px 0px 0px !important;
+		border-radius: 0px !important;
+
+		/* Animation */
+		-webkit-animation: moveUp .3s !important;
+		-moz-animation: moveUp .3s !important;
+		animation: moveUp .3s !important;
+	}
+
+}

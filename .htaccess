@@ -2,9 +2,9 @@ IndexIgnore *
 
 # Uncomment these lines to change PHP parameters if you are using the PHP Apache module
 #<IfModule mod_php5.c>
-#	php_value max_execution_time 300
-#	php_value post_max_size 100M
-#	php_value upload_max_size 100M
-#	php_value upload_max_filesize 5M
+#	php_value max_execution_time 200
+#	php_value post_max_size 200M
+#	php_value upload_max_size 200M
+#	php_value upload_max_filesize 20M
 #	php_value max_file_uploads 100
 #</IfModule>

@@ -1,0 +1,16 @@
+### v2.0
+- All new redefined interface
+- Faster animations and transitions
+- Import from Dropbox
+- Import from Server
+- Download public albums
+- Several sorting options
+- Installation assistent
+- Infobox and description for albums
+- Faster loading and improved performance
+- Better file handling and upload
+- Album covers are chosen intelligent
+- Prettier URLs
+- Massive changes under the hood
+- IPTC support (Headline and Caption)
+- EXIF Orientation support

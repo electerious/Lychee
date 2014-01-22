@@ -1,0 +1,88 @@
+/**
+ * @name        imageview.css
+ * @author      Tobias Reich
+ * @copyright   2014 by Tobias Reich
+ */
+
+#imageview {
+	position: fixed;
+	display: none;
+	width: 100%;
+	min-height: 100%;
+	background-color: rgba(10,10,10,.99);
+
+	-webkit-transition: background-color .3s;
+}
+
+	/* Modes ------------------------------------------------*/
+	#imageview.view {
+		background-color: inherit;
+	}
+	#imageview.full {
+		background-color: #040404;
+	}
+
+	/* ImageView ------------------------------------------------*/
+	#imageview #image {
+		position: absolute;
+		top: 60px;
+		right: 30px;
+		bottom: 30px;
+		left: 30px;
+		background-repeat: no-repeat;
+		background-position: 50% 50%;
+		background-size: contain;
+
+		-webkit-transition: top .3s, bottom .3s, margin-top .3s;
+
+		-webkit-animation-name: zoomIn;
+		-webkit-animation-duration: .3s;
+		-moz-animation-name: zoomIn;
+		-moz-animation-duration: .3s;
+		animation-name: zoomIn;
+		animation-duration: .3s;
+	}
+	#imageview #image.small {
+		top: 50%;
+		right: auto;
+		bottom: auto;
+		left: 50%;
+	}
+
+	/* Previous/Next Buttons ------------------------------------------------*/
+	#imageview .arrow_wrapper {
+		position: fixed;
+		width: 20%;
+		height: calc(100% - 60px);
+		top: 60px;
+		z-index: 1;
+	}
+	#imageview .arrow_wrapper.previous {
+		left: 0;
+	}
+	#imageview .arrow_wrapper.next {
+		right: 0;
+	}
+	#imageview .arrow_wrapper a {
+		position: fixed;
+		top:  50%;
+		margin-top: -10px;
+		color: #fff;
+		font-size: 50px;
+		text-shadow: 0px 1px 2px #000;
+		cursor: pointer;
+		opacity: 0;
+		z-index: 2;
+		-webkit-transition: opacity .2s;
+		-moz-transition: opacity .2s;
+		transition: opacity .2s;
+	}
+	#imageview .arrow_wrapper:hover a {
+		opacity: .2;
+	}
+	#imageview .arrow_wrapper a#previous {
+		left: 20px;
+	}
+	#imageview .arrow_wrapper a#next {
+		right: 20px;
+	}

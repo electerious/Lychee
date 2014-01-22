@@ -5,16 +5,35 @@
 		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
 		<title>Lychee</title>
 
-		<meta name="author" content="Tobias Reich, Philipp Maurer">
+		<meta name="author" content="Tobias Reich">
 		<meta name="keywords" content="">
 		<meta name="description" content="">
 
-		<link type="text/css" rel="stylesheet" href="css/animations.css">
-		<link type="text/css" rel="stylesheet" href="css/font-awesome.css">
-		<link type="text/css" rel="stylesheet" href="css/style.css">
-		<link rel="shortcut icon" href="img/favicon.png">
+		<!-- CSS -->
+		<link type="text/css" rel="stylesheet" href="assets/css/min/reset.css">
 
-		<link rel="apple-touch-icon-precomposed" href="img/apple-touch-icon.png">
+		<!-- Development
+		<link type="text/css" rel="stylesheet" href="assets/css/modules/upload.css">
+		<link type="text/css" rel="stylesheet" href="assets/css/modules/tooltip.css">
+		<link type="text/css" rel="stylesheet" href="assets/css/modules/misc.css">
+		<link type="text/css" rel="stylesheet" href="assets/css/modules/message.css">
+		<link type="text/css" rel="stylesheet" href="assets/css/modules/mediaquery.css">
+		<link type="text/css" rel="stylesheet" href="assets/css/modules/loading.css">
+		<link type="text/css" rel="stylesheet" href="assets/css/modules/infobox.css">
+		<link type="text/css" rel="stylesheet" href="assets/css/modules/imageview.css">
+		<link type="text/css" rel="stylesheet" href="assets/css/modules/header.css">
+		<link type="text/css" rel="stylesheet" href="assets/css/modules/font.css">
+		<link type="text/css" rel="stylesheet" href="assets/css/modules/contextmenu.css">
+		<link type="text/css" rel="stylesheet" href="assets/css/modules/content.css">
+		<link type="text/css" rel="stylesheet" href="assets/css/modules/animations.css"> -->
+
+		<!-- Production -->
+		<link type="text/css" rel="stylesheet" href="assets/css/min/main.css">
+
+		<link rel="shortcut icon" href="assets/img/favicon.ico">
+		<link rel="apple-touch-icon" href="assets/img/apple-touch-icon-iphone.png" sizes="120x120">
+		<link rel="apple-touch-icon" href="assets/img/apple-touch-icon-ipad.png" sizes="152x152">
+
 		<meta name="apple-mobile-web-app-status-bar-style" content="black" >
 		<meta name="viewport" content="user-scalable=no, initial-scale=1">
 		<meta name="apple-mobile-web-app-capable" content="yes">
@@ -30,30 +49,30 @@
 
 		<!-- Buttons -->
 		<div id="tools_albums">
-			<a class="button" id="button_signout">Sign Out</a>
-			<a class="button" id="button_signin">Sign In</a>
-			<a class="button icon icon-plus-sign button_add"></a>
+			<a class="button left icon-cog" id="button_settings"></a>
+			<a class="button left icon-signout" id="button_signin"></a>
+			<a id="hostedwith">Hosted with Lychee</a>
+			<a class="button right icon icon-plus button_add"></a>
 			<a class="button_divider"></a>
 			<input id="search" type="text" name="search" placeholder="Search …">
 		</div>
 		<div id="tools_album">
-			<a class="button" id="button_back_home">Back</a>
-			<a class="button icon icon-plus-sign button_add"></a>
+			<a class="button left icon-arrow-left" id="button_back_home"></a>
+			<a class="button right icon icon-plus button_add"></a>
 			<a class="button_divider"></a>
 			<div class="tools" id="button_trash_album" title="Delete Album"><a class="icon-trash"></a></div>
 			<div class="tools" id="button_archive" title="Download Album"><a class="icon-circle-arrow-down"></a></div>
-			<div class="tools" id="button_edit_album" title="Edit Title"><a class="icon-edit"></a></div>
+			<div class="tools" id="button_info_album" title="Show Info"><a class="icon-info-sign"></a></div>
 			<div class="tools" id="button_share_album" title="Share Album"><a class="icon-share"></a></div>
 		</div>
 		<div id="tools_photo">
-			<a class="button" id="button_back">Back</a>
+			<a class="button left icon-arrow-left" id="button_back"></a>
 			<div class="tools" id="button_trash" title="Delete"><a class="icon-trash"></a></div>
-			<div class="tools" id="button_move" title="Move to Album"><a class="icon-folder-open"></a></div>
-			<div class="tools" id="button_edit" title="Edit Title"><a class="icon-edit"></a></div>
-			<a class="button_divider less"></a>
+			<div class="tools" id="button_move" title="Move"><a class="icon-folder-open"></a></div>
+			<a class="button_divider"></a>
 			<div class="tools" id="button_download" title="Full Photo"><a class="icon-resize-full"></a></div>
 			<div class="tools" id="button_info" title="Show Info"><a class="icon-info-sign"></a></div>
-			<a class="button_divider less"></a>
+			<a class="button_divider"></a>
 			<div class="tools" id="button_share" title="Share Photo"><a class="icon-share"></a></div>
 			<div class="tools" id="button_star" title="Star Photo"><a class="icon-star-empty"></a></div>
 		</div>
@@ -74,31 +93,30 @@
 	<!-- Upload -->
 	<div id="upload">
 		<input id="upload_files" type="file" name="fileElem[]" multiple="true" accept="image/*">
-		<div id="auswahl"></div>
-		<input id="upload_button" type="button" onclick="sendFiles();" value="Upload">
 	</div>
 
 	<!-- JS -->
-	<script defer type="text/javascript" src="js/frameworks.js"></script>
+	<script defer type="text/javascript" src="assets/js/min/frameworks.js"></script>
 
 	<!-- Development
-	<script defer type="text/javascript" src="js/modules/lychee.js"></script>
-	<script defer type="text/javascript" src="js/modules/build.js"></script>
-	<script defer type="text/javascript" src="js/modules/view.js"></script>
-	<script defer type="text/javascript" src="js/modules/password.js"></script>
-	<script defer type="text/javascript" src="js/modules/modal.js"></script>
-	<script defer type="text/javascript" src="js/modules/album.js"></script>
-	<script defer type="text/javascript" src="js/modules/albums.js"></script>
-	<script defer type="text/javascript" src="js/modules/photo.js"></script>
-	<script defer type="text/javascript" src="js/modules/visible.js"></script>
-	<script defer type="text/javascript" src="js/modules/loadingBar.js"></script>
-	<script defer type="text/javascript" src="js/modules/contextMenu.js"></script>
-	<script defer type="text/javascript" src="js/modules/search.js"></script> -->
+	<script defer type="text/javascript" src="assets/js/modules/init.js"></script>
+	<script defer type="text/javascript" src="assets/js/modules/lychee.js"></script>
+	<script defer type="text/javascript" src="assets/js/modules/build.js"></script>
+	<script defer type="text/javascript" src="assets/js/modules/settings.js"></script>
+	<script defer type="text/javascript" src="assets/js/modules/upload.js"></script>
+	<script defer type="text/javascript" src="assets/js/modules/view.js"></script>
+	<script defer type="text/javascript" src="assets/js/modules/password.js"></script>
+	<script defer type="text/javascript" src="assets/js/modules/modal.js"></script>
+	<script defer type="text/javascript" src="assets/js/modules/album.js"></script>
+	<script defer type="text/javascript" src="assets/js/modules/albums.js"></script>
+	<script defer type="text/javascript" src="assets/js/modules/photo.js"></script>
+	<script defer type="text/javascript" src="assets/js/modules/visible.js"></script>
+	<script defer type="text/javascript" src="assets/js/modules/loadingBar.js"></script>
+	<script defer type="text/javascript" src="assets/js/modules/contextMenu.js"></script>
+	<script defer type="text/javascript" src="assets/js/modules/search.js"></script> -->
 
 	<!-- Production -->
-	<script defer type="text/javascript" src="js/functions.js"></script>
-	
-	<script defer type="text/javascript" src="js/main.js"></script>
+	<script defer type="text/javascript" src="assets/js/min/main.js"></script>
 
 	</body>
 </html>

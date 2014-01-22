@@ -1,0 +1,101 @@
+/**
+ * @name        contextmenu.css
+ * @author      Tobias Reich
+ * @copyright   2014 by Tobias Reich
+ */
+
+.contextmenu_bg {
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	z-index: 1000;
+}
+.contextmenu {
+	position: fixed;
+	top: 110%;
+	left: 110%;
+	padding: 5px 0px 6px 0px;
+	background-color: #393939;
+	background-image: -webkit-linear-gradient(top, #444, #2d2d2d);
+	background-image: -moz-linear-gradient(top, #393939, #2d2d2d);
+	background-image: -ms-linear-gradient(top, #393939, #2d2d2d);
+	background-image: linear-gradient(top, #393939, #2d2d2d);
+	border: 1px solid rgba(0,0,0,0.7);
+	border-bottom: 1px solid rgba(0,0,0,.9);
+	border-radius: 5px;
+	box-shadow: 0px 4px 5px rgba(0,0,0,0.3), inset 0px 1px 0px rgba(255,255,255,0.15), inset 1px 0px 0px rgba(255,255,255,0.05), inset -1px 0px 0px rgba(255,255,255,0.05);
+	opacity: .98;
+	z-index: 1001;
+}
+
+	/* Items ------------------------------------------------*/
+	.contextmenu tr {
+		font-size: 14px;
+		color: #eee;
+		text-shadow: 0px -1px 0px rgba(0,0,0,.6);
+		cursor: pointer;
+	}
+	.contextmenu tr:hover {
+		background-color: #6a84f2;
+		background-image: -webkit-linear-gradient(top, #6a84f2, #3959ef);
+		background-image: -moz-linear-gradient(top, #6a84f2, #3959ef);
+		background-image: -ms-linear-gradient(top, #6a84f2, #3959ef);
+		background-image: linear-gradient(top, #6a84f2, #3959ef);
+	}
+	.contextmenu tr.no_hover:hover {
+		cursor: inherit;
+		background-color: inherit;
+		background-image: none;
+	}
+	.contextmenu tr.separator {
+		float: left;
+		height: 1px;
+		width: 100%;
+		background-color: #1c1c1c;
+		border-bottom: 1px solid #4a4a4a;
+		margin: 5px 0px;
+		cursor: inherit;
+	}
+	.contextmenu tr.separator:hover {
+		background-color: #222;
+		background-image: none;
+	}
+	.contextmenu tr td {
+		padding: 7px 30px 6px 12px;
+		white-space: nowrap;
+		-webkit-transition: none;
+		-moz-transition: none;
+		transition: none;
+	}
+	.contextmenu tr:hover td {
+		color: #fff;
+		box-shadow: inset 0px 1px 0px rgba(255,255,255,.05);
+		text-shadow: 0px -1px 0px rgba(0,0,0,.4);
+	}
+	.contextmenu tr.no_hover:hover td {
+		box-shadow: none;
+	}
+	.contextmenu tr a {
+		float: left;
+		width: 10px;
+		margin-right: 10px;
+		text-align: center;
+	}
+
+	/* Direct Link Input ------------------------------------------------*/
+	.contextmenu #link {
+		float: right;
+		width: 140px;
+		margin: 0px -17px -1px 0px;
+		padding: 4px 6px 5px 6px;
+		background-color: #444;
+		color: #fff;
+		border: none;
+		border: 1px solid #111;
+		box-shadow: 0px 1px 0px rgba(255,255,255,.1);
+		outline: none;
+		border-radius: 5px;
+	}
+	.contextmenu tr a#link_icon {
+		padding-top: 4px;
+	}
