@@ -151,6 +151,17 @@ photo = {
 
 		if (albumID>=0) {
 
+			// Change reference for the next and previous photo
+			if (album.json.content[photoID].nextPhoto!==""||album.json.content[photoID].previousPhoto!=="") {
+
+				nextPhoto = album.json.content[photoID].nextPhoto;
+				previousPhoto = album.json.content[photoID].previousPhoto;
+
+				album.json.content[previousPhoto].nextPhoto = nextPhoto;
+				album.json.content[nextPhoto].previousPhoto = previousPhoto;
+
+			}
+
 			if (visible.photo) lychee.goto(album.getID());
 			album.json.content[photoID] = null;
 			view.album.content.delete(photoID);
