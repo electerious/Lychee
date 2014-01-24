@@ -25,10 +25,12 @@ $(document).ready(function(){
 	$(document).on(event_name, "#infobox_overlay", function() { hideInfobox() });
 	$("#button_info").on(event_name, function() { showInfobox() });
 
-	/* Download */
-	$("#button_download").on(event_name, function() {
+	/* Direct Link */
+	$("#button_direct").on(event_name, function() {
+
 		link = $("#imageview #image").css("background-image").replace(/"/g,"").replace(/url\(|\)$/ig, "");
 		window.open(link,"_newtab");
+
 	});
 
 	loadPhotoInfo(gup("p"));

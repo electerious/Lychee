@@ -56,9 +56,10 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 	$settings = getSettings();
 
 	// Security
-	if (isset($_POST['albumID'])&&($_POST['albumID']==''||$_POST['albumID']<0)) exit('Error: Wrong parameter type for albumID!');
+	if (isset($_POST['albumID'])&&($_POST['albumID']==''||$_POST['albumID']<0||$_POST['albumID']>10000)) exit('Error: Wrong parameter type for albumID!');
 	if (isset($_POST['photoID'])&&$_POST['photoID']=='') exit('Error: Wrong parameter type for photoID!');
 	foreach(array_keys($_POST) as $key) $_POST[$key] = mysqli_real_escape_string($database, urldecode($_POST[$key]));
+	foreach(array_keys($_GET) as $key) $_GET[$key] = mysqli_real_escape_string($database, urldecode($_GET[$key]));
 
 	if (isset($_SESSION['login'])&&$_SESSION['login']==true) {
 
@@ -98,8 +99,8 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 										echo setAlbumPassword($_POST['albumID'], $_POST['password']);
 									break;
 
-			case 'deleteAlbum':		if (isset($_POST['albumID'])&&isset($_POST['delAll']))
-										echo deleteAlbum($_POST['albumID'], $_POST['delAll']);
+			case 'deleteAlbum':		if (isset($_POST['albumID']))
+										echo deleteAlbum($_POST['albumID']);
 									break;
 
 			// Photo Functions
@@ -179,13 +180,25 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 			case 'update':			echo update();
 
 			default:				if (isset($_GET['function'])&&$_GET['function']=='getAlbumArchive'&&isset($_GET['albumID']))
-										// Album Archive
+
+										// Album Download
 										getAlbumArchive($_GET['albumID']);
+
+									else if (isset($_GET['function'])&&$_GET['function']=='getPhotoArchive'&&isset($_GET['photoID']))
+
+										// Photo Download
+										getPhotoArchive($_GET['photoID']);
+
 									else if (isset($_GET['function'])&&$_GET['function']=='update')
+
 										// Update Lychee
 										echo update();
+
 									else
+
+										// Function unknown
 										exit('Error: Function not found! Please check the spelling of the called function.');
+
 									break;
 
 		}
@@ -254,18 +267,34 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 			// Miscellaneous
 
 			default:				if (isset($_GET['function'])&&$_GET['function']=='getAlbumArchive'&&isset($_GET['albumID'])&&isset($_GET['password'])) {
+
+										// Album Download
 										if (isAlbumPublic($_GET['albumID'])) {
 											// Album Public
 											if (checkAlbumPassword($_GET['albumID'], $_GET['password']))
 												getAlbumArchive($_GET['albumID']);
 											else
-												echo 'Warning: Wrong password!';
+												exit('Warning: Wrong password!');
 										} else {
 											// Album Private
-											echo 'Warning: Album private or not downloadable!';
+											exit('Warning: Album private or not downloadable!');
 										}
+
+									} else if (isset($_GET['function'])&&$_GET['function']=='getPhotoArchive'&&isset($_GET['photoID'])&&isset($_GET['password'])) {
+
+										// Photo Download
+										if (isPhotoPublic($_GET['photoID'], $_GET['password']))
+											// Photo Public
+											getPhotoArchive($_GET['photoID']);
+										else
+											// Photo Private
+											exit('Warning: Photo private or not downloadable!');
+
 									} else {
+
+										// Function unknown
 										exit('Error: Function not found! Please check the spelling of the called function.');
+
 									}
 									break;
 

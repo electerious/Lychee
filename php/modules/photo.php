@@ -164,4 +164,25 @@ function isPhotoPublic($photoID, $password) {
 
 }
 
+function getPhotoArchive($photoID) {
+
+	global $database;
+
+	$result = $database->query("SELECT * FROM lychee_photos WHERE id = '$photoID';");
+	$row = $result->fetch_object();
+
+	$extension = array_reverse(explode('.', $row->url));
+
+	if ($row->title=='') $row->title = 'Untitled';
+
+	header("Content-Type: application/octet-stream");
+	header("Content-Disposition: attachment; filename=\"$row->title.$extension[0]\"");
+	header("Content-Length: " . filesize("../uploads/big/$row->url"));
+
+	readfile("../uploads/big/$row->url");
+
+	return true;
+
+}
+
 ?>

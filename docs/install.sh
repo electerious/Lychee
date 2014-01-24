@@ -1,6 +1,6 @@
 #!/bin/sh
 
-VERSION='1.3.2'
+VERSION='2.0'
 
 echo 'Press ENTER to continue or any other key to abort'
 read -s -n 1 key

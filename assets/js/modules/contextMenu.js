@@ -11,11 +11,14 @@ contextMenu = {
 
 	show: function(items, mouse_x, mouse_y, orientation) {
 
-		contextMenu.close();
+		if (visible.contextMenu()) contextMenu.close();
 
 		$("body")
 			.css("overflow", "hidden")
-			.append(build.contextMenu(items, orientation));
+			.append(build.contextMenu(items));
+
+		if ((mouse_x+$(".contextmenu").outerWidth(true))>$("html").width()) orientation = "left";
+		if ((mouse_y+$(".contextmenu").outerHeight(true))>$("html").height()) mouse_y -= (mouse_y+$(".contextmenu").outerHeight(true)-$("html").height())
 
 		if (orientation==="left") mouse_x -= $(".contextmenu").outerWidth(true);
 
@@ -26,7 +29,8 @@ contextMenu = {
 
 		$(".contextmenu").css({
 			"top": mouse_y,
-			"left": mouse_x
+			"left": mouse_x,
+			"opacity": .98
 		});
 
 	},
@@ -90,7 +94,6 @@ contextMenu = {
 
 	album: function(albumID, e) {
 
-		e.preventDefault();
 		var mouse_x = e.pageX,
 			mouse_y = e.pageY,
 			items;
@@ -117,7 +120,6 @@ contextMenu = {
 
 	photo: function(photoID, e) {
 
-		e.preventDefault();
 		var mouse_x = e.pageX,
 			mouse_y = e.pageY,
 			items;
@@ -152,14 +154,6 @@ contextMenu = {
 			items = [];
 
 		contextMenu.fns = [];
-		mouse_y -= $(document).scrollTop();
-
-		if (orientation===undefined) orientation = "left";
-
-		if (!mouse_x||!mouse_y) {
-			mouse_x = "10px";
-			mouse_y = "10px";
-		}
 
 		if (album.getID()!=="0") {
 			items = [
@@ -179,15 +173,11 @@ contextMenu = {
 			}
 
 			contextMenu.close();
+
 			$(".photo[data-id='" + photoID + "']").addClass("active");
-			$("body")
-				.css("overflow", "hidden")
-				.append(build.contextMenu(items, orientation));
-			if (!visible.photo()) mouse_x += $(".contextmenu").width();
-			$(".contextmenu").css({
-				"top": mouse_y,
-				"left": mouse_x-$(".contextmenu").width()
-			});
+
+			if (!visible.photo()) contextMenu.show(items, mouse_x, mouse_y, "right");
+			else contextMenu.show(items, mouse_x, mouse_y, "left");
 
 		});
 
@@ -206,18 +196,23 @@ contextMenu = {
 			function() { photo.share(photoID, 0) },
 			function() { photo.share(photoID, 1) },
 			function() { photo.share(photoID, 2) },
-			function() { photo.share(photoID, 3) }
+			function() { photo.share(photoID, 3) },
+			function() { window.open(photo.getDirectLink(),"_newtab") }
 		];
+		
+		link = photo.getViewLink(photoID);
+		if (photo.json.public==="2") link = location.href;
 
 		items = [
-			["<input readonly id='link' value='" + photo.getViewLink(photoID) + "'>", -1],
+			["<input readonly id='link' value='" + link + "'>", -1],
 			["separator", -1],
 			["<a class='icon-eye-close'></a> Make Private", 0],
 			["separator", -1],
 			["<a class='icon-twitter'></a> Twitter", 1],
 			["<a class='icon-facebook'></a> Facebook", 2],
 			["<a class='icon-envelope'></a> Mail", 3],
-			["<a class='icon-hdd'></a> Dropbox", 4]
+			["<a class='icon-hdd'></a> Dropbox", 4],
+			["<a class='icon-link'></a> Direct Link", 5]
 		];
 
 		contextMenu.show(items, mouse_x, mouse_y, "left");

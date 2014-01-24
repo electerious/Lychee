@@ -11,6 +11,9 @@ $(document).ready(function(){
 
 	/* Notifications */
 	if (window.webkitNotifications) window.webkitNotifications.requestPermission();
+	
+	/* Disable ContextMenu */
+	$(document).bind("contextmenu", function(e) { e.preventDefault() });
 
 	/* Tooltips */
 	if (!mobileBrowser()) $(".tools").tipsy({gravity: 'n', fade: false, delayIn: 0, opacity: 1});
@@ -27,7 +30,7 @@ $(document).ready(function(){
 		if (album.json.public==1) contextMenu.shareAlbum(album.getID(), e);
 		else modal.show("Share Album", "All photos inside this album will be public and visible for everyone. Existing public photos will have the same sharing permission as this album. Are your sure you want to share this album? <input class='text' type='password' placeholder='password (optional)' value=''>", [["Share Album", function() { album.setPublic(album.getID(), e) }], ["Cancel", function() {}]]);
 	});
-	$("#button_download").on(event_name, function() { window.open(photo.getDirectLink(),"_newtab") });
+	$("#button_download").on(event_name, function() { photo.getArchive(photo.getID()) });
 	$("#button_trash_album").on(event_name, function() { album.delete(album.getID()) });
 	$("#button_move").on(event_name, function(e) { contextMenu.move(photo.getID(), e) });
 	$("#button_trash").on(event_name, function() { photo.delete(photo.getID()) });
@@ -64,7 +67,6 @@ $(document).ready(function(){
 	Mousetrap
 		.bind('u', function() { $("#upload_files").click() })
 		.bind('s', function() { if (visible.photo()) $("#button_star").click() })
-		.bind('f', function() { if (visible.photo()) $("#button_download").click() })
 		.bind('command+backspace', function() { if (visible.photo()&&!visible.message()) photo.delete(photo.getID()) })
 		.bind('left', function() { if (visible.photo()) $("#imageview a#previous").click() })
 		.bind('right', function() { if (visible.photo()) $("#imageview a#next").click() })
@@ -118,6 +120,7 @@ $(document).ready(function(){
 		.on("contextmenu", ".photo", function(e) { contextMenu.photo(photo.getID(), e) })
 		.on("contextmenu", ".album", function(e) { contextMenu.album(album.getID(), e) })
 		.on(event_name, ".contextmenu_bg", contextMenu.close)
+		.on("contextmenu", ".contextmenu_bg", contextMenu.close)
 
 		/* Infobox */
 		.on(event_name, "#infobox_overlay", view.infobox.hide)

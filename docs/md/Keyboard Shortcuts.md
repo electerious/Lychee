@@ -11,7 +11,6 @@
 |:-----------|:------------|
 | `s` | Star photo |  
 | `i` | Show information |  
-| `f` | Show photo in new tab  
 | `cmd`+`backspace` | Delete photo  
 | `left` | Previous photo  
 | `right` | Next photo  

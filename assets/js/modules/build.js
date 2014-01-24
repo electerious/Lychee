@@ -197,12 +197,12 @@ build = {
 
 	},
 
-	contextMenu: function(items, orientation) {
+	contextMenu: function(items) {
 
 		var menu = "";
 
 		menu += "<div class='contextmenu_bg'></div>";
-		menu += "<div class='contextmenu " + orientation + "'>";
+		menu += "<div class='contextmenu'>";
 		menu +=		"<table>";
 		menu +=			"<tbody>";
 

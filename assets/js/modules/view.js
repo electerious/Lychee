@@ -35,7 +35,7 @@ view = {
 
 		hide: function() {
 
-			if (visible.photo()&&!visible.infobox()) {
+			if (visible.photo()&&!visible.infobox()&&!visible.contextMenu()&&!visible.message()) {
 				clearTimeout($(window).data("timeout"));
 				$(window).data("timeout", setTimeout(function() {
 					lychee.imageview.addClass("full");

@@ -12,8 +12,8 @@
 }
 .contextmenu {
 	position: fixed;
-	top: 110%;
-	left: 110%;
+	top: 0px;
+	left: 0px;
 	padding: 5px 0px 6px 0px;
 	background-color: #393939;
 	background-image: -webkit-linear-gradient(top, #444, #2d2d2d);
@@ -24,8 +24,12 @@
 	border-bottom: 1px solid rgba(0,0,0,.9);
 	border-radius: 5px;
 	box-shadow: 0px 4px 5px rgba(0,0,0,0.3), inset 0px 1px 0px rgba(255,255,255,0.15), inset 1px 0px 0px rgba(255,255,255,0.05), inset -1px 0px 0px rgba(255,255,255,0.05);
-	opacity: .98;
+	opacity: 0;
 	z-index: 1001;
+
+	-webkit-transition: none;
+	-moz-transition: none;
+	transition: none;
 }
 
 	/* Items ------------------------------------------------*/

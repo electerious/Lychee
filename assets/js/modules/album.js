@@ -128,7 +128,7 @@ album = {
 		buttons = [
 			["Delete Album and Photos", function() {
 
-				params = "deleteAlbum&albumID=" + albumID + "&delAll=true";
+				params = "deleteAlbum&albumID=" + albumID;
 				lychee.api(params, function(data) {
 
 					if (visible.albums()) {

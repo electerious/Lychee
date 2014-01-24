@@ -18,7 +18,7 @@ If possible, change these settings directly in your `php.ini`. We recommend to i
 Lychee supports the latest versions of Google Chrome, Apple Safari, Mozilla Firefox and Opera. Photos you share with others can be viewed from every browser.
 
 #### How can I set thumbnails for my albums?
-Thumbnails are choosen automatically by the photos you have starred and in the order you uploaded them. Star a photo inside a album to set it as an thumbnail.
+Thumbnails are chosen automatically by the photos you have starred and in the order you uploaded them. Star a photo inside a album to set it as an thumbnail.
 
 #### What is new?
 Take a look at the [Changelog](Changelog.md) to see whats new.

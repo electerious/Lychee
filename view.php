@@ -43,7 +43,7 @@
 	<header class="view">
 
 		<!-- Buttons -->
-		<div class="tools" id="button_download" title="Full Photo"><a class="icon-resize-full"></a></div>
+		<div class="tools" id="button_direct" title="Direct Link"><a class="icon-link"></a></div>
 		<div class="tools" id="button_info" title="Show Info"><a class="icon-info-sign"></a></div>
 
 		<a id="title" class="view"></a>

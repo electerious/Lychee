@@ -310,6 +310,19 @@ photo = {
 
 	},
 
+	getArchive: function(photoID) {
+
+		var link;
+
+		if (location.href.indexOf("index.html")>0) link = location.href.replace(location.hash, "").replace("index.html", "php/api.php?function=getPhotoArchive&photoID=" + photoID);
+		else link = location.href.replace(location.hash, "") + "php/api.php?function=getPhotoArchive&photoID=" + photoID;
+
+		if (lychee.publicMode) link += "&password=" + password.value;
+
+		location.href = link;
+
+	},
+
 	getDirectLink: function() {
 
 		return $("#imageview #image").css("background-image").replace(/"/g,"").replace(/url\(|\)$/ig, "");
