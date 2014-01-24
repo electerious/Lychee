@@ -38,7 +38,7 @@ Lychee supports [Twitter Cards](https://dev.twitter.com/docs/cards) and [Open Gr
 
 ## Troubleshooting
 
-Take a look at the [FAQ](docs/md/faq.md) if you have problems.
+Take a look at the [FAQ](docs/md/FAQ.md) if you have problems.
 
 ## Extensions
 
