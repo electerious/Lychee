@@ -1,0 +1,9 @@
+php/config.php
+
+uploads/import/*
+uploads/big/*
+uploads/thumb/*
+
+!uploads/import/index.html
+!uploads/big/index.html
+!uploads/thumb/index.html
