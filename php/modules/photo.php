@@ -34,7 +34,7 @@ function getPhoto($photoID, $albumID) {
 
     	if ($return['album']!=0) {
 
-    		$result = $database->query("SELECT public FROM lychee_albums WHERE id = " . $return['album'] . ";");
+    		$result = $database->query("SELECT public FROM lychee_albums WHERE id = '" . $return['album'] . "';");
     		$return_album = $result->fetch_array();
     		if ($return_album['public']=="1") $return['public'] = "2";
 
