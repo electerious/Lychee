@@ -57,5 +57,10 @@
 		-moz-animation: moveUp .3s !important;
 		animation: moveUp .3s !important;
 	}
+	
+	.upload_message {
+		top: 50% !important;
+		left: 50% !important;
+	}
 
 }
