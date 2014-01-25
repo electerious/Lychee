@@ -154,7 +154,7 @@ view = {
 				if (smartData===""&&albumsData==="") $("body").append(build.no_content("picture"));
 				else lychee.content.html(smartData + albumsData);
 
-				$("img").retina();
+				$("img[data-type!='svg']").retina();
 
 			},
 
@@ -249,7 +249,7 @@ view = {
 				});
 				lychee.content.html(photosData);
 
-				$("img").retina();
+				$("img[data-type!='svg']").retina();
 
 			},
 

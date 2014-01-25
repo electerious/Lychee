@@ -27,11 +27,15 @@ build = {
 			title = albumJSON.title;
 
 		if (title.length>18) title = albumJSON.title.substr(0, 18) + "...";
+		
+		typeThumb0 = albumJSON.thumb0.split('.').pop();
+		typeThumb1 = albumJSON.thumb1.split('.').pop();
+		typeThumb2 = albumJSON.thumb2.split('.').pop();
 
 		album += "<div  class='album' data-id='" + albumJSON.id + "' data-password='" + albumJSON.password + "'>";
-		album +=	"<img src='" + albumJSON.thumb2 + "' width='200' height='200' alt='thumb'>";
-		album +=	"<img src='" + albumJSON.thumb1 + "' width='200' height='200' alt='thumb'>";
-		album +=	"<img src='" + albumJSON.thumb0 + "' width='200' height='200' alt='thumb'>";
+		album +=	"<img src='" + albumJSON.thumb2 + "' width='200' height='200' alt='thumb' data-type='" + typeThumb2 + "'>";
+		album +=	"<img src='" + albumJSON.thumb1 + "' width='200' height='200' alt='thumb' data-type='" + typeThumb1 + "'>";
+		album +=	"<img src='" + albumJSON.thumb0 + "' width='200' height='200' alt='thumb' data-type='" + typeThumb0 + "'>";
 		album +=	"<div class='overlay'>";
 
 		if (albumJSON.password&&!lychee.publicMode) album += "<h1><span class='icon-lock'></span> " + title + "</h1>";
