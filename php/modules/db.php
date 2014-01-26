@@ -25,8 +25,8 @@ function dbConnect() {
     if (!$database->query("SELECT * FROM lychee_photos, lychee_albums, lychee_settings;"))
     	if (!createTables($database)) exit('Error: Could not create tables!');
 
-    // Avoid sql injection
-    $database->set_charset('GBK');
+    // Avoid sql injection on older MySQL versions
+	if ($database->server_version<50500) $database->set_charset('GBK');
 
     return $database;
 

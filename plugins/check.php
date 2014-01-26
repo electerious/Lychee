@@ -56,10 +56,12 @@ if (substr(sprintf('%o', @fileperms('../uploads/import/')), -4)!='0777') $error 
 if (substr(sprintf('%o', @fileperms('../uploads/')), -4)!='0777') $error .= ('Error 503: Wrong permissions for \'uploads/\' (777 required)' . PHP_EOL);
 if (substr(sprintf('%o', @fileperms('../php/')), -4)!='0777') $error .= ('Error 504: Wrong permissions for \'php/\' (777 required)' . PHP_EOL);
 
-if ($error=='') echo('Lychee is ready. Lets rock!' . PHP_EOL); else echo $error;
+if ($error=='') echo('Lychee is ready. Lets rock!' . PHP_EOL . PHP_EOL); else echo $error;
 
 // Check php.ini Settings
 if (ini_get('max_execution_time')<200&&ini_set('upload_max_filesize', '20M')!==true) echo('Warning: You may experience problems when uploading a large amount of photos. Take a look in the FAQ for details.' . PHP_EOL);
 
+// Check mysql version
+if ($database->server_version<50800) echo('Warning: Lychee uses the GBK charset to avoid sql injections on your MySQL version. Please update to MySQL 5.5 or higher to enable UTF-8 support.' . PHP_EOL);
 
 ?>
