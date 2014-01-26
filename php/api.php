@@ -169,6 +169,7 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 			// Settings
 
 			case 'setLogin':		if (isset($_POST['username'])&&isset($_POST['password']))
+										if (!isset($_POST['oldPassword'])) $_POST['oldPassword'] = '';
 										echo setLogin($_POST['oldPassword'], $_POST['username'], $_POST['password']);
 									break;
 
