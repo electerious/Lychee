@@ -59,7 +59,7 @@ view = {
 		},
 
 		mode: function(mode) {
-
+			
 			var albumID = album.getID();
 
 			switch (mode) {
@@ -72,6 +72,7 @@ view = {
 					lychee.header.removeClass("view");
 					$("#tools_albums, #tools_photo").hide();
 					$("#tools_album").show();
+					album.json.content === false ? $("#button_archive").hide() : $("#button_archive").show();
 					if (albumID==="s"||albumID==="f") {
 						$("#button_info_album, #button_trash_album, #button_share_album").hide();
 					} else if (albumID==="0") {
