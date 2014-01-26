@@ -22,7 +22,7 @@ function dbConnect() {
 
 	if (!$database->select_db($dbName))
 		if (!createDatabase($dbName, $database)) exit('Error: Could not create database!');
-    if (!$database->query("SELECT * FROM lychee_photos, lychee_albums, lychee_settings;"))
+    if (!$database->query("SELECT * FROM lychee_photos, lychee_albums, lychee_settings LIMIT 1;"))
     	if (!createTables($database)) exit('Error: Could not create tables!');
 
     // Avoid sql injection on older MySQL versions
