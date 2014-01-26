@@ -182,15 +182,19 @@ function getInfo($filename) {
 	$return['description'] = '';
 
 	// IPTC Metadata
-	$iptcInfo = iptcparse($iptcArray['APP13']);
-	if (is_array($iptcInfo)) {
-
-		$temp = $iptcInfo['2#105'][0];
-		if (isset($temp)&&strlen($temp)>0) $return['title'] = $temp;
-
-		$temp = $iptcInfo['2#120'][0];
-		if (isset($temp)&&strlen($temp)>0) $return['description'] = $temp;
-
+	if(isset($iptcArray['APP13'])) {
+	
+		$iptcInfo = iptcparse($iptcArray['APP13']);
+		if (is_array($iptcInfo)) {
+	
+			$temp = $iptcInfo['2#105'][0];
+			if (isset($temp)&&strlen($temp)>0) $return['title'] = $temp;
+	
+			$temp = $iptcInfo['2#120'][0];
+			if (isset($temp)&&strlen($temp)>0) $return['description'] = $temp;
+	
+		}
+		
 	}
 
 	// EXIF Metadata Fallback
@@ -270,12 +274,16 @@ function createThumb($filename, $width = 200, $height = 200) {
         $startWidth = $info[0]/2 - $info[1]/2;
         $startHeight = 0;
     }
+    
+    // Fallback for older version
+    if ($info['mime']==='image/webp'&&floatval(phpversion())<5.5) return false;
 
     // Create new image
     switch($info['mime']) {
         case 'image/jpeg': $sourceImg = imagecreatefromjpeg($url); break;
         case 'image/png': $sourceImg = imagecreatefrompng($url); break;
         case 'image/gif': $sourceImg = imagecreatefromgif($url); break;
+        case 'image/webp': $sourceImg = imagecreatefromwebp($url); break;
         default: return false;
     }
 

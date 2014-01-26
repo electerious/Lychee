@@ -55,7 +55,7 @@ upload = {
 
 			for (var i = 0; i < files.length; i++) {
 
-				if (files[i].type!=="image/jpeg"&&files[i].type!=="image/jpg"&&files[i].type!=="image/png"&&files[i].type!=="image/gif") {
+				if (files[i].type!=="image/jpeg"&&files[i].type!=="image/jpg"&&files[i].type!=="image/png"&&files[i].type!=="image/gif"&&files[i].type!=="image/webp") {
 					loadingBar.show("error", "The file format of " + files[i].name + " is not supported.");
 					return false;
 				} else {
@@ -134,7 +134,7 @@ upload = {
 					if (link&&link.length>3) {
 
 						extension = link.split('.').pop();
-						if (extension!=="jpeg"&&extension!=="jpg"&&extension!=="png"&&extension!=="gif") {
+						if (extension!=="jpeg"&&extension!=="jpg"&&extension!=="png"&&extension!=="gif"&&extension!=="webp") {
 							loadingBar.show("error", "The file format of this link is not supported.");
 							return false;
 						}

@@ -92,6 +92,7 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 										break;
 
 			case 'setAlbumPublic': 	if (isset($_POST['albumID']))
+										if (!isset($_POST['password'])) $_POST['password'] = '';
 										echo setAlbumPublic($_POST['albumID'], $_POST['password']);
 									break;
 

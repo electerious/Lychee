@@ -122,8 +122,9 @@ function getAlbum($albumID) {
 	    			$query = "SELECT id, title, sysdate, public, star, album, thumbUrl FROM lychee_photos WHERE public = 1 " . $settings['sorting'];
 	        		break;
 
-	    case 0:		$return['public'] = false;
+	    case "0":	$return['public'] = false;
 	    			$query = "SELECT id, title, sysdate, public, star, album, thumbUrl FROM lychee_photos WHERE album = 0 " . $settings['sorting'];
+					break;
 
 	    default:	$result = $database->query("SELECT * FROM lychee_albums WHERE id = '$albumID';");
 			    	$row = $result->fetch_object();
