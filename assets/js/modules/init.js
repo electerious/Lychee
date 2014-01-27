@@ -100,6 +100,13 @@ $(document).ready(function(){
 			if (visible.photo()) photo.setTitle(photo.getID());
 			else album.setTitle(album.getID());
 		})
+    
+        /* Clear Search */
+        .on(event_name, "#clearSearch", function (e) { 
+            e.preventDefault();
+            $("#search").val("");
+            $("#search").focus();
+        })
 
 		/* Navigation */
 		.on("click", ".album", function() { lychee.goto($(this).attr("data-id")) })

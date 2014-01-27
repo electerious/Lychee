@@ -122,9 +122,30 @@ header {
 		-moz-transition: opacity .3s ease-out, -moz-transform .3s ease-out, box-shadow .3s, width .2s ease-out;
 		transition: opacity .3s ease-out, transform .3s ease-out, box-shadow .3s, width .2s ease-out;
 	}
+    header #clearSearch {
+        position: absolute;
+        font-size: 24px;
+        right: 61px;
+        padding-top: 0px;
+        padding-bottom: 0;
+        top: 13px;
+        display: none;
+    }
 	header #search:focus {
 		width: 140px;
 	}
+
+    #search:focus ~ #clearSearch {
+        display: block;
+    }
+    
+    #clearSearch:hover + #search {
+        width: 140px;
+    }
+
+    #clearSearch:hover {
+        display: block;
+    }
 
 	/* Tools ------------------------------------------------*/
 	header .tools:first-of-type {
