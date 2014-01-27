@@ -261,7 +261,7 @@ contextMenu = {
 
 		$(".contextmenu_bg, .contextmenu").remove();
 		$(".photo.active, .album.active").removeClass("active");
-		$("body").css("overflow", "scroll");
+		$("body").css("overflow", "auto");
 
 	}
 

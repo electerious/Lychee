@@ -376,7 +376,7 @@ view = {
 			view.header.mode("album");
 
 			// Make body scrollable
-			$("body").css("overflow", "scroll");
+			$("body").css("overflow", "auto");
 
 			// Disable Fullscreen
 			$(document)
