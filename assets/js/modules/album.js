@@ -105,8 +105,10 @@ album = {
 					params = "addAlbum&title=" + escape(encodeURI(title));
 					lychee.api(params, function(data) {
 
-						if (data!==false) lychee.goto(data);
-						else lychee.error(null, params, data);
+						if (data!==false) {
+							if (data===true) data = 1; // Avoid first album to be true
+							lychee.goto(data);
+						} else lychee.error(null, params, data);
 
 					});
 
