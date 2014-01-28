@@ -167,8 +167,8 @@ view = {
 
 				if (albums.json.content[albumID].password) prefix = "<span class='icon-lock'></span> ";
 				if (title.length>18) {
+					longTitle = title;
 					title = title.substr(0, 18) + "...";
-					longTitle = albums.json.content[albumID].title;
 				}
 
 				$(".album[data-id='" + albumID + "'] .overlay h1")
@@ -262,11 +262,17 @@ view = {
 
 			title: function(photoID) {
 
-				var title = album.json.content[photoID].title;
+				var longTitle = "",
+					title = album.json.content[photoID].title;
 
-				if (title.length>18) title = title.substr(0, 18) + "...";
+				if (title.length>18) {
+					longTitle = title;
+					title = title.substr(0, 18) + "...";
+				}
 
-				$(".photo[data-id='" + photoID + "'] .overlay h1").html(title);
+				$(".photo[data-id='" + photoID + "'] .overlay h1")
+					.html(title)
+					.attr("title", longTitle);
 
 			},
 
