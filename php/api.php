@@ -110,16 +110,16 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 										echo json_encode(getPhoto($_POST['photoID'], $_POST['albumID']));
 									break;
 
-			case 'deletePhoto':		if (isset($_POST['photoID']))
-										echo deletePhoto($_POST['photoID']);
+			case 'deletePhoto':		if (isset($_POST['ids']))
+										echo deletePhoto($_POST['ids']);
 									break;
 
 			case 'setAlbum':		if (isset($_POST['ids'])&&isset($_POST['albumID']))
 										echo setAlbum($_POST['ids'], $_POST['albumID']);
 									break;
 
-			case 'setPhotoTitle':	if (isset($_POST['photoID'])&&isset($_POST['title']))
-										echo setPhotoTitle($_POST['photoID'], $_POST['title']);
+			case 'setPhotoTitle':	if (isset($_POST['ids'])&&isset($_POST['title']))
+										echo setPhotoTitle($_POST['ids'], $_POST['title']);
 									break;
 
 			case 'setPhotoStar':	if (isset($_POST['ids']))

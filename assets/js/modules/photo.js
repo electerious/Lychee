@@ -56,40 +56,47 @@ photo = {
 
 	},
 
-	delete: function(photoID) {
+	delete: function(ids) {
 
 		var params,
 			buttons,
 			photoTitle;
 
-		if (!photoID) return false;
+		if (!ids) return false;
+		if (ids instanceof Array===false) ids = [ids];
 
-		if (visible.photo()) photoTitle = photo.json.title;
-		else photoTitle = album.json.content[photoID].title;
-		if (photoTitle=="") photoTitle = "Untitled";
+		if (ids.length===1) {
+			// Get title if only one photo is selected
+			if (visible.photo()) photoTitle = photo.json.title;
+			else photoTitle = album.json.content[ids].title;
+			if (photoTitle=="") photoTitle = "Untitled";
+		}
 
 		buttons = [
-			["Delete Photo", function() {
+			["Delete", function() {
+			
+				ids.forEach(function(id, index, array) {
 
-				// Change reference for the next and previous photo
-				if (album.json.content[photoID].nextPhoto!==""||album.json.content[photoID].previousPhoto!=="") {
-
-					nextPhoto = album.json.content[photoID].nextPhoto;
-					previousPhoto = album.json.content[photoID].previousPhoto;
-
-					album.json.content[previousPhoto].nextPhoto = nextPhoto;
-					album.json.content[nextPhoto].previousPhoto = previousPhoto;
-
-				}
-
-				album.json.content[photoID] = null;
-
-				view.album.content.delete(photoID);
+					// Change reference for the next and previous photo
+					if (album.json.content[id].nextPhoto!==""||album.json.content[id].previousPhoto!=="") {
+	
+						nextPhoto = album.json.content[id].nextPhoto;
+						previousPhoto = album.json.content[id].previousPhoto;
+	
+						album.json.content[previousPhoto].nextPhoto = nextPhoto;
+						album.json.content[nextPhoto].previousPhoto = previousPhoto;
+	
+					}
+	
+					album.json.content[id] = null;
+					view.album.content.delete(id);
+					
+				});
 
 				// Only when search is not active
 				if (!visible.albums()) lychee.goto(album.getID());
 
-				params = "deletePhoto&photoID=" + photoID;
+				params = "deletePhoto&ids=" + ids;
 				lychee.api(params, function(data) {
 
 					if (data!==true) lychee.error(null, params, data);
@@ -97,51 +104,62 @@ photo = {
 				});
 
 			}],
-			["Keep Photo", function() {}]
+			["Cancel", function() {}]
 		];
-		modal.show("Delete Photo", "Are you sure you want to delete the photo '" + photoTitle + "'?<br>This action can't be undone!", buttons);
+		
+		if (ids.length===1) modal.show("Delete Photo", "Are you sure you want to delete the photo '" + photoTitle + "'?<br>This action can't be undone!", buttons);
+		else modal.show("Delete Photos", "Are you sure you want to delete all " + ids.length + " selected photo?<br>This action can't be undone!", buttons);
 
 	},
 
-	setTitle: function(photoID) {
-
+	setTitle: function(ids) {
+	
 		var oldTitle = "",
 			newTitle,
 			params,
 			buttons;
 
-		if (!photoID) return false;
-		if (photo.json) oldTitle = photo.json.title;
-		else if (album.json) oldTitle = album.json.content[photoID].title;
+		if (!ids) return false;
+		if (ids instanceof Array===false) ids = [ids];
+		
+		if (ids.length===1) {
+			// Get old title if only one photo is selected
+			if (photo.json) oldTitle = photo.json.title;
+			else if (album.json) oldTitle = album.json.content[ids].title;
+		}
 
 		buttons = [
 			["Set Title", function() {
 
 				newTitle = $(".message input.text").val();
 
-				if (photoID!=null&&photoID&&newTitle.length<31) {
-
+				if (newTitle.length<31) {
+				
 					if (visible.photo()) {
 						photo.json.title = (newTitle==="") ? "Untitled" : newTitle;
 						view.photo.title(oldTitle);
 					}
+				
+					ids.forEach(function(id, index, array) {
+						album.json.content[id].title = newTitle;
+						view.album.content.title(id);
+					});
 
-					album.json.content[photoID].title = newTitle;
-					view.album.content.title(photoID);
-
-					params = "setPhotoTitle&photoID=" + photoID + "&title=" + escape(encodeURI(newTitle));
+					params = "setPhotoTitle&ids=" + ids + "&title=" + escape(encodeURI(newTitle));
 					lychee.api(params, function(data) {
 
 						if (data!==true) lychee.error(null, params, data);
 
 					});
 
-				} else if (newTitle.length>0) loadingBar.show("error", "New title to short or too long. Please try another one!");
+				} else if (newTitle.length>30) loadingBar.show("error", "New title too long. Please try another one!");
 
 			}],
 			["Cancel", function() {}]
 		];
-		modal.show("Set Title", "Please enter a new title for this photo: <input class='text' type='text' placeholder='Title' value='" + oldTitle + "'>", buttons);
+		
+		if (ids.length===1) modal.show("Set Title", "Please enter a new title for this photo: <input class='text' type='text' placeholder='Title' value='" + oldTitle + "'>", buttons);
+		else modal.show("Set Titles", "Please enter a title for all selected photos: <input class='text' type='text' placeholder='Title' value=''>", buttons);
 
 	},
 
@@ -151,6 +169,7 @@ photo = {
 			nextPhoto,
 			previousPhoto;
 		
+		if (!ids) return false;
 		if (visible.photo) lychee.goto(album.getID());
 		if (ids instanceof Array===false) ids = [ids];
 	
@@ -185,6 +204,7 @@ photo = {
 
 		var params;
 
+		if (!ids) return false;
 		if (visible.photo()) {
 			photo.json.star = (photo.json.star==0) ? 1 : 0;
 			view.photo.star();

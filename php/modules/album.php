@@ -221,7 +221,7 @@ function deleteAlbum($albumID) {
 	$error = false;
 
     $result = $database->query("SELECT id FROM lychee_photos WHERE album = '$albumID';");
-    while($row =  $result->fetch_object()) {
+    while ($row = $result->fetch_object()) {
         if (!deletePhoto($row->id)) $error = true;
     }
 

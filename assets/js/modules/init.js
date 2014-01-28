@@ -37,7 +37,7 @@ $(document).ready(function(){
 	$("#button_download").on(event_name, function() { photo.getArchive(photo.getID()) });
 	$("#button_trash_album").on(event_name, function() { album.delete(album.getID()) });
 	$("#button_move").on(event_name, function(e) { contextMenu.move([photo.getID()], e) });
-	$("#button_trash").on(event_name, function() { photo.delete(photo.getID()) });
+	$("#button_trash").on(event_name, function() { photo.delete([photo.getID()]) });
 	$("#button_info_album").on(event_name, function() { view.infobox.show() });
 	$("#button_info").on(event_name, function() { view.infobox.show() });
 	$("#button_archive").on(event_name, function() { album.getArchive(album.getID()) });
@@ -70,14 +70,14 @@ $(document).ready(function(){
 		.on(event_name, ".header a", function() { view.infobox.hide() })
 		.on(event_name, "#edit_title_album", function() { album.setTitle(album.getID()) })
 		.on(event_name, "#edit_description_album", function() { album.setDescription(album.getID()) })
-		.on(event_name, "#edit_title", function() { photo.setTitle(photo.getID()) })
+		.on(event_name, "#edit_title", function() { photo.setTitle([photo.getID()]) })
 		.on(event_name, "#edit_description", function() { photo.setDescription(photo.getID()) });
 
 	/* Keyboard */
 	Mousetrap
 		.bind('u', function() { $("#upload_files").click() })
 		.bind('s', function() { if (visible.photo()) $("#button_star").click() })
-		.bind('command+backspace', function() { if (visible.photo()&&!visible.message()) photo.delete(photo.getID()) })
+		.bind('command+backspace', function() { if (visible.photo()&&!visible.message()) photo.delete([photo.getID()]) })
 		.bind('left', function() { if (visible.photo()) $("#imageview a#previous").click() })
 		.bind('right', function() { if (visible.photo()) $("#imageview a#next").click() })
 		.bind('i', function() {
@@ -107,7 +107,7 @@ $(document).ready(function(){
 
 		/* Header */
 		.on(event_name, "#title.editable", function() {
-			if (visible.photo()) photo.setTitle(photo.getID());
+			if (visible.photo()) photo.setTitle([photo.getID()]);
 			else album.setTitle(album.getID());
 		})
 

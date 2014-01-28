@@ -161,6 +161,7 @@ var lychee = {
 			hash = document.location.hash.replace("#", "").split("/");
 
 		contextMenu.close();
+		multiselect.close();
 
 		if (hash[0]!==undefined) albumID = hash[0];
 		if (hash[1]!==undefined) photoID = hash[1];

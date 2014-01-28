@@ -121,9 +121,9 @@ contextMenu = {
 
 		contextMenu.fns = [
 			function() { photo.setStar([photoID]) },
-			function() { photo.setTitle(photoID) },
+			function() { photo.setTitle([photoID]) },
 			function() { contextMenu.move([photoID], e, "right") },
-			function() { photo.delete(photoID) }
+			function() { photo.delete([photoID]) }
 		];
 
 		items = [
