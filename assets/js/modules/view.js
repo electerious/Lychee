@@ -162,12 +162,18 @@ view = {
 			title: function(albumID) {
 
 				var prefix = "",
+					longTitle = "",
 					title = albums.json.content[albumID].title;
 
 				if (albums.json.content[albumID].password) prefix = "<span class='icon-lock'></span> ";
-				if (title.length>18) title = title.substr(0, 18) + "...";
+				if (title.length>18) {
+					title = title.substr(0, 18) + "...";
+					longTitle = albums.json.content[albumID].title;
+				}
 
-				$(".album[data-id='" + albumID + "'] .overlay h1").html(prefix + title);
+				$(".album[data-id='" + albumID + "'] .overlay h1")
+					.html(prefix + title)
+					.attr("title", longTitle);
 
 			},
 

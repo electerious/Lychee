@@ -30,9 +30,13 @@ build = {
 		if (!albumJSON) return "";
 
 		var album = "",
+			longTitle = "",
 			title = albumJSON.title;
 
-		if (title.length>18) title = albumJSON.title.substr(0, 18) + "...";
+		if (title.length>18) {
+			title = albumJSON.title.substr(0, 18) + "...";
+			longTitle = albumJSON.title;
+		}
 		
 		typeThumb0 = albumJSON.thumb0.split('.').pop();
 		typeThumb1 = albumJSON.thumb1.split('.').pop();
@@ -45,7 +49,7 @@ build = {
 		album +=	"<div class='overlay'>";
 
 		if (albumJSON.password&&!lychee.publicMode) album += "<h1><span class='icon-lock'></span> " + title + "</h1>";
-		else album += "<h1>" + title + "</h1>";
+		else album += "<h1 title='" + longTitle + "'>" + title + "</h1>";
 
 		album +=		"<a>" + albumJSON.sysdate + "</a>";
 		album +=	"</div>";
