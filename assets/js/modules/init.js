@@ -11,12 +11,16 @@ $(document).ready(function(){
 
 	/* Notifications */
 	if (window.webkitNotifications) window.webkitNotifications.requestPermission();
-	
+
 	/* Disable ContextMenu */
 	$(document).bind("contextmenu", function(e) { e.preventDefault() });
 
 	/* Tooltips */
 	if (!mobileBrowser()) $(".tools").tipsy({gravity: 'n', fade: false, delayIn: 0, opacity: 1});
+
+	/* Multiselect */
+	$("#content").on("mousedown", multiselect.show);
+	$(document).on("mouseup", multiselect.close);
 
 	/* Header */
 	$("#hostedwith").on(event_name, function() { window.open(lychee.website,"_newtab") });
@@ -41,9 +45,9 @@ $(document).ready(function(){
 
 	/* Search */
 	$("#search").on("keyup click", function() { search.find($(this).val()) });
-	
+
 	/* Clear Search */
-	$("#clearSearch").on(event_name, function () { 
+	$("#clearSearch").on(event_name, function () {
 	    $("#search").focus();
 	    search.reset();
 	});
@@ -106,7 +110,7 @@ $(document).ready(function(){
 			if (visible.photo()) photo.setTitle(photo.getID());
 			else album.setTitle(album.getID());
 		})
-    
+
 		/* Navigation */
 		.on("click", ".album", function() { lychee.goto($(this).attr("data-id")) })
 		.on("click", ".photo", function() { lychee.goto(album.getID() + "/" + $(this).attr("data-id")) })

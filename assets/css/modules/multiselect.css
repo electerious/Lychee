@@ -1,0 +1,12 @@
+/**
+ * @name        multiselect.css
+ * @author      Tobias Reich
+ * @copyright   2014 by Tobias Reich
+ */
+
+#multiselect {
+	position: absolute;
+	background-color: RGBA(0, 94, 204, .4);
+	border: 1px solid RGBA(0, 94, 204, 1);
+	border-radius: 3px;
+}
