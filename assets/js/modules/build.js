@@ -36,7 +36,7 @@ build = {
 		album +=	"<img src='" + albumJSON.thumb2 + "' width='200' height='200' alt='thumb' data-type='" + typeThumb2 + "'>";
 		album +=	"<img src='" + albumJSON.thumb1 + "' width='200' height='200' alt='thumb' data-type='" + typeThumb1 + "'>";
 		album +=	"<img src='" + albumJSON.thumb0 + "' width='200' height='200' alt='thumb' data-type='" + typeThumb0 + "'>";
-		album +=	"<div class='overlay'>";
+		album +=	"<div class='overlay' title='" + albumJSON.title + "'>";
 
 		if (albumJSON.password&&!lychee.publicMode) album += "<h1><span class='icon-lock'></span> " + title + "</h1>";
 		else album += "<h1>" + title + "</h1>";
