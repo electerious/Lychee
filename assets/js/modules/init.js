@@ -41,6 +41,12 @@ $(document).ready(function(){
 
 	/* Search */
 	$("#search").on("keyup click", function() { search.find($(this).val()) });
+	
+	/* Clear Search */
+	$("#clearSearch").on(event_name, function () { 
+	    $("#search").focus();
+	    search.reset();
+	});
 
 	/* Back Buttons */
 	$("#button_back_home").on(event_name, function() { lychee.goto("") });
@@ -101,13 +107,6 @@ $(document).ready(function(){
 			else album.setTitle(album.getID());
 		})
     
-        /* Clear Search */
-        .on(event_name, "#clearSearch", function (e) { 
-            e.preventDefault();
-            $("#search").val("");
-            $("#search").focus();
-        })
-
 		/* Navigation */
 		.on("click", ".album", function() { lychee.goto($(this).attr("data-id")) })
 		.on("click", ".photo", function() { lychee.goto(album.getID() + "/" + $(this).attr("data-id")) })
