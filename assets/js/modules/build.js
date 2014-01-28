@@ -18,6 +18,12 @@ build = {
 		return "<div id='" + id + "' class='edit'><a class='icon-pencil'></a></div>";
 
 	},
+		
+	multiselect: function(top, left) {
+	
+		return "<div id='multiselect' style='top: " + top + "px; left: " + left + "px;'></div>";
+	
+	},
 
 	album: function(albumJSON) {
 

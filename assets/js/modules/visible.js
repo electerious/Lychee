@@ -45,6 +45,11 @@ visible = {
 	contextMenu: function() {
 		if ($(".contextmenu").length>0) return true;
 		else return false;
+	},
+	
+	multiselect: function() {
+		if ($("#multiselect").length>0) return true;
+		else return false;
 	}
 
 }
