@@ -145,39 +145,43 @@ photo = {
 
 	},
 
-	setAlbum: function(albumID, photoID) {
+	setAlbum: function(ids, albumID) {
 
-		var params;
-
-		if (albumID>=0) {
+		var params,
+			nextPhoto,
+			previousPhoto;
+		
+		if (visible.photo) lychee.goto(album.getID());
+		if (ids instanceof Array===false) ids = [ids];
+	
+		ids.forEach(function(id, index, array) {
 
 			// Change reference for the next and previous photo
-			if (album.json.content[photoID].nextPhoto!==""||album.json.content[photoID].previousPhoto!=="") {
+			if (album.json.content[id].nextPhoto!==""||album.json.content[id].previousPhoto!=="") {
 
-				nextPhoto = album.json.content[photoID].nextPhoto;
-				previousPhoto = album.json.content[photoID].previousPhoto;
+				nextPhoto = album.json.content[id].nextPhoto;
+				previousPhoto = album.json.content[id].previousPhoto;
 
 				album.json.content[previousPhoto].nextPhoto = nextPhoto;
 				album.json.content[nextPhoto].previousPhoto = previousPhoto;
 
 			}
+			
+			album.json.content[id] = null;
+			view.album.content.delete(id);
+			
+		});
 
-			if (visible.photo) lychee.goto(album.getID());
-			album.json.content[photoID] = null;
-			view.album.content.delete(photoID);
+		params = "setAlbum&ids=" + ids + "&albumID=" + albumID;
+		lychee.api(params, function(data) {
 
-			params = "setAlbum&photoID=" + photoID + "&albumID=" + albumID;
-			lychee.api(params, function(data) {
+			if (data!==true) lychee.error(null, params, data);
 
-				if (data!==true) lychee.error(null, params, data);
-
-			});
-
-		}
+		});
 
 	},
 
-	setStar: function(photoID) {
+	setStar: function(ids) {
 
 		var params;
 
@@ -186,10 +190,12 @@ photo = {
 			view.photo.star();
 		}
 
-		album.json.content[photoID].star = (album.json.content[photoID].star==0) ? 1 : 0;
-		view.album.content.star(photoID);
+		ids.forEach(function(id, index, array) {
+			album.json.content[id].star = (album.json.content[id].star==0) ? 1 : 0;
+			view.album.content.star(id);
+		});
 
-		params = "setPhotoStar&photoID=" + photoID;
+		params = "setPhotoStar&ids=" + ids;
 		lychee.api(params, function(data) {
 
 			if (data!==true) lychee.error(null, params, data);

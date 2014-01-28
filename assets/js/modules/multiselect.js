@@ -90,10 +90,58 @@ multiselect = {
 		}
 			
 	},
+	
+	stopResize: function() {
+	
+		$(document).off('mousemove');
+		
+	},
+	
+	getSize: function() {
+	
+		if (!visible.multiselect()) return false;
+	
+		return {
+			top: $('#multiselect').offset().top,
+			left: $('#multiselect').offset().left,
+			width: parseInt($('#multiselect').css('width').replace('px', '')),
+			height: parseInt($('#multiselect').css('height').replace('px', ''))
+		}
+	
+	},
+	
+	getSelection: function(e) {
+	
+		var ids = [],
+			offset,
+			size = multiselect.getSize();
+			
+		if (visible.contextMenu()) return false;
+		if (!visible.multiselect()) return false;
+		
+		$('.photo, .album').each(function() {
+		
+			offset = $(this).offset();
+			
+			if (offset.top>=size.top&&
+				offset.left>=size.left&&
+				(offset.top+206)<=(size.top+size.height)&&
+				(offset.left+206)<=(size.left+size.width)) {
+					ids.push($(this).data('id'));
+					$(this).addClass('active');	
+				}
+
+		});
+		
+		if (ids.length!=0&&visible.album()) contextMenu.photoMulti(ids, e);
+		else if (ids.length!=0&&visible.albums()) contextMenu.albumMulti(ids, e);
+		else multiselect.close();
+	
+	},
 		
 	close: function() {
 	
-		$(document).off('mousemove');
+		multiselect.stopResize();
 		
 		multiselect.position.top = null;
 		multiselect.position.right = null;

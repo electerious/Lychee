@@ -71,30 +71,36 @@ function setPhotoPublic($photoID, $url) {
 
 }
 
-function setPhotoStar($photoID) {
+function setPhotoStar($ids) {
 
 	global $database;
-
-    $result = $database->query("SELECT star FROM lychee_photos WHERE id = '$photoID';");
-    $row = $result->fetch_object();
-    if ($row->star == 0) {
-        $star = 1;
-    } else {
-        $star = 0;
+	
+	$error = false;
+    $result = $database->query("SELECT id, star FROM lychee_photos WHERE id IN ($ids);");
+    
+    while ($row = $result->fetch_object()) {
+        
+    	if ($row->star==0) $star = 1;
+    	else $star = 0;
+    	
+    	$star = $database->query("UPDATE lychee_photos SET star = '$star' WHERE id = '$row->id';");
+    	if (!$star) $error = true;
+    	
     }
-    $result = $database->query("UPDATE lychee_photos SET star = '$star' WHERE id = '$photoID';");
+    
+    if ($error) return false;
     return true;
 
 }
 
-function setAlbum($photoID, $newAlbum) {
+function setAlbum($ids, $albumID) {
 
 	global $database;
 
-    $result = $database->query("UPDATE lychee_photos SET album = '$newAlbum' WHERE id = '$photoID';");
+    $result = $database->query("UPDATE lychee_photos SET album = '$albumID' WHERE id IN ($ids);");
 
     if (!$result) return false;
-    else return true;
+    return true;
 
 }
 
@@ -106,7 +112,7 @@ function setPhotoTitle($photoID, $title) {
     $result = $database->query("UPDATE lychee_photos SET title = '$title' WHERE id = '$photoID';");
 
     if (!$result) return false;
-    else return true;
+    return true;
 
 }
 

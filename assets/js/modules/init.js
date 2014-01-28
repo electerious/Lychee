@@ -20,7 +20,7 @@ $(document).ready(function(){
 
 	/* Multiselect */
 	$("#content").on("mousedown", multiselect.show);
-	$(document).on("mouseup", multiselect.close);
+	$(document).on("mouseup", multiselect.getSelection);
 
 	/* Header */
 	$("#hostedwith").on(event_name, function() { window.open(lychee.website,"_newtab") });
@@ -36,12 +36,12 @@ $(document).ready(function(){
 	});
 	$("#button_download").on(event_name, function() { photo.getArchive(photo.getID()) });
 	$("#button_trash_album").on(event_name, function() { album.delete(album.getID()) });
-	$("#button_move").on(event_name, function(e) { contextMenu.move(photo.getID(), e) });
+	$("#button_move").on(event_name, function(e) { contextMenu.move([photo.getID()], e) });
 	$("#button_trash").on(event_name, function() { photo.delete(photo.getID()) });
 	$("#button_info_album").on(event_name, function() { view.infobox.show() });
 	$("#button_info").on(event_name, function() { view.infobox.show() });
 	$("#button_archive").on(event_name, function() { album.getArchive(album.getID()) });
-	$("#button_star").on(event_name, function() { photo.setStar(photo.getID()) });
+	$("#button_star").on(event_name, function() { photo.setStar([photo.getID()]) });
 
 	/* Search */
 	$("#search").on("keyup click", function() { search.find($(this).val()) });
