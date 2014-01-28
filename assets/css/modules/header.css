@@ -122,9 +122,30 @@ header {
 		-moz-transition: opacity .3s ease-out, -moz-transform .3s ease-out, box-shadow .3s, width .2s ease-out;
 		transition: opacity .3s ease-out, transform .3s ease-out, box-shadow .3s, width .2s ease-out;
 	}
-	header #search:focus {
-		width: 140px;
+	
+		header #search:focus {
+			width: 140px;
+		}
+		header #search:focus ~ #clearSearch {
+			opacity: 1;
+		}
+		
+	header #clearSearch {
+		position: absolute;
+		top: 15px;
+		right: 81px;
+		padding: 0;
+		font-size: 20px;
+		opacity: 0;
+		
+		-webkit-transition: opacity .2s ease-out;
+		-moz-transition: opacity .2s ease-out;
+		transition: opacity .2s ease-out;
 	}
+	
+		header #clearSearch:hover {
+			opacity: 1;
+		}
 
 	/* Tools ------------------------------------------------*/
 	header .tools:first-of-type {
