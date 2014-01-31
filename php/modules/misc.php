@@ -79,14 +79,17 @@ function update() {
 
 	global $database;
 
-	if(!$database->query("SELECT `public` FROM `lychee_albums`;")) $database->query("ALTER TABLE  `lychee_albums` ADD  `public` TINYINT( 1 ) NOT NULL DEFAULT  '0'");
-	if(!$database->query("SELECT `password` FROM `lychee_albums`;")) $database->query("ALTER TABLE  `lychee_albums` ADD  `password` VARCHAR( 100 ) NULL DEFAULT ''");
-	if(!$database->query("SELECT `description` FROM `lychee_albums`;")) $database->query("ALTER TABLE  `lychee_albums` ADD  `description` VARCHAR( 1000 ) NULL DEFAULT ''");
-	if($database->query("SELECT `password` FROM `lychee_albums`;")) $database->query("ALTER TABLE  `lychee_albums` CHANGE  `password` `password` VARCHAR( 100 ) NULL DEFAULT ''");
+	if(!$database->query("SELECT `public` FROM `lychee_albums` LIMIT 1;")) $database->query("ALTER TABLE  `lychee_albums` ADD  `public` TINYINT( 1 ) NOT NULL DEFAULT  '0'");
+	if(!$database->query("SELECT `password` FROM `lychee_albums` LIMIT 1;")) $database->query("ALTER TABLE  `lychee_albums` ADD  `password` VARCHAR( 100 ) NULL DEFAULT ''");
+	if(!$database->query("SELECT `description` FROM `lychee_albums` LIMIT 1;")) $database->query("ALTER TABLE  `lychee_albums` ADD  `description` VARCHAR( 1000 ) NULL DEFAULT ''");
+	if($database->query("SELECT `password` FROM `lychee_albums` LIMIT 1;")) $database->query("ALTER TABLE  `lychee_albums` CHANGE  `password` `password` VARCHAR( 100 ) NULL DEFAULT ''");
 
-	if($database->query("SELECT `description` FROM `lychee_photos`;")) $database->query("ALTER TABLE  `lychee_photos` CHANGE  `description` `description` VARCHAR( 1000 ) NULL DEFAULT ''");
-	if($database->query("SELECT `shortlink` FROM `lychee_photos`;")) $database->query("ALTER TABLE  `lychee_photos` DROP  `shortlink`");
+	if($database->query("SELECT `description` FROM `lychee_photos` LIMIT 1;")) $database->query("ALTER TABLE  `lychee_photos` CHANGE  `description` `description` VARCHAR( 1000 ) NULL DEFAULT ''");
+	if($database->query("SELECT `shortlink` FROM `lychee_photos` LIMIT 1;")) $database->query("ALTER TABLE  `lychee_photos` DROP  `shortlink`");
 	$database->query("UPDATE `lychee_photos` SET url = replace(url, 'uploads/big/', ''), thumbUrl = replace(thumbUrl, 'uploads/thumb/', '')");
+	
+	$result = $database->query("SELECT `value` FROM `lychee_settings` WHERE `key` = 'importFilename' LIMIT 1;");
+	if ($result->fetch_object()!==true) $database->query("INSERT INTO `lychee_settings` (`key`, `value`) VALUES ('importFilename', '1')");
 
 	return true;
 

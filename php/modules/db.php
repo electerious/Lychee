@@ -93,7 +93,7 @@ function createDatabase($dbName, $database) {
 
 function createTables($database) {
 
-	if (!$database->query("SELECT * FROM lychee_settings;")) {
+	if (!$database->query("SELECT * FROM lychee_settings LIMIT 1;")) {
 
 		$query = "
 
@@ -114,7 +114,8 @@ function createTables($database) {
 			('password',''),
 			('thumbQuality','90'),
 			('checkForUpdates','1'),
-			('sorting','ORDER BY id DESC');
+			('sorting','ORDER BY id DESC'),
+			('importFilename','1');
 
 		";
 
@@ -122,7 +123,7 @@ function createTables($database) {
 
 	}
 
-	if (!$database->query("SELECT * FROM lychee_albums;")) {
+	if (!$database->query("SELECT * FROM lychee_albums LIMIT 1;")) {
 
 		$query = "
 
@@ -142,7 +143,7 @@ function createTables($database) {
 
     }
 
-    if (!$database->query("SELECT * FROM lychee_photos;")) {
+    if (!$database->query("SELECT * FROM lychee_photos LIMIT 1;")) {
 
 		$query = "
 

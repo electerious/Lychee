@@ -39,3 +39,9 @@ If `1`, Lychee will check if you are using the latest version. The notice will b
 	sorting = ORDER BY [row] [ASC|DESC]
 
 A typical part of an MySQL statement. This string will be appended to mostly every MySQL query.
+
+#### Import Filename
+
+	importFilename = [0|1]
+
+If `1`, Lychee will import the filename of the upload file.

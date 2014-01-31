@@ -11,7 +11,7 @@ if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 function upload($files, $albumID) {
 
-	global $database;
+	global $database, $settings;
 
 	switch($albumID) {
 		// s for public (share)
@@ -32,35 +32,41 @@ function upload($files, $albumID) {
 	}
 
 	foreach ($files as $file) {
-
+	    	    
+	    if ($file['type']!=='image/jpeg'&&
+	    	$file['type']!=='image/png'&&
+	    	$file['type']!=='image/gif')
+	    		return false;
+	    		
 	    $id = str_replace('.', '', microtime(true));
 	    while(strlen($id)<14) $id .= 0;
-
-	    $tmp_name = $file["tmp_name"];
-
-	    $type = getimagesize($tmp_name);
-	    if (($type[2]!=1)&&($type[2]!=2)&&($type[2]!=3)) return false;
-	    $data = array_reverse(explode('.', $file["name"]));
-	    $data = $data[0];
-
-	    $photo_name = md5($id) . ".$data";
+	    
+	    $tmp_name = $file['tmp_name'];
+	    $extension = array_reverse(explode('.', $file['name']));
+	    $extension = $extension[0];
+	    $photo_name = md5($id) . ".$extension";
 
 	    // Import if not uploaded via web
 	    if (!is_uploaded_file($tmp_name)) {
-	    	if (copy($tmp_name, "../uploads/big/" . $photo_name)) {
+	    	if (copy($tmp_name, '../uploads/big/' . $photo_name)) {
 				unlink($tmp_name);
 				$import_name = $tmp_name;
 			}
 	    } else {
-		    move_uploaded_file($tmp_name, "../uploads/big/" . $photo_name);
-		    $import_name = "";
+		    move_uploaded_file($tmp_name, '../uploads/big/' . $photo_name);
+		    $import_name = '';
 	    }
 
 	    // Read infos
 	    $info = getInfo($photo_name);
 
+	    // Use title of file if IPTC title missing
+	    if ($info['title']===''&&
+	    	$settings['importFilename']==='1')
+	    		$info['title'] = mysqli_real_escape_string($database, substr(str_replace(".$extension", '', $file['name']), 0, 30));
+
 	    // Set orientation based on EXIF data
-	    if (isset($info['orientation'])&&isset($info['width'])&&isset($info['height'])) {
+	    if ($file['type']==='image/jpeg'&&isset($info['orientation'])&&isset($info['width'])&&isset($info['height'])) {
 
 	    	if ($info['orientation']==3||$info['orientation']==6||$info['orientation']==8) {
 
@@ -259,8 +265,8 @@ function createThumb($filename, $width = 200, $height = 200) {
     $info = getimagesize($url);
 
     $photoName = explode(".", $filename);
-    $newUrl = "../uploads/thumb/".$photoName[0].".jpeg";
-    $newUrl2x = "../uploads/thumb/".$photoName[0]."@2x.jpeg";
+    $newUrl = "../uploads/thumb/$photoName[0].jpeg";
+    $newUrl2x = "../uploads/thumb/$photoName[0]@2x.jpeg";
 
     // Set position and size
     $thumb = imagecreatetruecolor($width, $height);
