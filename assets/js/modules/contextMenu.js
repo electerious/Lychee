@@ -21,11 +21,21 @@ contextMenu = {
 		if ((mouse_x+$(".contextmenu").outerWidth(true))>$("html").width()) orientation = "left";
 		if ((mouse_y+$(".contextmenu").outerHeight(true))>$("html").height()) mouse_y -= (mouse_y+$(".contextmenu").outerHeight(true)-$("html").height())
 
+		if (mouse_x>$(document).width()) mouse_x = $(document).width();
+		if (mouse_x<0) mouse_x = 0;
+		if (mouse_y>$(document).height()) mouse_y = $(document).height();
+		if (mouse_y<0) mouse_y = 0;	
+		
 		if (orientation==="left") mouse_x -= $(".contextmenu").outerWidth(true);
 
-		if (!mouse_x||!mouse_y) {
-			mouse_x = "10px";
-			mouse_y = "10px";
+		if (mouse_x===null||
+			mouse_x===undefined||
+			mouse_x===NaN||
+			mouse_y===null||
+			mouse_y===undefined||
+			mouse_y===NaN) {
+				mouse_x = "10px";
+				mouse_y = "10px";
 		}
 
 		$(".contextmenu").css({
@@ -95,7 +105,7 @@ contextMenu = {
 			mouse_y = e.pageY - $(document).scrollTop(),
 			items;
 
-		if (albumID==="0"||albumID==="f"||albumID==="s") return false;
+		if (albumID==="0"||albumID==="f"||albumID==="s") return false;	
 
 		contextMenu.fns = [
 			function() { album.setTitle(albumID) },
