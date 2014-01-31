@@ -112,7 +112,7 @@ multiselect = {
 	
 	getSelection: function(e) {
 	
-		var ids = [],
+		var photoIDs = [],
 			offset,
 			size = multiselect.getSize();
 			
@@ -127,14 +127,14 @@ multiselect = {
 				offset.left>=size.left&&
 				(offset.top+206)<=(size.top+size.height)&&
 				(offset.left+206)<=(size.left+size.width)) {
-					ids.push($(this).data('id'));
+					photoIDs.push($(this).data('id'));
 					$(this).addClass('active');	
 				}
 
 		});
 		
-		if (ids.length!=0&&visible.album()) contextMenu.photoMulti(ids, e);
-		else if (ids.length!=0&&visible.albums()) contextMenu.albumMulti(ids, e);
+		if (photoIDs.length!=0&&visible.album()) contextMenu.photoMulti(photoIDs, e);
+		else if (photoIDs.length!=0&&visible.albums()) contextMenu.albumMulti(photoIDs, e);
 		else multiselect.close();
 	
 	},

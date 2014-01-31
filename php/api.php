@@ -110,20 +110,20 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 										echo json_encode(getPhoto($_POST['photoID'], $_POST['albumID']));
 									break;
 
-			case 'deletePhoto':		if (isset($_POST['ids']))
-										echo deletePhoto($_POST['ids']);
+			case 'deletePhoto':		if (isset($_POST['photoIDs']))
+										echo deletePhoto($_POST['photoIDs']);
 									break;
 
-			case 'setAlbum':		if (isset($_POST['ids'])&&isset($_POST['albumID']))
-										echo setAlbum($_POST['ids'], $_POST['albumID']);
+			case 'setAlbum':		if (isset($_POST['photoIDs'])&&isset($_POST['albumID']))
+										echo setAlbum($_POST['photoIDs'], $_POST['albumID']);
 									break;
 
-			case 'setPhotoTitle':	if (isset($_POST['ids'])&&isset($_POST['title']))
-										echo setPhotoTitle($_POST['ids'], $_POST['title']);
+			case 'setPhotoTitle':	if (isset($_POST['photoIDs'])&&isset($_POST['title']))
+										echo setPhotoTitle($_POST['photoIDs'], $_POST['title']);
 									break;
 
-			case 'setPhotoStar':	if (isset($_POST['ids']))
-										echo setPhotoStar($_POST['ids']);
+			case 'setPhotoStar':	if (isset($_POST['photoIDs']))
+										echo setPhotoStar($_POST['photoIDs']);
 									break;
 
 			case 'setPhotoPublic':	if (isset($_POST['photoID'])&&isset($_POST['url']))

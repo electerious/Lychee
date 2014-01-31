@@ -140,7 +140,7 @@ contextMenu = {
 
 	},
 	
-	photoMulti: function(ids, e) {
+	photoMulti: function(photoIDs, e) {
 	
 		var mouse_x = e.pageX,
 			mouse_y = e.pageY - $(document).scrollTop(),
@@ -149,10 +149,10 @@ contextMenu = {
 		multiselect.stopResize();
 
 		contextMenu.fns = [
-			function() { photo.setStar(ids) },
-			function() { photo.setTitle(ids) },
-			function() { contextMenu.move(ids, e, "right") },
-			function() { photo.delete(ids) }
+			function() { photo.setStar(photoIDs) },
+			function() { photo.setTitle(photoIDs) },
+			function() { contextMenu.move(photoIDs, e, "right") },
+			function() { photo.delete(photoIDs) }
 		];
 
 		items = [
@@ -167,7 +167,7 @@ contextMenu = {
 
 	},
 
-	move: function(ids, e, orientation) {
+	move: function(photoIDs, e, orientation) {
 
 		var mouse_x = e.pageX,
 			mouse_y = e.pageY - $(document).scrollTop(),
@@ -177,7 +177,7 @@ contextMenu = {
 
 		if (album.getID()!=="0") {
 			items = [
-				["Unsorted", 0, "photo.setAlbum([" + ids + "], 0)"],
+				["Unsorted", 0, "photo.setAlbum([" + photoIDs + "], 0)"],
 				["separator", -1]
 			];
 		}
@@ -188,7 +188,7 @@ contextMenu = {
 				items = [["New Album", 0, "album.add()"]];
 			} else {
 				$.each(data.content, function(index) {
-					if (this.id!=album.getID()) items.push([this.title, 0, "photo.setAlbum([" + ids + "], " + this.id + ")"]);
+					if (this.id!=album.getID()) items.push([this.title, 0, "photo.setAlbum([" + photoIDs + "], " + this.id + ")"]);
 				});
 			}
 

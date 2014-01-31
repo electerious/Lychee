@@ -71,12 +71,12 @@ function setPhotoPublic($photoID, $url) {
 
 }
 
-function setPhotoStar($ids) {
+function setPhotoStar($photoIDs) {
 
 	global $database;
 	
 	$error = false;
-    $result = $database->query("SELECT id, star FROM lychee_photos WHERE id IN ($ids);");
+    $result = $database->query("SELECT id, star FROM lychee_photos WHERE id IN ($photoIDs);");
     
     while ($row = $result->fetch_object()) {
         
@@ -93,23 +93,23 @@ function setPhotoStar($ids) {
 
 }
 
-function setAlbum($ids, $albumID) {
+function setAlbum($photoIDs, $albumID) {
 
 	global $database;
 
-    $result = $database->query("UPDATE lychee_photos SET album = '$albumID' WHERE id IN ($ids);");
+    $result = $database->query("UPDATE lychee_photos SET album = '$albumID' WHERE id IN ($photoIDs);");
 
     if (!$result) return false;
     return true;
 
 }
 
-function setPhotoTitle($ids, $title) {
+function setPhotoTitle($photoIDs, $title) {
 
 	global $database;
 
     if (strlen($title)>30) return false;
-    $result = $database->query("UPDATE lychee_photos SET title = '$title' WHERE id IN ($ids);");
+    $result = $database->query("UPDATE lychee_photos SET title = '$title' WHERE id IN ($photoIDs);");
 
     if (!$result) return false;
     return true;
@@ -129,11 +129,11 @@ function setPhotoDescription($photoID, $description) {
 
 }
 
-function deletePhoto($ids) {
+function deletePhoto($photoIDs) {
 
 	global $database;
 	
-	$result = $database->query("SELECT * FROM lychee_photos WHERE id IN ($ids);");
+	$result = $database->query("SELECT * FROM lychee_photos WHERE id IN ($photoIDs);");
 	
 	while ($row = $result->fetch_object()) {
 	
