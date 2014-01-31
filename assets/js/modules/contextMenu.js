@@ -11,20 +11,31 @@ contextMenu = {
 
 	show: function(items, mouse_x, mouse_y, orientation) {
 
-		if (visible.contextMenu()) contextMenu.close();
+		contextMenu.close();
 
 		$("body")
 			.css("overflow", "hidden")
 			.append(build.contextMenu(items));
 
+		// Do not leave the screen
 		if ((mouse_x+$(".contextmenu").outerWidth(true))>$("html").width()) orientation = "left";
 		if ((mouse_y+$(".contextmenu").outerHeight(true))>$("html").height()) mouse_y -= (mouse_y+$(".contextmenu").outerHeight(true)-$("html").height())
 
+		if (mouse_x>$(document).width()) mouse_x = $(document).width();
+		if (mouse_x<0) mouse_x = 0;
+		if (mouse_y>$(document).height()) mouse_y = $(document).height();
+		if (mouse_y<0) mouse_y = 0;	
+		
 		if (orientation==="left") mouse_x -= $(".contextmenu").outerWidth(true);
 
-		if (!mouse_x||!mouse_y) {
-			mouse_x = "10px";
-			mouse_y = "10px";
+		if (mouse_x===null||
+			mouse_x===undefined||
+			mouse_x===NaN||
+			mouse_y===null||
+			mouse_y===undefined||
+			mouse_y===NaN) {
+				mouse_x = "10px";
+				mouse_y = "10px";
 		}
 
 		$(".contextmenu").css({
@@ -38,10 +49,8 @@ contextMenu = {
 	add: function(e) {
 
 		var mouse_x = e.pageX,
-			mouse_y = e.pageY,
+			mouse_y = e.pageY - $(document).scrollTop(),
 			items;
-
-		mouse_y -= $(document).scrollTop();
 
 		contextMenu.fns = [
 			function() { $("#upload_files").click() },
@@ -68,10 +77,8 @@ contextMenu = {
 	settings: function(e) {
 
 		var mouse_x = e.pageX,
-			mouse_y = e.pageY,
+			mouse_y = e.pageY - $(document).scrollTop(),
 			items;
-
-		mouse_y -= $(document).scrollTop();
 
 		contextMenu.fns = [
 			function() { settings.setLogin() },
@@ -95,12 +102,10 @@ contextMenu = {
 	album: function(albumID, e) {
 
 		var mouse_x = e.pageX,
-			mouse_y = e.pageY,
+			mouse_y = e.pageY - $(document).scrollTop(),
 			items;
 
-		if (albumID==="0"||albumID==="f"||albumID==="s") return false;
-
-		mouse_y -= $(document).scrollTop();
+		if (albumID==="0"||albumID==="f"||albumID==="s") return false;	
 
 		contextMenu.fns = [
 			function() { album.setTitle(albumID) },
@@ -117,20 +122,40 @@ contextMenu = {
 		$(".album[data-id='" + albumID + "']").addClass("active");
 
 	},
+	
+	albumMulti: function(albumIDs, e) {
+		
+		var mouse_x = e.pageX,
+			mouse_y = e.pageY - $(document).scrollTop(),
+			items;
+
+		multiselect.stopResize();
+
+		contextMenu.fns = [
+			function() { album.setTitle(albumIDs) },
+			function() { album.delete(albumIDs) },
+		];
+
+		items = [
+			["<a class='icon-edit'></a> Rename All", 0],
+			["<a class='icon-trash'></a> Delete All", 1]
+		];
+
+		contextMenu.show(items, mouse_x, mouse_y, "right");
+
+	},
 
 	photo: function(photoID, e) {
 
 		var mouse_x = e.pageX,
-			mouse_y = e.pageY,
+			mouse_y = e.pageY - $(document).scrollTop(),
 			items;
 
-		mouse_y -= $(document).scrollTop();
-
 		contextMenu.fns = [
-			function() { photo.setStar(photoID) },
-			function() { photo.setTitle(photoID) },
-			function() { contextMenu.move(photoID, e, "right") },
-			function() { photo.delete(photoID) }
+			function() { photo.setStar([photoID]) },
+			function() { photo.setTitle([photoID]) },
+			function() { contextMenu.move([photoID], e, "right") },
+			function() { photo.delete([photoID]) }
 		];
 
 		items = [
@@ -146,18 +171,45 @@ contextMenu = {
 		$(".photo[data-id='" + photoID + "']").addClass("active");
 
 	},
+	
+	photoMulti: function(photoIDs, e) {
+	
+		var mouse_x = e.pageX,
+			mouse_y = e.pageY - $(document).scrollTop(),
+			items;
 
-	move: function(photoID, e, orientation) {
+		multiselect.stopResize();
+
+		contextMenu.fns = [
+			function() { photo.setStar(photoIDs) },
+			function() { photo.setTitle(photoIDs) },
+			function() { contextMenu.move(photoIDs, e, "right") },
+			function() { photo.delete(photoIDs) }
+		];
+
+		items = [
+			["<a class='icon-star'></a> Star All", 0],
+			["separator", -1],
+			["<a class='icon-edit'></a> Rename All", 1],
+			["<a class='icon-folder-open'></a> Move All", 2],
+			["<a class='icon-trash'></a> Delete All", 3]
+		];
+
+		contextMenu.show(items, mouse_x, mouse_y, "right");
+
+	},
+
+	move: function(photoIDs, e, orientation) {
 
 		var mouse_x = e.pageX,
-			mouse_y = e.pageY,
+			mouse_y = e.pageY - $(document).scrollTop(),
 			items = [];
 
-		contextMenu.fns = [];
+		contextMenu.close(true);
 
 		if (album.getID()!=="0") {
 			items = [
-				["Unsorted", 0, "photo.setAlbum(0, " + photoID + ")"],
+				["Unsorted", 0, "photo.setAlbum([" + photoIDs + "], 0)"],
 				["separator", -1]
 			];
 		}
@@ -168,13 +220,9 @@ contextMenu = {
 				items = [["New Album", 0, "album.add()"]];
 			} else {
 				$.each(data.content, function(index) {
-					if (this.id!=album.getID()) items.push([this.title, 0, "photo.setAlbum(" + this.id + ", " + photoID + ")"]);
+					if (this.id!=album.getID()) items.push([this.title, 0, "photo.setAlbum([" + photoIDs + "], " + this.id + ")"]);
 				});
 			}
-
-			contextMenu.close();
-
-			$(".photo[data-id='" + photoID + "']").addClass("active");
 
 			if (!visible.photo()) contextMenu.show(items, mouse_x, mouse_y, "right");
 			else contextMenu.show(items, mouse_x, mouse_y, "left");
@@ -255,13 +303,19 @@ contextMenu = {
 
 	},
 
-	close: function() {
-
-		contextMenu.js = null;
-
+	close: function(leaveSelection) {
+	
+		if (!visible.contextMenu()) return false;
+	
+		contextMenu.fns = [];
+		
 		$(".contextmenu_bg, .contextmenu").remove();
-		$(".photo.active, .album.active").removeClass("active");
 		$("body").css("overflow", "auto");
+		
+		if (leaveSelection!==true) {
+			$(".photo.active, .album.active").removeClass("active");
+			if (visible.multiselect()) multiselect.close();
+		}
 
 	}
 

@@ -71,42 +71,48 @@ function setPhotoPublic($photoID, $url) {
 
 }
 
-function setPhotoStar($photoID) {
+function setPhotoStar($photoIDs) {
 
 	global $database;
-
-    $result = $database->query("SELECT star FROM lychee_photos WHERE id = '$photoID';");
-    $row = $result->fetch_object();
-    if ($row->star == 0) {
-        $star = 1;
-    } else {
-        $star = 0;
+	
+	$error = false;
+    $result = $database->query("SELECT id, star FROM lychee_photos WHERE id IN ($photoIDs);");
+    
+    while ($row = $result->fetch_object()) {
+        
+    	if ($row->star==0) $star = 1;
+    	else $star = 0;
+    	
+    	$star = $database->query("UPDATE lychee_photos SET star = '$star' WHERE id = '$row->id';");
+    	if (!$star) $error = true;
+    	
     }
-    $result = $database->query("UPDATE lychee_photos SET star = '$star' WHERE id = '$photoID';");
+    
+    if ($error) return false;
     return true;
 
 }
 
-function setAlbum($photoID, $newAlbum) {
+function setAlbum($photoIDs, $albumID) {
 
 	global $database;
 
-    $result = $database->query("UPDATE lychee_photos SET album = '$newAlbum' WHERE id = '$photoID';");
+    $result = $database->query("UPDATE lychee_photos SET album = '$albumID' WHERE id IN ($photoIDs);");
 
     if (!$result) return false;
-    else return true;
+    return true;
 
 }
 
-function setPhotoTitle($photoID, $title) {
+function setPhotoTitle($photoIDs, $title) {
 
 	global $database;
 
     if (strlen($title)>30) return false;
-    $result = $database->query("UPDATE lychee_photos SET title = '$title' WHERE id = '$photoID';");
+    $result = $database->query("UPDATE lychee_photos SET title = '$title' WHERE id IN ($photoIDs);");
 
     if (!$result) return false;
-    else return true;
+    return true;
 
 }
 
@@ -123,22 +129,31 @@ function setPhotoDescription($photoID, $description) {
 
 }
 
-function deletePhoto($photoID) {
+function deletePhoto($photoIDs) {
 
 	global $database;
-
-    $result = $database->query("SELECT * FROM lychee_photos WHERE id = '$photoID';");
-    if (!$result) return false;
-    $row = $result->fetch_object();
-    $retinaUrl = explode(".", $row->thumbUrl);
-    $unlink1 = unlink("../uploads/big/".$row->url);
-    $unlink2 = unlink("../uploads/thumb/".$row->thumbUrl);
-    $unlink3 = unlink("../uploads/thumb/".$retinaUrl[0].'@2x.'.$retinaUrl[1]);
-    $result = $database->query("DELETE FROM lychee_photos WHERE id = '$photoID';");
-    if (!$unlink1 || !$unlink2 || !$unlink3) return false;
-    if (!$result) return false;
-
-    return true;
+	
+	$result = $database->query("SELECT * FROM lychee_photos WHERE id IN ($photoIDs);");
+	
+	while ($row = $result->fetch_object()) {
+	
+		// Get retina thumb url
+		$thumbUrl2x = explode(".", $row->thumbUrl);
+		$thumbUrl2x = $thumbUrl2x[0] . '@2x.' . $thumbUrl2x[1];
+		
+		// Delete files
+		if (!unlink('../uploads/big/' . $row->url)) return false;
+		if (!unlink('../uploads/thumb/' . $row->thumbUrl)) return false;
+		if (!unlink('../uploads/thumb/' . $thumbUrl2x)) return false;
+		
+		// Delete db entry
+		$delete = $database->query("DELETE FROM lychee_photos WHERE id = $row->id;");
+		if (!$delete) return false;
+		
+	}
+		
+	if (!$result) return false;
+	return true;
 
 }
 
