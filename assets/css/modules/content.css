@@ -26,6 +26,7 @@
 	position: absolute;
 	padding: 50px 0px 33px 0px;
 	width: 100%;
+	min-height: calc(100% - 90px);
 	-webkit-overflow-scrolling: touch;
 }
 
