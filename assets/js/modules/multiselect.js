@@ -18,6 +18,7 @@ multiselect = {
 
 	show: function(e) {
 	
+		if (mobileBrowser()) return false;
 		if ($('.album:hover, .photo:hover').length!=0) return false;
 		if (visible.multiselect()) $('#multiselect').remove();
 	
