@@ -112,7 +112,8 @@ multiselect = {
 	
 	getSelection: function(e) {
 	
-		var photoIDs = [],
+		var id,
+			ids = [],
 			offset,
 			size = multiselect.getSize();
 			
@@ -127,14 +128,22 @@ multiselect = {
 				offset.left>=size.left&&
 				(offset.top+206)<=(size.top+size.height)&&
 				(offset.left+206)<=(size.left+size.width)) {
-					photoIDs.push($(this).data('id'));
-					$(this).addClass('active');	
+				
+					id = $(this).data('id');
+					
+					if (id!=="0"&&id!==0&&id!=="f"&&id!=="s"&&id!==null&id!==undefined) {
+				
+						ids.push(id);
+						$(this).addClass('active');
+					
+					}
+					
 				}
 
 		});
-		
-		if (photoIDs.length!=0&&visible.album()) contextMenu.photoMulti(photoIDs, e);
-		else if (photoIDs.length!=0&&visible.albums()) contextMenu.albumMulti(photoIDs, e);
+						
+		if (ids.length!=0&&visible.album()) contextMenu.photoMulti(ids, e);
+		else if (ids.length!=0&&visible.albums()) contextMenu.albumMulti(ids, e);
 		else multiselect.close();
 	
 	},

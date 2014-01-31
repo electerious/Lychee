@@ -214,7 +214,7 @@ view = {
 
 		},
 
-		title: function(oldTitle) {
+		title: function() {
 
 			if ((visible.album()||!album.json.init)&&!visible.photo()) {
 
@@ -404,7 +404,7 @@ view = {
 
 		},
 
-		title: function(oldTitle) {
+		title: function() {
 
 			if (photo.json.init) $("#infobox .attr_name").html(photo.json.title + " " + build.editIcon("edit_title"));
 			lychee.setTitle(photo.json.title, true);

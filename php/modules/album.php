@@ -189,14 +189,14 @@ function getAlbum($albumID) {
 
 }
 
-function setAlbumTitle($albumID, $title) {
+function setAlbumTitle($albumIDs, $title) {
 
 	global $database;
 
     if (strlen($title)<1||strlen($title)>30) return false;
-    $result = $database->query("UPDATE lychee_albums SET title = '$title' WHERE id = '$albumID';");
+    $result = $database->query("UPDATE lychee_albums SET title = '$title' WHERE id IN ($albumIDs);");
+    
     if (!$result) return false;
-
     return true;
 
 }
@@ -204,34 +204,32 @@ function setAlbumTitle($albumID, $title) {
 function setAlbumDescription($albumID, $description) {
 
 	global $database;
-
+	
 	$description = htmlentities($description);
-    if (strlen($description)>800) return false;
-    $result = $database->query("UPDATE lychee_albums SET description = '$description' WHERE id = '$albumID';");
-
-    if (!$result) return false;
-    return true;
+	if (strlen($description)>800) return false;
+	$result = $database->query("UPDATE lychee_albums SET description = '$description' WHERE id = '$albumID';");
+	
+	if (!$result) return false;
+	return true;
 
 }
 
-function deleteAlbum($albumID) {
+function deleteAlbum($albumIDs) {
 
 	global $database;
-
+	
 	$error = false;
-
-    $result = $database->query("SELECT id FROM lychee_photos WHERE album = '$albumID';");
-    while ($row = $result->fetch_object()) {
-        if (!deletePhoto($row->id)) $error = true;
-    }
-
-    if ($albumID!=0) {
-        $result = $database->query("DELETE FROM lychee_albums WHERE id = '$albumID';");
-        if (!$result) return false;
-    }
-
-    if ($error) return false;
-    return true;
+	$result = $database->query("SELECT id FROM lychee_photos WHERE album IN ($albumIDs);");
+	
+	// Delete photos
+	while ($row = $result->fetch_object())
+		if (!deletePhoto($row->id)) $error = true;
+	
+	// Delete album
+	$result = $database->query("DELETE FROM lychee_albums WHERE id IN ($albumIDs);");
+	
+	if ($error||!$result) return false;
+	return true;
 
 }
 
@@ -308,7 +306,7 @@ function setAlbumPublic($albumID, $password) {
 	}
 
 	if (strlen($password)>0) return setAlbumPassword($albumID, $password);
-	else return true;
+	return true;
 
 }
 
@@ -329,10 +327,10 @@ function checkAlbumPassword($albumID, $password) {
 
 	$result = $database->query("SELECT password FROM lychee_albums WHERE id = '$albumID';");
 	$row = $result->fetch_object();
+	
 	if ($row->password=="") return true;
-
 	else if ($row->password==$password) return true;
-	else return false;
+	return false;
 
 }
 
@@ -344,7 +342,7 @@ function isAlbumPublic($albumID) {
 	$row = $result->fetch_object();
 
 	if ($row->public==1) return true;
-	else return false;
+	return false;
 
 }
 

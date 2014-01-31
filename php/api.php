@@ -83,8 +83,8 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 										echo addAlbum($_POST['title']);
 									break;
 
-			case 'setAlbumTitle':	if (isset($_POST['albumID'])&&isset($_POST['title']))
-										echo setAlbumTitle($_POST['albumID'], $_POST['title']);
+			case 'setAlbumTitle':	if (isset($_POST['albumIDs'])&&isset($_POST['title']))
+										echo setAlbumTitle($_POST['albumIDs'], $_POST['title']);
 									break;
 
 			case 'setAlbumDescription':	if (isset($_POST['albumID'])&&isset($_POST['description']))
@@ -100,8 +100,8 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 										echo setAlbumPassword($_POST['albumID'], $_POST['password']);
 									break;
 
-			case 'deleteAlbum':		if (isset($_POST['albumID']))
-										echo deleteAlbum($_POST['albumID']);
+			case 'deleteAlbum':		if (isset($_POST['albumIDs']))
+										echo deleteAlbum($_POST['albumIDs']);
 									break;
 
 			// Photo Functions

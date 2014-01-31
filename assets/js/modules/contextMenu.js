@@ -112,6 +112,28 @@ contextMenu = {
 		$(".album[data-id='" + albumID + "']").addClass("active");
 
 	},
+	
+	albumMulti: function(albumIDs, e) {
+		
+		var mouse_x = e.pageX,
+			mouse_y = e.pageY - $(document).scrollTop(),
+			items;
+
+		multiselect.stopResize();
+
+		contextMenu.fns = [
+			function() { album.setTitle(albumIDs) },
+			function() { album.delete(albumIDs) },
+		];
+
+		items = [
+			["<a class='icon-edit'></a> Rename All", 0],
+			["<a class='icon-trash'></a> Delete All", 1]
+		];
+
+		contextMenu.show(items, mouse_x, mouse_y, "right");
+
+	},
 
 	photo: function(photoID, e) {
 

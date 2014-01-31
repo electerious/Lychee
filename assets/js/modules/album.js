@@ -121,21 +121,28 @@ album = {
 
 	},
 
-	delete: function(albumID) {
+	delete: function(albumIDs) {
 
 		var params,
 			buttons,
 			albumTitle;
+			
+		if (!albumIDs) return false;
+		if (albumIDs instanceof Array===false) albumIDs = [albumIDs];
 
 		buttons = [
-			["Delete Album and Photos", function() {
+			["", function() {
 
-				params = "deleteAlbum&albumID=" + albumID;
+				params = "deleteAlbum&albumIDs=" + albumIDs;
 				lychee.api(params, function(data) {
 
 					if (visible.albums()) {
-						albums.json.num--;
-						view.albums.content.delete(albumID);
+					
+						albumIDs.forEach(function(id, index, array) {
+							albums.json.num--;
+							view.albums.content.delete(id);
+						});
+						
 					} else lychee.goto("");
 
 					if (data!==true) lychee.error(null, params, data);
@@ -143,69 +150,90 @@ album = {
 				});
 
 			}],
-			["Keep Album", function() {}]
+			["", function() {}]
 		];
 
-		if (albumID==="0") {
+		if (albumIDs==="0") {
 
 			buttons[0][0] = "Clear Unsorted";
+			buttons[1][0] = "Keep Unsorted";
+			
 			modal.show("Clear Unsorted", "Are you sure you want to delete all photos from 'Unsorted'?<br>This action can't be undone!", buttons)
 
-		} else {
-
+		} else if (albumIDs.length===1) {
+		
+			buttons[0][0] = "Delete Album and Photos";
+			buttons[1][0] = "Keep Album";
+		
+			// Get title
 			if (album.json) albumTitle = album.json.title;
-			else if (albums.json) albumTitle = albums.json.content[albumID].title;
+			else if (albums.json) albumTitle = albums.json.content[albumIDs].title;
+			
 			modal.show("Delete Album", "Are you sure you want to delete the album '" + albumTitle + "' and all of the photos it contains? This action can't be undone!", buttons);
 
+		} else {
+		
+			buttons[0][0] = "Delete Albums and Photos";
+			buttons[1][0] = "Keep Albums";
+			
+			modal.show("Delete Albums", "Are you sure you want to delete all " + albumIDs.length + " selected albums and all of the photos they contain? This action can't be undone!", buttons);
+		
 		}
 
 	},
 
-	setTitle: function(albumID) {
+	setTitle: function(albumIDs) {
 
 		var oldTitle = "",
 			newTitle,
 			params,
 			buttons;
 
-		if (!albumID) return false;
-		if (album.json) oldTitle = album.json.title;
-		else if (albums.json) oldTitle = albums.json.content[albumID].title;
+		if (!albumIDs) return false;
+		if (albumIDs instanceof Array===false) albumIDs = [albumIDs];
+		
+		if (albumIDs.length===1) {
+			// Get old title if only one album is selected
+			if (album.json) oldTitle = album.json.title;
+			else if (albums.json) oldTitle = albums.json.content[albumIDs].title;
+		}
 
 		buttons = [
 			["Set Title", function() {
 
-				newTitle = $(".message input.text").val();
+				newTitle = ($(".message input.text").val()==="") ? "Untitled" : $(".message input.text").val();
 
-				if (newTitle==="") newTitle = "Untitled";
-
-				if (albumID!==""&&albumID!=null&&albumID&&newTitle.length<31) {
+				if (newTitle.length<31) {
 
 					if (visible.album()) {
 
 						album.json.title = newTitle;
-						view.album.title(oldTitle);
+						view.album.title();
 
 					} else if (visible.albums()) {
-
-						albums.json.content[albumID].title = newTitle;
-						view.albums.content.title(albumID);
+					
+						albumIDs.forEach(function(id, index, array) {
+							albums.json.content[id].title = newTitle;
+							view.albums.content.title(id);
+						});
 
 					}
 
-					params = "setAlbumTitle&albumID=" + albumID + "&title=" + escape(encodeURI(newTitle));
+					params = "setAlbumTitle&albumIDs=" + albumIDs + "&title=" + escape(encodeURI(newTitle));
 					lychee.api(params, function(data) {
 
 						if (data!==true) lychee.error(null, params, data);
 
 					});
 
-				} else if (newTitle.length>0) loadingBar.show("error", "New title too short or too long. Please try again!");
+				} else if (newTitle.length>30) loadingBar.show("error", "New title too long. Please try another one!");
 
 			}],
 			["Cancel", function() {}]
 		];
-		modal.show("Set Title", "Please enter a new title for this album: <input class='text' type='text' placeholder='Title' value='" + oldTitle + "'>", buttons);
+		
+		if (albumIDs.length===1) modal.show("Set Title", "Please enter a new title for this album: <input class='text' type='text' placeholder='Title' value='" + oldTitle + "'>", buttons);
+		else modal.show("Set Titles", "Please enter a title for all " + albumIDs.length + " selected album: <input class='text' type='text' placeholder='Title' value='" + oldTitle + "'>", buttons);
 
 	},
 

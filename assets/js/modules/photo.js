@@ -73,24 +73,24 @@ photo = {
 		}
 
 		buttons = [
-			["Delete", function() {
-			
+			["", function() {
+
 				photoIDs.forEach(function(id, index, array) {
 
 					// Change reference for the next and previous photo
 					if (album.json.content[id].nextPhoto!==""||album.json.content[id].previousPhoto!=="") {
-	
+
 						nextPhoto = album.json.content[id].nextPhoto;
 						previousPhoto = album.json.content[id].previousPhoto;
-	
+
 						album.json.content[previousPhoto].nextPhoto = nextPhoto;
 						album.json.content[nextPhoto].previousPhoto = previousPhoto;
-	
+
 					}
-	
+
 					album.json.content[id] = null;
 					view.album.content.delete(id);
-					
+
 				});
 
 				// Only when search is not active
@@ -104,16 +104,29 @@ photo = {
 				});
 
 			}],
-			["Cancel", function() {}]
+			["", function() {}]
 		];
-		
-		if (photoIDs.length===1) modal.show("Delete Photo", "Are you sure you want to delete the photo '" + photoTitle + "'?<br>This action can't be undone!", buttons);
-		else modal.show("Delete Photos", "Are you sure you want to delete all " + photoIDs.length + " selected photo?<br>This action can't be undone!", buttons);
+
+		if (photoIDs.length===1) {
+
+			buttons[0][0] = "Delete Photo";
+			buttons[1][0] = "Keep Photo";
+
+			modal.show("Delete Photo", "Are you sure you want to delete the photo '" + photoTitle + "'?<br>This action can't be undone!", buttons);
+
+		} else {
+
+			buttons[0][0] = "Delete Photos";
+			buttons[1][0] = "Keep Photos";
+
+			modal.show("Delete Photos", "Are you sure you want to delete all " + photoIDs.length + " selected photo?<br>This action can't be undone!", buttons);
+
+		}
 
 	},
 
 	setTitle: function(photoIDs) {
-	
+
 		var oldTitle = "",
 			newTitle,
 			params,
@@ -121,7 +134,7 @@ photo = {
 
 		if (!photoIDs) return false;
 		if (photoIDs instanceof Array===false) photoIDs = [photoIDs];
-		
+
 		if (photoIDs.length===1) {
 			// Get old title if only one photo is selected
 			if (photo.json) oldTitle = photo.json.title;
@@ -134,12 +147,12 @@ photo = {
 				newTitle = $(".message input.text").val();
 
 				if (newTitle.length<31) {
-				
+
 					if (visible.photo()) {
 						photo.json.title = (newTitle==="") ? "Untitled" : newTitle;
-						view.photo.title(oldTitle);
+						view.photo.title();
 					}
-				
+
 					photoIDs.forEach(function(id, index, array) {
 						album.json.content[id].title = newTitle;
 						view.album.content.title(id);
@@ -157,9 +170,9 @@ photo = {
 			}],
 			["Cancel", function() {}]
 		];
-		
+
 		if (photoIDs.length===1) modal.show("Set Title", "Please enter a new title for this photo: <input class='text' type='text' placeholder='Title' value='" + oldTitle + "'>", buttons);
-		else modal.show("Set Titles", "Please enter a title for all selected photos: <input class='text' type='text' placeholder='Title' value=''>", buttons);
+		else modal.show("Set Titles", "Please enter a title for all " + photoIDs.length + " selected photos: <input class='text' type='text' placeholder='Title' value=''>", buttons);
 
 	},
 
@@ -168,11 +181,11 @@ photo = {
 		var params,
 			nextPhoto,
 			previousPhoto;
-		
+
 		if (!photoIDs) return false;
 		if (visible.photo) lychee.goto(album.getID());
 		if (photoIDs instanceof Array===false) photoIDs = [photoIDs];
-	
+
 		photoIDs.forEach(function(id, index, array) {
 
 			// Change reference for the next and previous photo
@@ -185,10 +198,10 @@ photo = {
 				album.json.content[nextPhoto].previousPhoto = previousPhoto;
 
 			}
-			
+
 			album.json.content[id] = null;
 			view.album.content.delete(id);
-			
+
 		});
 
 		params = "setAlbum&photoIDs=" + photoIDs + "&albumID=" + albumID;
