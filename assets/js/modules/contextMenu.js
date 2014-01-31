@@ -84,6 +84,7 @@ contextMenu = {
 			function() { settings.setLogin() },
 			function() { settings.setSorting() },
 			function() { window.open(lychee.website,"_newtab"); },
+			function() { window.open(lychee.website_donate,"_newtab"); },
 			function() { lychee.logout() }
 		];
 
@@ -91,8 +92,9 @@ contextMenu = {
 			["<a class='icon-user'></a> Change Login", 0],
 			["<a class='icon-sort'></a> Change Sorting", 1],
 			["<a class='icon-info-sign'></a> About Lychee", 2],
+			["<a class='icon-gift'></a> Donate", 3],
 			["separator", -1],
-			["<a class='icon-signout'></a> Sign Out", 3]
+			["<a class='icon-signout'></a> Sign Out", 4]
 		];
 
 		contextMenu.show(items, mouse_x, mouse_y, "right");
