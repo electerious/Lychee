@@ -113,7 +113,8 @@ multiselect = {
 	
 	getSelection: function(e) {
 	
-		var id,
+		var tolerance = 150,
+			id,
 			ids = [],
 			offset,
 			size = multiselect.getSize();
@@ -124,11 +125,11 @@ multiselect = {
 		$('.photo, .album').each(function() {
 		
 			offset = $(this).offset();
-			
-			if (offset.top>=size.top&&
-				offset.left>=size.left&&
-				(offset.top+206)<=(size.top+size.height)&&
-				(offset.left+206)<=(size.left+size.width)) {
+						
+			if (offset.top>=(size.top-tolerance)&&
+				offset.left>=(size.left-tolerance)&&
+				(offset.top+206)<=(size.top+size.height+tolerance)&&
+				(offset.left+206)<=(size.left+size.width+tolerance)) {
 				
 					id = $(this).data('id');
 					
