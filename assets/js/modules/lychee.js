@@ -116,7 +116,7 @@ var lychee = {
 				localStorage.setItem("username", user);
 				window.location.reload();
 			} else {
-				$("#password").val("").addClass("error");
+				$("#password").val("").addClass("error").focus();
 				$(".message .button.active").removeClass("pressed");
 			}
 		});
