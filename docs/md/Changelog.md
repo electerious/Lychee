@@ -1,3 +1,15 @@
+## v2.0.2
+
+Released January 30, 2014
+
+- Clear search button (#62)
+- Speed improvements (#57)
+- Show tooltip when album/photo title too long (#66)
+- Fixed php notices
+- Avoid empty downloads in empty albums (#56)
+- Correct position of upload modal on mobile devices
+- Improved security
+
 ## v2.0.1
 
 Released January 24, 2014
