@@ -23,12 +23,10 @@ function getTags($photoID) {
 function setTags($photoIDs, $tags) {
 
 	global $database;
-
-	if (substr($tags, strlen($tags)-1)===',') $tags = substr($tags, 0, strlen($tags)-1);
-	$tags = str_replace(' , ', ',', $tags);
-	$tags = str_replace(', ', ',', $tags);
-	$tags = str_replace(' ,', ',', $tags);
-	$tags = str_replace(',,', ',', $tags);
+	
+	// Parse tags
+	$tags = preg_replace('/(\ ,\ )|(\ ,)|(,\ )|(,{1,}\ {0,})|(,$|^,)/', ',', $tags);
+	$tags = preg_replace('/,$|^,/', ',', $tags);
 
 	$result = $database->query("UPDATE lychee_photos SET tags = '$tags' WHERE id IN ($photoIDs);");
 

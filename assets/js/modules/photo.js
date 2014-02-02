@@ -316,16 +316,8 @@ photo = {
 
 				tags = $(".message input.text").val();
 
-				if (tags.length<800) {
-
-					if (visible.photo()) {
-						photo.json.tags = tags;
-						view.photo.tags();
-					}
-
-					photo.setTags(photoIDs, tags)
-
-				} else loadingBar.show("error", "Description too long. Please try again!");
+				if (tags.length<800) photo.setTags(photoIDs, tags)
+				else loadingBar.show("error", "Description too long. Please try again!");
 
 			}],
 			["Cancel", function() {}]
@@ -340,6 +332,15 @@ photo = {
 	
 		if (!photoIDs) return false;
 		if (photoIDs instanceof Array===false) photoIDs = [photoIDs];
+		
+		// Parse tags
+		tags = tags.replace(/(\ ,\ )|(\ ,)|(,\ )|(,{1,}\ {0,})|(,$|^,)/g, ',');
+		tags = tags.replace(/,$|^,/g, '');
+		
+		if (visible.photo()) {
+			photo.json.tags = tags;
+			view.photo.tags();
+		}
 		
 		params = "setTags&photoIDs=" + photoIDs + "&tags=" + tags;
 		lychee.api(params, function(data) {
@@ -360,7 +361,6 @@ photo = {
 				
 		// Save
 		photo.json.tags = tags.toString();
-		view.photo.tags();
 		photo.setTags([photoID], photo.json.tags);
 	
 	},
