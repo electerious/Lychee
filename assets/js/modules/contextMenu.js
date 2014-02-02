@@ -110,8 +110,8 @@ contextMenu = {
 		if (albumID==="0"||albumID==="f"||albumID==="s") return false;	
 
 		contextMenu.fns = [
-			function() { album.setTitle(albumID) },
-			function() { album.delete(albumID) }
+			function() { album.setTitle([albumID]) },
+			function() { album.delete([albumID]) }
 		];
 
 		items = [

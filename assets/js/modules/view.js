@@ -447,6 +447,12 @@ view = {
 			}
 
 		},
+		
+		tags: function() {
+		
+			$("#infobox #tags").html(build.tags(photo.json.tags));
+		
+		},
 
 		photo: function() {
 

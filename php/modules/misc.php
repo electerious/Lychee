@@ -44,13 +44,13 @@ function search($term) {
 
 	$return["albums"] = "";
 
-    $result = $database->query("SELECT * FROM lychee_photos WHERE title like '%$term%' OR description like '%$term%';");
+    $result = $database->query("SELECT * FROM lychee_photos WHERE title like '%$term%' OR description like '%$term%' OR tags like '%$term%';");
     while($row = $result->fetch_array()) {
         $return['photos'][$row['id']] = $row;
         $return['photos'][$row['id']]['sysdate'] = date('d F Y', strtotime($row['sysdate']));
     }
 
-    $result = $database->query("SELECT * FROM lychee_albums WHERE title like '%$term%';");
+    $result = $database->query("SELECT * FROM lychee_albums WHERE title like '%$term%' OR description like '%$term%';");
     $i=0;
     while($row = $result->fetch_object()) {
 
@@ -85,7 +85,7 @@ function update() {
 	if($database->query("SELECT `password` FROM `lychee_albums` LIMIT 1;")) $database->query("ALTER TABLE  `lychee_albums` CHANGE  `password` `password` VARCHAR( 100 ) NULL DEFAULT ''");
 
 	if($database->query("SELECT `description` FROM `lychee_photos` LIMIT 1;")) $database->query("ALTER TABLE  `lychee_photos` CHANGE  `description` `description` VARCHAR( 1000 ) NULL DEFAULT ''");
-	if($database->query("SELECT `shortlink` FROM `lychee_photos` LIMIT 1;")) $database->query("ALTER TABLE  `lychee_photos` DROP  `shortlink`");
+	if(!$database->query("SELECT `tags` FROM `lychee_photos` LIMIT 1;")) $database->query("ALTER TABLE  `lychee_photos` ADD  `tags` VARCHAR( 1000 ) NULL DEFAULT ''");
 	$database->query("UPDATE `lychee_photos` SET url = replace(url, 'uploads/big/', ''), thumbUrl = replace(thumbUrl, 'uploads/thumb/', '')");
 	
 	$result = $database->query("SELECT `value` FROM `lychee_settings` WHERE `key` = 'importFilename' LIMIT 1;");

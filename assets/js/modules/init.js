@@ -35,7 +35,7 @@ $(document).ready(function(){
 		else modal.show("Share Album", "All photos inside this album will be public and visible for everyone. Existing public photos will have the same sharing permission as this album. Are your sure you want to share this album? <input class='text' type='password' placeholder='password (optional)' value=''>", [["Share Album", function() { album.setPublic(album.getID(), e) }], ["Cancel", function() {}]]);
 	});
 	$("#button_download").on(event_name, function() { photo.getArchive(photo.getID()) });
-	$("#button_trash_album").on(event_name, function() { album.delete(album.getID()) });
+	$("#button_trash_album").on(event_name, function() { album.delete([album.getID()]) });
 	$("#button_move").on(event_name, function(e) { contextMenu.move([photo.getID()], e) });
 	$("#button_trash").on(event_name, function() { photo.delete([photo.getID()]) });
 	$("#button_info_album").on(event_name, function() { view.infobox.show() });
@@ -68,10 +68,12 @@ $(document).ready(function(){
 	/* Infobox */
 	$("#infobox")
 		.on(event_name, ".header a", function() { view.infobox.hide() })
-		.on(event_name, "#edit_title_album", function() { album.setTitle(album.getID()) })
+		.on(event_name, "#edit_title_album", function() { album.setTitle([album.getID()]) })
 		.on(event_name, "#edit_description_album", function() { album.setDescription(album.getID()) })
 		.on(event_name, "#edit_title", function() { photo.setTitle([photo.getID()]) })
-		.on(event_name, "#edit_description", function() { photo.setDescription(photo.getID()) });
+		.on(event_name, "#edit_description", function() { photo.setDescription(photo.getID()) })
+		.on(event_name, "#edit_tags", function() { photo.editTags([photo.getID()]) })
+		.on(event_name, "#tags .tag span", function() { photo.deleteTag(photo.getID(), $(this).data('index')) });
 
 	/* Keyboard */
 	Mousetrap
@@ -108,7 +110,7 @@ $(document).ready(function(){
 		/* Header */
 		.on(event_name, "#title.editable", function() {
 			if (visible.photo()) photo.setTitle([photo.getID()]);
-			else album.setTitle(album.getID());
+			else album.setTitle([album.getID()]);
 		})
 
 		/* Navigation */

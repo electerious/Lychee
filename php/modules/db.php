@@ -152,6 +152,7 @@ function createTables($database) {
 				`title` varchar(50) NOT NULL,
 				`description` varchar(1000) NOT NULL DEFAULT '',
 				`url` varchar(100) NOT NULL,
+				`tags` varchar(1000) NOT NULL DEFAULT '',
 				`public` tinyint(1) NOT NULL,
 				`type` varchar(10) NOT NULL,
 				`width` int(11) NOT NULL,

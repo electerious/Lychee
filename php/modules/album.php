@@ -16,8 +16,8 @@ function addAlbum($title) {
     if (strlen($title)<1||strlen($title)>30) return false;
     $sysdate = date("d.m.Y");
     $result = $database->query("INSERT INTO lychee_albums (title, sysdate) VALUES ('$title', '$sysdate');");
+    
     if (!$result) return false;
-
     return $database->insert_id;
 
 }

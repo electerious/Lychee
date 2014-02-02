@@ -131,9 +131,14 @@
 
 	/* Tags ------------------------------------------------*/
 	#infobox #tags {
-		margin: 20px 20px 15px 20px;
+		width: calc(100% - 40px);
+		margin: 16px 20px 12px 20px;
 		color: #fff;
 		display: inline-block;
+	}
+	#infobox #tags .empty {
+		font-size: 14px;
+		margin-bottom: 8px;
 	}
 	#infobox .tag {
 		float: left;

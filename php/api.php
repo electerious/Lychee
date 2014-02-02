@@ -24,6 +24,7 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 	require('modules/upload.php');
 	require('modules/album.php');
 	require('modules/photo.php');
+	require('modules/tags.php');
 	require('modules/misc.php');
 
 	if (file_exists('config.php')) require('config.php');
@@ -156,6 +157,16 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 
 			case 'search':			if (isset($_POST['term']))
 										echo json_encode(search($_POST['term']));
+									break;
+									
+			// Tag Functions
+			
+			case 'getTags':			if (isset($_POST['photoID']))
+										echo json_encode(getTags($_POST['photoID']));
+									break;
+			
+			case 'setTags':			if (isset($_POST['photoIDs'])&&isset($_POST['tags']))
+										echo setTags($_POST['photoIDs'], $_POST['tags']);
 									break;
 
 			// Session Function

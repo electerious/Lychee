@@ -302,7 +302,69 @@ photo = {
 		modal.show("Set Description", "Please enter a description for this photo: <input class='text' type='text' placeholder='Description' value='" + oldDescription + "'>", buttons);
 
 	},
+	
+	editTags: function(photoIDs) {
+	
+		var oldTags = "";
+	
+		if (!photoIDs) return false;
+		if (photoIDs instanceof Array===false) photoIDs = [photoIDs];
+		if (visible.photo()) oldTags = photo.json.tags;
+	
+		buttons = [
+			["Set Tags", function() {
 
+				tags = $(".message input.text").val();
+
+				if (tags.length<800) {
+
+					if (visible.photo()) {
+						photo.json.tags = tags;
+						view.photo.tags();
+					}
+
+					photo.setTags(photoIDs, tags)
+
+				} else loadingBar.show("error", "Description too long. Please try again!");
+
+			}],
+			["Cancel", function() {}]
+		];
+		modal.show("Set Tags", "Please enter your tags for this photo. You can add multiple tags by separating them with a comma: <input class='text' type='text' placeholder='Tags' value='" + oldTags + "'>", buttons);
+	
+	},
+	
+	setTags: function(photoIDs, tags) {
+		
+		var params;
+	
+		if (!photoIDs) return false;
+		if (photoIDs instanceof Array===false) photoIDs = [photoIDs];
+		
+		params = "setTags&photoIDs=" + photoIDs + "&tags=" + tags;
+		lychee.api(params, function(data) {
+
+			if (data!==true) lychee.error(null, params, data);
+
+		});
+	
+	},
+		
+	deleteTag: function(photoID, index) {
+		
+		var tags;
+	
+		// Remove
+		tags = photo.json.tags.split(',');
+		tags.splice(index, 1);
+				
+		// Save
+		photo.json.tags = tags.toString();
+		view.photo.tags();
+		photo.setTags([photoID], photo.json.tags);
+	
+	},
+		
 	share: function(photoID, service) {
 
 		var link = "",

@@ -18,11 +18,11 @@ build = {
 		return "<div id='" + id + "' class='edit'><a class='icon-pencil'></a></div>";
 
 	},
-		
+
 	multiselect: function(top, left) {
-	
+
 		return "<div id='multiselect' style='top: " + top + "px; left: " + left + "px;'></div>";
-	
+
 	},
 
 	album: function(albumJSON) {
@@ -37,7 +37,7 @@ build = {
 			title = albumJSON.title.substr(0, 18) + "...";
 			longTitle = albumJSON.title;
 		}
-		
+
 		typeThumb0 = albumJSON.thumb0.split('.').pop();
 		typeThumb1 = albumJSON.thumb1.split('.').pop();
 		typeThumb2 = albumJSON.thumb2.split('.').pop();
@@ -241,6 +241,32 @@ build = {
 
 	},
 
+	tags: function(tags, forView) {
+
+		var html = "",
+			editTagsHTML;
+
+		if (tags!=="") {
+
+			tags = tags.split(",");
+
+			tags.forEach(function(tag, index, array) {
+
+				html += "<a class='tag'>" + tag + "<span class='icon-remove' data-index='" + index + "'></span></a>";
+
+			});
+
+		} else {
+
+			editTagsHTML = (forView===true||lychee.publicMode) ? "" : " " + build.editIcon("edit_tags");
+			html = "<div class='empty'>No Tags" + editTagsHTML + "</div>";
+
+		}
+
+		return html;
+
+	},
+
 	infoboxPhoto: function(photoJSON, forView) {
 
 		if (!photoJSON) return "";
@@ -272,7 +298,6 @@ build = {
 		editTitleHTML = (forView===true||lychee.publicMode) ? "" : " " + build.editIcon("edit_title");
 		editDescriptionHTML = (forView===true||lychee.publicMode) ? "" : " " + build.editIcon("edit_description");
 
-		//["Tags", "<a class='tag'>Abstract<span class='icon-remove'></span></a><a class='tag'>Colors<span class='icon-remove'></span></a><a class='tag'>Photoshop<span class='icon-remove'></span></a><a class='tag'>Something<span class='icon-remove'></span></a><a class='tag'>Lychee<span class='icon-remove'></span></a><a class='tag'>Tags<span class='icon-remove'></span></a><a class='tag icon-plus'></a>"]
 		infos = [
 			["", "Basics"],
 			["Name", photoJSON.title + editTitleHTML],
@@ -281,7 +306,8 @@ build = {
 			["", "Image"],
 			["Size", photoJSON.size],
 			["Format", photoJSON.type],
-			["Resolution", photoJSON.width + " x " + photoJSON.height]
+			["Resolution", photoJSON.width + " x " + photoJSON.height],
+			["Tags", build.tags(photoJSON.tags, forView)]
 		];
 
 		if ((photoJSON.takedate+photoJSON.make+photoJSON.model+photoJSON.shutter+photoJSON.aperture+photoJSON.focal+photoJSON.iso)!="") {
@@ -319,9 +345,7 @@ build = {
 				case "Tags":	// Tags
 								infobox += "</table>";
 								infobox += "<div class='separator'><h1>" + infos[index][0] + "</h1></div>";
-								infobox += "<tr>";
-								infobox +=		"<div id='tags'>" + infos[index][1] + "</div>";
-								infobox += "</tr>";
+								infobox += "<div id='tags'>" + infos[index][1] + "</div>";
 								break;
 
 				default:		// Item

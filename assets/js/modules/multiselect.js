@@ -19,6 +19,7 @@ multiselect = {
 	show: function(e) {
 	
 		if (mobileBrowser()) return false;
+		if (lychee.publicMode) return false;
 		if ($('.album:hover, .photo:hover').length!=0) return false;
 		if (visible.multiselect()) $('#multiselect').remove();
 	
@@ -133,7 +134,7 @@ multiselect = {
 				
 					id = $(this).data('id');
 					
-					if (id!=="0"&&id!==0&&id!=="f"&&id!=="s"&&id!==null&id!==undefined) {
+					if (id!=='0'&&id!==0&&id!=='f'&&id!=='s'&&id!==null&id!==undefined) {
 				
 						ids.push(id);
 						$(this).addClass('active');
@@ -159,7 +160,7 @@ multiselect = {
 		multiselect.position.bottom = null;
 		multiselect.position.left = null;
 		
-		lychee.animate('#multiselect', "fadeOut");
+		lychee.animate('#multiselect', 'fadeOut');
 		setTimeout(function() {
 			$('#multiselect').remove();
 		}, 300);
