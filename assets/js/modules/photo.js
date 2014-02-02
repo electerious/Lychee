@@ -171,8 +171,8 @@ photo = {
 			["Cancel", function() {}]
 		];
 
-		if (photoIDs.length===1) modal.show("Set Title", "Please enter a new title for this photo: <input class='text' type='text' placeholder='Title' value='" + oldTitle + "'>", buttons);
-		else modal.show("Set Titles", "Please enter a title for all " + photoIDs.length + " selected photos: <input class='text' type='text' placeholder='Title' value=''>", buttons);
+		if (photoIDs.length===1) modal.show("Set Title", "Please enter a new title for this photo: <input class='text' type='text' maxlength='30' placeholder='Title' value='" + oldTitle + "'>", buttons);
+		else modal.show("Set Titles", "Please enter a title for all " + photoIDs.length + " selected photos: <input class='text' type='text' maxlength='30' placeholder='Title' value=''>", buttons);
 
 	},
 
@@ -299,7 +299,7 @@ photo = {
 			}],
 			["Cancel", function() {}]
 		];
-		modal.show("Set Description", "Please enter a description for this photo: <input class='text' type='text' placeholder='Description' value='" + oldDescription + "'>", buttons);
+		modal.show("Set Description", "Please enter a description for this photo: <input class='text' type='text' maxlength='800' placeholder='Description' value='" + oldDescription + "'>", buttons);
 
 	},
 	
@@ -322,7 +322,7 @@ photo = {
 			}],
 			["Cancel", function() {}]
 		];
-		modal.show("Set Tags", "Please enter your tags for this photo. You can add multiple tags by separating them with a comma: <input class='text' type='text' placeholder='Tags' value='" + oldTags + "'>", buttons);
+		modal.show("Set Tags", "Please enter your tags for this photo. You can add multiple tags by separating them with a comma: <input class='text' type='text' maxlength='800' placeholder='Tags' value='" + oldTags + "'>", buttons);
 	
 	},
 	

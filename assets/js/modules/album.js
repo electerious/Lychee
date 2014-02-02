@@ -117,7 +117,7 @@ album = {
 			}],
 			["Cancel", function() {}]
 		];
-		modal.show("New Album", "Please enter a title for this album: <input class='text' type='text' placeholder='Title' value='Untitled'>", buttons);
+		modal.show("New Album", "Please enter a title for this album: <input class='text' type='text' maxlength='30' placeholder='Title' value='Untitled'>", buttons);
 
 	},
 
@@ -232,8 +232,8 @@ album = {
 			["Cancel", function() {}]
 		];
 		
-		if (albumIDs.length===1) modal.show("Set Title", "Please enter a new title for this album: <input class='text' type='text' placeholder='Title' value='" + oldTitle + "'>", buttons);
-		else modal.show("Set Titles", "Please enter a title for all " + albumIDs.length + " selected album: <input class='text' type='text' placeholder='Title' value='" + oldTitle + "'>", buttons);
+		if (albumIDs.length===1) modal.show("Set Title", "Please enter a new title for this album: <input class='text' type='text' maxlength='30' placeholder='Title' value='" + oldTitle + "'>", buttons);
+		else modal.show("Set Titles", "Please enter a title for all " + albumIDs.length + " selected album: <input class='text' type='text' maxlength='30' placeholder='Title' value='" + oldTitle + "'>", buttons);
 
 	},
 
@@ -249,7 +249,7 @@ album = {
 
 				description = $(".message input.text").val();
 
-				if (description.length<800) {
+				if (description.length<801) {
 
 					if (visible.album()) {
 						album.json.description = description;
@@ -268,7 +268,7 @@ album = {
 			}],
 			["Cancel", function() {}]
 		];
-		modal.show("Set Description", "Please enter a description for this album: <input class='text' type='text' placeholder='Description' value='" + oldDescription + "'>", buttons);
+		modal.show("Set Description", "Please enter a description for this album: <input class='text' type='text' maxlength='800' placeholder='Description' value='" + oldDescription + "'>", buttons);
 
 	},
 

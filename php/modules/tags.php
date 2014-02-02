@@ -27,6 +27,8 @@ function setTags($photoIDs, $tags) {
 	// Parse tags
 	$tags = preg_replace('/(\ ,\ )|(\ ,)|(,\ )|(,{1,}\ {0,})|(,$|^,)/', ',', $tags);
 	$tags = preg_replace('/,$|^,/', ',', $tags);
+	
+	if (strlen($tags)>1000) return false;
 
 	$result = $database->query("UPDATE lychee_photos SET tags = '$tags' WHERE id IN ($photoIDs);");
 

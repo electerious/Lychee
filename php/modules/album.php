@@ -13,7 +13,7 @@ function addAlbum($title) {
 
 	global $database;
 
-    if (strlen($title)<1||strlen($title)>30) return false;
+    if (strlen($title)<1||strlen($title)>50) return false;
     $sysdate = date("d.m.Y");
     $result = $database->query("INSERT INTO lychee_albums (title, sysdate) VALUES ('$title', '$sysdate');");
     
@@ -193,7 +193,7 @@ function setAlbumTitle($albumIDs, $title) {
 
 	global $database;
 
-    if (strlen($title)<1||strlen($title)>30) return false;
+    if (strlen($title)<1||strlen($title)>50) return false;
     $result = $database->query("UPDATE lychee_albums SET title = '$title' WHERE id IN ($albumIDs);");
     
     if (!$result) return false;
@@ -206,7 +206,7 @@ function setAlbumDescription($albumID, $description) {
 	global $database;
 	
 	$description = htmlentities($description);
-	if (strlen($description)>800) return false;
+	if (strlen($description)>1000) return false;
 	$result = $database->query("UPDATE lychee_albums SET description = '$description' WHERE id = '$albumID';");
 	
 	if (!$result) return false;

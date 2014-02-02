@@ -108,7 +108,7 @@ function setPhotoTitle($photoIDs, $title) {
 
 	global $database;
 
-    if (strlen($title)>30) return false;
+    if (strlen($title)>50) return false;
     $result = $database->query("UPDATE lychee_photos SET title = '$title' WHERE id IN ($photoIDs);");
 
     if (!$result) return false;
@@ -121,7 +121,7 @@ function setPhotoDescription($photoID, $description) {
 	global $database;
 
     $description = htmlentities($description);
-    if (strlen($description)>800) return false;
+    if (strlen($description)>1000) return false;
     $result = $database->query("UPDATE lychee_photos SET description = '$description' WHERE id = '$photoID';");
 
     if (!$result) return false;
