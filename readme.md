@@ -47,11 +47,10 @@ Take a look at the [FAQ](docs/md/FAQ.md) if you have problems.
 | lycheesync | Sync Lychee with any directory containing photos | https://github.com/GustavePate/lycheesync |
 
 ## Developer
-- [electerious](https://github.com/electerious) / [Tobias Reich](http://electerious.com)
-
-## Contributors
-- [phinal](https://github.com/phinal) / [Philipp Maurer](http://phinal.net)
-- [cdauth](https://github.com/cdauth)
+| Version | Name |
+|:-----------|:------------|
+| 1.2, 1.3, 2.x | [Tobias Reich](http://electerious.com)|
+| 1.0, 1.1 | [Tobias Reich](http://electerious.com)<br>[Philipp Maurer](http://phinal.net) |
 
 ##License
 
