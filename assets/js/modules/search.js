@@ -60,6 +60,7 @@ search = {
 							else {
 								lychee.content.html(code);
 								lychee.animate(".album, .photo", "contentZoomIn");
+								$("img[data-type!='svg']").retina();
 							}
 
 						}, 300);
