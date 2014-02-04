@@ -8,9 +8,6 @@ $(document).ready(function(){
 
 	/* Event Name */
 	var event_name = (mobileBrowser()) ? "touchend" : "click";
-
-	/* Notifications */
-	if (window.webkitNotifications) window.webkitNotifications.requestPermission();
 	
 	/* Disable ContextMenu */
 	$(document).bind("contextmenu", function(e) { e.preventDefault() });
