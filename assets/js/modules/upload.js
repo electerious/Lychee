@@ -44,7 +44,7 @@ upload = {
 		
 		if (window.webkitNotifications.checkPermission()!=0) window.webkitNotifications.requestPermission();
 	
-		if (window.webkitNotifications.checkPermission()==0) {
+		if (window.webkitNotifications.checkPermission()==0&&title) {
 			popup = window.webkitNotifications.createNotification("", title, "You can now manage your new photo(s).");
 			popup.show();
 		}
