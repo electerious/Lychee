@@ -309,7 +309,7 @@ photo = {
 	
 		if (!photoIDs) return false;
 		if (photoIDs instanceof Array===false) photoIDs = [photoIDs];
-		if (visible.photo()) oldTags = photo.json.tags;
+		if (visible.photo()) oldTags = photo.json.tags.replace(/,/g, ', ');
 	
 		buttons = [
 			["Set Tags", function() {
