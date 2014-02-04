@@ -244,7 +244,7 @@ build = {
 	tags: function(tags, forView) {
 
 		var html = "",
-			editTagsHTML;
+			editTagsHTML = (forView===true||lychee.publicMode) ? "" : " " + build.editIcon("edit_tags");
 
 		if (tags!=="") {
 
@@ -255,10 +255,12 @@ build = {
 				html += "<a class='tag'>" + tag + "<span class='icon-remove' data-index='" + index + "'></span></a>";
 
 			});
+			
+			html += editTagsHTML;
 
 		} else {
 
-			editTagsHTML = (forView===true||lychee.publicMode) ? "" : " " + build.editIcon("edit_tags");
+			
 			html = "<div class='empty'>No Tags" + editTagsHTML + "</div>";
 
 		}
