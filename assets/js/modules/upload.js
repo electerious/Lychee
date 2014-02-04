@@ -35,6 +35,21 @@ upload = {
 		$(".upload_message").append("<p>" + text + "</p>");
 
 	},
+	
+	notify: function(title) {
+	
+		var popup;
+		
+		if (!window.webkitNotifications) return false;
+		
+		if (window.webkitNotifications.checkPermission()!=0) window.webkitNotifications.requestPermission();
+	
+		if (window.webkitNotifications.checkPermission()==0&&title) {
+			popup = window.webkitNotifications.createNotification("", title, "You can now manage your new photo(s).");
+			popup.show();
+		}
+	
+	},
 
 	start: {
 
@@ -49,7 +64,7 @@ upload = {
 
 			if (files.length<=0) return false;
 			if (albumID===false) albumID = 0;
-
+						
 			formData.append("function", "upload");
 			formData.append("albumID", albumID);
 
@@ -75,12 +90,7 @@ upload = {
 				if (xhr.status===200) {
 
 					upload.close();
-
-					// WebKit Notification
-					if (window.webkitNotifications&&BrowserDetect.browser==="Safari") {
-						popup = window.webkitNotifications.createNotification("", "Upload complete", "You can now manage your new photo.");
-						popup.show();
-					}
+					upload.notify("Upload complete");
 
 					window.onbeforeunload = null;
 
@@ -146,6 +156,7 @@ upload = {
 						lychee.api(params, function(data) {
 
 							upload.close();
+							upload.notify("Import complete");
 
 							if (album.getID()===false) lychee.goto("0");
 							else album.load(albumID);
@@ -181,6 +192,7 @@ upload = {
 					lychee.api(params, function(data) {
 
 						upload.close();
+						upload.notify("Import complete");
 
 						if (album.getID()===false) lychee.goto("0");
 						else album.load(albumID);
@@ -222,6 +234,7 @@ upload = {
 						lychee.api(params, function(data) {
 
 							upload.close();
+							upload.notify("Import complete");
 
 							if (album.getID()===false) lychee.goto("0");
 							else album.load(albumID);

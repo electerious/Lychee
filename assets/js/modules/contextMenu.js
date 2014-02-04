@@ -51,6 +51,8 @@ contextMenu = {
 		var mouse_x = e.pageX,
 			mouse_y = e.pageY - $(document).scrollTop(),
 			items;
+		
+		upload.notify();
 
 		contextMenu.fns = [
 			function() { $("#upload_files").click() },
