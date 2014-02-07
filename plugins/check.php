@@ -16,8 +16,8 @@ header('content-type: text/plain');
 $error = '';
 
 // Include
-if (!file_exists('../php/config.php')) exit('Error 001: Configuration not found. Please install Lychee first.');
-require('../php/config.php');
+if (!file_exists('../data/config.php')) exit('Error 001: Configuration not found. Please install Lychee first.');
+require('../data/config.php');
 require('../php/modules/settings.php');
 
 // Database
@@ -54,7 +54,7 @@ if (substr(sprintf('%o', @fileperms('../uploads/big/')), -4)!='0777') $error .= 
 if (substr(sprintf('%o', @fileperms('../uploads/thumb/')), -4)!='0777') $error .= ('Error 501: Wrong permissions for \'uploads/thumb\' (777 required)' . PHP_EOL);
 if (substr(sprintf('%o', @fileperms('../uploads/import/')), -4)!='0777') $error .= ('Error 502: Wrong permissions for \'uploads/import\' (777 required)' . PHP_EOL);
 if (substr(sprintf('%o', @fileperms('../uploads/')), -4)!='0777') $error .= ('Error 503: Wrong permissions for \'uploads/\' (777 required)' . PHP_EOL);
-if (substr(sprintf('%o', @fileperms('../php/')), -4)!='0777') $error .= ('Error 504: Wrong permissions for \'php/\' (777 required)' . PHP_EOL);
+if (substr(sprintf('%o', @fileperms('../data/')), -4)!='0777') $error .= ('Error 504: Wrong permissions for \'data/\' (777 required)' . PHP_EOL);
 
 if ($error=='') echo('Lychee is ready. Lets rock!' . PHP_EOL . PHP_EOL); else echo $error;
 

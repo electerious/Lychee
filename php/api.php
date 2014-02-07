@@ -27,7 +27,7 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 	require('modules/tags.php');
 	require('modules/misc.php');
 
-	if (file_exists('config.php')) require('config.php');
+	if (file_exists('../data/config.php')) require('../data/config.php');
 	else {
 
 		/**
@@ -55,7 +55,7 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 
 	// Get Settings
 	$settings = getSettings();
-	
+
 	// Escape
 	foreach(array_keys($_POST) as $key) $_POST[$key] = mysqli_real_escape_string($database, urldecode($_POST[$key]));
 	foreach(array_keys($_GET) as $key) $_GET[$key] = mysqli_real_escape_string($database, urldecode($_GET[$key]));
@@ -64,7 +64,7 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 	if (isset($_POST['albumIDs'])&&preg_match('/^[0-9\,]{1,}$/', $_POST['albumIDs'])!==1) exit('Error: Wrong parameter type for albumIDs!');
 	if (isset($_POST['photoIDs'])&&preg_match('/^[0-9\,]{1,}$/', $_POST['photoIDs'])!==1) exit('Error: Wrong parameter type for photoIDs!');
 	if (isset($_POST['albumID'])&&preg_match('/^[0-9sf]{1,}$/', $_POST['albumID'])!==1) exit('Error: Wrong parameter type for albumID!');
-	if (isset($_POST['photoID'])&&preg_match('/^[0-9]{14}$/', $_POST['photoID'])!==1) exit('Error: Wrong parameter type for photoID!');	
+	if (isset($_POST['photoID'])&&preg_match('/^[0-9]{14}$/', $_POST['photoID'])!==1) exit('Error: Wrong parameter type for photoID!');
 
 	if (isset($_SESSION['login'])&&$_SESSION['login']==true) {
 
@@ -158,13 +158,13 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 			case 'search':			if (isset($_POST['term']))
 										echo json_encode(search($_POST['term']));
 									break;
-									
+
 			// Tag Functions
-			
+
 			case 'getTags':			if (isset($_POST['photoID']))
 										echo json_encode(getTags($_POST['photoID']));
 									break;
-			
+
 			case 'setTags':			if (isset($_POST['photoIDs'])&&isset($_POST['tags']))
 										echo setTags($_POST['photoIDs'], $_POST['tags']);
 									break;

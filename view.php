@@ -24,7 +24,7 @@
 
 				define("LYCHEE", true);
 
-				require("php/config.php");
+				require("data/config.php");
 				require("php/modules/db.php");
 				require("php/modules/misc.php");
 

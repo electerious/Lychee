@@ -16,12 +16,20 @@ To use Lychee without restrictions, we recommend to increase the values of the f
 	upload_max_size = 200M
 	upload_max_filesize = 20M
 	max_file_uploads = 100
+	
+### Download Lychee
+
+The easiest way to download Lychee is with git:
+
+	git clone https://github.com/electerious/Lychee.git
+	
+You can also use the [direct download](https://github.com/electerious/Lychee/archive/master.zip).
 
 ### Folder permissions
 
-Change the permissions of `uploads/` and `php/` to 777, including all subfolders:
+Change the permissions of `uploads/` and `data/` to 777, including all subfolders:
 
-	chmod -R 777 uploads/ php/
+	chmod -R 777 uploads/ data/
 
 ### Lychee installation
 

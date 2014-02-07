@@ -17,11 +17,11 @@ You can use Lychee right after the installation. Here are some advanced features
 
 ### Settings
 
-Sign in and click the gear on the top left corner to change your settings. If you want to edit them manually: MySQL details are stored in `php/config.php`. Other options and settings are stored directly in the database. [Settings &#187;](docs/md/Settings.md)
+Sign in and click the gear on the top left corner to change your settings. If you want to edit them manually: MySQL details are stored in `data/config.php`. Other options and settings are stored directly in the database. [Settings &#187;](docs/md/Settings.md)
 
 ### Update
 
-1. Replace all files, excluding `uploads/`
+1. Replace all files, excluding `uploads/` and `data/`
 2. Open Lychee and enter your database details
 
 ### FTP Upload

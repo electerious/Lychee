@@ -236,54 +236,55 @@ function deleteAlbum($albumIDs) {
 function getAlbumArchive($albumID) {
 
 	global $database;
-
-    switch($albumID) {
-        case 's':
-            $query = "SELECT * FROM lychee_photos WHERE public = '1';";
-            $zipTitle = "Public";
-            break;
-        case 'f':
-            $query = "SELECT * FROM lychee_photos WHERE star = '1';";
-            $zipTitle = "Starred";
-            break;
-        default:
-            $query = "SELECT * FROM lychee_photos WHERE album = '$albumID';";
-            $zipTitle = "Unsorted";
-    }
-
-    $result = $database->query($query);
-    $files = array();
-    $i=0;
-    while($row = $result->fetch_object()) {
-        $files[$i] = "../uploads/big/".$row->url;
-        $i++;
-    }
-    $result = $database->query("SELECT * FROM lychee_albums WHERE id = '$albumID';");
-    $row = $result->fetch_object();
-    if ($albumID!=0&&is_numeric($albumID))$zipTitle = $row->title;
-    $filename = "../uploads/".$zipTitle.".zip";
-
-    $zip = new ZipArchive();
-
-    if ($zip->open($filename, ZIPARCHIVE::CREATE)!==TRUE) {
-        return false;
-    }
-
-    foreach($files AS $zipFile) {
-        $newFile = explode("/",$zipFile);
-        $newFile = array_reverse($newFile);
-        $zip->addFile($zipFile, $zipTitle."/".$newFile[0]);
-    }
-
-    $zip->close();
-
-    header("Content-Type: application/zip");
-    header("Content-Disposition: attachment; filename=\"$zipTitle.zip\"");
-    header("Content-Length: ".filesize($filename));
-    readfile($filename);
-    unlink($filename);
-
-    return true;
+	
+	switch($albumID) {
+	    case 's':
+	        $query = "SELECT * FROM lychee_photos WHERE public = '1';";
+	        $zipTitle = "Public";
+	        break;
+	    case 'f':
+	        $query = "SELECT * FROM lychee_photos WHERE star = '1';";
+	        $zipTitle = "Starred";
+	        break;
+	    default:
+	        $query = "SELECT * FROM lychee_photos WHERE album = '$albumID';";
+	        $zipTitle = "Unsorted";
+	}
+	
+	$zip = new ZipArchive();
+	$result = $database->query($query);
+	$files = array();
+	$i=0;
+	
+	while($row = $result->fetch_object()) {
+	    $files[$i] = "../uploads/big/".$row->url;
+	    $i++;
+	}
+	
+	$result = $database->query("SELECT * FROM lychee_albums WHERE id = '$albumID';");
+	$row = $result->fetch_object();
+	if ($albumID!=0&&is_numeric($albumID)) $zipTitle = $row->title;
+	$filename = "../data/$zipTitle.zip";
+	
+	if ($zip->open($filename, ZIPARCHIVE::CREATE)!==TRUE) {
+	    return false;
+	}
+	
+	foreach($files AS $zipFile) {
+	    $newFile = explode("/",$zipFile);
+	    $newFile = array_reverse($newFile);
+	    $zip->addFile($zipFile, $zipTitle."/".$newFile[0]);
+	}
+	
+	$zip->close();
+	
+	header("Content-Type: application/zip");
+	header("Content-Disposition: attachment; filename=\"$zipTitle.zip\"");
+	header("Content-Length: ".filesize($filename));
+	readfile($filename);
+	unlink($filename);
+	
+	return true;
 
 }
 
