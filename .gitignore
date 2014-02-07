@@ -1,6 +1,7 @@
 *.esproj
 
 php/config.php
+data/config.php
 
 uploads/import/*
 uploads/big/*
