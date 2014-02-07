@@ -1,7 +1,5 @@
 *.esproj
 
-php/config.php
-
 uploads/import/*
 uploads/big/*
 uploads/thumb/*
