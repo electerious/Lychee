@@ -27,10 +27,6 @@
 	-moz-transform: translateX(320px);
 	transform: translateX(320px);
 
-	-webkit-user-select: text;
-	-moz-user-select: text;
-	user-select: text;
-
 	-webkit-transition: -webkit-transform .5s cubic-bezier(.225,.5,.165,1);
 	-moz-transition: -moz-transform .5s cubic-bezier(.225,.5,.165,1);
 	transition: transform .5s cubic-bezier(.225,.5,.165,1);
@@ -121,6 +117,10 @@
 		color: #fff;
 		font-size: 14px;
 		line-height: 19px;
+		
+		-webkit-user-select: text;
+		-moz-user-select: text;
+		user-select: text;
 	}
 	#infobox table tr td:first-child {
 		width: 110px;
