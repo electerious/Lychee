@@ -19,7 +19,7 @@ To use Lychee without restrictions, we recommend to increase the values of the f
 	
 ### Download Lychee
 
-The easiest way to download Lychee is with git:
+The easiest way to download Lychee is with `git`:
 
 	git clone https://github.com/electerious/Lychee.git
 	

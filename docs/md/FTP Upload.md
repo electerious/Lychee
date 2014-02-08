@@ -10,4 +10,4 @@ You can upload photos directly with every FTP client into Lychee. This feature h
 2. Navigate your browser to the place where Lychee is located (e.g. `http://example.com/view.php?p=filename.png`). `filename.png` must be replaced with the filename of your uploaded file.
 3. Share the link.
 
-Lychee will import the file as an public image, delete the original (unused) file and display it in the browser. [Sample FTP configuration](http://l.electerious.com/view.php?p=13657692738813).
+Lychee will import the file as a public image, delete the original (unused) file and display it in the browser. [Sample FTP configuration &#187;](http://l.electerious.com/view.php?p=13657692738813)

@@ -17,7 +17,7 @@ You can use Lychee right after the installation. Here are some advanced features
 
 ### Settings
 
-Sign in and click the gear on the top left corner to change your settings. If you want to edit them manually: MySQL details are stored in `data/config.php`. Other options and settings are stored directly in the database. [Settings &#187;](docs/md/Settings.md)
+Sign in and click the gear on the top left corner to change your settings. If you want to edit them manually: MySQL details are stored in `data/config.php`. Other options and hidden settings are stored directly in the database. [Settings &#187;](docs/md/Settings.md)
 
 ### Update
 
@@ -52,7 +52,11 @@ Take a look at the [FAQ](docs/md/FAQ.md) if you have problems.
 | 1.2, 1.3, 2.x | [Tobias Reich](http://electerious.com)|
 | 1.0, 1.1 | [Tobias Reich](http://electerious.com)<br>[Philipp Maurer](http://phinal.net) |
 
-##License
+## Donate
+
+I am working hard on continuously developing and maintaining Lychee. Please consider making a donation via [Flattr](https://flattr.com/submit/auto?user_id=electerious&url=http%3A%2F%2Flychee.electerious.com&title=Lychee&category=software) or PayPal (from [our site](http://lychee.electerious.com/)) to keep the project going strong and me motivated.
+
+## License
 
 (MIT License)
 
