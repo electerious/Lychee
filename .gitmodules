@@ -1,0 +1,3 @@
+[submodule "php/FeedWriter"]
+	path = php/FeedWriter
+	url = git@github.com:mibe/FeedWriter.git
