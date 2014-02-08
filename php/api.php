@@ -37,8 +37,8 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 
 		switch ($_POST['function']) {
 
-			case 'createConfig':	if (isset($_POST['dbHost'])&&isset($_POST['dbUser'])&&isset($_POST['dbPassword'])&&isset($_POST['dbName']))
-										echo createConfig($_POST['dbHost'], $_POST['dbUser'], $_POST['dbPassword'], $_POST['dbName']);
+			case 'dbCreateConfig':	if (isset($_POST['dbHost'])&&isset($_POST['dbUser'])&&isset($_POST['dbPassword'])&&isset($_POST['dbName']))
+										echo dbCreateConfig($_POST['dbHost'], $_POST['dbUser'], $_POST['dbPassword'], $_POST['dbName']);
 									break;
 
 			default:				echo 'Warning: No configuration!';

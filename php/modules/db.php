@@ -15,39 +15,33 @@ function dbConnect() {
 
     $database = new mysqli($dbHost, $dbUser, $dbPassword);
 
-    if (mysqli_connect_errno()) {
-	    echo mysqli_connect_errno().': '.mysqli_connect_error();
-        return false;
-	}
+    if ($database->connect_errno) exit('Error: ' . $database->connect_error);
+	
+	// Avoid sql injection on older MySQL versions
+	if ($database->server_version<50500) $database->set_charset('GBK');
 
 	if (!$database->select_db($dbName))
-		if (!createDatabase($dbName, $database)) exit('Error: Could not create database!');
-    if (!$database->query("SELECT * FROM lychee_photos, lychee_albums, lychee_settings LIMIT 1;"))
-    	if (!createTables($database)) exit('Error: Could not create tables!');
-
-    // Avoid sql injection on older MySQL versions
-	if ($database->server_version<50500) $database->set_charset('GBK');
+		if (!dbCreate($dbName, $database)) exit('Error: Could not create database!');
+		
+	dbCheck($database);
 
     return $database;
 
 }
 
-function dbClose() {
-
-	global $database;
-
-    if (!$database->close()) exit("Error: Closing the connection failed!");
-
-    return true;
-
+function dbCheck($database) {
+		
+	if (!$database->query("SELECT * FROM lychee_photos, lychee_albums, lychee_settings LIMIT 1;"))
+		if (!dbCreateTables($database)) exit('Error: Could not create tables!');
+		
 }
 
-function createConfig($dbHost = 'localhost', $dbUser, $dbPassword, $dbName = 'lychee') {
+function dbCreateConfig($dbHost = 'localhost', $dbUser, $dbPassword, $dbName = 'lychee') {
 
 	$dbPassword = urldecode($dbPassword);
 	$database = new mysqli($dbHost, $dbUser, $dbPassword);
 
-	if (mysqli_connect_errno()||$dbUser=="") return "Warning: Connection failed!";
+	if ($database->connect_errno) return "Warning: Connection failed!";
 	else {
 
 $config = "<?php
@@ -84,7 +78,7 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 }
 
-function createDatabase($dbName, $database) {
+function dbCreate($dbName, $database) {
 
 	$result = $database->query("CREATE DATABASE IF NOT EXISTS $dbName;");
 	$database->select_db($dbName);
@@ -94,7 +88,7 @@ function createDatabase($dbName, $database) {
 
 }
 
-function createTables($database) {
+function dbCreateTables($database) {
 
 	if (!$database->query("SELECT * FROM lychee_settings LIMIT 1;")) {
 
@@ -183,6 +177,16 @@ function createTables($database) {
 	    if (!$database->query($query)) return false;
 
     }
+
+    return true;
+
+}
+
+function dbClose() {
+
+	global $database;
+
+    if (!$database->close()) exit("Error: Closing the connection failed!");
 
     return true;
 

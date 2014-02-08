@@ -26,7 +26,7 @@ var settings = {
 				if (dbHost.length<1) dbHost = "localhost";
 				if (dbName.length<1) dbName = "lychee";
 
-				params = "createConfig&dbName=" + escape(dbName) + "&dbUser=" + escape(dbUser) + "&dbPassword=" + escape(dbPassword) + "&dbHost=" + escape(dbHost);
+				params = "dbCreateConfig&dbName=" + escape(dbName) + "&dbUser=" + escape(dbUser) + "&dbPassword=" + escape(dbPassword) + "&dbHost=" + escape(dbHost);
 				lychee.api(params, function(data) {
 
 					if (data!==true) {
