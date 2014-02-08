@@ -6,8 +6,8 @@
 
 #multiselect {
 	position: absolute;
-	background-color: RGBA(0, 94, 204, .3);
-	border: 1px solid RGBA(0, 94, 204, 1);
+	background-color: rgba(0, 94, 204, .3);
+	border: 1px solid rgba(0, 94, 204, 1);
 	border-radius: 3px;
 	z-index: 3;
 }

@@ -20,7 +20,7 @@ modal = {
 
 		modal.fns = [buttons[0][1], buttons[1][1]];
 		$("body").append(build.modal(title, text, buttons, marginTop, closeButton));
-		$(".message input:first-child").focus();
+		$(".message input:first-child").focus().select();
 
 	},
 

@@ -272,7 +272,7 @@ contextMenu = {
 		];
 
 		contextMenu.show(items, mouse_x, mouse_y, "left");
-		$(".contextmenu input").focus();
+		$(".contextmenu input").focus().select();
 
 	},
 
@@ -307,7 +307,7 @@ contextMenu = {
 		if (album.json.password==true) items[3] = ["<a class='icon-unlock'></a> Remove Password", 5];
 
 		contextMenu.show(items, mouse_x, mouse_y, "left");
-		$(".contextmenu input").focus();
+		$(".contextmenu input").focus().select();
 
 	},
 

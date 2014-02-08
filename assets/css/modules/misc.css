@@ -33,3 +33,8 @@ body.view {
 	-moz-transition: opacity .3s ease-out, -moz-transform .3s ease-out, box-shadow .3s;
 	transition: color .3s, opacity .3s ease-out, transform .3s ease-out, box-shadow .3s;
 }
+input {
+	-webkit-user-select: text !important;
+	-moz-user-select: text !important;
+	user-select: text !important;
+}
