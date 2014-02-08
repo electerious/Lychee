@@ -146,33 +146,29 @@ photo = {
 
 				newTitle = $(".message input.text").val();
 
-				if (newTitle.length<31) {
+				if (visible.photo()) {
+					photo.json.title = (newTitle==="") ? "Untitled" : newTitle;
+					view.photo.title();
+				}
 
-					if (visible.photo()) {
-						photo.json.title = (newTitle==="") ? "Untitled" : newTitle;
-						view.photo.title();
-					}
+				photoIDs.forEach(function(id, index, array) {
+					album.json.content[id].title = newTitle;
+					view.album.content.title(id);
+				});
 
-					photoIDs.forEach(function(id, index, array) {
-						album.json.content[id].title = newTitle;
-						view.album.content.title(id);
-					});
+				params = "setPhotoTitle&photoIDs=" + photoIDs + "&title=" + escape(encodeURI(newTitle));
+				lychee.api(params, function(data) {
 
-					params = "setPhotoTitle&photoIDs=" + photoIDs + "&title=" + escape(encodeURI(newTitle));
-					lychee.api(params, function(data) {
+					if (data!==true) lychee.error(null, params, data);
 
-						if (data!==true) lychee.error(null, params, data);
-
-					});
-
-				} else if (newTitle.length>30) loadingBar.show("error", "New title too long. Please try another one!");
+				});
 
 			}],
 			["Cancel", function() {}]
 		];
 
-		if (photoIDs.length===1) modal.show("Set Title", "Please enter a new title for this photo: <input class='text' type='text' maxlength='30' placeholder='Title' value='" + oldTitle + "'>", buttons);
-		else modal.show("Set Titles", "Please enter a title for all " + photoIDs.length + " selected photos: <input class='text' type='text' maxlength='30' placeholder='Title' value=''>", buttons);
+		if (photoIDs.length===1) modal.show("Set Title", "Enter a new title for this photo: <input class='text' type='text' maxlength='30' placeholder='Title' value='" + oldTitle + "'>", buttons);
+		else modal.show("Set Titles", "Enter a title for all " + photoIDs.length + " selected photos: <input class='text' type='text' maxlength='30' placeholder='Title' value=''>", buttons);
 
 	},
 
@@ -280,49 +276,62 @@ photo = {
 
 				description = $(".message input.text").val();
 
-				if (description.length<800) {
+				if (visible.photo()) {
+					photo.json.description = description;
+					view.photo.description();
+				}
 
-					if (visible.photo()) {
-						photo.json.description = description;
-						view.photo.description();
-					}
+				params = "setPhotoDescription&photoID=" + photoID + "&description=" + escape(description);
+				lychee.api(params, function(data) {
 
-					params = "setPhotoDescription&photoID=" + photoID + "&description=" + escape(description);
-					lychee.api(params, function(data) {
+					if (data!==true) lychee.error(null, params, data);
 
-						if (data!==true) lychee.error(null, params, data);
-
-					});
-
-				} else loadingBar.show("error", "Description too long. Please try again!");
+				});
 
 			}],
 			["Cancel", function() {}]
 		];
-		modal.show("Set Description", "Please enter a description for this photo: <input class='text' type='text' maxlength='800' placeholder='Description' value='" + oldDescription + "'>", buttons);
+		
+		modal.show("Set Description", "Enter a description for this photo: <input class='text' type='text' maxlength='800' placeholder='Description' value='" + oldDescription + "'>", buttons);
 
 	},
 	
 	editTags: function(photoIDs) {
 	
-		var oldTags = "";
+		var oldTags = "",
+			tags = "";
 	
 		if (!photoIDs) return false;
 		if (photoIDs instanceof Array===false) photoIDs = [photoIDs];
-		if (visible.photo()) oldTags = photo.json.tags.replace(/,/g, ', ');
+		
+		// Get tags
+		if (visible.photo()) oldTags = photo.json.tags;
+		if (visible.album()&&photoIDs.length===1) oldTags = album.json.content[photoIDs].tags;
+		if (visible.album()&&photoIDs.length>1) {
+			var same = true;
+			photoIDs.forEach(function(id, index, array) {
+				if(album.json.content[id].tags===album.json.content[photoIDs[0]].tags&&same===true) same = true;
+				else same = false;
+			});
+			if (same) oldTags = album.json.content[photoIDs[0]].tags;
+		}
+		
+		// Improve tags
+		oldTags = oldTags.replace(/,/g, ', ');
 	
 		buttons = [
 			["Set Tags", function() {
 
 				tags = $(".message input.text").val();
 
-				if (tags.length<800) photo.setTags(photoIDs, tags)
-				else loadingBar.show("error", "Description too long. Please try again!");
+				photo.setTags(photoIDs, tags);
 
 			}],
 			["Cancel", function() {}]
 		];
-		modal.show("Set Tags", "Please enter your tags for this photo. You can add multiple tags by separating them with a comma: <input class='text' type='text' maxlength='800' placeholder='Tags' value='" + oldTags + "'>", buttons);
+		
+		if (photoIDs.length===1) modal.show("Set Tags", "Enter your tags for this photo. You can add multiple tags by separating them with a comma: <input class='text' type='text' maxlength='800' placeholder='Tags' value='" + oldTags + "'>", buttons);
+		else modal.show("Set Tags", "Enter your tags for all " + photoIDs.length + " selected photos. Existing tags will be overwritten. You can add multiple tags by separating them with a comma: <input class='text' type='text' maxlength='800' placeholder='Tags' value='" + oldTags + "'>", buttons);
 	
 	},
 	
@@ -341,6 +350,10 @@ photo = {
 			photo.json.tags = tags;
 			view.photo.tags();
 		}
+		
+		photoIDs.forEach(function(id, index, array) {
+			album.json.content[id].tags = tags;
+		});
 		
 		params = "setTags&photoIDs=" + photoIDs + "&tags=" + tags;
 		lychee.api(params, function(data) {

@@ -115,15 +115,15 @@ function getAlbum($albumID) {
 	switch($albumID) {
 
 	    case "f":	$return['public'] = false;
-	    			$query = "SELECT id, title, sysdate, public, star, album, thumbUrl FROM lychee_photos WHERE star = 1 " . $settings['sorting'];
+	    			$query = "SELECT id, title, tags, sysdate, public, star, album, thumbUrl FROM lychee_photos WHERE star = 1 " . $settings['sorting'];
 	        		break;
 
 	    case "s":	$return['public'] = false;
-	    			$query = "SELECT id, title, sysdate, public, star, album, thumbUrl FROM lychee_photos WHERE public = 1 " . $settings['sorting'];
+	    			$query = "SELECT id, title, tags, sysdate, public, star, album, thumbUrl FROM lychee_photos WHERE public = 1 " . $settings['sorting'];
 	        		break;
 
 	    case "0":	$return['public'] = false;
-	    			$query = "SELECT id, title, sysdate, public, star, album, thumbUrl FROM lychee_photos WHERE album = 0 " . $settings['sorting'];
+	    			$query = "SELECT id, title, tags, sysdate, public, star, album, thumbUrl FROM lychee_photos WHERE album = 0 " . $settings['sorting'];
 					break;
 
 	    default:	$result = $database->query("SELECT * FROM lychee_albums WHERE id = '$albumID';");
@@ -134,7 +134,7 @@ function getAlbum($albumID) {
 			    	$return['public'] = $row->public;
 			    	if ($row->password=="") $return['password'] = false;
 			    	else $return['password'] = true;
-			    	$query = "SELECT id, title, sysdate, public, star, album, thumbUrl FROM lychee_photos WHERE album = '$albumID' " . $settings['sorting'];
+			    	$query = "SELECT id, title, tags, sysdate, public, star, album, thumbUrl FROM lychee_photos WHERE album = '$albumID' " . $settings['sorting'];
 			    	break;
 
 	}
@@ -150,6 +150,7 @@ function getAlbum($albumID) {
 	    $return['content'][$row['id']]['sysdate'] = date('d F Y', strtotime($row['sysdate']));
 	    $return['content'][$row['id']]['public'] = $row['public'];
 	    $return['content'][$row['id']]['star'] = $row['star'];
+	    $return['content'][$row['id']]['tags'] = $row['tags'];
 	    $return['content'][$row['id']]['album'] = $row['album'];
 	    $return['content'][$row['id']]['thumbUrl'] = $row['thumbUrl'];
 

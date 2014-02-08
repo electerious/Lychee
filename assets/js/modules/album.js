@@ -96,28 +96,25 @@ album = {
 
 				title = $(".message input.text").val();
 
-				if (title==="") title = "Untitled";
+				if (title.length===0) title = "Untitled";
 
-				if (title.length>0&&title.length<31) {
+				modal.close();
 
-					modal.close();
+				params = "addAlbum&title=" + escape(encodeURI(title));
+				lychee.api(params, function(data) {
 
-					params = "addAlbum&title=" + escape(encodeURI(title));
-					lychee.api(params, function(data) {
+					if (data!==false) {
+						if (data===true) data = 1; // Avoid first album to be true
+						lychee.goto(data);
+					} else lychee.error(null, params, data);
 
-						if (data!==false) {
-							if (data===true) data = 1; // Avoid first album to be true
-							lychee.goto(data);
-						} else lychee.error(null, params, data);
-
-					});
-
-				} else loadingBar.show("error", "Title too short or too long. Please try again!");
+				});
 
 			}],
 			["Cancel", function() {}]
 		];
-		modal.show("New Album", "Please enter a title for this album: <input class='text' type='text' maxlength='30' placeholder='Title' value='Untitled'>", buttons);
+		
+		modal.show("New Album", "Enter a title for this album: <input class='text' type='text' maxlength='30' placeholder='Title' value='Untitled'>", buttons);
 
 	},
 
@@ -203,37 +200,33 @@ album = {
 
 				newTitle = ($(".message input.text").val()==="") ? "Untitled" : $(".message input.text").val();
 
-				if (newTitle.length<31) {
+				if (visible.album()) {
 
-					if (visible.album()) {
+					album.json.title = newTitle;
+					view.album.title();
 
-						album.json.title = newTitle;
-						view.album.title();
-
-					} else if (visible.albums()) {
-					
-						albumIDs.forEach(function(id, index, array) {
-							albums.json.content[id].title = newTitle;
-							view.albums.content.title(id);
-						});
-
-					}
-
-					params = "setAlbumTitle&albumIDs=" + albumIDs + "&title=" + escape(encodeURI(newTitle));
-					lychee.api(params, function(data) {
-
-						if (data!==true) lychee.error(null, params, data);
-
+				} else if (visible.albums()) {
+				
+					albumIDs.forEach(function(id, index, array) {
+						albums.json.content[id].title = newTitle;
+						view.albums.content.title(id);
 					});
 
-				} else if (newTitle.length>30) loadingBar.show("error", "New title too long. Please try another one!");
+				}
+
+				params = "setAlbumTitle&albumIDs=" + albumIDs + "&title=" + escape(encodeURI(newTitle));
+				lychee.api(params, function(data) {
+
+					if (data!==true) lychee.error(null, params, data);
+
+				});
 
 			}],
 			["Cancel", function() {}]
 		];
 		
-		if (albumIDs.length===1) modal.show("Set Title", "Please enter a new title for this album: <input class='text' type='text' maxlength='30' placeholder='Title' value='" + oldTitle + "'>", buttons);
-		else modal.show("Set Titles", "Please enter a title for all " + albumIDs.length + " selected album: <input class='text' type='text' maxlength='30' placeholder='Title' value='" + oldTitle + "'>", buttons);
+		if (albumIDs.length===1) modal.show("Set Title", "Enter a new title for this album: <input class='text' type='text' maxlength='30' placeholder='Title' value='" + oldTitle + "'>", buttons);
+		else modal.show("Set Titles", "Enter a title for all " + albumIDs.length + " selected album: <input class='text' type='text' maxlength='30' placeholder='Title' value='" + oldTitle + "'>", buttons);
 
 	},
 
@@ -249,25 +242,22 @@ album = {
 
 				description = $(".message input.text").val();
 
-				if (description.length<801) {
+				if (visible.album()) {
+					album.json.description = description;
+					view.album.description();
+				}
 
-					if (visible.album()) {
-						album.json.description = description;
-						view.album.description();
-					}
+				params = "setAlbumDescription&albumID=" + photoID + "&description=" + escape(description);
+				lychee.api(params, function(data) {
 
-					params = "setAlbumDescription&albumID=" + photoID + "&description=" + escape(description);
-					lychee.api(params, function(data) {
+					if (data!==true) lychee.error(null, params, data);
 
-						if (data!==true) lychee.error(null, params, data);
-
-					});
-
-				} else loadingBar.show("error", "Description too long. Please try again!");
+				});
 
 			}],
 			["Cancel", function() {}]
 		];
+		
 		modal.show("Set Description", "Please enter a description for this album: <input class='text' type='text' maxlength='800' placeholder='Description' value='" + oldDescription + "'>", buttons);
 
 	},

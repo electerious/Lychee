@@ -157,6 +157,7 @@ contextMenu = {
 
 		contextMenu.fns = [
 			function() { photo.setStar([photoID]) },
+			function() { photo.editTags([photoID]) },
 			function() { photo.setTitle([photoID]) },
 			function() { contextMenu.move([photoID], e, "right") },
 			function() { photo.delete([photoID]) }
@@ -164,10 +165,11 @@ contextMenu = {
 
 		items = [
 			["<a class='icon-star'></a> Star", 0],
+			["<a class='icon-tags'></a> Tags", 1],
 			["separator", -1],
-			["<a class='icon-edit'></a> Rename", 1],
-			["<a class='icon-folder-open'></a> Move", 2],
-			["<a class='icon-trash'></a> Delete", 3]
+			["<a class='icon-edit'></a> Rename", 2],
+			["<a class='icon-folder-open'></a> Move", 3],
+			["<a class='icon-trash'></a> Delete", 4]
 		];
 
 		contextMenu.show(items, mouse_x, mouse_y, "right");
@@ -186,6 +188,7 @@ contextMenu = {
 
 		contextMenu.fns = [
 			function() { photo.setStar(photoIDs) },
+			function() { photo.editTags(photoIDs) },
 			function() { photo.setTitle(photoIDs) },
 			function() { contextMenu.move(photoIDs, e, "right") },
 			function() { photo.delete(photoIDs) }
@@ -193,10 +196,11 @@ contextMenu = {
 
 		items = [
 			["<a class='icon-star'></a> Star All", 0],
+			["<a class='icon-tags'></a> Tag All", 1],
 			["separator", -1],
-			["<a class='icon-edit'></a> Rename All", 1],
-			["<a class='icon-folder-open'></a> Move All", 2],
-			["<a class='icon-trash'></a> Delete All", 3]
+			["<a class='icon-edit'></a> Rename All", 2],
+			["<a class='icon-folder-open'></a> Move All", 3],
+			["<a class='icon-trash'></a> Delete All", 4]
 		];
 
 		contextMenu.show(items, mouse_x, mouse_y, "right");
