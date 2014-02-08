@@ -2,7 +2,6 @@
 
 /**
  * @name        API
- * @author      Philipp Maurer
  * @author      Tobias Reich
  * @copyright   2014 by Philipp Maurer, Tobias Reich
  */

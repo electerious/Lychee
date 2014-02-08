@@ -23,17 +23,11 @@ function dbConnect() {
 	if (!$database->select_db($dbName))
 		if (!dbCreate($dbName, $database)) exit('Error: Could not create database!');
 		
-	dbCheck($database);
+	if (!$database->query('SELECT * FROM lychee_photos, lychee_albums, lychee_settings LIMIT 0;'))
+		if (!dbCreateTables($database)) exit('Error: Could not create tables!');
 
     return $database;
 
-}
-
-function dbCheck($database) {
-		
-	if (!$database->query("SELECT * FROM lychee_photos, lychee_albums, lychee_settings LIMIT 1;"))
-		if (!dbCreateTables($database)) exit('Error: Could not create tables!');
-		
 }
 
 function dbCreateConfig($dbHost = 'localhost', $dbUser, $dbPassword, $dbName = 'lychee') {
@@ -41,14 +35,13 @@ function dbCreateConfig($dbHost = 'localhost', $dbUser, $dbPassword, $dbName = '
 	$dbPassword = urldecode($dbPassword);
 	$database = new mysqli($dbHost, $dbUser, $dbPassword);
 
-	if ($database->connect_errno) return "Warning: Connection failed!";
+	if ($database->connect_errno) return 'Warning: Connection failed!';
 	else {
 
 $config = "<?php
 
 /**
  * @name        Config
- * @author      Philipp Maurer
  * @author      Tobias Reich
  * @copyright   2014 by Philipp Maurer, Tobias Reich
 */
@@ -66,7 +59,7 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 ?>";
 
-		if (file_put_contents("../data/config.php", $config)===false) return "Warning: Could not create file!";
+		if (file_put_contents('../data/config.php', $config)===false) return 'Warning: Could not create file!';
 		else {
 
 			$_SESSION['login'] = true;
@@ -90,7 +83,7 @@ function dbCreate($dbName, $database) {
 
 function dbCreateTables($database) {
 
-	if (!$database->query("SELECT * FROM lychee_settings LIMIT 1;")) {
+	if (!$database->query('SELECT * FROM lychee_settings LIMIT 0;')) {
 
 		$query = "
 
@@ -120,7 +113,7 @@ function dbCreateTables($database) {
 
 	}
 
-	if (!$database->query("SELECT * FROM lychee_albums LIMIT 1;")) {
+	if (!$database->query('SELECT * FROM lychee_albums LIMIT 0;')) {
 
 		$query = "
 
@@ -140,7 +133,7 @@ function dbCreateTables($database) {
 
     }
 
-    if (!$database->query("SELECT * FROM lychee_photos LIMIT 1;")) {
+    if (!$database->query('SELECT * FROM lychee_photos LIMIT 0;')) {
 
 		$query = "
 
@@ -186,7 +179,7 @@ function dbClose() {
 
 	global $database;
 
-    if (!$database->close()) exit("Error: Closing the connection failed!");
+    if (!$database->close()) exit('Error: Closing the connection failed!');
 
     return true;
 
