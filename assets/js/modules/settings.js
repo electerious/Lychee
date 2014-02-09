@@ -53,7 +53,7 @@ var settings = {
 									["Retry", function() { setTimeout(settings.createConfig, 400) }],
 									["", function() {}]
 								];
-								modal.show("Saving Failed", "Unable to save this configuration. Permission denied in <b>'php/'</b>. Please set the read, write and execute rights for others in <b>'php/'</b> and <b>'uploads/'</b>. Take a look the readme for more information.", buttons, null, false);
+								modal.show("Saving Failed", "Unable to save this configuration. Permission denied in <b>'data/'</b>. Please set the read, write and execute rights for others in <b>'data/'</b> and <b>'uploads/'</b>. Take a look the readme for more information.", buttons, null, false);
 								return false;
 
 							}
