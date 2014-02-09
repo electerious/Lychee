@@ -170,6 +170,7 @@ upload = {
 				}],
 				["Cancel", function() {}]
 			];
+			
 			modal.show("Import from Link", "Please enter the direct link to a photo to import it: <input class='text' type='text' placeholder='http://' value='http://'>", buttons);
 
 		},
@@ -194,10 +195,15 @@ upload = {
 						upload.close();
 						upload.notify("Import complete");
 
-						if (album.getID()===false) lychee.goto("0");
+						if (data==="Notice: Import only contains albums!") {
+							if (visible.albums()) lychee.load();
+							else lychee.goto("");
+						}
+						else if (album.getID()===false) lychee.goto("0");
 						else album.load(albumID);
 
-						if (data==="Warning: Folder empty!") lychee.error("Folder empty. No photos imported!", params, data);
+						if (data==="Notice: Import only contains albums!") return true;
+						else if (data==="Warning: Folder empty!") lychee.error("Folder empty. No photos imported!", params, data);
 						else if (data!==true) lychee.error(null, params, data);
 
 					});
@@ -205,7 +211,8 @@ upload = {
 				}],
 				["Cancel", function() {}]
 			];
-			modal.show("Import from Server", "This action will import all photos which are located in <b>'uploads/import/'</b> of your Lychee installation.", buttons);
+			
+			modal.show("Import from Server", "This action will import all photos and albums which are located in <b>'uploads/import/'</b> of your Lychee installation.", buttons);
 
 		},
 

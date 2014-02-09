@@ -200,7 +200,7 @@ photo = {
 
 		});
 
-		params = "setAlbum&photoIDs=" + photoIDs + "&albumID=" + albumID;
+		params = "setPhotoAlbum&photoIDs=" + photoIDs + "&albumID=" + albumID;
 		lychee.api(params, function(data) {
 
 			if (data!==true) lychee.error(null, params, data);
@@ -355,7 +355,7 @@ photo = {
 			album.json.content[id].tags = tags;
 		});
 		
-		params = "setTags&photoIDs=" + photoIDs + "&tags=" + tags;
+		params = "setPhotoTags&photoIDs=" + photoIDs + "&tags=" + tags;
 		lychee.api(params, function(data) {
 
 			if (data!==true) lychee.error(null, params, data);

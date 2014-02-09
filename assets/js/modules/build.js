@@ -345,9 +345,11 @@ build = {
 								break;
 
 				case "Tags":	// Tags
-								infobox += "</table>";
-								infobox += "<div class='separator'><h1>" + infos[index][0] + "</h1></div>";
-								infobox += "<div id='tags'>" + infos[index][1] + "</div>";
+								if (forView!==true&&!lychee.publicMode) {
+									infobox += "</table>";
+									infobox += "<div class='separator'><h1>" + infos[index][0] + "</h1></div>";
+									infobox += "<div id='tags'>" + infos[index][1] + "</div>";
+								}
 								break;
 
 				default:		// Item

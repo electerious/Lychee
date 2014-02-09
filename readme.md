@@ -26,7 +26,7 @@ Sign in and click the gear on the top left corner to change your settings. If yo
 
 ### FTP Upload
 
-You can import photos from your server or upload photos directly with every FTP client into Lychee. [FTP Upload &#187;](docs/md/FTP Upload.md)
+To import photos and albums located in `uploads/import/` (photos you have uploaded via FTP or else), sign in and click the add-icon on the top right. Then choose 'Import from Server'.
 
 ### Keyboard Shortcuts
 
