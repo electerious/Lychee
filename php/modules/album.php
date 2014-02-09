@@ -14,8 +14,9 @@ function addAlbum($title) {
 	global $database;
 
     if (strlen($title)<1||strlen($title)>50) return false;
-    $sysdate = date("d.m.Y");
-    $result = $database->query("INSERT INTO lychee_albums (title, sysdate) VALUES ('$title', '$sysdate');");
+    
+    $sysdate	= date("d.m.Y");
+    $result		= $database->query("INSERT INTO lychee_albums (title, sysdate) VALUES ('$title', '$sysdate');");
     
     if (!$result) return false;
     return $database->insert_id;
@@ -32,8 +33,10 @@ function getAlbums($public) {
     // Albums
     if ($public) $query = "SELECT * FROM lychee_albums WHERE public = 1";
     else $query = "SELECT * FROM lychee_albums";
-    $result = $database->query($query) OR exit("Error: $result <br>".$database->error);
-    $i = 0;
+    
+    $result	= $database->query($query) OR exit("Error: $result <br>".$database->error);
+    $i		= 0;
+    
     while($row = $result->fetch_object()) {
 
     	// Info
@@ -41,11 +44,14 @@ function getAlbums($public) {
         $return["content"][$row->id]['title'] = $row->title;
         $return["content"][$row->id]['public'] = $row->public;
         $return["content"][$row->id]['sysdate'] = date('F Y', strtotime($row->sysdate));
+        
+        // Password
         if ($row->password=="") $return["content"][$row->id]['password'] = false;
         else $return["content"][$row->id]['password'] = true;
 
         // Thumbs
         if (($public&&$row->password=="")||(!$public)) {
+        
 	        $albumID = $row->id;
 	        $result2 = $database->query("SELECT thumbUrl FROM lychee_photos WHERE album = '$albumID' ORDER BY star DESC, " . substr($settings['sorting'], 9)  . " LIMIT 0, 3");
 	        $k = 0;
@@ -56,6 +62,7 @@ function getAlbums($public) {
 	        if (!isset($return["content"][$row->id]["thumb0"])) $return["content"][$row->id]["thumb0"] = "";
 	        if (!isset($return["content"][$row->id]["thumb1"])) $return["content"][$row->id]["thumb1"] = "";
 	        if (!isset($return["content"][$row->id]["thumb2"])) $return["content"][$row->id]["thumb2"] = "";
+	        
         }
 
         // Album count
@@ -64,9 +71,6 @@ function getAlbums($public) {
     }
 
     $return["num"] = $i;
-
-    if ($i==0) $return["albums"] = false;
-    else $return["albums"] = true;
 
     return $return;
 
@@ -77,8 +81,8 @@ function getSmartInfo() {
 	global $database, $settings;
 
 	// Unsorted
-    $result = $database->query("SELECT thumbUrl FROM lychee_photos WHERE album = 0 " . $settings['sorting']);
-    $i = 0;
+    $result	= $database->query("SELECT thumbUrl FROM lychee_photos WHERE album = 0 " . $settings['sorting']);
+    $i		= 0;
     while($row = $result->fetch_object()) {
         if ($i<3) $return["unsortedThumb$i"] = $row->thumbUrl;
         $i++;
@@ -86,8 +90,8 @@ function getSmartInfo() {
     $return['unsortedNum'] = $i;
 
 	// Public
-    $result2 = $database->query("SELECT thumbUrl FROM lychee_photos WHERE public = 1 " . $settings['sorting']);
-    $i = 0;
+    $result2	= $database->query("SELECT thumbUrl FROM lychee_photos WHERE public = 1 " . $settings['sorting']);
+    $i			= 0;
     while($row2 = $result2->fetch_object()) {
         if ($i<3) $return["publicThumb$i"] = $row2->thumbUrl;
         $i++;
@@ -95,8 +99,8 @@ function getSmartInfo() {
     $return['publicNum'] = $i;
 
 	// Starred
-    $result3 = $database->query("SELECT thumbUrl FROM lychee_photos WHERE star = 1 " . $settings['sorting']);
-    $i = 0;
+    $result3	= $database->query("SELECT thumbUrl FROM lychee_photos WHERE star = 1 " . $settings['sorting']);
+    $i			= 0;
     while($row3 = $result3->fetch_object()) {
         if ($i<3) $return["starredThumb$i"] = $row3->thumbUrl;
         $i++;
@@ -128,34 +132,33 @@ function getAlbum($albumID) {
 
 	    default:	$result = $database->query("SELECT * FROM lychee_albums WHERE id = '$albumID';");
 			    	$row = $result->fetch_object();
-			    	$return['title'] = $row->title;
-			    	$return['description'] = $row->description;
-			    	$return['sysdate'] = date('d M. Y', strtotime($row->sysdate));
-			    	$return['public'] = $row->public;
-			    	if ($row->password=="") $return['password'] = false;
-			    	else $return['password'] = true;
+			    	$return['title']		= $row->title;
+			    	$return['description']	= $row->description;
+			    	$return['sysdate']		= date('d M. Y', strtotime($row->sysdate));
+			    	$return['public']		= $row->public;
+			    	$return['password']		= ($row->password=="" ? false : true);
 			    	$query = "SELECT id, title, tags, sysdate, public, star, album, thumbUrl FROM lychee_photos WHERE album = '$albumID' " . $settings['sorting'];
 			    	break;
 
 	}
 
 	// Get photos
-	$result = $database->query($query);
-	$previousPhotoID = "";
-	$i = 0;
+	$result				= $database->query($query);
+	$previousPhotoID	= "";
+	$i					= 0;
 	while($row = $result->fetch_array()) {
 
-	    $return['content'][$row['id']]['id'] = $row['id'];
-	    $return['content'][$row['id']]['title'] = $row['title'];
-	    $return['content'][$row['id']]['sysdate'] = date('d F Y', strtotime($row['sysdate']));
-	    $return['content'][$row['id']]['public'] = $row['public'];
-	    $return['content'][$row['id']]['star'] = $row['star'];
-	    $return['content'][$row['id']]['tags'] = $row['tags'];
-	    $return['content'][$row['id']]['album'] = $row['album'];
-	    $return['content'][$row['id']]['thumbUrl'] = $row['thumbUrl'];
+	    $return['content'][$row['id']]['id']		= $row['id'];
+	    $return['content'][$row['id']]['title']		= $row['title'];
+	    $return['content'][$row['id']]['sysdate']	= date('d F Y', strtotime($row['sysdate']));
+	    $return['content'][$row['id']]['public']	= $row['public'];
+	    $return['content'][$row['id']]['star']		= $row['star'];
+	    $return['content'][$row['id']]['tags']		= $row['tags'];
+	    $return['content'][$row['id']]['album']		= $row['album'];
+	    $return['content'][$row['id']]['thumbUrl']	= $row['thumbUrl'];
 
-	    $return['content'][$row['id']]['previousPhoto'] = $previousPhotoID;
-	    $return['content'][$row['id']]['nextPhoto'] = "";
+	    $return['content'][$row['id']]['previousPhoto']	= $previousPhotoID;
+	    $return['content'][$row['id']]['nextPhoto']		= "";
 	    if ($previousPhotoID!="") $return['content'][$previousPhotoID]['nextPhoto'] = $row['id'];
 
 	    $previousPhotoID = $row['id'];
@@ -171,20 +174,20 @@ function getAlbum($albumID) {
 	} else {
 
 		// Enable next and previous for the first and last photo
-		$lastElement = end($return['content']);
-		$lastElementId = $lastElement['id'];
-		$firstElement = reset($return['content']);
-		$firstElementId = $firstElement['id'];
+		$lastElement	= end($return['content']);
+		$lastElementId	= $lastElement['id'];
+		$firstElement	= reset($return['content']);
+		$firstElementId	= $firstElement['id'];
 
 		if ($lastElementId!==$firstElementId) {
-			$return['content'][$lastElementId]['nextPhoto'] = $firstElementId;
-			$return['content'][$firstElementId]['previousPhoto'] = $lastElementId;
+			$return['content'][$lastElementId]['nextPhoto']			= $firstElementId;
+			$return['content'][$firstElementId]['previousPhoto']	= $lastElementId;
 		}
 
 	}
 
-	$return['id'] = $albumID;
-	$return['num'] = $i;
+	$return['id']	= $albumID;
+	$return['num']	= $i;
 
 	return $return;
 
@@ -219,8 +222,8 @@ function deleteAlbum($albumIDs) {
 
 	global $database;
 	
-	$error = false;
-	$result = $database->query("SELECT id FROM lychee_photos WHERE album IN ($albumIDs);");
+	$error	= false;
+	$result	= $database->query("SELECT id FROM lychee_photos WHERE album IN ($albumIDs);");
 	
 	// Delete photos
 	while ($row = $result->fetch_object())
@@ -252,10 +255,10 @@ function getAlbumArchive($albumID) {
 	        $zipTitle = "Unsorted";
 	}
 	
-	$zip = new ZipArchive();
-	$result = $database->query($query);
-	$files = array();
-	$i=0;
+	$zip	= new ZipArchive();
+	$result	= $database->query($query);
+	$files	= array();
+	$i		= 0;
 	
 	while($row = $result->fetch_object()) {
 	    $files[$i] = "../uploads/big/".$row->url;
@@ -293,15 +296,13 @@ function setAlbumPublic($albumID, $password) {
 
 	global $database;
 
-	$result = $database->query("SELECT public FROM lychee_albums WHERE id = '$albumID';");
-	$row = $result->fetch_object();
-	if ($row->public == 0){
-	    $public = 1;
-	} else {
-	    $public = 0;
-	}
+	$result	= $database->query("SELECT public FROM lychee_albums WHERE id = '$albumID';");
+	$row	= $result->fetch_object();
+	$public	= ($row->public===0 ? 1 : 0);
+	
 	$result = $database->query("UPDATE lychee_albums SET public = '$public', password = NULL WHERE id = '$albumID';");
 	if (!$result) return false;
+	
 	if ($public==1) {
 		$result = $database->query("UPDATE lychee_photos SET public = 0 WHERE album = '$albumID';");
 		if (!$result) return false;
@@ -327,8 +328,8 @@ function checkAlbumPassword($albumID, $password) {
 
 	global $database;
 
-	$result = $database->query("SELECT password FROM lychee_albums WHERE id = '$albumID';");
-	$row = $result->fetch_object();
+	$result	= $database->query("SELECT password FROM lychee_albums WHERE id = '$albumID';");
+	$row	= $result->fetch_object();
 	
 	if ($row->password=="") return true;
 	else if ($row->password==$password) return true;
@@ -340,8 +341,8 @@ function isAlbumPublic($albumID) {
 
 	global $database;
 
-	$result = $database->query("SELECT public FROM lychee_albums WHERE id = '$albumID';");
-	$row = $result->fetch_object();
+	$result	= $database->query("SELECT public FROM lychee_albums WHERE id = '$albumID';");
+	$row	= $result->fetch_object();
 
 	if ($row->public==1) return true;
 	return false;

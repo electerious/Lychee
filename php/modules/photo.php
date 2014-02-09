@@ -13,20 +13,7 @@ function getPhoto($photoID, $albumID) {
 
 	global $database;
 
-	if (!is_numeric($photoID)) {
-		$result = $database->query("SELECT COUNT(*) AS quantity FROM lychee_photos WHERE import_name = '../uploads/import/$photoID';");
-		$row = $result->fetch_object();
-		if ($row->quantity == 0) {
-			importPhoto($photoID, 's');
-		}
-		if (is_file("../uploads/import/$photoID")) {
-			importPhoto($photoID, 's');
-		}
-		$query = "SELECT * FROM lychee_photos WHERE import_name = '../uploads/import/$photoID' ORDER BY ID DESC;";
-	} else {
-		$query = "SELECT * FROM lychee_photos WHERE id = '$photoID';";
-	}
-
+	$query	= "SELECT * FROM lychee_photos WHERE id = '$photoID';";
     $result = $database->query($query);
     $return = $result->fetch_array();
 
@@ -40,9 +27,9 @@ function getPhoto($photoID, $albumID) {
 
     	}
 
-    	$return['original_album'] = $return['album'];
-    	$return['album'] = $albumID;
-    	$return['sysdate'] = date('d M. Y', strtotime($return['sysdate']));
+    	$return['original_album']	= $return['album'];
+    	$return['album']			= $albumID;
+    	$return['sysdate']			= date('d M. Y', strtotime($return['sysdate']));
     	if (strlen($return['takedate'])>0) $return['takedate'] = date('d M. Y', strtotime($return['takedate']));
 
 	}
@@ -57,13 +44,9 @@ function setPhotoPublic($photoID, $url) {
 
 	global $database;
 
-    $result = $database->query("SELECT public FROM lychee_photos WHERE id = '$photoID';");
-    $row = $result->fetch_object();
-    if ($row->public == 0){
-        $public = 1;
-    } else {
-        $public = 0;
-    }
+    $result	= $database->query("SELECT public FROM lychee_photos WHERE id = '$photoID';");
+    $row	= $result->fetch_object();
+    $public = ($row->public==0 ? 1 : 0);
     $result = $database->query("UPDATE lychee_photos SET public = '$public' WHERE id = '$photoID';");
 
     if (!$result) return false;
@@ -75,14 +58,12 @@ function setPhotoStar($photoIDs) {
 
 	global $database;
 	
-	$error = false;
-    $result = $database->query("SELECT id, star FROM lychee_photos WHERE id IN ($photoIDs);");
+	$error	= false;
+    $result	= $database->query("SELECT id, star FROM lychee_photos WHERE id IN ($photoIDs);");
     
     while ($row = $result->fetch_object()) {
         
-    	if ($row->star==0) $star = 1;
-    	else $star = 0;
-    	
+        $star = ($row->star==0 ? 1 : 0);    	
     	$star = $database->query("UPDATE lychee_photos SET star = '$star' WHERE id = '$row->id';");
     	if (!$star) $error = true;
     	
@@ -122,6 +103,7 @@ function setPhotoDescription($photoID, $description) {
 
     $description = htmlentities($description);
     if (strlen($description)>1000) return false;
+    
     $result = $database->query("UPDATE lychee_photos SET description = '$description' WHERE id = '$photoID';");
 
     if (!$result) return false;
@@ -159,9 +141,9 @@ function deletePhoto($photoIDs) {
 		$thumbUrl2x = $thumbUrl2x[0] . '@2x.' . $thumbUrl2x[1];
 		
 		// Delete files
-		if (!unlink('../uploads/big/' . $row->url)) return false;
-		if (!unlink('../uploads/thumb/' . $row->thumbUrl)) return false;
-		if (!unlink('../uploads/thumb/' . $thumbUrl2x)) return false;
+		if (!unlink('../uploads/big/' . $row->url))			return false;
+		if (!unlink('../uploads/thumb/' . $row->thumbUrl))	return false;
+		if (!unlink('../uploads/thumb/' . $thumbUrl2x))		return false;
 		
 		// Delete db entry
 		$delete = $database->query("DELETE FROM lychee_photos WHERE id = $row->id;");
@@ -178,20 +160,18 @@ function isPhotoPublic($photoID, $password) {
 
 	global $database;
 
-	if (is_numeric($photoID)) {
-		$query = "SELECT * FROM lychee_photos WHERE id = '$photoID';";
-	} else {
-		$query = "SELECT * FROM lychee_photos WHERE import_name = '../uploads/import/$photoID';";
-	}
-    $result = $database->query($query);
-    $row = $result->fetch_object();
+	$query = "SELECT * FROM lychee_photos WHERE id = '$photoID';";
+
+    $result	= $database->query($query);
+    $row	= $result->fetch_object();
+    
     if (!is_numeric($photoID)&&!$row) return true;
     if ($row->public==1) return true;
     else {
     	$cAP = checkAlbumPassword($row->album, $password);
     	$iAP = isAlbumPublic($row->album);
     	if ($iAP&&$cAP) return true;
-    	else return false;
+    	return false;
     }
 
 }
@@ -200,8 +180,8 @@ function getPhotoArchive($photoID) {
 
 	global $database;
 
-	$result = $database->query("SELECT * FROM lychee_photos WHERE id = '$photoID';");
-	$row = $result->fetch_object();
+	$result	= $database->query("SELECT * FROM lychee_photos WHERE id = '$photoID';");
+	$row	= $result->fetch_object();
 
 	$extension = array_reverse(explode('.', $row->url));
 

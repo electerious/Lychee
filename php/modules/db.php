@@ -32,8 +32,8 @@ function dbConnect() {
 
 function dbCreateConfig($dbHost = 'localhost', $dbUser, $dbPassword, $dbName = 'lychee') {
 
-	$dbPassword = urldecode($dbPassword);
-	$database = new mysqli($dbHost, $dbUser, $dbPassword);
+	$dbPassword	= urldecode($dbPassword);
+	$database	= new mysqli($dbHost, $dbUser, $dbPassword);
 
 	if ($database->connect_errno) return 'Warning: Connection failed!';
 	else {
@@ -60,12 +60,9 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 ?>";
 
 		if (file_put_contents('../data/config.php', $config)===false) return 'Warning: Could not create file!';
-		else {
-
-			$_SESSION['login'] = true;
-			return true;
-
-		}
+			
+		$_SESSION['login'] = true;
+		return true;
 
 	}
 

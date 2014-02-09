@@ -224,7 +224,7 @@ contextMenu = {
 
 		lychee.api("getAlbums", function(data) {
 
-			if (!data.albums) {
+			if (data.num===0) {
 				items = [["New Album", 0, "album.add()"]];
 			} else {
 				$.each(data.content, function(index) {
