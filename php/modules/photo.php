@@ -93,7 +93,7 @@ function setPhotoStar($photoIDs) {
 
 }
 
-function setAlbum($photoIDs, $albumID) {
+function setPhotoAlbum($photoIDs, $albumID) {
 
 	global $database;
 
@@ -126,6 +126,23 @@ function setPhotoDescription($photoID, $description) {
 
     if (!$result) return false;
     return true;
+
+}
+
+function setPhotoTags($photoIDs, $tags) {
+
+	global $database;
+	
+	// Parse tags
+	$tags = preg_replace('/(\ ,\ )|(\ ,)|(,\ )|(,{1,}\ {0,})|(,$|^,)/', ',', $tags);
+	$tags = preg_replace('/,$|^,/', ',', $tags);
+	
+	if (strlen($tags)>1000) return false;
+
+	$result = $database->query("UPDATE lychee_photos SET tags = '$tags' WHERE id IN ($photoIDs);");
+
+	if (!$result) return false;
+	return true;
 
 }
 
