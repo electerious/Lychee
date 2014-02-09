@@ -21,7 +21,6 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 	// Load modules
 	require('modules/album.php');
 	require('modules/db.php');
-	require('modules/feed.php');
 	require('modules/misc.php');
 	require('modules/photo.php');
 	require('modules/session.php');
