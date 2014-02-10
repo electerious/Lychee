@@ -16,7 +16,7 @@ function openGraphHeader($photoID) {
 	$photoID = mysqli_real_escape_string($database, $photoID);
 	if (!is_numeric($photoID)) return false;
 	
-	$result	= $database->query("SELECT * FROM lychee_photos WHERE id = '$photoID';");
+	$result	= $database->query("SELECT title, description, url FROM lychee_photos WHERE id = '$photoID';");
 	$row	= $result->fetch_object();
 	
 	$parseUrl = parse_url("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
@@ -54,7 +54,7 @@ function search($term) {
     }
 
 	// Albums
-    $result = $database->query("SELECT * FROM lychee_albums WHERE title like '%$term%' OR description like '%$term%';");
+    $result = $database->query("SELECT id, title, public, sysdate, password FROM lychee_albums WHERE title like '%$term%' OR description like '%$term%';");
     $i		= 0;
     while($row = $result->fetch_object()) {
 

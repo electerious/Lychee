@@ -31,8 +31,8 @@ function getAlbums($public) {
     if (!$public) $return = getSmartInfo();
 
     // Albums
-    if ($public) $query = "SELECT * FROM lychee_albums WHERE public = 1";
-    else $query = "SELECT * FROM lychee_albums";
+    if ($public) $query = "SELECT id, title, public, sysdate, password FROM lychee_albums WHERE public = 1";
+    else $query = "SELECT id, title, public, sysdate, password FROM lychee_albums";
     
     $result	= $database->query($query) OR exit("Error: $result <br>".$database->error);
     $i		= 0;
@@ -243,15 +243,15 @@ function getAlbumArchive($albumID) {
 	
 	switch($albumID) {
 	    case 's':
-	        $query = "SELECT * FROM lychee_photos WHERE public = '1';";
+	        $query = "SELECT url FROM lychee_photos WHERE public = '1';";
 	        $zipTitle = "Public";
 	        break;
 	    case 'f':
-	        $query = "SELECT * FROM lychee_photos WHERE star = '1';";
+	        $query = "SELECT url FROM lychee_photos WHERE star = '1';";
 	        $zipTitle = "Starred";
 	        break;
 	    default:
-	        $query = "SELECT * FROM lychee_photos WHERE album = '$albumID';";
+	        $query = "SELECT url FROM lychee_photos WHERE album = '$albumID';";
 	        $zipTitle = "Unsorted";
 	}
 	
@@ -265,7 +265,7 @@ function getAlbumArchive($albumID) {
 	    $i++;
 	}
 	
-	$result = $database->query("SELECT * FROM lychee_albums WHERE id = '$albumID';");
+	$result = $database->query("SELECT title FROM lychee_albums WHERE id = '$albumID' LIMIT 1;");
 	$row = $result->fetch_object();
 	if ($albumID!=0&&is_numeric($albumID)) $zipTitle = $row->title;
 	$filename = "../data/$zipTitle.zip";

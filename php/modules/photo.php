@@ -132,7 +132,7 @@ function deletePhoto($photoIDs) {
 
 	global $database;
 	
-	$result = $database->query("SELECT * FROM lychee_photos WHERE id IN ($photoIDs);");
+	$result = $database->query("SELECT id, url, thumbUrl FROM lychee_photos WHERE id IN ($photoIDs);");
 	
 	while ($row = $result->fetch_object()) {
 	
@@ -160,12 +160,11 @@ function isPhotoPublic($photoID, $password) {
 
 	global $database;
 
-	$query = "SELECT * FROM lychee_photos WHERE id = '$photoID';";
+	$query = "SELECT public, album FROM lychee_photos WHERE id = '$photoID';";
 
     $result	= $database->query($query);
     $row	= $result->fetch_object();
     
-    if (!is_numeric($photoID)&&!$row) return true;
     if ($row->public==1) return true;
     else {
     	$cAP = checkAlbumPassword($row->album, $password);
@@ -180,7 +179,7 @@ function getPhotoArchive($photoID) {
 
 	global $database;
 
-	$result	= $database->query("SELECT * FROM lychee_photos WHERE id = '$photoID';");
+	$result	= $database->query("SELECT title, url FROM lychee_photos WHERE id = '$photoID';");
 	$row	= $result->fetch_object();
 
 	$extension = array_reverse(explode('.', $row->url));
