@@ -298,7 +298,7 @@ function setAlbumPublic($albumID, $password) {
 
 	$result	= $database->query("SELECT public FROM lychee_albums WHERE id = '$albumID';");
 	$row	= $result->fetch_object();
-	$public	= ($row->public===0 ? 1 : 0);
+	$public	= ($row->public=='0' ? 1 : 0);
 	
 	$result = $database->query("UPDATE lychee_albums SET public = '$public', password = NULL WHERE id = '$albumID';");
 	if (!$result) return false;
