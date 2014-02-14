@@ -21,8 +21,7 @@ Sign in and click the gear on the top left corner to change your settings. If yo
 
 ### Update
 
-1. Replace all files, excluding `uploads/` and `data/`
-2. Open Lychee and enter your database details
+Updating is as easy as it should be.  [Update &#187;](docs/md/Update.md)
 
 ### FTP Upload
 
