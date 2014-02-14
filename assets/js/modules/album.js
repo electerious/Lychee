@@ -46,7 +46,14 @@ album = {
 			lychee.api(params, function(data) {
 
 				if (data==="Warning: Album private!") {
-					lychee.setMode("view");
+					if (document.location.hash.replace("#", "").split("/")[1]!=undefined) {
+						// Display photo only
+						lychee.setMode("view");
+					} else {
+						// Album not public
+						lychee.content.show();
+						lychee.goto("");
+					}
 					return false;
 				}
 

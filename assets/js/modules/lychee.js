@@ -257,6 +257,7 @@ var lychee = {
 
 			Mousetrap.unbind('esc');
 			$("#button_back, a#next, a#previous").remove();
+			$(".no_content").remove();
 
 			lychee.publicMode = true;
 			lychee.viewMode = true;
