@@ -140,6 +140,15 @@
 		font-size: 14px;
 		margin-bottom: 8px;
 	}
+	
+		#infobox #tags .edit {
+			display: inline-block;
+		}
+	
+		#infobox #tags .empty .edit {
+			display: inline;
+		}
+	
 	#infobox .tag {
 		float: left;
 		padding: 4px 7px;
