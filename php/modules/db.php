@@ -101,8 +101,7 @@ function dbCreateTables($database) {
 			('password',''),
 			('thumbQuality','90'),
 			('checkForUpdates','1'),
-			('sorting','ORDER BY id DESC'),
-			('importFilename','1');
+			('sorting','ORDER BY id DESC');
 
 		";
 

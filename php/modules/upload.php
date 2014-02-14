@@ -61,9 +61,8 @@ function upload($files, $albumID) {
 	    $info = getInfo($photo_name);
 
 	    // Use title of file if IPTC title missing
-	    if ($info['title']===''&&
-	    	$settings['importFilename']==='1')
-	    		$info['title'] = mysqli_real_escape_string($database, substr(basename($file['name'], ".$extension"), 0, 30));
+	    if ($info['title']==='')
+	    	$info['title'] = mysqli_real_escape_string($database, substr(basename($file['name'], ".$extension"), 0, 30));
 
 	    // Set orientation based on EXIF data
 	    if ($file['type']==='image/jpeg'&&isset($info['orientation'])&&isset($info['width'])&&isset($info['height'])) {

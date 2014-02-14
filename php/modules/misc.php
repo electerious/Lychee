@@ -93,9 +93,6 @@ function update() {
 	if($database->query("SELECT `description` FROM `lychee_photos` LIMIT 1;"))	$database->query("ALTER TABLE  `lychee_photos` CHANGE  `description` `description` VARCHAR( 1000 ) NULL DEFAULT ''");
 	if(!$database->query("SELECT `tags` FROM `lychee_photos` LIMIT 1;"))		$database->query("ALTER TABLE  `lychee_photos` ADD  `tags` VARCHAR( 1000 ) NULL DEFAULT ''");
 	$database->query("UPDATE `lychee_photos` SET url = replace(url, 'uploads/big/', ''), thumbUrl = replace(thumbUrl, 'uploads/thumb/', '')");
-	
-	$result = $database->query("SELECT `value` FROM `lychee_settings` WHERE `key` = 'importFilename' LIMIT 1;");
-	if ($result->fetch_object()!==true) $database->query("INSERT INTO `lychee_settings` (`key`, `value`) VALUES ('importFilename', '1')");
 
 	return true;
 
