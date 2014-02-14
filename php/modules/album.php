@@ -340,10 +340,11 @@ function checkAlbumPassword($albumID, $password) {
 function isAlbumPublic($albumID) {
 
 	global $database;
-
+	
 	$result	= $database->query("SELECT public FROM lychee_albums WHERE id = '$albumID';");
 	$row	= $result->fetch_object();
 
+	if ($albumID==='0'||$albumID==='s'||$albumID==='f') return false;
 	if ($row->public==1) return true;
 	return false;
 
