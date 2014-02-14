@@ -35,6 +35,7 @@ if (!extension_loaded('exif')) $error .= ('Error 300: PHP exif extension not act
 if (!extension_loaded('mbstring')) $error .= ('Error 301: PHP mbstring extension not activated' . PHP_EOL);
 if (!extension_loaded('gd')) $error .= ('Error 302: PHP gd extension not activated' . PHP_EOL);
 if (!extension_loaded('mysqli')) $error .= ('Error 303: PHP mysqli extension not activated' . PHP_EOL);
+if (!extension_loaded('json')) $error .= ('Error 304: PHP json extension not activated' . PHP_EOL);
 
 // Config
 if (!isset($dbName)||$dbName=='') $error .= ('Error 400: No property for $dbName in config.php' . PHP_EOL);
