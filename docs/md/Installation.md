@@ -1,7 +1,7 @@
-### Requirements
+### 1. Requirements
 Everything you need is a web-server with PHP 5.3 or later and a MySQL-Database.
 
-### PHP configuration `php.ini`
+### 2. PHP configuration `php.ini`
 
 The following extensions must be activated:
 
@@ -17,7 +17,7 @@ To use Lychee without restrictions, we recommend to increase the values of the f
 	upload_max_filesize = 20M
 	max_file_uploads = 100
 	
-### Download Lychee
+### 3. Download
 
 The easiest way to download Lychee is with `git`:
 
@@ -25,13 +25,13 @@ The easiest way to download Lychee is with `git`:
 	
 You can also use the [direct download](https://github.com/electerious/Lychee/archive/master.zip).
 
-### Folder permissions
+### 4. Permissions
 
 Change the permissions of `uploads/` and `data/` to 777, including all subfolders:
 
 	chmod -R 777 uploads/ data/
 
-### Lychee installation
+### 5. Finish
 
 Open Lychee in your browser and follow the given steps.
 If you have trouble, take a look at the [FAQ](FAQ.md).
