@@ -1,10 +1,10 @@
 <?php
 
 /**
- * @name        Session Module
- * @author      Philipp Maurer
- * @author      Tobias Reich
- * @copyright   2014 by Philipp Maurer, Tobias Reich
+ * @name		Session Module
+ * @author		Philipp Maurer
+ * @author		Tobias Reich
+ * @copyright	2014 by Philipp Maurer, Tobias Reich
  */
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
@@ -39,16 +39,16 @@ function login($username, $password) {
 	global $database, $settings;
 
 	// Check login
-    if ($username===$settings['username']&&$password===$settings['password']) {
-        $_SESSION['login'] = true;
-        return true;
-    }
+	if ($username===$settings['username']&&$password===$settings['password']) {
+		$_SESSION['login'] = true;
+		return true;
+	}
 
-    // No login
-    if ($settings['username']===''&&$settings['password']==='') {
-    	$_SESSION['login'] = true;
-    	return true;
-    }
+	// No login
+	if ($settings['username']===''&&$settings['password']==='') {
+		$_SESSION['login'] = true;
+		return true;
+	}
 
 	return false;
 
@@ -56,8 +56,8 @@ function login($username, $password) {
 
 function logout() {
 
-    session_destroy();
-    return true;
+	session_destroy();
+	return true;
 
 }
 

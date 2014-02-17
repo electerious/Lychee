@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @name        API
- * @author      Tobias Reich
- * @copyright   2014 by Tobias Reich
+ * @name		API
+ * @author		Tobias Reich
+ * @copyright	2014 by Tobias Reich
  */
 
 @ini_set('max_execution_time', '200');
@@ -26,7 +26,7 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 	require('modules/session.php');
 	require('modules/settings.php');
 	require('modules/upload.php');
-		
+
 	if (file_exists('../data/config.php')) require('../data/config.php');
 	else {
 
@@ -54,7 +54,7 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 	if (isset($_POST['photoIDs'])&&preg_match('/^[0-9\,]{1,}$/', $_POST['photoIDs'])!==1)	exit('Error: Wrong parameter type for photoIDs!');
 	if (isset($_POST['albumID'])&&preg_match('/^[0-9sf]{1,}$/', $_POST['albumID'])!==1)		exit('Error: Wrong parameter type for albumID!');
 	if (isset($_POST['photoID'])&&preg_match('/^[0-9]{14}$/', $_POST['photoID'])!==1)		exit('Error: Wrong parameter type for photoID!');
-	
+
 	// Fallback for switch statement
 	if (!isset($_POST['function']))	$_POST['function'] = '';
 	if (!isset($_GET['function']))	$_GET['function'] = '';
@@ -65,7 +65,7 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 		 * Admin Access
 		 * Full access to Lychee. Only with correct password/session.
 		 */
-		
+
 		define('LYCHEE_ACCESS_ADMIN', true);
 		require('access/admin.php');
 

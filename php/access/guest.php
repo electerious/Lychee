@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @name        Guest Access (Public Mode)
- * @author      Tobias Reich
- * @copyright   2014 by Tobias Reich
+ * @name		Guest Access (Public Mode)
+ * @author		Tobias Reich
+ * @copyright	2014 by Tobias Reich
  */
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
@@ -66,9 +66,9 @@ switch ($_POST['function']) {
 	// Miscellaneous
 
 	default:				switch ($_GET['function']) {
-	
+
 								case 'getFeed':				if (isset($_GET['albumID'])&&isset($_GET['password'])) {
-								
+
 																// Album Feed
 																if (isAlbumPublic($_GET['albumID'])) {
 																	// Album Public
@@ -80,12 +80,12 @@ switch ($_POST['function']) {
 																	// Album Private
 																	exit('Warning: Album private!');
 																}
-																										
+
 															}
 															break;
-	
+
 								case 'getAlbumArchive':		if (isset($_GET['albumID'])&&isset($_GET['password'])) {
-								
+
 																// Album Download
 																if (isAlbumPublic($_GET['albumID'])) {
 																	// Album Public
@@ -97,12 +97,12 @@ switch ($_POST['function']) {
 																	// Album Private
 																	exit('Warning: Album private or not downloadable!');
 																}
-								
+
 															}
 															break;
-								
+
 								case 'getPhotoArchive':		if (isset($_GET['photoID'])&&isset($_GET['password'])) {
-								
+
 																// Photo Download
 																if (isPhotoPublic($_GET['photoID'], $_GET['password']))
 																	// Photo Public
@@ -110,15 +110,15 @@ switch ($_POST['function']) {
 																else
 																	// Photo Private
 																	exit('Warning: Photo private or not downloadable!');
-																	
+
 															}
 															break;
-															
-								default:					exit('Error: Function not found! Please check the spelling of the called function.');							
+
+								default:					exit('Error: Function not found! Please check the spelling of the called function.');
 															break;
-															
+
 							}
-	
+
 							break;
 
 }

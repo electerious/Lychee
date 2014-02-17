@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @name        Installation Access
- * @author      Tobias Reich
- * @copyright   2014 by Tobias Reich
+ * @name		Installation Access
+ * @author		Tobias Reich
+ * @copyright	2014 by Tobias Reich
  */
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');

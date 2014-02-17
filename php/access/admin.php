@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @name        Admin Access
- * @author      Tobias Reich
- * @copyright   2014 by Tobias Reich
+ * @name		Admin Access
+ * @author		Tobias Reich
+ * @copyright	2014 by Tobias Reich
  */
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
@@ -74,7 +74,7 @@ switch ($_POST['function']) {
 	case 'setPhotoDescription':	if (isset($_POST['photoID'])&&isset($_POST['description']))
 									echo setPhotoDescription($_POST['photoID'], $_POST['description']);
 								break;
-								
+
 	case 'setPhotoTags':		if (isset($_POST['photoIDs'])&&isset($_POST['tags']))
 									echo setPhotoTags($_POST['photoIDs'], $_POST['tags']);
 								break;
@@ -127,25 +127,25 @@ switch ($_POST['function']) {
 	case 'update':			echo update();
 
 	default:				switch ($_GET['function']) {
-							
+
 								case 'getFeed':				if (isset($_GET['albumID']))
 																echo getFeed($_GET['albumID']);
 															break;
-	
+
 								case 'getAlbumArchive':		if (isset($_GET['albumID']))
 																getAlbumArchive($_GET['albumID']);
 															break;
-															
+
 								case 'getPhotoArchive':		if (isset($_GET['photoID']))
 																getPhotoArchive($_GET['photoID']);
 															break;
-															
+
 								case 'update':				echo update();
 															break;
-															
+
 								default:					exit('Error: Function not found! Please check the spelling of the called function.');
 															break;
-								
+
 							}
 
 							break;

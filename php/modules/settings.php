@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @name        Settings Module
- * @author      Tobias Reich
- * @copyright   2014 by Tobias Reich
+ * @name		Settings Module
+ * @author		Tobias Reich
+ * @copyright	2014 by Tobias Reich
  */
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
@@ -15,7 +15,7 @@ function getSettings() {
 	$result = $database->query('SELECT * FROM lychee_settings;');
 
 	while($row = $result->fetch_object()) {
-	    $return[$row->key] = $row->value;
+		$return[$row->key] = $row->value;
 	}
 
 	return $return;
