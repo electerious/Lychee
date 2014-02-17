@@ -14,7 +14,6 @@ function openGraphHeader($photoID) {
 	global $database;
 
 	$photoID = mysqli_real_escape_string($database, $photoID);
-	if (!is_numeric($photoID)) return false;
 
 	$result	= $database->query("SELECT title, description, url FROM lychee_photos WHERE id = '$photoID';");
 	$row	= $result->fetch_object();
