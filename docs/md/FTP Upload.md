@@ -2,7 +2,9 @@
 
 To import photos from your server (photos you have uploaded via FTP to your server), sign in and click the add-icon on the top right. Then choose 'Import from Server'. 
 
-### Upload and share single photos
+### Upload and share single photos [Depreciated]
+
+Important: This feature is depreciated and will be removed with the next major version. Do not use it anymore! It will be replaced by a plugin.
 
 You can upload photos directly with every FTP client into Lychee. This feature helps you to share single images quickly with others.
 
