@@ -24,8 +24,8 @@ contextMenu = {
 		if (mouse_x>$(document).width()) mouse_x = $(document).width();
 		if (mouse_x<0) mouse_x = 0;
 		if (mouse_y>$(document).height()) mouse_y = $(document).height();
-		if (mouse_y<0) mouse_y = 0;	
-		
+		if (mouse_y<0) mouse_y = 0;
+
 		if (orientation==="left") mouse_x -= $(".contextmenu").outerWidth(true);
 
 		if (mouse_x===null||
@@ -51,7 +51,7 @@ contextMenu = {
 		var mouse_x = e.pageX,
 			mouse_y = e.pageY - $(document).scrollTop(),
 			items;
-		
+
 		upload.notify();
 
 		contextMenu.fns = [
@@ -85,8 +85,8 @@ contextMenu = {
 		contextMenu.fns = [
 			function() { settings.setLogin() },
 			function() { settings.setSorting() },
-			function() { window.open(lychee.website,"_newtab"); },
-			function() { window.open(lychee.website_donate,"_newtab"); },
+			function() { window.open(lychee.website, "_newtab"); },
+			function() { window.open("plugins/check.php", "_newtab"); },
 			function() { lychee.logout() }
 		];
 
@@ -94,7 +94,7 @@ contextMenu = {
 			["<a class='icon-user'></a> Change Login", 0],
 			["<a class='icon-sort'></a> Change Sorting", 1],
 			["<a class='icon-info-sign'></a> About Lychee", 2],
-			["<a class='icon-gift'></a> Donate", 3],
+			["<a class='icon-dashboard'></a> Diagnostics", 3],
 			["separator", -1],
 			["<a class='icon-signout'></a> Sign Out", 4]
 		];
@@ -109,7 +109,7 @@ contextMenu = {
 			mouse_y = e.pageY - $(document).scrollTop(),
 			items;
 
-		if (albumID==="0"||albumID==="f"||albumID==="s") return false;	
+		if (albumID==="0"||albumID==="f"||albumID==="s") return false;
 
 		contextMenu.fns = [
 			function() { album.setTitle([albumID]) },
@@ -126,9 +126,9 @@ contextMenu = {
 		$(".album[data-id='" + albumID + "']").addClass("active");
 
 	},
-	
+
 	albumMulti: function(albumIDs, e) {
-		
+
 		var mouse_x = e.pageX,
 			mouse_y = e.pageY - $(document).scrollTop(),
 			items;
@@ -177,9 +177,9 @@ contextMenu = {
 		$(".photo[data-id='" + photoID + "']").addClass("active");
 
 	},
-	
+
 	photoMulti: function(photoIDs, e) {
-	
+
 		var mouse_x = e.pageX,
 			mouse_y = e.pageY - $(document).scrollTop(),
 			items;
@@ -255,7 +255,7 @@ contextMenu = {
 			function() { photo.share(photoID, 3) },
 			function() { window.open(photo.getDirectLink(),"_newtab") }
 		];
-		
+
 		link = photo.getViewLink(photoID);
 		if (photo.json.public==="2") link = location.href;
 
@@ -312,14 +312,14 @@ contextMenu = {
 	},
 
 	close: function(leaveSelection) {
-	
+
 		if (!visible.contextMenu()) return false;
-	
+
 		contextMenu.fns = [];
-		
+
 		$(".contextmenu_bg, .contextmenu").remove();
 		$("body").css("overflow", "auto");
-		
+
 		if (leaveSelection!==true) {
 			$(".photo.active, .album.active").removeClass("active");
 			if (visible.multiselect()) multiselect.close();

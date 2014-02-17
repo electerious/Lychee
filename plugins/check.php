@@ -1,12 +1,10 @@
 <?php
 
 /**
- * @name        check.php
- * @author      Philipp Maurer
+ * @name			check.php
  * @author		Tobias Reich
- * @copyright   2014 by Philipp Maurer, Tobias Reich
- * @description This file takes a look at your Lychee-configuration and displays all errors it can find.
- *				Everything should work if you can see the message 'Lychee is ready!'.
+ * @copyright	2014 by Tobias Reich
+ * @description	This file takes a look at your Lychee-configuration and displays all errors it can find.
  */
 
 define('LYCHEE', true);
@@ -57,7 +55,7 @@ if (substr(sprintf('%o', @fileperms('../uploads/import/')), -4)!='0777') $error 
 if (substr(sprintf('%o', @fileperms('../uploads/')), -4)!='0777') $error .= ('Error 503: Wrong permissions for \'uploads/\' (777 required)' . PHP_EOL);
 if (substr(sprintf('%o', @fileperms('../data/')), -4)!='0777') $error .= ('Error 504: Wrong permissions for \'data/\' (777 required)' . PHP_EOL);
 
-if ($error=='') echo('Lychee is ready. Lets rock!' . PHP_EOL . PHP_EOL); else echo $error;
+if ($error=='') echo('Everything is fine. Lychee should work without problems!' . PHP_EOL . PHP_EOL); else echo $error;
 
 // Check php.ini Settings
 if (ini_get('max_execution_time')<200&&ini_set('upload_max_filesize', '20M')!==true) echo('Warning: You may experience problems when uploading a large amount of photos. Take a look in the FAQ for details.' . PHP_EOL);
