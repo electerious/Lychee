@@ -1,5 +1,5 @@
 #### Lychee is not working
-If Lychee is not working properly, try to open `plugins/check.php`. This script will display all errors it can find. Everything should work if you can see the message "Lychee is ready. Lets rock!".
+If Lychee is not working properly, try to open `plugins/check.php`. This script will display all errors it can find.
 
 #### What do I need to run Lychee on my server?
 To run Lychee, everything you need is a web-server with PHP 5.3 or later and a MySQL-Database.
