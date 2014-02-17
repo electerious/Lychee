@@ -13,7 +13,6 @@ var lychee = {
 	update_path: "http://lychee.electerious.com/version/index.php",
 	updateURL: "https://github.com/electerious/Lychee",
 	website: "http://lychee.electerious.com",
-	website_donate: "http://lychee.electerious.com#donate",
 
 	upload_path_thumb: "uploads/thumb/",
 	upload_path_big: "uploads/big/",

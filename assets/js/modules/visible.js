@@ -21,7 +21,7 @@ visible = {
 		if ($('#imageview.fadeIn').length>0) return true;
 		else return false;
 	},
-	
+
 	search: function() {
 		if (search.code!==null&&search.code!=='') return true;
 		else return false;
@@ -51,7 +51,7 @@ visible = {
 		if ($('.contextmenu').length>0) return true;
 		else return false;
 	},
-	
+
 	multiselect: function() {
 		if ($('#multiselect').length>0) return true;
 		else return false;

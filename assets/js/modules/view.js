@@ -59,7 +59,7 @@ view = {
 		},
 
 		mode: function(mode) {
-			
+
 			var albumID = album.getID();
 
 			switch (mode) {
@@ -447,11 +447,11 @@ view = {
 			}
 
 		},
-		
+
 		tags: function() {
-		
+
 			$("#infobox #tags").html(build.tags(photo.json.tags));
-		
+
 		},
 
 		photo: function() {

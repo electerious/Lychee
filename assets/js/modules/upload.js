@@ -35,20 +35,20 @@ upload = {
 		$(".upload_message").append("<p>" + text + "</p>");
 
 	},
-	
+
 	notify: function(title) {
-	
+
 		var popup;
-		
+
 		if (!window.webkitNotifications) return false;
-		
+
 		if (window.webkitNotifications.checkPermission()!=0) window.webkitNotifications.requestPermission();
-	
+
 		if (window.webkitNotifications.checkPermission()==0&&title) {
 			popup = window.webkitNotifications.createNotification("", title, "You can now manage your new photo(s).");
 			popup.show();
 		}
-	
+
 	},
 
 	start: {
@@ -64,7 +64,7 @@ upload = {
 
 			if (files.length<=0) return false;
 			if (albumID===false) albumID = 0;
-						
+
 			formData.append("function", "upload");
 			formData.append("albumID", albumID);
 
@@ -170,7 +170,7 @@ upload = {
 				}],
 				["Cancel", function() {}]
 			];
-			
+
 			modal.show("Import from Link", "Please enter the direct link to a photo to import it: <input class='text' type='text' placeholder='http://' value='http://'>", buttons);
 
 		},
@@ -211,7 +211,7 @@ upload = {
 				}],
 				["Cancel", function() {}]
 			];
-			
+
 			modal.show("Import from Server", "This action will import all photos and albums which are located in <b>'uploads/import/'</b> of your Lychee installation.", buttons);
 
 		},

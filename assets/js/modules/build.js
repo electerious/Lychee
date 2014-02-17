@@ -255,12 +255,12 @@ build = {
 				html += "<a class='tag'>" + tag + "<span class='icon-remove' data-index='" + index + "'></span></a>";
 
 			});
-			
+
 			html += editTagsHTML;
 
 		} else {
 
-			
+
 			html = "<div class='empty'>No Tags" + editTagsHTML + "</div>";
 
 		}

@@ -291,19 +291,19 @@ photo = {
 			}],
 			["Cancel", function() {}]
 		];
-		
+
 		modal.show("Set Description", "Enter a description for this photo: <input class='text' type='text' maxlength='800' placeholder='Description' value='" + oldDescription + "'>", buttons);
 
 	},
-	
+
 	editTags: function(photoIDs) {
-	
+
 		var oldTags = "",
 			tags = "";
-	
+
 		if (!photoIDs) return false;
 		if (photoIDs instanceof Array===false) photoIDs = [photoIDs];
-		
+
 		// Get tags
 		if (visible.photo()) oldTags = photo.json.tags;
 		if (visible.album()&&photoIDs.length===1) oldTags = album.json.content[photoIDs].tags;
@@ -315,10 +315,10 @@ photo = {
 			});
 			if (same) oldTags = album.json.content[photoIDs[0]].tags;
 		}
-		
+
 		// Improve tags
 		oldTags = oldTags.replace(/,/g, ', ');
-	
+
 		buttons = [
 			["Set Tags", function() {
 
@@ -329,55 +329,55 @@ photo = {
 			}],
 			["Cancel", function() {}]
 		];
-		
+
 		if (photoIDs.length===1) modal.show("Set Tags", "Enter your tags for this photo. You can add multiple tags by separating them with a comma: <input class='text' type='text' maxlength='800' placeholder='Tags' value='" + oldTags + "'>", buttons);
 		else modal.show("Set Tags", "Enter your tags for all " + photoIDs.length + " selected photos. Existing tags will be overwritten. You can add multiple tags by separating them with a comma: <input class='text' type='text' maxlength='800' placeholder='Tags' value='" + oldTags + "'>", buttons);
-	
+
 	},
-	
+
 	setTags: function(photoIDs, tags) {
-		
+
 		var params;
-	
+
 		if (!photoIDs) return false;
 		if (photoIDs instanceof Array===false) photoIDs = [photoIDs];
-		
+
 		// Parse tags
 		tags = tags.replace(/(\ ,\ )|(\ ,)|(,\ )|(,{1,}\ {0,})|(,$|^,)/g, ',');
 		tags = tags.replace(/,$|^,/g, '');
-		
+
 		if (visible.photo()) {
 			photo.json.tags = tags;
 			view.photo.tags();
 		}
-		
+
 		photoIDs.forEach(function(id, index, array) {
 			album.json.content[id].tags = tags;
 		});
-		
+
 		params = "setPhotoTags&photoIDs=" + photoIDs + "&tags=" + tags;
 		lychee.api(params, function(data) {
 
 			if (data!==true) lychee.error(null, params, data);
 
 		});
-	
+
 	},
-		
+
 	deleteTag: function(photoID, index) {
-		
+
 		var tags;
-	
+
 		// Remove
 		tags = photo.json.tags.split(',');
 		tags.splice(index, 1);
-				
+
 		// Save
 		photo.json.tags = tags.toString();
 		photo.setTags([photoID], photo.json.tags);
-	
+
 	},
-		
+
 	share: function(photoID, service) {
 
 		var link = "",
