@@ -23,6 +23,10 @@ Sign in and click the gear on the top left corner to change your settings. If yo
 
 Updating is as easy as it should be.  [Update &#187;](docs/md/Update.md)
 
+### Build
+
+Lychee is ready to use, right out of the box. If you want to contribute and edit CSS or JS files, you need to rebuild Lychee. [Build &#187;](docs/md/Build.md)
+
 ### Keyboard Shortcuts
 
 These shortcuts will help you to use Lychee even faster. [Keyboard Shortcuts &#187;](docs/md/Keyboard Shortcuts.md)
