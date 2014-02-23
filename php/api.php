@@ -58,7 +58,7 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 	// Fallback for switch statement
 	if (!isset($_POST['function']))	$_POST['function'] = '';
 	if (!isset($_GET['function']))	$_GET['function'] = '';
-
+	
 	if (isset($_SESSION['login'])&&$_SESSION['login']==true) {
 
 		/**

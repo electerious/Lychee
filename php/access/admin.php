@@ -101,7 +101,7 @@ switch ($_POST['function']) {
 
 	// Session Function
 
-	case 'init':			echo json_encode(init('admin'));
+	case 'init':			echo json_encode(init('admin', $_POST['version']));
 							break;
 
 	case 'login':			if (isset($_POST['user'])&&isset($_POST['password']))
@@ -123,8 +123,6 @@ switch ($_POST['function']) {
 							break;
 
 	// Miscellaneous
-
-	case 'update':			echo update();
 
 	default:				switch ($_GET['function']) {
 

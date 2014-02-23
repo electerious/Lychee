@@ -7,7 +7,7 @@
 
 var lychee = {
 
-	version: "2.1 b3",
+	version: "2.1 b4",
 
 	api_path: "php/api.php",
 	update_path: "http://lychee.electerious.com/version/index.php",
@@ -26,6 +26,7 @@ var lychee = {
 	sorting: "",
 
 	dropbox: false,
+	dropboxKey: '',
 
 	loadingBar: $("#loading"),
 	header: $("header"),
@@ -35,13 +36,17 @@ var lychee = {
 
 	init: function() {
 
-		lychee.api("init", function(data) {
+		var params;
+
+		params = "init&version=" + escape(lychee.version);
+		lychee.api(params, function(data) {
 
 			if (data.loggedIn!==true) {
 				lychee.setMode("public");
 			} else {
 				lychee.username = data.config.username;
 				lychee.sorting = data.config.sorting;
+				lychee.dropboxKey = data.config.dropboxKey;
 			}
 
 			// No configuration
@@ -300,7 +305,7 @@ var lychee = {
 			g.id = "dropboxjs";
 			g.type = "text/javascript";
 			g.async = "true";
-			g.setAttribute("data-app-key", "iq7lioj9wu0ieqs");
+			g.setAttribute("data-app-key", lychee.dropboxKey);
 			g.onload = g.onreadystatechange = function() {
 				var rs = this.readyState;
 				if (rs&&rs!=="complete"&&rs!=="loaded") return;

@@ -80,18 +80,31 @@ function search($term) {
 
 }
 
-function update() {
+function update($version = '') {
 
-	global $database;
+	global $database, $configVersion;
 
+	// Albums
 	if(!$database->query("SELECT `public` FROM `lychee_albums` LIMIT 1;"))		$database->query("ALTER TABLE `lychee_albums` ADD `public` TINYINT( 1 ) NOT NULL DEFAULT	'0'");
 	if(!$database->query("SELECT `password` FROM `lychee_albums` LIMIT 1;"))	$database->query("ALTER TABLE `lychee_albums` ADD `password` VARCHAR( 100 ) NULL DEFAULT ''");
 	if(!$database->query("SELECT `description` FROM `lychee_albums` LIMIT 1;"))	$database->query("ALTER TABLE `lychee_albums` ADD `description` VARCHAR( 1000 ) NULL DEFAULT ''");
 	if($database->query("SELECT `password` FROM `lychee_albums` LIMIT 1;"))		$database->query("ALTER TABLE `lychee_albums` CHANGE `password` `password` VARCHAR( 100 ) NULL DEFAULT ''");
 
+	// Photos
 	if($database->query("SELECT `description` FROM `lychee_photos` LIMIT 1;"))	$database->query("ALTER TABLE `lychee_photos` CHANGE `description` `description` VARCHAR( 1000 ) NULL DEFAULT ''");
 	if(!$database->query("SELECT `tags` FROM `lychee_photos` LIMIT 1;"))		$database->query("ALTER TABLE `lychee_photos` ADD `tags` VARCHAR( 1000 ) NULL DEFAULT ''");
 	$database->query("UPDATE `lychee_photos` SET url = replace(url, 'uploads/big/', ''), thumbUrl = replace(thumbUrl, 'uploads/thumb/', '')");
+
+	// Settings
+	$result = $database->query("SELECT `key` FROM `lychee_settings` WHERE `key` = 'dropboxKey' LIMIT 1;");
+	if ($result->num_rows===0) $database->query("INSERT INTO `lychee_settings` (`key`, `value`) VALUES ('dropboxKey', '')");
+
+	// Config
+	if ($version!==''&&$configVersion!==$version) {
+		$data = file_get_contents('../data/config.php');
+		$data = preg_replace('/\$configVersion = \'[\w. ]*\';/', "\$configVersion = '$version';", $data);
+		file_put_contents('../data/config.php', $data);
+	}
 
 	return true;
 

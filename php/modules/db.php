@@ -30,7 +30,7 @@ function dbConnect() {
 
 }
 
-function dbCreateConfig($dbHost = 'localhost', $dbUser, $dbPassword, $dbName = 'lychee') {
+function dbCreateConfig($dbHost = 'localhost', $dbUser, $dbPassword, $dbName = 'lychee', $version) {
 
 	$dbPassword	= urldecode($dbPassword);
 	$database	= new mysqli($dbHost, $dbUser, $dbPassword);
@@ -43,13 +43,13 @@ $config = "<?php
 /**
  * @name		Config
  * @author		Tobias Reich
- * @copyright	2014 by Philipp Maurer, Tobias Reich
+ * @copyright	2014 Tobias Reich
 */
 
 if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 // Config version
-\$configVersion = '2.1';
+\$configVersion = '$version';
 
 // Database configurations
 \$dbHost = '$dbHost'; //Host of the Database
@@ -101,7 +101,8 @@ function dbCreateTables($database) {
 			('password',''),
 			('thumbQuality','90'),
 			('checkForUpdates','1'),
-			('sorting','ORDER BY id DESC');
+			('sorting','ORDER BY id DESC'),
+			('dropboxKey','');
 
 		";
 

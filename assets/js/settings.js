@@ -26,7 +26,7 @@ var settings = {
 				if (dbHost.length<1) dbHost = "localhost";
 				if (dbName.length<1) dbName = "lychee";
 
-				params = "dbCreateConfig&dbName=" + escape(dbName) + "&dbUser=" + escape(dbUser) + "&dbPassword=" + escape(dbPassword) + "&dbHost=" + escape(dbHost);
+				params = "dbCreateConfig&dbName=" + escape(dbName) + "&dbUser=" + escape(dbUser) + "&dbPassword=" + escape(dbPassword) + "&dbHost=" + escape(dbHost) + "&version=" + escape(lychee.version);
 				lychee.api(params, function(data) {
 
 					if (data!==true) {
@@ -71,7 +71,7 @@ var settings = {
 					} else {
 
 						// Configuration successful
-						lychee.api("update", function(data) { window.location.reload() });
+						window.location.reload();
 
 					}
 

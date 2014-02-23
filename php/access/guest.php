@@ -56,7 +56,7 @@ switch ($_POST['function']) {
 
 	// Session Functions
 
-	case 'init':			echo json_encode(init('public'));
+	case 'init':			echo json_encode(init('public', $_POST['version']));
 							break;
 
 	case 'login':			if (isset($_POST['user'])&&isset($_POST['password']))

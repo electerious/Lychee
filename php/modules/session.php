@@ -9,9 +9,13 @@
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
-function init($mode) {
+function init($mode, $version) {
 
-	global $settings;
+	global $settings, $configVersion;
+
+	// Update
+	if ($configVersion!==$version)
+		if (!update($version)) exit('Error: Updating the database failed!');
 
 	$return['config'] = $settings;
 	unset($return['config']['password']);
