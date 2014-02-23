@@ -39,3 +39,9 @@ If `1`, Lychee will check if you are using the latest version. The notice will b
 	sorting = ORDER BY [row] [ASC|DESC]
 
 A typical part of a MySQL statement. This string will be appended to mostly every MySQL query.
+
+#### Dropbox Key
+
+This key is required to use the Dropbox import feature from your server. Lychee will ask you for this key, the first time you try to use the import. You can get your personal drop-ins app key from [their website](https://www.dropbox.com/developers/apps/create).
+
+	dropboxKey = Your personal App Key

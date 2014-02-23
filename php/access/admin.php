@@ -122,6 +122,10 @@ switch ($_POST['function']) {
 								echo setSorting($_POST['type'], $_POST['order']);
 							break;
 
+	case 'setDropboxKey':	if (isset($_POST['key']))
+								echo setDropboxKey($_POST['key']);
+							break;
+
 	// Miscellaneous
 
 	default:				switch ($_GET['function']) {

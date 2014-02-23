@@ -80,6 +80,7 @@ var settings = {
 			}],
 			["", function() {}]
 		];
+
 		modal.show("Configuration", "Enter your database connection details below: <input id='dbHost' class='text less' type='text' placeholder='Host (optional)' value=''><input id='dbUser' class='text less' type='text' placeholder='Username' value=''><input id='dbPassword' class='text more' type='password' placeholder='Password' value=''><br>Lychee will create its own database. If required, you can enter the name of an existing database instead:<input id='dbName' class='text more' type='text' placeholder='Database (optional)' value=''>", buttons, -215, false);
 
 	},
@@ -137,6 +138,7 @@ var settings = {
 			}],
 			["", function() {}]
 		];
+
 		modal.show("Create Login", "Enter a username and password for your installation: <input id='username' class='text less' type='text' placeholder='New Username' value=''><input id='password' class='text' type='password' placeholder='New Password' value=''>", buttons, -122, false);
 
 	},
@@ -181,6 +183,7 @@ var settings = {
 			}],
 			["Cancel", function() {}]
 		];
+
 		modal.show("Change Login", "Enter your current password: <input id='old_password' class='text more' type='password' placeholder='Current Password' value=''><br>Your username and password will be changed to the following: <input id='username' class='text less' type='text' placeholder='New Username' value=''><input id='password' class='text' type='password' placeholder='New Password' value=''>", buttons, -171);
 
 	},
@@ -232,6 +235,35 @@ var settings = {
 			$("select#settings_type").val(sorting[0]);
 			$("select#settings_order").val(sorting[1]);
 		}
+
+	},
+
+	setDropboxKey: function(callback) {
+
+		var buttons,
+			params,
+			key;
+
+		buttons = [
+			["Set Key", function() {
+
+				key = $(".message input.text#key").val();
+
+				params = "setDropboxKey&key=" + key;
+				lychee.api(params, function(data) {
+
+					if (data===true) {
+						lychee.dropboxKey = key;
+						if (callback) lychee.loadDropbox(callback);
+					} else lychee.error(null, params, data);
+
+				});
+
+			}],
+			["Cancel", function() {}]
+		];
+
+		modal.show("Set Dropbox Key", "In order to import photos from your Dropbox, you need a valid drop-ins app key from <a href='https://www.dropbox.com/developers/apps/create'>their website</a>. Generate yourself a personal key and enter it below: <input id='key' class='text' type='text' placeholder='Dropbox API Key' value='" + lychee.dropboxKey + "'>", buttons);
 
 	}
 

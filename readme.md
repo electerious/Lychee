@@ -31,6 +31,10 @@ Lychee is ready to use, right out of the box. If you want to contribute and edit
 
 These shortcuts will help you to use Lychee even faster. [Keyboard Shortcuts &#187;](docs/md/Keyboard Shortcuts.md)
 
+### Dropbox import
+
+In order to use the Dropbox import from your server, you need a valid drop-ins app key from [their website](https://www.dropbox.com/developers/apps/create). Lychee will ask you for this key, the first time you try to use the import. Want to change your code? Take a loot at [the settings](docs/md/Settings.md) of Lychee.
+
 ### Twitter Cards
 
 Lychee supports [Twitter Cards](https://dev.twitter.com/docs/cards) and [Open Graph](http://opengraphprotocol.org) for shared images (not albums). In order to use Twitter Cards you need to request an approval for your domain. Simply share an image with Lychee, copy its link and paste it in [Twitters Card Validator](https://dev.twitter.com/docs/cards/validation/validator).

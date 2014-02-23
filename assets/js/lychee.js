@@ -7,7 +7,7 @@
 
 var lychee = {
 
-	version: "2.1 b4",
+	version: "2.1 b3",
 
 	api_path: "php/api.php",
 	update_path: "http://lychee.electerious.com/version/index.php",
@@ -44,9 +44,9 @@ var lychee = {
 			if (data.loggedIn!==true) {
 				lychee.setMode("public");
 			} else {
-				lychee.username = data.config.username;
-				lychee.sorting = data.config.sorting;
-				lychee.dropboxKey = data.config.dropboxKey;
+				lychee.username = data.config.username || '';
+				lychee.sorting = data.config.sorting || '';
+				lychee.dropboxKey = data.config.dropboxKey || '';
 			}
 
 			// No configuration
@@ -294,7 +294,7 @@ var lychee = {
 
 	loadDropbox: function(callback) {
 
-		if (!lychee.dropbox) {
+		if (!lychee.dropbox&&lychee.dropboxKey) {
 
 			loadingBar.show();
 
@@ -315,7 +315,15 @@ var lychee = {
 			};
 			s.parentNode.insertBefore(g, s);
 
-		} else callback();
+		} else if (lychee.dropbox&&lychee.dropboxKey) {
+
+			callback();
+
+		} else {
+
+			settings.setDropboxKey(callback);
+
+		};
 
 	},
 

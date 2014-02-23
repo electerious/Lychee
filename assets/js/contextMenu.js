@@ -85,6 +85,7 @@ contextMenu = {
 		contextMenu.fns = [
 			function() { settings.setLogin() },
 			function() { settings.setSorting() },
+			function() { settings.setDropboxKey() },
 			function() { window.open(lychee.website, "_newtab"); },
 			function() { window.open("plugins/check.php", "_newtab"); },
 			function() { lychee.logout() }
@@ -93,10 +94,12 @@ contextMenu = {
 		items = [
 			["<a class='icon-user'></a> Change Login", 0],
 			["<a class='icon-sort'></a> Change Sorting", 1],
-			["<a class='icon-info-sign'></a> About Lychee", 2],
-			["<a class='icon-dashboard'></a> Diagnostics", 3],
+			["<a class='icon-folder-open'></a> Set Dropbox", 2],
 			["separator", -1],
-			["<a class='icon-signout'></a> Sign Out", 4]
+			["<a class='icon-info-sign'></a> About Lychee", 3],
+			["<a class='icon-dashboard'></a> Diagnostics", 4],
+			["separator", -1],
+			["<a class='icon-signout'></a> Sign Out", 5]
 		];
 
 		contextMenu.show(items, mouse_x, mouse_y, "right");
