@@ -9,10 +9,9 @@
 		<meta name="keywords" content="">
 		<meta name="description" content="">
 
-		<link type="text/css" rel="stylesheet" href="assets/css/min/reset.css">
-		<link type="text/css" rel="stylesheet" href="assets/css/min/main.css">
+		<link type="text/css" rel="stylesheet" href="assets/build/main.css">
 
-		<link rel="shortcut icon" href="assets/img/favicon.ico">
+		<link rel="shortcut icon" href="favicon.ico">
 
 		<meta name="apple-mobile-web-app-status-bar-style" content="black" >
 		<meta name="viewport" content="user-scalable=no, initial-scale=1">
@@ -57,10 +56,9 @@
 	<div id="infobox"></div>
 
 	<!-- JS -->
-	<script type="text/javascript" src="assets/js/min/frameworks.js"></script>
-	<script type="text/javascript" src="assets/js/modules/build.js"></script>
-	<script type="text/javascript" src="assets/js/view.js"></script>
-
+	<script type="text/javascript" src="assets/js/_frameworks.js"></script>
+	<script type="text/javascript" src="assets/js/build.js"></script>
+	<script type="text/javascript" src="assets/js/view/main.js"></script>
 
 	</body>
 </html>

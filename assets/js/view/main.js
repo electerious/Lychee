@@ -1,8 +1,8 @@
 /**
- * @name        View
+ * @name		Main
  * @description	Used to view single photos with view.php
- * @author      Tobias Reich
- * @copyright   2014 by Tobias Reich
+ * @author		Tobias Reich
+ * @copyright	2014 by Tobias Reich
  */
 
 var header = $("header"),
