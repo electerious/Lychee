@@ -33,7 +33,7 @@ photo = {
 				checkPasswd = function() {
 					if (password.value!=="") photo.load(photoID, albumID);
 					else setTimeout(checkPasswd, 250);
-				}
+				};
 				checkPasswd();
 				return false;
 			}
@@ -69,7 +69,7 @@ photo = {
 			// Get title if only one photo is selected
 			if (visible.photo()) photoTitle = photo.json.title;
 			else photoTitle = album.json.content[photoIDs].title;
-			if (photoTitle=="") photoTitle = "Untitled";
+			if (photoTitle==="") photoTitle = "Untitled";
 		}
 
 		buttons = [
@@ -411,15 +411,15 @@ photo = {
 
 	isSmall: function() {
 
-		var size = [
-			["width", false],
-			["height", false]
-		];
+		var size = {
+			width: false,
+			height: false
+		};
 
-		if (photo.json.width<$(window).width()-60) size["width"] = true;
-		if (photo.json.height<$(window).height()-100) size["height"] = true;
+		if (photo.json.width<$(window).width()-60) size.width = true;
+		if (photo.json.height<$(window).height()-100) size.height = true;
 
-		if (size["width"]&&size["height"]) return true;
+		if (size.width&&size.height) return true;
 		else return false;
 
 	},
@@ -450,4 +450,4 @@ photo = {
 
 	}
 
-}
+};

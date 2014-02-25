@@ -12,7 +12,7 @@ modal = {
 	show: function(title, text, buttons, marginTop, closeButton) {
 
 		if (!buttons) {
-			var buttons = [
+			buttons = [
 				["", function() {}],
 				["", function() {}]
 			];
@@ -32,4 +32,4 @@ modal = {
 
 	}
 
-}
+};

@@ -57,4 +57,4 @@ visible = {
 		else return false;
 	}
 
-}
+};

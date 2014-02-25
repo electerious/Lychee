@@ -150,7 +150,7 @@ build = {
 		modal +=	"<div class='message center'" + custom_style + ">";
 		modal +=		"<h1>" + title + "</h1>";
 
-		if (closeButton!=false) {
+		if (closeButton!==false) {
 
 			modal +=		"<a class='close icon-remove-sign'></a>";
 
@@ -160,7 +160,7 @@ build = {
 
 		$.each(button, function(index) {
 
-			if (this[0]!="") {
+			if (this[0]!=="") {
 
 				if (index===0) modal += "<a class='button active'>" + this[0] + "</a>";
 				else modal += "<a class='button'>" + this[0] + "</a>";
@@ -334,7 +334,7 @@ build = {
 
 		$.each(infos, function(index) {
 
-			if (infos[index][1]===""||infos[index][1]==undefined||infos[index][1]==null) infos[index][1] = "-";
+			if (infos[index][1]===""||infos[index][1]===undefined||infos[index][1]===null) infos[index][1] = "-";
 
 			switch (infos[index][0]) {
 
@@ -426,7 +426,7 @@ build = {
 
 		$.each(infos, function(index) {
 
-			if (infos[index][1]===""||infos[index][1]==undefined||infos[index][1]==null) infos[index][1] = "-";
+			if (infos[index][1]===""||infos[index][1]===undefined||infos[index][1]===null) infos[index][1] = "-";
 
 			if (infos[index][0]==="") {
 
@@ -453,4 +453,4 @@ build = {
 
 	}
 
-}
+};

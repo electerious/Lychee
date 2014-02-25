@@ -73,7 +73,7 @@ var lychee = {
 
 	api: function(params, callback, loading) {
 
-		if (loading==undefined) loadingBar.show();
+		if (loading===undefined) loadingBar.show();
 
 		$.ajax({
 			type: "POST",
@@ -135,7 +135,7 @@ var lychee = {
 		$("#username").focus();
 		if (localStorage) {
 			local_username = localStorage.getItem("username");
-			if (local_username!=null) {
+			if (local_username!==null) {
 				if (local_username.length>0) $("#username").val(local_username);
 				$("#password").focus();
 			}
@@ -154,7 +154,7 @@ var lychee = {
 
 	goto: function(url) {
 
-		if (url==undefined) url = "";
+		if (url===undefined) url = "";
 		document.location.hash = url;
 
 	},
@@ -323,7 +323,7 @@ var lychee = {
 
 			settings.setDropboxKey(callback);
 
-		};
+		}
 
 	},
 
@@ -336,4 +336,4 @@ var lychee = {
 
 	}
 
-}
+};

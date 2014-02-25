@@ -45,8 +45,8 @@ $(document).ready(function(){
 
 	/* Clear Search */
 	$("#clearSearch").on(event_name, function () {
-	    $("#search").focus();
-	    search.reset();
+		$("#search").focus();
+		search.reset();
 	});
 
 	/* Back Buttons */
@@ -116,8 +116,8 @@ $(document).ready(function(){
 
 		/* Modal */
 		.on(event_name, ".message .close", modal.close)
-		.on(event_name, ".message .button:first", function() { if (modal.fns!=null) modal.fns[0](); if (!visible.signin()) modal.close() })
-		.on(event_name, ".message .button:last", function() { if (modal.fns!=null) modal.fns[1](); if (!visible.signin()) modal.close() })
+		.on(event_name, ".message .button:first", function() { if (modal.fns!==null) modal.fns[0](); if (!visible.signin()) modal.close() })
+		.on(event_name, ".message .button:last", function() { if (modal.fns!==null) modal.fns[1](); if (!visible.signin()) modal.close() })
 
 		/* Add Dialog */
 		.on(event_name, ".button_add", function(e) { contextMenu.add(e) })

@@ -15,7 +15,7 @@ loadingBar = {
 
 			loadingBar.status = "error";
 
-			if (!errorText) errorText = "Whoops, it looks like something went wrong. Please reload the site and try again!"
+			if (!errorText) errorText = "Whoops, it looks like something went wrong. Please reload the site and try again!";
 
 			lychee.loadingBar
 				.removeClass("loading uploading error")
@@ -28,7 +28,7 @@ loadingBar = {
 			clearTimeout(lychee.loadingBar.data("timeout"));
 			lychee.loadingBar.data("timeout", setTimeout(function() { loadingBar.hide(true) }, 3000));
 
-		} else if (loadingBar.status==null) {
+		} else if (loadingBar.status===null) {
 
 			loadingBar.status = "loading";
 
@@ -47,7 +47,7 @@ loadingBar = {
 
 	hide: function(force_hide) {
 
-		if ((loadingBar.status!=="error"&&loadingBar.status!=null)||force_hide) {
+		if ((loadingBar.status!=="error"&&loadingBar.status!==null)||force_hide) {
 
 			loadingBar.status = null;
 			clearTimeout(lychee.loadingBar.data("timeout"));
@@ -59,4 +59,4 @@ loadingBar = {
 
 	}
 
-}
+};

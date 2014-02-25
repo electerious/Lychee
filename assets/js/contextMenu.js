@@ -19,7 +19,7 @@ contextMenu = {
 
 		// Do not leave the screen
 		if ((mouse_x+$(".contextmenu").outerWidth(true))>$("html").width()) orientation = "left";
-		if ((mouse_y+$(".contextmenu").outerHeight(true))>$("html").height()) mouse_y -= (mouse_y+$(".contextmenu").outerHeight(true)-$("html").height())
+		if ((mouse_y+$(".contextmenu").outerHeight(true))>$("html").height()) mouse_y -= (mouse_y+$(".contextmenu").outerHeight(true)-$("html").height());
 
 		if (mouse_x>$(document).width()) mouse_x = $(document).width();
 		if (mouse_x<0) mouse_x = 0;
@@ -30,10 +30,10 @@ contextMenu = {
 
 		if (mouse_x===null||
 			mouse_x===undefined||
-			mouse_x===NaN||
+			isNaN(mouse_x)||
 			mouse_y===null||
 			mouse_y===undefined||
-			mouse_y===NaN) {
+			isNaN(mouse_y)) {
 				mouse_x = "10px";
 				mouse_y = "10px";
 		}
@@ -41,7 +41,7 @@ contextMenu = {
 		$(".contextmenu").css({
 			"top": mouse_y,
 			"left": mouse_x,
-			"opacity": .98
+			"opacity": 0.98
 		});
 
 	},
@@ -330,4 +330,4 @@ contextMenu = {
 
 	}
 
-}
+};

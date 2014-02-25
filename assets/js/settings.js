@@ -230,7 +230,7 @@ var settings = {
 				order.\
 			", buttons);
 
-		if (lychee.sorting!="") {
+		if (lychee.sorting!=="") {
 			sorting = lychee.sorting.replace("ORDER BY ", "").replace(" ", ";").split(";");
 			$("select#settings_type").val(sorting[0]);
 			$("select#settings_order").val(sorting[1]);
@@ -267,4 +267,4 @@ var settings = {
 
 	}
 
-}
+};

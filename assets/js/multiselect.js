@@ -21,7 +21,7 @@ multiselect = {
 		if (mobileBrowser()) return false;
 		if (lychee.publicMode) return false;
 		if (visible.search()) return false;
-		if ($('.album:hover, .photo:hover').length!=0) return false;
+		if ($('.album:hover, .photo:hover').length!==0) return false;
 		if (visible.multiselect()) $('#multiselect').remove();
 
 		multiselect.position.top = e.pageY;
@@ -109,7 +109,7 @@ multiselect = {
 			left: $('#multiselect').offset().left,
 			width: parseInt($('#multiselect').css('width').replace('px', '')),
 			height: parseInt($('#multiselect').css('height').replace('px', ''))
-		}
+		};
 
 	},
 
@@ -146,8 +146,8 @@ multiselect = {
 
 		});
 
-		if (ids.length!=0&&visible.album()) contextMenu.photoMulti(ids, e);
-		else if (ids.length!=0&&visible.albums()) contextMenu.albumMulti(ids, e);
+		if (ids.length!==0&&visible.album()) contextMenu.photoMulti(ids, e);
+		else if (ids.length!==0&&visible.albums()) contextMenu.albumMulti(ids, e);
 		else multiselect.close();
 
 	},
@@ -168,4 +168,4 @@ multiselect = {
 
 	}
 
-}
+};
