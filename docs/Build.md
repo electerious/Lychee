@@ -11,7 +11,7 @@ These dependencies can be installed using `npm`:
 	
 ### Build
 
-The Makefile is located in `docs/` and can be easily executed, using the following command. Make sure your run this from the root of Lychee:
+The Makefile is located in `etc/` and can be easily executed, using the following command. Make sure your run this from the root of Lychee:
 
 	make -f etc/Makefile
 	
