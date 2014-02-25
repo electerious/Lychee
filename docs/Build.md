@@ -13,7 +13,7 @@ These dependencies can be installed using `npm`:
 
 The Makefile is located in `docs/` and can be easily executed, using the following command. Make sure your run this from the root of Lychee:
 
-	make -f docs/Makefile
+	make -f etc/Makefile
 	
 ### Use uncompressed files
 
