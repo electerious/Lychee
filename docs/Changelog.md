@@ -1,3 +1,10 @@
+## v2.0.3
+
+Released February 26, 2014
+
+- Critical security fix
+- Notifications for Chrome
+
 ## v2.0.2
 
 Released January 30, 2014
