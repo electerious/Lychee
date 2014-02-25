@@ -162,7 +162,7 @@ album = {
 			buttons[0][0] = "Clear Unsorted";
 			buttons[1][0] = "Keep Unsorted";
 
-			modal.show("Clear Unsorted", "Are you sure you want to delete all photos from 'Unsorted'?<br>This action can't be undone!", buttons)
+			modal.show("Clear Unsorted", "Are you sure you want to delete all photos from 'Unsorted'?<br>This action can't be undone!", buttons);
 
 		} else if (albumIDs.length===1) {
 

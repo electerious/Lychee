@@ -31,7 +31,7 @@ albums = {
 				thumb0: data.unsortedThumb0,
 				thumb1: data.unsortedThumb1,
 				thumb2: data.unsortedThumb2
-			}
+			};
 
 			data.starredAlbum = {
 				id: "f",
@@ -41,7 +41,7 @@ albums = {
 				thumb0: data.starredThumb0,
 				thumb1: data.starredThumb1,
 				thumb2: data.starredThumb2
-			}
+			};
 
 			data.publicAlbum = {
 				id: "s",
@@ -51,7 +51,7 @@ albums = {
 				thumb0: data.publicThumb0,
 				thumb1: data.publicThumb1,
 				thumb2: data.publicThumb2
-			}
+			};
 
 			albums.json = data;
 
@@ -67,7 +67,7 @@ albums = {
 
 			}, waitTime);
 
-		})
+		});
 
 	},
 
