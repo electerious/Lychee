@@ -42,9 +42,10 @@ Take a look at the [FAQ](docs/md/FAQ.md) if you have problems.
 
 ## Extensions
 
-| Name | Description | Link |
+| Name | Description | |
 |:-----------|:------------|:------------|
-| lycheesync | Sync Lychee with any directory containing photos | https://github.com/GustavePate/lycheesync |
+| lycheesync | Sync Lychee with any directory containing photos | [More &#187;](https://github.com/GustavePate/lycheesync) |
+| Jekyll | Liquid tag for Jekyll sites that allows embedding Lychee albums | [More &#187;](https://gist.github.com/tobru/9171700) |
 
 ## Developer
 | Version | Name |
