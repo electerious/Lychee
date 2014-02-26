@@ -360,7 +360,7 @@ function importUrl($url, $albumID = 0) {
 
 			copy($url, $tmp_name);
 
-			return importPhoto($filename, $albumID);
+			return importPhoto($tmp_name, $albumID);
 
 		}
 
