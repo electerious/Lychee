@@ -46,6 +46,7 @@ if (!$settings['username']||$settings['username']=='')			$error .= ('Error 404: 
 if (!$settings['password']||$settings['password']=='')			$error .= ('Error 405: Password empty or not set' . PHP_EOL);
 if (!$settings['thumbQuality']||$settings['thumbQuality']=='')	$error .= ('Error 407: No or wrong property for thumbQuality' . PHP_EOL);
 if (!$settings['sorting']||$settings['sorting']=='')			$error .= ('Error 408: Wrong property for sorting' . PHP_EOL);
+if (!$settings['dropboxKey'])									$error .= ('Error 409: No property for dropboxKey' . PHP_EOL);
 if (!$settings['checkForUpdates']||($settings['checkForUpdates']!='0'&&$settings['checkForUpdates']!='1')) $error .= ('Error 406: No or wrong property for checkForUpdates' . PHP_EOL);
 
 // Permissions
