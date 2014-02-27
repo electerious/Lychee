@@ -30,6 +30,7 @@ function init($mode, $version) {
 		unset($return['config']['username']);
 		unset($return['config']['thumbQuality']);
 		unset($return['config']['sorting']);
+		unset($return['config']['dropboxKey']);
 		unset($return['config']['login']);
 		$return['loggedIn'] = false;
 	}

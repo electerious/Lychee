@@ -18,8 +18,8 @@ function openGraphHeader($photoID) {
 	$result	= $database->query("SELECT title, description, url FROM lychee_photos WHERE id = '$photoID';");
 	$row	= $result->fetch_object();
 
-	$parseUrl = parse_url("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-	$picture = $parseUrl['scheme']."://".$parseUrl['host'].$parseUrl['path']."/../uploads/big/".$row->url;
+	$parseUrl	= parse_url("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+	$picture	= $parseUrl['scheme']."://".$parseUrl['host'].$parseUrl['path']."/../uploads/big/".$row->url;
 
 	$return = '<!-- General Meta Data -->';
 	$return .= '<meta name="title" content="'.$row->title.'" />';
@@ -103,7 +103,7 @@ function update($version = '') {
 	if ($version!==''&&$configVersion!==$version) {
 		$data = file_get_contents('../data/config.php');
 		$data = preg_replace('/\$configVersion = \'[\w. ]*\';/', "\$configVersion = '$version';", $data);
-		file_put_contents('../data/config.php', $data);
+		if (file_put_contents('../data/config.php', $data)===false) return 'Error: Could not save updated config!';
 	}
 
 	return true;
