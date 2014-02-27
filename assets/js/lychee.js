@@ -7,7 +7,7 @@
 
 var lychee = {
 
-	version: "2.1 b3",
+	version: "2.1 b4",
 
 	api_path: "php/api.php",
 	update_path: "http://lychee.electerious.com/version/index.php",
