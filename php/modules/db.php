@@ -49,7 +49,7 @@ $config = "<?php
 if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 // Config version
-\$configVersion = '$version';
+\$configVersion = 'x';
 
 // Database configurations
 \$dbHost = '$dbHost'; //Host of the Database
@@ -60,7 +60,7 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 ?>";
 
 		if (file_put_contents('../data/config.php', $config)===false) return 'Warning: Could not create file!';
-
+		
 		$_SESSION['login'] = true;
 		return true;
 
