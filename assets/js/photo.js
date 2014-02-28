@@ -139,6 +139,7 @@ photo = {
 			// Get old title if only one photo is selected
 			if (photo.json) oldTitle = photo.json.title;
 			else if (album.json) oldTitle = album.json.content[photoIDs].title;
+			oldTitle = oldTitle.replace("'", "&apos;");
 		}
 
 		buttons = [
@@ -266,7 +267,7 @@ photo = {
 
 	setDescription: function(photoID) {
 
-		var oldDescription = photo.json.description,
+		var oldDescription = photo.json.description.replace("'", "&apos;"),
 			description,
 			params,
 			buttons;
