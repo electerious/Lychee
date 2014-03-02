@@ -54,7 +54,7 @@ if (substr(sprintf('%o', @fileperms('../uploads/big/')), -4)!='0777')	$error .= 
 if (substr(sprintf('%o', @fileperms('../uploads/thumb/')), -4)!='0777')	$error .= ('Error 501: Wrong permissions for \'uploads/thumb\' (777 required)' . PHP_EOL);
 if (substr(sprintf('%o', @fileperms('../uploads/import/')), -4)!='0777')$error .= ('Error 502: Wrong permissions for \'uploads/import\' (777 required)' . PHP_EOL);
 if (substr(sprintf('%o', @fileperms('../uploads/')), -4)!='0777')		$error .= ('Error 503: Wrong permissions for \'uploads/\' (777 required)' . PHP_EOL);
-if (substr(sprintf('%o', @fileperms('../data/')), -4)!='0777')			$error .= ('Error 504: Wrong permissions for \'data/\' (777 required)' . PHP_EOL);
+if (substr(sprintf('%o', @fileperms('../data/')), -4)!='0755')			$error .= ('Error 504: Wrong permissions for \'data/\' (777 required)' . PHP_EOL);
 
 if ($error=='') echo('Everything is fine. Lychee should work without problems!' . PHP_EOL . PHP_EOL); else echo $error;
 
