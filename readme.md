@@ -9,7 +9,7 @@ Lychee is a free photo-management tool, which runs on your server or web-space. 
 
 ## Installation
 
-To run Lychee, everything you need is a web-server with PHP 5.3 or later and a MySQL-Database. Follow the instructions to install Lychee on your server. [Installation &#187;](docs/md/Installation.md)
+To run Lychee, everything you need is a web-server with PHP 5.3 or later and a MySQL-Database. Follow the instructions to install Lychee on your server. [Installation &#187;](docs/Installation.md)
 
 ## How to use
 
@@ -17,20 +17,23 @@ You can use Lychee right after the installation. Here are some advanced features
 
 ### Settings
 
-Sign in and click the gear on the top left corner to change your settings. If you want to edit them manually: MySQL details are stored in `php/config.php`. Other options and settings are stored directly in the database. [Settings &#187;](docs/md/Settings.md)
+Sign in and click the gear on the top left corner to change your settings. If you want to edit them manually: MySQL details are stored in `data/config.php`. Other options and hidden settings are stored directly in the database. [Settings &#187;](docs/Settings.md)
 
 ### Update
 
-1. Replace all files, excluding `uploads/`
-2. Open Lychee and enter your database details
+Updating is as easy as it should be.  [Update &#187;](docs/Update.md)
 
-### FTP Upload
+### Build
 
-You can import photos from your server or upload photos directly with every FTP client into Lychee. [FTP Upload &#187;](docs/md/FTP Upload.md)
+Lychee is ready to use, right out of the box. If you want to contribute and edit CSS or JS files, you need to rebuild Lychee. [Build &#187;](docs/Build.md)
 
 ### Keyboard Shortcuts
 
-These shortcuts will help you to use Lychee even faster. [Keyboard Shortcuts &#187;](docs/md/Keyboard Shortcuts.md)
+These shortcuts will help you to use Lychee even faster. [Keyboard Shortcuts &#187;](docs/Keyboard Shortcuts.md)
+
+### Dropbox import
+
+In order to use the Dropbox import from your server, you need a valid drop-ins app key from [their website](https://www.dropbox.com/developers/apps/create). Lychee will ask you for this key, the first time you try to use the import. Want to change your code? Take a loot at [the settings](docs/Settings.md) of Lychee.
 
 ### Twitter Cards
 
@@ -38,7 +41,7 @@ Lychee supports [Twitter Cards](https://dev.twitter.com/docs/cards) and [Open Gr
 
 ## Troubleshooting
 
-Take a look at the [FAQ](docs/md/FAQ.md) if you have problems.
+Take a look at the [FAQ](docs/FAQ.md) if you have problems.
 
 ## Extensions
 
@@ -53,7 +56,11 @@ Take a look at the [FAQ](docs/md/FAQ.md) if you have problems.
 | 1.2, 1.3, 2.x | [Tobias Reich](http://electerious.com)|
 | 1.0, 1.1 | [Tobias Reich](http://electerious.com)<br>[Philipp Maurer](http://phinal.net) |
 
-##License
+## Donate
+
+I am working hard on continuously developing and maintaining Lychee. Please consider making a donation via [Flattr](https://flattr.com/submit/auto?user_id=electerious&url=http%3A%2F%2Flychee.electerious.com&title=Lychee&category=software) or PayPal (from [our site](http://lychee.electerious.com/)) to keep the project going strong and me motivated.
+
+## License
 
 (MIT License)
 

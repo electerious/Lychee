@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @name        Settings Module
- * @author      Tobias Reich
- * @copyright   2014 by Tobias Reich
+ * @name		Settings Module
+ * @author		Tobias Reich
+ * @copyright	2014 by Tobias Reich
  */
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
@@ -15,7 +15,7 @@ function getSettings() {
 	$result = $database->query('SELECT * FROM lychee_settings;');
 
 	while($row = $result->fetch_object()) {
-	    $return[$row->key] = $row->value;
+		$return[$row->key] = $row->value;
 	}
 
 	return $return;
@@ -66,22 +66,18 @@ function setPassword($password) {
 
 }
 
-/*function setCheckForUpdates() {
+function setDropboxKey($key) {
 
 	global $database;
 
-	$result = $database->query("SELECT value FROM lychee_settings WHERE `key` = 'checkForUpdates';");
-	$row = $result->fetch_object();
+	if (strlen($key)<1||strlen($key)>50) return false;
 
-	if ($row->value==0) $checkForUpdates = 1;
-	else $checkForUpdates = 0;
-
-	$result = $database->query("UPDATE lychee_settings SET value = '$checkForUpdates' WHERE `key` = 'checkForUpdates';");
+	$result = $database->query("UPDATE lychee_settings SET value = '$key' WHERE `key` = 'dropboxKey';");
 
 	if (!$result) return false;
 	return true;
 
-}*/
+}
 
 function setSorting($type, $order) {
 

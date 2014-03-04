@@ -1,65 +1,55 @@
 <?php
 
 /**
- * @name        DB Module
- * @author      Philipp Maurer
- * @author      Tobias Reich
- * @copyright   2014 by Philipp Maurer, Tobias Reich
+ * @name		DB Module
+ * @author		Philipp Maurer
+ * @author		Tobias Reich
+ * @copyright	2014 by Philipp Maurer, Tobias Reich
  */
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 function dbConnect() {
 
-    global $dbUser, $dbPassword, $dbHost, $dbName;
+	global $dbUser, $dbPassword, $dbHost, $dbName;
 
-    $database = new mysqli($dbHost, $dbUser, $dbPassword);
-
-    if (mysqli_connect_errno()) {
-	    echo mysqli_connect_errno().': '.mysqli_connect_error();
-        return false;
-	}
-
-	if (!$database->select_db($dbName))
-		if (!createDatabase($dbName, $database)) exit('Error: Could not create database!');
-    if (!$database->query("SELECT * FROM lychee_photos, lychee_albums, lychee_settings LIMIT 1;"))
-    	if (!createTables($database)) exit('Error: Could not create tables!');
-
-    // Avoid sql injection on older MySQL versions
-	if ($database->server_version<50500) $database->set_charset('GBK');
-
-    return $database;
-
-}
-
-function dbClose() {
-
-	global $database;
-
-    if (!$database->close()) exit("Error: Closing the connection failed!");
-
-    return true;
-
-}
-
-function createConfig($dbHost = 'localhost', $dbUser, $dbPassword, $dbName = 'lychee') {
-
-	$dbPassword = urldecode($dbPassword);
 	$database = new mysqli($dbHost, $dbUser, $dbPassword);
 
-	if (mysqli_connect_errno()||$dbUser=="") return "Warning: Connection failed!";
+	if ($database->connect_errno) exit('Error: ' . $database->connect_error);
+
+	// Avoid sql injection on older MySQL versions
+	if ($database->server_version<50500) $database->set_charset('GBK');
+
+	if (!$database->select_db($dbName))
+		if (!dbCreate($dbName, $database)) exit('Error: Could not create database!');
+
+	if (!$database->query('SELECT * FROM lychee_photos, lychee_albums, lychee_settings LIMIT 0;'))
+		if (!dbCreateTables($database)) exit('Error: Could not create tables!');
+
+	return $database;
+
+}
+
+function dbCreateConfig($dbHost = 'localhost', $dbUser, $dbPassword, $dbName = 'lychee', $version) {
+
+	$dbPassword	= urldecode($dbPassword);
+	$database	= new mysqli($dbHost, $dbUser, $dbPassword);
+
+	if ($database->connect_errno) return 'Warning: Connection failed!';
 	else {
 
 $config = "<?php
 
 /**
- * @name        Config
- * @author      Philipp Maurer
- * @author      Tobias Reich
- * @copyright   2014 by Philipp Maurer, Tobias Reich
+ * @name		Config
+ * @author		Tobias Reich
+ * @copyright	2014 Tobias Reich
 */
 
 if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
+
+// Config version
+\$configVersion = '';
 
 // Database configurations
 \$dbHost = '$dbHost'; //Host of the Database
@@ -69,19 +59,16 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 ?>";
 
-		if (file_put_contents("config.php", $config)===false) return "Warning: Could not create file!";
-		else {
+		if (file_put_contents('../data/config.php', $config)===false) return 'Warning: Could not create file!';
 
-			$_SESSION['login'] = true;
-			return true;
-
-		}
+		$_SESSION['login'] = true;
+		return true;
 
 	}
 
 }
 
-function createDatabase($dbName, $database) {
+function dbCreate($dbName, $database) {
 
 	$result = $database->query("CREATE DATABASE IF NOT EXISTS $dbName;");
 	$database->select_db($dbName);
@@ -91,9 +78,9 @@ function createDatabase($dbName, $database) {
 
 }
 
-function createTables($database) {
+function dbCreateTables($database) {
 
-	if (!$database->query("SELECT * FROM lychee_settings;")) {
+	if (!$database->query('SELECT * FROM lychee_settings LIMIT 0;')) {
 
 		$query = "
 
@@ -114,7 +101,8 @@ function createTables($database) {
 			('password',''),
 			('thumbQuality','90'),
 			('checkForUpdates','1'),
-			('sorting','ORDER BY id DESC');
+			('sorting','ORDER BY id DESC'),
+			('dropboxKey','');
 
 		";
 
@@ -122,7 +110,7 @@ function createTables($database) {
 
 	}
 
-	if (!$database->query("SELECT * FROM lychee_albums;")) {
+	if (!$database->query('SELECT * FROM lychee_albums LIMIT 0;')) {
 
 		$query = "
 
@@ -138,11 +126,11 @@ function createTables($database) {
 
 		";
 
-	    if (!$database->query($query)) return false;
+		if (!$database->query($query)) return false;
 
-    }
+	}
 
-    if (!$database->query("SELECT * FROM lychee_photos;")) {
+	if (!$database->query('SELECT * FROM lychee_photos LIMIT 0;')) {
 
 		$query = "
 
@@ -151,6 +139,7 @@ function createTables($database) {
 				`title` varchar(50) NOT NULL,
 				`description` varchar(1000) NOT NULL DEFAULT '',
 				`url` varchar(100) NOT NULL,
+				`tags` varchar(1000) NOT NULL DEFAULT '',
 				`public` tinyint(1) NOT NULL,
 				`type` varchar(10) NOT NULL,
 				`width` int(11) NOT NULL,
@@ -175,11 +164,21 @@ function createTables($database) {
 
 		";
 
-	    if (!$database->query($query)) return false;
+		if (!$database->query($query)) return false;
 
-    }
+	}
 
-    return true;
+	return true;
+
+}
+
+function dbClose() {
+
+	global $database;
+
+	if (!$database->close()) exit('Error: Closing the connection failed!');
+
+	return true;
 
 }
 

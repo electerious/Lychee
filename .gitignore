@@ -6,7 +6,9 @@ data/config.php
 uploads/import/*
 uploads/big/*
 uploads/thumb/*
+plugins/*
 
 !uploads/import/index.html
 !uploads/big/index.html
 !uploads/thumb/index.html
+!plugins/check.php

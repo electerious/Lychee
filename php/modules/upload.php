@@ -1,75 +1,80 @@
 <?php
 
 /**
- * @name        Upload Module
- * @author      Philipp Maurer
- * @author      Tobias Reich
- * @copyright   2014 by Philipp Maurer, Tobias Reich
+ * @name		Upload Module
+ * @author		Philipp Maurer
+ * @author		Tobias Reich
+ * @copyright	2014 by Philipp Maurer, Tobias Reich
  */
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 function upload($files, $albumID) {
 
-	global $database;
+	global $database, $settings;
 
 	switch($albumID) {
 		// s for public (share)
-	    case 's':
-	        $public = 1;
-	        $star = 0;
-	        $albumID = 0;
-	        break;
-	    // f for starred (fav)
-	    case 'f':
-	        $star = 1;
-	        $public = 0;
-	        $albumID = 0;
-	        break;
-	    default:
-	        $star = 0;
-	        $public = 0;
+		case 's':
+			$public		= 1;
+			$star		= 0;
+			$albumID	= 0;
+			break;
+		// f for starred (fav)
+		case 'f':
+			$star		= 1;
+			$public		= 0;
+			$albumID	= 0;
+			break;
+		default:
+			$star		= 0;
+			$public		= 0;
 	}
 
 	foreach ($files as $file) {
 
-	    $id = str_replace('.', '', microtime(true));
-	    while(strlen($id)<14) $id .= 0;
+		if ($file['type']!=='image/jpeg'&&
+			$file['type']!=='image/png'&&
+			$file['type']!=='image/gif')
+				return false;
 
-	    $tmp_name = $file["tmp_name"];
+		$id = str_replace('.', '', microtime(true));
+		while(strlen($id)<14) $id .= 0;
 
-	    $type = getimagesize($tmp_name);
-	    if (($type[2]!=1)&&($type[2]!=2)&&($type[2]!=3)) return false;
-	    $data = array_reverse(explode('.', $file["name"]));
-	    $data = $data[0];
+		$tmp_name	= $file['tmp_name'];
+		$extension	= array_reverse(explode('.', $file['name']));
+		$extension	= $extension[0];
+		$photo_name	= md5($id) . ".$extension";
 
-	    $photo_name = md5($id) . ".$data";
-
-	    // Import if not uploaded via web
-	    if (!is_uploaded_file($tmp_name)) {
-	    	if (copy($tmp_name, "../uploads/big/" . $photo_name)) {
-				unlink($tmp_name);
+		// Import if not uploaded via web
+		if (!is_uploaded_file($tmp_name)) {
+			if (copy($tmp_name, '../uploads/big/' . $photo_name)) {
+				@unlink($tmp_name);
 				$import_name = $tmp_name;
 			}
-	    } else {
-		    move_uploaded_file($tmp_name, "../uploads/big/" . $photo_name);
-		    $import_name = "";
-	    }
+		} else {
+			move_uploaded_file($tmp_name, '../uploads/big/' . $photo_name);
+			$import_name = '';
+		}
 
-	    // Read infos
-	    $info = getInfo($photo_name);
+		// Read infos
+		$info = getInfo($photo_name);
 
-	    // Set orientation based on EXIF data
-	    if (isset($info['orientation'])&&isset($info['width'])&&isset($info['height'])) {
+		// Use title of file if IPTC title missing
+		if ($info['title']==='')
+			$info['title'] = mysqli_real_escape_string($database, substr(basename($file['name'], ".$extension"), 0, 30));
 
-	    	if ($info['orientation']==3||$info['orientation']==6||$info['orientation']==8) {
+		// Set orientation based on EXIF data
+		if ($file['type']==='image/jpeg'&&isset($info['orientation'])&&isset($info['width'])&&isset($info['height'])) {
 
-		    	$newWidth = $info['width'];
-		    	$newHeight = $info['height'];
+			if ($info['orientation']==3||$info['orientation']==6||$info['orientation']==8) {
 
-		    	$sourceImg = imagecreatefromjpeg("../uploads/big/$photo_name");
+				$newWidth = $info['width'];
+				$newHeight = $info['height'];
 
-		    	switch($info['orientation']){
+				$sourceImg = imagecreatefromjpeg("../uploads/big/$photo_name");
+
+				switch($info['orientation']){
 
 					case 2:
 						// mirror
@@ -83,77 +88,77 @@ function upload($files, $albumID) {
 					case 4:
 						// rotate 180 and mirror
 						// not yet implemented
-					    break;
+						break;
 
 					case 5:
 						// rotate 90 and mirror
 						// not yet implemented
-					    break;
+						break;
 
 					case 6:
 						$sourceImg = imagerotate($sourceImg, -90, 0);
 						$newWidth = $info['height'];
 						$newHeight = $info['width'];
-					    break;
+						break;
 
 					case 7:
 						// rotate -90 and mirror
 						// not yet implemented
-					    break;
+						break;
 
 					case 8:
 						$sourceImg = imagerotate($sourceImg, 90, 0);
 						$newWidth = $info['height'];
 						$newHeight = $info['width'];
-					    break;
+						break;
 
-		    	}
+				}
 
-		    	$newSourceImg = imagecreatetruecolor($newWidth, $newHeight);
+				$newSourceImg = imagecreatetruecolor($newWidth, $newHeight);
 
-		    	imagecopyresampled($newSourceImg, $sourceImg, 0, 0, 0, 0, $newWidth, $newHeight, $newWidth, $newHeight);
-		    	imagejpeg($newSourceImg, "../uploads/big/$photo_name", 100);
+				imagecopyresampled($newSourceImg, $sourceImg, 0, 0, 0, 0, $newWidth, $newHeight, $newWidth, $newHeight);
+				imagejpeg($newSourceImg, "../uploads/big/$photo_name", 100);
 
-	    	}
+			}
 
-	    }
+		}
 
-	    // Create Thumb
-	    if (!createThumb($photo_name)) return false;
+		// Create Thumb
+		if (!createThumb($photo_name)) return false;
 
-	    // Save to DB
-	    $query = "INSERT INTO lychee_photos (id, title, url, description, type, width, height, size, sysdate, systime, iso, aperture, make, model, shutter, focal, takedate, taketime, thumbUrl, album, public, star, import_name)
-	        VALUES (
-	        	'" . $id . "',
-	        	'" . $info['title'] . "',
-	        	'" . $photo_name . "',
-	        	'" . $info['description'] . "',
-	        	'" . $info['type'] . "',
-	        	'" . $info['width'] . "',
-	        	'" . $info['height'] . "',
-	        	'" . $info['size'] . "',
-	        	'" . $info['date'] . "',
-	        	'" . $info['time'] . "',
-	        	'" . $info['iso'] . "',
-	        	'" . $info['aperture'] . "',
-	        	'" . $info['make'] . "',
-	        	'" . $info['model'] . "',
-	        	'" . $info['shutter'] . "',
-	        	'" . $info['focal'] . "',
-	        	'" . $info['takeDate'] . "',
-	        	'" . $info['takeTime'] . "',
-	        	'" . md5($id) . ".jpeg',
-	        	'" . $albumID . "',
-	        	'" . $public . "',
-	        	'" . $star . "',
-	        	'" . $import_name . "');";
-	    $result = $database->query($query);
+		// Save to DB
+		$query = "INSERT INTO lychee_photos (id, title, url, description, type, width, height, size, sysdate, systime, iso, aperture, make, model, shutter, focal, takedate, taketime, thumbUrl, album, public, star, import_name)
+			VALUES (
+				'" . $id . "',
+				'" . $info['title'] . "',
+				'" . $photo_name . "',
+				'" . $info['description'] . "',
+				'" . $info['type'] . "',
+				'" . $info['width'] . "',
+				'" . $info['height'] . "',
+				'" . $info['size'] . "',
+				'" . $info['date'] . "',
+				'" . $info['time'] . "',
+				'" . $info['iso'] . "',
+				'" . $info['aperture'] . "',
+				'" . $info['make'] . "',
+				'" . $info['model'] . "',
+				'" . $info['shutter'] . "',
+				'" . $info['focal'] . "',
+				'" . $info['takeDate'] . "',
+				'" . $info['takeTime'] . "',
+				'" . md5($id) . ".jpeg',
+				'" . $albumID . "',
+				'" . $public . "',
+				'" . $star . "',
+				'" . $import_name . "');";
+		$result = $database->query($query);
 
-	    if (!$result) return false;
+		if (!$result) return false;
 
-    }
+	}
 
-    return true;
+	return true;
 
 }
 
@@ -161,16 +166,16 @@ function getInfo($filename) {
 
 	global $database;
 
-	$url = '../uploads/big/' . $filename;
-	$iptcArray = array();
-	$info = getimagesize($url, $iptcArray);
+	$url		= '../uploads/big/' . $filename;
+	$iptcArray	= array();
+	$info		= getimagesize($url, $iptcArray);
 
 	// General information
-	$return['type'] = $info['mime'];
-	$return['width'] = $info[0];
-	$return['height'] = $info[1];
-	$return['date'] = date('d.m.Y', filectime($url));
-	$return['time'] = date('H:i:s', filectime($url));
+	$return['type']		= $info['mime'];
+	$return['width']	= $info[0];
+	$return['height']	= $info[1];
+	$return['date']		= date('d.m.Y', filectime($url));
+	$return['time']		= date('H:i:s', filectime($url));
 
 	// Size
 	$size = filesize($url)/1024;
@@ -178,76 +183,78 @@ function getInfo($filename) {
 	else $return['size'] = round($size, 1) . ' KB';
 
 	// IPTC Metadata Fallback
-	$return['title'] = '';
-	$return['description'] = '';
+	$return['title']		= '';
+	$return['description']	= '';
 
 	// IPTC Metadata
 	if(isset($iptcArray['APP13'])) {
-	
+
 		$iptcInfo = iptcparse($iptcArray['APP13']);
 		if (is_array($iptcInfo)) {
-	
-			$temp = $iptcInfo['2#105'][0];
+
+			$temp = @$iptcInfo['2#105'][0];
 			if (isset($temp)&&strlen($temp)>0) $return['title'] = $temp;
-	
-			$temp = $iptcInfo['2#120'][0];
+
+			$temp = @$iptcInfo['2#120'][0];
 			if (isset($temp)&&strlen($temp)>0) $return['description'] = $temp;
-	
+
 		}
-		
+
 	}
 
 	// EXIF Metadata Fallback
-	$return['orientation'] = '';
-	$return['iso'] = '';
-	$return['aperture'] = '';
-	$return['make'] = '';
-	$return['model'] = '';
-	$return['shutter'] = '';
-	$return['focal'] = '';
-	$return['takeDate'] = '';
-	$return['takeTime'] = '';
+	$return['orientation']	= '';
+	$return['iso']			= '';
+	$return['aperture']		= '';
+	$return['make']			= '';
+	$return['model']		= '';
+	$return['shutter']		= '';
+	$return['focal']		= '';
+	$return['takeDate']		= '';
+	$return['takeTime']		= '';
+
+	// Read EXIF
+	if ($info['mime']=='image/jpeg') $exif = exif_read_data($url, 'EXIF', 0);
+	else $exif = false;
 
 	// EXIF Metadata
-    if ($info['mime']=='image/jpeg'&&function_exists('exif_read_data')&&@exif_read_data($url, 'EXIF', 0)) {
+	if ($exif!==false) {
 
-        $exif = exif_read_data($url, 'EXIF', 0);
+		$temp = @$exif['Orientation'];
+		if (isset($temp)) $return['orientation'] = $temp;
 
-        $temp = $exif['Orientation'];
-        if (isset($temp)) $return['orientation'] = $temp;
+		$temp = @$exif['ISOSpeedRatings'];
+		if (isset($temp)) $return['iso'] = $temp;
 
-        $temp = $exif['ISOSpeedRatings'];
-        if (isset($temp)) $return['iso'] = $temp;
+		$temp = @$exif['COMPUTED']['ApertureFNumber'];
+		if (isset($temp)) $return['aperture'] = $temp;
 
-        $temp = $exif['COMPUTED']['ApertureFNumber'];
-        if (isset($temp)) $return['aperture'] = $temp;
+		$temp = @$exif['Make'];
+		if (isset($temp)) $return['make'] = $exif['Make'];
 
-        $temp = $exif['Make'];
-        if (isset($temp)) $return['make'] = $exif['Make'];
+		$temp = @$exif['Model'];
+		if (isset($temp)) $return['model'] = $temp;
 
-        $temp = $exif['Model'];
-        if (isset($temp)) $return['model'] = $temp;
+		$temp = @$exif['ExposureTime'];
+		if (isset($temp)) $return['shutter'] = $exif['ExposureTime'] . ' Sec.';
 
-        $temp = $exif['ExposureTime'];
-        if (isset($temp)) $return['shutter'] = $exif['ExposureTime'] . ' Sec.';
+		$temp = @$exif['FocalLength'];
+		if (isset($temp)) $return['focal'] = ($temp/1) . ' mm';
 
-        $temp = $exif['FocalLength'];
-        if (isset($temp)) $return['focal'] = ($temp/1) . ' mm';
+		$temp = @$exif['DateTimeOriginal'];
+		if (isset($temp)) {
+			$exifDate	= explode(' ', $temp);
+			$date		= explode(':', $exifDate[0]);
+			$return['takeDate'] = $date[2].'.'.$date[1].'.'.$date[0];
+			$return['takeTime'] = $exifDate[1];
+		}
 
-        $temp = $exif['DateTimeOriginal'];
-        if (isset($temp)) {
-            $exifDate = explode(' ', $temp);
-            $date = explode(':', $exifDate[0]);
-            $return['takeDate'] = $date[2].'.'.$date[1].'.'.$date[0];
-            $return['takeTime'] = $exifDate[1];
-        }
-
-    }
+	}
 
 	// Security
 	foreach(array_keys($return) as $key) $return[$key] = mysqli_real_escape_string($database, $return[$key]);
 
-    return $return;
+	return $return;
 
 }
 
@@ -255,63 +262,61 @@ function createThumb($filename, $width = 200, $height = 200) {
 
 	global $settings;
 
-    $url = "../uploads/big/$filename";
-    $info = getimagesize($url);
+	$url	= "../uploads/big/$filename";
+	$info	= getimagesize($url);
 
-    $photoName = explode(".", $filename);
-    $newUrl = "../uploads/thumb/".$photoName[0].".jpeg";
-    $newUrl2x = "../uploads/thumb/".$photoName[0]."@2x.jpeg";
+	$photoName	= explode(".", $filename);
+	$newUrl		= "../uploads/thumb/$photoName[0].jpeg";
+	$newUrl2x	= "../uploads/thumb/$photoName[0]@2x.jpeg";
 
-    // Set position and size
-    $thumb = imagecreatetruecolor($width, $height);
-    $thumb2x = imagecreatetruecolor($width*2, $height*2);
-    if ($info[0]<$info[1]) {
-        $newSize = $info[0];
-        $startWidth = 0;
-        $startHeight = $info[1]/2 - $info[0]/2;
-    } else {
-        $newSize = $info[1];
-        $startWidth = $info[0]/2 - $info[1]/2;
-        $startHeight = 0;
-    }
-    
-    // Fallback for older version
-    if ($info['mime']==='image/webp'&&floatval(phpversion())<5.5) return false;
+	// Set position and size
+	$thumb = imagecreatetruecolor($width, $height);
+	$thumb2x = imagecreatetruecolor($width*2, $height*2);
+	if ($info[0]<$info[1]) {
+		$newSize		= $info[0];
+		$startWidth		= 0;
+		$startHeight	= $info[1]/2 - $info[0]/2;
+	} else {
+		$newSize		= $info[1];
+		$startWidth		= $info[0]/2 - $info[1]/2;
+		$startHeight	= 0;
+	}
 
-    // Create new image
-    switch($info['mime']) {
-        case 'image/jpeg': $sourceImg = imagecreatefromjpeg($url); break;
-        case 'image/png': $sourceImg = imagecreatefrompng($url); break;
-        case 'image/gif': $sourceImg = imagecreatefromgif($url); break;
-        case 'image/webp': $sourceImg = imagecreatefromwebp($url); break;
-        default: return false;
-    }
+	// Fallback for older version
+	if ($info['mime']==='image/webp'&&floatval(phpversion())<5.5) return false;
 
-    imagecopyresampled($thumb,$sourceImg,0,0,$startWidth,$startHeight,$width,$height,$newSize,$newSize);
-    imagecopyresampled($thumb2x,$sourceImg,0,0,$startWidth,$startHeight,$width*2,$height*2,$newSize,$newSize);
+	// Create new image
+	switch($info['mime']) {
+		case 'image/jpeg':	$sourceImg = imagecreatefromjpeg($url); break;
+		case 'image/png':	$sourceImg = imagecreatefrompng($url); break;
+		case 'image/gif':	$sourceImg = imagecreatefromgif($url); break;
+		case 'image/webp':	$sourceImg = imagecreatefromwebp($url); break;
+		default: return false;
+	}
 
-    imagejpeg($thumb,$newUrl,$settings['thumbQuality']);
-    imagejpeg($thumb2x,$newUrl2x,$settings['thumbQuality']);
+	imagecopyresampled($thumb,$sourceImg,0,0,$startWidth,$startHeight,$width,$height,$newSize,$newSize);
+	imagecopyresampled($thumb2x,$sourceImg,0,0,$startWidth,$startHeight,$width*2,$height*2,$newSize,$newSize);
 
-    return true;
+	imagejpeg($thumb,$newUrl,$settings['thumbQuality']);
+	imagejpeg($thumb2x,$newUrl2x,$settings['thumbQuality']);
+
+	return true;
 
 }
 
-function importPhoto($name, $albumID = 0) {
+function importPhoto($path, $albumID = 0) {
 
-	$tmp_name = "../uploads/import/$name";
-	$info = getimagesize($tmp_name);
-	$size = filesize($tmp_name);
-	$nameFile = array(array());
-	$nameFile[0]['name'] = $name;
-	$nameFile[0]['type'] = $info['mime'];
-	$nameFile[0]['tmp_name'] = $tmp_name;
-	$nameFile[0]['error'] = 0;
-	$nameFile[0]['size'] = $size;
+	$info = getimagesize($path);
+	$size = filesize($path);
 
-	if (upload($nameFile, $albumID)) return true;
+	$nameFile					= array(array());
+	$nameFile[0]['name']		= $path;
+	$nameFile[0]['type']		= $info['mime'];
+	$nameFile[0]['tmp_name']	= $path;
+	$nameFile[0]['error']		= 0;
+	$nameFile[0]['size']		= $size;
 
-	return false;
+	return upload($nameFile, $albumID);
 
 }
 
@@ -332,6 +337,7 @@ function importUrl($url, $albumID = 0) {
 				$pathinfo = pathinfo($key);
 				$filename = $pathinfo['filename'].".".$pathinfo['extension'];
 				$tmp_name = "../uploads/import/$filename";
+
 				copy($key, $tmp_name);
 
 			}
@@ -351,8 +357,10 @@ function importUrl($url, $albumID = 0) {
 			$pathinfo = pathinfo($url);
 			$filename = $pathinfo['filename'].".".$pathinfo['extension'];
 			$tmp_name = "../uploads/import/$filename";
+
 			copy($url, $tmp_name);
-			return importPhoto($filename, $albumID);
+
+			return importPhoto($tmp_name, $albumID);
 
 		}
 
@@ -362,23 +370,36 @@ function importUrl($url, $albumID = 0) {
 
 }
 
-function importServer($albumID = 0) {
+function importServer($albumID = 0, $path = '../uploads/import/') {
 
 	global $database;
 
-	$i = 0;
-	$files = glob('../uploads/import/*');
+	$files				= glob($path . '*');
+	$contains['photos'] = false;
+	$contains['albums'] = false;
 
 	foreach ($files as $file) {
 
 		if (@getimagesize($file)) {
-			if (!importPhoto(basename($file), $albumID)) return false;
-			$i++;
+
+			// Photo
+			if (!importPhoto($file, $albumID)) return false;
+			$contains['photos'] = true;
+
+		} else if (is_dir($file)) {
+
+			$name		= mysqli_real_escape_string($database, basename($file));
+			$newAlbumID	= addAlbum('[Import] ' . $name);
+
+			if ($newAlbumID!==false) importServer($newAlbumID, $file . '/');
+			$contains['albums'] = true;
+
 		}
 
 	}
 
-	if ($i===0) return "Warning: Folder empty!";
+	if ($contains['photos']===false&&$contains['albums']===false) return "Warning: Folder empty!";
+	if ($contains['photos']===false&&$contains['albums']===true) return "Notice: Import only contains albums!";
 	return true;
 
 }

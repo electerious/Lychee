@@ -1,17 +1,21 @@
 <?php
 
 /**
- * @name        Session Module
- * @author      Philipp Maurer
- * @author      Tobias Reich
- * @copyright   2014 by Philipp Maurer, Tobias Reich
+ * @name		Session Module
+ * @author		Philipp Maurer
+ * @author		Tobias Reich
+ * @copyright	2014 by Philipp Maurer, Tobias Reich
  */
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
-function init($mode) {
+function init($mode, $version) {
 
-	global $settings;
+	global $settings, $configVersion;
+
+	// Update
+	if ($configVersion!==$version)
+		if (!update($version)) exit('Error: Updating the database failed!');
 
 	$return['config'] = $settings;
 	unset($return['config']['password']);
@@ -26,6 +30,7 @@ function init($mode) {
 		unset($return['config']['username']);
 		unset($return['config']['thumbQuality']);
 		unset($return['config']['sorting']);
+		unset($return['config']['dropboxKey']);
 		unset($return['config']['login']);
 		$return['loggedIn'] = false;
 	}
@@ -39,16 +44,16 @@ function login($username, $password) {
 	global $database, $settings;
 
 	// Check login
-    if ($username===$settings['username']&&$password===$settings['password']) {
-        $_SESSION['login'] = true;
-        return true;
-    }
+	if ($username===$settings['username']&&$password===$settings['password']) {
+		$_SESSION['login'] = true;
+		return true;
+	}
 
-    // No login
-    if ($settings['username']===''&&$settings['password']==='') {
-    	$_SESSION['login'] = true;
-    	return true;
-    }
+	// No login
+	if ($settings['username']===''&&$settings['password']==='') {
+		$_SESSION['login'] = true;
+		return true;
+	}
 
 	return false;
 
@@ -56,8 +61,8 @@ function login($username, $password) {
 
 function logout() {
 
-    session_destroy();
-    return true;
+	session_destroy();
+	return true;
 
 }
 
