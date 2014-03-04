@@ -1,3 +1,20 @@
+## v2.1
+
+Released March 4, 2014
+
+- `New` Multi-select (#32)
+- `New` Multi-folder import from server (#47)
+- `New` Tagging (#5)
+- `New` Import of original image name (#39)
+- `New` Makefile
+- `Improved` Upload-process
+- `Improved` Documentation
+- `Improved` Overlay for photos
+- `Fixed` Dropbox import (#84)
+- `Fixed` Wrong login or password annotation (#71)
+- `Fixed` Escaping issue (#89)
+- `Moved` Config now located in `data/`
+
 ## v2.0.3
 
 Released February 26, 2014
