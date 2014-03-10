@@ -21,7 +21,7 @@ Lychee supports the latest versions of Google Chrome, Apple Safari, Mozilla Fire
 Thumbnails are chosen automatically by the photos you have starred and in the order you uploaded them. Star a photo inside an album to set it as a thumbnail.
 
 #### What is new?
-Take a look at the [Changelog](Changelog.md) to see whats new.
+Take a look at the [Changelog](Changelog.md) to see what's new.
 
 #### How can I backup my installation?
 To backup your Lychee installation you need to do the following steps:
