@@ -2,6 +2,8 @@
 
 Released March 4, 2014
 
+Important: You need to reenter your database credentials and set the correct rights for `data/`, when updating from a previous version.
+
 - `New` Multi-select (#32)
 - `New` Multi-folder import from server (#47)
 - `New` Tagging (#5)
