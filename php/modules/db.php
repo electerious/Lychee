@@ -51,7 +51,7 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 // Config version
 \$configVersion = '';
 
-// Database configurations
+// Database configuration
 \$dbHost = '$dbHost'; //Host of the Database
 \$dbUser = '$dbUser'; //Username of the database
 \$dbPassword = '$dbPassword'; //Password of the Database
