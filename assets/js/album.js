@@ -157,7 +157,7 @@ album = {
 			["", function() {}]
 		];
 
-		if (albumIDs==="0") {
+		if (albumIDs.toString()==="0") {
 
 			buttons[0][0] = "Clear Unsorted";
 			buttons[1][0] = "Keep Unsorted";
