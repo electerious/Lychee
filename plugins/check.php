@@ -44,10 +44,9 @@ if (!isset($dbHost)||$dbHost=='')	$error .= ('Error 403: No property for $dbHost
 // Database Config
 if (!$settings['username']||$settings['username']=='')			$error .= ('Error 404: Username empty or not set' . PHP_EOL);
 if (!$settings['password']||$settings['password']=='')			$error .= ('Error 405: Password empty or not set' . PHP_EOL);
-if (!$settings['thumbQuality']||$settings['thumbQuality']=='')	$error .= ('Error 407: No or wrong property for thumbQuality' . PHP_EOL);
-if (!$settings['sorting']||$settings['sorting']=='')			$error .= ('Error 408: Wrong property for sorting' . PHP_EOL);
-if (!$settings['dropboxKey'])									$error .= ('Error 409: No property for dropboxKey' . PHP_EOL);
-if (!$settings['checkForUpdates']||($settings['checkForUpdates']!='0'&&$settings['checkForUpdates']!='1')) $error .= ('Error 406: No or wrong property for checkForUpdates' . PHP_EOL);
+if (!$settings['thumbQuality']||$settings['thumbQuality']=='')	$error .= ('Error 406: No or wrong property for thumbQuality' . PHP_EOL);
+if (!$settings['sorting']||$settings['sorting']=='')			$error .= ('Error 407: Wrong property for sorting' . PHP_EOL);
+if (!$settings['checkForUpdates']||($settings['checkForUpdates']!='0'&&$settings['checkForUpdates']!='1')) $error .= ('Error 408: No or wrong property for checkForUpdates' . PHP_EOL);
 
 // Permissions
 if (substr(sprintf('%o', @fileperms('../uploads/big/')), -4)!='0777')	$error .= ('Error 500: Wrong permissions for \'uploads/big\' (777 required)' . PHP_EOL);
@@ -57,6 +56,9 @@ if (substr(sprintf('%o', @fileperms('../uploads/')), -4)!='0777')		$error .= ('E
 if (substr(sprintf('%o', @fileperms('../data/')), -4)!='0777')			$error .= ('Error 504: Wrong permissions for \'data/\' (777 required)' . PHP_EOL);
 
 if ($error=='') echo('Everything is fine. Lychee should work without problems!' . PHP_EOL . PHP_EOL); else echo $error;
+
+// Check dropboxKey
+if (!$settings['dropboxKey'])	echo('Warning: Dropbox import not working. No property for dropboxKey.' . PHP_EOL);
 
 // Check php.ini Settings
 if (ini_get('max_execution_time')<200&&ini_set('upload_max_filesize', '20M')===false) echo('Warning: You may experience problems when uploading a large amount of photos. Take a look in the FAQ for details.' . PHP_EOL);
