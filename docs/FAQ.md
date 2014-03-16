@@ -34,11 +34,6 @@ To backup your Lychee installation you need to do the following steps:
 	- INSERT INTO lychee_photos_backup SELECT * FROM lychee_photos;
 	- CREATE TABLE lychee_settings_backup LIKE lychee_settings;
 	- INSERT INTO lychee_settings_backup SELECT * FROM lychee_settings;
-	
-#### How to update?
-
-1. Replace all files, excluding `uploads/`
-2. Open Lychee and enter your database details
 
 #### Can I upload videos?
 No. Video support is not planned.
