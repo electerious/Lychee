@@ -76,9 +76,12 @@ $(document).ready(function(){
 	Mousetrap
 		.bind('u', function() { $("#upload_files").click() })
 		.bind('s', function() { if (visible.photo()) $("#button_star").click() })
-		.bind('command+backspace', function() { if (visible.photo()&&!visible.message()) photo.delete([photo.getID()]) })
 		.bind('left', function() { if (visible.photo()) $("#imageview a#previous").click() })
 		.bind('right', function() { if (visible.photo()) $("#imageview a#next").click() })
+		.bind('command+backspace', function() {
+			if (visible.photo()&&!visible.message()) photo.delete([photo.getID()]);
+			else if (visible.album()&&!visible.message()) album.delete([album.getID()]);
+		})
 		.bind('i', function() {
 			if (visible.infobox()) view.infobox.hide();
 			else if (!visible.albums()) view.infobox.show();
