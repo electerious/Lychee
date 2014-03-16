@@ -74,9 +74,11 @@
 }
 @-moz-keyframes moveUp {
 	0% {
+		-moz-transform: translateY(100px);
 		opacity: 0;
 	}
 	100% {
+		-moz-transform: translateY(0px);
 		opacity: 1;
 	}
 }
@@ -183,9 +185,11 @@
 @-moz-keyframes zoomIn {
 	0% {
 		opacity: 0;
+		-moz-transform: scale(.8);
 	}
 	100% {
 		opacity: 1;
+		-moz-transform: scale(1);
 	}
 }
 @keyframes zoomIn {
@@ -213,9 +217,11 @@
 @-moz-keyframes zoomOut {
 	0% {
 		opacity: 1;
+		-moz-transform: scale(1);
 	}
 	100% {
 		opacity: 0;
+		-moz-transform: scale(.8);
 	}
 }
 @keyframes zoomOut {
@@ -278,7 +284,7 @@
 		opacity: 1;
 	}
 	50% {
-		opacity: 0.8;
+		opacity: 0.3;
 	}
 	100% {
 		opacity: 1;
@@ -289,7 +295,7 @@
 		opacity: 1;
 	}
 	50% {
-		opacity: 0.8;
+		opacity: 0.3;
 	}
 	100% {
 		opacity: 1;
