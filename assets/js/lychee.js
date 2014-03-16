@@ -102,6 +102,7 @@ var lychee = {
 			error: function(jqXHR, textStatus, errorThrown) {
 
 				lychee.error("Server error or API not found.", params, errorThrown);
+				upload.close(true);
 
 			}
 		});
