@@ -37,10 +37,13 @@
 
 		-webkit-animation-name: zoomIn;
 		-webkit-animation-duration: .3s;
+		-webkit-animation-timing-function: cubic-bezier(0.51,.92,.24,1.15);
 		-moz-animation-name: zoomIn;
 		-moz-animation-duration: .3s;
+		-moz-animation-timing-function: cubic-bezier(0.51,.92,.24,1.15);
 		animation-name: zoomIn;
 		animation-duration: .3s;
+		animation-timing-function: cubic-bezier(0.51,.92,.24,1.15);
 	}
 	#imageview #image.small {
 		top: 50%;

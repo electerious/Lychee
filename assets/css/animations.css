@@ -9,50 +9,62 @@
 	-webkit-animation-name: fadeIn;
 	-webkit-animation-duration: .3s;
 	-webkit-animation-fill-mode: forwards;
+	-webkit-animation-timing-function: cubic-bezier(0.51,.92,.24,1.15);
 	-moz-animation-name: fadeIn;
 	-moz-animation-duration: .3s;
 	-moz-animation-fill-mode: forwards;
+	-moz-animation-timing-function: cubic-bezier(0.51,.92,.24,1.15);
 	animation-name: fadeIn;
 	animation-duration: .3s;
-	animation-fill-mode: forwards; }
+	animation-fill-mode: forwards;
+	animation-timing-function: cubic-bezier(0.51,.92,.24,1.15); }
 
 .fadeOut {
 	-webkit-animation-name: fadeOut;
 	-webkit-animation-duration: .3s;
 	-webkit-animation-fill-mode: forwards;
+	-webkit-animation-timing-function: cubic-bezier(0.51,.92,.24,1.15);
 	-moz-animation-name: fadeOut;
 	-moz-animation-duration: .3s;
 	-moz-animation-fill-mode: forwards;
+	-moz-animation-timing-function: cubic-bezier(0.51,.92,.24,1.15);
 	animation-name: fadeOut;
 	animation-duration: .3s;
-	animation-fill-mode: forwards; }
+	animation-fill-mode: forwards;
+	animation-timing-function: cubic-bezier(0.51,.92,.24,1.15); }
 
 .contentZoomIn {
 	-webkit-animation-name: zoomIn;
 	-webkit-animation-duration: .2s;
 	-webkit-animation-fill-mode: forwards;
+	-webkit-animation-timing-function: cubic-bezier(0.51,.92,.24,1);
 	-moz-animation-name: zoomIn;
 	-moz-animation-duration: .2s;
 	-moz-animation-fill-mode: forwards;
+	-moz-animation-timing-function: cubic-bezier(0.51,.92,.24,1);
 	animation-name: zoomIn;
 	animation-duration: .2s;
-	animation-fill-mode: forwards; }
+	animation-fill-mode: forwards;
+	animation-timing-function: cubic-bezier(0.51,.92,.24,1); }
 
 .contentZoomOut {
 	-webkit-animation-name: zoomOut;
 	-webkit-animation-duration: .2s;
 	-webkit-animation-fill-mode: forwards;
+	-webkit-animation-timing-function: cubic-bezier(0.51,.92,.24,1);
 	-moz-animation-name: zoomOut;
 	-moz-animation-duration: .2s;
 	-moz-animation-fill-mode: forwards;
+	-moz-animation-timing-function: cubic-bezier(0.51,.92,.24,1);
 	animation-name: zoomOut;
 	animation-duration: .2s;
-	animation-fill-mode: forwards; }
+	animation-fill-mode: forwards;
+	animation-timing-function: cubic-bezier(0.51,.92,.24,1); }
 
 /* moveUp ------------------------------------------------*/
 @-webkit-keyframes moveUp {
 	0% {
-		-webkit-transform: translateY(30px);
+		-webkit-transform: translateY(100px);
 		opacity: 0;
 	}
 	100% {
@@ -70,7 +82,7 @@
 }
 @keyframes moveUp {
 	0% {
-		transform: translateY(30px);
+		transform: translateY(100px);
 		opacity: 0;
 	}
 	100% {

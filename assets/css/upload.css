@@ -33,13 +33,13 @@
 	/* Animation */
 	-webkit-animation-name: moveUp;
 	-webkit-animation-duration: .3s;
-	-webkit-animation-timing-function: ease-out;
+	-webkit-animation-timing-function: cubic-bezier(0.51,.92,.24,1.15);
 	-moz-animation-name: moveUp;
 	-moz-animation-duration: .3s;
-	-moz-animation-timing-function: ease-out;
+	-moz-animation-timing-function: cubic-bezier(0.51,.92,.24,1.15);
 	animation-name: moveUp;
 	animation-duration: .3s;
-	animation-timing-function: ease-out;
+	animation-timing-function: cubic-bezier(0.51,.92,.24,1.15);
 }
 
 	/* Icon ------------------------------------------------*/
