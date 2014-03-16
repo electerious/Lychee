@@ -37,29 +37,29 @@
 	-webkit-animation-name: zoomIn;
 	-webkit-animation-duration: .2s;
 	-webkit-animation-fill-mode: forwards;
-	-webkit-animation-timing-function: cubic-bezier(0.51,.92,.24,1.15);
+	-webkit-animation-timing-function: cubic-bezier(0.51,.92,.24,1);
 	-moz-animation-name: zoomIn;
 	-moz-animation-duration: .2s;
 	-moz-animation-fill-mode: forwards;
-	-moz-animation-timing-function: cubic-bezier(0.51,.92,.24,1.15);
+	-moz-animation-timing-function: cubic-bezier(0.51,.92,.24,1);
 	animation-name: zoomIn;
 	animation-duration: .2s;
 	animation-fill-mode: forwards;
-	animation-timing-function: cubic-bezier(0.51,.92,.24,1.15); }
+	animation-timing-function: cubic-bezier(0.51,.92,.24,1); }
 
 .contentZoomOut {
 	-webkit-animation-name: zoomOut;
 	-webkit-animation-duration: .2s;
 	-webkit-animation-fill-mode: forwards;
-	-webkit-animation-timing-function: cubic-bezier(0.51,.92,.24,1.15);
+	-webkit-animation-timing-function: cubic-bezier(0.51,.92,.24,1);
 	-moz-animation-name: zoomOut;
 	-moz-animation-duration: .2s;
 	-moz-animation-fill-mode: forwards;
-	-moz-animation-timing-function: cubic-bezier(0.51,.92,.24,1.15);
+	-moz-animation-timing-function: cubic-bezier(0.51,.92,.24,1);
 	animation-name: zoomOut;
 	animation-duration: .2s;
 	animation-fill-mode: forwards;
-	animation-timing-function: cubic-bezier(0.51,.92,.24,1.15); }
+	animation-timing-function: cubic-bezier(0.51,.92,.24,1); }
 
 /* moveUp ------------------------------------------------*/
 @-webkit-keyframes moveUp {
