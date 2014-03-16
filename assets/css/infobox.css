@@ -17,30 +17,31 @@
 	z-index: 4;
 	position: fixed;
 	right: 0px;
-	width: 300px;
+	width: 350px;
 	height: 100%;
 	background-color: rgba(20,20,20,0.98);
 	box-shadow: -1px 0px 2px rgba(0,0,0,.8);
 	display: none;
 
-	-webkit-transform: translateX(320px);
-	-moz-transform: translateX(320px);
-	transform: translateX(320px);
+	-webkit-transform: translateX(370px);
+	-moz-transform: translateX(370px);
+	transform: translateX(370px);
 
-	-webkit-transition: -webkit-transform .5s cubic-bezier(.225,.5,.165,1);
-	-moz-transition: -moz-transform .5s cubic-bezier(.225,.5,.165,1);
-	transition: transform .5s cubic-bezier(.225,.5,.165,1);
+	-webkit-transition: -webkit-transform .3s cubic-bezier(0.51,.92,.24,1.15);
+	-moz-transition: -moz-transform .3s cubic-bezier(0.51,.92,.24,1.15);
+	transition: transform .3s cubic-bezier(0.51,.92,.24,1.15);
 }
 #infobox.active {
-	-webkit-transform: translateX(0px);
-	-moz-transform: translateX(0px);
-	transform: translateX(0px);
+	-webkit-transform: translateX(50px);
+	-moz-transform: translateX(50px);
+	transform: translateX(50px);
 }
 
 	/* Misc ------------------------------------------------*/
 	#infobox .wrapper {
 		float: left;
 		height: 100%;
+		width: 300px;
 		overflow: scroll;
 	}
 	#infobox .edit {
@@ -70,7 +71,7 @@
 	}
 	#infobox .header h1 {
 		position: absolute;
-		margin: 15px 30%;
+		margin: 15px 30% 15px calc(30% - 25px);
 		width: 40%;
 		color: #fff;
 		font-size: 16px;
@@ -80,7 +81,7 @@
 	}
 	#infobox .header a {
 		float: right;
-		padding: 15px 15px;
+		padding: 15px 65px 15px 15px;
 		color: #fff;
 		font-size: 20px;
 		font-weight: bold;
@@ -117,7 +118,7 @@
 		color: #fff;
 		font-size: 14px;
 		line-height: 19px;
-		
+
 		-webkit-user-select: text;
 		-moz-user-select: text;
 		user-select: text;
@@ -140,15 +141,15 @@
 		font-size: 14px;
 		margin-bottom: 8px;
 	}
-	
+
 		#infobox #tags .edit {
 			display: inline-block;
 		}
-	
+
 		#infobox #tags .empty .edit {
 			display: inline;
 		}
-	
+
 	#infobox .tag {
 		float: left;
 		padding: 4px 7px;
