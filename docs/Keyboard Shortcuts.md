@@ -6,11 +6,17 @@
 | `esc` | Close/Back |  
 | `cmd`+`up` | Close/Back | 
 
-### Photoview
+### Album
+| Key | Action |
+|:-----------|:------------|
+| `i` | Show information |
+| `cmd`+`backspace` | Delete album |
+
+### Photo
 | Key | Action |
 |:-----------|:------------|
 | `s` | Star photo |  
 | `i` | Show information |  
-| `cmd`+`backspace` | Delete photo  
-| `left` | Previous photo  
-| `right` | Next photo  
+| `cmd`+`backspace` | Delete photo |
+| `left` | Previous photo |
+| `right` | Next photo |
