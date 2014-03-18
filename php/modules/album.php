@@ -9,14 +9,14 @@
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
-function addAlbum($title) {
+function addAlbum($title, $public = 0) {
 
 	global $database;
 
 	if (strlen($title)<1||strlen($title)>50) return false;
 
 	$sysdate	= date("d.m.Y");
-	$result		= $database->query("INSERT INTO lychee_albums (title, sysdate) VALUES ('$title', '$sysdate');");
+	$result		= $database->query("INSERT INTO lychee_albums (title, sysdate, public) VALUES ('$title', '$sysdate', '$public');");
 
 	if (!$result) return false;
 	return $database->insert_id;
