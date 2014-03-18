@@ -36,6 +36,11 @@ function getPhoto($photoID, $albumID) {
 
 	unset($return['album_public']);
 
+	// Remove unused items
+	foreach ($return as $key => $value) {
+		if (is_int($key)) unset($return[$key]);
+	}
+
 	return $return;
 
 }
