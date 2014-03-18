@@ -214,7 +214,7 @@ function getInfo($filename) {
 	$return['takeTime']		= '';
 
 	// Read EXIF
-	if ($info['mime']=='image/jpeg') $exif = exif_read_data($url, 'EXIF', 0);
+	if ($info['mime']=='image/jpeg') $exif = @exif_read_data($url, 'EXIF', 0);
 	else $exif = false;
 
 	// EXIF Metadata
