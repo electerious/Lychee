@@ -13,7 +13,7 @@ function getPhoto($photoID, $albumID) {
 
 	global $database;
 
-	$query	= "SELECT * FROM lychee_photos WHERE id = '$photoID';";
+	$query	= "SELECT * FROM lychee_photos WHERE id = '$photoID' LIMIT 1;";
 	$result = $database->query($query);
 	$return = $result->fetch_array();
 
