@@ -24,11 +24,11 @@ switch ($_POST['function']) {
 									echo addAlbum($_POST['title']);
 								break;
 
-	case 'setAlbumTitle':		if (isset($_POST['albumIDs'])&&isset($_POST['title']))
+	case 'setAlbumTitle':		if (isset($_POST['albumIDs'], $_POST['title']))
 									echo setAlbumTitle($_POST['albumIDs'], $_POST['title']);
 								break;
 
-	case 'setAlbumDescription':	if (isset($_POST['albumID'])&&isset($_POST['description']))
+	case 'setAlbumDescription':	if (isset($_POST['albumID'], $_POST['description']))
 									echo setAlbumDescription($_POST['albumID'], $_POST['description']);
 								break;
 
@@ -37,7 +37,7 @@ switch ($_POST['function']) {
 									echo setAlbumPublic($_POST['albumID'], $_POST['password']);
 								break;
 
-	case 'setAlbumPassword':	if (isset($_POST['albumID'])&&isset($_POST['password']))
+	case 'setAlbumPassword':	if (isset($_POST['albumID'], $_POST['password']))
 									echo setAlbumPassword($_POST['albumID'], $_POST['password']);
 								break;
 
@@ -47,7 +47,7 @@ switch ($_POST['function']) {
 
 	// Photo Functions
 
-	case 'getPhoto':			if (isset($_POST['photoID'])&&isset($_POST['albumID']))
+	case 'getPhoto':			if (isset($_POST['photoID'], $_POST['albumID']))
 									echo json_encode(getPhoto($_POST['photoID'], $_POST['albumID']));
 								break;
 
@@ -55,11 +55,11 @@ switch ($_POST['function']) {
 									echo deletePhoto($_POST['photoIDs']);
 								break;
 
-	case 'setPhotoAlbum':		if (isset($_POST['photoIDs'])&&isset($_POST['albumID']))
+	case 'setPhotoAlbum':		if (isset($_POST['photoIDs'], $_POST['albumID']))
 									echo setPhotoAlbum($_POST['photoIDs'], $_POST['albumID']);
 								break;
 
-	case 'setPhotoTitle':		if (isset($_POST['photoIDs'])&&isset($_POST['title']))
+	case 'setPhotoTitle':		if (isset($_POST['photoIDs'], $_POST['title']))
 									echo setPhotoTitle($_POST['photoIDs'], $_POST['title']);
 								break;
 
@@ -67,25 +67,25 @@ switch ($_POST['function']) {
 									echo setPhotoStar($_POST['photoIDs']);
 								break;
 
-	case 'setPhotoPublic':		if (isset($_POST['photoID'])&&isset($_POST['url']))
+	case 'setPhotoPublic':		if (isset($_POST['photoID'], $_POST['url']))
 									echo setPhotoPublic($_POST['photoID'], $_POST['url']);
 								break;
 
-	case 'setPhotoDescription':	if (isset($_POST['photoID'])&&isset($_POST['description']))
+	case 'setPhotoDescription':	if (isset($_POST['photoID'], $_POST['description']))
 									echo setPhotoDescription($_POST['photoID'], $_POST['description']);
 								break;
 
-	case 'setPhotoTags':		if (isset($_POST['photoIDs'])&&isset($_POST['tags']))
+	case 'setPhotoTags':		if (isset($_POST['photoIDs'], $_POST['tags']))
 									echo setPhotoTags($_POST['photoIDs'], $_POST['tags']);
 								break;
 
 	// Add Functions
 
-	case 'upload':			if (isset($_FILES)&&isset($_POST['albumID']))
+	case 'upload':			if (isset($_FILES, $_POST['albumID']))
 								echo upload($_FILES, $_POST['albumID']);
 							break;
 
-	case 'importUrl':		if (isset($_POST['url'])&&isset($_POST['albumID']))
+	case 'importUrl':		if (isset($_POST['url'], $_POST['albumID']))
 								echo importUrl($_POST['url'], $_POST['albumID']);
 							break;
 
@@ -104,7 +104,7 @@ switch ($_POST['function']) {
 	case 'init':			echo json_encode(init('admin', $_POST['version']));
 							break;
 
-	case 'login':			if (isset($_POST['user'])&&isset($_POST['password']))
+	case 'login':			if (isset($_POST['user'], $_POST['password']))
 								echo login($_POST['user'], $_POST['password']);
 							break;
 
@@ -113,12 +113,12 @@ switch ($_POST['function']) {
 
 	// Settings
 
-	case 'setLogin':		if (isset($_POST['username'])&&isset($_POST['password']))
+	case 'setLogin':		if (isset($_POST['username'], $_POST['password']))
 								if (!isset($_POST['oldPassword'])) $_POST['oldPassword'] = '';
 								echo setLogin($_POST['oldPassword'], $_POST['username'], $_POST['password']);
 							break;
 
-	case 'setSorting':		if (isset($_POST['type'])&&isset($_POST['order']))
+	case 'setSorting':		if (isset($_POST['type'], $_POST['order']))
 								echo setSorting($_POST['type'], $_POST['order']);
 							break;
 

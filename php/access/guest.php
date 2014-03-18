@@ -16,7 +16,7 @@ switch ($_POST['function']) {
 	case 'getAlbums':		echo json_encode(getAlbums(true));
 							break;
 
-	case 'getAlbum':		if (isset($_POST['albumID'])&&isset($_POST['password'])) {
+	case 'getAlbum':		if (isset($_POST['albumID'], $_POST['password'])) {
 								if (isAlbumPublic($_POST['albumID'])) {
 									// Album Public
 									if (checkAlbumPassword($_POST['albumID'], $_POST['password']))
@@ -30,7 +30,7 @@ switch ($_POST['function']) {
 							}
 							break;
 
-	case 'checkAlbumAccess':if (isset($_POST['albumID'])&&isset($_POST['password'])) {
+	case 'checkAlbumAccess':if (isset($_POST['albumID'], $_POST['password'])) {
 								if (isAlbumPublic($_POST['albumID'])) {
 									// Album Public
 									if (checkAlbumPassword($_POST['albumID'], $_POST['password']))
@@ -46,7 +46,7 @@ switch ($_POST['function']) {
 
 	// Photo Functions
 
-	case 'getPhoto':		if (isset($_POST['photoID'])&&isset($_POST['albumID'])&&isset($_POST['password'])) {
+	case 'getPhoto':		if (isset($_POST['photoID'], $_POST['albumID'], $_POST['password'])) {
 								if (isPhotoPublic($_POST['photoID'], $_POST['password']))
 									echo json_encode(getPhoto($_POST['photoID'], $_POST['albumID']));
 								else
@@ -59,7 +59,7 @@ switch ($_POST['function']) {
 	case 'init':			echo json_encode(init('public', $_POST['version']));
 							break;
 
-	case 'login':			if (isset($_POST['user'])&&isset($_POST['password']))
+	case 'login':			if (isset($_POST['user'], $_POST['password']))
 								echo login($_POST['user'], $_POST['password']);
 							break;
 
@@ -67,7 +67,7 @@ switch ($_POST['function']) {
 
 	default:				switch ($_GET['function']) {
 
-								case 'getFeed':				if (isset($_GET['albumID'])&&isset($_GET['password'])) {
+								case 'getFeed':				if (isset($_GET['albumID'], $_GET['password'])) {
 
 																// Album Feed
 																if (isAlbumPublic($_GET['albumID'])) {
@@ -84,7 +84,7 @@ switch ($_POST['function']) {
 															}
 															break;
 
-								case 'getAlbumArchive':		if (isset($_GET['albumID'])&&isset($_GET['password'])) {
+								case 'getAlbumArchive':		if (isset($_GET['albumID'], $_GET['password'])) {
 
 																// Album Download
 																if (isAlbumPublic($_GET['albumID'])) {
@@ -101,7 +101,7 @@ switch ($_POST['function']) {
 															}
 															break;
 
-								case 'getPhotoArchive':		if (isset($_GET['photoID'])&&isset($_GET['password'])) {
+								case 'getPhotoArchive':		if (isset($_GET['photoID'], $_GET['password'])) {
 
 																// Photo Download
 																if (isPhotoPublic($_GET['photoID'], $_GET['password']))
