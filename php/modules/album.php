@@ -146,7 +146,7 @@ function getAlbum($albumID) {
 	$result				= $database->query($query);
 	$previousPhotoID	= "";
 	$i					= 0;
-	while($row = $result->fetch_array()) {
+	while($row = $result->fetch_assoc()) {
 
 		$return['content'][$row['id']]['id']		= $row['id'];
 		$return['content'][$row['id']]['title']		= $row['title'];

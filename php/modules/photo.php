@@ -15,14 +15,14 @@ function getPhoto($photoID, $albumID) {
 
 	$query	= "SELECT * FROM lychee_photos WHERE id = '$photoID' LIMIT 1;";
 	$result = $database->query($query);
-	$return = $result->fetch_array();
+	$return = $result->fetch_assoc();
 
 	if ($albumID!='false') {
 
 		if ($return['album']!=0) {
 
 			$result = $database->query("SELECT public FROM lychee_albums WHERE id = '" . $return['album'] . "';");
-			$return_album = $result->fetch_array();
+			$return_album = $result->fetch_assoc();
 			if ($return_album['public']=="1") $return['public'] = "2";
 
 		}
@@ -35,11 +35,6 @@ function getPhoto($photoID, $albumID) {
 	}
 
 	unset($return['album_public']);
-
-	// Remove unused items
-	foreach ($return as $key => $value) {
-		if (is_int($key)) unset($return[$key]);
-	}
 
 	return $return;
 
