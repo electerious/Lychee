@@ -216,6 +216,7 @@ var settings = {
 			"Sort photos by \
 				<select id='settings_type'> \
 					<option value='id'>Upload Time</option> \
+					<option value='take'>Take Date</option> \
 					<option value='title'>Title</option> \
 					<option value='description'>Description</option> \
 					<option value='public'>Public</option> \
@@ -231,7 +232,11 @@ var settings = {
 			", buttons);
 
 		if (lychee.sorting!=="") {
-			sorting = lychee.sorting.replace("ORDER BY ", "").replace(" ", ";").split(";");
+			sorting = lychee.sorting.replace("ORDER BY ", "").split(" ");
+
+			// Special parsing
+			if (sorting[0]==='UNIX_TIMESTAMP(STR_TO_DATE(CONCAT(takedate,"-",taketime),"%d.%m.%Y-%H:%i:%S"))') sorting[0] = "take";
+
 			$("select#settings_type").val(sorting[0]);
 			$("select#settings_order").val(sorting[1]);
 		}

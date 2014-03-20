@@ -105,7 +105,10 @@ function setSorting($type, $order) {
 		case 'star':		$sorting .= 'star';
 							break;
 
-		default:		exit('Error: Unknown type for sorting!');
+		case 'take':		$sorting .= 'UNIX_TIMESTAMP(STR_TO_DATE(CONCAT(takedate,"-",taketime),"%d.%m.%Y-%H:%i:%S"))';
+							break;
+
+		default:			exit('Error: Unknown type for sorting!');
 
 	}
 
