@@ -47,7 +47,7 @@ function search($term) {
 
 	// Photos
 	$result = $database->query("SELECT id, title, tags, sysdate, public, star, album, thumbUrl FROM lychee_photos WHERE title like '%$term%' OR description like '%$term%' OR tags like '%$term%';");
-	while($row = $result->fetch_array()) {
+	while($row = $result->fetch_assoc()) {
 		$return['photos'][$row['id']]				= $row;
 		$return['photos'][$row['id']]['sysdate']	= date('d F Y', strtotime($row['sysdate']));
 	}
