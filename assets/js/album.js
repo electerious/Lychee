@@ -121,7 +121,7 @@ album = {
 			["Cancel", function() {}]
 		];
 
-		modal.show("New Album", "Enter a title for this album: <input class='text' type='text' maxlength='30' placeholder='Title' value='Untitled'>", buttons);
+		modal.show("New Album", "Enter a title for this album: <input class='text' type='text' maxlength='50' placeholder='Title' value='Untitled'>", buttons);
 
 	},
 
@@ -233,8 +233,8 @@ album = {
 			["Cancel", function() {}]
 		];
 
-		if (albumIDs.length===1) modal.show("Set Title", "Enter a new title for this album: <input class='text' type='text' maxlength='30' placeholder='Title' value='" + oldTitle + "'>", buttons);
-		else modal.show("Set Titles", "Enter a title for all " + albumIDs.length + " selected album: <input class='text' type='text' maxlength='30' placeholder='Title' value='" + oldTitle + "'>", buttons);
+		if (albumIDs.length===1) modal.show("Set Title", "Enter a new title for this album: <input class='text' type='text' maxlength='50' placeholder='Title' value='" + oldTitle + "'>", buttons);
+		else modal.show("Set Titles", "Enter a title for all " + albumIDs.length + " selected album: <input class='text' type='text' maxlength='50' placeholder='Title' value='" + oldTitle + "'>", buttons);
 
 	},
 
