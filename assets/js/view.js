@@ -33,7 +33,9 @@ view = {
 
 		},
 
-		hide: function() {
+		hide: function(e, delay) {
+
+			if (delay===undefined) delay = 500;
 
 			if (visible.photo()&&!visible.infobox()&&!visible.contextMenu()&&!visible.message()) {
 				clearTimeout($(window).data("timeout"));
@@ -53,7 +55,7 @@ view = {
 							left: 0
 						});
 					}
-				}, 500));
+				}, delay));
 			}
 
 		},
@@ -374,6 +376,14 @@ view = {
 			$(document)
 				.bind("mouseenter", view.header.show)
 				.bind("mouseleave", view.header.hide);
+
+			// Fullscreen on mobile
+			if (mobileBrowser()) {
+				$(document).on("touchend", "#image", function() {
+					if (visible.controls()) view.header.hide(null, 0);
+					else view.header.show();
+				});
+			}
 
 			lychee.animate(lychee.imageview, "fadeIn");
 
