@@ -105,7 +105,7 @@ $(document).ready(function(){
 	if (mobileBrowser()) {
 		$(document).on("touchend", "#image", function(e) {
 			if (visible.controls()) view.header.hide(e, 0);
-			else e.preventDefault();
+			else view.header.show();
 		});
 	}
 
