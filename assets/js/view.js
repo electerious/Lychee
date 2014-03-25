@@ -379,9 +379,14 @@ view = {
 
 			// Fullscreen on mobile
 			if (mobileBrowser()) {
-				$(document).on("touchend", "#image", function() {
-					if (visible.controls()) view.header.hide(null, 0);
-					else view.header.show();
+				$(document).on("touchend", "#image", function(e) {
+					if (visible.controls()) {
+						view.header.hide(e, 0);
+						e.preventDefault();
+					} else {
+						view.header.show();
+						e.preventDefault();
+					}
 				});
 			}
 
