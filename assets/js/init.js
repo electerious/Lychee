@@ -101,6 +101,14 @@ $(document).ready(function(){
 		else if (visible.albums()&&$("#search").val().length!==0) search.reset();
 	});
 
+	/* Fullscreen on mobile */
+	if (mobileBrowser()) {
+		$(document).on("touchend", "#image", function(e) {
+			if (visible.controls()) view.header.hide(e, 0);
+			else e.preventDefault();
+		});
+	}
+
 	/* Document */
 	$(document)
 

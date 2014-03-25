@@ -377,19 +377,6 @@ view = {
 				.bind("mouseenter", view.header.show)
 				.bind("mouseleave", view.header.hide);
 
-			// Fullscreen on mobile
-			if (mobileBrowser()) {
-				$(document).on("touchend", "#image", function(e) {
-					if (visible.controls()) {
-						view.header.hide(e, 0);
-						e.preventDefault();
-					} else {
-						view.header.show();
-						e.preventDefault();
-					}
-				});
-			}
-
 			lychee.animate(lychee.imageview, "fadeIn");
 
 		},
