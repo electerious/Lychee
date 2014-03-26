@@ -26,7 +26,7 @@ swipe = {
 
 		console.log(e);
 
-		offset = -1 * e.x;
+		swipe.offset = -1 * e.x;
 
 		swipe.obj.css({
 			WebkitTransform: 'translateX(' + offset + 'px)',
@@ -40,8 +40,8 @@ swipe = {
 
 		console.log('stop with ' + e.x);
 
-		if (e.x<=-150) left();
-		else if (e.x>=150) right();
+		if (e.x<=-swipe.tolerance) left();
+		else if (e.x>=swipe.tolerance) right();
 		else {
 			console.log('reset');
 			swipe.obj.css({
