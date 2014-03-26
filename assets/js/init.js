@@ -109,20 +109,23 @@ $(document).ready(function(){
 		});
 	}
 
-	$(document).swipe()
-		.on("swipeStart", function(e) {
-			swipe.start($("#image"));
-		})
-		.on('swipeMove', function(e) {
-			swipe.move(e.swipe);
-		})
-		.on('swipeEnd', function(e) {
-			swipe.stop(e.swipe, function() {
-				$("#imageview .arrow_wrapper.previous").click();
-			}, function() {
-				$("#imageview .arrow_wrapper.next").click();
+	/* Swipe on mobile */
+	if (mobileBrowser()) {
+		$(document).swipe()
+			.on("swipeStart", function(e) {
+				swipe.start($("#image"));
+			})
+			.on('swipeMove', function(e) {
+				swipe.move(e.swipe);
+			})
+			.on('swipeEnd', function(e) {
+				swipe.stop(e.swipe, function() {
+					$("#imageview .arrow_wrapper.previous").trigger('touchend');
+				}, function() {
+					$("#imageview .arrow_wrapper.next").trigger('touchend');
+				});
 			});
-		});
+	}
 
 	/* Document */
 	$(document)
