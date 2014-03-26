@@ -109,6 +109,18 @@ $(document).ready(function(){
 		});
 	}
 
+	$(document)
+		.on("touchstart", "#imageview", function(e) {
+			swipe.start("#image", e);
+		})
+		.on("touchmove", function(e) {
+			console.log('move');
+			swipe.move(e);
+		})
+		.on("touchend", "#imageview", function() {
+			swipe.stop();
+		});
+
 	/* Document */
 	$(document)
 
