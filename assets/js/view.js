@@ -15,8 +15,8 @@ view = {
 
 			if (visible.photo()) {
 				lychee.imageview.removeClass("full");
-				lychee.loadingBar.css("opacity", 1);
 				lychee.header.removeClass("hidden");
+				lychee.loadingBar.css("opacity", 1);
 				if ($("#imageview #image.small").length>0) {
 					$("#imageview #image").css({
 						marginTop: -1*($("#imageview #image").height()/2)+20
@@ -36,8 +36,8 @@ view = {
 				clearTimeout($(window).data("timeout"));
 				$(window).data("timeout", setTimeout(function() {
 					lychee.imageview.addClass("full");
-					lychee.loadingBar.css("opacity", 0);
 					lychee.header.addClass("hidden");
+					lychee.loadingBar.css("opacity", 0);
 					if ($("#imageview #image.small").length>0) {
 						$("#imageview #image").css({
 							marginTop: -1*($("#imageview #image").height()/2)
