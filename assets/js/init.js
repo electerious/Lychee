@@ -120,9 +120,9 @@ $(document).ready(function(){
 			})
 			.on('swipeEnd', function(e) {
 				swipe.stop(e.swipe, function() {
-					$("#imageview .arrow_wrapper.previous").trigger('touchend');
+					if (album.json&&album.json.content[photo.getID()]&&album.json.content[photo.getID()].previousPhoto!=="") lychee.goto(album.getID() + "/" + album.json.content[photo.getID()].previousPhoto)
 				}, function() {
-					$("#imageview .arrow_wrapper.next").trigger('touchend');
+					if (album.json&&album.json.content[photo.getID()]&&album.json.content[photo.getID()].nextPhoto!=="") lychee.goto(album.getID() + "/" + album.json.content[photo.getID()].nextPhoto)
 				});
 			});
 	}
