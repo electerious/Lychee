@@ -114,7 +114,7 @@ build = {
 			if (visibleControls)
 				view += "<div id='image' style='background-image: url(" + photoJSON.url + ")'></div>";
 			else
-				view += "<div id='image' style='background-image: url(" + photoJSON.url + "); top: 0px; right: 0px; bottom: 0px; left: 0px;'></div>";
+				view += "<div id='image' style='background-image: url(" + photoJSON.url + ");' class='full'></div>";
 
 		}
 
