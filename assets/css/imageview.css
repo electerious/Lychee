@@ -33,9 +33,9 @@
 		background-position: 50% 50%;
 		background-size: contain;
 
-		-webkit-transition: top .3s, right .3s, bottom .3s, left .3s, margin-top .3s, -webkit-transform .3s cubic-bezier(0.51,.92,.24,1.15);
-		-moz-transition: top .3s, right .3s, bottom .3s, left .3s, margin-top .3s, -moz-transform .3s cubic-bezier(0.51,.92,.24,1.15);
-		transition: top .3s, right .3s, bottom .3s, left .3s, margin-top .3s, transform .3s cubic-bezier(0.51,.92,.24,1.15);
+		-webkit-transition: top .3s, right .3s, bottom .3s, left .3s, margin-top .3s, opacity .1s, -webkit-transform .3s cubic-bezier(0.51,.92,.24,1.15);
+		-moz-transition: top .3s, right .3s, bottom .3s, left .3s, margin-top .3s, opacity .1s, -moz-transform .3s cubic-bezier(0.51,.92,.24,1.15);
+		transition: top .3s, right .3s, bottom .3s, left .3s, margin-top .3s, opacity .1s, transform .3s cubic-bezier(0.51,.92,.24,1.15);
 
 		-webkit-animation-name: zoomIn;
 		-webkit-animation-duration: .3s;

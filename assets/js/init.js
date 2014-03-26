@@ -55,12 +55,8 @@ $(document).ready(function(){
 
 	/* Image View */
 	lychee.imageview
-		.on(event_name, ".arrow_wrapper.previous", function() {
-			if (album.json&&album.json.content[photo.getID()]&&album.json.content[photo.getID()].previousPhoto!=="") lychee.goto(album.getID() + "/" + album.json.content[photo.getID()].previousPhoto)
-		})
-		.on(event_name, ".arrow_wrapper.next", function() {
-			if (album.json&&album.json.content[photo.getID()]&&album.json.content[photo.getID()].nextPhoto!=="") lychee.goto(album.getID() + "/" + album.json.content[photo.getID()].nextPhoto)
-		});
+		.on(event_name, ".arrow_wrapper.previous", photo.previous)
+		.on(event_name, ".arrow_wrapper.next", photo.next);
 
 	/* Infobox */
 	$("#infobox")
@@ -121,11 +117,7 @@ $(document).ready(function(){
 				swipe.move(e.swipe);
 			})
 			.on('swipeEnd', function(e) {
-				swipe.stop(e.swipe, function() {
-					if (album.json&&album.json.content[photo.getID()]&&album.json.content[photo.getID()].previousPhoto!=="") lychee.goto(album.getID() + "/" + album.json.content[photo.getID()].previousPhoto)
-				}, function() {
-					if (album.json&&album.json.content[photo.getID()]&&album.json.content[photo.getID()].nextPhoto!=="") lychee.goto(album.getID() + "/" + album.json.content[photo.getID()].nextPhoto)
-				});
+				swipe.stop(e.swipe, photo.previous, photo.next);
 			});
 	}
 

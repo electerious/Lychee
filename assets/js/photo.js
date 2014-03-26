@@ -56,6 +56,48 @@ photo = {
 
 	},
 
+	previous: function() {
+
+		if (album.json&&
+			album.json.content[photo.getID()]&&
+			album.json.content[photo.getID()].previousPhoto!=="") {
+
+				$("#image").css({
+					WebkitTransform: 'translateX(100px)',
+					MozTransform: 'translateX(100px)',
+					transform: 'translateX(100px)',
+					opacity: 0
+				});
+
+				setTimeout(function() {
+					lychee.goto(album.getID() + "/" + album.json.content[photo.getID()].previousPhoto)
+				}, 100);
+
+			}
+
+	},
+
+	next: function() {
+
+		if (album.json&&
+			album.json.content[photo.getID()]&&
+			album.json.content[photo.getID()].nextPhoto!=="") {
+
+				$("#image").css({
+					WebkitTransform: 'translateX(-100px)',
+					MozTransform: 'translateX(-100px)',
+					transform: 'translateX(-100px)',
+					opacity: 0
+				});
+
+				setTimeout(function() {
+					lychee.goto(album.getID() + "/" + album.json.content[photo.getID()].nextPhoto);
+				}, 100);
+
+			}
+
+	},
+
 	delete: function(photoIDs) {
 
 		var params,
