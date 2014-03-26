@@ -7,23 +7,15 @@
 
 swipe = {
 
-	object: null,
-	position: {
-		x: null,
-		y: null
-	},
+	obj: null,
+	tolerance: 150,
 
-	start: function(object, e) {
+	start: function(obj, tolerance) {
 
-		console.log('start with ' + object);
+		console.log('start with ' + obj);
 
-		swipe.object = object;
-
-		if (swipe.position.x===null)
-			swipe.position.x = e.originalEvent.pageX;
-
-		if (swipe.position.y===null)
-			swipe.position.y = e.originalEvent.pageY;
+		if (obj) swipe.obj = obj;
+		if (tolerance) swipe.tolerance = tolerance;
 
 		return true;
 
@@ -31,30 +23,34 @@ swipe = {
 
 	move: function(e) {
 
-		var offset = {
-			x: -1 * (swipe.position.x - e.originalEvent.pageX),
-			y: -1 * (swipe.position.y - e.originalEvent.pageY)
-		}
+		console.log(e);
 
-		if (swipe.position.x!==null) {
-			$(swipe.object).css({
-				'-webkit-transform': 'translateX(' + offset.x + 'px);',
-				'-moz-transform': 'translateX(' + offset.x + 'px);',
-				'transform': 'translateX(' + offset.x + 'px);'
-			});
-		}
+		e.x *= -1;
 
-		console.log(offset);
+		swipe.obj.css({
+			WebkitTransform: 'translateX(' + e.x + 'px)',
+			MozTransform: 'translateX(' + e.x + 'px)',
+			transform: 'translateX(' + e.x + 'px)'
+		});
 
 	},
 
-	stop: function() {
+	stop: function(e, left, right) {
 
-		console.log('stop');
+		console.log('stop with ' + e.x);
 
-		swipe.object = null;
-		swipe.position.x = null;
-		swipe.position.y = null;
+		if (e.x<=-150) left();
+		else if (e.x>=150) right();
+		else {
+			console.log('reset');
+			swipe.obj.css({
+				WebkitTransform: 'translateX(0px)',
+				MozTransform: 'translateX(0px)',
+				transform: 'translateX(0px)'
+			});
+		}
+
+		swipe.obj = null;
 
 	}
 

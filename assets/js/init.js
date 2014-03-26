@@ -109,16 +109,19 @@ $(document).ready(function(){
 		});
 	}
 
-	$(document)
-		.on("touchstart", "#imageview", function(e) {
-			swipe.start("#image", e);
+	$(document).swipe()
+		.on("swipeStart", function(e) {
+			swipe.start($("#image"));
 		})
-		.on("touchmove", function(e) {
-			console.log('move');
-			swipe.move(e);
+		.on('swipeMove', function(e) {
+			swipe.move(e.swipe);
 		})
-		.on("touchend", "#imageview", function() {
-			swipe.stop();
+		.on('swipeEnd', function(e) {
+			swipe.stop(e.swipe, function() {
+				$("#imageview .arrow_wrapper.previous").click();
+			}, function() {
+				$("#imageview .arrow_wrapper.next").click();
+			});
 		});
 
 	/* Document */
