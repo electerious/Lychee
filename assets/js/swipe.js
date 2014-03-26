@@ -9,6 +9,7 @@ swipe = {
 
 	obj: null,
 	tolerance: 150,
+	offset: 0,
 
 	start: function(obj, tolerance) {
 
@@ -25,12 +26,12 @@ swipe = {
 
 		console.log(e);
 
-		e.x *= -1;
+		offset = -1 * e.x;
 
 		swipe.obj.css({
-			WebkitTransform: 'translateX(' + e.x + 'px)',
-			MozTransform: 'translateX(' + e.x + 'px)',
-			transform: 'translateX(' + e.x + 'px)'
+			WebkitTransform: 'translateX(' + offset + 'px)',
+			MozTransform: 'translateX(' + offset + 'px)',
+			transform: 'translateX(' + offset + 'px)'
 		});
 
 	},
@@ -51,6 +52,7 @@ swipe = {
 		}
 
 		swipe.obj = null;
+		swipe.offset = 0;
 
 	}
 
