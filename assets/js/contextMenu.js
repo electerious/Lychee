@@ -210,6 +210,26 @@ contextMenu = {
 
 	},
 
+	photoMore: function(photoID, e) {
+
+		var mouse_x = e.pageX,
+			mouse_y = e.pageY - $(document).scrollTop(),
+			items;
+
+		contextMenu.fns = [
+			function() { window.open(photo.getDirectLink(),"_newtab") },
+			function() { photo.getArchive(photoID) }
+		];
+
+		items = [
+			["<a class='icon-resize-full'></a> Full Photo", 0],
+			["<a class='icon-circle-arrow-down'></a> Download", 1]
+		];
+
+		contextMenu.show(items, mouse_x, mouse_y, "right");
+
+	},
+
 	move: function(photoIDs, e, orientation) {
 
 		var mouse_x = e.pageX,
