@@ -29,9 +29,9 @@ swipe = {
 		swipe.offset = -1 * e.x;
 
 		swipe.obj.css({
-			WebkitTransform: 'translateX(' + offset + 'px)',
-			MozTransform: 'translateX(' + offset + 'px)',
-			transform: 'translateX(' + offset + 'px)'
+			WebkitTransform: 'translateX(' + swipe.offset + 'px)',
+			MozTransform: 'translateX(' + swipe.offset + 'px)',
+			transform: 'translateX(' + swipe.offset + 'px)'
 		});
 
 	},
