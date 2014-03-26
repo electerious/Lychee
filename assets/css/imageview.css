@@ -9,7 +9,7 @@
 	display: none;
 	width: 100%;
 	min-height: 100%;
-	background-color: rgba(10,10,10,.99);
+	background-color: rgba(10,10,10,.98);
 
 	-webkit-transition: background-color .3s;
 }
@@ -19,7 +19,7 @@
 		background-color: inherit;
 	}
 	#imageview.full {
-		background-color: #040404;
+		background-color: rgba(0,0,0,1);
 	}
 
 	/* ImageView ------------------------------------------------*/
@@ -47,12 +47,18 @@
 		animation-duration: .3s;
 		animation-timing-function: cubic-bezier(0.51,.92,.24,1.15);
 	}
-	#imageview #image.small {
-		top: 50%;
-		right: auto;
-		bottom: auto;
-		left: 50%;
-	}
+		#imageview #image.small {
+			top: 50%;
+			right: auto;
+			bottom: auto;
+			left: 50%;
+		}
+		#imageview #image.full {
+			top: 0px;
+			right: 0px;
+			bottom: 0px;
+			left: 0px;
+		}
 
 	/* Previous/Next Buttons ------------------------------------------------*/
 	#imageview .arrow_wrapper {

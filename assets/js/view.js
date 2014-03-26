@@ -22,12 +22,7 @@ view = {
 						marginTop: -1*($("#imageview #image").height()/2)+20
 					});
 				} else {
-					$("#imageview #image").css({
-						top: 60,
-						right: 30,
-						bottom: 30,
-						left: 30
-					});
+					$("#imageview #image").removeClass('full');
 				}
 			}
 
@@ -48,12 +43,7 @@ view = {
 							marginTop: -1*($("#imageview #image").height()/2)
 						});
 					} else {
-						$("#imageview #image").css({
-							top: 0,
-							right: 0,
-							bottom: 0,
-							left: 0
-						});
+						$("#imageview #image").addClass('full');
 					}
 				}, delay));
 			}
