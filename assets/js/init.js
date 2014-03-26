@@ -104,9 +104,10 @@ $(document).ready(function(){
 	/* Fullscreen on mobile */
 	if (mobileBrowser()) {
 		$(document).on("touchend", "#image", function(e) {
-			if (swipe.obj!==null&&(swipe.offset<=-5||swipe.offset>=5)) return false;
-			if (visible.controls()) view.header.hide(e, 0);
-			else view.header.show();
+			if (swipe.obj===null||(swipe.offset>=-5&&swipe.offset<=5)) {
+				if (visible.controls()) view.header.hide(e, 0);
+				else view.header.show();
+			}
 		});
 	}
 
