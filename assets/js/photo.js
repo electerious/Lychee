@@ -66,7 +66,7 @@ photo = {
 
 				if (animate===true) {
 
-					delay = 100;
+					delay = 200;
 
 					$("#image").css({
 						WebkitTransform: 'translateX(100%)',
@@ -95,7 +95,7 @@ photo = {
 
 				if (animate===true) {
 
-					delay = 100;
+					delay = 200;
 
 					$("#image").css({
 						WebkitTransform: 'translateX(-100%)',
