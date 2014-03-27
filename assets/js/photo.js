@@ -56,43 +56,59 @@ photo = {
 
 	},
 
-	previous: function() {
+	previous: function(animate) {
+
+		var delay = 0;
 
 		if (album.json&&
 			album.json.content[photo.getID()]&&
 			album.json.content[photo.getID()].previousPhoto!=="") {
 
-				$("#image").css({
-					WebkitTransform: 'translateX(100px)',
-					MozTransform: 'translateX(100px)',
-					transform: 'translateX(100px)',
-					opacity: 0
-				});
+				if (animate===true) {
+
+					delay = 100;
+
+					$("#image").css({
+						WebkitTransform: 'translateX(100%)',
+						MozTransform: 'translateX(100%)',
+						transform: 'translateX(100%)',
+						opacity: 0
+					});
+
+				}
 
 				setTimeout(function() {
 					lychee.goto(album.getID() + "/" + album.json.content[photo.getID()].previousPhoto)
-				}, 100);
+				}, delay);
 
 			}
 
 	},
 
-	next: function() {
+	next: function(animate) {
+
+		var delay = 0;
 
 		if (album.json&&
 			album.json.content[photo.getID()]&&
 			album.json.content[photo.getID()].nextPhoto!=="") {
 
-				$("#image").css({
-					WebkitTransform: 'translateX(-100px)',
-					MozTransform: 'translateX(-100px)',
-					transform: 'translateX(-100px)',
-					opacity: 0
-				});
+				if (animate===true) {
+
+					delay = 100;
+
+					$("#image").css({
+						WebkitTransform: 'translateX(-100%)',
+						MozTransform: 'translateX(-100%)',
+						transform: 'translateX(-100%)',
+						opacity: 0
+					});
+
+				}
 
 				setTimeout(function() {
 					lychee.goto(album.getID() + "/" + album.json.content[photo.getID()].nextPhoto);
-				}, 100);
+				}, delay);
 
 			}
 

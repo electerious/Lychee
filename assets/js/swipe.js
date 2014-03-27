@@ -40,8 +40,8 @@ swipe = {
 
 		console.log('stop with ' + e.x);
 
-		if (e.x<=-swipe.tolerance) left();
-		else if (e.x>=swipe.tolerance) right();
+		if (e.x<=-swipe.tolerance) left(true);
+		else if (e.x>=swipe.tolerance) right(true);
 		else {
 			console.log('reset');
 			swipe.obj.css({

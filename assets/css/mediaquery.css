@@ -45,6 +45,10 @@
 		margin: 40px 0px 0px 50px !important;
 	}
 
+	#imageview .arrow_wrapper {
+		display: none !important;
+	}
+
 	.message {
 		position: fixed !important;
 		width: 100% !important;
@@ -57,7 +61,7 @@
 		-moz-animation: moveUp .3s !important;
 		animation: moveUp .3s !important;
 	}
-	
+
 	.upload_message {
 		top: 50% !important;
 		left: 50% !important;
