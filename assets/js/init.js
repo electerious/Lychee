@@ -77,7 +77,18 @@ $(document).ready(function(){
 		.bind(['r', 'ctrl+r'], function(e) {
 			e.preventDefault();
 			if (visible.album()) album.setTitle(album.getID());
-			else if (visible.photo()) photo.setTitle(photo.getID());
+			else if (visible.photo()) photo.setTitle([photo.getID()]);
+		})
+		.bind(['d', 'ctrl+d'], function(e) {
+			e.preventDefault();
+			if (visible.photo()) photo.setDescription(photo.getID());
+			else if (visible.album()) album.setDescription(album.getID());
+		})
+		.bind(['t', 'ctrl+t'], function(e) {
+			if (visible.photo()) {
+				e.preventDefault();
+				photo.editTags([photo.getID()]);
+			}
 		})
 		.bind(['i', 'ctrl+i'], function() {
 			if (visible.infobox()) view.infobox.hide();

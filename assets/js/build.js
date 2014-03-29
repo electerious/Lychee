@@ -302,7 +302,7 @@ build = {
 
 		infos = [
 			["", "Basics"],
-			["Name", photoJSON.title + editTitleHTML],
+			["Title", photoJSON.title + editTitleHTML],
 			["Uploaded", photoJSON.sysdate],
 			["Description", photoJSON.description + editDescriptionHTML],
 			["", "Image"],
@@ -414,7 +414,7 @@ build = {
 
 		infos = [
 			["", "Basics"],
-			["Name", albumJSON.title + editTitleHTML],
+			["Title", albumJSON.title + editTitleHTML],
 			["Description", albumJSON.description + editDescriptionHTML],
 			["", "Album"],
 			["Created", albumJSON.sysdate],
