@@ -7,6 +7,7 @@
 
 var lychee = {
 
+	title: "",
 	version: "2.1.1",
 
 	api_path: "php/api.php",
@@ -224,8 +225,10 @@ var lychee = {
 
 	setTitle: function(title, editable) {
 
-		if (title==="Albums") document.title = "Lychee";
-		else document.title = "Lychee - " + title;
+		if (lychee.title==="") lychee.title = document.title;
+
+		if (title==="Albums") document.title = lychee.title;
+		else document.title = lychee.title + " - " + title;
 
 		if (editable) $("#title").addClass("editable");
 		else $("#title").removeClass("editable");
