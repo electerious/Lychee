@@ -70,17 +70,22 @@ $(document).ready(function(){
 
 	/* Keyboard */
 	Mousetrap
-		.bind('u', function() { $("#upload_files").click() })
-		.bind('s', function() { if (visible.photo()) $("#button_star").click() })
 		.bind('left', function() { if (visible.photo()) $("#imageview a#previous").click() })
 		.bind('right', function() { if (visible.photo()) $("#imageview a#next").click() })
-		.bind('command+backspace', function() {
-			if (visible.photo()&&!visible.message()) photo.delete([photo.getID()]);
-			else if (visible.album()&&!visible.message()) album.delete([album.getID()]);
+		.bind(['u', 'ctrl+u'], function() { $("#upload_files").click() })
+		.bind(['s', 'ctrl+s'], function() { if (visible.photo()) $("#button_star").click() })
+		.bind(['r', 'ctrl+r'], function(e) {
+			e.preventDefault();
+			if (visible.album()) album.setTitle(album.getID());
+			else if (visible.photo()) photo.setTitle(photo.getID());
 		})
-		.bind('i', function() {
+		.bind(['i', 'ctrl+i'], function() {
 			if (visible.infobox()) view.infobox.hide();
 			else if (!visible.albums()) view.infobox.show();
+		})
+		.bind(['command+backspace', 'ctrl+backspace'], function() {
+			if (visible.photo()&&!visible.message()) photo.delete([photo.getID()]);
+			else if (visible.album()&&!visible.message()) album.delete([album.getID()]);
 		});
 
 	Mousetrap.bindGlobal('enter', function() {
@@ -97,28 +102,24 @@ $(document).ready(function(){
 		else if (visible.albums()&&$("#search").val().length!==0) search.reset();
 	});
 
-	/* Fullscreen on mobile */
-	if (mobileBrowser()) {
-		$(document).on("touchend", "#image", function(e) {
-			if (swipe.obj===null||(swipe.offset>=-5&&swipe.offset<=5)) {
-				if (visible.controls()) view.header.hide(e, 0);
-				else view.header.show();
-			}
-		});
-	}
 
-	/* Swipe on mobile */
 	if (mobileBrowser()) {
-		$(document).swipe()
-			.on("swipeStart", function(e) {
-				swipe.start($("#image"));
+
+		$(document)
+
+			/* Fullscreen on mobile */
+			.on('touchend', '#image', function(e) {
+				if (swipe.obj===null||(swipe.offset>=-5&&swipe.offset<=5)) {
+					if (visible.controls()) view.header.hide(e, 0);
+					else view.header.show();
+				}
 			})
-			.on('swipeMove', function(e) {
-				swipe.move(e.swipe);
-			})
-			.on('swipeEnd', function(e) {
-				swipe.stop(e.swipe, photo.previous, photo.next);
-			});
+
+			/* Swipe on mobile */
+			.swipe().on('swipeStart', function() { swipe.start($("#image")) })
+			.swipe().on('swipeMove', function(e) { swipe.move(e.swipe) })
+			.swipe().on('swipeEnd', function(e) { swipe.stop(e.swipe, photo.previous, photo.next) });
+
 	}
 
 	/* Document */
