@@ -11,48 +11,77 @@ loadingBar = {
 
 	show: function(status, errorText) {
 
-		if (status==="error") {
+		if (status==='error') {
 
-			loadingBar.status = "error";
+			// Set status
+			loadingBar.status = 'error';
 
-			if (!errorText) errorText = "Whoops, it looks like something went wrong. Please reload the site and try again!";
+			// Parse text
+			if (errorText) errorText = errorText.replace('<br>', '');
+			if (!errorText) errorText = 'Whoops, it looks like something went wrong. Please reload the site and try again!';
 
+			// Move header down
+			if (visible.controls()) lychee.header.addClass('error');
+
+			// Modify loading
 			lychee.loadingBar
-				.removeClass("loading uploading error")
+				.removeClass('loading uploading error')
 				.addClass(status)
-				.html("<h1>Error: <span>" + errorText + "</span></h1>")
+				.html('<h1>Error: <span>' + errorText + '</span></h1>')
 				.show()
-				.css("height", "40px");
-			if (visible.controls()) lychee.header.addClass("error");
+				.css('height', '40px');
 
-			clearTimeout(lychee.loadingBar.data("timeout"));
-			lychee.loadingBar.data("timeout", setTimeout(function() { loadingBar.hide(true) }, 3000));
+			// Set timeout
+			clearTimeout(lychee.loadingBar.data('timeout'));
+			lychee.loadingBar.data('timeout', setTimeout(function() { loadingBar.hide(true) }, 3000));
 
-		} else if (loadingBar.status===null) {
+			return true;
 
-			loadingBar.status = "loading";
+		}
 
-			clearTimeout(lychee.loadingBar.data("timeout"));
-			lychee.loadingBar.data("timeout", setTimeout(function() {
+		if (loadingBar.status===null) {
+
+			// Set status
+			loadingBar.status = 'loading';
+
+			// Set timeout
+			clearTimeout(lychee.loadingBar.data('timeout'));
+			lychee.loadingBar.data('timeout', setTimeout(function() {
+
+				// Move header down
+				if (visible.controls()) lychee.header.addClass('loading');
+
+				// Modify loading
 				lychee.loadingBar
-					.show()
-					.removeClass("loading uploading error")
-					.addClass("loading");
-				if (visible.controls()) lychee.header.addClass("loading");
+					.removeClass('loading uploading error')
+					.addClass('loading')
+					.show();
+
 			}, 1000));
+
+			return true;
 
 		}
 
 	},
 
-	hide: function(force_hide) {
+	hide: function(force) {
 
-		if ((loadingBar.status!=="error"&&loadingBar.status!==null)||force_hide) {
+		if ((loadingBar.status!=='error'&&loadingBar.status!==null)||force) {
 
+			// Remove status
 			loadingBar.status = null;
-			clearTimeout(lychee.loadingBar.data("timeout"));
-			lychee.loadingBar.html("").css("height", "3px");
-			if (visible.controls()) lychee.header.removeClass("error loading");
+
+			// Move header up
+			if (visible.controls()) lychee.header.removeClass('error loading');
+
+			// Modify loading
+			lychee.loadingBar
+				.html('')
+				.css('height', '3px');
+
+			// Set timeout
+			clearTimeout(lychee.loadingBar.data('timeout'));
 			setTimeout(function() { lychee.loadingBar.hide() }, 300);
 
 		}
