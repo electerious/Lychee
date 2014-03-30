@@ -9,14 +9,14 @@
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
-function addAlbum($title, $public = 0) {
+function addAlbum($title = '', $public = 0, $visible = 1) {
 
 	global $database;
 
-	if (strlen($title)<1||strlen($title)>50) return false;
+	if (strlen($title)>50) $title = substr($title, 0, 50);
 
 	$sysdate	= date("d.m.Y");
-	$result		= $database->query("INSERT INTO lychee_albums (title, sysdate, public) VALUES ('$title', '$sysdate', '$public');");
+	$result		= $database->query("INSERT INTO lychee_albums (title, sysdate, public, visible) VALUES ('$title', '$sysdate', '$public', '$visible');");
 
 	if (!$result) return false;
 	return $database->insert_id;
@@ -31,7 +31,7 @@ function getAlbums($public) {
 	if (!$public) $return = getSmartInfo();
 
 	// Albums
-	if ($public) $query = "SELECT id, title, public, sysdate, password FROM lychee_albums WHERE public = 1";
+	if ($public) $query = "SELECT id, title, public, sysdate, password FROM lychee_albums WHERE public = 1 AND visible <> 0";
 	else $query = "SELECT id, title, public, sysdate, password FROM lychee_albums";
 
 	$result	= $database->query($query) OR exit("Error: $result <br>".$database->error);

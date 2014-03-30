@@ -87,6 +87,7 @@ function update($version = '') {
 	// Albums
 	if(!$database->query("SELECT `description` FROM `lychee_albums` LIMIT 1;"))	$database->query("ALTER TABLE `lychee_albums` ADD `description` VARCHAR( 1000 ) NULL DEFAULT ''"); // v2.0
 	if($database->query("SELECT `password` FROM `lychee_albums` LIMIT 1;"))		$database->query("ALTER TABLE `lychee_albums` CHANGE `password` `password` VARCHAR( 100 ) NULL DEFAULT ''"); // v2.0
+	if(!$database->query("SELECT `visible` FROM `lychee_albums` LIMIT 1;"))		$database->query("ALTER TABLE `lychee_albums` ADD `visible` TINYINT(1) NOT NULL DEFAULT 1"); // v2.2
 
 	// Photos
 	if($database->query("SELECT `description` FROM `lychee_photos` LIMIT 1;"))	$database->query("ALTER TABLE `lychee_photos` CHANGE `description` `description` VARCHAR( 1000 ) NULL DEFAULT ''"); // v2.0

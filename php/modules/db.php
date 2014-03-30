@@ -119,7 +119,8 @@ function dbCreateTables($database) {
 				`title` varchar(50) NOT NULL,
 				`description` varchar(1000) DEFAULT '',
 				`sysdate` varchar(10) NOT NULL,
-				`public` tinyint(1) DEFAULT '0',
+				`public` tinyint(1) NOT NULL DEFAULT '0',
+				`visible` tinyint(1) NOT NULL DEFAULT '1',
 				`password` varchar(100) DEFAULT '',
 				PRIMARY KEY (`id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=latin1;
