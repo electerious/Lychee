@@ -9,7 +9,7 @@
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
-function upload($files, $albumID) {
+function upload($files, $albumID, $description = '', $tags = '') {
 
 	global $database, $settings;
 
@@ -61,8 +61,10 @@ function upload($files, $albumID) {
 		$info = getInfo($photo_name);
 
 		// Use title of file if IPTC title missing
-		if ($info['title']==='')
-			$info['title'] = mysqli_real_escape_string($database, substr(basename($file['name'], ".$extension"), 0, 30));
+		if ($info['title']==='') $info['title'] = mysqli_real_escape_string($database, substr(basename($file['name'], ".$extension"), 0, 30));
+
+		// Use description parameter if set
+		if ($description==='') $description = $info['description'];
 
 		// Set orientation based on EXIF data
 		if ($file['type']==='image/jpeg'&&isset($info['orientation'])&&isset($info['width'])&&isset($info['height'])) {
@@ -127,12 +129,13 @@ function upload($files, $albumID) {
 		if (!createThumb($photo_name)) return false;
 
 		// Save to DB
-		$query = "INSERT INTO lychee_photos (id, title, url, description, type, width, height, size, sysdate, systime, iso, aperture, make, model, shutter, focal, takedate, taketime, thumbUrl, album, public, star, import_name)
+		$query = "INSERT INTO lychee_photos (id, title, url, description, tags, type, width, height, size, sysdate, systime, iso, aperture, make, model, shutter, focal, takedate, taketime, thumbUrl, album, public, star, import_name)
 			VALUES (
 				'" . $id . "',
 				'" . $info['title'] . "',
 				'" . $photo_name . "',
-				'" . $info['description'] . "',
+				'" . $description . "',
+				'" . $tags . "',
 				'" . $info['type'] . "',
 				'" . $info['width'] . "',
 				'" . $info['height'] . "',
@@ -304,7 +307,7 @@ function createThumb($filename, $width = 200, $height = 200) {
 
 }
 
-function importPhoto($path, $albumID = 0) {
+function importPhoto($path, $albumID = 0, $description = '', $tags = '') {
 
 	$info = getimagesize($path);
 	$size = filesize($path);
@@ -316,7 +319,7 @@ function importPhoto($path, $albumID = 0) {
 	$nameFile[0]['error']		= 0;
 	$nameFile[0]['size']		= $size;
 
-	return upload($nameFile, $albumID);
+	return upload($nameFile, $albumID, $description, $tags);
 
 }
 
