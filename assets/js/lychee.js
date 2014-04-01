@@ -113,7 +113,7 @@ var lychee = {
 	login: function() {
 
 		var user = $("input#username").val(),
-			password = hex_md5($("input#password").val()),
+			password = md5($("input#password").val()),
 			params;
 
 		params = "login&user=" + user + "&password=" + password;

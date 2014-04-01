@@ -1,4 +1,5 @@
-*.esproj
+build/node_modules/
+build/bower_components/
 
 php/config.php
 data/config.php

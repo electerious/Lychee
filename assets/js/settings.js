@@ -113,7 +113,7 @@ var settings = {
 
 				} else {
 
-					params = "setLogin&username=" + escape(username) + "&password=" + hex_md5(password);
+					params = "setLogin&username=" + escape(username) + "&password=" + md5(password);
 					lychee.api(params, function(data) {
 
 						if (data!==true) {
@@ -173,7 +173,7 @@ var settings = {
 					return false;
 				}
 
-				params = "setLogin&oldPassword=" + hex_md5(old_password) + "&username=" + escape(username) + "&password=" + hex_md5(password);
+				params = "setLogin&oldPassword=" + md5(old_password) + "&username=" + escape(username) + "&password=" + md5(password);
 				lychee.api(params, function(data) {
 
 					if (data!==true) lychee.error(null, params, data);

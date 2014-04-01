@@ -276,7 +276,7 @@ album = {
 
 		if ($(".message input.text").length>0&&$(".message input.text").val().length>0) {
 
-			params = "setAlbumPublic&albumID=" + albumID + "&password=" + hex_md5($(".message input.text").val());
+			params = "setAlbumPublic&albumID=" + albumID + "&password=" + md5($(".message input.text").val());
 			album.json.password = true;
 
 		} else {
