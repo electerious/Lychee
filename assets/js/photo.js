@@ -79,7 +79,7 @@ photo = {
 				}
 
 				setTimeout(function() {
-					if (photo.getID()!==false) return false;
+					if (photo.getID()===false) return false;
 					lychee.goto(album.getID() + "/" + album.json.content[photo.getID()].previousPhoto)
 				}, delay);
 
@@ -110,7 +110,7 @@ photo = {
 				}
 
 				setTimeout(function() {
-					if (photo.getID()!==false) return false;
+					if (photo.getID()===false) return false;
 					lychee.goto(album.getID() + "/" + album.json.content[photo.getID()].nextPhoto);
 				}, delay);
 
