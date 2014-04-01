@@ -42,6 +42,23 @@ module.exports = (grunt) ->
 				files:
 					'../assets/min/main.css': '../assets/min/main.css'
 
+		'file-creator':
+
+			manifest:
+				"../assets/min/cache.manifest": (fs, fd, done) ->
+					text =	"""
+							CACHE MANIFEST
+
+							# #{ (new Date()).valueOf().toString() }
+
+							assets/min/main.css
+							assets/min/main.js
+							assets/img/no_images.svg
+							assets/img/password.svg
+							"""
+					fs.writeSync fd, text
+					done()
+
 		watch:
 
 			js:
@@ -68,6 +85,7 @@ module.exports = (grunt) ->
 		grunt.task.run [
 			'js'
 			'css'
+			'file-creator'
 		]
 
 	grunt.registerTask 'js', [
