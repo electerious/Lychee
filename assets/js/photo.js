@@ -60,7 +60,8 @@ photo = {
 
 		var delay = 0;
 
-		if (album.json&&
+		if (photo.getID()!==false&&
+			album.json&&
 			album.json.content[photo.getID()]&&
 			album.json.content[photo.getID()].previousPhoto!=="") {
 
@@ -89,7 +90,8 @@ photo = {
 
 		var delay = 0;
 
-		if (album.json&&
+		if (photo.getID()!==false&&
+			album.json&&
 			album.json.content[photo.getID()]&&
 			album.json.content[photo.getID()].nextPhoto!=="") {
 

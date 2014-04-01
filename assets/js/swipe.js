@@ -36,8 +36,6 @@ swipe = {
 
 	stop: function(e, left, right) {
 
-		console.log('stop with ' + e.x);
-
 		if (e.x<=-swipe.tolerance) left(true);
 		else if (e.x>=swipe.tolerance) right(true);
 		else if (swipe.obj!==null) {
