@@ -13,8 +13,6 @@ swipe = {
 
 	start: function(obj, tolerance) {
 
-		console.log('start with ' + obj);
-
 		if (obj) swipe.obj = obj;
 		if (tolerance) swipe.tolerance = tolerance;
 
@@ -23,8 +21,6 @@ swipe = {
 	},
 
 	move: function(e) {
-
-		console.log(e);
 
 		if (swipe.obj===null) return false;
 
@@ -45,7 +41,6 @@ swipe = {
 		if (e.x<=-swipe.tolerance) left(true);
 		else if (e.x>=swipe.tolerance) right(true);
 		else if (swipe.obj!==null) {
-			console.log('reset');
 			swipe.obj.css({
 				WebkitTransform: 'translateX(0px)',
 				MozTransform: 'translateX(0px)',
