@@ -6,7 +6,7 @@ module.exports = (grunt) ->
 
 		concat:
 
-			frameworks:
+			view:
 
 				options:
 					separator: "\n"
@@ -16,8 +16,10 @@ module.exports = (grunt) ->
 					'bower_components/mousetrap/mousetrap.min.js'
 					'bower_components/mousetrap/plugins/global-bind/mousetrap-global-bind.min.js'
 					'../assets/js/_frameworks.js'
+					'../assets/js/build.js'
+					'../assets/js/view/main.js'
 				]
-				dest: '../assets/min/frameworks.js'
+				dest: '../assets/min/view.js'
 
 			js:
 				options:
@@ -40,6 +42,12 @@ module.exports = (grunt) ->
 				dest: '../assets/min/main.css'
 
 		uglify:
+
+			view:
+				options:
+					banner: '/*! <%= pkg.name %> <%= pkg.version %> | <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+				files:
+					'../assets/min/view.js': '../assets/min/view.js'
 
 			assets:
 				options:
@@ -79,10 +87,15 @@ module.exports = (grunt) ->
 
 	grunt.registerTask 'default', ->
 		grunt.task.run [
-			'concat:frameworks'
+			'view'
 			'js'
 			'css'
 		]
+
+	grunt.registerTask 'view', [
+		'concat:view'
+		'uglify:view'
+	]
 
 	grunt.registerTask 'js', [
 		'concat:js'

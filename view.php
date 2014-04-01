@@ -59,9 +59,7 @@
 	<div id="infobox"></div>
 
 	<!-- JS -->
-	<script type="text/javascript" src="assets/min/frameworks.js"></script>
-	<script type="text/javascript" src="assets/js/build.js"></script>
-	<script type="text/javascript" src="assets/js/view/main.js"></script>
+	<script type="text/javascript" src="assets/min/view.js"></script>
 
 	</body>
 </html>
