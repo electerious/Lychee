@@ -51,10 +51,10 @@ module.exports = (grunt) ->
 
 							# #{ (new Date()).valueOf().toString() }
 
-							assets/min/main.css
-							assets/min/main.js
-							assets/img/no_images.svg
-							assets/img/password.svg
+							main.css
+							main.js
+							../img/no_images.svg
+							../img/password.svg
 							"""
 					fs.writeSync fd, text
 					done()

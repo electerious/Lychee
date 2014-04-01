@@ -1,8 +1,8 @@
 CACHE MANIFEST
 
-# 1396383979640
+# 1396384139535
 
-assets/min/main.css
-assets/min/main.js
-assets/img/no_images.svg
-assets/img/password.svg
+main.css
+main.js
+../img/no_images.svg
+../img/password.svg
