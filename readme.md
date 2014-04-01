@@ -49,6 +49,7 @@ Take a look at the [FAQ](docs/FAQ.md) if you have problems. Discovered a bug? Pl
 |:-----------|:------------|:------------|
 | lycheesync | Sync Lychee with any directory containing photos | [More &#187;](https://github.com/GustavePate/lycheesync) |
 | Jekyll | Liquid tag for Jekyll sites that allows embedding Lychee albums | [More &#187;](https://gist.github.com/tobru/9171700) |
+| lychee-redirect | Redirect from an album-name to a Lychee-album | [More &#187;](https://github.com/electerious/lychee-redirect) |
 
 ## Developer
 | Version | Name |
