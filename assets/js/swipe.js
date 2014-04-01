@@ -44,7 +44,7 @@ swipe = {
 
 		if (e.x<=-swipe.tolerance) left(true);
 		else if (e.x>=swipe.tolerance) right(true);
-		else {
+		else if (swipe.obj!==null) {
 			console.log('reset');
 			swipe.obj.css({
 				WebkitTransform: 'translateX(0px)',
