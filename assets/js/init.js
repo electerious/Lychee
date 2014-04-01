@@ -127,9 +127,9 @@ $(document).ready(function(){
 			})
 
 			/* Swipe on mobile */
-			.swipe().on('swipeStart', function() { swipe.start($("#image")) })
-			.swipe().on('swipeMove', function(e) { swipe.move(e.swipe) })
-			.swipe().on('swipeEnd', function(e) { swipe.stop(e.swipe, photo.previous, photo.next) });
+			.swipe().on('swipeStart', function() { if (visible.photo()) swipe.start($("#image")) })
+			.swipe().on('swipeMove', function(e) { if (visible.photo()) swipe.move(e.swipe) })
+			.swipe().on('swipeEnd', function(e) { if (visible.photo()) swipe.stop(e.swipe, photo.previous, photo.next) });
 
 	}
 

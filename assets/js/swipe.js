@@ -26,6 +26,8 @@ swipe = {
 
 		console.log(e);
 
+		if (swipe.obj===null) return false;
+
 		swipe.offset = -1 * e.x;
 
 		swipe.obj.css({
