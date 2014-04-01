@@ -3,18 +3,21 @@
 	<head>
 
 		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-		<title></title>
+		<title>Lychee</title>
 
-		<meta name="author" content="Tobias Reich, Philipp Maurer">
+		<meta name="author" content="Tobias Reich">
 		<meta name="keywords" content="">
 		<meta name="description" content="">
 
-		<link type="text/css" rel="stylesheet" href="assets/build/main.css">
+		<!-- CSS -->
+		<link type="text/css" rel="stylesheet" href="assets/min/main.css">
 
 		<link rel="shortcut icon" href="favicon.ico">
+		<link rel="apple-touch-icon" href="assets/img/apple-touch-icon-iphone.png" sizes="120x120">
+		<link rel="apple-touch-icon" href="assets/img/apple-touch-icon-ipad.png" sizes="152x152">
 
-		<meta name="apple-mobile-web-app-status-bar-style" content="black" >
-		<meta name="viewport" content="user-scalable=no, initial-scale=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 
 		<?php
@@ -56,7 +59,7 @@
 	<div id="infobox"></div>
 
 	<!-- JS -->
-	<script type="text/javascript" src="assets/js/_frameworks.js"></script>
+	<script type="text/javascript" src="assets/min/frameworks.js"></script>
 	<script type="text/javascript" src="assets/js/build.js"></script>
 	<script type="text/javascript" src="assets/js/view/main.js"></script>
 

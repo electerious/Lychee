@@ -6,6 +6,19 @@ module.exports = (grunt) ->
 
 		concat:
 
+			frameworks:
+
+				options:
+					separator: "\n"
+				src: [
+					'bower_components/jQuery/dist/jquery.min.js'
+					'bower_components/js-md5/js/md5.min.js'
+					'bower_components/mousetrap/mousetrap.min.js'
+					'bower_components/mousetrap/plugins/global-bind/mousetrap-global-bind.min.js'
+					'../assets/js/_frameworks.js'
+				]
+				dest: '../assets/min/frameworks.js'
+
 			js:
 				options:
 					separator: "\n"
@@ -66,6 +79,7 @@ module.exports = (grunt) ->
 
 	grunt.registerTask 'default', ->
 		grunt.task.run [
+			'concat:frameworks'
 			'js'
 			'css'
 		]
