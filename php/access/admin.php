@@ -13,15 +13,16 @@ switch ($_POST['function']) {
 
 	// Album Functions
 
-	case 'getAlbums':			echo json_encode(getAlbums(false));
+	case 'getAlbums':			$album = new Albums($database, $plugins, $settings, null);
+								echo json_encode($album->getAll(false));
 								break;
 
 	case 'getAlbum':			if (isset($_POST['albumID']))
 									echo json_encode(getAlbum($_POST['albumID']));
 								break;
 
-	case 'addAlbum':			if (isset($_POST['title']))
-									echo addAlbum($_POST['title']);
+	case 'addAlbum':			$album = new Albums($database, $plugins, $settings, null);
+								echo $album->add($_POST['title']);
 								break;
 
 	case 'setAlbumTitle':		if (isset($_POST['albumIDs'], $_POST['title']))

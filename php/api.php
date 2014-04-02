@@ -22,7 +22,7 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 	require('autoload.php');
 
 	// Load modules
-	require('modules/album.php');
+	require('modules/_album.php');
 	require('modules/db.php');
 	require('modules/misc.php');
 	require('modules/photo.php');
@@ -50,7 +50,7 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 
 	// Init plugins
 	$plugins = explode(';', $settings['plugins']);
-	$plugins = new Plugins($plugins);
+	$plugins = new Plugins($plugins, $database);
 
 	// Escape
 	foreach(array_keys($_POST) as $key)	$_POST[$key] = mysqli_real_escape_string($database, urldecode($_POST[$key]));

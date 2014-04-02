@@ -1,10 +1,10 @@
 <?php
 
-/**
- * @name		Plugins Module
- * @author		Tobias Reich
- * @copyright	2014 by Tobias Reich
- */
+###
+# @name		Plugins Module
+# @author		Tobias Reich
+# @copyright	2014 by Tobias Reich
+###
 
 class Plugins implements \SplSubject {
 
@@ -14,13 +14,15 @@ class Plugins implements \SplSubject {
 	public $action	= null;
 	public $args	= null;
 
-	public function __construct($files) {
+	public function __construct($files, $database) {
 
 		if (!isset($files)) return false;
 
-		$plugins = $this;
-		$this->files = $files;
+		# Init vars
+		$plugins		= $this;
+		$this->files	= $files;
 
+		# Load plugins
 		foreach ($this->files as $file) {
 			if ($file==='') continue;
 			include('../plugins/' . $file);
@@ -34,6 +36,7 @@ class Plugins implements \SplSubject {
 
 		if (!isset($observer)) return false;
 
+		# Add observer
 		$this->observers[] = $observer;
 
 		return true;
@@ -44,6 +47,7 @@ class Plugins implements \SplSubject {
 
 		if (!isset($observer)) return false;
 
+		# Remove observer
 		$key = array_search($observer, $this->observers, true);
 		if ($key) unset($this->observers[$key]);
 
@@ -53,6 +57,7 @@ class Plugins implements \SplSubject {
 
 	public function notify() {
 
+		# Notify each observer
 		foreach ($this->observers as $value) $value->update($this);
 
 		return true;
@@ -63,9 +68,11 @@ class Plugins implements \SplSubject {
 
 		if (!isset($action, $args)) return false;
 
+		# Save vars
 		$this->action	= $action;
 		$this->args		= $args;
 
+		# Notify observers
 		$this->notify();
 
 		return true;
