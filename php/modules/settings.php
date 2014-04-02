@@ -14,7 +14,7 @@ function getSettings() {
 
 	$result = $database->query('SELECT * FROM lychee_settings;');
 
-	while($row = $result->fetch_object()) {
+	while ($row = $result->fetch_object()) {
 		$return[$row->key] = $row->value;
 	}
 

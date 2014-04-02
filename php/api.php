@@ -18,6 +18,9 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 	define('LYCHEE', true);
 	date_default_timezone_set('UTC');
 
+	// Load autoload
+	require('autoload.php');
+
 	// Load modules
 	require('modules/album.php');
 	require('modules/db.php');
@@ -44,6 +47,10 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 	// Connect and get settings
 	$database = dbConnect();
 	$settings = getSettings();
+
+	// Init plugins
+	$plugins = explode(';', $settings['plugins']);
+	$plugins = new Plugins($plugins);
 
 	// Escape
 	foreach(array_keys($_POST) as $key)	$_POST[$key] = mysqli_real_escape_string($database, urldecode($_POST[$key]));
