@@ -220,7 +220,7 @@ view = {
 						lychee.setTitle("Unsorted", false);
 						break;
 					default:
-						if (album.json.init) $("#infobox .attr_name").html(album.json.title + " " + build.editIcon("edit_title_album"));
+						if (album.json.init) $("#infobox .attr_title").html(album.json.title + " " + build.editIcon("edit_title_album"));
 						lychee.setTitle(album.json.title, true);
 						break;
 				}
@@ -397,7 +397,7 @@ view = {
 
 		title: function() {
 
-			if (photo.json.init) $("#infobox .attr_name").html(photo.json.title + " " + build.editIcon("edit_title"));
+			if (photo.json.init) $("#infobox .attr_title").html(photo.json.title + " " + build.editIcon("edit_title"));
 			lychee.setTitle(photo.json.title, true);
 
 		},
