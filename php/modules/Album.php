@@ -8,7 +8,7 @@
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
-class Albums {
+class Album {
 
 	private $database	= null;
 	private $plugins	= null;

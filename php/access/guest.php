@@ -13,7 +13,7 @@ switch ($_POST['function']) {
 
 	// Album Functions
 
-	case 'getAlbums':		$album = new Albums($database, $plugins, $settings, null);
+	case 'getAlbums':		$album = new Album($database, $plugins, $settings, null);
 							echo json_encode($album->getAll(true));
 							break;
 
