@@ -38,32 +38,35 @@ function getAlbums($public) {
 
 	while ($row = $result->fetch_object()) {
 
+		$album = array();
+		
 		// Info
-		$return['content'][$row->id]['id']		= $row->id;
-		$return['content'][$row->id]['title']	= $row->title;
-		$return['content'][$row->id]['public']	= $row->public;
-		$return['content'][$row->id]['sysdate']	= date('F Y', strtotime($row->sysdate));
+		$album['id']      = $row->id;
+		$album['title']   = $row->title;
+		$album['public']  = $row->public;
+		$album['sysdate'] = date('F Y', strtotime($row->sysdate));
 
 		// Password
-		$return['content'][$row->id]['password'] = false;
-		if ($row->password!='') $return['content'][$row->id]['password'] = true;
+		$album['password'] = ($row->password != '');
 
 		// Thumbs
-		if (($public&&$row->password=='')||(!$public)) {
+		if (($public && $row->password=='') || (!$public)) {
 
 			$albumID = $row->id;
 			$result2 = $database->query("SELECT thumbUrl FROM lychee_photos WHERE album = '$albumID' ORDER BY star DESC, " . substr($settings['sorting'], 9) . " LIMIT 0, 3");
 			$k = 0;
 			while ($row2 = $result2->fetch_object()) {
-				$return['content'][$row->id]["thumb$k"] = $row2->thumbUrl;
+				$album['thumb'.$k] = $row2->thumbUrl;
 				$k++;
 			}
 
 		}
+		
+		$return['content'][] = $album;
 
 	}
 
-	$return["num"] = $result->num_rows;
+	$return['num'] = $result->num_rows;
 
 	return $return;
 
