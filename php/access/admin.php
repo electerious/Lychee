@@ -25,12 +25,14 @@ switch ($_POST['function']) {
 								echo $album->add($_POST['title']);
 								break;
 
-	case 'setAlbumTitle':		if (isset($_POST['albumIDs'], $_POST['title']))
-									echo setAlbumTitle($_POST['albumIDs'], $_POST['title']);
+	case 'setAlbumTitle':		if (!isset($_POST['albumIDs'])) exit();
+								$album = new Album($database, $plugins, $settings, $_POST['albumIDs']);
+								echo $album->setTitle($_POST['title']);
 								break;
 
-	case 'setAlbumDescription':	if (isset($_POST['albumID'], $_POST['description']))
-									echo setAlbumDescription($_POST['albumID'], $_POST['description']);
+	case 'setAlbumDescription':	if (!isset($_POST['albumID'])) exit();
+								$album = new Album($database, $plugins, $settings, $_POST['albumID']);
+								echo $album->setDescription($_POST['description']);
 								break;
 
 	case 'setAlbumPublic': 		if (isset($_POST['albumID']))
@@ -42,8 +44,9 @@ switch ($_POST['function']) {
 									echo setAlbumPassword($_POST['albumID'], $_POST['password']);
 								break;
 
-	case 'deleteAlbum':			if (isset($_POST['albumIDs']))
-									echo deleteAlbum($_POST['albumIDs']);
+	case 'deleteAlbum':			if (!isset($_POST['albumIDs'])) exit();
+								$album = new Album($database, $plugins, $settings, $_POST['albumIDs']);
+								echo $album->delete($_POST['albumIDs']);
 								break;
 
 	// Photo Functions

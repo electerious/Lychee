@@ -12,10 +12,10 @@ class Album {
 
 	private $database	= null;
 	private $plugins	= null;
-	private $settings	= array();
-	private $albumIDs	= array();
+	private $settings	= null;
+	private $albumIDs	= null;
 
-	public function __construct($database = null, $plugins = null, $settings = null, $albumIDs = array()) {
+	public function __construct($database, $plugins, $settings, $albumIDs) {
 
 		# Init vars
 		$this->database	= $database;
@@ -62,7 +62,7 @@ class Album {
 
 	public function getAll($public) {
 
-		if (!isset($public)) return false;
+		if (!isset($this->database, $this->settings, $public)) return false;
 
 		# Call plugins
 		$this->plugins('getAll:before', func_get_args());
@@ -111,6 +111,77 @@ class Album {
 		$this->plugins('getAll:after', func_get_args());
 
 		return $return;
+
+	}
+
+	public function setTitle($title = 'Untitled') {
+
+		if (!isset($this->database, $this->albumIDs)) return false;
+
+		# Call plugins
+		$this->plugins('setTitle:before', func_get_args());
+
+		# Parse
+		if (strlen($title)>50) $title = substr($title, 0, 50);
+
+		# Execute query
+		$result = $this->database->query("UPDATE lychee_albums SET title = '$title' WHERE id IN ($this->albumIDs);");
+
+		# Call plugins
+		$this->plugins('setTitle:after', func_get_args());
+
+		if (!$result) return false;
+		return true;
+
+	}
+
+	public function setDescription($description = '') {
+
+		if (!isset($this->database, $this->albumIDs)) return false;
+
+		# Call plugins
+		$this->plugins('setDescription:before', func_get_args());
+
+		# Parse
+		$description = htmlentities($description);
+		if (strlen($description)>1000) return false;
+
+		# Execute query
+		$result = $this->database->query("UPDATE lychee_albums SET description = '$description' WHERE id IN ($this->albumIDs);");
+
+		# Call plugins
+		$this->plugins('setDescription:after', func_get_args());
+
+		if (!$result) return false;
+		return true;
+
+	}
+
+	public function delete($albumIDs) {
+
+		if (!isset($this->database, $this->albumIDs)) return false;
+
+		# Call plugins
+		$this->plugins('delete:before', func_get_args());
+
+		# Init vars
+		$error = false;
+
+		# Execute query
+		$result = $this->database->query("SELECT id FROM lychee_photos WHERE album IN ($albumIDs);");
+
+		# For each album delete photo
+		while ($row = $result->fetch_object())
+			if (!deletePhoto($row->id)) $error = true;
+
+		# Delete albums
+		$result = $this->database->query("DELETE FROM lychee_albums WHERE id IN ($albumIDs);");
+
+		# Call plugins
+		$this->plugins('delete:after', func_get_args());
+
+		if ($error||!$result) return false;
+		return true;
 
 	}
 
