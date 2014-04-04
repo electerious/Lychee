@@ -24,7 +24,6 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 	// Load modules
 	require('modules/misc.php');
 	require('modules/photo.php');
-	require('modules/_settings.php');
 	require('modules/upload.php');
 
 	if (file_exists('../data/config.php')) require('../data/config.php');
