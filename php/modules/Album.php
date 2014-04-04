@@ -27,12 +27,15 @@ class Album {
 
 	}
 
-	private function plugins($action, $args) {
+	private function plugins($name, $location, $args) {
 
-		if (!isset($this->plugins, $action, $args)) return false;
+		if (!isset($this->plugins, $name, $location, $args)) return false;
+
+		# Parse
+		$location = ($location===0 ? 'before' : 'after');
 
 		# Call plugins
-		$this->plugins->activate("Album:$action", $args);
+		$this->plugins->activate($name . ":" . $location, $args);
 
 		return true;
 
@@ -43,7 +46,7 @@ class Album {
 		if (!isset($this->database)) return false;
 
 		# Call plugins
-		$this->plugins('add:before', func_get_args());
+		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Parse
 		if (strlen($title)>50) $title = substr($title, 0, 50);
@@ -53,7 +56,7 @@ class Album {
 		$result		= $this->database->query("INSERT INTO lychee_albums (title, sysdate, public, visible) VALUES ('$title', '$sysdate', '$public', '$visible');");
 
 		# Call plugins
-		$this->plugins('add:after', func_get_args());
+		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$result) return false;
 		return $this->database->insert_id;
@@ -65,7 +68,7 @@ class Album {
 		if (!isset($this->database, $this->settings, $this->albumIDs)) return false;
 
 		# Call plugins
-		$this->plugins('get:before', func_get_args());
+		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Get album information
 		switch($this->albumIDs) {
@@ -133,7 +136,7 @@ class Album {
 		$return['num']	= $photos->num_rows;
 
 		# Call plugins
-		$this->plugins('get:after', func_get_args());
+		$this->plugins(__METHOD__, 1, func_get_args());
 
 		return $return;
 
@@ -144,7 +147,7 @@ class Album {
 		if (!isset($this->database, $this->settings, $public)) return false;
 
 		# Call plugins
-		$this->plugins('getAll:before', func_get_args());
+		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Get SmartAlbums
 		if ($public===false) $return = $this->getSmartInfo();
@@ -187,7 +190,7 @@ class Album {
 		$return['num'] = $albums->num_rows;
 
 		# Call plugins
-		$this->plugins('getAll:after', func_get_args());
+		$this->plugins(__METHOD__, 1, func_get_args());
 
 		return $return;
 
@@ -239,7 +242,7 @@ class Album {
 		if (!isset($this->database, $this->albumIDs)) return false;
 
 		# Call plugins
-		$this->plugins('getArchive:before', func_get_args());
+		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Photos query
 		switch($this->albumIDs) {
@@ -298,7 +301,7 @@ class Album {
 		unlink($filename);
 
 		# Call plugins
-		$this->plugins('getArchive:after', func_get_args());
+		$this->plugins(__METHOD__, 1, func_get_args());
 
 		return true;
 
@@ -309,7 +312,7 @@ class Album {
 		if (!isset($this->database, $this->albumIDs)) return false;
 
 		# Call plugins
-		$this->plugins('setTitle:before', func_get_args());
+		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Parse
 		if (strlen($title)>50) $title = substr($title, 0, 50);
@@ -318,7 +321,7 @@ class Album {
 		$result = $this->database->query("UPDATE lychee_albums SET title = '$title' WHERE id IN ($this->albumIDs);");
 
 		# Call plugins
-		$this->plugins('setTitle:after', func_get_args());
+		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$result) return false;
 		return true;
@@ -330,7 +333,7 @@ class Album {
 		if (!isset($this->database, $this->albumIDs)) return false;
 
 		# Call plugins
-		$this->plugins('setDescription:before', func_get_args());
+		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Parse
 		$description = htmlentities($description);
@@ -340,7 +343,7 @@ class Album {
 		$result = $this->database->query("UPDATE lychee_albums SET description = '$description' WHERE id IN ($this->albumIDs);");
 
 		# Call plugins
-		$this->plugins('setDescription:after', func_get_args());
+		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$result) return false;
 		return true;
@@ -352,7 +355,7 @@ class Album {
 		if (!isset($this->database, $this->albumIDs)) return false;
 
 		# Call plugins
-		$this->plugins('setPublic:before', func_get_args());
+		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Get public
 		$albums	= $this->database->query("SELECT id, public FROM lychee_albums WHERE id IN ('$this->albumIDs');");
@@ -375,7 +378,7 @@ class Album {
 		}
 
 		# Call plugins
-		$this->plugins('setPublic:after', func_get_args());
+		$this->plugins(__METHOD__, 1, func_get_args());
 
 		# Set password
 		if (isset($password)&&strlen($password)>0) return $this->setPassword($password);
@@ -389,7 +392,7 @@ class Album {
 		if (!isset($this->database, $this->albumIDs)) return false;
 
 		# Call plugins
-		$this->plugins('getPublic:before', func_get_args());
+		$this->plugins(__METHOD__, 0, func_get_args());
 
 		if ($this->albumIDs==='0'||$this->albumIDs==='s'||$this->albumIDs==='f') return false;
 
@@ -398,7 +401,7 @@ class Album {
 		$album	= $albums->fetch_object();
 
 		# Call plugins
-		$this->plugins('getPublic:after', func_get_args());
+		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if ($album->public==1) return true;
 		return false;
@@ -428,14 +431,14 @@ class Album {
 		if (!isset($this->database, $this->albumIDs)) return false;
 
 		# Call plugins
-		$this->plugins('checkPassword:before', func_get_args());
+		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Execute query
 		$albums	= $this->database->query("SELECT password FROM lychee_albums WHERE id = '$this->albumIDs' LIMIT 1;");
 		$album	= $albums->fetch_object();
 
 		# Call plugins
-		$this->plugins('checkPassword:before', func_get_args());
+		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if ($album->password=='') return true;
 		else if ($album->password===$password) return true;
@@ -448,7 +451,7 @@ class Album {
 		if (!isset($this->database, $this->albumIDs)) return false;
 
 		# Call plugins
-		$this->plugins('delete:before', func_get_args());
+		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Init vars
 		$error = false;
@@ -464,7 +467,7 @@ class Album {
 		$result = $this->database->query("DELETE FROM lychee_albums WHERE id IN ($albumIDs);");
 
 		# Call plugins
-		$this->plugins('delete:after', func_get_args());
+		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if ($error||!$result) return false;
 		return true;
