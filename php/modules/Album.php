@@ -157,6 +157,61 @@ class Album {
 
 	}
 
+	public function setPublic($password) {
+
+		if (!isset($this->database, $this->albumIDs)) return false;
+
+		# Call plugins
+		$this->plugins('setPublic:before', func_get_args());
+
+		# Get public
+		$albums	= $this->database->query("SELECT id, public FROM lychee_albums WHERE id IN ('$this->albumIDs');");
+
+		while ($album = $albums->fetch_object()) {
+
+			# Invert public
+			$public = ($album->public=='0' ? 1 : 0);
+
+			# Set public
+			$result = $this->database->query("UPDATE lychee_albums SET public = '$public', password = NULL WHERE id = '$album->id';");
+			if (!$result) return false;
+
+			# Reset permissions for photos
+			if ($public===1) {
+				$result = $this->database->query("UPDATE lychee_photos SET public = 0 WHERE album = '$album->id';");
+				if (!$result) return false;
+			}
+
+		}
+
+		# Call plugins
+		$this->plugins('setPublic:after', func_get_args());
+
+		# Set password
+		if (isset($password)&&strlen($password)>0) return $this->setPassword($password);
+
+		return true;
+
+	}
+
+	public function setPassword($password) {
+
+		if (!isset($this->database, $this->albumIDs)) return false;
+
+		# Call plugins
+		$this->plugins('setPassword:before', func_get_args());
+
+		# Execute query
+		$result = $this->database->query("UPDATE lychee_albums SET password = '$password' WHERE id IN ('$this->albumIDs');");
+
+		# Call plugins
+		$this->plugins('setPassword:after', func_get_args());
+
+		if (!$result) return false;
+		return true;
+
+	}
+
 	public function delete($albumIDs) {
 
 		if (!isset($this->database, $this->albumIDs)) return false;
@@ -188,6 +243,9 @@ class Album {
 	public function getArchive() {
 
 		if (!isset($this->database, $this->albumIDs)) return false;
+
+		# Call plugins
+		$this->plugins('getArchive:before', func_get_args());
 
 		# Photos query
 		switch($this->albumIDs) {
@@ -244,6 +302,9 @@ class Album {
 
 		# Delete zip
 		unlink($filename);
+
+		# Call plugins
+		$this->plugins('getArchive:after', func_get_args());
 
 		return true;
 

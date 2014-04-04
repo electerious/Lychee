@@ -281,7 +281,7 @@ album = {
 
 		} else {
 
-			params = "setAlbumPublic&albumID=" + albumID;
+			params = "setAlbumPublic&albumID=" + albumID + "&password=";
 			album.json.password = false;
 
 		}

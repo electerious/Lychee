@@ -21,27 +21,29 @@ switch ($_POST['function']) {
 									echo json_encode(getAlbum($_POST['albumID']));
 								break;
 
-	case 'addAlbum':			$album = new Album($database, $plugins, $settings, null);
+	case 'addAlbum':			if (!isset($_POST['title'])) exit();
+								$album = new Album($database, $plugins, $settings, null);
 								echo $album->add($_POST['title']);
 								break;
 
-	case 'setAlbumTitle':		if (!isset($_POST['albumIDs'])) exit();
+	case 'setAlbumTitle':		if (!isset($_POST['albumIDs'], $_POST['title'])) exit();
 								$album = new Album($database, $plugins, $settings, $_POST['albumIDs']);
 								echo $album->setTitle($_POST['title']);
 								break;
 
-	case 'setAlbumDescription':	if (!isset($_POST['albumID'])) exit();
+	case 'setAlbumDescription':	if (!isset($_POST['albumID'], $_POST['description'])) exit();
 								$album = new Album($database, $plugins, $settings, $_POST['albumID']);
 								echo $album->setDescription($_POST['description']);
 								break;
 
-	case 'setAlbumPublic': 		if (isset($_POST['albumID']))
-									if (!isset($_POST['password'])) $_POST['password'] = '';
-									echo setAlbumPublic($_POST['albumID'], $_POST['password']);
+	case 'setAlbumPublic': 		if (!isset($_POST['albumID'], $_POST['password'])) exit();
+								$album = new Album($database, $plugins, $settings, $_POST['albumID']);
+								echo $album->setPublic($_POST['password']);
 								break;
 
-	case 'setAlbumPassword':	if (isset($_POST['albumID'], $_POST['password']))
-									echo setAlbumPassword($_POST['albumID'], $_POST['password']);
+	case 'setAlbumPassword':	if (!isset($_POST['albumID'], $_POST['password'])) exit();
+								$album = new Album($database, $plugins, $settings, $_POST['albumID']);
+								echo $album->setPassword($_POST['password']);
 								break;
 
 	case 'deleteAlbum':			if (!isset($_POST['albumIDs'])) exit();
