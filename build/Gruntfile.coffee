@@ -45,13 +45,13 @@ module.exports = (grunt) ->
 
 			view:
 				options:
-					banner: '/*! <%= pkg.name %> <%= pkg.version %> | <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+					banner: '/*! <%= pkg.name %> <%= pkg.version %> */\n'
 				files:
 					'../assets/min/view.js': '../assets/min/view.js'
 
 			assets:
 				options:
-					banner: '/*! <%= pkg.name %> <%= pkg.version %> | <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+					banner: '/*! <%= pkg.name %> <%= pkg.version %> */\n'
 				files:
 					'../assets/min/main.js': '../assets/min/main.js'
 
@@ -59,7 +59,7 @@ module.exports = (grunt) ->
 
 			assets:
 				options:
-					banner: '/*! <%= pkg.name %> <%= pkg.version %> | <%= grunt.template.today("yyyy-mm-dd") %> */'
+					banner: '/*! <%= pkg.name %> <%= pkg.version %> */'
 				files:
 					'../assets/min/main.css': '../assets/min/main.css'
 
