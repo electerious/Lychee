@@ -167,8 +167,9 @@ function isPhotoPublic($photoID, $password) {
 
 	if ($row->public==1) return true;
 	else {
-		$cAP = checkAlbumPassword($row->album, $password);
-		$iAP = isAlbumPublic($row->album);
+		$album	= new Album($database, null, null, $row->album);
+		$cAP		= $album->checkPassword($password);
+		$iAP		= $album->getPublic();
 		if ($iAP&&$cAP) return true;
 		return false;
 	}

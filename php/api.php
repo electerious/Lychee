@@ -22,7 +22,6 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 	require('autoload.php');
 
 	// Load modules
-	require('modules/_album.php');
 	require('modules/db.php');
 	require('modules/misc.php');
 	require('modules/photo.php');

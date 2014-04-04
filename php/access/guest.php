@@ -17,31 +17,27 @@ switch ($_POST['function']) {
 							echo json_encode($album->getAll(true));
 							break;
 
-	case 'getAlbum':		if (isset($_POST['albumID'], $_POST['password'])) {
-								if (isAlbumPublic($_POST['albumID'])) {
-									// Album Public
-									if (checkAlbumPassword($_POST['albumID'], $_POST['password']))
-										echo json_encode(getAlbum($_POST['albumID']));
-									else
-										echo 'Warning: Wrong password!';
-								} else {
-									// Album Private
-									echo 'Warning: Album private!';
-								}
+	case 'getAlbum':		if (!isset($_POST['albumID'], $_POST['password'])) exit();
+							$album = new Album($database, $plugins, $settings, $_POST['albumID']);
+							if ($album->getPublic()) {
+								// Album Public
+								if ($album->checkPassword($_POST['password'])) echo json_encode($album->get());
+								else echo 'Warning: Wrong password!';
+							} else {
+								// Album Private
+								echo 'Warning: Album private!';
 							}
 							break;
 
-	case 'checkAlbumAccess':if (isset($_POST['albumID'], $_POST['password'])) {
-								if (isAlbumPublic($_POST['albumID'])) {
-									// Album Public
-									if (checkAlbumPassword($_POST['albumID'], $_POST['password']))
-										echo true;
-									else
-										echo false;
-								} else {
-									// Album Private
-									echo false;
-								}
+	case 'checkAlbumAccess':if (!isset($_POST['albumID'], $_POST['password'])) exit();
+							$album = new Album($database, $plugins, $settings, $_POST['albumID']);
+							if ($album->getPublic()) {
+								// Album Public
+								if ($album->checkPassword($_POST['password'])) echo true;
+								else echo false;
+							} else {
+								// Album Private
+								echo false;
 							}
 							break;
 
@@ -68,34 +64,14 @@ switch ($_POST['function']) {
 
 	default:				switch ($_GET['function']) {
 
-								case 'getFeed':				if (isset($_GET['albumID'], $_GET['password'])) {
-
-																// Album Feed
-																if (isAlbumPublic($_GET['albumID'])) {
-																	// Album Public
-																	if (checkAlbumPassword($_GET['albumID'], $_GET['password']))
-																		echo getFeed($_GET['albumID']);
-																	else
-																		exit('Warning: Wrong password!');
-																} else {
-																	// Album Private
-																	exit('Warning: Album private!');
-																}
-
-															}
-															break;
-
 								case 'getAlbumArchive':		if (!isset($_GET['albumID'], $_GET['password'])) exit();
+															$album = new Album($database, $plugins, $settings, $_GET['albumID']);
 
 															// Album Download
-															if (isAlbumPublic($_GET['albumID'])) {
+															if ($album->getPublic()) {
 																// Album Public
-																if (checkAlbumPassword($_GET['albumID'], $_GET['password'])) {
-																	$album = new Album($database, $plugins, $settings, $_GET['albumID']);
-																	$album->getArchive();
-																} else {
-																	exit('Warning: Wrong password!');
-																}
+																if ($album->checkPassword($_GET['password'])) $album->getArchive();
+																else exit('Warning: Wrong password!');
 															} else {
 																// Album Private
 																exit('Warning: Album private or not downloadable!');

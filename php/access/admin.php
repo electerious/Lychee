@@ -17,8 +17,9 @@ switch ($_POST['function']) {
 								echo json_encode($album->getAll(false));
 								break;
 
-	case 'getAlbum':			if (isset($_POST['albumID']))
-									echo json_encode(getAlbum($_POST['albumID']));
+	case 'getAlbum':			if (!isset($_POST['albumID'])) exit();
+								$album = new Album($database, $plugins, $settings, $_POST['albumID']);
+								echo json_encode($album->get());
 								break;
 
 	case 'addAlbum':			if (!isset($_POST['title'])) exit();
