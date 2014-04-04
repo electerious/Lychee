@@ -8,10 +8,9 @@
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
-class Album {
+class Album extends Module {
 
 	private $database	= null;
-	private $plugins	= null;
 	private $settings	= null;
 	private $albumIDs	= null;
 
@@ -22,20 +21,6 @@ class Album {
 		$this->plugins	= $plugins;
 		$this->settings	= $settings;
 		$this->albumIDs	= $albumIDs;
-
-		return true;
-
-	}
-
-	private function plugins($name, $location, $args) {
-
-		if (!isset($this->plugins, $name, $location, $args)) return false;
-
-		# Parse
-		$location = ($location===0 ? 'before' : 'after');
-
-		# Call plugins
-		$this->plugins->activate($name . ":" . $location, $args);
 
 		return true;
 

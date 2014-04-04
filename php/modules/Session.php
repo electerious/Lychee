@@ -8,30 +8,15 @@
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
-class Session {
+class Session extends Module {
 
-	private $plugins	= null;
-	private $settings	= null;
+	private $settings = null;
 
 	public function __construct($plugins, $settings) {
 
 		# Init vars
 		$this->plugins	= $plugins;
 		$this->settings	= $settings;
-
-		return true;
-
-	}
-
-	private function plugins($name, $location, $args) {
-
-		if (!isset($this->plugins, $name, $location, $args)) return false;
-
-		# Parse
-		$location = ($location===0 ? 'before' : 'after');
-
-		# Call plugins
-		$this->plugins->activate($name . ":" . $location, $args);
 
 		return true;
 
