@@ -11,8 +11,8 @@ if (!defined('LYCHEE_ACCESS_INSTALLATION')) exit('Error: You are not allowed to 
 
 switch ($_POST['function']) {
 
-	case 'dbCreateConfig':	if (isset($_POST['dbHost'], $_POST['dbUser'], $_POST['dbPassword'], $_POST['dbName'], $_POST['version']))
-								echo dbCreateConfig($_POST['dbHost'], $_POST['dbUser'], $_POST['dbPassword'], $_POST['dbName'], $_POST['version']);
+	case 'dbCreateConfig':	if (!isset($_POST['dbHost'], $_POST['dbUser'], $_POST['dbPassword'], $_POST['dbName'], $_POST['version'])) exit();
+							echo Database::createConfig($_POST['dbHost'], $_POST['dbUser'], $_POST['dbPassword'], $_POST['dbName'], $_POST['version']);
 							break;
 
 	default:				echo 'Warning: No configuration!';

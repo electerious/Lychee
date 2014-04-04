@@ -22,7 +22,6 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 	require('autoload.php');
 
 	// Load modules
-	require('modules/db.php');
 	require('modules/misc.php');
 	require('modules/photo.php');
 	require('modules/settings.php');
@@ -43,7 +42,7 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 	}
 
 	// Connect and get settings
-	$database = dbConnect();
+	$database = Database::connect($dbHost, $dbUser, $dbPassword, $dbName);
 	$settings = getSettings();
 
 	// Init plugins
