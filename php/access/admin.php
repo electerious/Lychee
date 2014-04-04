@@ -108,17 +108,21 @@ switch ($_POST['function']) {
 
 	// Session Function
 
-	case 'init':			echo json_encode(init('admin', $_POST['version']));
+	case 'init':			if (!isset($_POST['version'])) exit();
+							$session = new Session($plugins, $settings);
+							echo json_encode($session->init(false, $_POST['version']));
 							break;
 
-	case 'login':			if (isset($_POST['user'], $_POST['password']))
-								echo login($_POST['user'], $_POST['password']);
+	case 'login':			if (!isset($_POST['user'], $_POST['password'])) exit();
+							$session = new Session($plugins, $settings);
+							echo $session->login($_POST['user'], $_POST['password']);
 							break;
 
-	case 'logout':			logout();
+	case 'logout':			$session = new Session($plugins, $settings);
+							echo $session->logout();
 							break;
 
-	// Settings
+	// Settings Function
 
 	case 'setLogin':		if (isset($_POST['username'], $_POST['password']))
 								if (!isset($_POST['oldPassword'])) $_POST['oldPassword'] = '';

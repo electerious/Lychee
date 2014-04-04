@@ -25,7 +25,7 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 	require('modules/db.php');
 	require('modules/misc.php');
 	require('modules/photo.php');
-	require('modules/session.php');
+	require('modules/_session.php');
 	require('modules/settings.php');
 	require('modules/upload.php');
 

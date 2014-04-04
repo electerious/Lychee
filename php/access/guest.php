@@ -53,11 +53,13 @@ switch ($_POST['function']) {
 
 	// Session Functions
 
-	case 'init':			echo json_encode(init('public', $_POST['version']));
+	case 'init':			$session = new Session($plugins, $settings);
+							echo json_encode($session->init(true, $_POST['version']));
 							break;
 
-	case 'login':			if (isset($_POST['user'], $_POST['password']))
-								echo login($_POST['user'], $_POST['password']);
+	case 'login':			if (!isset($_POST['user'], $_POST['password'])) exit();
+							$session = new Session($plugins, $settings);
+							echo $session->login($_POST['user'], $_POST['password']);
 							break;
 
 	// Miscellaneous
