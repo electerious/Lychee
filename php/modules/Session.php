@@ -41,6 +41,9 @@ class Session {
 
 		if (!isset($this->settings, $public, $version)) return false;
 
+		# Call plugins
+		$this->plugins(__METHOD__, 0, func_get_args());
+
 		global $configVersion;
 
 		# Update
@@ -74,6 +77,9 @@ class Session {
 
 		}
 
+		# Call plugins
+		$this->plugins(__METHOD__, 1, func_get_args());
+
 		return $return;
 
 	}
@@ -81,6 +87,9 @@ class Session {
 	public function login($username, $password) {
 
 		if (!isset($this->settings, $username, $password)) return false;
+
+		# Call plugins
+		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Check login
 		if ($username===$this->settings['username']&&$password===$this->settings['password']) {
@@ -94,13 +103,23 @@ class Session {
 			return true;
 		}
 
+		# Call plugins
+		$this->plugins(__METHOD__, 1, func_get_args());
+
 		return false;
 
 	}
 
 	public function logout() {
 
+		# Call plugins
+		$this->plugins(__METHOD__, 0, func_get_args());
+
 		session_destroy();
+
+		# Call plugins
+		$this->plugins(__METHOD__, 1, func_get_args());
+
 		return true;
 
 	}
