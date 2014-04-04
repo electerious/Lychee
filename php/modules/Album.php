@@ -32,7 +32,7 @@ class Album {
 		if (!isset($this->plugins, $action, $args)) return false;
 
 		# Call plugins
-		$this->plugins->activate("Albums:$action", $args);
+		$this->plugins->activate("Album:$action", $args);
 
 		return true;
 
@@ -181,6 +181,70 @@ class Album {
 		$this->plugins('delete:after', func_get_args());
 
 		if ($error||!$result) return false;
+		return true;
+
+	}
+
+	public function getArchive() {
+
+		if (!isset($this->database, $this->albumIDs)) return false;
+
+		# Photos query
+		switch($this->albumIDs) {
+			case 's':
+				$photos = "SELECT url FROM lychee_photos WHERE public = '1';";
+				$zipTitle = 'Public';
+				break;
+			case 'f':
+				$photos = "SELECT url FROM lychee_photos WHERE star = '1';";
+				$zipTitle = 'Starred';
+				break;
+			default:
+				$photos = "SELECT url FROM lychee_photos WHERE album = '$this->albumIDs';";
+				$zipTitle = 'Unsorted';
+		}
+
+		# Execute query
+		$photos = $this->database->query($photos);
+
+		# Init vars
+		$zip	= new ZipArchive();
+		$files	= array();
+		$i		= 0;
+
+		# Parse each url
+		while ($photo = $photos->fetch_object()) {
+			$files[$i] = '../uploads/big/' . $photo->url;
+			$i++;
+		}
+
+		# Set title
+		$album = $this->database->query("SELECT title FROM lychee_albums WHERE id = '$this->albumIDs' LIMIT 1;");
+		if ($this->albumIDs!=0&&is_numeric($this->albumIDs)) $zipTitle = $album->fetch_object()->title;
+
+		# Create zip
+		$filename = "../data/$zipTitle.zip";
+		if ($zip->open($filename, ZIPARCHIVE::CREATE)!==TRUE) return false;
+
+		# Add each photo
+		foreach ($files AS $file) {
+			$newFile = explode('/', $file);
+			$newFile = array_reverse($newFile);
+			$zip->addFile($file, $zipTitle . '/' . $newFile[0]);
+		}
+
+		# Finish zip
+		$zip->close();
+
+		# Send zip
+		header("Content-Type: application/zip");
+		header("Content-Disposition: attachment; filename=\"$zipTitle.zip\"");
+		header("Content-Length: ".filesize($filename));
+		readfile($filename);
+
+		# Delete zip
+		unlink($filename);
+
 		return true;
 
 	}

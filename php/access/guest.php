@@ -85,21 +85,22 @@ switch ($_POST['function']) {
 															}
 															break;
 
-								case 'getAlbumArchive':		if (isset($_GET['albumID'], $_GET['password'])) {
+								case 'getAlbumArchive':		if (!isset($_GET['albumID'], $_GET['password'])) exit();
 
-																// Album Download
-																if (isAlbumPublic($_GET['albumID'])) {
-																	// Album Public
-																	if (checkAlbumPassword($_GET['albumID'], $_GET['password']))
-																		getAlbumArchive($_GET['albumID']);
-																	else
-																		exit('Warning: Wrong password!');
+															// Album Download
+															if (isAlbumPublic($_GET['albumID'])) {
+																// Album Public
+																if (checkAlbumPassword($_GET['albumID'], $_GET['password'])) {
+																	$album = new Album($database, $plugins, $settings, $_GET['albumID']);
+																	$album->getArchive();
 																} else {
-																	// Album Private
-																	exit('Warning: Album private or not downloadable!');
+																	exit('Warning: Wrong password!');
 																}
-
+															} else {
+																// Album Private
+																exit('Warning: Album private or not downloadable!');
 															}
+
 															break;
 
 								case 'getPhotoArchive':		if (isset($_GET['photoID'], $_GET['password'])) {

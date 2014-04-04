@@ -138,8 +138,9 @@ switch ($_POST['function']) {
 																echo getFeed($_GET['albumID']);
 															break;
 
-								case 'getAlbumArchive':		if (isset($_GET['albumID']))
-																getAlbumArchive($_GET['albumID']);
+								case 'getAlbumArchive':		if (!isset($_GET['albumID'])) exit();
+															$album = new Album($database, $plugins, $settings, $_GET['albumID']);
+															$album->getArchive();
 															break;
 
 								case 'getPhotoArchive':		if (isset($_GET['photoID']))
