@@ -1,15 +1,11 @@
 ### 1. Requirements
 Everything you need is a web-server with PHP 5.3 or later and a MySQL-Database.
 
-### 2. PHP configuration `php.ini`
+The following PHP extensions must be activated:
 
-The following extensions must be activated:
-
-	extension = php_mbstring.dll
-	extension = php_exif.dll
-	extension = php_gd2.dll
-
-To use Lychee without restrictions, we recommend to increase the values of the following properties:
+	exif, gd, json, mbstring, mysqli, zip
+	
+To use Lychee without restrictions, we recommend to increase the values of the following properties in `php.ini`:
 
 	max_execution_time = 200
 	post_max_size = 200M
@@ -17,7 +13,9 @@ To use Lychee without restrictions, we recommend to increase the values of the f
 	upload_max_filesize = 20M
 	max_file_uploads = 100
 	
-### 3. Download
+You might also take a look at [Issue #106](https://github.com/electerious/Lychee/issues/106) if you are using nginx or in the [FAQ](https://github.com/electerious/Lychee/blob/master/docs/FAQ.md#i-cant-upload-multiple-photos-at-once) if you are using CGI or FastCGI.
+	
+### 2. Download
 
 The easiest way to download Lychee is with `git`:
 
@@ -25,13 +23,13 @@ The easiest way to download Lychee is with `git`:
 	
 You can also use the [direct download](https://github.com/electerious/Lychee/archive/master.zip).
 
-### 4. Permissions
+### 3. Permissions
 
 Change the permissions of `uploads/` and `data/` to 777, including all subfolders:
 
 	chmod -R 777 uploads/ data/
 
-### 5. Finish
+### 4. Finish
 
 Open Lychee in your browser and follow the given steps.
 If you have trouble, take a look at the [FAQ](FAQ.md).
