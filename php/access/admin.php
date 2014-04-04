@@ -124,17 +124,20 @@ switch ($_POST['function']) {
 
 	// Settings Function
 
-	case 'setLogin':		if (isset($_POST['username'], $_POST['password']))
-								if (!isset($_POST['oldPassword'])) $_POST['oldPassword'] = '';
-								echo setLogin($_POST['oldPassword'], $_POST['username'], $_POST['password']);
+	case 'setLogin':		if (!isset($_POST['username'], $_POST['password'])) exit();
+							if (!isset($_POST['oldPassword'])) $_POST['oldPassword'] = '';
+							$settings = new Settings($database);
+							echo $settings->setLogin($_POST['oldPassword'], $_POST['username'], $_POST['password']);
 							break;
 
-	case 'setSorting':		if (isset($_POST['type'], $_POST['order']))
-								echo setSorting($_POST['type'], $_POST['order']);
+	case 'setSorting':		if (!isset($_POST['type'], $_POST['order'])) exit();
+							$settings = new Settings($database);
+							echo $settings->setSorting($_POST['type'], $_POST['order']);
 							break;
 
-	case 'setDropboxKey':	if (isset($_POST['key']))
-								echo setDropboxKey($_POST['key']);
+	case 'setDropboxKey':	if (!isset($_POST['key'])) exit();
+							$settings = new Settings($database);
+							echo $settings->setDropboxKey($_POST['key']);
 							break;
 
 	// Miscellaneous

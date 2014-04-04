@@ -24,7 +24,7 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 	// Load modules
 	require('modules/misc.php');
 	require('modules/photo.php');
-	require('modules/settings.php');
+	require('modules/_settings.php');
 	require('modules/upload.php');
 
 	if (file_exists('../data/config.php')) require('../data/config.php');
@@ -41,9 +41,12 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 
 	}
 
-	// Connect and get settings
+	// Connect to database
 	$database = Database::connect($dbHost, $dbUser, $dbPassword, $dbName);
-	$settings = getSettings();
+
+	// Load settings
+	$settings = new Settings($database);
+	$settings = $settings->get();
 
 	// Init plugins
 	$plugins = explode(';', $settings['plugins']);

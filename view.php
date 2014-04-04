@@ -27,12 +27,13 @@
 				define("LYCHEE", true);
 
 				require("data/config.php");
-				require("php/modules/db.php");
+				require("php/modules/Module.php");
+				require("php/modules/Database.php");
 				require("php/modules/misc.php");
 
-				$database = dbConnect();
+				$database = Database::connect($dbHost, $dbUser, $dbPassword, $dbName);
 
-				echo openGraphHeader($_GET['p']);
+				echo getGraphHeader($database, $_GET['p']);
 
 			}
 

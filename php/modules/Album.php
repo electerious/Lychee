@@ -155,7 +155,7 @@ class Album extends Module {
 			if (($public===true&&$album['password']===false)||($public===false)) {
 
 				# Execute query
-				$thumbs = $this->database->query("SELECT thumbUrl FROM lychee_photos WHERE album = '" . $album['id'] . "' ORDER BY star DESC, " . substr($this->settings['sorting'], 9) . " LIMIT 0, 3");
+				$thumbs = $this->database->query("SELECT thumbUrl FROM lychee_photos WHERE album = '" . $album['id'] . "' ORDER BY star DESC, " . substr($this->settings['sorting'], 9) . " LIMIT 3");
 
 				# For each thumb
 				$k = 0;

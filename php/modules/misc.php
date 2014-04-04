@@ -9,9 +9,9 @@
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
-function openGraphHeader($photoID) {
+function getGraphHeader($database, $photoID) {
 
-	global $database;
+	if (!isset($database, $photoID)) return false;
 
 	$photoID = mysqli_real_escape_string($database, $photoID);
 
