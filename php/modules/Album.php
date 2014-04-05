@@ -59,22 +59,22 @@ class Album extends Module {
 		switch($this->albumIDs) {
 
 			case 'f':	$return['public'] = false;
-						$query = "SELECT id, title, tags, sysdate, public, star, album, thumbUrl FROM lychee_photos WHERE star = 1 " . $this->settings['sorting'];
+						$query = "SELECT id, title, tags, public, star, album, thumbUrl FROM lychee_photos WHERE star = 1 " . $this->settings['sorting'];
 						break;
 
 			case 's':	$return['public'] = false;
-						$query = "SELECT id, title, tags, sysdate, public, star, album, thumbUrl FROM lychee_photos WHERE public = 1 " . $this->settings['sorting'];
+						$query = "SELECT id, title, tags, public, star, album, thumbUrl FROM lychee_photos WHERE public = 1 " . $this->settings['sorting'];
 						break;
 
 			case '0':	$return['public'] = false;
-						$query = "SELECT id, title, tags, sysdate, public, star, album, thumbUrl FROM lychee_photos WHERE album = 0 " . $this->settings['sorting'];
+						$query = "SELECT id, title, tags, public, star, album, thumbUrl FROM lychee_photos WHERE album = 0 " . $this->settings['sorting'];
 						break;
 
 			default:	$albums = $this->database->query("SELECT * FROM lychee_albums WHERE id = '$this->albumIDs' LIMIT 1;");
 						$return = $albums->fetch_assoc();
 						$return['sysdate']		= date('d M. Y', strtotime($return['sysdate']));
 						$return['password']		= ($return['password']=='' ? false : true);
-						$query = "SELECT id, title, tags, sysdate, public, star, album, thumbUrl FROM lychee_photos WHERE album = '$this->albumIDs' " . $this->settings['sorting'];
+						$query = "SELECT id, title, tags, public, star, album, thumbUrl FROM lychee_photos WHERE album = '$this->albumIDs' " . $this->settings['sorting'];
 						break;
 
 		}
@@ -85,7 +85,7 @@ class Album extends Module {
 		while($photo = $photos->fetch_assoc()) {
 
 			# Parse
-			$photo['sysdate']			= date('d F Y', strtotime($photo['sysdate']));
+			$photo['sysdate']			= date('d F Y', substr($photo['id'], 0, -4));
 			$photo['previousPhoto']		= $previousPhotoID;
 			$photo['nextPhoto']		= '';
 

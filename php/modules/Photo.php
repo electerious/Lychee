@@ -33,7 +33,7 @@ class Photo extends Module {
 		$photo	= $photos->fetch_assoc();
 
 		# Parse photo
-		$photo['sysdate'] = date('d M. Y', strtotime($photo['sysdate']));
+		$photo['sysdate'] = date('d M. Y', substr($photo['id'], 0, -4));
 		if (strlen($photo['takedate'])>0) $photo['takedate'] = date('d M. Y', strtotime($photo['takedate']));
 
 		if ($albumID!='false') {
