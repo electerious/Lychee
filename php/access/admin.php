@@ -54,36 +54,44 @@ switch ($_POST['function']) {
 
 	// Photo Functions
 
-	case 'getPhoto':			if (isset($_POST['photoID'], $_POST['albumID']))
-									echo json_encode(getPhoto($_POST['photoID'], $_POST['albumID']));
+	case 'getPhoto':			if (!isset($_POST['photoID'], $_POST['albumID'])) exit();
+								$photo = new Photo($database, $plugins, $_POST['photoID']);
+								echo json_encode($photo->get($_POST['albumID']));
 								break;
 
-	case 'deletePhoto':			if (isset($_POST['photoIDs']))
-									echo deletePhoto($_POST['photoIDs']);
+	case 'setPhotoTitle':		if (!isset($_POST['photoIDs'], $_POST['title'])) exit();
+								$photo = new Photo($database, $plugins, $_POST['photoIDs']);
+								echo $photo->setTitle($_POST['title']);
 								break;
 
-	case 'setPhotoAlbum':		if (isset($_POST['photoIDs'], $_POST['albumID']))
-									echo setPhotoAlbum($_POST['photoIDs'], $_POST['albumID']);
+	case 'setPhotoDescription':	if (!isset($_POST['photoID'], $_POST['description'])) exit();
+								$photo = new Photo($database, $plugins, $_POST['photoID']);
+								echo $photo->setDescription($_POST['description']);
 								break;
 
-	case 'setPhotoTitle':		if (isset($_POST['photoIDs'], $_POST['title']))
-									echo setPhotoTitle($_POST['photoIDs'], $_POST['title']);
+	case 'setPhotoStar':		if (!isset($_POST['photoIDs'])) exit();
+								$photo = new Photo($database, $plugins, $_POST['photoIDs']);
+								echo $photo->setStar();
 								break;
 
-	case 'setPhotoStar':		if (isset($_POST['photoIDs']))
-									echo setPhotoStar($_POST['photoIDs']);
+	case 'setPhotoPublic':		if (!isset($_POST['photoID'])) exit();
+								$photo = new Photo($database, $plugins, $_POST['photoID']);
+								echo $photo->setPublic();
 								break;
 
-	case 'setPhotoPublic':		if (isset($_POST['photoID'], $_POST['url']))
-									echo setPhotoPublic($_POST['photoID'], $_POST['url']);
+	case 'setPhotoAlbum':		if (!isset($_POST['photoIDs'], $_POST['albumID'])) exit();
+								$photo = new Photo($database, $plugins, $_POST['photoIDs']);
+								echo $photo->setAlbum($_POST['albumID']);
 								break;
 
-	case 'setPhotoDescription':	if (isset($_POST['photoID'], $_POST['description']))
-									echo setPhotoDescription($_POST['photoID'], $_POST['description']);
+	case 'setPhotoTags':		if (!isset($_POST['photoIDs'], $_POST['tags'])) exit();
+								$photo = new Photo($database, $plugins, $_POST['photoIDs']);
+								echo $photo->setTags($_POST['tags']);
 								break;
 
-	case 'setPhotoTags':		if (isset($_POST['photoIDs'], $_POST['tags']))
-									echo setPhotoTags($_POST['photoIDs'], $_POST['tags']);
+	case 'deletePhoto':			if (!isset($_POST['photoIDs'])) exit();
+								$photo = new Photo($database, $plugins, $_POST['photoIDs']);
+								echo $photo->delete();
 								break;
 
 	// Add Functions
@@ -144,17 +152,14 @@ switch ($_POST['function']) {
 
 	default:				switch ($_GET['function']) {
 
-								case 'getFeed':				if (isset($_GET['albumID']))
-																echo getFeed($_GET['albumID']);
-															break;
-
 								case 'getAlbumArchive':		if (!isset($_GET['albumID'])) exit();
 															$album = new Album($database, $plugins, $settings, $_GET['albumID']);
 															$album->getArchive();
 															break;
 
-								case 'getPhotoArchive':		if (isset($_GET['photoID']))
-																getPhotoArchive($_GET['photoID']);
+								case 'getPhotoArchive':		if (!isset($_GET['photoID'])) exit();
+															$photo = new Photo($database, $plugins, $_GET['photoID']);
+															$photo->getArchive();
 															break;
 
 								case 'update':				echo update();

@@ -43,12 +43,12 @@ switch ($_POST['function']) {
 
 	// Photo Functions
 
-	case 'getPhoto':		if (isset($_POST['photoID'], $_POST['albumID'], $_POST['password'])) {
-								if (isPhotoPublic($_POST['photoID'], $_POST['password']))
-									echo json_encode(getPhoto($_POST['photoID'], $_POST['albumID']));
-								else
-									echo 'Warning: Wrong password!';
-							}
+	case 'getPhoto':		if (!isset($_POST['photoID'], $_POST['albumID'], $_POST['password'])) exit();
+							$photo = new Photo($database, $plugins, $_POST['photoID']);
+							if ($photo->getPublic($_POST['password']))
+								echo json_encode($photo->get($_POST['albumID']));
+							else
+								echo 'Warning: Wrong password!';
 							break;
 
 	// Session Functions
@@ -81,17 +81,17 @@ switch ($_POST['function']) {
 
 															break;
 
-								case 'getPhotoArchive':		if (isset($_GET['photoID'], $_GET['password'])) {
+								case 'getPhotoArchive':		if (!isset($_GET['photoID'], $_GET['password'])) exit();
+															$photo = new Photo($database, $plugins, $_GET['photoID']);
 
-																// Photo Download
-																if (isPhotoPublic($_GET['photoID'], $_GET['password']))
-																	// Photo Public
-																	getPhotoArchive($_GET['photoID']);
-																else
-																	// Photo Private
-																	exit('Warning: Photo private or not downloadable!');
+															// Photo Download
+															if ($photo->getPublic($_GET['password']))
+																// Photo Public
+																$photo->getArchive();
+															else
+																// Photo Private
+																exit('Warning: Photo private or not downloadable!');
 
-															}
 															break;
 
 								default:					exit('Error: Function not found! Please check the spelling of the called function.');
