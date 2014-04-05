@@ -239,19 +239,19 @@ function deleteAlbum($albumIDs) {
 
 function getAlbumArchive($albumID) {
 
-	global $database;
+	global $database, $settings;
 
 	switch($albumID) {
 		case 's':
-			$query = "SELECT takedate, taketime, title, type, url FROM lychee_photos WHERE public = '1';";
+			$query = "SELECT takedate, taketime, title, type, url FROM lychee_photos WHERE public = '1' " . $settings['sorting'].";";
 			$zipTitle = "Public";
 			break;
 		case 'f':
-			$query = "SELECT takedate, taketime, title, type, url FROM lychee_photos WHERE star = '1';";
+			$query = "SELECT takedate, taketime, title, type, url FROM lychee_photos WHERE star = '1' " . $settings['sorting'].";";
 			$zipTitle = "Starred";
 			break;
 		default:
-			$query = "SELECT takedate, taketime, title, type, url FROM lychee_photos WHERE album = '$albumID';";
+			$query = "SELECT takedate, taketime, title, type, url FROM lychee_photos WHERE album = '$albumID' " . $settings['sorting'].";";
 			$zipTitle = "Unsorted";
 	}
 
@@ -283,6 +283,7 @@ function getAlbumArchive($albumID) {
 	// now add all files to zip file
 	$img_extension  = "jpg";
 	$file_stats     = array();
+	$added_files    = array();
 
 	// this operation should be moved to upload after getInfo();
 	$set_mtime      = true;
@@ -331,6 +332,16 @@ function getAlbumArchive($albumID) {
 
 		// set file name in zip file
 		$zip_file_name = $zipTitle."/".$row->title.".".$img_extension;
+
+		// make sure that files with the same title don't collide
+		if (!empty($added_files)) {
+			$i = 1;
+			while(in_array($zip_file_name, $added_files)) {
+				$zip_file_name = $zipTitle."/".$row->title."-".$i.".".$img_extension;
+				$i++;
+			}
+		}
+		$added_files[] = $zip_file_name;
 
 		// add file to zip
 		$zip->addFile($image_file_path, $zip_file_name);
