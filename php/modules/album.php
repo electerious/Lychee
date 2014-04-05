@@ -239,54 +239,121 @@ function deleteAlbum($albumIDs) {
 
 function getAlbumArchive($albumID) {
 
-	global $database;
+	global $database, $settings;
 
 	switch($albumID) {
 		case 's':
-			$query = "SELECT url FROM lychee_photos WHERE public = '1';";
+			$query = "SELECT takedate, taketime, title, type, url FROM lychee_photos WHERE public = '1' " . $settings['sorting'].";";
 			$zipTitle = "Public";
 			break;
 		case 'f':
-			$query = "SELECT url FROM lychee_photos WHERE star = '1';";
+			$query = "SELECT takedate, taketime, title, type, url FROM lychee_photos WHERE star = '1' " . $settings['sorting'].";";
 			$zipTitle = "Starred";
 			break;
 		default:
-			$query = "SELECT url FROM lychee_photos WHERE album = '$albumID';";
+			$query = "SELECT takedate, taketime, title, type, url FROM lychee_photos WHERE album = '$albumID' " . $settings['sorting'].";";
 			$zipTitle = "Unsorted";
 	}
 
-	$zip	= new ZipArchive();
-	$result	= $database->query($query);
-	$files	= array();
-	$i		= 0;
+	// get images from DB
+	$result_images = $database->query($query);
 
-	while($row = $result->fetch_object()) {
-		$files[$i] = "../uploads/big/".$row->url;
-		$i++;
-	}
-
-	$result = $database->query("SELECT title FROM lychee_albums WHERE id = '$albumID' LIMIT 1;");
-	$row = $result->fetch_object();
-	if ($albumID!=0&&is_numeric($albumID)) $zipTitle = $row->title;
-	$filename = "../data/$zipTitle.zip";
-
-	if ($zip->open($filename, ZIPARCHIVE::CREATE)!==TRUE) {
+	// there should be a proper error handling
+	if ($result_images->num_rows == 0) {
 		return false;
 	}
 
-	foreach($files AS $zipFile) {
-		$newFile = explode("/",$zipFile);
-		$newFile = array_reverse($newFile);
-		$zip->addFile($zipFile, $zipTitle."/".$newFile[0]);
+	// get album title from db
+	$result = @$database->query("SELECT title FROM lychee_albums WHERE id = '$albumID' LIMIT 1;");
+	if ($result->num_rows == 1) {
+		$row = $result->fetch_object();
+		if ($albumID!=0&&is_numeric($albumID)) $zipTitle = $row->title;
+	}
+
+	// set zip file name
+	$outfilename = "../data/$zipTitle.zip";
+
+	// initialize zip file
+	$zip = new ZipArchive();
+
+	if ($zip->open($outfilename, ZIPARCHIVE::CREATE)!==TRUE) {
+		return false;
+	}
+
+	// now add all files to zip file
+	$img_extension  = "jpg";
+	$file_stats     = array();
+	$added_files    = array();
+
+	// this operation should be moved to upload after getInfo();
+	$set_mtime      = true;
+
+	while($row = $result_images->fetch_object()) {
+
+		$image_file_path = "../uploads/big/".$row->url;
+
+		// check if file exists and is readable
+		if (! @is_readable($image_file_path)) {
+			continue;
+		}
+
+		switch($row->type) {
+			case 'image/png':
+				$img_extension = "png";
+				break;
+			case 'image/gif':
+				$img_extension = "gif";
+				break;
+			default:
+				$img_extension = "jpg";
+		}
+
+		// sets the file date according to exif
+		// this is nasty. Changing attributes in
+		// zip files is only possible with
+		// php version >= 5.6
+		// this way we change the date of the
+		// actual file and zip saves as it as
+		// mtime attribute
+		if ($set_mtime === true ) {
+
+			$file_date = @explode(".", $row->takedate);
+			$file_time = @explode(":", $row->taketime);
+
+			$file_mtime = @mktime(  $file_time[0],
+						$file_time[1],
+						$file_time[2],
+						$file_date[1],
+						$file_date[0],
+						$file_date[2]);
+
+			@touch($image_file_path, $file_mtime);
+		}
+
+		// set file name in zip file
+		$zip_file_name = $zipTitle."/".$row->title.".".$img_extension;
+
+		// make sure that files with the same title don't collide
+		if (!empty($added_files)) {
+			$i = 1;
+			while(in_array($zip_file_name, $added_files)) {
+				$zip_file_name = $zipTitle."/".$row->title."-".$i.".".$img_extension;
+				$i++;
+			}
+		}
+		$added_files[] = $zip_file_name;
+
+		// add file to zip
+		$zip->addFile($image_file_path, $zip_file_name);
 	}
 
 	$zip->close();
 
 	header("Content-Type: application/zip");
 	header("Content-Disposition: attachment; filename=\"$zipTitle.zip\"");
-	header("Content-Length: ".filesize($filename));
-	readfile($filename);
-	unlink($filename);
+	header("Content-Length: ".filesize($outfilename));
+	readfile($outfilename);
+	unlink($outfilename);
 
 	return true;
 
