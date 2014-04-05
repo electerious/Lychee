@@ -318,7 +318,7 @@ photo = {
 		album.json.content[photoID].public = (album.json.content[photoID].public==0) ? 1 : 0;
 		view.album.content.public(photoID);
 
-		params = "setPhotoPublic&photoID=" + photoID + "&url=" + photo.getViewLink(photoID);
+		params = "setPhotoPublic&photoID=" + photoID;
 		lychee.api(params, function(data) {
 
 			if (data!==true) lychee.error(null, params, data);

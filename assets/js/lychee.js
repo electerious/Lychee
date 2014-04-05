@@ -20,7 +20,7 @@ var lychee = {
 
 	publicMode: false,
 	viewMode: false,
-	debugMode: false,
+	debugMode: true,
 
 	username: "",
 	checkForUpdates: false,
@@ -251,10 +251,12 @@ var lychee = {
 			.off("drop");
 
 		Mousetrap
-			.unbind('n')
-			.unbind('u')
-			.unbind('s')
-			.unbind('backspace');
+			.unbind(['u', 'ctrl+u'])
+			.unbind(['s', 'ctrl+s'])
+			.unbind(['r', 'ctrl+r'])
+			.unbind(['d', 'ctrl+d'])
+			.unbind(['t', 'ctrl+t'])
+			.unbind(['command+backspace', 'ctrl+backspace']);
 
 		if (mode==="public") {
 
