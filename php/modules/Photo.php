@@ -28,6 +28,9 @@ class Photo extends Module {
 
 		if (!isset($this->database, $this->photoIDs)) return false;
 
+		# Call plugins
+		$this->plugins(__METHOD__, 0, func_get_args());
+
 		# Get photo
 		$photos	= $this->database->query("SELECT * FROM lychee_photos WHERE id = '$this->photoIDs' LIMIT 1;");
 		$photo	= $photos->fetch_assoc();
@@ -54,6 +57,9 @@ class Photo extends Module {
 
 		}
 
+		# Call plugins
+		$this->plugins(__METHOD__, 1, func_get_args());
+
 		return $photo;
 
 	}
@@ -61,6 +67,9 @@ class Photo extends Module {
 	public function getArchive() {
 
 		if (!isset($this->database, $this->photoIDs)) return false;
+
+		# Call plugins
+		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Get photo
 		$photos	= $this->database->query("SELECT title, url FROM lychee_photos WHERE id = '$this->photoIDs' LIMIT 1;");
@@ -80,6 +89,9 @@ class Photo extends Module {
 		# Send file
 		readfile("../uploads/big/$photo->url");
 
+		# Call plugins
+		$this->plugins(__METHOD__, 1, func_get_args());
+
 		return true;
 
 	}
@@ -88,11 +100,17 @@ class Photo extends Module {
 
 		if (!isset($this->database, $this->photoIDs)) return false;
 
+		# Call plugins
+		$this->plugins(__METHOD__, 0, func_get_args());
+
 		# Parse
 		if (strlen($title)>50) $title = substr($title, 0, 50);
 
 		# Set title
 		$result = $this->database->query("UPDATE lychee_photos SET title = '$title' WHERE id IN ($this->photoIDs);");
+
+		# Call plugins
+		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$result) return false;
 		return true;
@@ -103,12 +121,18 @@ class Photo extends Module {
 
 		if (!isset($this->database, $this->photoIDs)) return false;
 
+		# Call plugins
+		$this->plugins(__METHOD__, 0, func_get_args());
+
 		# Parse
 		$description = htmlentities($description);
 		if (strlen($description)>1000) $description = substr($description, 0, 1000);
 
 		# Set description
 		$result = $this->database->query("UPDATE lychee_photos SET description = '$description' WHERE id IN ('$this->photoIDs');");
+
+		# Call plugins
+		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$result) return false;
 		return true;
@@ -118,6 +142,9 @@ class Photo extends Module {
 	public function setStar() {
 
 		if (!isset($this->database, $this->photoIDs)) return false;
+
+		# Call plugins
+		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Init vars
 		$error	= false;
@@ -137,6 +164,9 @@ class Photo extends Module {
 
 		}
 
+		# Call plugins
+		$this->plugins(__METHOD__, 1, func_get_args());
+
 		if ($error) return false;
 		return true;
 
@@ -145,6 +175,9 @@ class Photo extends Module {
 	function getPublic($password) {
 
 		if (!isset($this->database, $this->photoIDs)) return false;
+
+		# Call plugins
+		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Get photo
 		$photos	= $this->database->query("SELECT public, album FROM lychee_photos WHERE id = '$this->photoIDs' LIMIT 1;");
@@ -159,6 +192,9 @@ class Photo extends Module {
 			if ($acP===true&&$agP===true) return true;
 		}
 
+		# Call plugins
+		$this->plugins(__METHOD__, 1, func_get_args());
+
 		return false;
 
 	}
@@ -166,6 +202,9 @@ class Photo extends Module {
 	public function setPublic() {
 
 		if (!isset($this->database, $this->photoIDs)) return false;
+
+		# Call plugins
+		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Get public
 		$photos	= $this->database->query("SELECT public FROM lychee_photos WHERE id = '$this->photoIDs' LIMIT 1;");
@@ -177,6 +216,9 @@ class Photo extends Module {
 		# Set public
 		$result = $this->database->query("UPDATE lychee_photos SET public = '$public' WHERE id = '$this->photoIDs';");
 
+		# Call plugins
+		$this->plugins(__METHOD__, 1, func_get_args());
+
 		if (!$result) return false;
 		return true;
 
@@ -186,8 +228,14 @@ class Photo extends Module {
 
 		if (!isset($this->database, $this->photoIDs)) return false;
 
+		# Call plugins
+		$this->plugins(__METHOD__, 0, func_get_args());
+
 		# Set album
 		$result = $this->database->query("UPDATE lychee_photos SET album = '$albumID' WHERE id IN ($this->photoIDs);");
+
+		# Call plugins
+		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$result) return false;
 		return true;
@@ -198,6 +246,9 @@ class Photo extends Module {
 
 		if (!isset($this->database, $this->photoIDs)) return false;
 
+		# Call plugins
+		$this->plugins(__METHOD__, 0, func_get_args());
+
 		# Parse tags
 		$tags = preg_replace('/(\ ,\ )|(\ ,)|(,\ )|(,{1,}\ {0,})|(,$|^,)/', ',', $tags);
 		$tags = preg_replace('/,$|^,/', ',', $tags);
@@ -205,6 +256,9 @@ class Photo extends Module {
 
 		# Set tags
 		$result = $this->database->query("UPDATE lychee_photos SET tags = '$tags' WHERE id IN ($this->photoIDs);");
+
+		# Call plugins
+		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$result) return false;
 		return true;
@@ -214,6 +268,9 @@ class Photo extends Module {
 	public function delete() {
 
 		if (!isset($this->database, $this->photoIDs)) return false;
+
+		# Call plugins
+		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Get photos
 		$photos = $this->database->query("SELECT id, url, thumbUrl FROM lychee_photos WHERE id IN ($this->photoIDs);");
@@ -235,6 +292,9 @@ class Photo extends Module {
 			if (!$delete) return false;
 
 		}
+
+		# Call plugins
+		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$photos) return false;
 		return true;
