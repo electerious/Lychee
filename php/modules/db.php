@@ -15,6 +15,8 @@ function dbConnect() {
 
 	$database = new mysqli($dbHost, $dbUser, $dbPassword);
 
+	$database->set_charset("utf8");
+
 	if ($database->connect_errno) exit('Error: ' . $database->connect_error);
 
 	// Avoid sql injection on older MySQL versions
@@ -87,7 +89,7 @@ function dbCreateTables($database) {
 			CREATE TABLE `lychee_settings` (
 				`key` varchar(50) NOT NULL DEFAULT '',
 				`value` varchar(50) DEFAULT ''
-			) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+			) ENGINE=MyISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 		";
 
@@ -123,7 +125,7 @@ function dbCreateTables($database) {
 				`visible` tinyint(1) NOT NULL DEFAULT '1',
 				`password` varchar(100) DEFAULT '',
 				PRIMARY KEY (`id`)
-			) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+			) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 		";
 
@@ -161,7 +163,7 @@ function dbCreateTables($database) {
 				`album` varchar(30) NOT NULL DEFAULT '0',
 				`import_name` varchar(100) DEFAULT '',
 				PRIMARY KEY (`id`)
-			) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+			) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 		";
 
