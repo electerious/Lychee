@@ -22,18 +22,16 @@ class Session extends Module {
 
 	}
 
-	public function init($public, $version) {
+	public function init($database, $public, $version) {
 
 		if (!isset($this->settings, $public, $version)) return false;
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
 
-		global $configVersion;
-
 		# Update
-		if ($configVersion!==$version)
-			if (!update($version)) exit('Error: Updating the database failed!');
+		if (!isset($this->settings['version'])||$this->settings['version']!==$version)
+			if (!Database::update($database, @$this->settings['version'])) exit('Error: Updating the database failed!');
 
 		# Return settings
 		$return['config'] = $this->settings;

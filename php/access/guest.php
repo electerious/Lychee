@@ -54,7 +54,7 @@ switch ($_POST['function']) {
 	// Session Functions
 
 	case 'init':			$session = new Session($plugins, $settings);
-							echo json_encode($session->init(true, $_POST['version']));
+							echo json_encode($session->init($database, true, $_POST['version']));
 							break;
 
 	case 'login':			if (!isset($_POST['user'], $_POST['password'])) exit();

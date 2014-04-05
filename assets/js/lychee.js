@@ -8,7 +8,8 @@
 var lychee = {
 
 	title: "",
-	version: "2.2 b1",
+	version: "2.5 b1",
+	version_code: "020200",
 
 	api_path: "php/api.php",
 	update_path: "http://lychee.electerious.com/version/index.php",
@@ -39,7 +40,7 @@ var lychee = {
 
 		var params;
 
-		params = "init&version=" + escape(lychee.version);
+		params = "init&version=" + lychee.version_code;
 		lychee.api(params, function(data) {
 
 			if (data.loggedIn!==true) {

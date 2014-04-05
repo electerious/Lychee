@@ -34,9 +34,34 @@ class Database extends Module {
 
 	}
 
-	static function createConfig($host = 'localhost', $user, $password, $name = 'lychee', $version) {
+	static function update($database, $version) {
 
-		if (!isset($host, $user, $password, $name, $version)) return false;
+		if (!isset($database)) return false;
+
+		# List of updates
+		$updates = array(
+			'020100', #2.1
+			'020101', #2.1.1
+			'020200' #2.2
+		);
+
+		# For each update
+		foreach ($updates as $update) {
+
+			if (isset($version)&&$update<=$version) continue;
+
+			# Load update
+			include('./database/update_' . $update . '.php');
+
+		}
+
+		return true;
+
+	}
+
+	static function createConfig($host = 'localhost', $user, $password, $name = 'lychee') {
+
+		if (!isset($host, $user, $password, $name)) return false;
 
 		$database = new mysqli($host, $user, $password);
 
@@ -52,9 +77,6 @@ $config = "<?php
 ###
 
 if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
-
-# Config version
-\$configVersion = '';
 
 # Database configuration
 \$dbHost = '$host'; # Host of the database
@@ -77,7 +99,7 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 		if (!isset($database, $name)) return false;
 
-		# Execute query
+		# Create database
 		$result = $database->query("CREATE DATABASE IF NOT EXISTS $name;");
 		$database->select_db($name);
 
@@ -93,30 +115,18 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 		# Create settings
 		if (!$database->query('SELECT * FROM lychee_settings LIMIT 0;')) {
 
-			$query = "
+			# Read file
+			$file	= './database/settings_table.sql';
+			$query	= file_get_contents($file);
 
-				CREATE TABLE `lychee_settings` (
-					`key` varchar(50) NOT NULL DEFAULT '',
-					`value` varchar(50) DEFAULT ''
-				) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
-			";
-
+			# Create table
 			if (!$database->query($query)) return false;
 
-			$query = "
+			# Read file
+			$file	= './database/settings_content.sql';
+			$query	= file_get_contents($file);
 
-				INSERT INTO `lychee_settings` (`key`, `value`)
-				VALUES
-				('username',''),
-				('password',''),
-				('thumbQuality','90'),
-				('checkForUpdates','1'),
-				('sorting','ORDER BY id DESC'),
-				('dropboxKey','');
-
-			";
-
+			# Add content
 			if (!$database->query($query)) return false;
 
 		}
@@ -124,21 +134,11 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 		# Create albums
 		if (!$database->query('SELECT * FROM lychee_albums LIMIT 0;')) {
 
-			$query = "
+			# Read file
+			$file	= './database/albums_table.sql';
+			$query	= file_get_contents($file);
 
-				CREATE TABLE `lychee_albums` (
-					`id` int(11) NOT NULL AUTO_INCREMENT,
-					`title` varchar(50) NOT NULL,
-					`description` varchar(1000) DEFAULT '',
-					`sysdate` varchar(10) NOT NULL,
-					`public` tinyint(1) NOT NULL DEFAULT '0',
-					`visible` tinyint(1) NOT NULL DEFAULT '1',
-					`password` varchar(100) DEFAULT '',
-					PRIMARY KEY (`id`)
-				) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
-			";
-
+			# Create table
 			if (!$database->query($query)) return false;
 
 		}
@@ -146,38 +146,11 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 		# Create photos
 		if (!$database->query('SELECT * FROM lychee_photos LIMIT 0;')) {
 
-			$query = "
+			# Read file
+			$file	= './database/photos_table.sql';
+			$query	= file_get_contents($file);
 
-				CREATE TABLE `lychee_photos` (
-					`id` bigint(14) NOT NULL,
-					`title` varchar(50) NOT NULL,
-					`description` varchar(1000) NOT NULL DEFAULT '',
-					`url` varchar(100) NOT NULL,
-					`tags` varchar(1000) NOT NULL DEFAULT '',
-					`public` tinyint(1) NOT NULL,
-					`type` varchar(10) NOT NULL,
-					`width` int(11) NOT NULL,
-					`height` int(11) NOT NULL,
-					`size` varchar(20) NOT NULL,
-					`sysdate` varchar(10) NOT NULL,
-					`systime` varchar(8) NOT NULL,
-					`iso` varchar(15) NOT NULL,
-					`aperture` varchar(20) NOT NULL,
-					`make` varchar(20) NOT NULL,
-					`model` varchar(50) NOT NULL,
-					`shutter` varchar(30) NOT NULL,
-					`focal` varchar(20) NOT NULL,
-					`takedate` varchar(20) NOT NULL,
-					`taketime` varchar(8) NOT NULL,
-					`star` tinyint(1) NOT NULL,
-					`thumbUrl` varchar(50) NOT NULL,
-					`album` varchar(30) NOT NULL DEFAULT '0',
-					`import_name` varchar(100) DEFAULT '',
-					PRIMARY KEY (`id`)
-				) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
-			";
-
+			# Create table
 			if (!$database->query($query)) return false;
 
 		}
