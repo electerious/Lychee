@@ -335,6 +335,27 @@ class Album extends Module {
 
 	}
 
+	public function getPublic() {
+
+		if (!isset($this->database, $this->albumIDs)) return false;
+
+		# Call plugins
+		$this->plugins(__METHOD__, 0, func_get_args());
+
+		if ($this->albumIDs==='0'||$this->albumIDs==='s'||$this->albumIDs==='f') return false;
+
+		# Execute query
+		$albums	= $this->database->query("SELECT public FROM lychee_albums WHERE id = '$this->albumIDs' LIMIT 1;");
+		$album	= $albums->fetch_object();
+
+		# Call plugins
+		$this->plugins(__METHOD__, 1, func_get_args());
+
+		if ($album->public==1) return true;
+		return false;
+
+	}
+
 	public function setPublic($password) {
 
 		if (!isset($this->database, $this->albumIDs)) return false;
@@ -372,39 +393,18 @@ class Album extends Module {
 
 	}
 
-	public function getPublic() {
+	public function setPassword($password) {
 
 		if (!isset($this->database, $this->albumIDs)) return false;
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
 
-		if ($this->albumIDs==='0'||$this->albumIDs==='s'||$this->albumIDs==='f') return false;
-
-		# Execute query
-		$albums	= $this->database->query("SELECT public FROM lychee_albums WHERE id = '$this->albumIDs' LIMIT 1;");
-		$album	= $albums->fetch_object();
-
-		# Call plugins
-		$this->plugins(__METHOD__, 1, func_get_args());
-
-		if ($album->public==1) return true;
-		return false;
-
-	}
-
-	public function setPassword($password) {
-
-		if (!isset($this->database, $this->albumIDs)) return false;
-
-		# Call plugins
-		$this->plugins('setPassword:before', func_get_args());
-
 		# Execute query
 		$result = $this->database->query("UPDATE lychee_albums SET password = '$password' WHERE id IN ('$this->albumIDs');");
 
 		# Call plugins
-		$this->plugins('setPassword:after', func_get_args());
+		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$result) return false;
 		return true;
@@ -442,11 +442,15 @@ class Album extends Module {
 		$error = false;
 
 		# Execute query
-		$result = $this->database->query("SELECT id FROM lychee_photos WHERE album IN ($albumIDs);");
+		$photos = $this->database->query("SELECT id FROM lychee_photos WHERE album IN ($albumIDs);");
 
 		# For each album delete photo
-		while ($row = $result->fetch_object())
-			if (!deletePhoto($row->id)) $error = true;
+		while ($row = $photos->fetch_object()) {
+
+			$photo = new Photo($this->database, $this->plugins, $row->id);
+			if (!$photo->delete($row->id)) $error = true;
+
+		}
 
 		# Delete albums
 		$result = $this->database->query("DELETE FROM lychee_albums WHERE id IN ($albumIDs);");
