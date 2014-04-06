@@ -67,59 +67,89 @@ function upload($files, $albumID, $description = '', $tags = '') {
 		if ($description==='') $description = $info['description'];
 
 		// Set orientation based on EXIF data
-		if ($file['type']==='image/jpeg'&&isset($info['orientation'])&&isset($info['width'])&&isset($info['height'])) {
+		if ($file['type'] === 'image/jpeg' && isset($info['orientation']) && isset($info['width']) && isset($info['height'])) {
 
-			if ($info['orientation']==3||$info['orientation']==6||$info['orientation']==8) {
+			if(class_exists('Imagick')) {
 
-				$newWidth = $info['width'];
-				$newHeight = $info['height'];
-
-				$sourceImg = imagecreatefromjpeg("../uploads/big/$photo_name");
+				$rotateImage = 0;
 
 				switch($info['orientation']){
-
-					case 2:
-						// mirror
-						// not yet implemented
-						break;
-
 					case 3:
-						$sourceImg = imagerotate($sourceImg, -180, 0);
+						$rotateImage = 180;
+						$imageOrientation = 1;
 						break;
-
-					case 4:
-						// rotate 180 and mirror
-						// not yet implemented
-						break;
-
-					case 5:
-						// rotate 90 and mirror
-						// not yet implemented
-						break;
-
 					case 6:
-						$sourceImg = imagerotate($sourceImg, -90, 0);
-						$newWidth = $info['height'];
-						$newHeight = $info['width'];
+						$rotateImage = 90;
+						$imageOrientation = 1;
 						break;
-
-					case 7:
-						// rotate -90 and mirror
-						// not yet implemented
-						break;
-
 					case 8:
-						$sourceImg = imagerotate($sourceImg, 90, 0);
-						$newWidth = $info['height'];
-						$newHeight = $info['width'];
+						$rotateImage = 270;
+						$imageOrientation = 1;
 						break;
-
 				}
 
-				$newSourceImg = imagecreatetruecolor($newWidth, $newHeight);
+				if ($rotateImage) {
+					$image = new Imagick();
+			                $image->readImage(__DIR__ . '/../../uploads/big/' . $photo_name);
+			                $image->rotateImage(new ImagickPixel(), $rotateImage);
+			                $image->setImageOrientation($imageOrientation);
+			                $image->writeImage(__DIR__ . '/../../uploads/big/' . $photo_name);
+			                $image->clear();
+			                $image->destroy();
+				}
+			} else {
+				if ($info['orientation']==3||$info['orientation']==6||$info['orientation']==8) {
 
-				imagecopyresampled($newSourceImg, $sourceImg, 0, 0, 0, 0, $newWidth, $newHeight, $newWidth, $newHeight);
-				imagejpeg($newSourceImg, "../uploads/big/$photo_name", 100);
+					$newWidth = $info['width'];
+					$newHeight = $info['height'];
+
+					$sourceImg = imagecreatefromjpeg("../uploads/big/$photo_name");
+
+					switch($info['orientation']){
+
+						case 2:
+							// mirror
+							// not yet implemented
+							break;
+
+						case 3:
+							$sourceImg = imagerotate($sourceImg, -180, 0);
+							break;
+
+						case 4:
+							// rotate 180 and mirror
+							// not yet implemented
+							break;
+
+						case 5:
+							// rotate 90 and mirror
+							// not yet implemented
+							break;
+
+						case 6:
+							$sourceImg = imagerotate($sourceImg, -90, 0);
+							$newWidth = $info['height'];
+							$newHeight = $info['width'];
+							break;
+
+						case 7:
+							// rotate -90 and mirror
+							// not yet implemented
+							break;
+
+						case 8:
+							$sourceImg = imagerotate($sourceImg, 90, 0);
+							$newWidth = $info['height'];
+							$newHeight = $info['width'];
+							break;
+
+					}
+
+					$newSourceImg = imagecreatetruecolor($newWidth, $newHeight);
+
+					imagecopyresampled($newSourceImg, $sourceImg, 0, 0, 0, 0, $newWidth, $newHeight, $newWidth, $newHeight);
+					imagejpeg($newSourceImg, "../uploads/big/$photo_name", 100);
+				}
 
 			}
 
@@ -207,14 +237,14 @@ function getInfo($filename) {
 
 	// EXIF Metadata Fallback
 	$return['orientation']	= '';
-	$return['iso']			= '';
-	$return['aperture']		= '';
-	$return['make']			= '';
-	$return['model']		= '';
-	$return['shutter']		= '';
-	$return['focal']		= '';
-	$return['takeDate']		= '';
-	$return['takeTime']		= '';
+	$return['iso']		= '';
+	$return['aperture']	= '';
+	$return['make']		= '';
+	$return['model']	= '';
+	$return['shutter']	= '';
+	$return['focal']	= '';
+	$return['takeDate']	= '';
+	$return['takeTime']	= '';
 
 	// Read EXIF
 	if ($info['mime']=='image/jpeg') $exif = @exif_read_data($url, 'EXIF', 0);
@@ -223,8 +253,10 @@ function getInfo($filename) {
 	// EXIF Metadata
 	if ($exif!==false) {
 
-		$temp = @$exif['Orientation'];
-		if (isset($temp)) $return['orientation'] = $temp;
+		if( isset($exif['Orientation']) )
+		        $return['orientation'] = $exif['Orientation'];
+		elseif( isset($exif['IFD0']['Orientation']) )
+		        $return['orientation'] = $exif['IFD0']['Orientation'];
 
 		$temp = @$exif['ISOSpeedRatings'];
 		if (isset($temp)) $return['iso'] = $temp;
@@ -265,12 +297,42 @@ function createThumb($filename, $width = 200, $height = 200) {
 
 	global $settings;
 
-	$url	= "../uploads/big/$filename";
-	$info	= getimagesize($url);
+	$url		= __DIR__ . '/../../uploads/big/' . $filename;
+	$info		= getimagesize($url);
 
 	$photoName	= explode(".", $filename);
-	$newUrl		= "../uploads/thumb/$photoName[0].jpeg";
-	$newUrl2x	= "../uploads/thumb/$photoName[0]@2x.jpeg";
+	$newUrl		= __DIR__ . '/../../uploads/thumb/' . $photoName[0] . '.jpeg';
+	$newUrl2x	= __DIR__ . '/../../uploads/thumb/' . $photoName[0] . '@2x.jpeg';
+
+	// create thumbnails with Imagick
+	// at the moment $settings['thumbQuality'] isn't used.
+	if(class_exists('Imagick')) {
+
+		// read image
+		$thumb = new Imagick();
+                $thumb->readImage($url);
+
+		// copy image for 2nd thumb version
+		$thumb2x = clone $thumb;
+
+		// creat 1st version
+		$thumb->cropThumbnailImage( $width, $height );
+                $thumb->writeImage($newUrl);
+
+		// creat 2nd version
+		$thumb2x->cropThumbnailImage( $width*2, $height*2 );
+                $thumb2x->writeImage($newUrl2x);
+
+		// close thumb
+                $thumb->clear();
+                $thumb->destroy();
+
+		// close thumb2
+                $thumb2x->clear();
+                $thumb2x->destroy();
+
+		return true;
+	}
 
 	// Set position and size
 	$thumb = imagecreatetruecolor($width, $height);
@@ -312,7 +374,7 @@ function importPhoto($path, $albumID = 0, $description = '', $tags = '') {
 	$info = getimagesize($path);
 	$size = filesize($path);
 
-	$nameFile					= array(array());
+	$nameFile			= array(array());
 	$nameFile[0]['name']		= $path;
 	$nameFile[0]['type']		= $info['mime'];
 	$nameFile[0]['tmp_name']	= $path;
@@ -377,9 +439,9 @@ function importServer($albumID = 0, $path = '../uploads/import/') {
 
 	global $database;
 
-	$files				= glob($path . '*');
-	$contains['photos'] = false;
-	$contains['albums'] = false;
+	$files			= glob($path . '*');
+	$contains['photos']	= false;
+	$contains['albums']	= false;
 
 	foreach ($files as $file) {
 
