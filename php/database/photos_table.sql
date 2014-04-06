@@ -26,4 +26,4 @@ CREATE TABLE IF NOT EXISTS `lychee_photos` (
   `album` varchar(30) NOT NULL DEFAULT '0',
   `import_name` varchar(100) DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;

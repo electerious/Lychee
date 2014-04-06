@@ -5,4 +5,4 @@
 CREATE TABLE IF NOT EXISTS `lychee_settings` (
   `key` varchar(50) NOT NULL DEFAULT '',
   `value` varchar(200) DEFAULT ''
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;

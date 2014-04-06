@@ -11,4 +11,4 @@ CREATE TABLE IF NOT EXISTS `lychee_albums` (
   `visible` tinyint(1) NOT NULL DEFAULT '1',
   `password` varchar(100) DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
