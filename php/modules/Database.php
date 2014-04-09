@@ -52,7 +52,7 @@ class Database extends Module {
 			if (isset($version)&&$update<=$version) continue;
 
 			# Load update
-			include('./database/update_' . $update . '.php');
+			include(__DIR__ . '/../database/update_' . $update . '.php');
 
 		}
 
@@ -72,7 +72,7 @@ class Database extends Module {
 $config = "<?php
 
 ###
-# @name		Config
+# @name		Configuration
 # @author		Tobias Reich
 # @copyright	2014 Tobias Reich
 ###
@@ -88,7 +88,7 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 ?>";
 
 			# Save file
-			if (file_put_contents('../data/config.php', $config)===false) return 'Warning: Could not create file!';
+			if (file_put_contents(__DIR__ . '/../../data/config.php', $config)===false) return 'Warning: Could not create file!';
 
 			return true;
 
@@ -117,14 +117,14 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 		if (!$database->query('SELECT * FROM lychee_settings LIMIT 0;')) {
 
 			# Read file
-			$file	= './database/settings_table.sql';
+			$file	= __DIR__ . '/../database/settings_table.sql';
 			$query	= file_get_contents($file);
 
 			# Create table
 			if (!$database->query($query)) return false;
 
 			# Read file
-			$file	= './database/settings_content.sql';
+			$file	= __DIR__ . '/../database/settings_content.sql';
 			$query	= file_get_contents($file);
 
 			# Add content
@@ -136,7 +136,7 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 		if (!$database->query('SELECT * FROM lychee_albums LIMIT 0;')) {
 
 			# Read file
-			$file	= './database/albums_table.sql';
+			$file	= __DIR__ . '/../database/albums_table.sql';
 			$query	= file_get_contents($file);
 
 			# Create table
@@ -148,7 +148,7 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 		if (!$database->query('SELECT * FROM lychee_photos LIMIT 0;')) {
 
 			# Read file
-			$file	= './database/photos_table.sql';
+			$file	= __DIR__ . '/../database/photos_table.sql';
 			$query	= file_get_contents($file);
 
 			# Create table
