@@ -254,7 +254,7 @@ class Album extends Module {
 
 		# Parse each url
 		while ($photo = $photos->fetch_object()) {
-			$files[$i] = '../uploads/big/' . $photo->url;
+			$files[$i] = __DIR__ . '/../../uploads/big/' . $photo->url;
 			$i++;
 		}
 
@@ -263,7 +263,7 @@ class Album extends Module {
 		if ($this->albumIDs!=0&&is_numeric($this->albumIDs)) $zipTitle = $album->fetch_object()->title;
 
 		# Create zip
-		$filename = "../data/$zipTitle.zip";
+		$filename = __DIR__ . "/../../data/$zipTitle.zip";
 		if ($zip->open($filename, ZIPARCHIVE::CREATE)!==TRUE) return false;
 
 		# Add each photo
