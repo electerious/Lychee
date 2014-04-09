@@ -19,13 +19,13 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 	date_default_timezone_set('UTC');
 
 	// Load autoload
-	require('autoload.php');
+	require(__DIR__ . '/autoload.php');
 
 	// Load modules
-	require('modules/misc.php');
-	require('modules/upload.php');
+	require(__DIR__ . '/modules/misc.php');
+	require(__DIR__ . '/modules/upload.php');
 
-	if (file_exists('../data/config.php')) require('../data/config.php');
+	if (file_exists(__DIR__ . '/../data/config.php')) require(__DIR__ . '/../data/config.php');
 	else {
 
 		/**
@@ -34,7 +34,7 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 		 */
 
 		define('LYCHEE_ACCESS_INSTALLATION', true);
-		require('access/installation.php');
+		require(__DIR__ . '/access/installation.php');
 		exit();
 
 	}
@@ -72,7 +72,7 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 		 */
 
 		define('LYCHEE_ACCESS_ADMIN', true);
-		require('access/admin.php');
+		require(__DIR__ . '/access/admin.php');
 
 	} else {
 
@@ -82,7 +82,7 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 		 */
 
 		define('LYCHEE_ACCESS_GUEST', true);
-		require('access/guest.php');
+		require(__DIR__ . '/access/guest.php');
 
 	}
 
