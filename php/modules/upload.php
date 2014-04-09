@@ -48,12 +48,12 @@ function upload($files, $albumID, $description = '', $tags = '') {
 
 		// Import if not uploaded via web
 		if (!is_uploaded_file($tmp_name)) {
-			if (copy($tmp_name, '../uploads/big/' . $photo_name)) {
+			if (copy($tmp_name, __DIR__ . '/../../uploads/big/' . $photo_name)) {
 				@unlink($tmp_name);
 				$import_name = $tmp_name;
 			}
 		} else {
-			move_uploaded_file($tmp_name, '../uploads/big/' . $photo_name);
+			move_uploaded_file($tmp_name, __DIR__ . '/../../uploads/big/' . $photo_name);
 			$import_name = '';
 		}
 
@@ -67,16 +67,49 @@ function upload($files, $albumID, $description = '', $tags = '') {
 		if ($description==='') $description = $info['description'];
 
 		// Set orientation based on EXIF data
-		if ($file['type']==='image/jpeg'&&isset($info['orientation'])&&isset($info['width'])&&isset($info['height'])) {
+		if ($file['type'] === 'image/jpeg' && isset($info['orientation']) && isset($info['width']) && isset($info['height'])) {
 
-			if ($info['orientation']==3||$info['orientation']==6||$info['orientation']==8) {
+			if(class_exists('Imagick')) {
+
+				$rotateImage = 0;
+
+				switch ($info['orientation']) {
+
+					case 3:
+						$rotateImage = 180;
+						$imageOrientation = 1;
+						break;
+
+					case 6:
+						$rotateImage = 90;
+						$imageOrientation = 1;
+						break;
+
+					case 8:
+						$rotateImage = 270;
+						$imageOrientation = 1;
+						break;
+
+				}
+
+				if ($rotateImage) {
+					$image = new Imagick();
+					$image->readImage(__DIR__ . '/../../uploads/big/' . $photo_name);
+					$image->rotateImage(new ImagickPixel(), $rotateImage);
+					$image->setImageOrientation($imageOrientation);
+					$image->writeImage(__DIR__ . '/../../uploads/big/' . $photo_name);
+					$image->clear();
+					$image->destroy();
+				}
+
+			} else {
 
 				$newWidth = $info['width'];
 				$newHeight = $info['height'];
 
-				$sourceImg = imagecreatefromjpeg("../uploads/big/$photo_name");
+				$sourceImg = imagecreatefromjpeg(__DIR__ . "/../../uploads/big/$photo_name");
 
-				switch($info['orientation']){
+				switch ($info['orientation']) {
 
 					case 2:
 						// mirror
@@ -119,7 +152,7 @@ function upload($files, $albumID, $description = '', $tags = '') {
 				$newSourceImg = imagecreatetruecolor($newWidth, $newHeight);
 
 				imagecopyresampled($newSourceImg, $sourceImg, 0, 0, 0, 0, $newWidth, $newHeight, $newWidth, $newHeight);
-				imagejpeg($newSourceImg, "../uploads/big/$photo_name", 100);
+				imagejpeg($newSourceImg, __DIR__ . '/../../uploads/big/' . $photo_name, 100);
 
 			}
 
@@ -169,7 +202,7 @@ function getInfo($filename) {
 
 	global $database;
 
-	$url		= '../uploads/big/' . $filename;
+	$url		= __DIR__ . '/../../uploads/big/' . $filename;
 	$iptcArray	= array();
 	$info		= getimagesize($url, $iptcArray);
 
@@ -223,8 +256,8 @@ function getInfo($filename) {
 	// EXIF Metadata
 	if ($exif!==false) {
 
-		$temp = @$exif['Orientation'];
-		if (isset($temp)) $return['orientation'] = $temp;
+		if (isset($exif['Orientation'])) $return['orientation'] = $exif['Orientation'];
+		else if (isset($exif['IFD0']['Orientation'])) $return['orientation'] = $exif['IFD0']['Orientation'];
 
 		$temp = @$exif['ISOSpeedRatings'];
 		if (isset($temp)) $return['iso'] = $temp;
@@ -265,43 +298,75 @@ function createThumb($filename, $width = 200, $height = 200) {
 
 	global $settings;
 
-	$url	= "../uploads/big/$filename";
-	$info	= getimagesize($url);
+	$url		= __DIR__ . '/../../uploads/big/' . $filename;
+	$info		= getimagesize($url);
 
 	$photoName	= explode(".", $filename);
-	$newUrl		= "../uploads/thumb/$photoName[0].jpeg";
-	$newUrl2x	= "../uploads/thumb/$photoName[0]@2x.jpeg";
+	$newUrl		= __DIR__ . '/../../uploads/thumb/' . $photoName[0] . '.jpeg';
+	$newUrl2x	= __DIR__ . '/../../uploads/thumb/' . $photoName[0] . '@2x.jpeg';
 
-	// Set position and size
-	$thumb = imagecreatetruecolor($width, $height);
-	$thumb2x = imagecreatetruecolor($width*2, $height*2);
-	if ($info[0]<$info[1]) {
-		$newSize		= $info[0];
-		$startWidth		= 0;
-		$startHeight	= $info[1]/2 - $info[0]/2;
+	// create thumbnails with Imagick
+	if (class_exists('Imagick')) {
+
+		// read image
+		$thumb = new Imagick();
+		$thumb->readImage($url);
+		$thumb->setImageCompressionQuality($settings['thumbQuality']);
+		$thumb->setImageFormat('jpeg');
+
+		// copy image for 2nd thumb version
+		$thumb2x = clone $thumb;
+
+		// creat 1st version
+		$thumb->cropThumbnailImage($width, $height);
+		$thumb->writeImage($newUrl);
+
+		// creat 2nd version
+		$thumb2x->cropThumbnailImage($width*2, $height*2);
+		$thumb2x->writeImage($newUrl2x);
+
+		// close thumb
+		$thumb->clear();
+		$thumb->destroy();
+
+		// close thumb2
+		$thumb2x->clear();
+		$thumb2x->destroy();
+
 	} else {
-		$newSize		= $info[1];
-		$startWidth		= $info[0]/2 - $info[1]/2;
-		$startHeight	= 0;
+
+		// Set position and size
+		$thumb = imagecreatetruecolor($width, $height);
+		$thumb2x = imagecreatetruecolor($width*2, $height*2);
+		if ($info[0]<$info[1]) {
+			$newSize		= $info[0];
+			$startWidth		= 0;
+			$startHeight	= $info[1]/2 - $info[0]/2;
+		} else {
+			$newSize		= $info[1];
+			$startWidth		= $info[0]/2 - $info[1]/2;
+			$startHeight	= 0;
+		}
+
+		// Fallback for older version
+		if ($info['mime']==='image/webp'&&floatval(phpversion())<5.5) return false;
+
+		// Create new image
+		switch($info['mime']) {
+			case 'image/jpeg':	$sourceImg = imagecreatefromjpeg($url); break;
+			case 'image/png':	$sourceImg = imagecreatefrompng($url); break;
+			case 'image/gif':	$sourceImg = imagecreatefromgif($url); break;
+			case 'image/webp':	$sourceImg = imagecreatefromwebp($url); break;
+			default: return false;
+		}
+
+		imagecopyresampled($thumb,$sourceImg,0,0,$startWidth,$startHeight,$width,$height,$newSize,$newSize);
+		imagecopyresampled($thumb2x,$sourceImg,0,0,$startWidth,$startHeight,$width*2,$height*2,$newSize,$newSize);
+
+		imagejpeg($thumb,$newUrl,$settings['thumbQuality']);
+		imagejpeg($thumb2x,$newUrl2x,$settings['thumbQuality']);
+
 	}
-
-	// Fallback for older version
-	if ($info['mime']==='image/webp'&&floatval(phpversion())<5.5) return false;
-
-	// Create new image
-	switch($info['mime']) {
-		case 'image/jpeg':	$sourceImg = imagecreatefromjpeg($url); break;
-		case 'image/png':	$sourceImg = imagecreatefrompng($url); break;
-		case 'image/gif':	$sourceImg = imagecreatefromgif($url); break;
-		case 'image/webp':	$sourceImg = imagecreatefromwebp($url); break;
-		default: return false;
-	}
-
-	imagecopyresampled($thumb,$sourceImg,0,0,$startWidth,$startHeight,$width,$height,$newSize,$newSize);
-	imagecopyresampled($thumb2x,$sourceImg,0,0,$startWidth,$startHeight,$width*2,$height*2,$newSize,$newSize);
-
-	imagejpeg($thumb,$newUrl,$settings['thumbQuality']);
-	imagejpeg($thumb2x,$newUrl2x,$settings['thumbQuality']);
 
 	return true;
 
@@ -339,7 +404,7 @@ function importUrl($url, $albumID = 0) {
 
 				$pathinfo = pathinfo($key);
 				$filename = $pathinfo['filename'].".".$pathinfo['extension'];
-				$tmp_name = "../uploads/import/$filename";
+				$tmp_name = __DIR__ . '/../../uploads/import/' . $filename;
 
 				copy($key, $tmp_name);
 
@@ -359,7 +424,7 @@ function importUrl($url, $albumID = 0) {
 
 			$pathinfo = pathinfo($url);
 			$filename = $pathinfo['filename'].".".$pathinfo['extension'];
-			$tmp_name = "../uploads/import/$filename";
+			$tmp_name = __DIR__ . "/../../uploads/import/$filename";
 
 			copy($url, $tmp_name);
 
@@ -373,13 +438,15 @@ function importUrl($url, $albumID = 0) {
 
 }
 
-function importServer($albumID = 0, $path = '../uploads/import/') {
+function importServer($albumID = 0, $path) {
+
+	if (!isset($path)) $path = __DIR__ . '/../../uploads/import/';
 
 	global $database;
 
-	$files				= glob($path . '*');
-	$contains['photos'] = false;
-	$contains['albums'] = false;
+	$files			= glob($path . '*');
+	$contains['photos']	= false;
+	$contains['albums']	= false;
 
 	foreach ($files as $file) {
 
