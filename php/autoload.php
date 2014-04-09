@@ -7,7 +7,7 @@
  */
 
 function __autoload($class_name) {
-	require './modules/' . $class_name . '.php';
+	require __DIR__ . '/modules/' . $class_name . '.php';
 }
 
 ?>
