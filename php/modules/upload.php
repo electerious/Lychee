@@ -48,12 +48,12 @@ function upload($files, $albumID, $description = '', $tags = '') {
 
 		// Import if not uploaded via web
 		if (!is_uploaded_file($tmp_name)) {
-			if (copy($tmp_name, '../uploads/big/' . $photo_name)) {
+			if (copy($tmp_name, UPLOADS_BIG_DIR . '/' . $photo_name)) {
 				@unlink($tmp_name);
 				$import_name = $tmp_name;
 			}
 		} else {
-			move_uploaded_file($tmp_name, '../uploads/big/' . $photo_name);
+			move_uploaded_file($tmp_name, UPLOADS_BIG_DIR . '/' . $photo_name);
 			$import_name = '';
 		}
 
@@ -74,7 +74,7 @@ function upload($files, $albumID, $description = '', $tags = '') {
 				$newWidth = $info['width'];
 				$newHeight = $info['height'];
 
-				$sourceImg = imagecreatefromjpeg("../uploads/big/$photo_name");
+				$sourceImg = imagecreatefromjpeg(UPLOADS_BIG_DIR . '/' . $photo_name);
 
 				switch($info['orientation']){
 
@@ -119,7 +119,7 @@ function upload($files, $albumID, $description = '', $tags = '') {
 				$newSourceImg = imagecreatetruecolor($newWidth, $newHeight);
 
 				imagecopyresampled($newSourceImg, $sourceImg, 0, 0, 0, 0, $newWidth, $newHeight, $newWidth, $newHeight);
-				imagejpeg($newSourceImg, "../uploads/big/$photo_name", 100);
+				imagejpeg($newSourceImg, UPLOADS_BIG_DIR . '/' . $photo_name, 100);
 
 			}
 
@@ -169,7 +169,7 @@ function getInfo($filename) {
 
 	global $database;
 
-	$url		= '../uploads/big/' . $filename;
+	$url		= UPLOADS_BIG_DIR . '/' . $filename;
 	$iptcArray	= array();
 	$info		= getimagesize($url, $iptcArray);
 
@@ -265,12 +265,12 @@ function createThumb($filename, $width = 200, $height = 200) {
 
 	global $settings;
 
-	$url	= "../uploads/big/$filename";
+	$url	= UPLOADS_BIG_DIR . '/' . $filename;
 	$info	= getimagesize($url);
 
 	$photoName	= explode(".", $filename);
-	$newUrl		= "../uploads/thumb/$photoName[0].jpeg";
-	$newUrl2x	= "../uploads/thumb/$photoName[0]@2x.jpeg";
+	$newUrl		= UPLOADS_THUMB_DIR . '/' . $photoName[0] . '.jpeg';
+	$newUrl2x	= UPLOADS_THUMB_DIR . '/' . $photoName[0] . '@2x.jpeg';
 
 	// Set position and size
 	$thumb = imagecreatetruecolor($width, $height);
@@ -339,7 +339,7 @@ function importUrl($url, $albumID = 0) {
 
 				$pathinfo = pathinfo($key);
 				$filename = $pathinfo['filename'].".".$pathinfo['extension'];
-				$tmp_name = "../uploads/import/$filename";
+				$tmp_name = UPLOADS_IMPORT_DIR . '/' . $filename;
 
 				copy($key, $tmp_name);
 
@@ -359,7 +359,7 @@ function importUrl($url, $albumID = 0) {
 
 			$pathinfo = pathinfo($url);
 			$filename = $pathinfo['filename'].".".$pathinfo['extension'];
-			$tmp_name = "../uploads/import/$filename";
+			$tmp_name = UPLOADS_IMPORT_DIR . '/' . $filename;
 
 			copy($url, $tmp_name);
 
@@ -373,10 +373,11 @@ function importUrl($url, $albumID = 0) {
 
 }
 
-function importServer($albumID = 0, $path = '../uploads/import/') {
+function importServer($albumID = 0, $path = UPLOADS_IMPORT_DIR ) {
 
 	global $database;
 
+	$path			= $path . '/';
 	$files				= glob($path . '*');
 	$contains['photos'] = false;
 	$contains['albums'] = false;

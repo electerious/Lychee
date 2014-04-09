@@ -101,9 +101,9 @@ function update($version = '') {
 
 	// Config
 	if ($version!==''&&$configVersion!==$version) {
-		$data = file_get_contents('../data/config.php');
+		$data = file_get_contents(CONFIG_FILE);
 		$data = preg_replace('/\$configVersion = \'[\w. ]*\';/', "\$configVersion = '$version';", $data);
-		if (file_put_contents('../data/config.php', $data)===false) return 'Error: Could not save updated config!';
+		if (file_put_contents(CONFIG_FILE, $data)===false) return 'Error: Could not save updated config!';
 	}
 
 	return true;

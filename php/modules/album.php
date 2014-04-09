@@ -263,7 +263,7 @@ function getAlbumArchive($albumID) {
 	$i		= 0;
 
 	while($row = $result->fetch_object()) {
-		$files[$i] = '../uploads/big/' . $row->url;
+		$files[$i] = UPLOADS_BIG_DIR . '/' . $row->url;
 		$i++;
 	}
 
@@ -271,7 +271,7 @@ function getAlbumArchive($albumID) {
 	$row = $result->fetch_object();
 
 	if ($albumID!=0&&is_numeric($albumID)) $zipTitle = $row->title;
-	$filename = "../data/$zipTitle.zip";
+	$filename = DATA_DIR . "/$zipTitle.zip";
 
 	if ($zip->open($filename, ZIPARCHIVE::CREATE)!==TRUE) {
 		return false;

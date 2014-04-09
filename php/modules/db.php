@@ -59,7 +59,7 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 ?>";
 
-		if (file_put_contents('../data/config.php', $config)===false) return 'Warning: Could not create file!';
+		if (file_put_contents(CONFIG_FILE, $config)===false) return 'Warning: Could not create file!';
 
 		$_SESSION['login'] = true;
 		return true;
