@@ -84,10 +84,10 @@ class Photo extends Module {
 		# Set headers
 		header("Content-Type: application/octet-stream");
 		header("Content-Disposition: attachment; filename=\"$photo->title.$extension[0]\"");
-		header("Content-Length: " . filesize("../uploads/big/$photo->url"));
+		header("Content-Length: " . filesize(__DIR__ . '/../../uploads/big/' . $photo->url));
 
 		# Send file
-		readfile("../uploads/big/$photo->url");
+		readfile(__DIR__ . '/../../uploads/big/' . $photo->url);
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
@@ -283,9 +283,9 @@ class Photo extends Module {
 			$thumbUrl2x = $thumbUrl2x[0] . '@2x.' . $thumbUrl2x[1];
 
 			# Delete files
-			if (!unlink('../uploads/big/' . $photo->url))			return false;
-			if (!unlink('../uploads/thumb/' . $photo->thumbUrl))	return false;
-			if (!unlink('../uploads/thumb/' . $thumbUrl2x))		return false;
+			if (!unlink(__DIR__ . '/../../uploads/big/' . $photo->url))			return false;
+			if (!unlink(__DIR__ . '/../../uploads/thumb/' . $photo->thumbUrl))	return false;
+			if (!unlink(__DIR__ . '/../../uploads/thumb/' . $thumbUrl2x))		return false;
 
 			# Delete db entry
 			$delete = $this->database->query("DELETE FROM lychee_photos WHERE id = '$photo->id';");
