@@ -12,6 +12,15 @@
 @ini_set('upload_max_filesize', '20M');
 @ini_set('max_file_uploads', '100');
 
+// define dirs
+define('DATA_DIR', $_SERVER["DOCUMENT_ROOT"] . '/data');
+define('UPLOADS_BIG_DIR', $_SERVER["DOCUMENT_ROOT"] . '/uploads/big');
+define('UPLOADS_THUMB_DIR', $_SERVER["DOCUMENT_ROOT"] . '/uploads/thumb');
+define('UPLOADS_IMPORT_DIR', $_SERVER["DOCUMENT_ROOT"] . '/uploads/import');
+
+//define files
+define('CONFIG_FILE', DATA_DIR . '/config.php');
+
 if (!empty($_POST['function'])||!empty($_GET['function'])) {
 
 	session_start();
@@ -27,7 +36,7 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 	require('modules/settings.php');
 	require('modules/upload.php');
 
-	if (file_exists('../data/config.php')) require('../data/config.php');
+	if (file_exists(CONFIG_FILE)) require(CONFIG_FILE);
 	else {
 
 		/**

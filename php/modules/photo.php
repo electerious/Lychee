@@ -141,9 +141,9 @@ function deletePhoto($photoIDs) {
 		$thumbUrl2x = $thumbUrl2x[0] . '@2x.' . $thumbUrl2x[1];
 
 		// Delete files
-		if (!unlink('../uploads/big/' . $row->url))			return false;
-		if (!unlink('../uploads/thumb/' . $row->thumbUrl))	return false;
-		if (!unlink('../uploads/thumb/' . $thumbUrl2x))		return false;
+		if (!unlink(UPLOADS_BIG_DIR . '/' . $row->url))		return false;
+		if (!unlink(UPLOADS_THUMB_DIR . '/' . $row->thumbUrl))	return false;
+		if (!unlink(UPLOADS_THUMB_DIR . '/' . $thumbUrl2x))	return false;
 
 		// Delete db entry
 		$delete = $database->query("DELETE FROM lychee_photos WHERE id = $row->id;");
@@ -188,9 +188,9 @@ function getPhotoArchive($photoID) {
 
 	header("Content-Type: application/octet-stream");
 	header("Content-Disposition: attachment; filename=\"$row->title.$extension[0]\"");
-	header("Content-Length: " . filesize("../uploads/big/$row->url"));
+	header("Content-Length: " . filesize(UPLOADS_BIG_DIR . '/' . $row->url));
 
-	readfile("../uploads/big/$row->url");
+	readfile(UPLOADS_BIG_DIR . '/' . $row->url);
 
 	return true;
 
