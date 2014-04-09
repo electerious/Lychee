@@ -25,7 +25,7 @@ class Plugins implements \SplSubject {
 		# Load plugins
 		foreach ($this->files as $file) {
 			if ($file==='') continue;
-			include('../plugins/' . $file);
+			include(__DIR__ . '/../../plugins/' . $file);
 		}
 
 		return true;
