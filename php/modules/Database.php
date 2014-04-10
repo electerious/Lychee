@@ -43,7 +43,8 @@ class Database extends Module {
 		$updates = array(
 			'020100', #2.1
 			'020101', #2.1.1
-			'020200' #2.2
+			'020200', #2.2
+			'020500' #2.5
 		);
 
 		# For each update
