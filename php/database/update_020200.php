@@ -6,7 +6,7 @@
 # @copyright	2014 by Tobias Reich
 ###
 
-if(!$database->query("SELECT `visible` FROM `lychee_albums` LIMIT 1;")) {
+if (!$database->query("SELECT `visible` FROM `lychee_albums` LIMIT 1;")) {
 	$result = $database->query("ALTER TABLE `lychee_albums` ADD `visible` TINYINT(1) NOT NULL DEFAULT 1");
 	if (!$result) return false;
 }
