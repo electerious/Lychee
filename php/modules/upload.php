@@ -67,7 +67,7 @@ function upload($files, $albumID, $description = '', $tags = '') {
 		if ($description==='') $description = $info['description'];
 
 		// Set orientation based on EXIF data
-		if ($file['type'] === 'image/jpeg' && isset($info['orientation']) && isset($info['width']) && isset($info['height'])) {
+		if ($file['type']==='image/jpeg'&&isset($info['orientation'])&&isset($info['width'])&&isset($info['height'])) {
 
 			if(extension_loaded('imagick')) {
 
