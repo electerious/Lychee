@@ -447,7 +447,7 @@ class Album extends Module {
 		# For each album delete photo
 		while ($row = $photos->fetch_object()) {
 
-			$photo = new Photo($this->database, $this->plugins, $row->id);
+			$photo = new Photo($this->database, $this->plugins, null, $row->id);
 			if (!$photo->delete($row->id)) $error = true;
 
 		}

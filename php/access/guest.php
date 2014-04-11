@@ -44,7 +44,7 @@ switch ($_POST['function']) {
 	// Photo Functions
 
 	case 'getPhoto':		if (!isset($_POST['photoID'], $_POST['albumID'], $_POST['password'])) exit();
-							$photo = new Photo($database, $plugins, $_POST['photoID']);
+							$photo = new Photo($database, $plugins, null, $_POST['photoID']);
 							if ($photo->getPublic($_POST['password']))
 								echo json_encode($photo->get($_POST['albumID']));
 							else
@@ -82,7 +82,7 @@ switch ($_POST['function']) {
 															break;
 
 								case 'getPhotoArchive':		if (!isset($_GET['photoID'], $_GET['password'])) exit();
-															$photo = new Photo($database, $plugins, $_GET['photoID']);
+															$photo = new Photo($database, $plugins, null, $_GET['photoID']);
 
 															// Photo Download
 															if ($photo->getPublic($_GET['password']))

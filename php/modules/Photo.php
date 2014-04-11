@@ -11,14 +11,291 @@ if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 class Photo extends Module {
 
 	private $database	= null;
+	private $settings	= null;
 	private $photoIDs	= null;
 
-	public function __construct($database, $plugins, $photoIDs) {
+	public function __construct($database, $plugins, $settings, $photoIDs) {
 
 		# Init vars
 		$this->database	= $database;
 		$this->plugins	= $plugins;
+		$this->settings	= $settings;
 		$this->photoIDs	= $photoIDs;
+
+		return true;
+
+	}
+
+	public function add($files, $albumID, $description = '', $tags = '') {
+
+		if (!isset($this->database)) return false;
+
+		# Call plugins
+		$this->plugins(__METHOD__, 0, func_get_args());
+
+		switch($albumID) {
+
+			case 's':
+				# s for public (share)
+				$public		= 1;
+				$star		= 0;
+				$albumID	= 0;
+				break;
+
+			case 'f':
+				# f for starred (fav)
+				$star		= 1;
+				$public		= 0;
+				$albumID	= 0;
+				break;
+
+			default:
+				$star		= 0;
+				$public		= 0;
+				break;
+
+		}
+
+		foreach ($files as $file) {
+
+			if ($file['type']!=='image/jpeg'&&
+				$file['type']!=='image/png'&&
+				$file['type']!=='image/gif')
+					return false;
+
+			$id = str_replace('.', '', microtime(true));
+			while(strlen($id)<14) $id .= 0;
+
+			$tmp_name	= $file['tmp_name'];
+			$extension	= array_reverse(explode('.', $file['name']));
+			$extension	= $extension[0];
+			$photo_name	= md5($id) . ".$extension";
+			$path		= __DIR__ . '/../../uploads/big/' . $photo_name;
+
+			# Import if not uploaded via web
+			if (!is_uploaded_file($tmp_name)) {
+				if (copy($tmp_name, $path)) { @unlink($tmp_name); }
+			} else {
+				move_uploaded_file($tmp_name, $path);
+			}
+
+			# Read infos
+			$info = $this->getInfo($path);
+
+			# Use title of file if IPTC title missing
+			if ($info['title']==='') $info['title'] = mysqli_real_escape_string($this->database, substr(basename($file['name'], ".$extension"), 0, 30));
+
+			# Use description parameter if set
+			if ($description==='') $description = $info['description'];
+
+			# Set orientation based on EXIF data
+			if ($file['type']==='image/jpeg'&&isset($info['orientation'])&&$info['orientation']!==''&&isset($info['width'])&&isset($info['height'])) {
+
+				if(extension_loaded('imagick')) {
+
+					$rotateImage = 0;
+
+					switch ($info['orientation']) {
+
+						case 3:
+							$rotateImage = 180;
+							$imageOrientation = 1;
+							break;
+
+						case 6:
+							$rotateImage = 90;
+							$imageOrientation = 1;
+							break;
+
+						case 8:
+							$rotateImage = 270;
+							$imageOrientation = 1;
+							break;
+
+					}
+
+					if ($rotateImage) {
+						$image = new Imagick();
+						$image->readImage(__DIR__ . '/../../uploads/big/' . $photo_name);
+						$image->rotateImage(new ImagickPixel(), $rotateImage);
+						$image->setImageOrientation($imageOrientation);
+						$image->writeImage(__DIR__ . '/../../uploads/big/' . $photo_name);
+						$image->clear();
+						$image->destroy();
+					}
+
+				} else {
+
+					$newWidth = $info['width'];
+					$newHeight = $info['height'];
+
+					$sourceImg = imagecreatefromjpeg(__DIR__ . "/../../uploads/big/$photo_name");
+
+					switch ($info['orientation']) {
+
+						case 2:
+							# mirror
+							# not yet implemented
+							break;
+
+						case 3:
+							$sourceImg = imagerotate($sourceImg, -180, 0);
+							break;
+
+						case 4:
+							# rotate 180 and mirror
+							# not yet implemented
+							break;
+
+						case 5:
+							# rotate 90 and mirror
+							# not yet implemented
+							break;
+
+						case 6:
+							$sourceImg = imagerotate($sourceImg, -90, 0);
+							$newWidth = $info['height'];
+							$newHeight = $info['width'];
+							break;
+
+						case 7:
+							# rotate -90 and mirror
+							# not yet implemented
+							break;
+
+						case 8:
+							$sourceImg = imagerotate($sourceImg, 90, 0);
+							$newWidth = $info['height'];
+							$newHeight = $info['width'];
+							break;
+
+					}
+
+					$newSourceImg = imagecreatetruecolor($newWidth, $newHeight);
+
+					imagecopyresampled($newSourceImg, $sourceImg, 0, 0, 0, 0, $newWidth, $newHeight, $newWidth, $newHeight);
+					imagejpeg($newSourceImg, __DIR__ . '/../../uploads/big/' . $photo_name, 100);
+
+				}
+
+			}
+
+			# Create Thumb
+			if (!$this->createThumb($path, $photo_name)) return false;
+
+			# Save to DB
+			$query = "INSERT INTO lychee_photos (id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star)
+				VALUES (
+					'" . $id . "',
+					'" . $info['title'] . "',
+					'" . $photo_name . "',
+					'" . $description . "',
+					'" . $tags . "',
+					'" . $info['type'] . "',
+					'" . $info['width'] . "',
+					'" . $info['height'] . "',
+					'" . $info['size'] . "',
+					'" . $info['iso'] . "',
+					'" . $info['aperture'] . "',
+					'" . $info['make'] . "',
+					'" . $info['model'] . "',
+					'" . $info['shutter'] . "',
+					'" . $info['focal'] . "',
+					'" . $info['takestamp'] . "',
+					'" . md5($id) . ".jpeg',
+					'" . $albumID . "',
+					'" . $public . "',
+					'" . $star . "');";
+			$result = $this->database->query($query);
+
+			if (!$result) return false;
+
+		}
+
+		# Call plugins
+		$this->plugins(__METHOD__, 1, func_get_args());
+
+		return true;
+
+	}
+
+	private function createThumb($url, $filename, $width = 200, $height = 200) {
+
+		if (!isset($this->settings)) return false;
+
+		# Call plugins
+		$this->plugins(__METHOD__, 0, func_get_args());
+
+		$info		= getimagesize($url);
+		$photoName	= explode(".", $filename);
+		$newUrl		= __DIR__ . '/../../uploads/thumb/' . $photoName[0] . '.jpeg';
+		$newUrl2x	= __DIR__ . '/../../uploads/thumb/' . $photoName[0] . '@2x.jpeg';
+
+		# create thumbnails with Imagick
+		if(extension_loaded('imagick')) {
+
+			# Read image
+			$thumb = new Imagick();
+			$thumb->readImage($url);
+			$thumb->setImageCompressionQuality($this->settings['thumbQuality']);
+			$thumb->setImageFormat('jpeg');
+
+			# Copy image for 2nd thumb version
+			$thumb2x = clone $thumb;
+
+			# Create 1st version
+			$thumb->cropThumbnailImage($width, $height);
+			$thumb->writeImage($newUrl);
+
+			# Create 2nd version
+			$thumb2x->cropThumbnailImage($width*2, $height*2);
+			$thumb2x->writeImage($newUrl2x);
+
+			# Close thumb
+			$thumb->clear();
+			$thumb->destroy();
+
+			# Close thumb2
+			$thumb2x->clear();
+			$thumb2x->destroy();
+
+		} else {
+
+			# Set position and size
+			$thumb = imagecreatetruecolor($width, $height);
+			$thumb2x = imagecreatetruecolor($width*2, $height*2);
+			if ($info[0]<$info[1]) {
+				$newSize		= $info[0];
+				$startWidth		= 0;
+				$startHeight	= $info[1]/2 - $info[0]/2;
+			} else {
+				$newSize		= $info[1];
+				$startWidth		= $info[0]/2 - $info[1]/2;
+				$startHeight	= 0;
+			}
+
+			# Fallback for older version
+			if ($info['mime']==='image/webp'&&floatval(phpversion())<5.5) return false;
+
+			# Create new image
+			switch($info['mime']) {
+				case 'image/jpeg':	$sourceImg = imagecreatefromjpeg($url); break;
+				case 'image/png':	$sourceImg = imagecreatefrompng($url); break;
+				case 'image/gif':	$sourceImg = imagecreatefromgif($url); break;
+				case 'image/webp':	$sourceImg = imagecreatefromwebp($url); break;
+				default: return false;
+			}
+
+			imagecopyresampled($thumb, $sourceImg, 0, 0, $startWidth, $startHeight, $width, $height, $newSize, $newSize);
+			imagecopyresampled($thumb2x, $sourceImg, 0, 0, $startWidth, $startHeight, $width*2, $height*2, $newSize, $newSize);
+
+			imagejpeg($thumb, $newUrl, $this->settings['thumbQuality']);
+			imagejpeg($thumb2x, $newUrl2x, $this->settings['thumbQuality']);
+
+		}
+
+		# Call plugins
+		$this->plugins(__METHOD__, 1, func_get_args());
 
 		return true;
 
@@ -61,6 +338,99 @@ class Photo extends Module {
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		return $photo;
+
+	}
+
+	private function getInfo($url) {
+
+		if (!isset($this->database, $url)) return false;
+
+		# Call plugins
+		$this->plugins(__METHOD__, 0, func_get_args());
+
+		$iptcArray	= array();
+		$info		= getimagesize($url, $iptcArray);
+
+		# General information
+		$return['type']		= $info['mime'];
+		$return['width']	= $info[0];
+		$return['height']	= $info[1];
+
+		# Size
+		$size = filesize($url)/1024;
+		if ($size>=1024) $return['size'] = round($size/1024, 1) . ' MB';
+		else $return['size'] = round($size, 1) . ' KB';
+
+		# IPTC Metadata Fallback
+		$return['title']		= '';
+		$return['description']	= '';
+
+		# IPTC Metadata
+		if(isset($iptcArray['APP13'])) {
+
+			$iptcInfo = iptcparse($iptcArray['APP13']);
+			if (is_array($iptcInfo)) {
+
+				$temp = @$iptcInfo['2#105'][0];
+				if (isset($temp)&&strlen($temp)>0) $return['title'] = $temp;
+
+				$temp = @$iptcInfo['2#120'][0];
+				if (isset($temp)&&strlen($temp)>0) $return['description'] = $temp;
+
+			}
+
+		}
+
+		# EXIF Metadata Fallback
+		$return['orientation']	= '';
+		$return['iso']			= '';
+		$return['aperture']		= '';
+		$return['make']			= '';
+		$return['model']		= '';
+		$return['shutter']		= '';
+		$return['focal']		= '';
+		$return['takestamp']		= '';
+
+		# Read EXIF
+		if ($info['mime']=='image/jpeg') $exif = @exif_read_data($url, 'EXIF', 0);
+		else $exif = false;
+
+		# EXIF Metadata
+		if ($exif!==false) {
+
+			if (isset($exif['Orientation'])) $return['orientation'] = $exif['Orientation'];
+			else if (isset($exif['IFD0']['Orientation'])) $return['orientation'] = $exif['IFD0']['Orientation'];
+
+			$temp = @$exif['ISOSpeedRatings'];
+			if (isset($temp)) $return['iso'] = $temp;
+
+			$temp = @$exif['COMPUTED']['ApertureFNumber'];
+			if (isset($temp)) $return['aperture'] = $temp;
+
+			$temp = @$exif['Make'];
+			if (isset($temp)) $return['make'] = $exif['Make'];
+
+			$temp = @$exif['Model'];
+			if (isset($temp)) $return['model'] = $temp;
+
+			$temp = @$exif['ExposureTime'];
+			if (isset($temp)) $return['shutter'] = $exif['ExposureTime'] . ' Sec.';
+
+			$temp = @$exif['FocalLength'];
+			if (isset($temp)) $return['focal'] = ($temp/1) . ' mm';
+
+			$temp = @$exif['DateTimeOriginal'];
+			if (isset($temp)) $return['takestamp'] = strtotime($temp);
+
+		}
+
+		# Security
+		foreach(array_keys($return) as $key) $return[$key] = mysqli_real_escape_string($this->database, $return[$key]);
+
+		# Call plugins
+		$this->plugins(__METHOD__, 1, func_get_args());
+
+		return $return;
 
 	}
 

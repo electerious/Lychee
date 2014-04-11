@@ -55,49 +55,50 @@ switch ($_POST['function']) {
 	// Photo Functions
 
 	case 'getPhoto':			if (!isset($_POST['photoID'], $_POST['albumID'])) exit();
-								$photo = new Photo($database, $plugins, $_POST['photoID']);
+								$photo = new Photo($database, $plugins, null, $_POST['photoID']);
 								echo json_encode($photo->get($_POST['albumID']));
 								break;
 
 	case 'setPhotoTitle':		if (!isset($_POST['photoIDs'], $_POST['title'])) exit();
-								$photo = new Photo($database, $plugins, $_POST['photoIDs']);
+								$photo = new Photo($database, $plugins, null, $_POST['photoIDs']);
 								echo $photo->setTitle($_POST['title']);
 								break;
 
 	case 'setPhotoDescription':	if (!isset($_POST['photoID'], $_POST['description'])) exit();
-								$photo = new Photo($database, $plugins, $_POST['photoID']);
+								$photo = new Photo($database, $plugins, null, $_POST['photoID']);
 								echo $photo->setDescription($_POST['description']);
 								break;
 
 	case 'setPhotoStar':		if (!isset($_POST['photoIDs'])) exit();
-								$photo = new Photo($database, $plugins, $_POST['photoIDs']);
+								$photo = new Photo($database, $plugins, null, $_POST['photoIDs']);
 								echo $photo->setStar();
 								break;
 
 	case 'setPhotoPublic':		if (!isset($_POST['photoID'])) exit();
-								$photo = new Photo($database, $plugins, $_POST['photoID']);
+								$photo = new Photo($database, $plugins, null, $_POST['photoID']);
 								echo $photo->setPublic();
 								break;
 
 	case 'setPhotoAlbum':		if (!isset($_POST['photoIDs'], $_POST['albumID'])) exit();
-								$photo = new Photo($database, $plugins, $_POST['photoIDs']);
+								$photo = new Photo($database, $plugins, null, $_POST['photoIDs']);
 								echo $photo->setAlbum($_POST['albumID']);
 								break;
 
 	case 'setPhotoTags':		if (!isset($_POST['photoIDs'], $_POST['tags'])) exit();
-								$photo = new Photo($database, $plugins, $_POST['photoIDs']);
+								$photo = new Photo($database, $plugins, null, $_POST['photoIDs']);
 								echo $photo->setTags($_POST['tags']);
 								break;
 
 	case 'deletePhoto':			if (!isset($_POST['photoIDs'])) exit();
-								$photo = new Photo($database, $plugins, $_POST['photoIDs']);
+								$photo = new Photo($database, $plugins, null, $_POST['photoIDs']);
 								echo $photo->delete();
 								break;
 
 	// Add Functions
 
-	case 'upload':			if (isset($_FILES, $_POST['albumID']))
-								echo upload($_FILES, $_POST['albumID']);
+	case 'upload':			if (!isset($_FILES, $_POST['albumID'])) exit();
+							$photo = new Photo($database, $plugins, $settings, null);
+							echo $photo->add($_FILES, $_POST['albumID']);
 							break;
 
 	case 'importUrl':		if (isset($_POST['url'], $_POST['albumID']))
@@ -158,7 +159,7 @@ switch ($_POST['function']) {
 															break;
 
 								case 'getPhotoArchive':		if (!isset($_GET['photoID'])) exit();
-															$photo = new Photo($database, $plugins, $_GET['photoID']);
+															$photo = new Photo($database, $plugins, null, $_GET['photoID']);
 															$photo->getArchive();
 															break;
 
