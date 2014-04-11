@@ -31,6 +31,11 @@ if ($database->query("SELECT `takedate`, `taketime` FROM `lychee_photos` LIMIT 1
 	$result = $database->query("ALTER TABLE `lychee_photos` DROP COLUMN `taketime`;");
 }
 
+# Remove `import_name`
+if ($database->query("SELECT `import_name` FROM `lychee_photos` LIMIT 1;")) {
+	$result = $database->query("ALTER TABLE `lychee_photos` DROP COLUMN `import_name`;");
+}
+
 # Remove `sysdate` and `systime`
 if ($database->query("SELECT `sysdate`, `systime` FROM `lychee_photos` LIMIT 1;")) {
 	$result = $database->query("ALTER TABLE `lychee_photos` DROP COLUMN `sysdate`;");
