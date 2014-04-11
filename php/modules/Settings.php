@@ -31,6 +31,9 @@ class Settings extends Module {
 		# Add each to return
 		while ($setting = $settings->fetch_object()) $return[$setting->key] = $setting->value;
 
+		# Fallback for versions below v2.5
+		if (!isset($return['plugins'])) $return['plugins'] = '';
+
 		return $return;
 
 	}

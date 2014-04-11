@@ -6,11 +6,20 @@
 # @copyright	2014 by Tobias Reich
 ###
 
+# Add `plugins`
+$result = $database->query("SELECT `key` FROM `lychee_settings` WHERE `key` = 'plugins' LIMIT 1;");
+if ($result->num_rows===0) {
+	$result = $database->query("INSERT INTO `lychee_settings` (`key`, `value`) VALUES ('plugins', '')");
+	if (!$result) return false;
+}
+
+# Add `takestamp`
 if (!$database->query("SELECT `takestamp` FROM `lychee_photos` LIMIT 1;")) {
 	$result = $database->query("ALTER TABLE `lychee_photos` ADD `takestamp` INT(11) DEFAULT NULL");
 	if (!$result) return false;
 }
 
+# Convert to `takestamp`
 if ($database->query("SELECT `takedate`, `taketime` FROM `lychee_photos` LIMIT 1;")) {
 	$result = $database->query("SELECT `id`, `takedate`, `taketime` FROM `lychee_photos` WHERE `takedate` <> '' AND `taketime` <> '';");
 	if (!$result) return false;
@@ -22,11 +31,19 @@ if ($database->query("SELECT `takedate`, `taketime` FROM `lychee_photos` LIMIT 1
 	$result = $database->query("ALTER TABLE `lychee_photos` DROP COLUMN `taketime`;");
 }
 
+# Remove `sysdate` and `systime`
+if ($database->query("SELECT `sysdate`, `systime` FROM `lychee_photos` LIMIT 1;")) {
+	$result = $database->query("ALTER TABLE `lychee_photos` DROP COLUMN `sysdate`;");
+	$result = $database->query("ALTER TABLE `lychee_photos` DROP COLUMN `systime`;");
+}
+
+# Add `sysstamp`
 if (!$database->query("SELECT `sysstamp` FROM `lychee_albums` LIMIT 1;")) {
 	$result = $database->query("ALTER TABLE `lychee_albums` ADD `sysstamp` INT(11) DEFAULT NULL");
 	if (!$result) return false;
 }
 
+# Convert to `sysstamp`
 if ($database->query("SELECT `sysdate` FROM `lychee_albums` LIMIT 1;")) {
 	$result = $database->query("SELECT `id`, `sysdate` FROM `lychee_albums`;");
 	if (!$result) return false;
@@ -37,6 +54,23 @@ if ($database->query("SELECT `sysdate` FROM `lychee_albums` LIMIT 1;")) {
 	$result = $database->query("ALTER TABLE `lychee_albums` DROP COLUMN `sysdate`;");
 }
 
+# Set character of database
+$result = $database->query("ALTER DATABASE $dbName CHARACTER SET utf8 COLLATE utf8_general_ci;");
+if (!$result) return false;
+
+# Set character
+$result = $database->query("ALTER TABLE `lychee_albums` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;");
+if (!$result) return false;
+
+# Set character
+$result = $database->query("ALTER TABLE `lychee_photos` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;");
+if (!$result) return false;
+
+# Set character
+$result = $database->query("ALTER TABLE `lychee_settings` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;");
+if (!$result) return false;
+
+# Set version
 $result = $database->query("UPDATE lychee_settings SET value = '020500' WHERE `key` = 'version';");
 if (!$result) return false;
 

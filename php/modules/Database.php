@@ -35,7 +35,7 @@ class Database extends Module {
 
 	}
 
-	static function update($database, $version) {
+	static function update($database, $dbName, $version) {
 
 		if (!isset($database)) return false;
 

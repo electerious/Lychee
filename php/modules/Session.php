@@ -22,7 +22,7 @@ class Session extends Module {
 
 	}
 
-	public function init($database, $public, $version) {
+	public function init($database, $dbName, $public, $version) {
 
 		if (!isset($this->settings, $public, $version)) return false;
 
@@ -31,7 +31,7 @@ class Session extends Module {
 
 		# Update
 		if (!isset($this->settings['version'])||$this->settings['version']!==$version)
-			if (!Database::update($database, @$this->settings['version'])) exit('Error: Updating the database failed!');
+			if (!Database::update($database, $dbName, @$this->settings['version'])) exit('Error: Updating the database failed!');
 
 		# Return settings
 		$return['config'] = $this->settings;
