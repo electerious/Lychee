@@ -37,8 +37,8 @@ class Album extends Module {
 		if (strlen($title)>50) $title = substr($title, 0, 50);
 
 		# Database
-		$sysdate	= date('d.m.Y');
-		$result		= $this->database->query("INSERT INTO lychee_albums (title, sysdate, public, visible) VALUES ('$title', '$sysdate', '$public', '$visible');");
+		$sysstamp	= time();
+		$result		= $this->database->query("INSERT INTO lychee_albums (title, sysstamp, public, visible) VALUES ('$title', '$sysstamp', '$public', '$visible');");
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
@@ -72,7 +72,7 @@ class Album extends Module {
 
 			default:	$albums = $this->database->query("SELECT * FROM lychee_albums WHERE id = '$this->albumIDs' LIMIT 1;");
 						$return = $albums->fetch_assoc();
-						$return['sysdate']		= date('d M. Y', strtotime($return['sysdate']));
+						$return['sysdate']		= date('d M. Y', $return['sysstamp']);
 						$return['password']		= ($return['password']=='' ? false : true);
 						$query = "SELECT id, title, tags, public, star, album, thumbUrl FROM lychee_photos WHERE album = '$this->albumIDs' " . $this->settings['sorting'];
 						break;
@@ -138,8 +138,8 @@ class Album extends Module {
 		if ($public===false) $return = $this->getSmartInfo();
 
 		# Albums query
-		$query = 'SELECT id, title, public, sysdate, password FROM lychee_albums WHERE public = 1 AND visible <> 0';
-		if ($public===false) $query = 'SELECT id, title, public, sysdate, password FROM lychee_albums';
+		$query = 'SELECT id, title, public, sysstamp, password FROM lychee_albums WHERE public = 1 AND visible <> 0';
+		if ($public===false) $query = 'SELECT id, title, public, sysstamp, password FROM lychee_albums';
 
 		# Execute query
 		$albums = $this->database->query($query) OR exit('Error: ' . $this->database->error);
@@ -148,7 +148,7 @@ class Album extends Module {
 		while ($album = $albums->fetch_assoc()) {
 
 			# Parse info
-			$album['sysdate']	= date('F Y', strtotime($album['sysdate']));
+			$album['sysdate']	= date('F Y', $album['sysstamp']);
 			$album['password']	= ($album['password'] != '');
 
 			# Thumbs

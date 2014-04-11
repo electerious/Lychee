@@ -46,14 +46,14 @@ function search($term) {
 	$return['albums'] = '';
 
 	// Photos
-	$result = $database->query("SELECT id, title, tags, sysdate, public, star, album, thumbUrl FROM lychee_photos WHERE title like '%$term%' OR description like '%$term%' OR tags like '%$term%';");
+	$result = $database->query("SELECT id, title, tags, public, star, album, thumbUrl FROM lychee_photos WHERE title like '%$term%' OR description like '%$term%' OR tags like '%$term%';");
 	while($row = $result->fetch_assoc()) {
 		$return['photos'][$row['id']]				= $row;
-		$return['photos'][$row['id']]['sysdate']	= date('d F Y', strtotime($row['sysdate']));
+		$return['photos'][$row['id']]['sysdate']	= date('d M. Y', substr($row['id'], 0, -4));
 	}
 
 	// Albums
-	$result = $database->query("SELECT id, title, public, sysdate, password FROM lychee_albums WHERE title like '%$term%' OR description like '%$term%';");
+	$result = $database->query("SELECT id, title, public, sysstamp, password FROM lychee_albums WHERE title like '%$term%' OR description like '%$term%';");
 	$i		= 0;
 	while($row = $result->fetch_object()) {
 
@@ -61,7 +61,7 @@ function search($term) {
 		$return['albums'][$row->id]['id']		= $row->id;
 		$return['albums'][$row->id]['title']	= $row->title;
 		$return['albums'][$row->id]['public']	= $row->public;
-		$return['albums'][$row->id]['sysdate']	= date('F Y', strtotime($row->sysdate));
+		$return['albums'][$row->id]['sysdate']	= date('F Y', $row->sysstamp);
 		$return['albums'][$row->id]['password']	= ($row->password=='' ? false : true);
 
 		// Thumbs
