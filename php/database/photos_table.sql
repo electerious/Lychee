@@ -19,11 +19,9 @@ CREATE TABLE IF NOT EXISTS `lychee_photos` (
   `model` varchar(50) NOT NULL,
   `shutter` varchar(30) NOT NULL,
   `focal` varchar(20) NOT NULL,
-  `takedate` varchar(20) NOT NULL,
-  `taketime` varchar(8) NOT NULL,
+  `takestamp` int(11) DEFAULT NULL,
   `star` tinyint(1) NOT NULL,
   `thumbUrl` varchar(50) NOT NULL,
   `album` varchar(30) NOT NULL DEFAULT '0',
-  `import_name` varchar(100) DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
