@@ -162,7 +162,7 @@ function upload($files, $albumID, $description = '', $tags = '') {
 		if (!createThumb($photo_name)) return false;
 
 		// Save to DB
-		$query = "INSERT INTO lychee_photos (id, title, url, description, tags, type, width, height, size, sysdate, systime, iso, aperture, make, model, shutter, focal, takedate, taketime, thumbUrl, album, public, star, import_name)
+		$query = "INSERT INTO lychee_photos (id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, import_name)
 			VALUES (
 				'" . $id . "',
 				'" . $info['title'] . "',
@@ -173,16 +173,13 @@ function upload($files, $albumID, $description = '', $tags = '') {
 				'" . $info['width'] . "',
 				'" . $info['height'] . "',
 				'" . $info['size'] . "',
-				'" . $info['date'] . "',
-				'" . $info['time'] . "',
 				'" . $info['iso'] . "',
 				'" . $info['aperture'] . "',
 				'" . $info['make'] . "',
 				'" . $info['model'] . "',
 				'" . $info['shutter'] . "',
 				'" . $info['focal'] . "',
-				'" . $info['takeDate'] . "',
-				'" . $info['takeTime'] . "',
+				'" . $info['takestamp'] . "',
 				'" . md5($id) . ".jpeg',
 				'" . $albumID . "',
 				'" . $public . "',
@@ -210,8 +207,6 @@ function getInfo($filename) {
 	$return['type']		= $info['mime'];
 	$return['width']	= $info[0];
 	$return['height']	= $info[1];
-	$return['date']		= date('d.m.Y', filectime($url));
-	$return['time']		= date('H:i:s', filectime($url));
 
 	// Size
 	$size = filesize($url)/1024;
@@ -246,8 +241,7 @@ function getInfo($filename) {
 	$return['model']		= '';
 	$return['shutter']		= '';
 	$return['focal']		= '';
-	$return['takeDate']		= '';
-	$return['takeTime']		= '';
+	$return['takestamp']		= '';
 
 	// Read EXIF
 	if ($info['mime']=='image/jpeg') $exif = @exif_read_data($url, 'EXIF', 0);
@@ -278,12 +272,7 @@ function getInfo($filename) {
 		if (isset($temp)) $return['focal'] = ($temp/1) . ' mm';
 
 		$temp = @$exif['DateTimeOriginal'];
-		if (isset($temp)) {
-			$exifDate	= explode(' ', $temp);
-			$date		= explode(':', $exifDate[0]);
-			$return['takeDate'] = $date[2].'.'.$date[1].'.'.$date[0];
-			$return['takeTime'] = $exifDate[1];
-		}
+		if (isset($temp)) $return['takestamp'] = strtotime($temp);
 
 	}
 
