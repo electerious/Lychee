@@ -37,7 +37,7 @@ class Photo extends Module {
 
 		# Parse photo
 		$photo['sysdate'] = date('d M. Y', substr($photo['id'], 0, -4));
-		if (strlen($photo['takedate'])>0) $photo['takedate'] = date('d M. Y', strtotime($photo['takedate']));
+		if (strlen($photo['takestamp'])>0) $photo['takedate'] = date('d M. Y', $photo['takestamp']);
 
 		if ($albumID!='false') {
 
