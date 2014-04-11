@@ -69,7 +69,7 @@ function upload($files, $albumID, $description = '', $tags = '') {
 		// Set orientation based on EXIF data
 		if ($file['type'] === 'image/jpeg' && isset($info['orientation']) && isset($info['width']) && isset($info['height'])) {
 
-			if(class_exists('Imagick')) {
+			if(extension_loaded('imagick')) {
 
 				$rotateImage = 0;
 
@@ -306,7 +306,7 @@ function createThumb($filename, $width = 200, $height = 200) {
 	$newUrl2x	= __DIR__ . '/../../uploads/thumb/' . $photoName[0] . '@2x.jpeg';
 
 	// create thumbnails with Imagick
-	if (class_exists('Imagick')) {
+	if(extension_loaded('imagick')) {
 
 		// read image
 		$thumb = new Imagick();
