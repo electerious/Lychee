@@ -96,7 +96,8 @@ album = {
 
 		var title,
 			params,
-			buttons;
+			buttons,
+			isNumber = function(n) { return !isNaN(parseFloat(n)) && isFinite(n) };
 
 		buttons = [
 			["Create Album", function() {
@@ -110,10 +111,10 @@ album = {
 				params = "addAlbum&title=" + escape(encodeURI(title));
 				lychee.api(params, function(data) {
 
-					if (data!==false) {
-						if (data===true) data = 1; // Avoid first album to be true
-						lychee.goto(data);
-					} else lychee.error(null, params, data);
+					if (data===true) data = 1; // Avoid first album to be true
+
+					if (data!==false&&isNumber(data)) lychee.goto(data);
+					else lychee.error(null, params, data);
 
 				});
 
