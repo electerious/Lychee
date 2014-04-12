@@ -88,6 +88,7 @@ var lychee = {
 
 				if (typeof data==="string"&&data.substring(0, 7)==="Error: ") {
 					lychee.error(data.substring(7, data.length), params, data);
+					upload.close(true);
 					return false;
 				}
 
