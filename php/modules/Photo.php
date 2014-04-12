@@ -674,9 +674,9 @@ class Photo extends Module {
 			$thumbUrl2x = $thumbUrl2x[0] . '@2x.' . $thumbUrl2x[1];
 
 			# Delete files
-			if (!unlink($this->uploadsBig . $photo->url))			return false;
-			if (!unlink($this->uploadsThumb . $photo->thumbUrl))	return false;
-			if (!unlink($this->uploadsThumb . $thumbUrl2x))		return false;
+			if (file_exists($this->uploadsBig . $photo->url)&&!unlink($this->uploadsBig . $photo->url))					return false;
+			if (file_exists($this->uploadsThumb . $photo->thumbUrl)&&!unlink($this->uploadsThumb . $photo->thumbUrl))	return false;
+			if (file_exists($this->uploadsThumb . $thumbUrl2x)&&!unlink($this->uploadsThumb . $thumbUrl2x))				return false;
 
 			# Delete db entry
 			$delete = $this->database->query("DELETE FROM lychee_photos WHERE id = '$photo->id';");
