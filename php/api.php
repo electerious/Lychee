@@ -1,10 +1,10 @@
 <?php
 
-/**
- * @name		API
- * @author		Tobias Reich
- * @copyright	2014 by Tobias Reich
- */
+###
+# @name		API
+# @author		Tobias Reich
+# @copyright	2014 by Tobias Reich
+###
 
 @ini_set('max_execution_time', '200');
 @ini_set('post_max_size', '200M');
@@ -18,10 +18,10 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 	define('LYCHEE', true);
 	date_default_timezone_set('UTC');
 
-	// Load autoload
+	# Load autoload
 	require(__DIR__ . '/autoload.php');
 
-	// Load modules
+	# Load modules
 	require(__DIR__ . '/modules/misc.php');
 	require(__DIR__ . '/modules/upload.php');
 
@@ -39,28 +39,28 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 
 	}
 
-	// Connect to database
+	# Connect to database
 	$database = Database::connect($dbHost, $dbUser, $dbPassword, $dbName);
 
-	// Load settings
+	# Load settings
 	$settings = new Settings($database);
 	$settings = $settings->get();
 
-	// Init plugins
+	# Init plugins
 	$plugins = explode(';', $settings['plugins']);
 	$plugins = new Plugins($plugins, $database);
 
-	// Escape
+	# Escape
 	foreach(array_keys($_POST) as $key)	$_POST[$key] = mysqli_real_escape_string($database, urldecode($_POST[$key]));
 	foreach(array_keys($_GET) as $key)	$_GET[$key] = mysqli_real_escape_string($database, urldecode($_GET[$key]));
 
-	// Validate parameters
+	# Validate parameters
 	if (isset($_POST['albumIDs'])&&preg_match('/^[0-9\,]{1,}$/', $_POST['albumIDs'])!==1)	exit('Error: Wrong parameter type for albumIDs!');
 	if (isset($_POST['photoIDs'])&&preg_match('/^[0-9\,]{1,}$/', $_POST['photoIDs'])!==1)	exit('Error: Wrong parameter type for photoIDs!');
 	if (isset($_POST['albumID'])&&preg_match('/^[0-9sf]{1,}$/', $_POST['albumID'])!==1)		exit('Error: Wrong parameter type for albumID!');
 	if (isset($_POST['photoID'])&&preg_match('/^[0-9]{14}$/', $_POST['photoID'])!==1)		exit('Error: Wrong parameter type for photoID!');
 
-	// Fallback for switch statement
+	# Fallback for switch statement
 	if (!isset($_POST['function']))	$_POST['function'] = '';
 	if (!isset($_GET['function']))	$_GET['function'] = '';
 
