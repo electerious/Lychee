@@ -232,32 +232,16 @@ class Album extends Module {
 		# Photos query
 		switch($this->albumIDs) {
 			case 's':
-				$photos = "SELECT title, type, url FROM lychee_photos WHERE public = '1';";
+				$photos = "SELECT title, url FROM lychee_photos WHERE public = '1';";
 				$zipTitle = 'Public';
 				break;
 			case 'f':
-				$photos = "SELECT title, type, url FROM lychee_photos WHERE star = '1';";
+				$photos = "SELECT title, url FROM lychee_photos WHERE star = '1';";
 				$zipTitle = 'Starred';
 				break;
 			default:
-				$photos = "SELECT title, type, url FROM lychee_photos WHERE album = '$this->albumIDs';";
+				$photos = "SELECT title, url FROM lychee_photos WHERE album = '$this->albumIDs';";
 				$zipTitle = 'Unsorted';
-		}
-
-		# Execute query
-		$photos = $this->database->query($photos);
-
-		# Check if album empty
-		if ($photos->num_rows==0) return false;
-
-		# Init vars
-		$files	= array();
-		$i		= 0;
-
-		# Parse each path
-		while ($photo = $photos->fetch_object()) {
-			$files[$i] = __DIR__ . '/../../uploads/big/' . $photo->url;
-			$i++;
 		}
 
 		# Set title
@@ -266,19 +250,58 @@ class Album extends Module {
 		$filename = __DIR__ . "/../../data/$zipTitle.zip";
 
 		# Create zip
-
 		$zip = new ZipArchive();
 		if ($zip->open($filename, ZIPARCHIVE::CREATE)!==TRUE) return false;
 
-		# Add each photo
-		foreach ($files AS $file) {
+		# Execute query
+		$photos = $this->database->query($photos);
 
-			if (!@is_readable($file)) continue;
+		# Check if album empty
+		if ($photos->num_rows==0) return false;
 
-			$photoName = explode('/', $file);
-			$photoName = array_reverse($photoName);
-			$photoName = $photoName[0];
-			$zip->addFile($file, $zipTitle . '/' . $photoName);
+		# Parse each path
+		$files = array();
+		while ($photo = $photos->fetch_object()) {
+
+			# Parse url
+			$photo->url = __DIR__ . '/../../uploads/big/' . $photo->url;
+
+			# Parse title
+			$badChars =	array_merge(
+							array_map('chr', range(0,31)),
+							array("<", ">", ":", '"', "/", "\\", "|", "?", "*")
+						);
+			$photo->title = str_replace($badChars, '', $photo->title);
+			if (!isset($photo->title)||$photo->title==='') $photo->title = 'Untitled';
+
+			# Check if readable
+			if (!@is_readable($photo->url)) continue;
+
+			# Get extension of image
+			$extension = array_reverse(explode('.', $photo->url));
+			$extension = $extension[0];
+
+			# Set title for photo
+			$zipFileName = $zipTitle . '/' . $photo->title . '.' . $extension;
+
+			# Check for duplicates
+			if (!empty($files)) {
+				$i = 1;
+				while (in_array($zipFileName, $files)) {
+
+					# Set new title for photo
+					$zipFileName = $zipTitle . '/' . $photo->title . '-' . $i . '.' . $extension;
+
+					$i++;
+
+				}
+			}
+
+			# Add to array
+			$files[] = $zipFileName;
+
+			# Add photo to zip
+			$zip->addFile($photo->url, $zipFileName);
 
 		}
 
