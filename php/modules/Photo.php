@@ -90,6 +90,9 @@ class Photo extends Module {
 			# Read infos
 			$info = $this->getInfo($path);
 
+			# Set original date
+			if ($info['takestamp']!=='') @touch($path, $info['takestamp']);
+
 			# Use title of file if IPTC title missing
 			if ($info['title']==='') $info['title'] = mysqli_real_escape_string($this->database, substr(basename($file['name'], ".$extension"), 0, 30));
 
