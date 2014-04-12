@@ -68,7 +68,7 @@ class Photo extends Module {
 			if ($file['type']!=='image/jpeg'&&
 				$file['type']!=='image/png'&&
 				$file['type']!=='image/gif')
-					return false;
+					continue;
 
 			$id = str_replace('.', '', microtime(true));
 			while(strlen($id)<14) $id .= 0;
@@ -81,9 +81,10 @@ class Photo extends Module {
 
 			# Import if not uploaded via web
 			if (!is_uploaded_file($tmp_name)) {
-				if (copy($tmp_name, $path)) { @unlink($tmp_name); }
+				if (!@copy($tmp_name, $path)) exit('Error: Could not copy photo to uploads!');
+				else @unlink($tmp_name);
 			} else {
-				move_uploaded_file($tmp_name, $path);
+				if (!@move_uploaded_file($tmp_name, $path)) exit('Error: Could not move photo to uploads!');
 			}
 
 			# Read infos
@@ -97,11 +98,11 @@ class Photo extends Module {
 
 			# Set orientation based on EXIF data
 			if ($file['type']==='image/jpeg'&&isset($info['orientation'])&&$info['orientation']!==''&&isset($info['width'])&&isset($info['height'])) {
-				if (!$this->adjustFile($path, $info)) return false;
+				if (!$this->adjustFile($path, $info)) exit('Error: Could not adjust photo!');
 			}
 
 			# Create Thumb
-			if (!$this->createThumb($path, $photo_name)) return false;
+			if (!$this->createThumb($path, $photo_name)) exit('Error: Could not create thumbnail for photo!');
 
 			# Save to DB
 			$query = "INSERT INTO lychee_photos (id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star)
@@ -128,7 +129,7 @@ class Photo extends Module {
 					'" . $star . "');";
 			$result = $this->database->query($query);
 
-			if (!$result) return false;
+			if (!$result) exit('Error: Could not save photo in database!');
 
 		}
 

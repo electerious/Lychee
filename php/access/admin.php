@@ -101,12 +101,12 @@ switch ($_POST['function']) {
 							echo $photo->add($_FILES, $_POST['albumID']);
 							break;
 
-	case 'importUrl':		if (isset($_POST['url'], $_POST['albumID']))
-								echo importUrl($_POST['url'], $_POST['albumID']);
+	case 'importUrl':		if (!isset($_POST['url'], $_POST['albumID'])) exit();
+							echo Import::url($_POST['url'], $_POST['albumID']);
 							break;
 
-	case 'importServer':	if (isset($_POST['albumID']))
-								echo importServer($_POST['albumID']);
+	case 'importServer':	if (!isset($_POST['albumID'])) exit();
+							echo Import::server($_POST['albumID'], null);
 							break;
 
 	// Search Function

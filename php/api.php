@@ -23,7 +23,6 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 
 	# Load modules
 	require(__DIR__ . '/modules/misc.php');
-	require(__DIR__ . '/modules/upload.php');
 
 	if (file_exists(__DIR__ . '/../data/config.php')) require(__DIR__ . '/../data/config.php');
 	else {
