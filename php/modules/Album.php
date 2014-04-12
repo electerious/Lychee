@@ -232,27 +232,29 @@ class Album extends Module {
 		# Photos query
 		switch($this->albumIDs) {
 			case 's':
-				$photos = "SELECT url FROM lychee_photos WHERE public = '1';";
+				$photos = "SELECT title, type, url FROM lychee_photos WHERE public = '1';";
 				$zipTitle = 'Public';
 				break;
 			case 'f':
-				$photos = "SELECT url FROM lychee_photos WHERE star = '1';";
+				$photos = "SELECT title, type, url FROM lychee_photos WHERE star = '1';";
 				$zipTitle = 'Starred';
 				break;
 			default:
-				$photos = "SELECT url FROM lychee_photos WHERE album = '$this->albumIDs';";
+				$photos = "SELECT title, type, url FROM lychee_photos WHERE album = '$this->albumIDs';";
 				$zipTitle = 'Unsorted';
 		}
 
 		# Execute query
 		$photos = $this->database->query($photos);
 
+		# Check if album empty
+		if ($photos->num_rows==0) return false;
+
 		# Init vars
-		$zip	= new ZipArchive();
 		$files	= array();
 		$i		= 0;
 
-		# Parse each url
+		# Parse each path
 		while ($photo = $photos->fetch_object()) {
 			$files[$i] = __DIR__ . '/../../uploads/big/' . $photo->url;
 			$i++;
@@ -261,16 +263,23 @@ class Album extends Module {
 		# Set title
 		$album = $this->database->query("SELECT title FROM lychee_albums WHERE id = '$this->albumIDs' LIMIT 1;");
 		if ($this->albumIDs!=0&&is_numeric($this->albumIDs)) $zipTitle = $album->fetch_object()->title;
+		$filename = __DIR__ . "/../../data/$zipTitle.zip";
 
 		# Create zip
-		$filename = __DIR__ . "/../../data/$zipTitle.zip";
+
+		$zip = new ZipArchive();
 		if ($zip->open($filename, ZIPARCHIVE::CREATE)!==TRUE) return false;
 
 		# Add each photo
 		foreach ($files AS $file) {
-			$newFile = explode('/', $file);
-			$newFile = array_reverse($newFile);
-			$zip->addFile($file, $zipTitle . '/' . $newFile[0]);
+
+			if (!@is_readable($file)) continue;
+
+			$photoName = explode('/', $file);
+			$photoName = array_reverse($photoName);
+			$photoName = $photoName[0];
+			$zip->addFile($file, $zipTitle . '/' . $photoName);
+
 		}
 
 		# Finish zip
