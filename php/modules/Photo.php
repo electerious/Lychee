@@ -90,9 +90,6 @@ class Photo extends Module {
 			# Read infos
 			$info = $this->getInfo($path);
 
-			# Set original date
-			if ($info['takestamp']!=='') @touch($path, $info['takestamp']);
-
 			# Use title of file if IPTC title missing
 			if ($info['title']==='') $info['title'] = mysqli_real_escape_string($this->database, substr(basename($file['name'], ".$extension"), 0, 30));
 
@@ -103,6 +100,9 @@ class Photo extends Module {
 			if ($file['type']==='image/jpeg'&&isset($info['orientation'])&&$info['orientation']!==''&&isset($info['width'])&&isset($info['height'])) {
 				if (!$this->adjustFile($path, $info)) exit('Error: Could not adjust photo!');
 			}
+
+			# Set original date
+			if ($info['takestamp']!=='') @touch($path, $info['takestamp']);
 
 			# Create Thumb
 			if (!$this->createThumb($path, $photo_name)) exit('Error: Could not create thumbnail for photo!');
