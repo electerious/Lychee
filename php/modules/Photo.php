@@ -14,9 +14,6 @@ class Photo extends Module {
 	private $settings	= null;
 	private $photoIDs	= null;
 
-	private $uploadsBig		= null;
-	private $uploadsThumb	= null;
-
 	public function __construct($database, $plugins, $settings, $photoIDs) {
 
 		# Init vars
@@ -24,10 +21,6 @@ class Photo extends Module {
 		$this->plugins	= $plugins;
 		$this->settings	= $settings;
 		$this->photoIDs	= $photoIDs;
-
-		# Set upload dirs
-		$this->uploadsBig	= __DIR__ . '/../../uploads/big/';
-		$this->uploadsThumb	= __DIR__ . '/../../uploads/thumb/';
 
 		return true;
 
@@ -77,7 +70,7 @@ class Photo extends Module {
 			$extension	= array_reverse(explode('.', $file['name']));
 			$extension	= $extension[0];
 			$photo_name	= md5($id) . ".$extension";
-			$path		= $this->uploadsBig . $photo_name;
+			$path		= LYCHEE_UPLOADS_BIG . $photo_name;
 
 			# Import if not uploaded via web
 			if (!is_uploaded_file($tmp_name)) {
@@ -152,8 +145,8 @@ class Photo extends Module {
 
 		$info		= getimagesize($url);
 		$photoName	= explode(".", $filename);
-		$newUrl		= $this->uploadsThumb . $photoName[0] . '.jpeg';
-		$newUrl2x	= $this->uploadsThumb . $photoName[0] . '@2x.jpeg';
+		$newUrl		= LYCHEE_UPLOADS_THUMB . $photoName[0] . '.jpeg';
+		$newUrl2x	= LYCHEE_UPLOADS_THUMB . $photoName[0] . '@2x.jpeg';
 
 		# create thumbnails with Imagick
 		if(extension_loaded('imagick')) {
@@ -479,10 +472,10 @@ class Photo extends Module {
 		# Set headers
 		header("Content-Type: application/octet-stream");
 		header("Content-Disposition: attachment; filename=\"$photo->title.$extension[0]\"");
-		header("Content-Length: " . filesize($this->uploadsBig . $photo->url));
+		header("Content-Length: " . filesize(LYCHEE_UPLOADS_BIG . $photo->url));
 
 		# Send file
-		readfile($this->uploadsBig . $photo->url);
+		readfile(LYCHEE_UPLOADS_BIG . $photo->url);
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
@@ -678,9 +671,9 @@ class Photo extends Module {
 			$thumbUrl2x = $thumbUrl2x[0] . '@2x.' . $thumbUrl2x[1];
 
 			# Delete files
-			if (file_exists($this->uploadsBig . $photo->url)&&!unlink($this->uploadsBig . $photo->url))					return false;
-			if (file_exists($this->uploadsThumb . $photo->thumbUrl)&&!unlink($this->uploadsThumb . $photo->thumbUrl))	return false;
-			if (file_exists($this->uploadsThumb . $thumbUrl2x)&&!unlink($this->uploadsThumb . $thumbUrl2x))				return false;
+			if (file_exists(LYCHEE_UPLOADS_BIG . $photo->url)&&!unlink(LYCHEE_UPLOADS_BIG . $photo->url))					return false;
+			if (file_exists(LYCHEE_UPLOADS_THUMB . $photo->thumbUrl)&&!unlink(LYCHEE_UPLOADS_THUMB . $photo->thumbUrl))		return false;
+			if (file_exists(LYCHEE_UPLOADS_THUMB . $thumbUrl2x)&&!unlink(LYCHEE_UPLOADS_THUMB . $thumbUrl2x))				return false;
 
 			# Delete db entry
 			$delete = $this->database->query("DELETE FROM lychee_photos WHERE id = '$photo->id';");

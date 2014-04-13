@@ -15,8 +15,10 @@
 if (!empty($_POST['function'])||!empty($_GET['function'])) {
 
 	session_start();
-	define('LYCHEE', true);
 	date_default_timezone_set('UTC');
+
+	# Define globals
+	require(__DIR__ . '/define.php');
 
 	# Load autoload
 	require(__DIR__ . '/autoload.php');
@@ -24,7 +26,7 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 	# Load modules
 	require(__DIR__ . '/modules/misc.php');
 
-	if (file_exists(__DIR__ . '/../data/config.php')) require(__DIR__ . '/../data/config.php');
+	if (file_exists(LYCHEE_CONFIG_FILE)) require(LYCHEE_CONFIG_FILE);
 	else {
 
 		/**

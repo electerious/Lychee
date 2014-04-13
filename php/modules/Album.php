@@ -247,7 +247,7 @@ class Album extends Module {
 		# Set title
 		$album = $this->database->query("SELECT title FROM lychee_albums WHERE id = '$this->albumIDs' LIMIT 1;");
 		if ($this->albumIDs!=0&&is_numeric($this->albumIDs)) $zipTitle = $album->fetch_object()->title;
-		$filename = __DIR__ . "/../../data/$zipTitle.zip";
+		$filename = LYCHEE_DATA . $zipTitle . '.zip';
 
 		# Create zip
 		$zip = new ZipArchive();
@@ -264,7 +264,7 @@ class Album extends Module {
 		while ($photo = $photos->fetch_object()) {
 
 			# Parse url
-			$photo->url = __DIR__ . '/../../uploads/big/' . $photo->url;
+			$photo->url = LYCHEE_UPLOADS_BIG . $photo->url;
 
 			# Parse title
 			$badChars =	array_merge(

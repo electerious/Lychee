@@ -34,16 +34,13 @@ class Import extends Module {
 		$urls = str_replace(' ', '%20', $urls);
 		$urls = explode(',', $urls);
 
-		# Set path
-		$path = __DIR__ . '/../../data/';
-
 		foreach ($urls as &$url) {
 
 			if (@getimagesize($url)) {
 
 				$pathinfo	= pathinfo($url);
 				$filename	= $pathinfo['filename'] . '.' . $pathinfo['extension'];
-				$tmp_name	= $path . $filename;
+				$tmp_name	= LYCHEE_DATA . $filename;
 
 				if (!@copy($url, $tmp_name)) return false;
 
@@ -51,13 +48,13 @@ class Import extends Module {
 
 		}
 
-		return Import::server($albumID, $path);
+		return Import::server($albumID, LYCHEE_DATA);
 
 	}
 
 	static function server($albumID = 0, $path) {
 
-		if (!isset($path)) $path = __DIR__ . '/../../uploads/import/';
+		if (!isset($path)) $path = LYCHEE_UPLOADS_IMPORT;
 
 		global $database, $plugins, $settings;
 
