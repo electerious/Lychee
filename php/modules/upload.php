@@ -372,7 +372,7 @@ function importUrl($url, $albumID = 0) {
 
 function importServer($albumID = 0, $path = '../uploads/import/') {
 
-	global $database;
+	global $database, $settings;;
 
 	$files				= glob($path . '*');
 	$contains['photos'] = false;
@@ -388,10 +388,15 @@ function importServer($albumID = 0, $path = '../uploads/import/') {
 
 		} else if (is_dir($file)) {
 
-			$name		= mysqli_real_escape_string($database, basename($file));
-			$newAlbumID	= addAlbum('[Import] ' . $name);
 
-			if ($newAlbumID!==false) importServer($newAlbumID, $file . '/');
+			$name		= mysqli_real_escape_string($database, basename($file));
+
+			$albumID = getAlbumByTitle($settings['albumPrefix'] . $name);
+			
+			if($albumID == false)
+				$albumID	= addAlbum($settings['albumPrefix'] . $name);
+
+			if ($albumID!==false) importServer($albumID, $file . '/');
 			$contains['albums'] = true;
 
 		}

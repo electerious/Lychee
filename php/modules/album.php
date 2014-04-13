@@ -193,6 +193,16 @@ function getAlbum($albumID) {
 
 }
 
+function getAlbumByTitle($title){
+
+		global $database;
+
+		$result = $database->query("SELECT id FROM lychee_albums WHERE title = '$title';");
+		$row = $result->fetch_object();
+
+		return ((isset($row->id) && is_numeric($row->id)) ? $row->id : false);
+}
+
 function setAlbumTitle($albumIDs, $title) {
 
 	global $database;
