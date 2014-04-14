@@ -73,7 +73,14 @@ $(document).ready(function(){
 		.bind('left', function() { if (visible.photo()) $("#imageview a#previous").click() })
 		.bind('right', function() { if (visible.photo()) $("#imageview a#next").click() })
 		.bind(['u', 'ctrl+u'], function() { $("#upload_files").click() })
-		.bind(['s', 'ctrl+s'], function() { if (visible.photo()) $("#button_star").click() })
+		.bind(['s', 'ctrl+s', 'f', 'ctrl+f'], function(e) {
+			if (visible.photo()) {
+				$("#button_star").click();
+			} else if (visible.albums()) {
+				e.preventDefault();
+				$("#search").focus();
+			}
+		})
 		.bind(['r', 'ctrl+r'], function(e) {
 			e.preventDefault();
 			if (visible.album()) album.setTitle(album.getID());
