@@ -275,7 +275,14 @@ album = {
 
 		var params;
 
-		if ($(".message input.text").length>0&&$(".message input.text").val().length>0) {
+		if (!visible.message()&&album.json.public==0) {
+
+			modal.show("Share Album", "This album will be shared with one of the following properties:</p><form><div class='choice'><input type='radio' value='public' name='choice' checked><h2>Public</h2><p>The album can be shared and will be visible for everyone.</p></div><div class='choice'><input type='radio' value='password' name='choice'><h2>Password protected</h2><p>The album can be shared with everyone, but is only accessible with a valid password and won't be listed to visitors of your Lychee.<input class='text' type='password' placeholder='password' value=''></p></div></form><p style='display: none;'>", [["Share Album", function() { album.setPublic(album.getID(), e) }], ["Cancel", function() {}]], -170);
+			return true;
+
+		}
+
+		if (visible.message()&&$(".message .choice input:checked").val()==="password") {
 
 			params = "setAlbumPublic&albumID=" + albumID + "&password=" + md5($(".message input.text").val());
 			album.json.password = true;

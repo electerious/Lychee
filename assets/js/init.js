@@ -29,7 +29,7 @@ $(document).ready(function(){
 	});
 	$("#button_share_album").on(event_name, function(e) {
 		if (album.json.public==1) contextMenu.shareAlbum(album.getID(), e);
-		else modal.show("Share Album", "All photos inside this album will be public and visible for everyone. Existing public photos will have the same sharing permission as this album. Are your sure you want to share this album? <input class='text' type='password' placeholder='password (optional)' value=''>", [["Share Album", function() { album.setPublic(album.getID(), e) }], ["Cancel", function() {}]]);
+		else album.setPublic(album.getID(), e);
 	});
 	$("#button_more").on(event_name, function(e) { contextMenu.photoMore(photo.getID(), e) });
 	$("#button_trash_album").on(event_name, function() { album.delete([album.getID()]) });

@@ -196,3 +196,34 @@
 	.message .copylink {
 		margin-bottom: 20px;
 	}
+
+	/* Radio Buttons ------------------------------------------------*/
+	.message .choice {
+		float: left;
+		padding: 12px 5% 15px;
+		color: #fff;
+	}
+
+		.message .choice input {
+			float: left;
+		}
+		.message .choice h2 {
+			float: left;
+			margin: 1px 0px 0px 8px;
+			color: #fff;
+			font-size: 14px;
+			font-weight: 700;
+			text-shadow: 0 -1px 0 #222;
+		}
+		.message .choice p {
+			margin-top: 2px;
+			padding: 0px 5% 0px 25px;
+			color: #aaa;
+			font-size: 13px;
+		}
+
+			.message .choice p input {
+				width: 100%;
+				padding: 10px 1px 9px;
+				margin-top: 10px;
+			}
