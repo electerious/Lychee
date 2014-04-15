@@ -13,7 +13,8 @@ var settings = {
 			dbUser,
 			dbPassword,
 			dbHost,
-			buttons;
+			buttons,
+			params;
 
 		buttons = [
 			["Connect", function() {
@@ -191,7 +192,8 @@ var settings = {
 	setSorting: function() {
 
 		var buttons,
-			sorting;
+			sorting,
+			params;
 
 		buttons = [
 			["Change Sorting", function() {

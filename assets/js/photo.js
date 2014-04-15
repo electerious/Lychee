@@ -362,7 +362,8 @@ photo = {
 	editTags: function(photoIDs) {
 
 		var oldTags = "",
-			tags = "";
+			tags = "",
+			buttons;
 
 		if (!photoIDs) return false;
 		if (photoIDs instanceof Array===false) photoIDs = [photoIDs];

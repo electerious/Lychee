@@ -132,7 +132,8 @@ upload = {
 			var albumID = album.getID(),
 				params,
 				extension,
-				buttons;
+				buttons,
+				link;
 
 			if (albumID===false) albumID = 0;
 
