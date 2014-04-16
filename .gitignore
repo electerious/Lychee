@@ -8,6 +8,7 @@ uploads/import/*
 uploads/big/*
 uploads/thumb/*
 plugins/*
+etc/*
 
 !uploads/import/index.html
 !uploads/big/index.html
