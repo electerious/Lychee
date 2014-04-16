@@ -6,6 +6,8 @@
 # @copyright	2014 by Tobias Reich
 ###
 
+if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
+
 class Plugins implements \SplSubject {
 
 	private $files		= array();
