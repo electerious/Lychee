@@ -116,7 +116,7 @@
 		background: -ms-linear-gradient(top, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 20%,rgba(0,0,0,0.9) 100%); /* IE10+ */
 		background: linear-gradient(top, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 20%,rgba(0,0,0,0.9) 100%); /* W3C */
 	}
-	.photo .overlay {		
+	.photo .overlay {
 		background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 60%, rgba(0,0,0,0.5) 80%, rgba(0,0,0,0.9) 100%); /* FF3.6+ */
 		background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 60%, rgba(0,0,0,0.5) 80%, rgba(0,0,0,0.9) 100%); /* Chrome10+,Safari5.1+ */
 		background: -ms-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 60%, rgba(0,0,0,0.5) 80%, rgba(0,0,0,0.9) 100%); /* IE10+ */
