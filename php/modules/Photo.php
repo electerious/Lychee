@@ -639,7 +639,7 @@ class Photo extends Module {
 
 		# Parse tags
 		$tags = preg_replace('/(\ ,\ )|(\ ,)|(,\ )|(,{1,}\ {0,})|(,$|^,)/', ',', $tags);
-		$tags = preg_replace('/,$|^,/', ',', $tags);
+		$tags = preg_replace('/,$|^,|(\ ){0,}$/', '', $tags);
 		if (strlen($tags)>1000) return false;
 
 		# Set tags

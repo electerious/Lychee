@@ -408,7 +408,7 @@ photo = {
 
 		// Parse tags
 		tags = tags.replace(/(\ ,\ )|(\ ,)|(,\ )|(,{1,}\ {0,})|(,$|^,)/g, ',');
-		tags = tags.replace(/,$|^,/g, '');
+		tags = tags.replace(/,$|^,|(\ ){0,}$/g, '');
 
 		if (visible.photo()) {
 			photo.json.tags = tags;
