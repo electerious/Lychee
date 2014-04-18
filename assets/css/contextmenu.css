@@ -36,7 +36,7 @@
 	.contextmenu tr {
 		font-size: 14px;
 		color: #eee;
-		text-shadow: 0px -1px 0px rgba(0,0,0,.6);
+		text-shadow: 0px -1px 0px rgba(0,0,0,.4);
 		cursor: pointer;
 	}
 	.contextmenu tr:hover {
