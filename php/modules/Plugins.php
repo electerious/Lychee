@@ -27,7 +27,7 @@ class Plugins implements \SplSubject {
 		# Load plugins
 		foreach ($this->files as $file) {
 			if ($file==='') continue;
-			include(__DIR__ . '/../../plugins/' . $file);
+			include(LYCHEE_PLUGINS . $file);
 		}
 
 		return true;
