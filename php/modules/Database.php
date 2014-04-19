@@ -119,16 +119,18 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 			# Read file
 			$file	= __DIR__ . '/../database/settings_table.sql';
-			$query	= file_get_contents($file);
+			$query	= @file_get_contents($file);
 
 			# Create table
+			if (!isset($query)||$query===false) return false;
 			if (!$database->query($query)) return false;
 
 			# Read file
 			$file	= __DIR__ . '/../database/settings_content.sql';
-			$query	= file_get_contents($file);
+			$query	= @file_get_contents($file);
 
 			# Add content
+			if (!isset($query)||$query===false) return false;
 			if (!$database->query($query)) return false;
 
 		}
@@ -138,9 +140,10 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 			# Read file
 			$file	= __DIR__ . '/../database/albums_table.sql';
-			$query	= file_get_contents($file);
+			$query	= @file_get_contents($file);
 
 			# Create table
+			if (!isset($query)||$query===false) return false;
 			if (!$database->query($query)) return false;
 
 		}
@@ -150,9 +153,10 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 			# Read file
 			$file	= __DIR__ . '/../database/photos_table.sql';
-			$query	= file_get_contents($file);
+			$query	= @file_get_contents($file);
 
 			# Create table
+			if (!isset($query)||$query===false) return false;
 			if (!$database->query($query)) return false;
 
 		}
