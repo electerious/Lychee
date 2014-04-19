@@ -22,14 +22,12 @@
 
 		<?php
 
-			if(isset($_GET['p'])) {
+			if (isset($_GET['p'])&&$_GET['p']>0) {
 
-				define("LYCHEE", true);
-
-				require("data/config.php");
-				require("php/modules/Module.php");
-				require("php/modules/Database.php");
-				require("php/modules/misc.php");
+				require(__DIR__ . "/php/define.php");
+				require(LYCHEE_CONFIG_FILE);
+				require(LYCHEE . "php/autoload.php");
+				require(LYCHEE . "php/modules/misc.php");
 
 				$database = Database::connect($dbHost, $dbUser, $dbPassword, $dbName);
 
