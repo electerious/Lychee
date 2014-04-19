@@ -111,8 +111,8 @@ switch ($_POST['function']) {
 
 	// Search Function
 
-	case 'search':			if (isset($_POST['term']))
-								echo json_encode(search($_POST['term']));
+	case 'search':			if (!isset($_POST['term'])) exit();
+							echo json_encode(search($database, $settings, $_POST['term']));
 							break;
 
 	// Session Function

@@ -39,9 +39,9 @@ function getGraphHeader($database, $photoID) {
 
 }
 
-function search($term) {
+function search($database, $settings, $term) {
 
-	global $database, $settings;
+	if (!isset($database, $settings, $term)) return false;
 
 	$return['albums'] = '';
 
