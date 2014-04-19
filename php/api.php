@@ -49,7 +49,7 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 
 	# Init plugins
 	$plugins = explode(';', $settings['plugins']);
-	$plugins = new Plugins($plugins, $database);
+	$plugins = new Plugins($plugins, $database, $settings);
 
 	# Escape
 	foreach(array_keys($_POST) as $key)	$_POST[$key] = mysqli_real_escape_string($database, urldecode($_POST[$key]));
