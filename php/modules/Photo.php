@@ -163,16 +163,12 @@ class Photo extends Module {
 			# Create 1st version
 			$thumb->cropThumbnailImage($width, $height);
 			$thumb->writeImage($newUrl);
+			$thumb->clear();
+			$thumb->destroy();
 
 			# Create 2nd version
 			$thumb2x->cropThumbnailImage($width*2, $height*2);
 			$thumb2x->writeImage($newUrl2x);
-
-			# Close thumb
-			$thumb->clear();
-			$thumb->destroy();
-
-			# Close thumb2
 			$thumb2x->clear();
 			$thumb2x->destroy();
 
@@ -200,14 +196,21 @@ class Photo extends Module {
 				case 'image/png':	$sourceImg = imagecreatefrompng($url); break;
 				case 'image/gif':	$sourceImg = imagecreatefromgif($url); break;
 				case 'image/webp':	$sourceImg = imagecreatefromwebp($url); break;
-				default: return false;
+				default:			return false; break;
 			}
 
+			# Create thumb
 			imagecopyresampled($thumb, $sourceImg, 0, 0, $startWidth, $startHeight, $width, $height, $newSize, $newSize);
-			imagecopyresampled($thumb2x, $sourceImg, 0, 0, $startWidth, $startHeight, $width*2, $height*2, $newSize, $newSize);
-
 			imagejpeg($thumb, $newUrl, $this->settings['thumbQuality']);
+			imagedestroy($thumb);
+
+			# Create retina thumb
+			imagecopyresampled($thumb2x, $sourceImg, 0, 0, $startWidth, $startHeight, $width*2, $height*2, $newSize, $newSize);
 			imagejpeg($thumb2x, $newUrl2x, $this->settings['thumbQuality']);
+			imagedestroy($thumb2x);
+
+			# Free memory
+			imagedestroy($sourceImg);
 
 		}
 
@@ -248,7 +251,7 @@ class Photo extends Module {
 
 			}
 
-			if ($rotateImage) {
+			if ($rotateImage!==0) {
 				$image = new Imagick();
 				$image->readImage($path);
 				$image->rotateImage(new ImagickPixel(), $rotateImage);
@@ -260,10 +263,10 @@ class Photo extends Module {
 
 		} else {
 
-			$newWidth = $info['width'];
-			$newHeight = $info['height'];
-
-			$sourceImg = imagecreatefromjpeg($path);
+			$newWidth	= $info['width'];
+			$newHeight	= $info['height'];
+			$process	= false;
+			$sourceImg	= imagecreatefromjpeg($path);
 
 			switch ($info['orientation']) {
 
@@ -273,7 +276,8 @@ class Photo extends Module {
 					break;
 
 				case 3:
-					$sourceImg = imagerotate($sourceImg, -180, 0);
+					$process	= true;
+					$sourceImg	= imagerotate($sourceImg, -180, 0);
 					break;
 
 				case 4:
@@ -287,9 +291,10 @@ class Photo extends Module {
 					break;
 
 				case 6:
-					$sourceImg = imagerotate($sourceImg, -90, 0);
-					$newWidth = $info['height'];
-					$newHeight = $info['width'];
+					$process	= true;
+					$sourceImg	= imagerotate($sourceImg, -90, 0);
+					$newWidth	= $info['height'];
+					$newHeight	= $info['width'];
 					break;
 
 				case 7:
@@ -298,17 +303,27 @@ class Photo extends Module {
 					break;
 
 				case 8:
-					$sourceImg = imagerotate($sourceImg, 90, 0);
-					$newWidth = $info['height'];
-					$newHeight = $info['width'];
+					$process	= true;
+					$sourceImg	= imagerotate($sourceImg, 90, 0);
+					$newWidth	= $info['height'];
+					$newHeight	= $info['width'];
 					break;
 
 			}
 
-			$newSourceImg = imagecreatetruecolor($newWidth, $newHeight);
+			# Need to adjust photo?
+			if ($process===true) {
 
-			imagecopyresampled($newSourceImg, $sourceImg, 0, 0, 0, 0, $newWidth, $newHeight, $newWidth, $newHeight);
-			imagejpeg($newSourceImg, $path, 100);
+				# Recreate photo
+				$newSourceImg = imagecreatetruecolor($newWidth, $newHeight);
+				imagecopyresampled($newSourceImg, $sourceImg, 0, 0, 0, 0, $newWidth, $newHeight, $newWidth, $newHeight);
+				imagejpeg($newSourceImg, $path, 100);
+
+				# Free memory
+				imagedestroy($sourceImg);
+				imagedestroy($newSourceImg);
+
+			}
 
 		}
 
