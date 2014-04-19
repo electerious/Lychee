@@ -22,7 +22,7 @@ $(document).ready(function(){
 	/* Header */
 	$("#hostedwith").on(event_name, function() { window.open(lychee.website,"_newtab") });
 	$("#button_signin").on(event_name, lychee.loginDialog);
-	$("#button_settings").on(event_name, contextMenu.settings);
+	$("#button_settings").on("click", contextMenu.settings);
 	$("#button_share").on(event_name, function(e) {
 		if (photo.json.public==1||photo.json.public==2) contextMenu.sharePhoto(photo.getID(), e);
 		else photo.setPublic(photo.getID(), e);
