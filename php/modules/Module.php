@@ -26,4 +26,10 @@ class Module {
 
 	}
 
+	protected function dependencies($available = false) {
+
+		if ($available===false) exit('Error: Can not execute function. Missing parameters and variables.');
+
+	}
+
 }

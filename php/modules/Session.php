@@ -24,7 +24,8 @@ class Session extends Module {
 
 	public function init($database, $dbName, $public, $version) {
 
-		if (!isset($this->settings, $public, $version)) return false;
+		# Check dependencies
+		$this->dependencies(isset($this->settings, $public, $version));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -69,7 +70,8 @@ class Session extends Module {
 
 	public function login($username, $password) {
 
-		if (!isset($this->settings, $username, $password)) return false;
+		# Check dependencies
+		$this->dependencies(isset($this->settings, $username, $password));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());

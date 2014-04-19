@@ -28,7 +28,8 @@ class Photo extends Module {
 
 	public function add($files, $albumID, $description = '', $tags = '') {
 
-		if (!isset($this->database)) return false;
+		# Check dependencies
+		$this->dependencies(isset($this->database));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -138,7 +139,8 @@ class Photo extends Module {
 
 	private function createThumb($url, $filename, $width = 200, $height = 200) {
 
-		if (!isset($this->settings, $url, $filename)) return false;
+		# Check dependencies
+		$this->dependencies(isset($this->settings, $url, $filename));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -223,7 +225,8 @@ class Photo extends Module {
 
 	private function adjustFile($path, $info) {
 
-		if (!isset($path, $info)) return false;
+		# Check dependencies
+		$this->dependencies(isset($path, $info));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -336,7 +339,8 @@ class Photo extends Module {
 
 	public function get($albumID) {
 
-		if (!isset($this->database, $this->photoIDs)) return false;
+		# Check dependencies
+		$this->dependencies(isset($this->database, $this->photoIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -376,7 +380,8 @@ class Photo extends Module {
 
 	private function getInfo($url) {
 
-		if (!isset($this->database, $url)) return false;
+		# Check dependencies
+		$this->dependencies(isset($this->database, $url));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -469,7 +474,8 @@ class Photo extends Module {
 
 	public function getArchive() {
 
-		if (!isset($this->database, $this->photoIDs)) return false;
+		# Check dependencies
+		$this->dependencies(isset($this->database, $this->photoIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -501,7 +507,8 @@ class Photo extends Module {
 
 	function setTitle($title) {
 
-		if (!isset($this->database, $this->photoIDs)) return false;
+		# Check dependencies
+		$this->dependencies(isset($this->database, $this->photoIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -522,7 +529,8 @@ class Photo extends Module {
 
 	function setDescription($description) {
 
-		if (!isset($this->database, $this->photoIDs)) return false;
+		# Check dependencies
+		$this->dependencies(isset($this->database, $this->photoIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -544,7 +552,8 @@ class Photo extends Module {
 
 	public function setStar() {
 
-		if (!isset($this->database, $this->photoIDs)) return false;
+		# Check dependencies
+		$this->dependencies(isset($this->database, $this->photoIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -577,7 +586,8 @@ class Photo extends Module {
 
 	function getPublic($password) {
 
-		if (!isset($this->database, $this->photoIDs)) return false;
+		# Check dependencies
+		$this->dependencies(isset($this->database, $this->photoIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -604,7 +614,8 @@ class Photo extends Module {
 
 	public function setPublic() {
 
-		if (!isset($this->database, $this->photoIDs)) return false;
+		# Check dependencies
+		$this->dependencies(isset($this->database, $this->photoIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -629,7 +640,8 @@ class Photo extends Module {
 
 	function setAlbum($albumID) {
 
-		if (!isset($this->database, $this->photoIDs)) return false;
+		# Check dependencies
+		$this->dependencies(isset($this->database, $this->photoIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -647,7 +659,8 @@ class Photo extends Module {
 
 	public function setTags($tags) {
 
-		if (!isset($this->database, $this->photoIDs)) return false;
+		# Check dependencies
+		$this->dependencies(isset($this->database, $this->photoIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -670,7 +683,8 @@ class Photo extends Module {
 
 	public function delete() {
 
-		if (!isset($this->database, $this->photoIDs)) return false;
+		# Check dependencies
+		$this->dependencies(isset($this->database, $this->photoIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());

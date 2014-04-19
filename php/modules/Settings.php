@@ -23,7 +23,8 @@ class Settings extends Module {
 
 	public function get() {
 
-		if (!isset($this->database)) return false;
+		# Check dependencies
+		$this->dependencies(isset($this->database));
 
 		# Execute query
 		$settings = $this->database->query('SELECT * FROM lychee_settings;');
@@ -40,7 +41,8 @@ class Settings extends Module {
 
 	public function setLogin($oldPassword = '', $username, $password) {
 
-		if (!isset($this->database)) return false;
+		# Check dependencies
+		$this->dependencies(isset($this->database));
 
 		# Load settings
 		$settings = $this->get();
@@ -63,7 +65,8 @@ class Settings extends Module {
 
 	private function setUsername($username) {
 
-		if (!isset($this->database)) return false;
+		# Check dependencies
+		$this->dependencies(isset($this->database));
 
 		# Parse
 		$username = htmlentities($username);
@@ -79,7 +82,8 @@ class Settings extends Module {
 
 	private function setPassword($password) {
 
-		if (!isset($this->database)) return false;
+		# Check dependencies
+		$this->dependencies(isset($this->database));
 
 		if (strlen($password)<1||strlen($password)>50) return false;
 
@@ -93,7 +97,8 @@ class Settings extends Module {
 
 	public function setDropboxKey($key) {
 
-		if (!isset($this->database, $key)) return false;
+		# Check dependencies
+		$this->dependencies(isset($this->database, $key));
 
 		if (strlen($key)<1||strlen($key)>50) return false;
 
@@ -107,7 +112,8 @@ class Settings extends Module {
 
 	public function setSorting($type, $order) {
 
-		if (!isset($this->database, $type, $order)) return false;
+		# Check dependencies
+		$this->dependencies(isset($this->database, $type, $order));
 
 		$sorting = 'ORDER BY ';
 

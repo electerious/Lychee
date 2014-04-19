@@ -12,7 +12,8 @@ class Database extends Module {
 
 	static function connect($host = 'localhost', $user, $password, $name = 'lychee') {
 
-		if (!isset($host, $user, $password, $name)) return false;
+		# Check dependencies
+		Module::dependencies(isset($host, $user, $password, $name));
 
 		$database = new mysqli($host, $user, $password);
 
@@ -35,9 +36,10 @@ class Database extends Module {
 
 	}
 
-	static function update($database, $dbName, $version) {
+	static function update($database, $dbName, $version = 0) {
 
-		if (!isset($database)) return false;
+		# Check dependencies
+		Module::dependencies(isset($database, $dbName));
 
 		# List of updates
 		$updates = array(
@@ -63,7 +65,8 @@ class Database extends Module {
 
 	static function createConfig($host = 'localhost', $user, $password, $name = 'lychee') {
 
-		if (!isset($host, $user, $password, $name)) return false;
+		# Check dependencies
+		Module::dependencies(isset($host, $user, $password, $name));
 
 		$database = new mysqli($host, $user, $password);
 
@@ -99,7 +102,8 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 	static function createDatabase($database, $name = 'lychee') {
 
-		if (!isset($database, $name)) return false;
+		# Check dependencies
+		Module::dependencies(isset($database, $name));
 
 		# Create database
 		$result = $database->query("CREATE DATABASE IF NOT EXISTS $name;");
@@ -112,7 +116,8 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 	static function createTables($database) {
 
-		if (!isset($database)) return false;
+		# Check dependencies
+		Module::dependencies(isset($database));
 
 		# Create settings
 		if (!$database->query('SELECT * FROM lychee_settings LIMIT 0;')) {
