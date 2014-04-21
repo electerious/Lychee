@@ -47,7 +47,7 @@ class Settings extends Module {
 		# Load settings
 		$settings = $this->get();
 
-		if ($oldPassword==$settings['password']) {
+		if ($oldPassword===$settings['password']||$settings['password']===crypt($oldPassword, $settings['password'])) {
 
 			# Save username
 			if (!$this->setUsername($username)) exit('Error: Updating username failed!');
@@ -85,7 +85,7 @@ class Settings extends Module {
 		# Check dependencies
 		$this->dependencies(isset($this->database));
 
-		if (strlen($password)<1||strlen($password)>50) return false;
+		$password = get_hashed_password($password);
 
 		# Execute query
 		$result = $this->database->query("UPDATE lychee_settings SET value = '$password' WHERE `key` = 'password';");
