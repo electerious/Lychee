@@ -442,15 +442,19 @@ class Album extends Module {
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
 
-		if (isset($password)&&strlen($password)>0) {
-			# get hashed password
+		if (strlen($password)>0) {
+
+			# Get hashed password
 			$password = get_hashed_password($password);
 
-			# set hashed password
+			# Set hashed password
 			$result = $this->database->query("UPDATE lychee_albums SET password = '$password' WHERE id IN ('$this->albumIDs');");
+
 		} else {
-			# unset password
+
+			# Unset password
 			$result = $this->database->query("UPDATE lychee_albums SET password = NULL WHERE id IN ('$this->albumIDs');");
+
 		}
 
 		# Call plugins

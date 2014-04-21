@@ -82,9 +82,9 @@ function search($database, $settings, $term) {
 
 function get_hashed_password($password) {
 
-	# inspired by -> http://alias.io/2010/01/store-passwords-safely-with-php-and-mysql/
+	# Inspired by http://alias.io/2010/01/store-passwords-safely-with-php-and-mysql/
 
-	# A higher "cost" is more secure but consumes more processing power
+	# A higher $cost is more secure but consumes more processing power
 	$cost = 10;
 
 	# Create a random salt
@@ -96,6 +96,7 @@ function get_hashed_password($password) {
 
 	# Hash the password with the salt
 	return crypt($password, $salt);
+
 }
 
 ?>
