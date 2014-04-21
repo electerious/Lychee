@@ -277,7 +277,15 @@ album = {
 
 		if (!visible.message()&&album.json.public==0) {
 
-			modal.show("Share Album", "This album will be shared with one of the following properties:</p><form><div class='choice'><input type='radio' value='public' name='choice' checked><h2>Public</h2><p>The album can be shared and will be visible for everyone.</p></div><div class='choice'><input type='radio' value='password' name='choice'><h2>Password protected</h2><p>The album can be shared with everyone, but is only accessible with a valid password and won't be listed to visitors of your Lychee.<input class='text' type='password' placeholder='password' value=''></p></div></form><p style='display: none;'>", [["Share Album", function() { album.setPublic(album.getID(), e) }], ["Cancel", function() {}]], -170);
+			modal.show("Share Album", "This album will be shared with one of the following properties:</p><form><div class='choice'><input type='radio' value='public' name='choice' checked><h2>Public</h2><p>The album can be shared and will be visible for everyone.</p></div><div class='choice'><input type='radio' value='password' name='choice'><h2>Password protected</h2><p>The album can be shared with everyone, but is only accessible with a valid password and won't be listed to visitors of your Lychee.<input class='text' type='password' placeholder='password' value='' style='display: none;'></p></div></form><p style='display: none;'>", [["Share Album", function() { album.setPublic(album.getID(), e) }], ["Cancel", function() {}]], -160);
+
+			$(".message .choice input:radio").on("change", function() {
+
+				if ($(this).val()==="password") $(".message .choice input.text").show();
+				else $(".message .choice input.text").hide();
+
+			});
+
 			return true;
 
 		}
