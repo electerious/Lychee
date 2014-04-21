@@ -442,8 +442,16 @@ class Album extends Module {
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
 
-		# Execute query
-		$result = $this->database->query("UPDATE lychee_albums SET password = '$password' WHERE id IN ('$this->albumIDs');");
+		if (isset($password)&&strlen($password)>0) {
+			# get hashed password
+			$password = get_hashed_password($password);
+
+			# set hashed password
+			$result = $this->database->query("UPDATE lychee_albums SET password = '$password' WHERE id IN ('$this->albumIDs');");
+		} else {
+			# unset password
+			$result = $this->database->query("UPDATE lychee_albums SET password = NULL WHERE id IN ('$this->albumIDs');");
+		}
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
@@ -469,7 +477,7 @@ class Album extends Module {
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if ($album->password=='') return true;
-		else if ($album->password===$password) return true;
+		else if ($album->password===$password||$album->password===crypt($password, $album->password)) return true;
 		return false;
 
 	}

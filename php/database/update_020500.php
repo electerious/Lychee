@@ -75,6 +75,10 @@ if (!$result) return false;
 $result = $database->query("ALTER TABLE `lychee_settings` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;");
 if (!$result) return false;
 
+# Set album password length to 100 (for longer hashes)
+$result = $database->query("ALTER TABLE `lychee_albums` CHANGE `password` `password` VARCHAR(100);");
+if (!$result) return false;
+
 # Set version
 $result = $database->query("UPDATE lychee_settings SET value = '020500' WHERE `key` = 'version';");
 if (!$result) return false;

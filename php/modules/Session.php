@@ -76,8 +76,14 @@ class Session extends Module {
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
 
-		# Check login
+		# Check login with MD5 hash
 		if ($username===$this->settings['username']&&$password===$this->settings['password']) {
+			$_SESSION['login'] = true;
+			return true;
+		}
+
+		# Check login with crypted hash
+		if ($username===$this->settings['username']&&$this->settings['password']===crypt($password, $this->settings['password'])) {
 			$_SESSION['login'] = true;
 			return true;
 		}
