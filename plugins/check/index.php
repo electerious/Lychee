@@ -8,7 +8,7 @@
 ###
 
 # Location
-$lychee = __DIR__ . '/../';
+$lychee = __DIR__ . '/../../';
 
 # Load requirements
 require($lychee . 'php/define.php');
