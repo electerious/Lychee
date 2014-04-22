@@ -1,7 +1,3 @@
-#Do not use this branch in production!
-
----
-
 # Lychee
 
 #### A great looking and easy-to-use Photo-Management-System.
@@ -43,17 +39,23 @@ In order to use the Dropbox import from your server, you need a valid drop-ins a
 
 Lychee supports [Twitter Cards](https://dev.twitter.com/docs/cards) and [Open Graph](http://opengraphprotocol.org) for shared images (not albums). In order to use Twitter Cards you need to request an approval for your domain. Simply share an image with Lychee, copy its link and paste it in [Twitters Card Validator](https://dev.twitter.com/docs/cards/validation/validator).
 
-## Troubleshooting
+### Plugins and Extensions
 
-Take a look at the [FAQ](docs/FAQ.md) if you have problems. Discovered a bug? Please create an issue here on GitHub!
+The plugin-system of Lychee allows you to execute scripts, when a certain action fires. Plugins are hooks, which are injected directly into Lychee. [Plugin documentation &#187;](docs/)
 
-## Extensions
+It's also possible to build extensions upon Lychee. The way to do so isn't documented and can change every time. We recommend to use the plugin-system, when possible.
+
+Here's a list of all available Plugins and Extensions:
 
 | Name | Description | |
 |:-----------|:------------|:------------|
 | lycheesync | Sync Lychee with any directory containing photos | [More &#187;](https://github.com/GustavePate/lycheesync) |
 | Jekyll | Liquid tag for Jekyll sites that allows embedding Lychee albums | [More &#187;](https://gist.github.com/tobru/9171700) |
 | lychee-redirect | Redirect from an album-name to a Lychee-album | [More &#187;](https://github.com/electerious/lychee-redirect) |
+
+## Troubleshooting
+
+Take a look at the [FAQ](docs/FAQ.md) if you have problems. Discovered a bug? Please create an issue here on GitHub!
 
 ## Developer
 | Version | Name |
