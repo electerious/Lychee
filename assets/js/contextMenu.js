@@ -87,7 +87,7 @@ contextMenu = {
 			function() { settings.setSorting() },
 			function() { settings.setDropboxKey() },
 			function() { window.open(lychee.website, "_newtab"); },
-			function() { window.open("plugins/check.php", "_newtab"); },
+			function() { window.open("plugins/check/", "_newtab"); },
 			function() { lychee.logout() }
 		];
 
