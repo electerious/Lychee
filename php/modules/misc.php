@@ -88,7 +88,16 @@ function get_hashed_password($password) {
 	$cost = 10;
 
 	# Create a random salt
-	$salt = strtr(base64_encode(mcrypt_create_iv(16, MCRYPT_DEV_URANDOM)), '+', '.');
+	if (extension_loaded('openssl')) {
+		$salt = strtr(substr(base64_encode(openssl_random_pseudo_bytes(17)),0,22), '+', '.');
+	} elseif (extension_loaded('mcrypt')) {
+		$salt = strtr(substr(base64_encode(mcrypt_create_iv(17, MCRYPT_DEV_URANDOM)),0,22), '+', '.');
+	} else {
+		$salt = "";
+		for ($i = 0; $i < 22; $i++) {
+			$salt .= substr("./ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", mt_rand(0, 63), 1);
+		}
+	}
 
 	# Prefix information about the hash so PHP knows how to verify it later.
 	# "$2a$" Means we're using the Blowfish algorithm. The following two digits are the cost parameter.
