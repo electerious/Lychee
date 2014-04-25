@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `lychee_photos` (
   `size` varchar(20) NOT NULL,
   `iso` varchar(15) NOT NULL,
   `aperture` varchar(20) NOT NULL,
-  `make` varchar(20) NOT NULL,
+  `make` varchar(50) NOT NULL,
   `model` varchar(50) NOT NULL,
   `shutter` varchar(30) NOT NULL,
   `focal` varchar(20) NOT NULL,

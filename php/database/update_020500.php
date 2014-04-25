@@ -79,6 +79,10 @@ if (!$result) return false;
 $result = $database->query("ALTER TABLE `lychee_albums` CHANGE `password` `password` VARCHAR(100);");
 if (!$result) return false;
 
+# Set make length to 50
+$result = $database->query("ALTER TABLE `lychee_photos` CHANGE `make` `make` VARCHAR(50);");
+if (!$result) return false;
+
 # Set version
 $result = $database->query("UPDATE lychee_settings SET value = '020500' WHERE `key` = 'version';");
 if (!$result) return false;
