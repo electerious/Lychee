@@ -460,10 +460,10 @@ class Photo extends Module {
 			if (isset($temp)) $return['aperture'] = $temp;
 
 			$temp = @$exif['Make'];
-			if (isset($temp)) $return['make'] = $exif['Make'];
+			if (isset($temp)) $return['make'] = trim($temp);
 
 			$temp = @$exif['Model'];
-			if (isset($temp)) $return['model'] = $temp;
+			if (isset($temp)) $return['model'] = trim($temp);
 
 			$temp = @$exif['ExposureTime'];
 			if (isset($temp)) $return['shutter'] = $exif['ExposureTime'] . ' Sec.';
