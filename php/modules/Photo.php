@@ -14,6 +14,18 @@ class Photo extends Module {
 	private $settings	= null;
 	private $photoIDs	= null;
 
+	private $allowedTypes = [
+		IMAGETYPE_JPEG,
+		IMAGETYPE_GIF,
+		IMAGETYPE_PNG
+	];
+	private $validExtensions = [
+		'.jpg',
+		'.jpeg',
+		'.png',
+		'.gif'
+	];
+
 	public function __construct($database, $plugins, $settings, $photoIDs) {
 
 		# Init vars
@@ -59,17 +71,19 @@ class Photo extends Module {
 
 		foreach ($files as $file) {
 
-			if ($file['type']!=='image/jpeg'&&
-				$file['type']!=='image/png'&&
-				$file['type']!=='image/gif')
-					continue;
+			# Verify extension
+			$extension = $this->getExtension($file['name']);
+			if (!in_array(strtolower($extension), $this->validExtensions, true)) continue;
 
+			# Verify image
+			$type = @exif_imagetype($file['tmp_name']);
+			if (!in_array($type, $this->allowedTypes, true)) continue;
+
+			# Generate id
 			$id = str_replace('.', '', microtime(true));
 			while(strlen($id)<14) $id .= 0;
 
 			$tmp_name	= $file['tmp_name'];
-			$extension	= array_reverse(explode('.', $file['name']));
-			$extension	= $extension[0];
 			$photo_name	= md5($id) . ".$extension";
 			$path		= LYCHEE_UPLOADS_BIG . $photo_name;
 
@@ -485,7 +499,8 @@ class Photo extends Module {
 		$photo	= $photos->fetch_object();
 
 		# Get extension
-		$extension = array_reverse(explode('.', $photo->url));
+		$extension = $this->getExtension($photo->url);
+		if ($extension===false) return false;
 
 		# Parse title
 		if ($photo->title=='') $photo->title = 'Untitled';
@@ -505,7 +520,17 @@ class Photo extends Module {
 
 	}
 
-	function setTitle($title) {
+	public function getExtension($filename) {
+
+		$extension = strpos($filename, '.') !== false
+			? strrchr($filename, '.')
+			: '';
+
+		return $extension;
+
+	}
+
+	public function setTitle($title) {
 
 		# Check dependencies
 		$this->dependencies(isset($this->database, $this->photoIDs));
@@ -527,7 +552,7 @@ class Photo extends Module {
 
 	}
 
-	function setDescription($description) {
+	public function setDescription($description) {
 
 		# Check dependencies
 		$this->dependencies(isset($this->database, $this->photoIDs));
@@ -584,7 +609,7 @@ class Photo extends Module {
 
 	}
 
-	function getPublic($password) {
+	public function getPublic($password) {
 
 		# Check dependencies
 		$this->dependencies(isset($this->database, $this->photoIDs));
