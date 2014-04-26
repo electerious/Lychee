@@ -84,7 +84,7 @@ class Photo extends Module {
 			while(strlen($id)<14) $id .= 0;
 
 			$tmp_name	= $file['tmp_name'];
-			$photo_name	= md5($id) . ".$extension";
+			$photo_name	= md5($id) . $extension;
 			$path		= LYCHEE_UPLOADS_BIG . $photo_name;
 
 			# Import if not uploaded via web
