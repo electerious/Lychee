@@ -441,7 +441,7 @@ class Photo extends Module {
 		$return['model']		= '';
 		$return['shutter']		= '';
 		$return['focal']		= '';
-		$return['takestamp']		= '';
+		$return['takestamp']	= 0;
 
 		# Read EXIF
 		if ($info['mime']=='image/jpeg') $exif = @exif_read_data($url, 'EXIF', 0);
