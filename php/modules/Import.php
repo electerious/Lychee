@@ -30,25 +30,31 @@ class Import extends Module {
 
 	static function url($urls, $albumID = 0) {
 
+		$error = false;
+
 		# Parse
 		$urls = str_replace(' ', '%20', $urls);
 		$urls = explode(',', $urls);
 
 		foreach ($urls as &$url) {
 
-			if (@exif_imagetype($url)!==false) {
-
-				$pathinfo	= pathinfo($url);
-				$filename	= $pathinfo['filename'] . '.' . $pathinfo['extension'];
-				$tmp_name	= LYCHEE_DATA . $filename;
-
-				if (!@copy($url, $tmp_name)) return false;
-
+			if (@exif_imagetype($url)===false) {
+				$error = true;
+				continue;
 			}
+
+			$pathinfo	= pathinfo($url);
+			$filename	= $pathinfo['filename'] . '.' . $pathinfo['extension'];
+			$tmp_name	= LYCHEE_DATA . $filename;
+
+			if (@copy($url, $tmp_name)===false) $error = true;
 
 		}
 
-		return Import::server($albumID, LYCHEE_DATA);
+		$import = Import::server($albumID, LYCHEE_DATA);
+
+		if ($error===false&&$import===true) return true;
+		else return false;
 
 	}
 
