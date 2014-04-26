@@ -36,7 +36,7 @@ class Import extends Module {
 
 		foreach ($urls as &$url) {
 
-			if (@getimagesize($url)) {
+			if (@exif_imagetype($url)!==false) {
 
 				$pathinfo	= pathinfo($url);
 				$filename	= $pathinfo['filename'] . '.' . $pathinfo['extension'];
@@ -64,7 +64,7 @@ class Import extends Module {
 
 		foreach ($files as $file) {
 
-			if (@getimagesize($file)) {
+			if (@exif_imagetype($file)!==false) {
 
 				# Photo
 
