@@ -17,112 +17,112 @@ switch ($_POST['function']) {
 								echo json_encode($album->getAll(false));
 								break;
 
-	case 'getAlbum':			if (!isset($_POST['albumID'])) exit();
+	case 'getAlbum':			Module::dependencies(isset($_POST['albumID']));
 								$album = new Album($database, $plugins, $settings, $_POST['albumID']);
 								echo json_encode($album->get());
 								break;
 
-	case 'addAlbum':			if (!isset($_POST['title'])) exit();
+	case 'addAlbum':			Module::dependencies(isset($_POST['title']));
 								$album = new Album($database, $plugins, $settings, null);
 								echo $album->add($_POST['title']);
 								break;
 
-	case 'setAlbumTitle':		if (!isset($_POST['albumIDs'], $_POST['title'])) exit();
+	case 'setAlbumTitle':		Module::dependencies(isset($_POST['albumIDs'], $_POST['title']));
 								$album = new Album($database, $plugins, $settings, $_POST['albumIDs']);
 								echo $album->setTitle($_POST['title']);
 								break;
 
-	case 'setAlbumDescription':	if (!isset($_POST['albumID'], $_POST['description'])) exit();
+	case 'setAlbumDescription':	Module::dependencies(isset($_POST['albumID'], $_POST['description']));
 								$album = new Album($database, $plugins, $settings, $_POST['albumID']);
 								echo $album->setDescription($_POST['description']);
 								break;
 
-	case 'setAlbumPublic': 		if (!isset($_POST['albumID'], $_POST['password'])) exit();
+	case 'setAlbumPublic': 		Module::dependencies(isset($_POST['albumID'], $_POST['password']));
 								$album = new Album($database, $plugins, $settings, $_POST['albumID']);
 								echo $album->setPublic($_POST['password']);
 								break;
 
-	case 'setAlbumPassword':	if (!isset($_POST['albumID'], $_POST['password'])) exit();
+	case 'setAlbumPassword':	Module::dependencies(isset($_POST['albumID'], $_POST['password']));
 								$album = new Album($database, $plugins, $settings, $_POST['albumID']);
 								echo $album->setPassword($_POST['password']);
 								break;
 
-	case 'deleteAlbum':			if (!isset($_POST['albumIDs'])) exit();
+	case 'deleteAlbum':			Module::dependencies(isset($_POST['albumIDs']));
 								$album = new Album($database, $plugins, $settings, $_POST['albumIDs']);
 								echo $album->delete($_POST['albumIDs']);
 								break;
 
 	// Photo Functions
 
-	case 'getPhoto':			if (!isset($_POST['photoID'], $_POST['albumID'])) exit();
+	case 'getPhoto':			Module::dependencies(isset($_POST['photoID'], $_POST['albumID']));
 								$photo = new Photo($database, $plugins, null, $_POST['photoID']);
 								echo json_encode($photo->get($_POST['albumID']));
 								break;
 
-	case 'setPhotoTitle':		if (!isset($_POST['photoIDs'], $_POST['title'])) exit();
+	case 'setPhotoTitle':		Module::dependencies(isset($_POST['photoIDs'], $_POST['title']));
 								$photo = new Photo($database, $plugins, null, $_POST['photoIDs']);
 								echo $photo->setTitle($_POST['title']);
 								break;
 
-	case 'setPhotoDescription':	if (!isset($_POST['photoID'], $_POST['description'])) exit();
+	case 'setPhotoDescription':	Module::dependencies(isset($_POST['photoID'], $_POST['description']));
 								$photo = new Photo($database, $plugins, null, $_POST['photoID']);
 								echo $photo->setDescription($_POST['description']);
 								break;
 
-	case 'setPhotoStar':		if (!isset($_POST['photoIDs'])) exit();
+	case 'setPhotoStar':		Module::dependencies(isset($_POST['photoIDs']));
 								$photo = new Photo($database, $plugins, null, $_POST['photoIDs']);
 								echo $photo->setStar();
 								break;
 
-	case 'setPhotoPublic':		if (!isset($_POST['photoID'])) exit();
+	case 'setPhotoPublic':		Module::dependencies(isset($_POST['photoID']));
 								$photo = new Photo($database, $plugins, null, $_POST['photoID']);
 								echo $photo->setPublic();
 								break;
 
-	case 'setPhotoAlbum':		if (!isset($_POST['photoIDs'], $_POST['albumID'])) exit();
+	case 'setPhotoAlbum':		Module::dependencies(isset($_POST['photoIDs'], $_POST['albumID']));
 								$photo = new Photo($database, $plugins, null, $_POST['photoIDs']);
 								echo $photo->setAlbum($_POST['albumID']);
 								break;
 
-	case 'setPhotoTags':		if (!isset($_POST['photoIDs'], $_POST['tags'])) exit();
+	case 'setPhotoTags':		Module::dependencies(isset($_POST['photoIDs'], $_POST['tags']));
 								$photo = new Photo($database, $plugins, null, $_POST['photoIDs']);
 								echo $photo->setTags($_POST['tags']);
 								break;
 
-	case 'deletePhoto':			if (!isset($_POST['photoIDs'])) exit();
+	case 'deletePhoto':			Module::dependencies(isset($_POST['photoIDs']));
 								$photo = new Photo($database, $plugins, null, $_POST['photoIDs']);
 								echo $photo->delete();
 								break;
 
 	// Add Functions
 
-	case 'upload':			if (!isset($_FILES, $_POST['albumID'])) exit();
+	case 'upload':			Module::dependencies(isset($_FILES, $_POST['albumID']));
 							$photo = new Photo($database, $plugins, $settings, null);
 							echo $photo->add($_FILES, $_POST['albumID']);
 							break;
 
-	case 'importUrl':		if (!isset($_POST['url'], $_POST['albumID'])) exit();
+	case 'importUrl':		Module::dependencies(isset($_POST['url'], $_POST['albumID']));
 							echo Import::url($_POST['url'], $_POST['albumID']);
 							break;
 
-	case 'importServer':	if (!isset($_POST['albumID'])) exit();
+	case 'importServer':	Module::dependencies(isset($_POST['albumID']));
 							echo Import::server($_POST['albumID'], null);
 							break;
 
 	// Search Function
 
-	case 'search':			if (!isset($_POST['term'])) exit();
+	case 'search':			Module::dependencies(isset($_POST['term']));
 							echo json_encode(search($database, $settings, $_POST['term']));
 							break;
 
 	// Session Function
 
-	case 'init':			if (!isset($_POST['version'])) exit();
+	case 'init':			Module::dependencies(isset($_POST['version']));
 							$session = new Session($plugins, $settings);
 							echo json_encode($session->init($database, $dbName, false, $_POST['version']));
 							break;
 
-	case 'login':			if (!isset($_POST['user'], $_POST['password'])) exit();
+	case 'login':			Module::dependencies(isset($_POST['user'], $_POST['password']));
 							$session = new Session($plugins, $settings);
 							echo $session->login($_POST['user'], $_POST['password']);
 							break;
@@ -133,18 +133,18 @@ switch ($_POST['function']) {
 
 	// Settings Function
 
-	case 'setLogin':		if (!isset($_POST['username'], $_POST['password'])) exit();
+	case 'setLogin':		Module::dependencies(isset($_POST['username'], $_POST['password']));
 							if (!isset($_POST['oldPassword'])) $_POST['oldPassword'] = '';
 							$settings = new Settings($database);
 							echo $settings->setLogin($_POST['oldPassword'], $_POST['username'], $_POST['password']);
 							break;
 
-	case 'setSorting':		if (!isset($_POST['type'], $_POST['order'])) exit();
+	case 'setSorting':		Module::dependencies(isset($_POST['type'], $_POST['order']));
 							$settings = new Settings($database);
 							echo $settings->setSorting($_POST['type'], $_POST['order']);
 							break;
 
-	case 'setDropboxKey':	if (!isset($_POST['key'])) exit();
+	case 'setDropboxKey':	Module::dependencies(isset($_POST['key']));
 							$settings = new Settings($database);
 							echo $settings->setDropboxKey($_POST['key']);
 							break;
@@ -153,12 +153,12 @@ switch ($_POST['function']) {
 
 	default:				switch ($_GET['function']) {
 
-								case 'getAlbumArchive':		if (!isset($_GET['albumID'])) exit();
+								case 'getAlbumArchive':		Module::dependencies(isset($_GET['albumID']));
 															$album = new Album($database, $plugins, $settings, $_GET['albumID']);
 															$album->getArchive();
 															break;
 
-								case 'getPhotoArchive':		if (!isset($_GET['photoID'])) exit();
+								case 'getPhotoArchive':		Module::dependencies(isset($_GET['photoID']));
 															$photo = new Photo($database, $plugins, null, $_GET['photoID']);
 															$photo->getArchive();
 															break;

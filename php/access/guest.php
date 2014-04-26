@@ -17,7 +17,7 @@ switch ($_POST['function']) {
 							echo json_encode($album->getAll(true));
 							break;
 
-	case 'getAlbum':		if (!isset($_POST['albumID'], $_POST['password'])) exit();
+	case 'getAlbum':		Module::dependencies(isset($_POST['albumID'], $_POST['password']));
 							$album = new Album($database, $plugins, $settings, $_POST['albumID']);
 							if ($album->getPublic()) {
 								// Album Public
@@ -29,7 +29,7 @@ switch ($_POST['function']) {
 							}
 							break;
 
-	case 'checkAlbumAccess':if (!isset($_POST['albumID'], $_POST['password'])) exit();
+	case 'checkAlbumAccess':Module::dependencies(isset($_POST['albumID'], $_POST['password']));
 							$album = new Album($database, $plugins, $settings, $_POST['albumID']);
 							if ($album->getPublic()) {
 								// Album Public
@@ -43,7 +43,7 @@ switch ($_POST['function']) {
 
 	// Photo Functions
 
-	case 'getPhoto':		if (!isset($_POST['photoID'], $_POST['albumID'], $_POST['password'])) exit();
+	case 'getPhoto':		Module::dependencies(isset($_POST['photoID'], $_POST['albumID'], $_POST['password']));
 							$photo = new Photo($database, $plugins, null, $_POST['photoID']);
 							if ($photo->getPublic($_POST['password']))
 								echo json_encode($photo->get($_POST['albumID']));
@@ -57,7 +57,7 @@ switch ($_POST['function']) {
 							echo json_encode($session->init($database, $dbName, true, $_POST['version']));
 							break;
 
-	case 'login':			if (!isset($_POST['user'], $_POST['password'])) exit();
+	case 'login':			Module::dependencies(isset($_POST['user'], $_POST['password']));
 							$session = new Session($plugins, $settings);
 							echo $session->login($_POST['user'], $_POST['password']);
 							break;
@@ -66,7 +66,7 @@ switch ($_POST['function']) {
 
 	default:				switch ($_GET['function']) {
 
-								case 'getAlbumArchive':		if (!isset($_GET['albumID'], $_GET['password'])) exit();
+								case 'getAlbumArchive':		Module::dependencies(isset($_GET['albumID'], $_GET['password']));
 															$album = new Album($database, $plugins, $settings, $_GET['albumID']);
 
 															// Album Download
@@ -81,7 +81,7 @@ switch ($_POST['function']) {
 
 															break;
 
-								case 'getPhotoArchive':		if (!isset($_GET['photoID'], $_GET['password'])) exit();
+								case 'getPhotoArchive':		Module::dependencies(isset($_GET['photoID'], $_GET['password']));
 															$photo = new Photo($database, $plugins, null, $_GET['photoID']);
 
 															// Photo Download

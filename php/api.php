@@ -89,7 +89,7 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 
 } else {
 
-	exit('Error: No permission!');
+	exit('Error: Called function not found!');
 
 }
 
