@@ -316,7 +316,7 @@ class Album extends Module {
 		# Send zip
 		header("Content-Type: application/zip");
 		header("Content-Disposition: attachment; filename=\"$zipTitle.zip\"");
-		header("Content-Length: ".filesize($filename));
+		header("Content-Length: " . filesize($filename));
 		readfile($filename);
 
 		# Delete zip
