@@ -58,7 +58,7 @@ class Album extends Module {
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Get album information
-		switch($this->albumIDs) {
+		switch ($this->albumIDs) {
 
 			case 'f':	$return['public'] = false;
 						$query = "SELECT id, title, tags, public, star, album, thumbUrl FROM lychee_photos WHERE star = 1 " . $this->settings['sorting'];
@@ -84,7 +84,7 @@ class Album extends Module {
 		# Get photos
 		$photos				= $this->database->query($query);
 		$previousPhotoID	= '';
-		while($photo = $photos->fetch_assoc()) {
+		while ($photo = $photos->fetch_assoc()) {
 
 			# Parse
 			$photo['sysdate']			= date('d F Y', substr($photo['id'], 0, -4));
