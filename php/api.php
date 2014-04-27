@@ -1,7 +1,7 @@
 <?php
 
 ###
-# @name		API
+# @name			API
 # @author		Tobias Reich
 # @copyright	2014 by Tobias Reich
 ###
@@ -29,10 +29,10 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 	if (file_exists(LYCHEE_CONFIG_FILE)) require(LYCHEE_CONFIG_FILE);
 	else {
 
-		/**
-		 * Installation Access
-		 * Limited access to configure Lychee. Only available when the config.php file is missing.
-		 */
+		###
+		# Installation Access
+		# Limited access to configure Lychee. Only available when the config.php file is missing.
+		###
 
 		define('LYCHEE_ACCESS_INSTALLATION', true);
 		require(__DIR__ . '/access/installation.php');
@@ -67,20 +67,20 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 
 	if (isset($_SESSION['login'])&&$_SESSION['login']==true) {
 
-		/**
-		 * Admin Access
-		 * Full access to Lychee. Only with correct password/session.
-		 */
+		###
+		# Admin Access
+		# Full access to Lychee. Only with correct password/session.
+		###
 
 		define('LYCHEE_ACCESS_ADMIN', true);
 		require(__DIR__ . '/access/admin.php');
 
 	} else {
 
-		/**
-		 * Guest Access
-		 * Access to view all public folders and photos in Lychee.
-		 */
+		###
+		# Guest Access
+		# Access to view all public folders and photos in Lychee.
+		###
 
 		define('LYCHEE_ACCESS_GUEST', true);
 		require(__DIR__ . '/access/guest.php');
