@@ -216,12 +216,12 @@ class Photo extends Module {
 			}
 
 			# Create thumb
-			imagecopyresampled($thumb, $sourceImg, 0, 0, $startWidth, $startHeight, $width, $height, $newSize, $newSize);
+			fastimagecopyresampled($thumb, $sourceImg, 0, 0, $startWidth, $startHeight, $width, $height, $newSize, $newSize);
 			imagejpeg($thumb, $newUrl, $this->settings['thumbQuality']);
 			imagedestroy($thumb);
 
 			# Create retina thumb
-			imagecopyresampled($thumb2x, $sourceImg, 0, 0, $startWidth, $startHeight, $width*2, $height*2, $newSize, $newSize);
+			fastimagecopyresampled($thumb2x, $sourceImg, 0, 0, $startWidth, $startHeight, $width*2, $height*2, $newSize, $newSize);
 			imagejpeg($thumb2x, $newUrl2x, $this->settings['thumbQuality']);
 			imagedestroy($thumb2x);
 
