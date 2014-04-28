@@ -1,0 +1,30 @@
+
+footer {
+	position: fixed;
+	bottom: 0;
+	max-height: 75%;
+	width: 100%;
+	color: #fff;
+
+
+	background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 60%, rgba(0,0,0,0.5) 80%, rgba(0,0,0,0.9) 100%); /* FF3.6+ */
+	background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 0px, rgba(0,0,0,0.5) 25px, rgba(0,0,0,0.9) 100%); /* Chrome10+,Safari5.1+ */
+	background: -ms-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 60%, rgba(0,0,0,0.5) 80%, rgba(0,0,0,0.9) 100%); /* IE10+ */
+	background: linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 60%, rgba(0,0,0,0.5) 80%, rgba(0,0,0,0.9) 100%); /* W3C */
+
+	padding: 35px 15px 40px 15px;
+
+}
+
+footer #footer_title {
+		font-size: 16px;
+		font-weight: bold;
+		text-shadow: 0px -1px 0px #222;
+}
+
+/* Modes ------------------------------------------------*/
+footer.hidden {
+	-webkit-transform: translateY(100%);
+	-moz-transform: translateY(100%);
+	transform: translateY(100%);
+}

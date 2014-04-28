@@ -17,6 +17,7 @@ view = {
 
 			lychee.imageview.removeClass("full");
 			lychee.header.removeClass("hidden");
+			lychee.footer.removeClass("hidden");
 			lychee.loadingBar.css("opacity", 1);
 
 			if ($("#imageview #image.small").length>0) $("#imageview #image").css('margin-top', newMargin);
@@ -38,6 +39,7 @@ view = {
 
 					lychee.imageview.addClass("full");
 					lychee.header.addClass("hidden");
+					lychee.footer.addClass("hidden");
 					lychee.loadingBar.css("opacity", 0);
 
 					if ($("#imageview #image.small").length>0) $("#imageview #image").css('margin-top', newMargin);
@@ -56,11 +58,13 @@ view = {
 			switch (mode) {
 				case "albums":
 					lychee.header.removeClass("view");
+					lychee.footer.removeClass("view");
 					$("#tools_album, #tools_photo").hide();
 					$("#tools_albums").show();
 					break;
 				case "album":
 					lychee.header.removeClass("view");
+					lychee.footer.removeClass("view");
 					$("#tools_albums, #tools_photo").hide();
 					$("#tools_album").show();
 					album.json.content === false ? $("#button_archive").hide() : $("#button_archive").show();
@@ -75,6 +79,7 @@ view = {
 					break;
 				case "photo":
 					lychee.header.addClass("view");
+					lychee.footer.addClass("view")
 					$("#tools_albums, #tools_album").hide();
 					$("#tools_photo").show();
 					break;
@@ -212,16 +217,20 @@ view = {
 				switch (album.getID()) {
 					case "f":
 						lychee.setTitle("Starred", false);
+						lychee.setFooterTitle("", false);
 						break;
 					case "s":
 						lychee.setTitle("Public", false);
+						lychee.setFooterTitle("", false);
 						break;
 					case "0":
 						lychee.setTitle("Unsorted", false);
+						lychee.setFooterTitle("", false);
 						break;
 					default:
 						if (album.json.init) $("#infobox .attr_title").html(album.json.title + " " + build.editIcon("edit_title_album"));
 						lychee.setTitle(album.json.title, true);
+						lychee.setFooterTitle("", false);
 						break;
 				}
 
@@ -398,7 +407,11 @@ view = {
 		title: function() {
 
 			if (photo.json.init) $("#infobox .attr_title").html(photo.json.title + " " + build.editIcon("edit_title"));
-			lychee.setTitle(photo.json.title, true);
+			// Set the photo title to the footer area
+			lychee.setFooterTitle(photo.json.title, true);
+
+			// Clear any title that's set in the header area
+			lychee.setTitle('', false);
 
 		},
 
