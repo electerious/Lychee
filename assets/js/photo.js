@@ -230,8 +230,8 @@ photo = {
 			["Cancel", function() {}]
 		];
 
-		if (photoIDs.length===1) modal.show("Set Title", "Enter a new title for this photo: <input class='text' type='text' maxlength='30' placeholder='Title' value='" + oldTitle + "'>", buttons);
-		else modal.show("Set Titles", "Enter a title for all " + photoIDs.length + " selected photos: <input class='text' type='text' maxlength='30' placeholder='Title' value=''>", buttons);
+		if (photoIDs.length===1) modal.show("Set Title", "Enter a new title for this photo: <input class='text' type='text' maxlength='200' placeholder='Title' value='" + oldTitle + "'>", buttons);
+		else modal.show("Set Titles", "Enter a title for all " + photoIDs.length + " selected photos: <input class='text' type='text' maxlength='200' placeholder='Title' value=''>", buttons);
 
 	},
 
