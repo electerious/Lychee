@@ -32,6 +32,7 @@ var lychee = {
 
 	loadingBar: $("#loading"),
 	header: $("header"),
+	footer: $("footer"),
 	content: $("#content"),
 	imageview: $("#imageview"),
 	infobox: $("#infobox"),
@@ -236,6 +237,27 @@ var lychee = {
 		else $("#title").removeClass("editable");
 
 		$("#title").html(title);
+
+	},
+
+	setFooterTitle: function(title, editable) {
+		if (lychee.title==="") lychee.title = document.title;
+
+		if (title==="Albums") document.title = lychee.title;
+		else document.title = lychee.title + " - " + title;
+
+		if (editable) $("#footer_title").addClass("editable");
+		else $("#footer_title").removeClass("editable");
+
+		if(title != "") {
+			// Set the title if there's a value
+			$("footer").show();
+			$("#footer_title").html(title);
+		}
+		else {
+			// Hide the footer completely if no value
+			$("footer").hide();
+		}
 
 	},
 

@@ -152,6 +152,12 @@ $(document).ready(function(){
 			else album.setTitle([album.getID()]);
 		})
 
+		/* Footer */
+		.on(event_name, "#footer_title.editable", function() {
+			if (visible.photo()) photo.setTitle([photo.getID()]);
+			else album.setTitle([album.getID()]);
+		})
+
 		/* Navigation */
 		.on("click", ".album", function() { lychee.goto($(this).attr("data-id")) })
 		.on("click", ".photo", function() { lychee.goto(album.getID() + "/" + $(this).attr("data-id")) })

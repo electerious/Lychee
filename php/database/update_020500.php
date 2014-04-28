@@ -83,6 +83,10 @@ if (!$result) return false;
 $result = $database->query("ALTER TABLE `lychee_photos` CHANGE `make` `make` VARCHAR(50);");
 if (!$result) return false;
 
+# Set photo title max length to 200
+$result = $database->query("ALTER TABLE `lychee_photos` CHANGE `title` `title` VARCHAR(200);");
+if (!$result) return false;
+
 # Set version
 $result = $database->query("UPDATE lychee_settings SET value = '020500' WHERE `key` = 'version';");
 if (!$result) return false;
