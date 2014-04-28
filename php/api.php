@@ -73,7 +73,10 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 		###
 
 		define('LYCHEE_ACCESS_ADMIN', true);
-		require(__DIR__ . '/access/admin.php');
+		require(__DIR__ . '/access/admin2.php');
+
+		$admin = new Admin($database, $plugins, $settings);
+		$admin->check($_POST['function']);
 
 	} else {
 
