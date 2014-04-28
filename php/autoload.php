@@ -6,10 +6,23 @@
 # @copyright	2014 by Tobias Reich
 ###
 
-function lycheeAutoloader($class_name) {
-	require __DIR__ . '/modules/' . $class_name . '.php';
+if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
+
+function lycheeAutoloaderModules($class_name) {
+
+	$file = LYCHEE . 'php/modules/' . $class_name . '.php';
+	if (file_exists($file)!==false) require $file;
+
 }
 
-spl_autoload_register('lycheeAutoloader');
+function lycheeAutoloaderAccess($class_name) {
+
+	$file = LYCHEE . 'php/access/' . $class_name . '.php';
+	if (file_exists($file)!==false) require $file;
+
+}
+
+spl_autoload_register('lycheeAutoloaderModules');
+spl_autoload_register('lycheeAutoloaderAccess');
 
 ?>
