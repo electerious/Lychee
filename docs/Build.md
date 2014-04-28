@@ -7,9 +7,11 @@ First you have to install the following dependencies:
 - `bower` [Bower](http://bower.io)
 - `grunt` [Grunt](http://gruntjs.com)
 
-After [installing Node.js](http://nodejs.org) you can use the included `npm` package manager to install the global requirements with the following command:
+After [installing Node.js](http://nodejs.org) you can use the included `npm` package manager to install the global requirements and Lychee-dependencies with the following command:
 
-	npm install -g bower grunt-cli
+	npm install -g bower grunt-cli;
+	npm install && bower install;
+	
 	
 ### Build
 
