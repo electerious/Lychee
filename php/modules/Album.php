@@ -520,3 +520,5 @@ class Album extends Module {
 	}
 
 }
+
+?>
