@@ -85,7 +85,6 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 		###
 
 		define('LYCHEE_ACCESS_GUEST', true);
-		require(__DIR__ . '/access/guest_foo.php');
 
 		$guest = new Guest($database, $plugins, $settings);
 		$guest->check($fn);
