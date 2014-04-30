@@ -62,6 +62,8 @@ class Admin extends Access {
 
 		}
 
+		return true;
+
 	}
 
 	# Album functions
