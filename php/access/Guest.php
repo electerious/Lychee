@@ -32,7 +32,8 @@ class Guest extends Access {
 			case 'getPhotoArchive':	$this->getPhotoArchive(); break;
 
 			# Error
-			default:					exit('Error: Function not found! Please check the spelling of the called function.'); break;
+			default:					exit('Error: Function not found! Please check the spelling of the called function.');
+										return false; break;
 
 		}
 
