@@ -35,7 +35,11 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 		###
 
 		define('LYCHEE_ACCESS_INSTALLATION', true);
-		require(__DIR__ . '/access/installation.php');
+		require(__DIR__ . '/access/installation_foo.php');
+
+		$installation = new Installation(null, null, null);
+		$installation->check($_POST['function']);
+
 		exit();
 
 	}
