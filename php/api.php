@@ -62,8 +62,8 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 	if (isset($_POST['photoID'])&&preg_match('/^[0-9]{14}$/', $_POST['photoID'])!==1)		exit('Error: Wrong parameter type for photoID!');
 
 	# Fallback for switch statement
-	if (!isset($_POST['function']))	$_POST['function'] = '';
-	if (!isset($_GET['function']))	$_GET['function'] = '';
+	if (isset($_POST['function'])) $fn = $_POST['function'];
+	else $fn = $_GET['function'];
 
 	if (isset($_SESSION['login'])&&$_SESSION['login']==true) {
 
@@ -75,7 +75,7 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 		define('LYCHEE_ACCESS_ADMIN', true);
 
 		$admin = new Admin($database, $plugins, $settings);
-		$admin->check($_POST['function']);
+		$admin->check($fn);
 
 	} else {
 
@@ -85,7 +85,10 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 		###
 
 		define('LYCHEE_ACCESS_GUEST', true);
-		require(__DIR__ . '/access/guest.php');
+		require(__DIR__ . '/access/guest_foo.php');
+
+		$guest = new Guest($database, $plugins, $settings);
+		$guest->check($fn);
 
 	}
 
