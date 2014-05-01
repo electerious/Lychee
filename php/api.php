@@ -64,7 +64,7 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 	if (isset($_POST['albumID'])&&preg_match('/^[0-9sf]{1,}$/', $_POST['albumID'])!==1)		exit('Error: Wrong parameter type for albumID!');
 	if (isset($_POST['photoID'])&&preg_match('/^[0-9]{14}$/', $_POST['photoID'])!==1)		exit('Error: Wrong parameter type for photoID!');
 
-	# Fallback for switch statement
+	# Function for switch statement
 	if (isset($_POST['function'])) $fn = $_POST['function'];
 	else $fn = $_GET['function'];
 
