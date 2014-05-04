@@ -62,13 +62,89 @@ class Import extends Module {
 
 		if (!isset($path)) $path = LYCHEE_UPLOADS_IMPORT;
 
-		global $database, $plugins, $settings;
+		//determine OS type and set move cmd (Windows untested!)
+		$myos = strtoupper( substr(PHP_OS,0,3) );
 
-		$files				= glob($path . '*');
+		if ( $myos  === "WIN" ) { $osmv = 'MOVE'; } else { $osmv = 'mv'; }
+
+		//generate tmp dir name by hashing epoch time & random number
+		$tmpdirname = md5(time() . rand());
+
+		global $database;
+
+		if ( isset($tmpdirname) ){
+
+			//make temporary directory
+	  		if (@mkdir(LYCHEE_DATA . "$tmpdirname")!==false) { 
+
+				//get list of folders and move them to tmpdir
+				$folders = glob($path . '*', GLOB_ONLYDIR);
+
+				if ( isset($folders) ) {
+
+					foreach ($folders as $folder) {
+
+						$out = ''; 
+						$ret = ''; 
+
+						@exec("$osmv " . $folder . ' ' . LYCHEE_DATA . $tmpdirname, $out, $ret); 	
+						
+						if ( isset($ret) && ($ret > 0) ) Log::error($database, __METHOD__, __LINE__, "Failed to move directory or file ($ret):" . $folder);
+					
+					} 
+
+				}
+
+				//get list of files and move them to tmpdir
+			 	$files = glob($path . '*');	
+			
+				if ( isset($files) ) {
+
+					foreach ($files as $file) {
+
+						//prevent logging second error for directories that could not be moved.
+						if ( is_dir($file) ) continue; 
+
+						$out = ''; 
+						$ret = ''; 
+
+						@exec("$osmv " . $file . ' ' . LYCHEE_DATA . $tmpdirname, $out, $ret); 	
+						if ( isset($ret) && ($ret > 0) ) Log::error($database, __METHOD__, __LINE__, "Failed to move directory or file ($ret):" . $file);
+
+					}
+
+				}
+
+				//If no files could be copied to the temp dir, remove.
+				if ( count( glob(LYCHEE_DATA . "$tmpdirname/*") ) == 0 ) { rmdir(LYCHEE_DATA . "$tmpdirname"); return false; }
+
+			} else {
+
+				Log::error($database, __METHOD__, __LINE__, 'Failed to create temporary directory');
+				return false;
+
+			}
+
+		} else {
+
+			Log::error($database, __METHOD__, __LINE__, 'Failed to generate temporary directory name');	
+			return false;
+
+		}
+
+		global $plugins, $settings;
+
 		$contains['photos']	= false;
 		$contains['albums']	= false;
+			
+		$path = LYCHEE_DATA . "$tmpdirname"; 
+		$files = glob($path . '/*');	
 
 		foreach ($files as $file) {
+
+			//It's possible to move a file because of directory permissions but
+			//the file may still be unreadable by the user
+			if (!is_readable($file) ) { Log::error($database, __METHOD__, __LINE__, 'Could not read file or directory: ' . $file); continue; }
 
 			if (@exif_imagetype($file)!==false) {
 
@@ -92,7 +168,7 @@ class Import extends Module {
 
 		}
 
-		if ($contains['photos']===false&&$contains['albums']===false)	return 'Warning: Folder empty!';
+		if ($contains['photos']===false&&$contains['albums']===false)	return 'Warning: Folder empty or no readable files to process!';
 		if ($contains['photos']===false&&$contains['albums']===true)	return 'Notice: Import only contains albums!';
 		return true;
 
