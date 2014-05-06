@@ -44,7 +44,10 @@ class Album extends Module {
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
-		if (!$result) return false;
+		if (!$result) {
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			return false;
+		}
 		return $this->database->insert_id;
 
 	}
@@ -346,7 +349,10 @@ class Album extends Module {
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
-		if (!$result) return false;
+		if (!$result) {
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			return false;
+		}
 		return true;
 
 	}
@@ -369,7 +375,10 @@ class Album extends Module {
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
-		if (!$result) return false;
+		if (!$result) {
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			return false;
+		}
 		return true;
 
 	}
@@ -414,12 +423,18 @@ class Album extends Module {
 
 			# Set public
 			$result = $this->database->query("UPDATE lychee_albums SET public = '$public', password = NULL WHERE id = '$album->id';");
-			if (!$result) return false;
+			if (!$result) {
+				Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+				return false;
+			}
 
 			# Reset permissions for photos
 			if ($public===1) {
 				$result = $this->database->query("UPDATE lychee_photos SET public = 0 WHERE album = '$album->id';");
-				if (!$result) return false;
+				if (!$result) {
+					Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+					return false;
+				}
 			}
 
 		}
@@ -460,7 +475,10 @@ class Album extends Module {
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
-		if (!$result) return false;
+		if (!$result) {
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			return false;
+		}
 		return true;
 
 	}
