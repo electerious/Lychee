@@ -259,13 +259,19 @@ class Album extends Module {
 
 		# Create zip
 		$zip = new ZipArchive();
-		if ($zip->open($filename, ZIPARCHIVE::CREATE)!==TRUE) return false;
+		if ($zip->open($filename, ZIPARCHIVE::CREATE)!==TRUE) {
+			Log::error($this->database, __METHOD__, __LINE__, 'Could not create ZipArchive');
+			return false;
+		}
 
 		# Execute query
 		$photos = $this->database->query($photos);
 
 		# Check if album empty
-		if ($photos->num_rows==0) return false;
+		if ($photos->num_rows==0) {
+			Log::error($this->database, __METHOD__, __LINE__, 'Could not create ZipArchive without images');
+			return false;
+		}
 
 		# Parse each path
 		$files = array();
@@ -367,7 +373,7 @@ class Album extends Module {
 
 		# Parse
 		$description = htmlentities($description);
-		if (strlen($description)>1000) return false;
+		if (strlen($description)>1000) $description = substr($description, 0, 1000);
 
 		# Execute query
 		$result = $this->database->query("UPDATE lychee_albums SET description = '$description' WHERE id IN ($this->albumIDs);");
@@ -532,7 +538,11 @@ class Album extends Module {
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
-		if ($error||!$result) return false;
+		if ($error) return false;
+		if (!$result) {
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			return false;
+		}
 		return true;
 
 	}
