@@ -138,7 +138,7 @@ class Settings extends Module {
 			case 'star':		$sorting .= 'star';
 								break;
 
-			case 'take':		$sorting .= 'takestamp';
+			case 'takestamp':	$sorting .= 'takestamp';
 								break;
 
 			default:			exit('Error: Unknown type for sorting!');

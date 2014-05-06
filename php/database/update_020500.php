@@ -83,6 +83,10 @@ if (!$result) return false;
 $result = $database->query("ALTER TABLE `lychee_photos` CHANGE `make` `make` VARCHAR(50);");
 if (!$result) return false;
 
+# Reset sorting
+$result = $database->query("UPDATE lychee_settings SET value = 'ORDER BY takestamp DESC' WHERE `key` = 'sorting' AND `value` LIKE '%UNIX_TIMESTAMP%';");
+if (!$result) return false;
+
 # Set version
 $result = $database->query("UPDATE lychee_settings SET value = '020500' WHERE `key` = 'version';");
 if (!$result) return false;
