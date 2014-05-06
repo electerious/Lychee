@@ -29,7 +29,7 @@ class Database extends Module {
 			if (!Database::createDatabase($database, $name)) exit('Error: Could not create database!');
 
 		# Check tables
-		if (!$database->query('SELECT * FROM lychee_photos, lychee_albums, lychee_settings LIMIT 0;'))
+		if (!$database->query('SELECT * FROM lychee_photos, lychee_albums, lychee_settings, lychee_log LIMIT 0;'))
 			if (!Database::createTables($database)) exit('Error: Could not create tables!');
 
 		return $database;
@@ -118,6 +118,19 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 		# Check dependencies
 		Module::dependencies(isset($database));
+
+		# Create log
+		if (!$database->query('SELECT * FROM lychee_log LIMIT 0;')) {
+
+			# Read file
+			$file	= __DIR__ . '/../database/log_table.sql';
+			$query	= @file_get_contents($file);
+
+			# Create table
+			if (!isset($query)||$query===false) return false;
+			if (!$database->query($query)) return false;
+
+		}
 
 		# Create settings
 		if (!$database->query('SELECT * FROM lychee_settings LIMIT 0;')) {
