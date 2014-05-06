@@ -138,7 +138,7 @@ class Settings extends Module {
 			case 'star':		$sorting .= 'star';
 								break;
 
-			case 'take':		$sorting .= 'UNIX_TIMESTAMP(STR_TO_DATE(CONCAT(takedate,"-",taketime),"%d.%m.%Y-%H:%i:%S"))';
+			case 'take':		$sorting .= 'takestamp';
 								break;
 
 			default:			exit('Error: Unknown type for sorting!');
