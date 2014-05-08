@@ -89,10 +89,15 @@ class Photo extends Module {
 
 			# Import if not uploaded via web
 			if (!is_uploaded_file($tmp_name)) {
-				if (!@copy($tmp_name, $path)) exit('Error: Could not copy photo to uploads!');
-				else @unlink($tmp_name);
+				if (!@copy($tmp_name, $path)) {
+					Log::error($this->database, __METHOD__, __LINE__, 'Could not copy photo to uploads');
+					exit('Error: Could not copy photo to uploads!');
+				} else @unlink($tmp_name);
 			} else {
-				if (!@move_uploaded_file($tmp_name, $path)) exit('Error: Could not move photo to uploads!');
+				if (!@move_uploaded_file($tmp_name, $path)) {
+					Log::error($this->database, __METHOD__, __LINE__, 'Could not move photo to uploads');
+					exit('Error: Could not move photo to uploads!');
+				}
 			}
 
 			# Read infos
@@ -106,14 +111,20 @@ class Photo extends Module {
 
 			# Set orientation based on EXIF data
 			if ($file['type']==='image/jpeg'&&isset($info['orientation'])&&$info['orientation']!==''&&isset($info['width'])&&isset($info['height'])) {
-				if (!$this->adjustFile($path, $info)) exit('Error: Could not adjust photo!');
+				if (!$this->adjustFile($path, $info)) {
+					Log::error($this->database, __METHOD__, __LINE__, 'Could not adjust photo');
+					exit('Error: Could not adjust photo!');
+				}
 			}
 
 			# Set original date
 			if ($info['takestamp']!=='') @touch($path, $info['takestamp']);
 
 			# Create Thumb
-			if (!$this->createThumb($path, $photo_name)) exit('Error: Could not create thumbnail for photo!');
+			if (!$this->createThumb($path, $photo_name)) {
+				Log::error($this->database, __METHOD__, __LINE__, 'Could not create thumbnail for photo');
+				exit('Error: Could not create thumbnail for photo!');
+			}
 
 			# Save to DB
 			$query = "INSERT INTO lychee_photos (id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star)
@@ -140,7 +151,10 @@ class Photo extends Module {
 					'" . $star . "');";
 			$result = $this->database->query($query);
 
-			if (!$result) exit('Error: Could not save photo in database!');
+			if (!$result) {
+				Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+				exit('Error: Could not save photo in database!');
+			}
 
 		}
 
@@ -154,7 +168,7 @@ class Photo extends Module {
 	private function createThumb($url, $filename, $width = 200, $height = 200) {
 
 		# Check dependencies
-		$this->dependencies(isset($this->settings, $url, $filename));
+		$this->dependencies(isset($this->database, $this->settings, $url, $filename));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -203,16 +217,14 @@ class Photo extends Module {
 				$startHeight	= 0;
 			}
 
-			# Fallback for older version
-			if ($info['mime']==='image/webp'&&floatval(phpversion())<5.5) return false;
-
 			# Create new image
 			switch($info['mime']) {
 				case 'image/jpeg':	$sourceImg = imagecreatefromjpeg($url); break;
 				case 'image/png':	$sourceImg = imagecreatefrompng($url); break;
 				case 'image/gif':	$sourceImg = imagecreatefromgif($url); break;
-				case 'image/webp':	$sourceImg = imagecreatefromwebp($url); break;
-				default:			return false; break;
+				default:			Log::error($this->database, __METHOD__, __LINE__, 'Type of photo is not supported');
+									return false;
+									break;
 			}
 
 			# Create thumb
@@ -500,7 +512,10 @@ class Photo extends Module {
 
 		# Get extension
 		$extension = $this->getExtension($photo->url);
-		if ($extension===false) return false;
+		if ($extension===false) {
+			Log::error($this->database, __METHOD__, __LINE__, 'Invalid photo extension');
+			return false;
+		}
 
 		# Parse title
 		if ($photo->title=='') $photo->title = 'Untitled';
@@ -547,7 +562,10 @@ class Photo extends Module {
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
-		if (!$result) return false;
+		if (!$result) {
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			return false;
+		}
 		return true;
 
 	}
@@ -570,7 +588,10 @@ class Photo extends Module {
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
-		if (!$result) return false;
+		if (!$result) {
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			return false;
+		}
 		return true;
 
 	}
@@ -604,7 +625,10 @@ class Photo extends Module {
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
-		if ($error) return false;
+		if ($error) {
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			return false;
+		}
 		return true;
 
 	}
@@ -658,7 +682,10 @@ class Photo extends Module {
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
-		if (!$result) return false;
+		if (!$result) {
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			return false;
+		}
 		return true;
 
 	}
@@ -677,7 +704,10 @@ class Photo extends Module {
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
-		if (!$result) return false;
+		if (!$result) {
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			return false;
+		}
 		return true;
 
 	}
@@ -693,7 +723,10 @@ class Photo extends Module {
 		# Parse tags
 		$tags = preg_replace('/(\ ,\ )|(\ ,)|(,\ )|(,{1,}\ {0,})|(,$|^,)/', ',', $tags);
 		$tags = preg_replace('/,$|^,|(\ ){0,}$/', '', $tags);
-		if (strlen($tags)>1000) return false;
+		if (strlen($tags)>1000) {
+			Log::error($this->database, __METHOD__, __LINE__, 'Length of tags higher than 1000');
+			return false;
+		}
 
 		# Set tags
 		$result = $this->database->query("UPDATE lychee_photos SET tags = '$tags' WHERE id IN ($this->photoIDs);");
@@ -701,7 +734,10 @@ class Photo extends Module {
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
-		if (!$result) return false;
+		if (!$result) {
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			return false;
+		}
 		return true;
 
 	}
@@ -716,6 +752,10 @@ class Photo extends Module {
 
 		# Get photos
 		$photos = $this->database->query("SELECT id, url, thumbUrl FROM lychee_photos WHERE id IN ($this->photoIDs);");
+		if (!$photos) {
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			return false;
+		}
 
 		# For each photo
 		while ($photo = $photos->fetch_object()) {
@@ -724,21 +764,36 @@ class Photo extends Module {
 			$thumbUrl2x = explode(".", $photo->thumbUrl);
 			$thumbUrl2x = $thumbUrl2x[0] . '@2x.' . $thumbUrl2x[1];
 
-			# Delete files
-			if (file_exists(LYCHEE_UPLOADS_BIG . $photo->url)&&!unlink(LYCHEE_UPLOADS_BIG . $photo->url))					return false;
-			if (file_exists(LYCHEE_UPLOADS_THUMB . $photo->thumbUrl)&&!unlink(LYCHEE_UPLOADS_THUMB . $photo->thumbUrl))		return false;
-			if (file_exists(LYCHEE_UPLOADS_THUMB . $thumbUrl2x)&&!unlink(LYCHEE_UPLOADS_THUMB . $thumbUrl2x))				return false;
+			# Delete big
+			if (file_exists(LYCHEE_UPLOADS_BIG . $photo->url)&&!unlink(LYCHEE_UPLOADS_BIG . $photo->url)) {
+				Log::error($this->database, __METHOD__, __LINE__, 'Could not delete photo in uploads/big/');
+				return false;
+			}
+
+			# Delete thumb
+			if (file_exists(LYCHEE_UPLOADS_THUMB . $photo->thumbUrl)&&!unlink(LYCHEE_UPLOADS_THUMB . $photo->thumbUrl)) {
+				Log::error($this->database, __METHOD__, __LINE__, 'Could not delete photo in uploads/thumb/');
+				return false;
+			}
+
+			# Delete thumb@2x
+			if (file_exists(LYCHEE_UPLOADS_THUMB . $thumbUrl2x)&&!unlink(LYCHEE_UPLOADS_THUMB . $thumbUrl2x))	 {
+				Log::error($this->database, __METHOD__, __LINE__, 'Could not delete high-res photo in uploads/thumb/');
+				return false;
+			}
 
 			# Delete db entry
 			$delete = $this->database->query("DELETE FROM lychee_photos WHERE id = '$photo->id';");
-			if (!$delete) return false;
+			if (!$delete) {
+				Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+				return false;
+			}
 
 		}
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
-		if (!$photos) return false;
 		return true;
 
 	}
