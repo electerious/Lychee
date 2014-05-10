@@ -8,6 +8,6 @@ CREATE TABLE IF NOT EXISTS `lychee_log` (
   `type` varchar(11) NOT NULL,
   `function` varchar(100) NOT NULL,
   `line` int(11) NOT NULL,
-  `text` TEXT DEFAULT '',
+  `text` TEXT,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
