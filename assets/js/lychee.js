@@ -8,7 +8,7 @@
 var lychee = {
 
 	title: "",
-	version: "2.5 b1",
+	version: "2.5 b2",
 	version_code: "020500",
 
 	api_path: "php/api.php",
