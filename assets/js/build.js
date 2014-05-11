@@ -197,21 +197,37 @@ build = {
 
 	},
 
-	uploadModal: function(icon, text) {
+	uploadModal: function(icon, text, html) {
 
 		var modal = "";
 
-		modal += "<div class='upload_overlay fadeIn'>";
-		modal +=	"<div class='upload_message center'>";
-		modal +=		"<a class='icon-" + icon + "'></a>";
+		if (html!==null||html!==undefined) {
 
-		if (text!==undefined) modal += "<p>" + text + "</p>";
-		else modal += "<div class='progressbar'><div></div></div>";
+			modal += "<div class='upload_overlay fadeIn'>";
+			modal += "<div class='upload_message center'>";
+			modal +=	 "<h1>" + text + "</h1>";
+			modal +=	 "<a class='close icon-remove-sign'></a>";
+			modal += html;
+			modal += "</div>";
+			modal += "</div>";
 
-		modal +=	"</div>";
-		modal += "</div>";
+			return modal;
 
-		return modal;
+		} else {
+
+			modal += "<div class='upload_overlay fadeIn'>";
+			modal +=	"<div class='upload_message center'>";
+			modal +=		"<a class='icon-" + icon + "'></a>";
+
+			if (text!==undefined) modal += "<p>" + text + "</p>";
+			else modal += "<div class='progressbar'><div></div></div>";
+
+			modal +=	"</div>";
+			modal += "</div>";
+
+			return modal;
+
+		}
 
 	},
 

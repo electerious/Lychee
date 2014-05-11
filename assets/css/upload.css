@@ -19,9 +19,9 @@
 .upload_message {
 	position: absolute;
 	display: inline-block;
-	width: 200px;
-	margin-left: -100px;
-	margin-top: -85px;
+	width: 450px;
+	margin-left: -225px;
+	margin-top: -160px;
 	background-color: #444;
 	background-image: -webkit-linear-gradient(top, rgb(75, 75, 75), rgb(45, 45, 45));
 	background-image: -moz-linear-gradient(top, rgb(75, 75, 75), rgb(45, 45, 45));
@@ -42,7 +42,79 @@
 	animation-timing-function: cubic-bezier(0.51,.92,.24,1.15);
 }
 
-	/* Icon ------------------------------------------------*/
+	/* Header ------------------------------------------------*/
+	.upload_message h1 {
+		float: left;
+		width: 100%;
+		padding: 12px 0px;
+		color: #fff;
+		font-size: 16px;
+		font-weight: bold;
+		text-shadow: 0px -1px 0px #222;
+		text-align: center;
+	}
+	.upload_message .close {
+		position: absolute;
+		top: 0px;
+		right: 0px;
+		padding: 11px 14px 6px 7px;
+		color: #aaa;
+		font-size: 20px;
+		text-shadow: 0px -1px 0px #222;
+		cursor: pointer;
+	}
+	.upload_message .close:hover {
+		color: #fff;
+	}
+
+	/* Rows ------------------------------------------------*/
+	.upload_message .rows {
+		float: left;
+		margin: 3px 8px 8px 8px;
+		width: calc(100% - 16px);
+		height: 300px;
+		background-color: rgba(0, 0, 0, .5);
+		overflow: hidden;
+		overflow-y: scroll;
+		border-radius: 3px;
+		box-shadow: inset 0px 0px 3px rgba(0, 0, 0, .8);
+	}
+
+	/* Row ------------------------------------------------*/
+	.upload_message .rows .row {
+		display: inline-block;
+		padding: 13px 0px;
+		width: 100%;
+		background-color: rgba(255, 255, 255, .02);
+	}
+
+	.upload_message .rows .row:nth-child(2n) {
+		background-color: rgba(255, 255, 255, 0);
+	}
+
+		.upload_message .rows .row a.name {
+			float: left;
+			padding: 0px 10px;
+			color: #fff;
+			font-size: 14px;
+		}
+
+		.upload_message .rows .row a.status {
+			float: right;
+			padding: 0px 10px;
+			color: rgba(255, 255, 255, .5);
+			font-size: 14px;
+		}
+
+			.upload_message .rows .row a.status.error {
+				color: rgb(213, 24, 24);
+			}
+
+			.upload_message .rows .row a.status.success {
+				color: rgb(42, 213, 0);
+			}
+
+	/* Icon ------------------------------------------------
 	.upload_message a {
 		float: left;
 		width: 100%;
@@ -64,9 +136,9 @@
 		animation-duration: 2s;
 		animation-timing-function: ease-in-out;
 		animation-iteration-count: infinite;
-	}
+	}*/
 
-	/* Text ------------------------------------------------*/
+	/* Text ------------------------------------------------
 	.upload_message p {
 		float: left;
 		width: 100%;
@@ -74,10 +146,10 @@
 		color: #fff;
 		font-size: 14px;
 		text-align: center;
-		text-shadow: 0px -1px 0px rgba(0,0,0,.5);
+		text-shadow: 0px -1px 0px rgba(0,0,0,.5);*/
 	}
 
-	/* Progress ------------------------------------------------*/
+	/* Progress ------------------------------------------------
 	.upload_message .progressbar {
 		float: left;
 		width: 170px;
@@ -92,7 +164,6 @@
 		box-shadow: 0 1px 0 rgba(255,255,255,.06), inset 0px 0px 2px #222;
 		border-radius: 50px;
 
-		/* Animation */
 		-webkit-animation-name: moveBackground;
 		-webkit-animation-duration: 1s;
 		-webkit-animation-timing-function: linear;
@@ -120,4 +191,4 @@
 		-webkit-transition: width .2s, opacity .5;
 		-moz-transition: width .2s, opacity .5;
 		transition: width .2s, opacity .5;
-	}
+	}*/

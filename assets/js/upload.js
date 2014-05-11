@@ -7,12 +7,12 @@
 
 upload = {
 
-	show: function(icon, text) {
+	show: function(icon, text, html) {
 
 		if (icon===undefined) icon = "upload";
 
 		upload.close(true);
-		$("body").append(build.uploadModal(icon, text));
+		$("body").append(build.uploadModal(icon, text, html));
 
 	},
 
@@ -55,75 +55,121 @@ upload = {
 
 		local: function(files) {
 
-			var pre_progress = 0,
-				formData = new FormData(),
-				xhr = new XMLHttpRequest(),
-				albumID = album.getID(),
-				popup,
-				progress;
+			var albumID = album.getID(),
+				html = "";
+
+			var process = function(files, file) {
+
+				var formData = new FormData(),
+					xhr = new XMLHttpRequest(),
+					pre_progress = 0,
+					progress;
+
+				formData.append("function", "upload");
+				formData.append("albumID", albumID);
+				formData.append(0, file);
+
+				xhr.open("POST", lychee.api_path);
+
+				xhr.onload = function() {
+
+					var wait;
+
+					if (xhr.status===200) {
+
+						$(".upload_message .rows .row:nth-child(" + (file.num+1) + ") .status")
+							.html("Finished")
+							.addClass("success");
+
+						file.ready = true;
+						wait = false;
+
+						for (var i = 0; i < files.length; i++) {
+
+							if (files[i].ready===false) {
+								wait = true;
+								break;
+							}
+
+						}
+
+						if (wait===false) {
+
+							$("#upload_files").val("");
+
+							if (album.getID()===false) lychee.goto("0");
+							else album.load(albumID);
+
+						}
+
+					}
+
+				};
+
+				xhr.upload.onprogress = function(e) {
+
+					if (e.lengthComputable) {
+
+						progress = (e.loaded / e.total * 100 | 0);
+
+						if (progress>pre_progress) {
+							$(".upload_message .rows .row:nth-child(" + (file.num+1) + ") .status").html(progress + "%");
+							pre_progress = progress;
+						}
+
+						if (progress>=100) {
+
+							$(".upload_message .rows .row:nth-child(" + (file.num+1) + ") .status").html("Processing");
+
+							if (file.next!==null) process(files, file.next);
+
+						}
+
+					}
+
+				};
+
+				xhr.send(formData);
+
+			}
 
 			if (files.length<=0) return false;
 			if (albumID===false) albumID = 0;
 
-			formData.append("function", "upload");
-			formData.append("albumID", albumID);
+			html = "<div class='rows'>";
 
 			for (var i = 0; i < files.length; i++) {
 
-				if (files[i].type!=="image/jpeg"&&files[i].type!=="image/jpg"&&files[i].type!=="image/png"&&files[i].type!=="image/gif"&&files[i].type!=="image/webp") {
-					loadingBar.show("error", "The file format of " + files[i].name + " is not supported.");
-					return false;
+				files[i].num = i;
+				files[i].ready = false;
+
+				if (i < files.length-1) files[i].next = files[i+1];
+				else files[i].next = null;
+
+				if (files[i].type!=="image/jpeg"&&files[i].type!=="image/jpg"&&files[i].type!=="image/png"&&files[i].type!=="image/gif") {
+
+					files[i].ready = true;
+
+					// Generate html with error
+					html += "<div class='row'><a class='name'>" + lychee.escapeHTML(files[i].name) + "</a><a class='status error'>Not supported</a></div>";
+
 				} else {
-					formData.append(i, files[i]);
+
+					// Generate html
+					html += "<div class='row'><a class='name'>" + lychee.escapeHTML(files[i].name) + "</a><a class='status'></a></div>";
+
 				}
 
 			}
 
-			upload.show();
+			html += "</div>";
 
 			window.onbeforeunload = function() { return "Lychee is currently uploading!"; };
+			window.onbeforeunload = null;
 
-			xhr.open("POST", lychee.api_path);
+			upload.show(null, "Uploading", html);
 
-			xhr.onload = function() {
-
-				if (xhr.status===200) {
-
-					upload.close();
-					upload.notify("Upload complete");
-
-					window.onbeforeunload = null;
-
-					if (album.getID()===false) lychee.goto("0");
-					else album.load(albumID);
-
-				}
-
-			};
-
-			xhr.upload.onprogress = function(e) {
-
-				if (e.lengthComputable) {
-
-					progress = (e.loaded / e.total * 100 | 0);
-
-					if (progress>pre_progress) {
-						upload.setProgress(progress);
-						pre_progress = progress;
-					}
-
-					if (progress>=100) {
-						upload.setIcon("cog");
-						upload.setText("Processing photos");
-					}
-
-				}
-
-			};
-
-			$("#upload_files").val("");
-
-			xhr.send(formData);
+			process(files, files[0]);
 
 		},
 
