@@ -121,7 +121,7 @@ var lychee = {
 		params = "login&user=" + user + "&password=" + password;
 		lychee.api(params, function(data) {
 			if (data===true) {
-				localStorage.setItem("username", user);
+				localStorage.setItem("lychee_username", user);
 				window.location.reload();
 			} else {
 				$("#password").val("").addClass("error").focus();
@@ -138,7 +138,7 @@ var lychee = {
 		$("body").append(build.signInModal());
 		$("#username").focus();
 		if (localStorage) {
-			local_username = localStorage.getItem("username");
+			local_username = localStorage.getItem("lychee_username");
 			if (local_username!==null) {
 				if (local_username.length>0) $("#username").val(local_username);
 				$("#password").focus();
