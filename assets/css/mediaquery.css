@@ -63,8 +63,9 @@
 	}
 
 	.upload_message {
-		top: 50% !important;
-		left: 50% !important;
+		margin-top: 0px !important;
+		margin-left: 0px !important;
+		width: 100% !important;
 	}
 
 }
