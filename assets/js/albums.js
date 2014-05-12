@@ -58,6 +58,7 @@ albums = {
 			durationTime = (new Date().getTime() - startTime);
 			if (durationTime>300) waitTime = 0; else waitTime = 300 - durationTime;
 			if (!visible.albums()&&!visible.photo()&&!visible.album()) waitTime = 0;
+			if (visible.album()&&lychee.content.html()==="") waitTime = 0;
 
 			setTimeout(function() {
 
