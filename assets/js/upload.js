@@ -7,12 +7,10 @@
 
 upload = {
 
-	show: function(icon, text, html) {
-
-		if (icon===undefined) icon = "upload";
+	show: function(title, files) {
 
 		upload.close(true);
-		$("body").append(build.uploadModal(icon, text, html));
+		$("body").append(build.uploadModal(title, files));
 
 	},
 
@@ -56,92 +54,95 @@ upload = {
 		local: function(files) {
 
 			var albumID = album.getID(),
-				html = "";
+				process = function(files, file) {
 
-			var process = function(files, file) {
+					var formData = new FormData(),
+						xhr = new XMLHttpRequest(),
+						pre_progress = 0,
+						progress;
 
-				var formData = new FormData(),
-					xhr = new XMLHttpRequest(),
-					pre_progress = 0,
-					progress;
+					formData.append("function", "upload");
+					formData.append("albumID", albumID);
+					formData.append(0, file);
 
-				formData.append("function", "upload");
-				formData.append("albumID", albumID);
-				formData.append(0, file);
+					xhr.open("POST", lychee.api_path);
 
-				xhr.open("POST", lychee.api_path);
+					xhr.onload = function() {
 
-				xhr.onload = function() {
+						var wait;
 
-					var wait;
+						if (xhr.status===200) {
 
-					if (xhr.status===200) {
+							$(".upload_message .rows .row:nth-child(" + (file.num+1) + ") .status")
+								.html("Finished")
+								.addClass("success");
 
-						$(".upload_message .rows .row:nth-child(" + (file.num+1) + ") .status")
-							.html("Finished")
-							.addClass("success");
+							file.ready = true;
+							wait = false;
 
-						file.ready = true;
-						wait = false;
+							for (var i = 0; i < files.length; i++) {
 
-						for (var i = 0; i < files.length; i++) {
+								if (files[i].ready===false) {
+									wait = true;
+									break;
+								}
 
-							if (files[i].ready===false) {
-								wait = true;
-								break;
+							}
+
+							if (wait===false) {
+
+								window.onbeforeunload = null;
+
+								$("#upload_files").val("");
+
+								if (album.getID()===false) lychee.goto("0");
+								else album.load(albumID);
+
 							}
 
 						}
 
-						if (wait===false) {
+					};
 
-							$("#upload_files").val("");
+					xhr.upload.onprogress = function(e) {
 
-							if (album.getID()===false) lychee.goto("0");
-							else album.load(albumID);
+						if (e.lengthComputable) {
 
-						}
+							progress = (e.loaded / e.total * 100 | 0);
 
-					}
+							if (progress>pre_progress) {
+								$(".upload_message .rows .row:nth-child(" + (file.num+1) + ") .status").html(progress + "%");
+								pre_progress = progress;
+							}
 
-				};
+							if (progress>=100) {
 
-				xhr.upload.onprogress = function(e) {
+								/*$(".upload_message .rows").animate({
+									scrollTop: $(".upload_message .rows .row:nth-child(" + (file.num+1) + ")").offset().top - 200
+								}, 0);*/
 
-					if (e.lengthComputable) {
+								$(".upload_message .rows .row:nth-child(" + (file.num+1) + ") .status").html("Processing");
 
-						progress = (e.loaded / e.total * 100 | 0);
+								if (file.next!==null) process(files, file.next);
 
-						if (progress>pre_progress) {
-							$(".upload_message .rows .row:nth-child(" + (file.num+1) + ") .status").html(progress + "%");
-							pre_progress = progress;
-						}
-
-						if (progress>=100) {
-
-							$(".upload_message .rows .row:nth-child(" + (file.num+1) + ") .status").html("Processing");
-
-							if (file.next!==null) process(files, file.next);
+							}
 
 						}
 
-					}
+					};
 
-				};
+					xhr.send(formData);
 
-				xhr.send(formData);
-
-			}
+				}
 
 			if (files.length<=0) return false;
 			if (albumID===false) albumID = 0;
-
-			html = "<div class='rows'>";
 
 			for (var i = 0; i < files.length; i++) {
 
 				files[i].num = i;
 				files[i].ready = false;
+				files[i].supported = true;
 
 				if (i < files.length-1) files[i].next = files[i+1];
 				else files[i].next = null;
@@ -149,25 +150,15 @@ upload = {
 				if (files[i].type!=="image/jpeg"&&files[i].type!=="image/jpg"&&files[i].type!=="image/png"&&files[i].type!=="image/gif") {
 
 					files[i].ready = true;
-
-					// Generate html with error
-					html += "<div class='row'><a class='name'>" + lychee.escapeHTML(files[i].name) + "</a><a class='status error'>Not supported</a></div>";
-
-				} else {
-
-					// Generate html
-					html += "<div class='row'><a class='name'>" + lychee.escapeHTML(files[i].name) + "</a><a class='status'></a></div>";
+					files[i].supported = false;
 
 				}
 
 			}
 
-			html += "</div>";
-
 			window.onbeforeunload = function() { return "Lychee is currently uploading!"; };
-			window.onbeforeunload = null;
 
-			upload.show(null, "Uploading", html);
+			upload.show("Uploading", files);
 
 			process(files, files[0]);
 
@@ -179,7 +170,8 @@ upload = {
 				params,
 				extension,
 				buttons,
-				link;
+				link,
+				files = [];
 
 			if (albumID===false) albumID = 0;
 
@@ -196,8 +188,12 @@ upload = {
 							return false;
 						}
 
-						modal.close();
-						upload.show("cog", "Importing from URL");
+						files[0] = {
+							name: link,
+							supported: true
+						}
+
+						upload.show("Importing URL", files);
 
 						params = "importUrl&url=" + escape(encodeURI(link)) + "&albumID=" + albumID;
 						lychee.api(params, function(data) {

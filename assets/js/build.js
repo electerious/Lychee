@@ -197,37 +197,40 @@ build = {
 
 	},
 
-	uploadModal: function(icon, text, html) {
+	uploadModal: function(title, files) {
 
 		var modal = "";
 
-		if (html!==null||html!==undefined) {
+		modal += "<div class='upload_overlay fadeIn'>";
+		modal +=	"<div class='upload_message center'>";
+		modal +=		"<h1>" + title + "</h1>";
+		modal +=		"<div class='rows'>";
 
-			modal += "<div class='upload_overlay fadeIn'>";
-			modal += "<div class='upload_message center'>";
-			modal +=	 "<h1>" + text + "</h1>";
-			modal +=	 "<a class='close icon-remove-sign'></a>";
-			modal += html;
-			modal += "</div>";
-			modal += "</div>";
+		for (var i = 0; i < files.length; i++) {
 
-			return modal;
+			if (files[i].supported===true) {
 
-		} else {
+				modal += "<div class='row'>"
+				modal +=	"<a class='name'>" + lychee.escapeHTML(files[i].name) + "</a>"
+				modal +=	"<a class='status'></a>"
+				modal += "</div>";
 
-			modal += "<div class='upload_overlay fadeIn'>";
-			modal +=	"<div class='upload_message center'>";
-			modal +=		"<a class='icon-" + icon + "'></a>";
+			} else {
 
-			if (text!==undefined) modal += "<p>" + text + "</p>";
-			else modal += "<div class='progressbar'><div></div></div>";
+				modal += "<div class='row'>"
+				modal +=	"<a class='name'>" + lychee.escapeHTML(files[i].name) + "</a>"
+				modal +=	"<a class='status error'>Not supported</a>"
+				modal += "</div>";
 
-			modal +=	"</div>";
-			modal += "</div>";
-
-			return modal;
+			}
 
 		}
+
+		modal +=		"</div>";
+		modal +=	"</div>";
+		modal += "</div>";
+
+		return modal;
 
 	},
 
