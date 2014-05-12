@@ -94,9 +94,12 @@
 
 		.upload_message .rows .row a.name {
 			float: left;
+			width: 70%;
 			padding: 0px 10px;
 			color: #fff;
 			font-size: 14px;
+			white-space: nowrap;
+			overflow: hidden;
 		}
 
 		.upload_message .rows .row a.status {

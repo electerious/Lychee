@@ -208,6 +208,8 @@ build = {
 
 		for (var i = 0; i < files.length; i++) {
 
+			if (files[i].name.length>40) files[i].name = files[i].name.substr(0, 40) + "...";
+
 			if (files[i].supported===true) {
 
 				modal += "<div class='row'>"

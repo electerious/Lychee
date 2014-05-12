@@ -222,15 +222,20 @@ upload = {
 
 			var albumID = album.getID(),
 				params,
-				buttons;
+				buttons,
+				files = [];
 
 			if (albumID===false) albumID = 0;
 
 			buttons = [
 				["Import", function() {
 
-					modal.close();
-					upload.show("cog", "Importing photos");
+					files[0] = {
+						name: "uploads/import/",
+						supported: true
+					};
+
+					upload.show("Importing from server", files);
 
 					params = "importServer&albumID=" + albumID;
 					lychee.api(params, function(data) {
@@ -262,7 +267,8 @@ upload = {
 		dropbox: function() {
 
 			var albumID = album.getID(),
-				params;
+				params,
+				links = "";
 
 			if (albumID===false) albumID = 0;
 
@@ -272,15 +278,23 @@ upload = {
 					multiselect: true,
 					success: function(files) {
 
-						if (files.length>1) {
+						for (var i = 0; i < files.length; i++) {
 
-							for (var i = 0; i < files.length; i++) files[i] = files[i].link;
+							links += files[i].link + ",";
 
-						} else files = files[0].link;
+							files[i] = {
+								name: files[i].link,
+								supported: true
+							};
 
-						upload.show("cog", "Importing photos");
+						}
 
-						params = "importUrl&url=" + escape(files) + "&albumID=" + albumID;
+						// Remove last comma
+						links = links.substr(0, links.length-1);
+
+						upload.show("Importing from Dropbox", files);
+
+						params = "importUrl&url=" + escape(links) + "&albumID=" + albumID;
 						lychee.api(params, function(data) {
 
 							upload.close();
