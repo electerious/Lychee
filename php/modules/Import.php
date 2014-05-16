@@ -160,7 +160,11 @@ class Import extends Module {
 					continue;
 				}
 
-				Import::server($newAlbumID, $file . '/', false);
+				if (Import::server($newAlbumID, $file . '/', false)==='Warning: Folder empty or no readable files to process!') {
+					$error = true;
+					Log::error($database, __METHOD__, __LINE__, 'Could not import folder. Function returned error');
+					continue;
+				}
 
 				$contains['albums'] = true;
 
