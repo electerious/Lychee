@@ -95,6 +95,8 @@ upload = {
 
 								$("#upload_files").val("");
 
+								//upload.close();
+
 								if (album.getID()===false) lychee.goto("0");
 								else album.load(albumID);
 

@@ -21,7 +21,7 @@
 	display: inline-block;
 	width: 450px;
 	margin-left: -225px;
-	margin-top: -160px;
+	margin-top: -170px;
 	background-color: #444;
 	background-image: -webkit-linear-gradient(top, rgb(75, 75, 75), rgb(45, 45, 45));
 	background-image: -moz-linear-gradient(top, rgb(75, 75, 75), rgb(45, 45, 45));
@@ -83,7 +83,7 @@
 	/* Row ------------------------------------------------*/
 	.upload_message .rows .row {
 		display: inline-block;
-		padding: 13px 0px;
+		padding: 8px 0px;
 		width: 100%;
 		background-color: rgba(255, 255, 255, .02);
 	}
@@ -95,7 +95,7 @@
 		.upload_message .rows .row a.name {
 			float: left;
 			width: 70%;
-			padding: 0px 10px;
+			padding: 5px 10px;
 			color: #fff;
 			font-size: 14px;
 			white-space: nowrap;
@@ -104,7 +104,7 @@
 
 		.upload_message .rows .row a.status {
 			float: right;
-			padding: 0px 10px;
+			padding: 5px 10px;
 			color: rgba(255, 255, 255, .5);
 			font-size: 14px;
 		}
