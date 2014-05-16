@@ -58,11 +58,7 @@ class Import extends Module {
 
 	}
 
-	static function server($albumID = 0, $path) {
-
-		global $database, $plugins, $settings;
-
-		if (!isset($path)) $path = LYCHEE_UPLOADS_IMPORT;
+	static function move($database, $path) {
 
 		# Determine OS type and set move cmd (Windows untested!)
 		$myos = substr(PHP_OS,0,3);
@@ -75,7 +71,7 @@ class Import extends Module {
 		$tmpdirname = md5(time() . rand());
 
 		# Make temporary directory
-	  	if (@mkdir(LYCHEE_DATA . $tmpdirname)===false) {
+		if (@mkdir(LYCHEE_DATA . $tmpdirname)===false) {
 			Log::error($database, __METHOD__, __LINE__, 'Failed to create temporary directory');
 			return false;
 		}
@@ -107,11 +103,26 @@ class Import extends Module {
 			return false;
 		}
 
+		# Set new path
+		$path = LYCHEE_DATA . $tmpdirname;
+
+		return $path;
+
+	}
+
+	static function server($albumID = 0, $path, $useTemp = false) {
+
+		global $database, $plugins, $settings;
+
+		if (!isset($path)) $path = LYCHEE_UPLOADS_IMPORT;
+
+		if ($useTemp===true) $path = Import::move($database, $path);
+
 		$error				= false;
 		$contains['photos']	= false;
 		$contains['albums']	= false;
 
-		$path = LYCHEE_DATA . $tmpdirname;
+		# Get all files
 		$files = glob($path . '/*');
 
 		foreach ($files as $file) {
@@ -149,7 +160,11 @@ class Import extends Module {
 					continue;
 				}
 
-				Import::server($newAlbumID, $file . '/');
+				if (Import::server($newAlbumID, $file . '/', false)==='Warning: Folder empty or no readable files to process!') {
+					$error = true;
+					Log::error($database, __METHOD__, __LINE__, 'Could not import folder. Function returned error');
+					continue;
+				}
 
 				$contains['albums'] = true;
 
@@ -158,7 +173,9 @@ class Import extends Module {
 		}
 
 		# Delete tmpdir if import was successful
-		if ($error===false) rmdir(LYCHEE_DATA . $tmpdirname);
+		if ($error===false&&$useTemp===true&&file_exists(LYCHEE_DATA . $tmpdirname)) {
+			if (@rmdir(LYCHEE_DATA . $tmpdirname)===false) Log::error($database, __METHOD__, __LINE__, 'Could not delete temp-folder (' . LYCHEE_DATA . $tmpdirname . ') after successful import');
+		}
 
 		if ($contains['photos']===false&&$contains['albums']===false)	return 'Warning: Folder empty or no readable files to process!';
 		if ($contains['photos']===false&&$contains['albums']===true)	return 'Notice: Import only contains albums!';

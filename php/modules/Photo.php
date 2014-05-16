@@ -43,6 +43,12 @@ class Photo extends Module {
 		# Check dependencies
 		$this->dependencies(isset($this->database));
 
+		# Check permissions
+		if (hasPermissions(LYCHEE_UPLOADS_BIG)===false||hasPermissions(LYCHEE_UPLOADS_THUMB)===false) {
+			Log::error($this->database, __METHOD__, __LINE__, 'Wrong permissions in uploads/');
+			exit('Error: Wrong permissions in uploads-folder!');
+		}
+
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
 
