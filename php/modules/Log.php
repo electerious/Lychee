@@ -37,7 +37,7 @@ class Log extends Module {
 		$sysstamp = time();
 
 		# Escape
-		$type		= mysqli_real_escape_string($type, $function);
+		$type		= mysqli_real_escape_string($database, $type);
 		$function	= mysqli_real_escape_string($database, $function);
 		$line		= mysqli_real_escape_string($database, $line);
 		$text		= mysqli_real_escape_string($database, $text);

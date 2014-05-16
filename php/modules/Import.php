@@ -60,21 +60,79 @@ class Import extends Module {
 
 	static function server($albumID = 0, $path) {
 
-		if (!isset($path)) $path = LYCHEE_UPLOADS_IMPORT;
-
 		global $database, $plugins, $settings;
 
-		$files				= glob($path . '*');
+		if (!isset($path)) $path = LYCHEE_UPLOADS_IMPORT;
+
+		# Determine OS type and set move cmd (Windows untested!)
+		$myos = substr(PHP_OS,0,3);
+		$myos = strtoupper($myos);
+
+		if ($myos==='WIN') $osmv = 'MOVE';
+		else $osmv = 'mv';
+
+		# Generate tmp dir name by hashing epoch time & random number
+		$tmpdirname = md5(time() . rand());
+
+		# Make temporary directory
+	  	if (@mkdir(LYCHEE_DATA . $tmpdirname)===false) {
+			Log::error($database, __METHOD__, __LINE__, 'Failed to create temporary directory');
+			return false;
+		}
+
+		# Get list of files and move them to tmpdir
+		$files = glob($path . '*');
+		if (isset($files)) {
+
+			foreach ($files as $file) {
+
+				# Prevent index.html from being moved
+				if (basename($file)==='index.html') continue;
+
+				$out = '';
+				$ret = '';
+
+				@exec($osmv . ' ' . $file . ' ' . LYCHEE_DATA . $tmpdirname, $out, $ret);
+				if (isset($ret)&&($ret>0)) Log::error($database, __METHOD__, __LINE__, "Failed to move directory or file ($ret):" . $file);
+
+			}
+
+		}
+
+		# If no files could be copied to the temp dir, remove
+		$files = glob(LYCHEE_DATA . $tmpdirname . '/*');
+		if (count($files)===0) {
+			rmdir(LYCHEE_DATA . $tmpdirname);
+			Log::error($database, __METHOD__, __LINE__, 'Import failed, because files could not be temporary moved to ' . LYCHEE_DATA);
+			return false;
+		}
+
+		$error				= false;
 		$contains['photos']	= false;
 		$contains['albums']	= false;
 
+		$path = LYCHEE_DATA . $tmpdirname;
+		$files = glob($path . '/*');
+
 		foreach ($files as $file) {
+
+			# It is possible to move a file because of directory permissions but
+			# the file may still be unreadable by the user
+			if (!is_readable($file)) {
+				$error = true;
+				Log::error($database, __METHOD__, __LINE__, 'Could not read file or directory: ' . $file);
+				continue;
+			}
 
 			if (@exif_imagetype($file)!==false) {
 
 				# Photo
 
-				if (!Import::photo($database, $plugins, $settings, $file, $albumID)) return false;
+				if (!Import::photo($database, $plugins, $settings, $file, $albumID)) {
+					$error = true;
+					Log::error($database, __METHOD__, __LINE__, 'Could not import file: ' . $file);
+					continue;
+				}
 				$contains['photos'] = true;
 
 			} else if (is_dir($file)) {
@@ -85,14 +143,24 @@ class Import extends Module {
 				$album		= new Album($database, null, null, null);
 				$newAlbumID	= $album->add('[Import] ' . $name);
 
-				if ($newAlbumID!==false) Import::server($newAlbumID, $file . '/');
+				if ($newAlbumID===false) {
+					$error = true;
+					Log::error($database, __METHOD__, __LINE__, 'Could not create album in Lychee (' . $newAlbumID . ')');
+					continue;
+				}
+
+				Import::server($newAlbumID, $file . '/');
+
 				$contains['albums'] = true;
 
 			}
 
 		}
 
-		if ($contains['photos']===false&&$contains['albums']===false)	return 'Warning: Folder empty!';
+		# Delete tmpdir if import was successful
+		if ($error===false) rmdir(LYCHEE_DATA . $tmpdirname);
+
+		if ($contains['photos']===false&&$contains['albums']===false)	return 'Warning: Folder empty or no readable files to process!';
 		if ($contains['photos']===false&&$contains['albums']===true)	return 'Notice: Import only contains albums!';
 		return true;
 
