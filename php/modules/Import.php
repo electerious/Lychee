@@ -87,8 +87,11 @@ class Import extends Module {
 
 				$out = '';
 				$ret = '';
+				$file = escapeshellarg($file);
+				$cmd = $osmv . " $file " . LYCHEE_DATA . $tmpdirname;
 
-				@exec($osmv . ' ' . $file . ' ' . LYCHEE_DATA . $tmpdirname, $out, $ret);
+				@exec($cmd, $out, $ret);
+
 				if (isset($ret)&&($ret>0)) Log::error($database, __METHOD__, __LINE__, "Failed to move directory or file ($ret):" . $file);
 
 			}
