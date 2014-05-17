@@ -82,8 +82,8 @@ class Import extends Module {
 
 			foreach ($files as $file) {
 
-				# Prevent index.html from being moved
-				if (basename($file)==='index.html') continue;
+				# Prevent unsupported files from being moved
+				if (is_dir($file)===false&&@exif_imagetype($file)===false) continue;
 
 				$out = '';
 				$ret = '';
