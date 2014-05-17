@@ -26,8 +26,18 @@ class Plugins implements \SplSubject {
 
 		# Load plugins
 		foreach ($this->files as $file) {
+
 			if ($file==='') continue;
-			include(LYCHEE_PLUGINS . $file);
+
+			$file = LYCHEE_PLUGINS . $file;
+
+			if (file_exists($file)===false) {
+				Log::warning($database, __METHOD__, __LINE__, 'Could not include plugin. File does not exist (' . $file . ').');
+				continue;
+			}
+
+			include($file);
+
 		}
 
 		return true;
