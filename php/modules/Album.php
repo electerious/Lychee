@@ -428,7 +428,7 @@ class Album extends Module {
 			$public = ($album->public=='0' ? 1 : 0);
 
 			# Set public
-			$result = $this->database->query("UPDATE lychee_albums SET public = '$public', password = NULL WHERE id = '$album->id';");
+			$result = $this->database->query("UPDATE lychee_albums SET public = '$public', visible = 1, password = NULL WHERE id = '$album->id';");
 			if (!$result) {
 				Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
 				return false;
@@ -469,12 +469,12 @@ class Album extends Module {
 			$password = get_hashed_password($password);
 
 			# Set hashed password
-			$result = $this->database->query("UPDATE lychee_albums SET password = '$password' WHERE id IN ('$this->albumIDs');");
+			$result = $this->database->query("UPDATE lychee_albums SET visible = 0, password = '$password' WHERE id IN ('$this->albumIDs');");
 
 		} else {
 
 			# Unset password
-			$result = $this->database->query("UPDATE lychee_albums SET password = NULL WHERE id IN ('$this->albumIDs');");
+			$result = $this->database->query("UPDATE lychee_albums SET visible = 1, password = NULL WHERE id IN ('$this->albumIDs');");
 
 		}
 
