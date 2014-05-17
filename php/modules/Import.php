@@ -82,13 +82,16 @@ class Import extends Module {
 
 			foreach ($files as $file) {
 
-				# Prevent index.html from being moved
-				if (basename($file)==='index.html') continue;
+				# Prevent unsupported files from being moved
+				if (is_dir($file)===false&&@exif_imagetype($file)===false) continue;
 
 				$out = '';
 				$ret = '';
+				$file = escapeshellarg($file);
+				$cmd = $osmv . " $file " . LYCHEE_DATA . $tmpdirname;
 
-				@exec($osmv . ' ' . $file . ' ' . LYCHEE_DATA . $tmpdirname, $out, $ret);
+				@exec($cmd, $out, $ret);
+
 				if (isset($ret)&&($ret>0)) Log::error($database, __METHOD__, __LINE__, "Failed to move directory or file ($ret):" . $file);
 
 			}
@@ -116,7 +119,13 @@ class Import extends Module {
 
 		if (!isset($path)) $path = LYCHEE_UPLOADS_IMPORT;
 
-		if ($useTemp===true) $path = Import::move($database, $path);
+		if ($useTemp===true) {
+			$path = Import::move($database, $path);
+			if ($path===false) {
+				Log::error($database, __METHOD__, __LINE__, 'Failed to move import to temporary directory');
+				return false;
+			}
+		}
 
 		$error				= false;
 		$contains['photos']	= false;
