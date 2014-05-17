@@ -116,7 +116,13 @@ class Import extends Module {
 
 		if (!isset($path)) $path = LYCHEE_UPLOADS_IMPORT;
 
-		if ($useTemp===true) $path = Import::move($database, $path);
+		if ($useTemp===true) {
+			$path = Import::move($database, $path);
+			if ($path===false) {
+				Log::error($database, __METHOD__, __LINE__, 'Failed to move import to temporary directory');
+				return false;
+			}
+		}
 
 		$error				= false;
 		$contains['photos']	= false;
