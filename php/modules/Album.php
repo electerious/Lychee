@@ -292,8 +292,7 @@ class Album extends Module {
 			if (!@is_readable($photo->url)) continue;
 
 			# Get extension of image
-			$extension = array_reverse(explode('.', $photo->url));
-			$extension = $extension[0];
+			$extension = getExtension($photo->url);
 
 			# Set title for photo
 			$zipFileName = $zipTitle . '/' . $photo->title . '.' . $extension;
@@ -304,7 +303,7 @@ class Album extends Module {
 				while (in_array($zipFileName, $files)) {
 
 					# Set new title for photo
-					$zipFileName = $zipTitle . '/' . $photo->title . '-' . $i . '.' . $extension;
+					$zipFileName = $zipTitle . '/' . $photo->title . '-' . $i . $extension;
 
 					$i++;
 
@@ -428,7 +427,7 @@ class Album extends Module {
 			$public = ($album->public=='0' ? 1 : 0);
 
 			# Set public
-			$result = $this->database->query("UPDATE lychee_albums SET public = '$public', password = NULL WHERE id = '$album->id';");
+			$result = $this->database->query("UPDATE lychee_albums SET public = '$public', visible = 1, password = NULL WHERE id = '$album->id';");
 			if (!$result) {
 				Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
 				return false;
@@ -469,12 +468,12 @@ class Album extends Module {
 			$password = get_hashed_password($password);
 
 			# Set hashed password
-			$result = $this->database->query("UPDATE lychee_albums SET password = '$password' WHERE id IN ('$this->albumIDs');");
+			$result = $this->database->query("UPDATE lychee_albums SET visible = 0, password = '$password' WHERE id IN ('$this->albumIDs');");
 
 		} else {
 
 			# Unset password
-			$result = $this->database->query("UPDATE lychee_albums SET password = NULL WHERE id IN ('$this->albumIDs');");
+			$result = $this->database->query("UPDATE lychee_albums SET visible = 1, password = NULL WHERE id IN ('$this->albumIDs');");
 
 		}
 

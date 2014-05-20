@@ -32,6 +32,13 @@ visible = {
 		else return false;
 	},
 
+	infoboxbutton: function() {
+		if (visible.albums()) return false;
+		if (visible.photo()) return true;
+		if (visible.album()&&$('#button_info_album:visible').length>0) return true;
+		else return false;
+	},
+
 	controls: function() {
 		if (lychee.loadingBar.css('opacity')<1) return false;
 		else return true;

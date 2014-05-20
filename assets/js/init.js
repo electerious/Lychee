@@ -99,7 +99,7 @@ $(document).ready(function(){
 		})
 		.bind(['i', 'ctrl+i'], function() {
 			if (visible.infobox()) view.infobox.hide();
-			else if (!visible.albums()) view.infobox.show();
+			else if (visible.infoboxbutton()) view.infobox.show();
 		})
 		.bind(['command+backspace', 'ctrl+backspace'], function() {
 			if (visible.photo()&&!visible.message()) photo.delete([photo.getID()]);
