@@ -528,7 +528,7 @@ class Photo extends Module {
 
 		# Set headers
 		header("Content-Type: application/octet-stream");
-		header("Content-Disposition: attachment; filename=\"$photo->title.$extension[0]\"");
+		header("Content-Disposition: attachment; filename=\"" . $photo->title . $extension . "\"");
 		header("Content-Length: " . filesize(LYCHEE_UPLOADS_BIG . $photo->url));
 
 		# Send file
