@@ -292,8 +292,7 @@ class Album extends Module {
 			if (!@is_readable($photo->url)) continue;
 
 			# Get extension of image
-			$extension = array_reverse(explode('.', $photo->url));
-			$extension = $extension[0];
+			$extension = getExtension($photo->url);
 
 			# Set title for photo
 			$zipFileName = $zipTitle . '/' . $photo->title . '.' . $extension;
@@ -304,7 +303,7 @@ class Album extends Module {
 				while (in_array($zipFileName, $files)) {
 
 					# Set new title for photo
-					$zipFileName = $zipTitle . '/' . $photo->title . '-' . $i . '.' . $extension;
+					$zipFileName = $zipTitle . '/' . $photo->title . '-' . $i . $extension;
 
 					$i++;
 

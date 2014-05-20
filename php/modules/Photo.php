@@ -78,7 +78,7 @@ class Photo extends Module {
 		foreach ($files as $file) {
 
 			# Verify extension
-			$extension = $this->getExtension($file['name']);
+			$extension = getExtension($file['name']);
 			if (!in_array(strtolower($extension), $this->validExtensions, true)) continue;
 
 			# Verify image
@@ -517,7 +517,7 @@ class Photo extends Module {
 		$photo	= $photos->fetch_object();
 
 		# Get extension
-		$extension = $this->getExtension($photo->url);
+		$extension = getExtension($photo->url);
 		if ($extension===false) {
 			Log::error($this->database, __METHOD__, __LINE__, 'Invalid photo extension');
 			return false;
@@ -538,16 +538,6 @@ class Photo extends Module {
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		return true;
-
-	}
-
-	public function getExtension($filename) {
-
-		$extension = strpos($filename, '.') !== false
-			? strrchr($filename, '.')
-			: '';
-
-		return $extension;
 
 	}
 

@@ -9,36 +9,6 @@
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
-function getGraphHeader($database, $photoID) {
-
-	if (!isset($database, $photoID)) return false;
-
-	$photoID = mysqli_real_escape_string($database, $photoID);
-
-	$result	= $database->query("SELECT title, description, url FROM lychee_photos WHERE id = '$photoID';");
-	$row	= $result->fetch_object();
-
-	$parseUrl	= parse_url("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-	$picture	= $parseUrl['scheme']."://".$parseUrl['host'].$parseUrl['path']."/../uploads/big/".$row->url;
-
-	$return = '<!-- General Meta Data -->';
-	$return .= '<meta name="title" content="'.$row->title.'" />';
-	$return .= '<meta name="description" content="'.$row->description.' - via Lychee" />';
-	$return .= '<link rel="image_src" type="image/jpeg" href="'.$picture.'" />';
-
-	$return .= '<!-- Twitter Meta Data -->';
-	$return .= '<meta name="twitter:card" content="photo">';
-	$return .= '<meta name="twitter:title" content="'.$row->title.'">';
-	$return .= '<meta name="twitter:image:src" content="'.$picture.'">';
-
-	$return .= '<!-- Facebook Meta Data -->';
-	$return .= '<meta property="og:title" content="'.$row->title.'">';
-	$return .= '<meta property="og:image" content="'.$picture.'">';
-
-	return $return;
-
-}
-
 function search($database, $settings, $term) {
 
 	if (!isset($database, $settings, $term)) return false;
@@ -77,6 +47,46 @@ function search($database, $settings, $term) {
 	}
 
 	return $return;
+
+}
+
+function getGraphHeader($database, $photoID) {
+
+	if (!isset($database, $photoID)) return false;
+
+	$photoID = mysqli_real_escape_string($database, $photoID);
+
+	$result	= $database->query("SELECT title, description, url FROM lychee_photos WHERE id = '$photoID';");
+	$row	= $result->fetch_object();
+
+	$parseUrl	= parse_url("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+	$picture	= $parseUrl['scheme']."://".$parseUrl['host'].$parseUrl['path']."/../uploads/big/".$row->url;
+
+	$return = '<!-- General Meta Data -->';
+	$return .= '<meta name="title" content="'.$row->title.'" />';
+	$return .= '<meta name="description" content="'.$row->description.' - via Lychee" />';
+	$return .= '<link rel="image_src" type="image/jpeg" href="'.$picture.'" />';
+
+	$return .= '<!-- Twitter Meta Data -->';
+	$return .= '<meta name="twitter:card" content="photo">';
+	$return .= '<meta name="twitter:title" content="'.$row->title.'">';
+	$return .= '<meta name="twitter:image:src" content="'.$picture.'">';
+
+	$return .= '<!-- Facebook Meta Data -->';
+	$return .= '<meta property="og:title" content="'.$row->title.'">';
+	$return .= '<meta property="og:image" content="'.$picture.'">';
+
+	return $return;
+
+}
+
+function getExtension($filename) {
+
+	$extension = strpos($filename, '.') !== false
+		? strrchr($filename, '.')
+		: '';
+
+	return $extension;
 
 }
 
