@@ -14,17 +14,17 @@ class Photo extends Module {
 	private $settings	= null;
 	private $photoIDs	= null;
 
-	private $allowedTypes = [
+	private $allowedTypes = array(
 		IMAGETYPE_JPEG,
 		IMAGETYPE_GIF,
 		IMAGETYPE_PNG
-	];
-	private $validExtensions = [
+	);
+	private $validExtensions = array(
 		'.jpg',
 		'.jpeg',
 		'.png',
 		'.gif'
-	];
+	);
 
 	public function __construct($database, $plugins, $settings, $photoIDs) {
 

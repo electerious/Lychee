@@ -138,7 +138,7 @@ upload = {
 				}
 
 			if (files.length<=0) return false;
-			if (albumID===false) albumID = 0;
+			if (albumID===false||visible.albums()===true) albumID = 0;
 
 			for (var i = 0; i < files.length; i++) {
 

@@ -28,25 +28,25 @@ $result = '';
 # Database
 $database = new mysqli($dbHost, $dbUser, $dbPassword, $dbName);
 
-if (mysqli_connect_errno()!=0) { 
+if (mysqli_connect_errno()!=0) {
 	echo 'Error 100: ' . mysqli_connect_errno() . ': ' . mysqli_connect_error() . '' . PHP_EOL;
 	exit();
 }
 
 # Result
-$result = $database->query('SELECT FROM_UNIXTIME(time), type, function, line, text FROM lychee_log;'); 
+$result = $database->query('SELECT FROM_UNIXTIME(time), type, function, line, text FROM lychee_log;');
 
 # Output
-if ($result === FALSE) { 
+if ($result === FALSE) {
 	echo('Everything looks fine, Lychee has not reported any problems!' . PHP_EOL . PHP_EOL);
 } else {
 	while ( $row = $result->fetch_row() ) {
 
 		# Encode result before printing
-		htmlentities($row);
+		$row = array_map("htmlentities", $row);
 
 		# Format: time TZ - type - function(line) - text
-		printf ("%s %s - %s - %s (%s) \t- %s\n", $row[0], date_default_timezone_get(), $row[1], $row[2], $row[3], $row[4]); 	
+		printf ("%s %s - %s - %s (%s) \t- %s\n", $row[0], date_default_timezone_get(), $row[1], $row[2], $row[3], $row[4]);
 	}
 
 }
