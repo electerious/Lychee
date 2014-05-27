@@ -63,7 +63,7 @@ upload = {
 				progress;
 
 			if (files.length<=0) return false;
-			if (albumID===false) albumID = 0;
+			if (albumID===false||visible.albums()===true) albumID = 0;
 
 			formData.append("function", "upload");
 			formData.append("albumID", albumID);
