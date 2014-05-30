@@ -117,10 +117,7 @@ class Photo extends Module {
 
 			# Set orientation based on EXIF data
 			if ($file['type']==='image/jpeg'&&isset($info['orientation'])&&$info['orientation']!==''&&isset($info['width'])&&isset($info['height'])) {
-				if (!$this->adjustFile($path, $info)) {
-					Log::error($this->database, __METHOD__, __LINE__, 'Could not adjust photo');
-					exit('Error: Could not adjust photo!');
-				}
+				if (!$this->adjustFile($path, $info)) Log::notice($this->database, __METHOD__, __LINE__, 'Could not adjust photo (' . $info['title'] . ')');
 			}
 
 			# Set original date
