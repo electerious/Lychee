@@ -720,7 +720,7 @@ class Photo extends Module {
 		$tags = preg_replace('/(\ ,\ )|(\ ,)|(,\ )|(,{1,}\ {0,})|(,$|^,)/', ',', $tags);
 		$tags = preg_replace('/,$|^,|(\ ){0,}$/', '', $tags);
 		if (strlen($tags)>1000) {
-			Log::error($this->database, __METHOD__, __LINE__, 'Length of tags higher than 1000');
+			Log::notice($this->database, __METHOD__, __LINE__, 'Length of tags higher than 1000');
 			return false;
 		}
 
