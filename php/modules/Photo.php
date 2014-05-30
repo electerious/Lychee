@@ -621,7 +621,7 @@ class Photo extends Module {
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
-		if ($error) {
+		if ($error===true) {
 			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
 			return false;
 		}
