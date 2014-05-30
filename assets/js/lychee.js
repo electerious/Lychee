@@ -168,7 +168,8 @@ var lychee = {
 		var albumID = "",
 			photoID = "",
 			hash = document.location.hash.replace("#", "").split("/");
-
+			
+		$(".no_content").remove();
 		contextMenu.close();
 		multiselect.close();
 
