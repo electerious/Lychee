@@ -332,7 +332,7 @@ album = {
 				link = "http://www.facebook.com/sharer.php?u=" + encodeURI(url) + "&t=" + encodeURI(album.json.title);
 				break;
 			case 2:
-				link = "mailto:?subject=" + encodeURI(album.json.title) + "&body=" + encodeURI("Hi! Check this out: " + url);
+				link = "mailto:?subject=" + encodeURI(album.json.title) + "&body=" + encodeURI(url);
 				break;
 			default:
 				link = "";
