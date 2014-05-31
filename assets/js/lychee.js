@@ -8,7 +8,7 @@
 var lychee = {
 
 	title: "",
-	version: "2.5 b2",
+	version: "2.5 b3",
 	version_code: "020500",
 
 	api_path: "php/api.php",
@@ -168,7 +168,7 @@ var lychee = {
 		var albumID = "",
 			photoID = "",
 			hash = document.location.hash.replace("#", "").split("/");
-			
+
 		$(".no_content").remove();
 		contextMenu.close();
 		multiselect.close();
