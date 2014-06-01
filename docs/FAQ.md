@@ -41,3 +41,6 @@ No. Lychee has it's own folder-structure and database. Please upload or import a
 
 #### Can I upload videos?
 No. Video support is not planned.
+
+#### What's the advantage of buying Lychee?
+Lychee is completely free to use for personal usage. However, if you like Lychee or want to use in commercially, you need to buy Lychee from [our site](http://lychee.electerious.com). I hope you appreciate my work and support further development by buying a license.
