@@ -86,7 +86,7 @@ function dbCreateTables($database) {
 
 			CREATE TABLE `lychee_settings` (
 				`key` varchar(50) NOT NULL DEFAULT '',
-				`value` varchar(50) DEFAULT ''
+				`value` varchar(200) DEFAULT ''
 			) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 		";
