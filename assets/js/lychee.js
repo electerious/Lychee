@@ -336,6 +336,14 @@ var lychee = {
 
 	},
 
+	removeHTML: function(html) {
+
+		var tmp = document.createElement("DIV");
+		tmp.innerHTML = html;
+		return tmp.textContent || tmp.innerText;
+
+	},
+
 	error: function(errorThrown, params, data) {
 
 		console.log("Error Description: " + errorThrown);

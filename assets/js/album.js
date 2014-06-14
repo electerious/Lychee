@@ -207,7 +207,14 @@ album = {
 		buttons = [
 			["Set Title", function() {
 
-				newTitle = ($(".message input.text").val()==="") ? "Untitled" : $(".message input.text").val();
+				// Get input
+				newTitle = $(".message input.text").val();
+
+				// Remove html from input
+				newTitle = lychee.removeHTML(newTitle);
+
+				// Set to Untitled when empty
+				newTitle = (newTitle==="") ? "Untitled" : newTitle;
 
 				if (visible.album()) {
 
@@ -249,7 +256,11 @@ album = {
 		buttons = [
 			["Set Description", function() {
 
+				// Get input
 				description = $(".message input.text").val();
+
+				// Remove html from input
+				description = lychee.removeHTML(description);
 
 				if (visible.album()) {
 					album.json.description = description;
