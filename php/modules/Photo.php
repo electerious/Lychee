@@ -110,7 +110,7 @@ class Photo extends Module {
 			$info = $this->getInfo($path);
 
 			# Use title of file if IPTC title missing
-			if ($info['title']==='') $info['title'] = mysqli_real_escape_string($this->database, substr(basename($file['name'], ".$extension"), 0, 30));
+			if ($info['title']==='') $info['title'] = mysqli_real_escape_string($this->database, substr(basename($file['name'], $extension), 0, 30));
 
 			# Use description parameter if set
 			if ($description==='') $description = $info['description'];
