@@ -295,7 +295,7 @@ class Album extends Module {
 			$extension = getExtension($photo->url);
 
 			# Set title for photo
-			$zipFileName = $zipTitle . '/' . $photo->title . '.' . $extension;
+			$zipFileName = $zipTitle . '/' . $photo->title . $extension;
 
 			# Check for duplicates
 			if (!empty($files)) {
