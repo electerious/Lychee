@@ -267,7 +267,7 @@ album = {
 					view.album.description();
 				}
 
-				params = "setAlbumDescription&albumID=" + photoID + "&description=" + escape(description);
+				params = "setAlbumDescription&albumID=" + photoID + "&description=" + escape(encodeURI(description));
 				lychee.api(params, function(data) {
 
 					if (data!==true) lychee.error(null, params, data);

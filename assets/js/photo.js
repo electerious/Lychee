@@ -352,7 +352,7 @@ photo = {
 					view.photo.description();
 				}
 
-				params = "setPhotoDescription&photoID=" + photoID + "&description=" + escape(description);
+				params = "setPhotoDescription&photoID=" + photoID + "&description=" + escape(encodeURI(description));
 				lychee.api(params, function(data) {
 
 					if (data!==true) lychee.error(null, params, data);
