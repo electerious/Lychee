@@ -237,6 +237,12 @@ class Album extends Module {
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
 
+		# Illicit chars
+		$badChars =	array_merge(
+						array_map('chr', range(0,31)),
+						array("<", ">", ":", '"', "/", "\\", "|", "?", "*")
+					);
+
 		# Photos query
 		switch($this->albumIDs) {
 			case 's':
@@ -255,6 +261,10 @@ class Album extends Module {
 		# Set title
 		$album = $this->database->query("SELECT title FROM lychee_albums WHERE id = '$this->albumIDs' LIMIT 1;");
 		if ($this->albumIDs!=0&&is_numeric($this->albumIDs)) $zipTitle = $album->fetch_object()->title;
+
+		# Parse title
+		$zipTitle = str_replace($badChars, '', $zipTitle);
+
 		$filename = LYCHEE_DATA . $zipTitle . '.zip';
 
 		# Create zip
@@ -281,10 +291,6 @@ class Album extends Module {
 			$photo->url = LYCHEE_UPLOADS_BIG . $photo->url;
 
 			# Parse title
-			$badChars =	array_merge(
-							array_map('chr', range(0,31)),
-							array("<", ">", ":", '"', "/", "\\", "|", "?", "*")
-						);
 			$photo->title = str_replace($badChars, '', $photo->title);
 			if (!isset($photo->title)||$photo->title==='') $photo->title = 'Untitled';
 
