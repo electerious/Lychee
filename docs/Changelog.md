@@ -9,6 +9,7 @@ Released -
 - `New` Logging-System
 - `New` Blowfish hash instead of MD5 for all new passwords (thanks @bb-Ricardo)
 - `New` Compile Lychee using Grunt (with npm and bower)
+- `New` Open full photo without making the photo public
 - `Improved` Shortcuts
 - `Improved` Album share dialog
 - `Improved` Database update mechanism
@@ -16,7 +17,7 @@ Released -
 - `Improved` EXIF parsing
 - `Improved` URL and Server import (thanks @djdallmann)
 - `Improved` Check permissions on upload
-- `Fixed` Wrong capture date in InfoBox
+- `Fixed` Wrong capture date in Infobox
 - `Fixed` Sorting by takedate
 
 ## v2.1.1
