@@ -70,12 +70,18 @@ class Settings extends Module {
 
 		# Parse
 		$username = htmlentities($username);
-		if (strlen($username)>50) return false;
+		if (strlen($username)>50) {
+			Log::notice($this->database, __METHOD__, __LINE__, 'Username is longer than 50 chars');
+			return false;
+		}
 
 		# Execute query
 		$result = $this->database->query("UPDATE lychee_settings SET value = '$username' WHERE `key` = 'username';");
 
-		if (!$result) return false;
+		if (!$result) {
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			return false;
+		}
 		return true;
 
 	}
@@ -90,7 +96,10 @@ class Settings extends Module {
 		# Execute query
 		$result = $this->database->query("UPDATE lychee_settings SET value = '$password' WHERE `key` = 'password';");
 
-		if (!$result) return false;
+		if (!$result) {
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			return false;
+		}
 		return true;
 
 	}
@@ -100,12 +109,18 @@ class Settings extends Module {
 		# Check dependencies
 		$this->dependencies(isset($this->database, $key));
 
-		if (strlen($key)<1||strlen($key)>50) return false;
+		if (strlen($key)<1||strlen($key)>50) {
+			Log::notice($this->database, __METHOD__, __LINE__, 'Dropbox key is either too short or too long');
+			return false;
+		}
 
 		# Execute query
 		$result = $this->database->query("UPDATE lychee_settings SET value = '$key' WHERE `key` = 'dropboxKey';");
 
-		if (!$result) return false;
+		if (!$result) {
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			return false;
+		}
 		return true;
 
 	}
@@ -163,7 +178,10 @@ class Settings extends Module {
 		# Execute query
 		$result = $this->database->query("UPDATE lychee_settings SET value = '$sorting' WHERE `key` = 'sorting';");
 
-		if (!$result) return false;
+		if (!$result) {
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			return false;
+		}
 		return true;
 
 	}

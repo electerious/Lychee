@@ -7,9 +7,15 @@
 ###
 
 $result = $database->query("ALTER TABLE `lychee_settings` CHANGE `value` `value` VARCHAR( 200 ) NULL DEFAULT ''");
-if (!$result) return false;
+if (!$result) {
+	Log::error($database, 'update_020101', __LINE__, 'Could not update database (' . $database->error . ')');
+	return false;
+}
 
 $result = $database->query("UPDATE lychee_settings SET value = '020101' WHERE `key` = 'version';");
-if (!$result) return false;
+if (!$result) {
+	Log::error($database, 'update_020101', __LINE__, 'Could not update database (' . $database->error . ')');
+	return false;
+}
 
 ?>

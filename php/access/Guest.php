@@ -16,7 +16,7 @@ class Guest extends Access {
 		switch ($fn) {
 
 			# Album functions
-			case 'getAlbums':		$this->getAlbums(); break;
+			case 'getAlbums':			$this->getAlbums(); break;
 			case 'getAlbum':			$this->getAlbum(); break;
 			case 'checkAlbumAccess':	$this->checkAlbumAccess(); break;
 
@@ -25,7 +25,8 @@ class Guest extends Access {
 
 			# Session functions
 			case 'init':				$this->init(); break;
-			case 'login':			$this->login(); break;
+			case 'login':				$this->login(); break;
+			case 'logout':				$this->logout(); break;
 
 			# $_GET functions
 			case 'getAlbumArchive':	$this->getAlbumArchive(); break;
@@ -118,6 +119,13 @@ class Guest extends Access {
 		Module::dependencies(isset($_POST['user'], $_POST['password']));
 		$session = new Session($this->plugins, $this->settings);
 		echo $session->login($_POST['user'], $_POST['password']);
+
+	}
+
+	private function logout() {
+
+		$session = new Session($this->plugins, $this->settings);
+		echo $session->logout();
 
 	}
 

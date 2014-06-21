@@ -31,8 +31,12 @@ class Session extends Module {
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Update
-		if (!isset($this->settings['version'])||$this->settings['version']!==$version)
-			if (!Database::update($database, $dbName, @$this->settings['version'])) exit('Error: Updating the database failed!');
+		if (!isset($this->settings['version'])||$this->settings['version']!==$version) {
+			if (!Database::update($database, $dbName, @$this->settings['version'])) {
+				Log::error($database, __METHOD__, __LINE__, 'Updating the database failed');
+				exit('Error: Updating the database failed!');
+			}
+		}
 
 		# Return settings
 		$return['config'] = $this->settings;

@@ -140,16 +140,28 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 			$query	= @file_get_contents($file);
 
 			# Create table
-			if (!isset($query)||$query===false) return false;
-			if (!$database->query($query)) return false;
+			if (!isset($query)||$query===false) {
+				Log::error($database, __METHOD__, __LINE__, 'Could not load query for lychee_settings');
+				return false;
+			}
+			if (!$database->query($query)) {
+				Log::error($database, __METHOD__, __LINE__, $database->error);
+				return false;
+			}
 
 			# Read file
 			$file	= __DIR__ . '/../database/settings_content.sql';
 			$query	= @file_get_contents($file);
 
 			# Add content
-			if (!isset($query)||$query===false) return false;
-			if (!$database->query($query)) return false;
+			if (!isset($query)||$query===false) {
+				Log::error($database, __METHOD__, __LINE__, 'Could not load content-query for lychee_settings');
+				return false;
+			}
+			if (!$database->query($query)) {
+				Log::error($database, __METHOD__, __LINE__, $database->error);
+				return false;
+			}
 
 		}
 
@@ -161,8 +173,14 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 			$query	= @file_get_contents($file);
 
 			# Create table
-			if (!isset($query)||$query===false) return false;
-			if (!$database->query($query)) return false;
+			if (!isset($query)||$query===false) {
+				Log::error($database, __METHOD__, __LINE__, 'Could not load query for lychee_albums');
+				return false;
+			}
+			if (!$database->query($query)) {
+				Log::error($database, __METHOD__, __LINE__, $database->error);
+				return false;
+			}
 
 		}
 
@@ -174,8 +192,14 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 			$query	= @file_get_contents($file);
 
 			# Create table
-			if (!isset($query)||$query===false) return false;
-			if (!$database->query($query)) return false;
+			if (!isset($query)||$query===false) {
+				Log::error($database, __METHOD__, __LINE__, 'Could not load query for lychee_photos');
+				return false;
+			}
+			if (!$database->query($query)) {
+				Log::error($database, __METHOD__, __LINE__, $database->error);
+				return false;
+			}
 
 		}
 

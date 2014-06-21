@@ -156,13 +156,13 @@
 		margin-top: -1px;
 		margin-left: 12px;
 		padding: 12px 7px 3px 7px;
-		box-shadow: 0px 0px 3px #000;
+		box-shadow: 0px 0px 3px rgba(0, 0, 0, .8);
 		border-radius: 0px 0px 3px 3px;
 		border: 1px solid #fff;
 		border-top: none;
 		color: #fff;
 		font-size: 24px;
-		text-shadow: 0px 1px 0px #000;
+		text-shadow: 0px 1px 0px rgba(0, 0, 0, .4);
 		opacity: .9;
 	}
 	.album .badge.icon-star,
@@ -236,7 +236,7 @@
 		color: #fff;
 		font-size: 14px;
 		font-weight: bold;
-		text-shadow: 0px -1px 0px #000;
+		text-shadow: 0px -1px 0px rgba(0, 0, 0, .8);
 	}
 
 	/* No Content ------------------------------------------------*/

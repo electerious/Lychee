@@ -20,7 +20,7 @@ $(document).ready(function(){
 	$(document).on("mouseup", multiselect.getSelection);
 
 	/* Header */
-	$("#hostedwith").on(event_name, function() { window.open(lychee.website,"_newtab") });
+	$("#hostedwith").on(event_name, function() { window.open(lychee.website) });
 	$("#button_signin").on(event_name, lychee.loginDialog);
 	$("#button_settings").on("click", contextMenu.settings);
 	$("#button_share").on(event_name, function(e) {

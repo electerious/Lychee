@@ -333,7 +333,7 @@ build = {
 			["Tags", build.tags(photoJSON.tags, forView)]
 		];
 
-		if ((photoJSON.takedate+photoJSON.make+photoJSON.model+photoJSON.shutter+photoJSON.aperture+photoJSON.focal+photoJSON.iso)!="") {
+		if ((photoJSON.takestamp+photoJSON.make+photoJSON.model+photoJSON.shutter+photoJSON.aperture+photoJSON.focal+photoJSON.iso)!=="null") {
 
 			infos = infos.concat([
 				["", "Camera"],

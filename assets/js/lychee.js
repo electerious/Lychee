@@ -8,7 +8,7 @@
 var lychee = {
 
 	title: "",
-	version: "2.5 b2",
+	version: "2.5 rc1",
 	version_code: "020500",
 
 	api_path: "php/api.php",
@@ -21,7 +21,7 @@ var lychee = {
 
 	publicMode: false,
 	viewMode: false,
-	debugMode: true,
+	debugMode: false,
 
 	username: "",
 	checkForUpdates: false,
@@ -169,6 +169,7 @@ var lychee = {
 			photoID = "",
 			hash = document.location.hash.replace("#", "").split("/");
 
+		$(".no_content").remove();
 		contextMenu.close();
 		multiselect.close();
 
@@ -341,6 +342,14 @@ var lychee = {
 			settings.setDropboxKey(callback);
 
 		}
+
+	},
+
+	removeHTML: function(html) {
+
+		var tmp = document.createElement("DIV");
+		tmp.innerHTML = html;
+		return tmp.textContent || tmp.innerText;
 
 	},
 

@@ -11,7 +11,7 @@
 	height: 100%;
 	top: 0px;
 	left: 0px;
-	background-color: rgba(0,0,0,.85);
+	background-color: rgba(0,0,0,.8);
 }
 #infobox {
 	z-index: 4;
@@ -77,7 +77,7 @@
 		font-size: 16px;
 		font-weight: bold;
 		text-align: center;
-		text-shadow: 0px -1px 0px #000;
+		text-shadow: 0px -1px 0px rgba(0, 0, 0, .8);
 	}
 	#infobox .header a {
 		float: right;
@@ -85,7 +85,7 @@
 		color: #fff;
 		font-size: 20px;
 		font-weight: bold;
-		text-shadow: 0px -1px 0px #000;
+		text-shadow: 0px -1px 0px rgba(0, 0, 0, .8);
 		opacity: .5;
 		cursor: pointer;
 	}
@@ -105,7 +105,7 @@
 		color: #fff;
 		font-size: 14px;
 		font-weight: bold;
-		text-shadow: 0px -1px 0px #000;
+		text-shadow: 0px -1px 0px rgba(0, 0, 0, .8);
 	}
 
 	/* Table ------------------------------------------------*/

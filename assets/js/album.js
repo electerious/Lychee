@@ -207,7 +207,14 @@ album = {
 		buttons = [
 			["Set Title", function() {
 
-				newTitle = ($(".message input.text").val()==="") ? "Untitled" : $(".message input.text").val();
+				// Get input
+				newTitle = $(".message input.text").val();
+
+				// Remove html from input
+				newTitle = lychee.removeHTML(newTitle);
+
+				// Set to Untitled when empty
+				newTitle = (newTitle==="") ? "Untitled" : newTitle;
 
 				if (visible.album()) {
 
@@ -249,14 +256,18 @@ album = {
 		buttons = [
 			["Set Description", function() {
 
+				// Get input
 				description = $(".message input.text").val();
+
+				// Remove html from input
+				description = lychee.removeHTML(description);
 
 				if (visible.album()) {
 					album.json.description = description;
 					view.album.description();
 				}
 
-				params = "setAlbumDescription&albumID=" + photoID + "&description=" + escape(description);
+				params = "setAlbumDescription&albumID=" + photoID + "&description=" + escape(encodeURI(description));
 				lychee.api(params, function(data) {
 
 					if (data!==true) lychee.error(null, params, data);
@@ -332,7 +343,7 @@ album = {
 				link = "http://www.facebook.com/sharer.php?u=" + encodeURI(url) + "&t=" + encodeURI(album.json.title);
 				break;
 			case 2:
-				link = "mailto:?subject=" + encodeURI(album.json.title) + "&body=" + encodeURI("Hi! Check this out: " + url);
+				link = "mailto:?subject=" + encodeURI(album.json.title) + "&body=" + encodeURI(url);
 				break;
 			default:
 				link = "";

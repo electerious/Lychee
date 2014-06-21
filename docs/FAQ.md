@@ -13,6 +13,7 @@ If possible, change these settings directly in your `php.ini`. We recommend to i
 	upload_max_size = 200M
 	upload_max_filesize = 20M
 	max_file_uploads = 100
+	memory_limit = 256M
 
 #### Which browsers are supported?
 Lychee supports the latest versions of Google Chrome, Apple Safari, Mozilla Firefox and Opera. Photos you share with others can be viewed from every browser.
@@ -34,6 +35,12 @@ To backup your Lychee installation you need to do the following steps:
 	- INSERT INTO lychee_photos_backup SELECT * FROM lychee_photos;
 	- CREATE TABLE lychee_settings_backup LIKE lychee_settings;
 	- INSERT INTO lychee_settings_backup SELECT * FROM lychee_settings;
+	
+#### Can I use my existing folder-structure?
+No. Lychee has it's own folder-structure and database. Please upload or import all your photos to use them.
 
 #### Can I upload videos?
 No. Video support is not planned.
+
+#### What's the advantage of buying Lychee?
+Lychee is completely free to use for personal usage. However, if you like Lychee or want to use in commercially, you need to buy Lychee from [our site](http://lychee.electerious.com). I hope you appreciate my work and support further development by buying a license.

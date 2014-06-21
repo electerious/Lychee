@@ -86,8 +86,9 @@ contextMenu = {
 			function() { settings.setLogin() },
 			function() { settings.setSorting() },
 			function() { settings.setDropboxKey() },
-			function() { window.open(lychee.website, "_newtab"); },
-			function() { window.open("plugins/check/", "_newtab"); },
+			function() { window.open(lychee.website); },
+			function() { window.open("plugins/check/"); },
+			function() { window.open("plugins/displaylog/"); },
 			function() { lychee.logout() }
 		];
 
@@ -98,8 +99,9 @@ contextMenu = {
 			["separator", -1],
 			["<a class='icon-info-sign'></a> About Lychee", 3],
 			["<a class='icon-dashboard'></a> Diagnostics", 4],
+			["<a class='icon-list'></a> Show Log", 5],
 			["separator", -1],
-			["<a class='icon-signout'></a> Sign Out", 5]
+			["<a class='icon-signout'></a> Sign Out", 6]
 		];
 
 		contextMenu.show(items, mouse_x, mouse_y, "right");
@@ -217,7 +219,7 @@ contextMenu = {
 			items;
 
 		contextMenu.fns = [
-			function() { window.open(photo.getDirectLink(),"_newtab") },
+			function() { window.open(photo.getDirectLink()) },
 			function() { photo.getArchive(photoID) }
 		];
 
@@ -276,7 +278,7 @@ contextMenu = {
 			function() { photo.share(photoID, 1) },
 			function() { photo.share(photoID, 2) },
 			function() { photo.share(photoID, 3) },
-			function() { window.open(photo.getDirectLink(),"_newtab") }
+			function() { window.open(photo.getDirectLink()) }
 		];
 
 		link = photo.getViewLink(photoID);

@@ -207,7 +207,11 @@ photo = {
 		buttons = [
 			["Set Title", function() {
 
+				// Get input
 				newTitle = $(".message input.text").val();
+
+				// Remove html from input
+				newTitle = lychee.removeHTML(newTitle);
 
 				if (visible.photo()) {
 					photo.json.title = (newTitle==="") ? "Untitled" : newTitle;
@@ -337,14 +341,18 @@ photo = {
 		buttons = [
 			["Set Description", function() {
 
+				// Get input
 				description = $(".message input.text").val();
+
+				// Remove html from input
+				description = lychee.removeHTML(description);
 
 				if (visible.photo()) {
 					photo.json.description = description;
 					view.photo.description();
 				}
 
-				params = "setPhotoDescription&photoID=" + photoID + "&description=" + escape(description);
+				params = "setPhotoDescription&photoID=" + photoID + "&description=" + escape(encodeURI(description));
 				lychee.api(params, function(data) {
 
 					if (data!==true) lychee.error(null, params, data);
@@ -409,6 +417,9 @@ photo = {
 		// Parse tags
 		tags = tags.replace(/(\ ,\ )|(\ ,)|(,\ )|(,{1,}\ {0,})|(,$|^,)/g, ',');
 		tags = tags.replace(/,$|^,|(\ ){0,}$/g, '');
+
+		// Remove html from input
+		tags = lychee.removeHTML(tags);
 
 		if (visible.photo()) {
 			photo.json.tags = tags;

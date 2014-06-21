@@ -110,17 +110,14 @@ class Photo extends Module {
 			$info = $this->getInfo($path);
 
 			# Use title of file if IPTC title missing
-			if ($info['title']==='') $info['title'] = mysqli_real_escape_string($this->database, substr(basename($file['name'], ".$extension"), 0, 30));
+			if ($info['title']==='') $info['title'] = mysqli_real_escape_string($this->database, substr(basename($file['name'], $extension), 0, 30));
 
 			# Use description parameter if set
 			if ($description==='') $description = $info['description'];
 
 			# Set orientation based on EXIF data
 			if ($file['type']==='image/jpeg'&&isset($info['orientation'])&&$info['orientation']!==''&&isset($info['width'])&&isset($info['height'])) {
-				if (!$this->adjustFile($path, $info)) {
-					Log::error($this->database, __METHOD__, __LINE__, 'Could not adjust photo');
-					exit('Error: Could not adjust photo!');
-				}
+				if (!$this->adjustFile($path, $info)) Log::notice($this->database, __METHOD__, __LINE__, 'Could not adjust photo (' . $info['title'] . ')');
 			}
 
 			# Set original date
@@ -621,7 +618,7 @@ class Photo extends Module {
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
-		if ($error) {
+		if ($error===true) {
 			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
 			return false;
 		}
@@ -720,7 +717,7 @@ class Photo extends Module {
 		$tags = preg_replace('/(\ ,\ )|(\ ,)|(,\ )|(,{1,}\ {0,})|(,$|^,)/', ',', $tags);
 		$tags = preg_replace('/,$|^,|(\ ){0,}$/', '', $tags);
 		if (strlen($tags)>1000) {
-			Log::error($this->database, __METHOD__, __LINE__, 'Length of tags higher than 1000');
+			Log::notice($this->database, __METHOD__, __LINE__, 'Length of tags higher than 1000');
 			return false;
 		}
 
