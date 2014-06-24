@@ -1,6 +1,6 @@
 ## v2.5
 
-Released -
+Released June 24, 2014
 
 - `New` Swipe gestures on mobile devices
 - `New` Plugin-System
