@@ -22,7 +22,7 @@ password = {
 					view.album.password();
 				}
 
-				params = "setAlbumPassword&albumID=" + albumID + "&password=" + hex_md5($(".message input.text").val());
+				params = "setAlbumPassword&albumID=" + albumID + "&password=" + md5($(".message input.text").val());
 				lychee.api(params, function(data) {
 
 					if (data!==true) lychee.error(null, params, data);
@@ -58,11 +58,11 @@ password = {
 		} else {
 
 			// Check password
-			params = "checkAlbumAccess&albumID=" + albumID + "&password=" + hex_md5(passwd);
+			params = "checkAlbumAccess&albumID=" + albumID + "&password=" + md5(passwd);
 			lychee.api(params, function(data) {
 
 				if (data===true) {
-					password.value = hex_md5(passwd);
+					password.value = md5(passwd);
 					callback();
 				} else {
 					lychee.goto("");

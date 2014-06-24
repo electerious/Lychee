@@ -114,7 +114,7 @@ build = {
 			if (visibleControls)
 				view += "<div id='image' style='background-image: url(" + photoJSON.url + ")'></div>";
 			else
-				view += "<div id='image' style='background-image: url(" + photoJSON.url + "); top: 0px; right: 0px; bottom: 0px; left: 0px;'></div>";
+				view += "<div id='image' style='background-image: url(" + photoJSON.url + ");' class='full'></div>";
 
 		}
 
@@ -302,7 +302,7 @@ build = {
 
 		infos = [
 			["", "Basics"],
-			["Name", photoJSON.title + editTitleHTML],
+			["Title", photoJSON.title + editTitleHTML],
 			["Uploaded", photoJSON.sysdate],
 			["Description", photoJSON.description + editDescriptionHTML],
 			["", "Image"],
@@ -312,7 +312,7 @@ build = {
 			["Tags", build.tags(photoJSON.tags, forView)]
 		];
 
-		if ((photoJSON.takedate+photoJSON.make+photoJSON.model+photoJSON.shutter+photoJSON.aperture+photoJSON.focal+photoJSON.iso)!="") {
+		if ((photoJSON.takestamp+photoJSON.make+photoJSON.model+photoJSON.shutter+photoJSON.aperture+photoJSON.focal+photoJSON.iso)!=="null") {
 
 			infos = infos.concat([
 				["", "Camera"],
@@ -414,7 +414,7 @@ build = {
 
 		infos = [
 			["", "Basics"],
-			["Name", albumJSON.title + editTitleHTML],
+			["Title", albumJSON.title + editTitleHTML],
 			["Description", albumJSON.description + editDescriptionHTML],
 			["", "Album"],
 			["Created", albumJSON.sysdate],

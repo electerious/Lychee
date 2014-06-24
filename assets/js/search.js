@@ -45,14 +45,14 @@ search = {
 					else if (photosData==="") code = build.divider("Albums")+albumsData;
 					else code = build.divider("Photos")+photosData+build.divider("Albums")+albumsData;
 
-					if (search.code!==hex_md5(code)) {
+					if (search.code!==md5(code)) {
 
 						$(".no_content").remove();
 
 						lychee.animate(".album, .photo", "contentZoomOut");
 						lychee.animate(".divider", "fadeOut");
 
-						search.code = hex_md5(code);
+						search.code = md5(code);
 
 						setTimeout(function() {
 

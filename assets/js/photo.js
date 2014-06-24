@@ -56,6 +56,68 @@ photo = {
 
 	},
 
+	previous: function(animate) {
+
+		var delay = 0;
+
+		if (photo.getID()!==false&&
+			album.json&&
+			album.json.content[photo.getID()]&&
+			album.json.content[photo.getID()].previousPhoto!=="") {
+
+				if (animate===true) {
+
+					delay = 200;
+
+					$("#image").css({
+						WebkitTransform: 'translateX(100%)',
+						MozTransform: 'translateX(100%)',
+						transform: 'translateX(100%)',
+						opacity: 0
+					});
+
+				}
+
+				setTimeout(function() {
+					if (photo.getID()===false) return false;
+					lychee.goto(album.getID() + "/" + album.json.content[photo.getID()].previousPhoto)
+				}, delay);
+
+			}
+
+	},
+
+	next: function(animate) {
+
+		var delay = 0;
+
+		if (photo.getID()!==false&&
+			album.json&&
+			album.json.content[photo.getID()]&&
+			album.json.content[photo.getID()].nextPhoto!=="") {
+
+				if (animate===true) {
+
+					delay = 200;
+
+					$("#image").css({
+						WebkitTransform: 'translateX(-100%)',
+						MozTransform: 'translateX(-100%)',
+						transform: 'translateX(-100%)',
+						opacity: 0
+					});
+
+				}
+
+				setTimeout(function() {
+					if (photo.getID()===false) return false;
+					lychee.goto(album.getID() + "/" + album.json.content[photo.getID()].nextPhoto);
+				}, delay);
+
+			}
+
+	},
+
 	delete: function(photoIDs) {
 
 		var params,
@@ -145,7 +207,11 @@ photo = {
 		buttons = [
 			["Set Title", function() {
 
+				// Get input
 				newTitle = $(".message input.text").val();
+
+				// Remove html from input
+				newTitle = lychee.removeHTML(newTitle);
 
 				if (visible.photo()) {
 					photo.json.title = (newTitle==="") ? "Untitled" : newTitle;
@@ -256,7 +322,7 @@ photo = {
 		album.json.content[photoID].public = (album.json.content[photoID].public==0) ? 1 : 0;
 		view.album.content.public(photoID);
 
-		params = "setPhotoPublic&photoID=" + photoID + "&url=" + photo.getViewLink(photoID);
+		params = "setPhotoPublic&photoID=" + photoID;
 		lychee.api(params, function(data) {
 
 			if (data!==true) lychee.error(null, params, data);
@@ -275,14 +341,18 @@ photo = {
 		buttons = [
 			["Set Description", function() {
 
+				// Get input
 				description = $(".message input.text").val();
+
+				// Remove html from input
+				description = lychee.removeHTML(description);
 
 				if (visible.photo()) {
 					photo.json.description = description;
 					view.photo.description();
 				}
 
-				params = "setPhotoDescription&photoID=" + photoID + "&description=" + escape(description);
+				params = "setPhotoDescription&photoID=" + photoID + "&description=" + escape(encodeURI(description));
 				lychee.api(params, function(data) {
 
 					if (data!==true) lychee.error(null, params, data);
@@ -300,7 +370,8 @@ photo = {
 	editTags: function(photoIDs) {
 
 		var oldTags = "",
-			tags = "";
+			tags = "",
+			buttons;
 
 		if (!photoIDs) return false;
 		if (photoIDs instanceof Array===false) photoIDs = [photoIDs];
@@ -345,7 +416,10 @@ photo = {
 
 		// Parse tags
 		tags = tags.replace(/(\ ,\ )|(\ ,)|(,\ )|(,{1,}\ {0,})|(,$|^,)/g, ',');
-		tags = tags.replace(/,$|^,/g, '');
+		tags = tags.replace(/,$|^,|(\ ){0,}$/g, '');
+
+		// Remove html from input
+		tags = lychee.removeHTML(tags);
 
 		if (visible.photo()) {
 			photo.json.tags = tags;

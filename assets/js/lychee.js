@@ -7,7 +7,9 @@
 
 var lychee = {
 
-	version: "2.1.1",
+	title: "",
+	version: "2.5 rc1",
+	version_code: "020500",
 
 	api_path: "php/api.php",
 	update_path: "http://lychee.electerious.com/version/index.php",
@@ -38,7 +40,7 @@ var lychee = {
 
 		var params;
 
-		params = "init&version=" + escape(lychee.version);
+		params = "init&version=" + lychee.version_code;
 		lychee.api(params, function(data) {
 
 			if (data.loggedIn!==true) {
@@ -86,6 +88,7 @@ var lychee = {
 
 				if (typeof data==="string"&&data.substring(0, 7)==="Error: ") {
 					lychee.error(data.substring(7, data.length), params, data);
+					upload.close(true);
 					return false;
 				}
 
@@ -112,13 +115,13 @@ var lychee = {
 	login: function() {
 
 		var user = $("input#username").val(),
-			password = hex_md5($("input#password").val()),
+			password = md5($("input#password").val()),
 			params;
 
 		params = "login&user=" + user + "&password=" + password;
 		lychee.api(params, function(data) {
 			if (data===true) {
-				localStorage.setItem("username", user);
+				localStorage.setItem("lychee_username", user);
 				window.location.reload();
 			} else {
 				$("#password").val("").addClass("error").focus();
@@ -135,7 +138,7 @@ var lychee = {
 		$("body").append(build.signInModal());
 		$("#username").focus();
 		if (localStorage) {
-			local_username = localStorage.getItem("username");
+			local_username = localStorage.getItem("lychee_username");
 			if (local_username!==null) {
 				if (local_username.length>0) $("#username").val(local_username);
 				$("#password").focus();
@@ -166,6 +169,7 @@ var lychee = {
 			photoID = "",
 			hash = document.location.hash.replace("#", "").split("/");
 
+		$(".no_content").remove();
 		contextMenu.close();
 		multiselect.close();
 
@@ -224,8 +228,10 @@ var lychee = {
 
 	setTitle: function(title, editable) {
 
-		if (title==="Albums") document.title = "Lychee";
-		else document.title = "Lychee - " + title;
+		if (lychee.title==="") lychee.title = document.title;
+
+		if (title==="Albums") document.title = lychee.title;
+		else document.title = lychee.title + " - " + title;
 
 		if (editable) $("#title").addClass("editable");
 		else $("#title").removeClass("editable");
@@ -248,10 +254,12 @@ var lychee = {
 			.off("drop");
 
 		Mousetrap
-			.unbind('n')
-			.unbind('u')
-			.unbind('s')
-			.unbind('backspace');
+			.unbind(['u', 'ctrl+u'])
+			.unbind(['s', 'ctrl+s'])
+			.unbind(['r', 'ctrl+r'])
+			.unbind(['d', 'ctrl+d'])
+			.unbind(['t', 'ctrl+t'])
+			.unbind(['command+backspace', 'ctrl+backspace']);
 
 		if (mode==="public") {
 
@@ -325,6 +333,14 @@ var lychee = {
 			settings.setDropboxKey(callback);
 
 		}
+
+	},
+
+	removeHTML: function(html) {
+
+		var tmp = document.createElement("DIV");
+		tmp.innerHTML = html;
+		return tmp.textContent || tmp.innerText;
 
 	},
 

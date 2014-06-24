@@ -11,49 +11,40 @@ view = {
 
 		show: function() {
 
+			var newMargin = -1*($("#imageview #image").height()/2)+20;
+
 			clearTimeout($(window).data("timeout"));
 
-			if (visible.photo()) {
-				lychee.imageview.removeClass("full");
-				lychee.loadingBar.css("opacity", 1);
-				lychee.header.removeClass("hidden");
-				if ($("#imageview #image.small").length>0) {
-					$("#imageview #image").css({
-						marginTop: -1*($("#imageview #image").height()/2)+20
-					});
-				} else {
-					$("#imageview #image").css({
-						top: 60,
-						right: 30,
-						bottom: 30,
-						left: 30
-					});
-				}
-			}
+			lychee.imageview.removeClass("full");
+			lychee.header.removeClass("hidden");
+			lychee.loadingBar.css("opacity", 1);
+
+			if ($("#imageview #image.small").length>0) $("#imageview #image").css('margin-top', newMargin);
+			else $("#imageview #image").removeClass('full');
 
 		},
 
-		hide: function() {
+		hide: function(e, delay) {
+
+			var newMargin = -1*($("#imageview #image").height()/2);
+
+			if (delay===undefined) delay = 500;
 
 			if (visible.photo()&&!visible.infobox()&&!visible.contextMenu()&&!visible.message()) {
+
 				clearTimeout($(window).data("timeout"));
+
 				$(window).data("timeout", setTimeout(function() {
+
 					lychee.imageview.addClass("full");
-					lychee.loadingBar.css("opacity", 0);
 					lychee.header.addClass("hidden");
-					if ($("#imageview #image.small").length>0) {
-						$("#imageview #image").css({
-							marginTop: -1*($("#imageview #image").height()/2)
-						});
-					} else {
-						$("#imageview #image").css({
-							top: 0,
-							right: 0,
-							bottom: 0,
-							left: 0
-						});
-					}
-				}, 500));
+					lychee.loadingBar.css("opacity", 0);
+
+					if ($("#imageview #image.small").length>0) $("#imageview #image").css('margin-top', newMargin);
+					else $("#imageview #image").addClass('full');
+
+				}, delay));
+
 			}
 
 		},
@@ -229,7 +220,7 @@ view = {
 						lychee.setTitle("Unsorted", false);
 						break;
 					default:
-						if (album.json.init) $("#infobox .attr_name").html(album.json.title + " " + build.editIcon("edit_title_album"));
+						if (album.json.init) $("#infobox .attr_title").html(album.json.title + " " + build.editIcon("edit_title_album"));
 						lychee.setTitle(album.json.title, true);
 						break;
 				}
@@ -381,7 +372,7 @@ view = {
 
 		hide: function() {
 
-			if (!visible.controls()) view.header.show();
+			view.header.show();
 			if (visible.infobox) view.infobox.hide();
 
 			lychee.content.removeClass("view");
@@ -406,7 +397,7 @@ view = {
 
 		title: function() {
 
-			if (photo.json.init) $("#infobox .attr_name").html(photo.json.title + " " + build.editIcon("edit_title"));
+			if (photo.json.init) $("#infobox .attr_title").html(photo.json.title + " " + build.editIcon("edit_title"));
 			lychee.setTitle(photo.json.title, true);
 
 		},

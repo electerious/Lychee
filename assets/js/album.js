@@ -96,7 +96,8 @@ album = {
 
 		var title,
 			params,
-			buttons;
+			buttons,
+			isNumber = function(n) { return !isNaN(parseFloat(n)) && isFinite(n) };
 
 		buttons = [
 			["Create Album", function() {
@@ -110,10 +111,10 @@ album = {
 				params = "addAlbum&title=" + escape(encodeURI(title));
 				lychee.api(params, function(data) {
 
-					if (data!==false) {
-						if (data===true) data = 1; // Avoid first album to be true
-						lychee.goto(data);
-					} else lychee.error(null, params, data);
+					if (data===true) data = 1; // Avoid first album to be true
+
+					if (data!==false&&isNumber(data)) lychee.goto(data);
+					else lychee.error(null, params, data);
 
 				});
 
@@ -206,7 +207,14 @@ album = {
 		buttons = [
 			["Set Title", function() {
 
-				newTitle = ($(".message input.text").val()==="") ? "Untitled" : $(".message input.text").val();
+				// Get input
+				newTitle = $(".message input.text").val();
+
+				// Remove html from input
+				newTitle = lychee.removeHTML(newTitle);
+
+				// Set to Untitled when empty
+				newTitle = (newTitle==="") ? "Untitled" : newTitle;
 
 				if (visible.album()) {
 
@@ -248,14 +256,18 @@ album = {
 		buttons = [
 			["Set Description", function() {
 
+				// Get input
 				description = $(".message input.text").val();
+
+				// Remove html from input
+				description = lychee.removeHTML(description);
 
 				if (visible.album()) {
 					album.json.description = description;
 					view.album.description();
 				}
 
-				params = "setAlbumDescription&albumID=" + photoID + "&description=" + escape(description);
+				params = "setAlbumDescription&albumID=" + photoID + "&description=" + escape(encodeURI(description));
 				lychee.api(params, function(data) {
 
 					if (data!==true) lychee.error(null, params, data);
@@ -274,14 +286,29 @@ album = {
 
 		var params;
 
-		if ($(".message input.text").length>0&&$(".message input.text").val().length>0) {
+		if (!visible.message()&&album.json.public==0) {
 
-			params = "setAlbumPublic&albumID=" + albumID + "&password=" + hex_md5($(".message input.text").val());
+			modal.show("Share Album", "This album will be shared with one of the following properties:</p><form><div class='choice'><input type='radio' value='public' name='choice' checked><h2>Public</h2><p>Visible and accessible for everyone.</p></div><div class='choice'><input type='radio' value='password' name='choice'><h2>Password protected</h2><p>Not visible to visitors and only accessible with a valid password.<input class='text' type='password' placeholder='password' value='' style='display: none;'></p></div></form><p style='display: none;'>", [["Share Album", function() { album.setPublic(album.getID(), e) }], ["Cancel", function() {}]], -160);
+
+			$(".message .choice input:radio").on("change", function() {
+
+				if ($(this).val()==="password") $(".message .choice input.text").show();
+				else $(".message .choice input.text").hide();
+
+			});
+
+			return true;
+
+		}
+
+		if (visible.message()&&$(".message .choice input:checked").val()==="password") {
+
+			params = "setAlbumPublic&albumID=" + albumID + "&password=" + md5($(".message input.text").val());
 			album.json.password = true;
 
 		} else {
 
-			params = "setAlbumPublic&albumID=" + albumID;
+			params = "setAlbumPublic&albumID=" + albumID + "&password=";
 			album.json.password = false;
 
 		}
@@ -316,7 +343,7 @@ album = {
 				link = "http://www.facebook.com/sharer.php?u=" + encodeURI(url) + "&t=" + encodeURI(album.json.title);
 				break;
 			case 2:
-				link = "mailto:?subject=" + encodeURI(album.json.title) + "&body=" + encodeURI("Hi! Check this out: " + url);
+				link = "mailto:?subject=" + encodeURI(album.json.title) + "&body=" + encodeURI(url);
 				break;
 			default:
 				link = "";
