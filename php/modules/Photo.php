@@ -41,7 +41,7 @@ class Photo extends Module {
 	public function add($files, $albumID, $description = '', $tags = '') {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database));
+		self::dependencies(isset($this->database));
 
 		# Check permissions
 		if (hasPermissions(LYCHEE_UPLOADS_BIG)===false||hasPermissions(LYCHEE_UPLOADS_THUMB)===false) {
@@ -171,7 +171,7 @@ class Photo extends Module {
 	private function createThumb($url, $filename, $width = 200, $height = 200) {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->settings, $url, $filename));
+		self::dependencies(isset($this->database, $this->settings, $url, $filename));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -255,7 +255,7 @@ class Photo extends Module {
 	private function adjustFile($path, $info) {
 
 		# Check dependencies
-		$this->dependencies(isset($path, $info));
+		self::dependencies(isset($path, $info));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -369,7 +369,7 @@ class Photo extends Module {
 	public function get($albumID) {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->photoIDs));
+		self::dependencies(isset($this->database, $this->photoIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -410,7 +410,7 @@ class Photo extends Module {
 	private function getInfo($url) {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $url));
+		self::dependencies(isset($this->database, $url));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -504,7 +504,7 @@ class Photo extends Module {
 	public function getArchive() {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->photoIDs));
+		self::dependencies(isset($this->database, $this->photoIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -541,7 +541,7 @@ class Photo extends Module {
 	public function setTitle($title) {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->photoIDs));
+		self::dependencies(isset($this->database, $this->photoIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -566,7 +566,7 @@ class Photo extends Module {
 	public function setDescription($description) {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->photoIDs));
+		self::dependencies(isset($this->database, $this->photoIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -592,7 +592,7 @@ class Photo extends Module {
 	public function setStar() {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->photoIDs));
+		self::dependencies(isset($this->database, $this->photoIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -629,7 +629,7 @@ class Photo extends Module {
 	public function getPublic($password) {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->photoIDs));
+		self::dependencies(isset($this->database, $this->photoIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -657,7 +657,7 @@ class Photo extends Module {
 	public function setPublic() {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->photoIDs));
+		self::dependencies(isset($this->database, $this->photoIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -686,7 +686,7 @@ class Photo extends Module {
 	function setAlbum($albumID) {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->photoIDs));
+		self::dependencies(isset($this->database, $this->photoIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -708,7 +708,7 @@ class Photo extends Module {
 	public function setTags($tags) {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->photoIDs));
+		self::dependencies(isset($this->database, $this->photoIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -738,7 +738,7 @@ class Photo extends Module {
 	public function delete() {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->photoIDs));
+		self::dependencies(isset($this->database, $this->photoIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());

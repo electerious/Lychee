@@ -25,7 +25,7 @@ class Session extends Module {
 	public function init($database, $dbName, $public, $version) {
 
 		# Check dependencies
-		$this->dependencies(isset($this->settings, $public, $version));
+		self::dependencies(isset($this->settings, $public, $version));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -75,7 +75,7 @@ class Session extends Module {
 	public function login($username, $password) {
 
 		# Check dependencies
-		$this->dependencies(isset($this->settings, $username, $password));
+		self::dependencies(isset($this->settings, $username, $password));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());

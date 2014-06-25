@@ -29,7 +29,7 @@ class Album extends Module {
 	public function add($title = 'Untitled', $public = 0, $visible = 1) {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database));
+		self::dependencies(isset($this->database));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -55,7 +55,7 @@ class Album extends Module {
 	public function get() {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->settings, $this->albumIDs));
+		self::dependencies(isset($this->database, $this->settings, $this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -135,7 +135,7 @@ class Album extends Module {
 	public function getAll($public) {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->settings, $public));
+		self::dependencies(isset($this->database, $this->settings, $public));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -190,7 +190,7 @@ class Album extends Module {
 	private function getSmartInfo() {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->settings));
+		self::dependencies(isset($this->database, $this->settings));
 
 		# Unsorted
 		$unsorted	= $this->database->query("SELECT thumbUrl FROM lychee_photos WHERE album = 0 " . $this->settings['sorting']);
@@ -232,7 +232,7 @@ class Album extends Module {
 	public function getArchive() {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->database, $this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -346,7 +346,7 @@ class Album extends Module {
 	public function setTitle($title = 'Untitled') {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->database, $this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -371,7 +371,7 @@ class Album extends Module {
 	public function setDescription($description = '') {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->database, $this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -397,7 +397,7 @@ class Album extends Module {
 	public function getPublic() {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->database, $this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -419,7 +419,7 @@ class Album extends Module {
 	public function setPublic($password) {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->database, $this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -463,7 +463,7 @@ class Album extends Module {
 	public function setPassword($password) {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->database, $this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -497,7 +497,7 @@ class Album extends Module {
 	public function checkPassword($password) {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->database, $this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -518,7 +518,7 @@ class Album extends Module {
 	public function delete($albumIDs) {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->database, $this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
