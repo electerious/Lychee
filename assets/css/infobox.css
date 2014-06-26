@@ -43,6 +43,7 @@
 		height: 100%;
 		width: 300px;
 		overflow: scroll;
+		-webkit-overflow-scrolling: touch;
 	}
 	#infobox .edit {
 		display: inline;
