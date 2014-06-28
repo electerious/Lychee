@@ -18,11 +18,11 @@ If possible, change these settings directly in your `php.ini`. We recommend to i
 #### Which browsers are supported?
 Lychee supports the latest versions of Google Chrome, Apple Safari, Mozilla Firefox and Opera. Photos you share with others can be viewed from every browser.
 
-#### How can I set thumbnails for my albums?
-Thumbnails are chosen automatically by the photos you have starred and in the order you uploaded them. Star a photo inside an album to set it as a thumbnail.
-
 #### What is new?
 Take a look at the [Changelog](Changelog.md) to see what's new.
+
+#### How can I set thumbnails for my albums?
+Thumbnails are chosen automatically by the photos you have starred and in the order you uploaded them. Star a photo inside an album to set it as a thumbnail.
 
 #### How can I backup my installation?
 To backup your Lychee installation you need to do the following steps:
@@ -42,5 +42,8 @@ No. Lychee has it's own folder-structure and database. Please upload or import a
 #### Can I upload videos?
 No. Video support is not planned.
 
-#### What's the advantage of buying Lychee?
-Lychee is completely free to use for personal usage. However, if you like Lychee or want to use in commercially, you need to buy Lychee from [our site](http://lychee.electerious.com). I hope you appreciate my work and support further development by buying a license.
+#### Is it possible to create multiple users?
+[No, not yet.](https://github.com/electerious/Lychee/issues/132)
+
+#### Blank screen when viewing a photo using iOS
+There's a problem with images compressed by ImageOptim. [Read more.](https://github.com/electerious/Lychee/issues/175#issuecomment-47403992)
