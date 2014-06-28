@@ -148,6 +148,9 @@
 	.photo .overlay a {
 		margin: 155px 0px 5px 15px;
 	}
+		.photo .overlay a span {
+			margin: 0px 5px 0px 0px;
+		}
 
 	/* Badges ------------------------------------------------*/
 	.album .badge,

@@ -79,7 +79,7 @@ class Album extends Module {
 						$return = $albums->fetch_assoc();
 						$return['sysdate']		= date('d M. Y', $return['sysstamp']);
 						$return['password']		= ($return['password']=='' ? false : true);
-						$query = "SELECT id, title, tags, public, star, album, thumbUrl FROM lychee_photos WHERE album = '$this->albumIDs' " . $this->settings['sorting'];
+						$query = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp FROM lychee_photos WHERE album = '$this->albumIDs' " . $this->settings['sorting'];
 						break;
 
 		}
@@ -92,7 +92,12 @@ class Album extends Module {
 			# Parse
 			$photo['sysdate']			= date('d F Y', substr($photo['id'], 0, -4));
 			$photo['previousPhoto']		= $previousPhotoID;
-			$photo['nextPhoto']		= '';
+			$photo['nextPhoto']			= '';
+
+			if ($photo['takestamp']!=='0') {
+				$photo['cameraDate']	= 1;
+				$photo['sysdate']		= date('d F Y', $photo['takestamp']);
+			}
 
 			if ($previousPhotoID!=='') $return['content'][$previousPhotoID]['nextPhoto'] = $photo['id'];
 			$previousPhotoID = $photo['id'];

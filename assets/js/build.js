@@ -81,7 +81,13 @@ build = {
 		photo +=	"<img src='" + photoJSON.thumbUrl + "' width='200' height='200' alt='thumb'>";
 		photo +=	"<div class='overlay'>";
 		photo +=		"<h1 title='" + longTitle + "'>" + title + "</h1>";
-		photo +=		"<a>" + photoJSON.sysdate + "</a>";
+
+		if (photoJSON.cameraDate==1) {
+			photo += "<a><span class='icon-camera' title='Photo Date'></span>" + photoJSON.sysdate + "</a>";
+		} else {
+			photo += "<a>" + photoJSON.sysdate + "</a>";
+		}
+
 		photo +=	"</div>";
 
 		if (photoJSON.star==1) photo += "<a class='badge red icon-star'></a>";
