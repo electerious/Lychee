@@ -54,9 +54,10 @@ build = {
 		album +=		"<a>" + albumJSON.sysdate + "</a>";
 		album +=	"</div>";
 
-		if(!lychee.publicMode&&albumJSON.star==1) album += "<a class='badge red icon-star'></a>";
-		if(!lychee.publicMode&&albumJSON.public==1) album += "<a class='badge red icon-share'></a>";
-		if(!lychee.publicMode&&albumJSON.unsorted==1) album += "<a class='badge red icon-reorder'></a>";
+		if(!lychee.publicMode&&albumJSON.star===1)		album += "<a class='badge red icon-star'></a>";
+		if(!lychee.publicMode&&albumJSON.public===1)	album += "<a class='badge red icon-share'></a>";
+		if(!lychee.publicMode&&albumJSON.unsorted===1)	album += "<a class='badge red icon-reorder'></a>";
+		if(!lychee.publicMode&&albumJSON.recent===1)	album += "<a class='badge red icon-time'></a>";
 
 		album += "</div>";
 

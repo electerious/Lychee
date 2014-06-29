@@ -71,6 +71,10 @@ class Album extends Module {
 						$query = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp FROM lychee_photos WHERE public = 1 " . $this->settings['sorting'];
 						break;
 
+			case 'r':	$return['public'] = false;
+						$query = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp FROM lychee_photos WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY)) " . $this->settings['sorting'];
+						break;
+
 			case '0':	$return['public'] = false;
 						$query = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp FROM lychee_photos WHERE album = 0 " . $this->settings['sorting'];
 						break;
@@ -230,6 +234,17 @@ class Album extends Module {
 		}
 		$return['starredNum'] = $starred->num_rows;
 
+		# Recent
+		$recent		= $this->database->query("SELECT thumbUrl FROM lychee_photos WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY)) " . $this->settings['sorting']);
+		$i			= 0;
+		while($row3 = $recent->fetch_object()) {
+			if ($i<3) {
+				$return["recentThumb$i"] = $row3->thumbUrl;
+				$i++;
+			} else break;
+		}
+		$return['recentNum'] = $recent->num_rows;
+
 		return $return;
 
 	}
@@ -257,6 +272,10 @@ class Album extends Module {
 			case 'f':
 				$photos = "SELECT title, url FROM lychee_photos WHERE star = '1';";
 				$zipTitle = 'Starred';
+				break;
+			case 'r':
+				$photos = "SELECT title, url FROM lychee_photos WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY));";
+				$zipTitle = 'Recent';
 				break;
 			default:
 				$photos = "SELECT title, url FROM lychee_photos WHERE album = '$this->albumIDs';";
