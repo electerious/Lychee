@@ -64,15 +64,15 @@ class Album extends Module {
 		switch ($this->albumIDs) {
 
 			case 'f':	$return['public'] = false;
-						$query = "SELECT id, title, tags, public, star, album, thumbUrl FROM lychee_photos WHERE star = 1 " . $this->settings['sorting'];
+						$query = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp FROM lychee_photos WHERE star = 1 " . $this->settings['sorting'];
 						break;
 
 			case 's':	$return['public'] = false;
-						$query = "SELECT id, title, tags, public, star, album, thumbUrl FROM lychee_photos WHERE public = 1 " . $this->settings['sorting'];
+						$query = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp FROM lychee_photos WHERE public = 1 " . $this->settings['sorting'];
 						break;
 
 			case '0':	$return['public'] = false;
-						$query = "SELECT id, title, tags, public, star, album, thumbUrl FROM lychee_photos WHERE album = 0 " . $this->settings['sorting'];
+						$query = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp FROM lychee_photos WHERE album = 0 " . $this->settings['sorting'];
 						break;
 
 			default:	$albums = $this->database->query("SELECT * FROM lychee_albums WHERE id = '$this->albumIDs' LIMIT 1;");
