@@ -130,7 +130,7 @@ class Photo extends Module {
 			}
 
 			# Save to DB
-			$query = "INSERT INTO lychee_photos (id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star)
+			$query = "INSERT INTO lychee_photos (id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, checksum)
 				VALUES (
 					'" . $id . "',
 					'" . $info['title'] . "',
@@ -151,7 +151,8 @@ class Photo extends Module {
 					'" . md5($id) . ".jpeg',
 					'" . $albumID . "',
 					'" . $public . "',
-					'" . $star . "');";
+					'" . $star . "',
+					'" . md5_file($path) . "');";
 			$result = $this->database->query($query);
 
 			if (!$result) {
