@@ -176,6 +176,10 @@
 	.photo .badge.icon-share {
 		padding: 12px 6px 3px 8px;
 	}
+	.album .badge.icon-time,
+	.photo .badge.icon-time {
+		padding: 12px 8px 3px 9px;
+	}
 	.album .badge::after,
 	.photo .badge::after {
 		content: "";
@@ -197,6 +201,10 @@
 	.album .badge.icon-share::after,
 	.photo .badge.icon-share::after {
 		margin-left: -31px;
+	}
+	.album .badge.icon-time::after,
+	.photo .badge.icon-time::after {
+		margin-left: -29px;
 	}
 	.album .badge.icon-reorder::after {
 		margin-left: -30px;

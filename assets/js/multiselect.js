@@ -135,7 +135,7 @@ multiselect = {
 
 					id = $(this).data('id');
 
-					if (id!=='0'&&id!==0&&id!=='f'&&id!=='s'&&id!==null&id!==undefined) {
+					if (id!=='0'&&id!==0&&id!=='f'&&id!=='s'&&id!=='r'&&id!==null&id!==undefined) {
 
 						ids.push(id);
 						$(this).addClass('active');

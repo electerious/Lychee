@@ -68,6 +68,13 @@ class Photo extends Module {
 				$albumID	= 0;
 				break;
 
+			case 'r':
+				# r for recent
+				$public		= 0;
+				$star		= 0;
+				$albumID	= 0;
+				break;
+
 			default:
 				$star		= 0;
 				$public		= 0;

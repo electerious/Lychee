@@ -114,7 +114,7 @@ contextMenu = {
 			mouse_y = e.pageY - $(document).scrollTop(),
 			items;
 
-		if (albumID==="0"||albumID==="f"||albumID==="s") return false;
+		if (albumID==="0"||albumID==="f"||albumID==="s"||albumID==="r") return false;
 
 		contextMenu.fns = [
 			function() { album.setTitle([albumID]) },

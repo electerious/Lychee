@@ -64,7 +64,7 @@ view = {
 					$("#tools_albums, #tools_photo").hide();
 					$("#tools_album").show();
 					album.json.content === false ? $("#button_archive").hide() : $("#button_archive").show();
-					if (albumID==="s"||albumID==="f") {
+					if (albumID==="s"||albumID==="f"||albumID==="r") {
 						$("#button_info_album, #button_trash_album, #button_share_album").hide();
 					} else if (albumID==="0") {
 						$("#button_info_album, #button_share_album").hide();
@@ -130,7 +130,8 @@ view = {
 				albums.parse(albums.json.unsortedAlbum);
 				albums.parse(albums.json.publicAlbum);
 				albums.parse(albums.json.starredAlbum);
-				if (!lychee.publicMode) smartData = build.divider("Smart Albums") + build.album(albums.json.unsortedAlbum) + build.album(albums.json.starredAlbum) + build.album(albums.json.publicAlbum);
+				albums.parse(albums.json.recentAlbum);
+				if (!lychee.publicMode) smartData = build.divider("Smart Albums") + build.album(albums.json.unsortedAlbum) + build.album(albums.json.starredAlbum) + build.album(albums.json.publicAlbum) + build.album(albums.json.recentAlbum);
 
 				/*  Albums */
 				if (albums.json.content) {
@@ -215,6 +216,9 @@ view = {
 						break;
 					case "s":
 						lychee.setTitle("Public", false);
+						break;
+					case "r":
+						lychee.setTitle("Recent", false);
 						break;
 					case "0":
 						lychee.setTitle("Unsorted", false);

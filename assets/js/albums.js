@@ -53,6 +53,16 @@ albums = {
 				thumb2: data.publicThumb2
 			};
 
+			data.recentAlbum = {
+				id: "r",
+				title: "Recent",
+				sysdate: data.recentNum + " photos",
+				recent: 1,
+				thumb0: data.recentThumb0,
+				thumb1: data.recentThumb1,
+				thumb2: data.recentThumb2
+			};
+
 			albums.json = data;
 
 			durationTime = (new Date().getTime() - startTime);
