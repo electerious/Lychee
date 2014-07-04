@@ -116,15 +116,6 @@ if (!$result) {
 	return false;
 }
 
-# Add `checksum`
-if (!$database->query("SELECT `checksum` FROM `lychee_photos` LIMIT 1;")) {
-	$result = $database->query("ALTER TABLE `lychee_photos` ADD `checksum` VARCHAR(100) DEFAULT NULL");
-	if (!$result) {
-		Log::error($database, 'update_020500', __LINE__, 'Could not update database (' . $database->error . ')');
-		return false;
-	}
-}
-
 # Reset sorting
 $result = $database->query("UPDATE lychee_settings SET value = 'ORDER BY takestamp DESC' WHERE `key` = 'sorting' AND `value` LIKE '%UNIX_TIMESTAMP%';");
 if (!$result) {
