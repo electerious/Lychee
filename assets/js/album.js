@@ -37,7 +37,7 @@ album = {
 
 			if (!refresh) {
 				loadingBar.show();
-				lychee.animate(".album, .photo", "contentZoomOut");
+				lychee.animate(".album:nth-child(-n+100), .photo:nth-child(-n+100)", "contentZoomOut");
 				lychee.animate(".divider", "fadeOut");
 			}
 
@@ -74,7 +74,7 @@ album = {
 					view.album.init();
 
 					if (!refresh) {
-						lychee.animate(".album, .photo", "contentZoomIn");
+						lychee.animate(".album:nth-child(-n+100), .photo:nth-child(-n+100)", "contentZoomIn");
 						view.header.mode("album");
 					}
 

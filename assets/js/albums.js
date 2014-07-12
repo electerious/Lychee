@@ -15,7 +15,7 @@ albums = {
 			durationTime,
 			waitTime;
 
-		lychee.animate(".album, .photo", "contentZoomOut");
+		lychee.animate(".album:nth-child(-n+100), .photo:nth-child(-n+100)", "contentZoomOut");
 		lychee.animate(".divider", "fadeOut");
 
 		startTime = new Date().getTime();
@@ -73,7 +73,7 @@ albums = {
 
 				view.header.mode("albums");
 				view.albums.init();
-				lychee.animate(".album, .photo", "contentZoomIn");
+				lychee.animate(".album:nth-child(-n+100), .photo:nth-child(-n+100)", "contentZoomIn");
 
 			}, waitTime);
 
