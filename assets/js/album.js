@@ -18,6 +18,7 @@ album = {
 		else id = $(".album:hover, .album.active").attr("data-id");
 
 		// Search
+		if (!id) id = $(".album:hover, .album.active").attr("data-id");
 		if (!id) id = $(".photo:hover, .photo.active").attr("data-album-id");
 
 		if (id) return id;
@@ -201,6 +202,7 @@ album = {
 			// Get old title if only one album is selected
 			if (album.json) oldTitle = album.json.title;
 			else if (albums.json) oldTitle = albums.json.content[albumIDs].title;
+			if (!oldTitle) oldTitle = "";
 			oldTitle = oldTitle.replace("'", "&apos;");
 		}
 

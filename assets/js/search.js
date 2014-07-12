@@ -82,7 +82,12 @@ search = {
 
 		if (search.code!=="") {
 
+			// Trash data
+			albums.json = null;
+			album.json = null;
+			photo.json = null;
 			search.code = "";
+
 			lychee.animate(".divider", "fadeOut");
 			albums.load();
 
