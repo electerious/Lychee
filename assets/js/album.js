@@ -88,8 +88,7 @@ album = {
 
 	parse: function(photo) {
 
-		if (photo&&photo.thumbUrl) photo.thumbUrl = lychee.upload_path_thumb + photo.thumbUrl;
-		else if (!album.json.title) album.json.title = "Untitled";
+		if (!album.json.title) album.json.title = "Untitled";
 
 	},
 

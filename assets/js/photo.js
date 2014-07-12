@@ -52,7 +52,6 @@ photo = {
 	parse: function() {
 
 		if (!photo.json.title) photo.json.title = "Untitled";
-		photo.json.url = lychee.upload_path_big + photo.json.url;
 
 	},
 
