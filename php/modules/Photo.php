@@ -390,6 +390,9 @@ class Photo extends Module {
 		$photo['sysdate'] = date('d M. Y', substr($photo['id'], 0, -4));
 		if (strlen($photo['takestamp'])>1) $photo['takedate'] = date('d M. Y', $photo['takestamp']);
 
+		# Parse url
+		$photo['url'] = LYCHEE_URL_UPLOADS_BIG . $photo['url'];
+
 		if ($albumID!='false') {
 
 			if ($photo['album']!=0) {

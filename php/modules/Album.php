@@ -97,6 +97,7 @@ class Album extends Module {
 			$photo['sysdate']			= date('d F Y', substr($photo['id'], 0, -4));
 			$photo['previousPhoto']		= $previousPhotoID;
 			$photo['nextPhoto']			= '';
+			$photo['thumbUrl']			= LYCHEE_URL_UPLOADS_THUMB . $photo['thumbUrl'];
 
 			if ($photo['takestamp']!=='0') {
 				$photo['cameraDate']	= 1;
@@ -175,7 +176,7 @@ class Album extends Module {
 				# For each thumb
 				$k = 0;
 				while ($thumb = $thumbs->fetch_object()) {
-					$album["thumb$k"] = $thumb->thumbUrl;
+					$album["thumb$k"] = LYCHEE_URL_UPLOADS_THUMB . $thumb->thumbUrl;
 					$k++;
 				}
 
@@ -206,7 +207,7 @@ class Album extends Module {
 		$i			= 0;
 		while($row = $unsorted->fetch_object()) {
 			if ($i<3) {
-				$return["unsortedThumb$i"] = $row->thumbUrl;
+				$return["unsortedThumb$i"] = LYCHEE_URL_UPLOADS_THUMB . $row->thumbUrl;
 				$i++;
 			} else break;
 		}
@@ -217,7 +218,7 @@ class Album extends Module {
 		$i			= 0;
 		while($row2 = $public->fetch_object()) {
 			if ($i<3) {
-				$return["publicThumb$i"] = $row2->thumbUrl;
+				$return["publicThumb$i"] = LYCHEE_URL_UPLOADS_THUMB . $row2->thumbUrl;
 				$i++;
 			} else break;
 		}
@@ -228,7 +229,7 @@ class Album extends Module {
 		$i			= 0;
 		while($row3 = $starred->fetch_object()) {
 			if ($i<3) {
-				$return["starredThumb$i"] = $row3->thumbUrl;
+				$return["starredThumb$i"] = LYCHEE_URL_UPLOADS_THUMB . $row3->thumbUrl;
 				$i++;
 			} else break;
 		}
@@ -239,7 +240,7 @@ class Album extends Module {
 		$i			= 0;
 		while($row3 = $recent->fetch_object()) {
 			if ($i<3) {
-				$return["recentThumb$i"] = $row3->thumbUrl;
+				$return["recentThumb$i"] = LYCHEE_URL_UPLOADS_THUMB . $row3->thumbUrl;
 				$i++;
 			} else break;
 		}

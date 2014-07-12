@@ -246,7 +246,6 @@ view = {
 				var photosData = "";
 
 				$.each(album.json.content, function() {
-					album.parse(this);
 					photosData += build.photo(this);
 				});
 				lychee.content.html(photosData);

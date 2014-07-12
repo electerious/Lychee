@@ -16,9 +16,6 @@ var lychee = {
 	updateURL: "https://github.com/electerious/Lychee",
 	website: "http://lychee.electerious.com",
 
-	upload_path_thumb: "uploads/thumb/",
-	upload_path_big: "uploads/big/",
-
 	publicMode: false,
 	viewMode: false,
 	debugMode: false,
