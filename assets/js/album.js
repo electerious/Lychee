@@ -74,7 +74,7 @@ album = {
 					view.album.init();
 
 					if (!refresh) {
-						lychee.animate(".album:nth-child(-n+100), .photo:nth-child(-n+100)", "contentZoomIn");
+						//lychee.animate(".album:nth-child(-n+100), .photo:nth-child(-n+100)", "contentZoomIn");
 						view.header.mode("album");
 					}
 
