@@ -49,7 +49,7 @@ search = {
 
 						$(".no_content").remove();
 
-						lychee.animate(".album:nth-child(-n+100), .photo:nth-child(-n+100)", "contentZoomOut");
+						lychee.animate(".album:nth-child(-n+50), .photo:nth-child(-n+50)", "contentZoomOut");
 						lychee.animate(".divider", "fadeOut");
 
 						search.code = md5(code);
@@ -59,7 +59,7 @@ search = {
 							if (code==="error") $("body").append(build.no_content("search"));
 							else {
 								lychee.content.html(code);
-								lychee.animate(".album:nth-child(-n+100), .photo:nth-child(-n+100)", "contentZoomIn");
+								lychee.animate(".album:nth-child(-n+50), .photo:nth-child(-n+50)", "contentZoomIn");
 								$("img[data-type!='svg']").retina();
 							}
 
