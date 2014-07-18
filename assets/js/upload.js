@@ -119,9 +119,9 @@ upload = {
 
 							if (progress>=100) {
 
-								/*$(".upload_message .rows").animate({
-									scrollTop: $(".upload_message .rows .row:nth-child(" + (file.num+1) + ")").offset().top - 200
-								}, 0);*/
+								var scrollPos = 0;
+								if ((file.num+1)>4) scrollPos = (file.num + 1 - 4) * 40
+								$(".upload_message .rows").scrollTop(scrollPos);
 
 								$(".upload_message .rows .row:nth-child(" + (file.num+1) + ") .status").html("Processing");
 
