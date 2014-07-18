@@ -110,6 +110,28 @@
 			font-size: 14px;
 		}
 
+		.upload_message .rows .row a.status {
+			-webkit-animation-name: pulse;
+			-webkit-animation-duration: 2s;
+			-webkit-animation-timing-function: ease-in-out;
+			-webkit-animation-iteration-count: infinite;
+			-moz-animation-name: pulse;
+			-moz-animation-duration: 2s;
+			-moz-animation-timing-function: ease-in-out;
+			-moz-animation-iteration-count: infinite;
+			animation-name: pulse;
+			animation-duration: 2s;
+			animation-timing-function: ease-in-out;
+			animation-iteration-count: infinite;
+		}
+
+			.upload_message .rows .row a.status.error,
+			.upload_message .rows .row a.status.success {
+				-webkit-animation: none;
+				-moz-animation: none;
+				animation: none;
+			}
+
 			.upload_message .rows .row a.status.error {
 				color: rgb(213, 24, 24);
 			}
