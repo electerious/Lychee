@@ -1,6 +1,15 @@
+## v2.5.5
+
+Released July 5, 2014
+
+- `New` Smart Album "Recent"
+- `New` Checksum of photo in database (#48)
+- `New` Show takedate in photo-overlay (when available)
+- `Improved` Permission check when running with the same UID (#174)
+
 ## v2.5
 
-Released -
+Released June 24, 2014
 
 - `New` Swipe gestures on mobile devices
 - `New` Plugin-System

@@ -24,7 +24,7 @@ class Settings extends Module {
 	public function get() {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database));
+		self::dependencies(isset($this->database));
 
 		# Execute query
 		$settings = $this->database->query('SELECT * FROM lychee_settings;');
@@ -42,7 +42,7 @@ class Settings extends Module {
 	public function setLogin($oldPassword = '', $username, $password) {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database));
+		self::dependencies(isset($this->database));
 
 		# Load settings
 		$settings = $this->get();
@@ -66,7 +66,7 @@ class Settings extends Module {
 	private function setUsername($username) {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database));
+		self::dependencies(isset($this->database));
 
 		# Parse
 		$username = htmlentities($username);
@@ -89,7 +89,7 @@ class Settings extends Module {
 	private function setPassword($password) {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database));
+		self::dependencies(isset($this->database));
 
 		$password = get_hashed_password($password);
 
@@ -107,7 +107,7 @@ class Settings extends Module {
 	public function setDropboxKey($key) {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $key));
+		self::dependencies(isset($this->database, $key));
 
 		if (strlen($key)<1||strlen($key)>50) {
 			Log::notice($this->database, __METHOD__, __LINE__, 'Dropbox key is either too short or too long');
@@ -128,7 +128,7 @@ class Settings extends Module {
 	public function setSorting($type, $order) {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $type, $order));
+		self::dependencies(isset($this->database, $type, $order));
 
 		$sorting = 'ORDER BY ';
 

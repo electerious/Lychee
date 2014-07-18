@@ -54,9 +54,10 @@ build = {
 		album +=		"<a>" + albumJSON.sysdate + "</a>";
 		album +=	"</div>";
 
-		if(!lychee.publicMode&&albumJSON.star==1) album += "<a class='badge red icon-star'></a>";
-		if(!lychee.publicMode&&albumJSON.public==1) album += "<a class='badge red icon-share'></a>";
-		if(!lychee.publicMode&&albumJSON.unsorted==1) album += "<a class='badge red icon-reorder'></a>";
+		if(!lychee.publicMode&&albumJSON.star===1)		album += "<a class='badge red icon-star'></a>";
+		if(!lychee.publicMode&&albumJSON.public===1)	album += "<a class='badge red icon-share'></a>";
+		if(!lychee.publicMode&&albumJSON.unsorted===1)	album += "<a class='badge red icon-reorder'></a>";
+		if(!lychee.publicMode&&albumJSON.recent===1)	album += "<a class='badge red icon-time'></a>";
 
 		album += "</div>";
 
@@ -81,7 +82,13 @@ build = {
 		photo +=	"<img src='" + photoJSON.thumbUrl + "' width='200' height='200' alt='thumb'>";
 		photo +=	"<div class='overlay'>";
 		photo +=		"<h1 title='" + longTitle + "'>" + title + "</h1>";
-		photo +=		"<a>" + photoJSON.sysdate + "</a>";
+
+		if (photoJSON.cameraDate==1) {
+			photo += "<a><span class='icon-camera' title='Photo Date'></span>" + photoJSON.sysdate + "</a>";
+		} else {
+			photo += "<a>" + photoJSON.sysdate + "</a>";
+		}
+
 		photo +=	"</div>";
 
 		if (photoJSON.star==1) photo += "<a class='badge red icon-star'></a>";

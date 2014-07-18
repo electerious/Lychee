@@ -15,7 +15,7 @@ albums = {
 			durationTime,
 			waitTime;
 
-		lychee.animate(".album, .photo", "contentZoomOut");
+		lychee.animate(".album:nth-child(-n+50), .photo:nth-child(-n+50)", "contentZoomOut");
 		lychee.animate(".divider", "fadeOut");
 
 		startTime = new Date().getTime();
@@ -53,6 +53,16 @@ albums = {
 				thumb2: data.publicThumb2
 			};
 
+			data.recentAlbum = {
+				id: "r",
+				title: "Recent",
+				sysdate: data.recentNum + " photos",
+				recent: 1,
+				thumb0: data.recentThumb0,
+				thumb1: data.recentThumb1,
+				thumb2: data.recentThumb2
+			};
+
 			albums.json = data;
 
 			durationTime = (new Date().getTime() - startTime);
@@ -64,7 +74,7 @@ albums = {
 
 				view.header.mode("albums");
 				view.albums.init();
-				lychee.animate(".album, .photo", "contentZoomIn");
+				lychee.animate(".album:nth-child(-n+50), .photo:nth-child(-n+50)", "contentZoomIn");
 
 			}, waitTime);
 
@@ -79,9 +89,9 @@ albums = {
 			album.thumb1 = "assets/img/password.svg";
 			album.thumb2 = "assets/img/password.svg";
 		} else {
-			if (album.thumb0) album.thumb0 = lychee.upload_path_thumb + album.thumb0; else album.thumb0 = "assets/img/no_images.svg";
-			if (album.thumb1) album.thumb1 = lychee.upload_path_thumb + album.thumb1; else album.thumb1 = "assets/img/no_images.svg";
-			if (album.thumb2) album.thumb2 = lychee.upload_path_thumb + album.thumb2; else album.thumb2 = "assets/img/no_images.svg";
+			if (!album.thumb0) album.thumb0 = "assets/img/no_images.svg";
+			if (!album.thumb1) album.thumb1 = "assets/img/no_images.svg";
+			if (!album.thumb2) album.thumb2 = "assets/img/no_images.svg";
 		}
 
 	}

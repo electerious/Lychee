@@ -29,7 +29,7 @@ class Album extends Module {
 	public function add($title = 'Untitled', $public = 0, $visible = 1) {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database));
+		self::dependencies(isset($this->database));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -55,7 +55,7 @@ class Album extends Module {
 	public function get() {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->settings, $this->albumIDs));
+		self::dependencies(isset($this->database, $this->settings, $this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -64,22 +64,26 @@ class Album extends Module {
 		switch ($this->albumIDs) {
 
 			case 'f':	$return['public'] = false;
-						$query = "SELECT id, title, tags, public, star, album, thumbUrl FROM lychee_photos WHERE star = 1 " . $this->settings['sorting'];
+						$query = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp FROM lychee_photos WHERE star = 1 " . $this->settings['sorting'];
 						break;
 
 			case 's':	$return['public'] = false;
-						$query = "SELECT id, title, tags, public, star, album, thumbUrl FROM lychee_photos WHERE public = 1 " . $this->settings['sorting'];
+						$query = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp FROM lychee_photos WHERE public = 1 " . $this->settings['sorting'];
+						break;
+
+			case 'r':	$return['public'] = false;
+						$query = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp FROM lychee_photos WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY)) " . $this->settings['sorting'];
 						break;
 
 			case '0':	$return['public'] = false;
-						$query = "SELECT id, title, tags, public, star, album, thumbUrl FROM lychee_photos WHERE album = 0 " . $this->settings['sorting'];
+						$query = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp FROM lychee_photos WHERE album = 0 " . $this->settings['sorting'];
 						break;
 
 			default:	$albums = $this->database->query("SELECT * FROM lychee_albums WHERE id = '$this->albumIDs' LIMIT 1;");
 						$return = $albums->fetch_assoc();
 						$return['sysdate']		= date('d M. Y', $return['sysstamp']);
 						$return['password']		= ($return['password']=='' ? false : true);
-						$query = "SELECT id, title, tags, public, star, album, thumbUrl FROM lychee_photos WHERE album = '$this->albumIDs' " . $this->settings['sorting'];
+						$query = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp FROM lychee_photos WHERE album = '$this->albumIDs' " . $this->settings['sorting'];
 						break;
 
 		}
@@ -92,7 +96,13 @@ class Album extends Module {
 			# Parse
 			$photo['sysdate']			= date('d F Y', substr($photo['id'], 0, -4));
 			$photo['previousPhoto']		= $previousPhotoID;
-			$photo['nextPhoto']		= '';
+			$photo['nextPhoto']			= '';
+			$photo['thumbUrl']			= LYCHEE_URL_UPLOADS_THUMB . $photo['thumbUrl'];
+
+			if ($photo['takestamp']!=='0') {
+				$photo['cameraDate']	= 1;
+				$photo['sysdate']		= date('d F Y', $photo['takestamp']);
+			}
 
 			if ($previousPhotoID!=='') $return['content'][$previousPhotoID]['nextPhoto'] = $photo['id'];
 			$previousPhotoID = $photo['id'];
@@ -135,7 +145,7 @@ class Album extends Module {
 	public function getAll($public) {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->settings, $public));
+		self::dependencies(isset($this->database, $this->settings, $public));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -166,7 +176,7 @@ class Album extends Module {
 				# For each thumb
 				$k = 0;
 				while ($thumb = $thumbs->fetch_object()) {
-					$album["thumb$k"] = $thumb->thumbUrl;
+					$album["thumb$k"] = LYCHEE_URL_UPLOADS_THUMB . $thumb->thumbUrl;
 					$k++;
 				}
 
@@ -190,14 +200,14 @@ class Album extends Module {
 	private function getSmartInfo() {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->settings));
+		self::dependencies(isset($this->database, $this->settings));
 
 		# Unsorted
 		$unsorted	= $this->database->query("SELECT thumbUrl FROM lychee_photos WHERE album = 0 " . $this->settings['sorting']);
 		$i			= 0;
 		while($row = $unsorted->fetch_object()) {
 			if ($i<3) {
-				$return["unsortedThumb$i"] = $row->thumbUrl;
+				$return["unsortedThumb$i"] = LYCHEE_URL_UPLOADS_THUMB . $row->thumbUrl;
 				$i++;
 			} else break;
 		}
@@ -208,7 +218,7 @@ class Album extends Module {
 		$i			= 0;
 		while($row2 = $public->fetch_object()) {
 			if ($i<3) {
-				$return["publicThumb$i"] = $row2->thumbUrl;
+				$return["publicThumb$i"] = LYCHEE_URL_UPLOADS_THUMB . $row2->thumbUrl;
 				$i++;
 			} else break;
 		}
@@ -219,11 +229,22 @@ class Album extends Module {
 		$i			= 0;
 		while($row3 = $starred->fetch_object()) {
 			if ($i<3) {
-				$return["starredThumb$i"] = $row3->thumbUrl;
+				$return["starredThumb$i"] = LYCHEE_URL_UPLOADS_THUMB . $row3->thumbUrl;
 				$i++;
 			} else break;
 		}
 		$return['starredNum'] = $starred->num_rows;
+
+		# Recent
+		$recent		= $this->database->query("SELECT thumbUrl FROM lychee_photos WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY)) " . $this->settings['sorting']);
+		$i			= 0;
+		while($row3 = $recent->fetch_object()) {
+			if ($i<3) {
+				$return["recentThumb$i"] = LYCHEE_URL_UPLOADS_THUMB . $row3->thumbUrl;
+				$i++;
+			} else break;
+		}
+		$return['recentNum'] = $recent->num_rows;
 
 		return $return;
 
@@ -232,7 +253,7 @@ class Album extends Module {
 	public function getArchive() {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->database, $this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -252,6 +273,10 @@ class Album extends Module {
 			case 'f':
 				$photos = "SELECT title, url FROM lychee_photos WHERE star = '1';";
 				$zipTitle = 'Starred';
+				break;
+			case 'r':
+				$photos = "SELECT title, url FROM lychee_photos WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY));";
+				$zipTitle = 'Recent';
 				break;
 			default:
 				$photos = "SELECT title, url FROM lychee_photos WHERE album = '$this->albumIDs';";
@@ -346,7 +371,7 @@ class Album extends Module {
 	public function setTitle($title = 'Untitled') {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->database, $this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -371,7 +396,7 @@ class Album extends Module {
 	public function setDescription($description = '') {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->database, $this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -397,7 +422,7 @@ class Album extends Module {
 	public function getPublic() {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->database, $this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -419,7 +444,7 @@ class Album extends Module {
 	public function setPublic($password) {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->database, $this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -463,7 +488,7 @@ class Album extends Module {
 	public function setPassword($password) {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->database, $this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -497,7 +522,7 @@ class Album extends Module {
 	public function checkPassword($password) {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->database, $this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -518,7 +543,7 @@ class Album extends Module {
 	public function delete($albumIDs) {
 
 		# Check dependencies
-		$this->dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->database, $this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());

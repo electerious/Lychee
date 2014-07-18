@@ -8,16 +8,13 @@
 var lychee = {
 
 	title: "",
-	version: "2.5 rc1",
-	version_code: "020500",
+	version: "2.5.5",
+	version_code: "020505",
 
 	api_path: "php/api.php",
 	update_path: "http://lychee.electerious.com/version/index.php",
 	updateURL: "https://github.com/electerious/Lychee",
 	website: "http://lychee.electerious.com",
-
-	upload_path_thumb: "uploads/thumb/",
-	upload_path_big: "uploads/big/",
 
 	publicMode: false,
 	viewMode: false,

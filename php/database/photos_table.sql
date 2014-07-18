@@ -23,5 +23,6 @@ CREATE TABLE IF NOT EXISTS `lychee_photos` (
   `star` tinyint(1) NOT NULL,
   `thumbUrl` varchar(50) NOT NULL,
   `album` varchar(30) NOT NULL DEFAULT '0',
+  `checksum` VARCHAR(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;

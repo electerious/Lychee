@@ -18,6 +18,7 @@ album = {
 		else id = $(".album:hover, .album.active").attr("data-id");
 
 		// Search
+		if (!id) id = $(".album:hover, .album.active").attr("data-id");
 		if (!id) id = $(".photo:hover, .photo.active").attr("data-album-id");
 
 		if (id) return id;
@@ -36,7 +37,7 @@ album = {
 
 			if (!refresh) {
 				loadingBar.show();
-				lychee.animate(".album, .photo", "contentZoomOut");
+				lychee.animate(".album:nth-child(-n+50), .photo:nth-child(-n+50)", "contentZoomOut");
 				lychee.animate(".divider", "fadeOut");
 			}
 
@@ -73,7 +74,7 @@ album = {
 					view.album.init();
 
 					if (!refresh) {
-						lychee.animate(".album, .photo", "contentZoomIn");
+						lychee.animate(".album:nth-child(-n+50), .photo:nth-child(-n+50)", "contentZoomIn");
 						view.header.mode("album");
 					}
 
@@ -87,8 +88,7 @@ album = {
 
 	parse: function(photo) {
 
-		if (photo&&photo.thumbUrl) photo.thumbUrl = lychee.upload_path_thumb + photo.thumbUrl;
-		else if (!album.json.title) album.json.title = "Untitled";
+		if (!album.json.title) album.json.title = "Untitled";
 
 	},
 
@@ -201,6 +201,7 @@ album = {
 			// Get old title if only one album is selected
 			if (album.json) oldTitle = album.json.title;
 			else if (albums.json) oldTitle = albums.json.content[albumIDs].title;
+			if (!oldTitle) oldTitle = "";
 			oldTitle = oldTitle.replace("'", "&apos;");
 		}
 
