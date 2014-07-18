@@ -95,7 +95,7 @@ upload = {
 
 								$("#upload_files").val("");
 
-								//upload.close();
+								upload.close();
 
 								if (album.getID()===false) lychee.goto("0");
 								else album.load(albumID);
@@ -196,6 +196,8 @@ upload = {
 						}
 
 						upload.show("Importing URL", files);
+
+						//$(".upload_message .rows .row:nth-child(1) .status").html("Importing");
 
 						params = "importUrl&url=" + escape(encodeURI(link)) + "&albumID=" + albumID;
 						lychee.api(params, function(data) {
