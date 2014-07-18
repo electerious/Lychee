@@ -35,7 +35,6 @@ search = {
 					if (data&&data.photos) {
 						album.json = { content: data.photos };
 						$.each(album.json.content, function() {
-							album.parse(this);
 							photosData += build.photo(this);
 						});
 					}
