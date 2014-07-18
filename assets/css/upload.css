@@ -22,21 +22,9 @@
 	width: 450px;
 	margin-left: -225px;
 	margin-top: -170px;
-	background-color: #444;
-	background-image: -webkit-linear-gradient(top, rgb(75, 75, 75), rgb(45, 45, 45));
-	background-image: -moz-linear-gradient(top, rgb(75, 75, 75), rgb(45, 45, 45));
-	background-image: -ms-linear-gradient(top, rgb(75, 75, 75), rgb(45, 45, 45));
-	background-image: linear-gradient(top, rgb(75, 75, 75), rgb(45, 45, 45));
+	background-image: linear-gradient(to bottom, rgb(75, 75, 75), rgb(45, 45, 45));
 	border-radius: 5px;
 	box-shadow: 0px 0px 5px #000, inset 0px 1px 0px rgba(255,255,255,.08), inset 1px 0px 0px rgba(255,255,255,.03), inset -1px 0px 0px rgba(255,255,255,.03);
-
-	/* Animation */
-	-webkit-animation-name: moveUp;
-	-webkit-animation-duration: .3s;
-	-webkit-animation-timing-function: cubic-bezier(0.51,.92,.24,1.15);
-	-moz-animation-name: moveUp;
-	-moz-animation-duration: .3s;
-	-moz-animation-timing-function: cubic-bezier(0.51,.92,.24,1.15);
 	animation-name: moveUp;
 	animation-duration: .3s;
 	animation-timing-function: cubic-bezier(0.51,.92,.24,1.15);
@@ -111,14 +99,6 @@
 		}
 
 		.upload_message .rows .row a.status {
-			-webkit-animation-name: pulse;
-			-webkit-animation-duration: 2s;
-			-webkit-animation-timing-function: ease-in-out;
-			-webkit-animation-iteration-count: infinite;
-			-moz-animation-name: pulse;
-			-moz-animation-duration: 2s;
-			-moz-animation-timing-function: ease-in-out;
-			-moz-animation-iteration-count: infinite;
 			animation-name: pulse;
 			animation-duration: 2s;
 			animation-timing-function: ease-in-out;
@@ -127,8 +107,6 @@
 
 			.upload_message .rows .row a.status.error,
 			.upload_message .rows .row a.status.success {
-				-webkit-animation: none;
-				-moz-animation: none;
 				animation: none;
 			}
 
