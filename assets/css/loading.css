@@ -12,16 +12,6 @@
 	background-repeat: repeat-x;
 	border-bottom: 1px solid rgba(0,0,0,.3);
 	display: none;
-
-	/* Animation */
-	-webkit-animation-name: moveBackground;
-	-webkit-animation-duration: .3s;
-	-webkit-animation-iteration-count: infinite;
-	-webkit-animation-timing-function: linear;
-	-moz-animation-name: moveBackground;
-	-moz-animation-duration: .3s;
-	-moz-animation-iteration-count: infinite;
-	-moz-animation-timing-function: linear;
 	animation-name: moveBackground;
 	animation-duration: .3s;
 	animation-iteration-count: infinite;
@@ -30,16 +20,11 @@
 
 	/* Modes ------------------------------------------------*/
 	#loading.loading {
-		background-image: -webkit-linear-gradient(left, #153674 0%, #153674 47%, #2651AE 53%, #2651AE 100%);
-		background-image: -moz-linear-gradient(left, #153674 0%, #153674 47%, #2651AE 53%, #2651AE 100%);
-		background-image: linear-gradient(left right, #153674 0%, #153674 47%, #2651AE 53%, #2651AE 100%);
+		background-image: linear-gradient(to right, #153674 0%, #153674 47%, #2651AE 53%, #2651AE 100%);
 		z-index: 2;
 	}
 	#loading.error {
-		background-color: #2f0d0e;
-		background-image: -webkit-linear-gradient(left, #451317 0%, #451317 47%, #AA3039 53%, #AA3039 100%);
-		background-image: -moz-linear-gradient(left, #451317 0%, #451317 47%, #AA3039 53%, #AA3039 100%);
-		background-image: linear-gradient(left right, #451317 0%, #451317 47%, #AA3039 53%, #AA3039 100%);
+		background-image: linear-gradient(to right, #451317 0%, #451317 47%, #AA3039 53%, #AA3039 100%);
 		z-index: 1;
 	}
 

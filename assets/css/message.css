@@ -20,20 +20,11 @@
 	margin-left: -250px;
 	margin-top: -95px;
 	background-color: #444;
-	background-image: -webkit-linear-gradient(top, rgb(75, 75, 75), rgb(45, 45, 45));
-	background-image: -moz-linear-gradient(top, rgb(75, 75, 75), rgb(45, 45, 45));
-	background-image: -ms-linear-gradient(top, rgb(75, 75, 75), rgb(45, 45, 45));
-	background-image: linear-gradient(top, rgb(75, 75, 75), rgb(45, 45, 45));
+	background-image: linear-gradient(to bottom, rgb(75, 75, 75), rgb(45, 45, 45));
 	border-radius: 5px;
 	box-shadow: 0px 0px 5px #000, inset 0px 1px 0px rgba(255,255,255,.08);
 
 	/* Animation */
-	-webkit-animation-name: moveUp;
-	-webkit-animation-duration: .3s;
-	-webkit-animation-timing-function: cubic-bezier(0.51,.92,.24,1.15);
-	-moz-animation-name: moveUp;
-	-moz-animation-duration: .3s;
-	-moz-animation-timing-function: cubic-bezier(0.51,.92,.24,1.15);
 	animation-name: moveUp;
 	animation-duration: .3s;
 	animation-timing-function: cubic-bezier(0.51,.92,.24,1.15);
@@ -107,19 +98,12 @@
 		box-shadow: inset 0px 1px 0px rgba(255,255,255,.08), 0px 1px 0px rgba(255,255,255,.1), 0px 0px 4px #005ecc;
 	}
 	.message .button:hover {
-		background-color: #565757;
-		background-image: -webkit-linear-gradient(top, rgb(60, 60, 60), rgb(57, 57, 57));
-		background-image: -moz-linear-gradient(top, rgb(60, 60, 60), rgb(57, 57, 57));
-		background-image: -ms-linear-gradient(top, rgb(60, 60, 60), rgb(57, 57, 57));
-		background-image: linear-gradient(top, rgb(60, 60, 60), rgb(57, 57, 57));
+		background-image: linear-gradient(to bottom, rgb(60, 60, 60), rgb(57, 57, 57));
 	}
 	.message .button:active,
 	.message .button.pressed {
 		background-color: #393939;
-		background-image: -webkit-linear-gradient(top, rgb(57, 57, 57), rgb(60, 60, 60));
-		background-image: -moz-linear-gradient(top, rgb(57, 57, 57), rgb(60, 60, 60));
-		background-image: -ms-linear-gradient(top, rgb(57, 57, 57), rgb(60, 60, 60));
-		background-image: linear-gradient(top, rgb(57, 57, 57), rgb(60, 60, 60));
+		background-image: linear-gradient(to bottom, rgb(57, 57, 57), rgb(60, 60, 60));
 	}
 
 	/* Sign in ------------------------------------------------*/

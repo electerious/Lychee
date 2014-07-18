@@ -10,8 +10,7 @@
 	width: 100%;
 	min-height: 100%;
 	background-color: rgba(10,10,10,.98);
-
-	-webkit-transition: background-color .3s;
+	transition: background-color .3s;
 }
 
 	/* Modes ------------------------------------------------*/
@@ -32,17 +31,7 @@
 		background-repeat: no-repeat;
 		background-position: 50% 50%;
 		background-size: contain;
-
-		-webkit-transition: top .3s, right .3s, bottom .3s, left .3s, margin-top .3s, opacity .2s, -webkit-transform .3s cubic-bezier(0.51,.92,.24,1.15);
-		-moz-transition: top .3s, right .3s, bottom .3s, left .3s, margin-top .3s, opacity .2s, -moz-transform .3s cubic-bezier(0.51,.92,.24,1.15);
 		transition: top .3s, right .3s, bottom .3s, left .3s, margin-top .3s, opacity .2s, transform .3s cubic-bezier(0.51,.92,.24,1.15);
-
-		-webkit-animation-name: zoomIn;
-		-webkit-animation-duration: .3s;
-		-webkit-animation-timing-function: cubic-bezier(0.51,.92,.24,1.15);
-		-moz-animation-name: zoomIn;
-		-moz-animation-duration: .3s;
-		-moz-animation-timing-function: cubic-bezier(0.51,.92,.24,1.15);
 		animation-name: zoomIn;
 		animation-duration: .3s;
 		animation-timing-function: cubic-bezier(0.51,.92,.24,1.15);
@@ -84,8 +73,6 @@
 		cursor: pointer;
 		opacity: 0;
 		z-index: 2;
-		-webkit-transition: opacity .2s;
-		-moz-transition: opacity .2s;
 		transition: opacity .2s;
 	}
 	#imageview .arrow_wrapper:hover a {

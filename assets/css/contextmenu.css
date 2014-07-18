@@ -15,11 +15,7 @@
 	top: 0px;
 	left: 0px;
 	padding: 5px 0px 6px 0px;
-	background-color: #444;
-	background-image: -webkit-linear-gradient(top, #444, #2f2f2f);
-	background-image: -moz-linear-gradient(top, #444, #2f2f2f);
-	background-image: -ms-linear-gradient(top, #444, #2f2f2f);
-	background-image: linear-gradient(top, #444, #2f2f2f);
+	background: linear-gradient(to bottom, #444 0%, #2f2f2f 100%);
 	border: 1px solid rgba(0,0,0,0.5);
 	border-bottom: 1px solid rgba(0,0,0,.7);
 	border-radius: 5px;
@@ -27,8 +23,6 @@
 	opacity: 0;
 	z-index: 1001;
 
-	-webkit-transition: none;
-	-moz-transition: none;
 	transition: none;
 }
 
@@ -40,11 +34,7 @@
 		cursor: pointer;
 	}
 	.contextmenu tr:hover {
-		background-color: #6a84f2;
-		background-image: -webkit-linear-gradient(top, #6a84f2, #4967F0);
-		background-image: -moz-linear-gradient(top, #6a84f2, #4967F0);
-		background-image: -ms-linear-gradient(top, #6a84f2, #4967F0);
-		background-image: linear-gradient(top, #6a84f2, #4967F0);
+		background: linear-gradient(to bottom, #6a84f2, #4967F0);
 	}
 	.contextmenu tr.no_hover:hover {
 		cursor: inherit;
@@ -67,8 +57,6 @@
 	.contextmenu tr td {
 		padding: 7px 30px 6px 12px;
 		white-space: nowrap;
-		-webkit-transition: none;
-		-moz-transition: none;
 		transition: none;
 	}
 	.contextmenu tr:hover td {

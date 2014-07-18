@@ -90,8 +90,6 @@ function loadPhotoInfo(photoID) {
 		document.title = "Lychee - " + data.title;
 		headerTitle.html(data.title);
 
-		data.url = "uploads/big/" + data.url;
-
 		imageview.attr("data-id", photoID);
 		if (isPhotoSmall(data)) imageview.html("<div id='image' class='small' style='background-image: url(" + data.url + "); width: " + data.width + "px; height: " + data.height + "px; margin-top: -" + parseInt((data.height/2)-20) + "px; margin-left: -" + data.width/2 + "px;'></div>");
 		else imageview.html("<div id='image' style='background-image: url(" + data.url + ");'></div>");
