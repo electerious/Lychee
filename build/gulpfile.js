@@ -45,6 +45,7 @@ gulp.task('css', function () {
 
 	gulp.src(paths.css)
 		.pipe(plugins.concat('main.css', {newLine: "\n"}))
+		.pipe(plugins.autoprefixer('last 4 versions', '> 5%'))
 		.pipe(plugins.minifyCss())
 		.pipe(gulp.dest('../assets/min/'));
 

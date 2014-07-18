@@ -8,39 +8,27 @@ header {
 	position: fixed;
 	height: 49px;
 	width: 100%;
-	background-image: -webkit-linear-gradient(top, #3E3E3E, #282828);
-	background-image: -moz-linear-gradient(top, #3E3E3E, #282828);
-	background-image: -ms-linear-gradient(top, #3E3E3E, #282828);
-	background-image: linear-gradient(top, #3E3E3E, #282828);
+	background: linear-gradient(to bottom, #3E3E3E, #282828);
 	border-bottom: 1px solid #161616;
 	z-index: 1;
-
-	-webkit-transition: -webkit-transform .3s ease-out;
-	-moz-transition: -moz-transform .3s ease-out;
 	transition: transform .3s ease-out;
 }
 
 	/* Modes ------------------------------------------------*/
 	header.hidden {
-		-webkit-transform: translateY(-60px);
-		-moz-transform: translateY(-60px);
 		transform: translateY(-60px);
 	}
 	header.loading {
-		-webkit-transform: translateY(2px);
-		-moz-transform: translateY(2px);
 		transform: translateY(2px);
 	}
 	header.error {
-		-webkit-transform: translateY(40px);
-		-moz-transform: translateY(40px);
 		transform: translateY(40px);
 	}
 		header.view.error {
 			background-color: rgba(10,10,10,.99);
 		}
 	header.view {
-		background-image: none;
+		background: none;
 		border-bottom: none;
 	}
 		header.view .button,
@@ -117,19 +105,16 @@ header {
 		outline: none;
 		border-radius: 50px;
 		opacity: .6;
-
-		-webkit-transition: opacity .3s ease-out, -webkit-transform .3s ease-out, box-shadow .3s, width .2s ease-out;
-		-moz-transition: opacity .3s ease-out, -moz-transform .3s ease-out, box-shadow .3s, width .2s ease-out;
 		transition: opacity .3s ease-out, transform .3s ease-out, box-shadow .3s, width .2s ease-out;
 	}
-	
+
 		header #search:focus {
 			width: 140px;
 		}
 		header #search:focus ~ #clearSearch {
 			opacity: 1;
 		}
-		
+
 	header #clearSearch {
 		position: absolute;
 		top: 15px;
@@ -137,12 +122,9 @@ header {
 		padding: 0;
 		font-size: 20px;
 		opacity: 0;
-		
-		-webkit-transition: opacity .2s ease-out;
-		-moz-transition: opacity .2s ease-out;
 		transition: opacity .2s ease-out;
 	}
-	
+
 		header #clearSearch:hover {
 			opacity: 1;
 		}

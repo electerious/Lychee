@@ -7,12 +7,6 @@
 	font-size: 12px;
 	position: absolute;
 	z-index: 100000;
-
-	/* Animation */
-	-webkit-animation-name: fadeIn;
-	-webkit-animation-duration: .3s;
-	-moz-animation-name: fadeIn;
-	-moz-animation-duration: .3s;
 	animation-name: fadeIn;
 	animation-duration: .3s;
 }

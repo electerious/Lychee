@@ -29,8 +29,6 @@ body.view {
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	user-select: none;
-	-webkit-transition: color .3s, opacity .3s ease-out, -webkit-transform .3s ease-out, box-shadow .3s;
-	-moz-transition: opacity .3s ease-out, -moz-transform .3s ease-out, box-shadow .3s;
 	transition: color .3s, opacity .3s ease-out, transform .3s ease-out, box-shadow .3s;
 }
 input {
