@@ -407,7 +407,7 @@ class Photo extends Module {
 			}
 
 			$photo['original_album']	= $photo['album'];
-			$photo['album']			= $albumID;
+			$photo['album']				= $albumID;
 
 		}
 
