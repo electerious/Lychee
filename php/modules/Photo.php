@@ -159,7 +159,7 @@ class Photo extends Module {
 					'" . $albumID . "',
 					'" . $public . "',
 					'" . $star . "',
-					'" . md5_file($path) . "');";
+					'" . sha1_file($path) . "');";
 			$result = $this->database->query($query);
 
 			if (!$result) {
