@@ -10,7 +10,7 @@
 if (!$database->query("SELECT `checksum` FROM `lychee_photos` LIMIT 1;")) {
 	$result = $database->query("ALTER TABLE `lychee_photos` ADD `checksum` VARCHAR(100) DEFAULT NULL");
 	if (!$result) {
-		Log::error($database, 'update_020500', __LINE__, 'Could not update database (' . $database->error . ')');
+		Log::error($database, 'update_020505', __LINE__, 'Could not update database (' . $database->error . ')');
 		return false;
 	}
 }

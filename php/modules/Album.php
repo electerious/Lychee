@@ -99,7 +99,7 @@ class Album extends Module {
 			$photo['nextPhoto']			= '';
 			$photo['thumbUrl']			= LYCHEE_URL_UPLOADS_THUMB . $photo['thumbUrl'];
 
-			if ($photo['takestamp']!=='0') {
+			if (isset($photo['takestamp'])&&$photo['takestamp']!=='0') {
 				$photo['cameraDate']	= 1;
 				$photo['sysdate']		= date('d F Y', $photo['takestamp']);
 			}

@@ -19,6 +19,7 @@ function search($database, $settings, $term) {
 	$result = $database->query("SELECT id, title, tags, public, star, album, thumbUrl FROM lychee_photos WHERE title like '%$term%' OR description like '%$term%' OR tags like '%$term%';");
 	while($row = $result->fetch_assoc()) {
 		$return['photos'][$row['id']]				= $row;
+		$return['photos'][$row['id']]['thumbUrl']	= LYCHEE_URL_UPLOADS_THUMB . $row['thumbUrl'];
 		$return['photos'][$row['id']]['sysdate']	= date('d M. Y', substr($row['id'], 0, -4));
 	}
 
@@ -38,7 +39,7 @@ function search($database, $settings, $term) {
 		$result2	= $database->query("SELECT thumbUrl FROM lychee_photos WHERE album = '" . $row->id . "' " . $settings['sorting'] . " LIMIT 0, 3;");
 		$k			= 0;
 		while($row2 = $result2->fetch_object()){
-			$return['albums'][$row->id]["thumb$k"] = $row2->thumbUrl;
+			$return['albums'][$row->id]["thumb$k"] = LYCHEE_URL_UPLOADS_THUMB . $row2->thumbUrl;
 			$k++;
 		}
 
