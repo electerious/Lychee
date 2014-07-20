@@ -113,6 +113,10 @@ class Photo extends Module {
 				}
 			}
 
+			# Calculate checksum
+			$checksum = sha1_file($path);
+			if ($checksum===false) $checksum = '';
+
 			# Read infos
 			$info = $this->getInfo($path);
 
@@ -159,7 +163,7 @@ class Photo extends Module {
 					'" . $albumID . "',
 					'" . $public . "',
 					'" . $star . "',
-					'" . sha1_file($path) . "');";
+					'" . $checksum . "');";
 			$result = $this->database->query($query);
 
 			if (!$result) {
