@@ -56,10 +56,10 @@ build = {
 
 		if (!lychee.publicMode) {
 
-			if(albumJSON.star===1)		album += "<a class='badge red icon-star'></a>";
-			if(albumJSON.public===1)	album += "<a class='badge red icon-share'></a>";
-			if(albumJSON.unsorted===1)	album += "<a class='badge red icon-reorder'></a>";
-			if(albumJSON.recent===1)	album += "<a class='badge red icon-time'></a>";
+			if(albumJSON.star==1)		album += "<a class='badge red icon-star'></a>";
+			if(albumJSON.public==1)	album += "<a class='badge red icon-share'></a>";
+			if(albumJSON.unsorted==1)	album += "<a class='badge red icon-reorder'></a>";
+			if(albumJSON.recent==1)	album += "<a class='badge red icon-time'></a>";
 
 		}
 
