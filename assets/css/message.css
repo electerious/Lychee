@@ -179,7 +179,8 @@
 	/* Radio Buttons ------------------------------------------------*/
 	.message .choice {
 		float: left;
-		padding: 12px 5% 15px;
+		margin: 12px 5%;
+		width: 90%;
 		color: #fff;
 	}
 
