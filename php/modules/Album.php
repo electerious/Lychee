@@ -488,7 +488,7 @@ class Album extends Module {
 
 	}
 
-	public function setPassword($password) {
+	private function setPassword($password) {
 
 		# Check dependencies
 		self::dependencies(isset($this->database, $this->albumIDs));
