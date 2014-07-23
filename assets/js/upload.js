@@ -198,7 +198,7 @@ upload = {
 						}
 
 						upload.show("Importing URL", files, function() {
-							$(".upload_message .rows .row:nth-child(1) .status").html("Importing");
+							$(".upload_message .rows .row .status").html("Importing");
 						});
 
 						params = "importUrl&url=" + escape(encodeURI(link)) + "&albumID=" + albumID;
@@ -229,21 +229,26 @@ upload = {
 			var albumID = album.getID(),
 				params,
 				buttons,
-				files = [];
+				files = [],
+				path;
 
 			if (albumID===false) albumID = 0;
 
 			buttons = [
 				["Import", function() {
 
+					path = $(".message input.text").val();
+
 					files[0] = {
-						name: "uploads/import/",
+						name: path,
 						supported: true
 					};
 
-					upload.show("Importing from server", files);
+					upload.show("Importing from server", files, function() {
+						$(".upload_message .rows .row .status").html("Importing");
+					});
 
-					params = "importServer&albumID=" + albumID;
+					params = "importServer&albumID=" + albumID + "&path=" + escape(encodeURI(path));
 					lychee.api(params, function(data) {
 
 						upload.close();
@@ -266,7 +271,7 @@ upload = {
 				["Cancel", function() {}]
 			];
 
-			modal.show("Import from Server", "This action will import all photos and albums which are located in <b>'uploads/import/'</b> of your Lychee installation.", buttons);
+			modal.show("Import from Server", "This action will import all photos and albums which are located in the following directory: <input class='text' type='text' maxlength='100' placeholder='Absolute path to directory' value='" + lychee.location + "uploads/import/'>", buttons);
 
 		},
 

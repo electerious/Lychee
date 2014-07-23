@@ -208,8 +208,8 @@ class Admin extends Access {
 
 	private function importServer() {
 
-		Module::dependencies(isset($_POST['albumID']));
-		echo Import::server($_POST['albumID'], null);
+		Module::dependencies(isset($_POST['albumID'], $_POST['path']));
+		echo Import::server($_POST['albumID'], $_POST['path']);
 
 	}
 
