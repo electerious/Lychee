@@ -271,7 +271,7 @@ upload = {
 				["Cancel", function() {}]
 			];
 
-			modal.show("Import from Server", "This action will import all photos and albums which are located in the following directory: <input class='text' type='text' maxlength='100' placeholder='Absolute path to directory' value='" + lychee.location + "uploads/import/'>", buttons);
+			modal.show("Import from Server", "This action will import all photos and albums which are located in the following directory. The original files will be deleted after the import. <input class='text' type='text' maxlength='100' placeholder='Absolute path to directory' value='" + lychee.location + "uploads/import/'>", buttons);
 
 		},
 
