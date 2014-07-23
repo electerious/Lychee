@@ -7,10 +7,12 @@
 
 upload = {
 
-	show: function(title, files) {
+	show: function(title, files, callback) {
 
 		upload.close(true);
 		$("body").append(build.uploadModal(title, files));
+
+		if (callback!=null&&callback!=undefined) callback();
 
 	},
 
@@ -195,9 +197,9 @@ upload = {
 							supported: true
 						}
 
-						upload.show("Importing URL", files);
-
-						//$(".upload_message .rows .row:nth-child(1) .status").html("Importing");
+						upload.show("Importing URL", files, function() {
+							$(".upload_message .rows .row:nth-child(1) .status").html("Importing");
+						});
 
 						params = "importUrl&url=" + escape(encodeURI(link)) + "&albumID=" + albumID;
 						lychee.api(params, function(data) {
@@ -296,7 +298,9 @@ upload = {
 						// Remove last comma
 						links = links.substr(0, links.length-1);
 
-						upload.show("Importing from Dropbox", files);
+						upload.show("Importing from Dropbox", files, function() {
+							$(".upload_message .rows .row .status").html("Importing");
+						});
 
 						params = "importUrl&url=" + escape(links) + "&albumID=" + albumID;
 						lychee.api(params, function(data) {
