@@ -23,6 +23,7 @@ var lychee = {
 	username: "",
 	checkForUpdates: false,
 	sorting: "",
+	location: "",
 
 	dropbox: false,
 	dropboxKey: '',
@@ -46,6 +47,7 @@ var lychee = {
 				lychee.username = data.config.username || '';
 				lychee.sorting = data.config.sorting || '';
 				lychee.dropboxKey = data.config.dropboxKey || '';
+				lychee.location = data.config.location || '';
 			}
 
 			// No configuration

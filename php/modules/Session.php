@@ -42,6 +42,9 @@ class Session extends Module {
 		$return['config'] = $this->settings;
 		unset($return['config']['password']);
 
+		# Path to Lychee for the server-import dialog
+		$return['config']['location'] = LYCHEE;
+
 		# No login
 		if ($this->settings['username']===''&&$this->settings['password']==='') $return['config']['login'] = false;
 		else $return['config']['login'] = true;
@@ -59,6 +62,7 @@ class Session extends Module {
 			unset($return['config']['sorting']);
 			unset($return['config']['dropboxKey']);
 			unset($return['config']['login']);
+			unset($return['config']['location']);
 
 			# Logged out
 			$return['loggedIn'] = false;
