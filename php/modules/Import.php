@@ -171,7 +171,7 @@ class Import extends Module {
 
 				if (Import::server($newAlbumID, $file . '/', false)==='Warning: Folder empty or no readable files to process!') {
 					$error = true;
-					Log::error($database, __METHOD__, __LINE__, 'Could not import folder. Function returned error');
+					Log::error($database, __METHOD__, __LINE__, 'Could not import folder. Function returned warning');
 					continue;
 				}
 
