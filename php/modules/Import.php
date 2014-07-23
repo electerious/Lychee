@@ -119,6 +119,11 @@ class Import extends Module {
 
 		if (!isset($path)) $path = LYCHEE_UPLOADS_IMPORT;
 
+		if (is_dir($path)===false) {
+			Log::error($database, __METHOD__, __LINE__, 'Given path is not a directory (' . $path . ')');
+			return 'Error: Given path is not a directory!';
+		}
+
 		if ($useTemp===true) {
 			$path = Import::move($database, $path);
 			if ($path===false) {
