@@ -9,33 +9,6 @@ password = {
 
 	value: "",
 
-	set: function(albumID) {
-
-		var buttons,
-			params;
-
-		buttons = [
-			["Set Password", function() {
-
-				if (visible.album()) {
-					album.json.password = true;
-					view.album.password();
-				}
-
-				params = "setAlbumPassword&albumID=" + albumID + "&password=" + md5($(".message input.text").val());
-				lychee.api(params, function(data) {
-
-					if (data!==true) lychee.error(null, params, data);
-
-				});
-
-			}],
-			["Cancel", function() {}]
-		];
-		modal.show("Set Password", "Set a password to protect '" + album.json.title + "' from unauthorized viewers. Only people with this password can view this album. <input class='text' type='password' placeholder='password' value=''>", buttons);
-
-	},
-
 	get: function(albumID, callback) {
 
 		var passwd = $(".message input.text").val(),
@@ -84,24 +57,6 @@ password = {
 			["Cancel", lychee.goto]
 		];
 		modal.show("<a class='icon-lock'></a> Enter Password", "This album is protected by a password. Enter the password below to view the photos of this album: <input class='text' type='password' placeholder='password' value=''>", buttons, -110, false);
-
-	},
-
-	remove: function(albumID) {
-
-		var params;
-
-		if (visible.album()) {
-			album.json.password = false;
-			view.album.password();
-		}
-
-		params = "setAlbumPassword&albumID=" + albumID + "&password=";
-		lychee.api(params, function(data) {
-
-			if (data!==true) lychee.error(null, params, data);
-
-		});
 
 	}
 

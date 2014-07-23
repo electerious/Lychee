@@ -441,7 +441,7 @@ class Album extends Module {
 
 	}
 
-	public function setPublic($password) {
+	public function setPublic($password, $visible) {
 
 		# Check dependencies
 		self::dependencies(isset($this->database, $this->albumIDs));
@@ -457,8 +457,11 @@ class Album extends Module {
 			# Invert public
 			$public = ($album->public=='0' ? 1 : 0);
 
+			# Convert visible
+			$visible = ($visible==='true' ? 1 : 0);
+
 			# Set public
-			$result = $this->database->query("UPDATE lychee_albums SET public = '$public', visible = 1, password = NULL WHERE id = '$album->id';");
+			$result = $this->database->query("UPDATE lychee_albums SET public = '$public', visible = '$visible', password = NULL WHERE id = '$album->id';");
 			if (!$result) {
 				Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
 				return false;
@@ -485,7 +488,7 @@ class Album extends Module {
 
 	}
 
-	public function setPassword($password) {
+	private function setPassword($password) {
 
 		# Check dependencies
 		self::dependencies(isset($this->database, $this->albumIDs));
@@ -499,12 +502,12 @@ class Album extends Module {
 			$password = get_hashed_password($password);
 
 			# Set hashed password
-			$result = $this->database->query("UPDATE lychee_albums SET visible = 0, password = '$password' WHERE id IN ('$this->albumIDs');");
+			$result = $this->database->query("UPDATE lychee_albums SET password = '$password' WHERE id IN ('$this->albumIDs');");
 
 		} else {
 
 			# Unset password
-			$result = $this->database->query("UPDATE lychee_albums SET visible = 1, password = NULL WHERE id IN ('$this->albumIDs');");
+			$result = $this->database->query("UPDATE lychee_albums SET password = NULL WHERE id IN ('$this->albumIDs');");
 
 		}
 

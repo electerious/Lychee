@@ -311,7 +311,6 @@ contextMenu = {
 
 		contextMenu.fns = [
 			function() { album.setPublic(albumID) },
-			function() { password.set(albumID) },
 			function() { album.share(0) },
 			function() { album.share(1) },
 			function() { album.share(2) },
@@ -322,14 +321,11 @@ contextMenu = {
 			["<input readonly id='link' value='" + location.href + "'>", -1],
 			["separator", -1],
 			["<a class='icon-eye-close'></a> Make Private", 0],
-			["<a class='icon-lock'></a> Set Password", 1],
 			["separator", -1],
-			["<a class='icon-twitter'></a> Twitter", 2],
-			["<a class='icon-facebook'></a> Facebook", 3],
-			["<a class='icon-envelope'></a> Mail", 4],
+			["<a class='icon-twitter'></a> Twitter", 1],
+			["<a class='icon-facebook'></a> Facebook", 2],
+			["<a class='icon-envelope'></a> Mail", 3],
 		];
-
-		if (album.json.password==true) items[3] = ["<a class='icon-unlock'></a> Remove Password", 5];
 
 		contextMenu.show(items, mouse_x, mouse_y, "left");
 		$(".contextmenu input").focus().select();

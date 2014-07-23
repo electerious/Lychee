@@ -31,21 +31,20 @@ build = {
 
 		var album = "",
 			longTitle = "",
-			title = albumJSON.title;
+			title = albumJSON.title,
+			typeThumb = "";
 
 		if (title.length>18) {
 			title = albumJSON.title.substr(0, 18) + "...";
 			longTitle = albumJSON.title;
 		}
 
-		typeThumb0 = albumJSON.thumb0.split('.').pop();
-		typeThumb1 = albumJSON.thumb1.split('.').pop();
-		typeThumb2 = albumJSON.thumb2.split('.').pop();
+		if (albumJSON.thumb0.split('.').pop()==="svg") typeThumb = "nonretina";
 
 		album += "<div  class='album' data-id='" + albumJSON.id + "' data-password='" + albumJSON.password + "'>";
-		album +=	"<img src='" + albumJSON.thumb2 + "' width='200' height='200' alt='thumb' data-type='" + typeThumb2 + "'>";
-		album +=	"<img src='" + albumJSON.thumb1 + "' width='200' height='200' alt='thumb' data-type='" + typeThumb1 + "'>";
-		album +=	"<img src='" + albumJSON.thumb0 + "' width='200' height='200' alt='thumb' data-type='" + typeThumb0 + "'>";
+		album +=	"<img src='" + albumJSON.thumb2 + "' width='200' height='200' alt='thumb' data-type='nonretina'>";
+		album +=	"<img src='" + albumJSON.thumb1 + "' width='200' height='200' alt='thumb' data-type='nonretina'>";
+		album +=	"<img src='" + albumJSON.thumb0 + "' width='200' height='200' alt='thumb' data-type='" + typeThumb + "'>";
 		album +=	"<div class='overlay'>";
 
 		if (albumJSON.password&&!lychee.publicMode) album += "<h1><span class='icon-lock'></span> " + title + "</h1>";
@@ -54,10 +53,14 @@ build = {
 		album +=		"<a>" + albumJSON.sysdate + "</a>";
 		album +=	"</div>";
 
-		if(!lychee.publicMode&&albumJSON.star===1)		album += "<a class='badge red icon-star'></a>";
-		if(!lychee.publicMode&&albumJSON.public===1)	album += "<a class='badge red icon-share'></a>";
-		if(!lychee.publicMode&&albumJSON.unsorted===1)	album += "<a class='badge red icon-reorder'></a>";
-		if(!lychee.publicMode&&albumJSON.recent===1)	album += "<a class='badge red icon-time'></a>";
+		if (!lychee.publicMode) {
+
+			if(albumJSON.star==1)		album += "<a class='badge red icon-star'></a>";
+			if(albumJSON.public==1)	album += "<a class='badge red icon-share'></a>";
+			if(albumJSON.unsorted==1)	album += "<a class='badge red icon-reorder'></a>";
+			if(albumJSON.recent==1)	album += "<a class='badge red icon-time'></a>";
+
+		}
 
 		album += "</div>";
 

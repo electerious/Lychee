@@ -22,7 +22,6 @@ class Admin extends Access {
 			case 'setAlbumTitle':		$this->setAlbumTitle(); break;
 			case 'setAlbumDescription':	$this->setAlbumDescription(); break;
 			case 'setAlbumPublic':		$this->setAlbumPublic(); break;
-			case 'setAlbumPassword':	$this->setAlbumPassword(); break;
 			case 'deleteAlbum':			$this->deleteAlbum(); break;
 
 			# Photo functions
@@ -110,17 +109,9 @@ class Admin extends Access {
 
 	private function setAlbumPublic() {
 
-		Module::dependencies(isset($_POST['albumID'], $_POST['password']));
+		Module::dependencies(isset($_POST['albumID'], $_POST['password'], $_POST['visible']));
 		$album = new Album($this->database, $this->plugins, $this->settings, $_POST['albumID']);
-		echo $album->setPublic($_POST['password']);
-
-	}
-
-	private function setAlbumPassword() {
-
-		Module::dependencies(isset($_POST['albumID'], $_POST['password']));
-		$album = new Album($this->database, $this->plugins, $this->settings, $_POST['albumID']);
-		echo $album->setPassword($_POST['password']);
+		echo $album->setPublic($_POST['password'], $_POST['visible']);
 
 	}
 
