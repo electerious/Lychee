@@ -1,3 +1,18 @@
+## v2.5.6
+
+Released July 25, 2014
+
+- `New` Choose if album should be listed public (#177)
+- `New` Gulp instead of Grunt with autoprefixer
+- `Improved` Slightly better performance when opening big albums
+- `Improved` Checksum with sha1 instead of md5 (#179)
+- `Fixed` Missing public badge on public albums
+- `Fixed` Wrong path for public photos in view.php
+- `Fixed` Wrong link to thumbs when searching
+- `Fixed` Wrong date in album view when takestamp was null
+- `Fixed` It wasn't possible to rename albums while searching
+- `Fixed` It was possible to right-click on SmartAlbums after searching
+
 ## v2.5.5
 
 Released July 5, 2014

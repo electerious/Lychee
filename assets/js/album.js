@@ -308,10 +308,10 @@ album = {
 
 			if ($(".message .choice input[name='password']:checked").val()==="password") {
 				password = md5($(".message input.text").val());
-				album.json.password = true;
+				album.json.password = 1;
 			} else {
 				password = "";
-				album.json.password = false;
+				album.json.password = 0;
 			}
 
 			if ($(".message .choice input[name='listed']:checked").val()==="listed") listed = true;
@@ -323,8 +323,11 @@ album = {
 		if (visible.album()) {
 
 			album.json.public = (album.json.public==0) ? 1 : 0;
+			album.json.password = (album.json.public==0) ? 0 : album.json.password;
+
 			view.album.public();
 			view.album.password();
+
 			if (album.json.public==1) contextMenu.shareAlbum(albumID, e);
 
 		}
