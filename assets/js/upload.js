@@ -58,18 +58,51 @@ upload = {
 			var albumID = album.getID(),
 				process = function(files, file) {
 
+					var formData = new FormData(),
+						xhr = new XMLHttpRequest(),
+						pre_progress = 0,
+						progress,
+						finish = function() {
+
+							window.onbeforeunload = null;
+
+							$("#upload_files").val("");
+
+							upload.close();
+
+							if (album.getID()===false) lychee.goto("0");
+							else album.load(albumID);
+
+						};
+
+					// Check if file is supported
 					if (file.supported===false) {
 
 						// Skip file
 						if (file.next!==null) process(files, file.next);
+						else {
+
+							// Look for supported files
+							// If zero files are supported, hide the upload after a delay
+
+							var hasSupportedFiles = false;
+
+							for (var i = 0; i < files.length; i++) {
+
+								if (files[i].supported===true) {
+									hasSupportedFiles = true;
+									break;
+								}
+
+							}
+
+							if (hasSupportedFiles===false) setTimeout(finish, 2000);
+
+						}
+
 						return false;
 
 					}
-
-					var formData = new FormData(),
-						xhr = new XMLHttpRequest(),
-						pre_progress = 0,
-						progress;
 
 					formData.append("function", "upload");
 					formData.append("albumID", albumID);
@@ -79,10 +112,12 @@ upload = {
 
 					xhr.onload = function() {
 
-						var wait;
-
+						// On success
 						if (xhr.status===200) {
 
+							var wait;
+
+							// Set status to finished
 							$(".upload_message .rows .row:nth-child(" + (file.num+1) + ") .status")
 								.html("Finished")
 								.addClass("success");
@@ -90,6 +125,7 @@ upload = {
 							file.ready = true;
 							wait = false;
 
+							// Check if there are file which are not finished
 							for (var i = 0; i < files.length; i++) {
 
 								if (files[i].ready===false) {
@@ -99,18 +135,8 @@ upload = {
 
 							}
 
-							if (wait===false) {
-
-								window.onbeforeunload = null;
-
-								$("#upload_files").val("");
-
-								upload.close();
-
-								if (album.getID()===false) lychee.goto("0");
-								else album.load(albumID);
-
-							}
+							// Finish upload when all files are finished
+							if (wait===false) finish();
 
 						}
 
@@ -120,8 +146,10 @@ upload = {
 
 						if (e.lengthComputable) {
 
+							// Calculate progress
 							progress = (e.loaded / e.total * 100 | 0);
 
+							// Set progress when progress has changed
 							if (progress>pre_progress) {
 								$(".upload_message .rows .row:nth-child(" + (file.num+1) + ") .status").html(progress + "%");
 								pre_progress = progress;
@@ -129,12 +157,15 @@ upload = {
 
 							if (progress>=100) {
 
+								// Scroll to the uploading file
 								var scrollPos = 0;
 								if ((file.num+1)>4) scrollPos = (file.num + 1 - 4) * 40
 								$(".upload_message .rows").scrollTop(scrollPos);
 
+								// Set status to processing
 								$(".upload_message .rows .row:nth-child(" + (file.num+1) + ") .status").html("Processing");
 
+								// Upload next file
 								if (file.next!==null) process(files, file.next);
 
 							}
@@ -159,6 +190,7 @@ upload = {
 				if (i < files.length-1) files[i].next = files[i+1];
 				else files[i].next = null;
 
+				// Check if file is supported
 				if (files[i].type!=="image/jpeg"&&files[i].type!=="image/jpg"&&files[i].type!=="image/png"&&files[i].type!=="image/gif") {
 
 					files[i].ready = true;
@@ -172,6 +204,7 @@ upload = {
 
 			upload.show("Uploading", files);
 
+			// Upload first file
 			process(files, files[0]);
 
 		},
