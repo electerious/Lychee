@@ -24,6 +24,7 @@
 		z-index: 2;
 	}
 	#loading.error {
+		background-color: #2f0d0e;
 		background-image: linear-gradient(to right, #451317 0%, #451317 47%, #AA3039 53%, #AA3039 100%);
 		z-index: 1;
 	}
