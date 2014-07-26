@@ -83,8 +83,8 @@
 
 		.upload_message .rows .row a.name {
 			float: left;
-			width: 70%;
 			padding: 5px 10px;
+			width: calc(70% - 20px);
 			color: #fff;
 			font-size: 14px;
 			white-space: nowrap;
@@ -92,10 +92,12 @@
 		}
 
 		.upload_message .rows .row a.status {
-			float: right;
+			float: left;
 			padding: 5px 10px;
+			width: calc(30% - 20px);
 			color: rgba(255, 255, 255, .5);
 			font-size: 14px;
+			text-align: right;
 		}
 
 		.upload_message .rows .row a.status {
