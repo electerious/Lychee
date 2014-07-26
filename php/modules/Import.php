@@ -58,7 +58,7 @@ class Import extends Module {
 
 	}
 
-	static function move($database, $path) {
+	/*static function move($database, $path) {
 
 		# Determine OS type and set move cmd (Windows untested!)
 		$myos = substr(PHP_OS,0,3);
@@ -111,26 +111,34 @@ class Import extends Module {
 
 		return $path;
 
-	}
+	}*/
 
 	static function server($albumID = 0, $path, $useTemp = false) {
 
 		global $database, $plugins, $settings;
 
+		# Parse path
 		if (!isset($path)) $path = LYCHEE_UPLOADS_IMPORT;
+		if (substr($path, -1)==='/') $path = substr($path, 0, -1);
 
 		if (is_dir($path)===false) {
 			Log::error($database, __METHOD__, __LINE__, 'Given path is not a directory (' . $path . ')');
 			return 'Error: Given path is not a directory!';
 		}
 
-		if ($useTemp===true) {
+		# Skip folders of Lychee
+		if ($path===LYCHEE_UPLOADS_BIG||($path . '/')===LYCHEE_UPLOADS_BIG||$path===LYCHEE_UPLOADS_THUMB||($path . '/')===LYCHEE_UPLOADS_THUMB) {
+			Log::error($database, __METHOD__, __LINE__, 'Given path is a reserved path of Lychee (' . $path . ')');
+			return 'Error: Given path is a reserved path of Lychee!';
+		}
+
+		/*if ($useTemp===true) {
 			$path = Import::move($database, $path);
 			if ($path===false) {
 				Log::error($database, __METHOD__, __LINE__, 'Failed to move import to temporary directory');
 				return false;
 			}
-		}
+		}*/
 
 		$error				= false;
 		$contains['photos']	= false;
@@ -164,9 +172,10 @@ class Import extends Module {
 
 				# Folder
 
-				$name		= mysqli_real_escape_string($database, basename($file));
-				$album		= new Album($database, null, null, null);
-				$newAlbumID	= $album->add('[Import] ' . $name);
+				$name				= mysqli_real_escape_string($database, basename($file));
+				$album				= new Album($database, null, null, null);
+				$newAlbumID			= $album->add('[Import] ' . $name);
+				$contains['albums']	= true;
 
 				if ($newAlbumID===false) {
 					$error = true;
@@ -174,22 +183,22 @@ class Import extends Module {
 					continue;
 				}
 
-				if (Import::server($newAlbumID, $file . '/', false)==='Warning: Folder empty or no readable files to process!') {
+				$import = Import::server($newAlbumID, $file . '/', false);
+
+				if ($import!==true&&$import!=='Notice: Import only contains albums!') {
 					$error = true;
 					Log::error($database, __METHOD__, __LINE__, 'Could not import folder. Function returned warning');
 					continue;
 				}
-
-				$contains['albums'] = true;
 
 			}
 
 		}
 
 		# Delete tmpdir if import was successful
-		if ($error===false&&$useTemp===true&&file_exists(LYCHEE_DATA . $tmpdirname)) {
+		/*if ($error===false&&$useTemp===true&&file_exists(LYCHEE_DATA . $tmpdirname)) {
 			if (@rmdir(LYCHEE_DATA . $tmpdirname)===false) Log::error($database, __METHOD__, __LINE__, 'Could not delete temp-folder (' . LYCHEE_DATA . $tmpdirname . ') after successful import');
-		}
+		}*/
 
 		if ($contains['photos']===false&&$contains['albums']===false)	return 'Warning: Folder empty or no readable files to process!';
 		if ($contains['photos']===false&&$contains['albums']===true)	return 'Notice: Import only contains albums!';
