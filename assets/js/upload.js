@@ -58,6 +58,14 @@ upload = {
 			var albumID = album.getID(),
 				process = function(files, file) {
 
+					if (file.supported===false) {
+
+						// Skip file
+						if (file.next!==null) process(files, file.next);
+						return false;
+
+					}
+
 					var formData = new FormData(),
 						xhr = new XMLHttpRequest(),
 						pre_progress = 0,
