@@ -41,7 +41,7 @@ Lychee supports [Twitter Cards](https://dev.twitter.com/docs/cards) and [Open Gr
 
 ### Plugins and Extensions
 
-The plugin-system of Lychee allows you to execute scripts, when a certain action fires. Plugins are hooks, which are injected directly into Lychee. [Plugin documentation &#187;](docs/)
+The plugin-system of Lychee allows you to execute scripts, when a certain action fires. Plugins are hooks, which are injected directly into Lychee. [Plugin documentation &#187;](docs/Plugins.md)
 
 It's also possible to build extensions upon Lychee. The way to do so isn't documented and can change every time. We recommend to use the plugin-system, when possible.
 
