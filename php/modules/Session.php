@@ -63,6 +63,7 @@ class Session extends Module {
 			unset($return['config']['dropboxKey']);
 			unset($return['config']['login']);
 			unset($return['config']['location']);
+			unset($return['config']['plugins']);
 
 			# Logged out
 			$return['loggedIn'] = false;
