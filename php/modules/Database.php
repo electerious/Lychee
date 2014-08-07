@@ -72,8 +72,13 @@ class Database extends Module {
 		$database = new mysqli($host, $user, $password);
 
 		if ($database->connect_errno) return 'Warning: Connection failed!';
-		else {
 
+		# Check if user can create a database
+		$result = $database->query('CREATE DATABASE lychee_dbcheck');
+		if (!$result) return 'Warning: Creation failed!';
+		else $database->query('DROP DATABASE lychee_dbcheck');
+
+		# Save config.php
 $config = "<?php
 
 ###
@@ -92,12 +97,10 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 ?>";
 
-			# Save file
-			if (file_put_contents(LYCHEE_CONFIG_FILE, $config)===false) return 'Warning: Could not create file!';
+		# Save file
+		if (file_put_contents(LYCHEE_CONFIG_FILE, $config)===false) return 'Warning: Could not create file!';
 
-			return true;
-
-		}
+		return true;
 
 	}
 
