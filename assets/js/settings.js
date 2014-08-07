@@ -47,6 +47,18 @@ var settings = {
 
 							}
 
+							// Creation failed
+							if (data.indexOf("Warning: Creation failed!")!==-1) {
+
+								buttons = [
+									["Retry", function() { setTimeout(settings.createConfig, 400) }],
+									["", function() {}]
+								];
+								modal.show("Creation Failed", "Unable to create the database. Double-check your host, username and password and ensure that the specified user has the rights to modify and add content to the database.", buttons, null, false);
+								return false;
+
+							}
+
 							// Could not create file
 							if (data.indexOf("Warning: Could not create file!")!==-1) {
 
