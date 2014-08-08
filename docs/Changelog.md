@@ -1,6 +1,6 @@
 ## v2.6
 
-Released August 9, 2014
+Released August ??, 2014
 
 - `New` Uploader (#101)
 - `New` Plugin documentation
