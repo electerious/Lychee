@@ -73,10 +73,16 @@ class Database extends Module {
 
 		if ($database->connect_errno) return 'Warning: Connection failed!';
 
-		# Check if user can create a database
-		$result = $database->query('CREATE DATABASE lychee_dbcheck');
-		if (!$result) return 'Warning: Creation failed!';
-		else $database->query('DROP DATABASE lychee_dbcheck');
+		# Check if database exists
+		if (!$database->select_db($name)) {
+
+			# Database doesn't exist
+			# Check if user can create a database
+			$result = $database->query('CREATE DATABASE lychee_dbcheck');
+			if (!$result) return 'Warning: Creation failed!';
+			else $database->query('DROP DATABASE lychee_dbcheck');
+
+		}
 
 		# Save config.php
 $config = "<?php
