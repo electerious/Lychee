@@ -5,15 +5,6 @@ The following PHP extensions must be activated:
 
 	exif, gd, json, mbstring, mysqli, zip
 	
-To use Lychee without restrictions, we recommend to increase the values of the following properties in `php.ini`:
-
-	max_execution_time = 200
-	post_max_size = 200M
-	upload_max_size = 200M
-	upload_max_filesize = 20M
-	max_file_uploads = 100
-	memory_limit = 256M
-	
 You might also take a look at [Issue #106](https://github.com/electerious/Lychee/issues/106) if you are using nginx or in the [FAQ](https://github.com/electerious/Lychee/blob/master/docs/FAQ.md#i-cant-upload-multiple-photos-at-once) if you are using CGI or FastCGI.
 	
 ### 2. Download
