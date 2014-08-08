@@ -1,3 +1,12 @@
+## v2.6
+
+Released August 9, 2014
+
+- `New` Uploader (#101)
+- `New` Plugin documentation
+- `Improved` Database and installation process (#202 #195)
+- `Fixed` Don't show EXIF info when not available (#194)
+
 ## v2.5.6
 
 Released July 25, 2014
