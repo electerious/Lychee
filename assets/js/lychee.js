@@ -8,7 +8,7 @@
 var lychee = {
 
 	title: "",
-	version: "2.6.0",
+	version: "2.6",
 	version_code: "020600",
 
 	api_path: "php/api.php",
@@ -220,7 +220,7 @@ var lychee = {
 
 		$.ajax({
 			url: lychee.update_path,
-			success: function(data) { if (data!=lychee.version) $("#version span").show(); }
+			success: function(data) { if (parseInt(data)>parseInt(lychee.version_code)) $("#version span").show(); }
 		});
 
 	},
