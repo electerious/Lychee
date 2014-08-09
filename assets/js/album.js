@@ -287,7 +287,8 @@ album = {
 
 		var params,
 			password = "",
-			listed = false;
+			listed = false,
+			downloadable = false;
 
 		if (!visible.message()&&album.json.public==0) {
 
@@ -315,10 +316,11 @@ album = {
 			}
 
 			if ($(".message .choice input[name='listed']:checked").val()==="listed") listed = true;
+			if ($(".message .choice input[name='downloadable']:checked").val()==="downloadable") downloadable = true;
 
 		}
 
-		params = "setAlbumPublic&albumID=" + albumID + "&password=" + password + "&visible=" + listed;
+		params = "setAlbumPublic&albumID=" + albumID + "&password=" + password + "&visible=" + listed + "&downloadable=" + downloadable;
 
 		if (visible.album()) {
 

@@ -109,9 +109,9 @@ class Admin extends Access {
 
 	private function setAlbumPublic() {
 
-		Module::dependencies(isset($_POST['albumID'], $_POST['password'], $_POST['visible']));
+		Module::dependencies(isset($_POST['albumID'], $_POST['password'], $_POST['visible'], $_POST['downloadable']));
 		$album = new Album($this->database, $this->plugins, $this->settings, $_POST['albumID']);
-		echo $album->setPublic($_POST['password'], $_POST['visible']);
+		echo $album->setPublic($_POST['password'], $_POST['visible'], $_POST['downloadable']);
 
 	}
 

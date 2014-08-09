@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS `lychee_albums` (
   `sysstamp` int(11) NOT NULL,
   `public` tinyint(1) NOT NULL DEFAULT '0',
   `visible` tinyint(1) NOT NULL DEFAULT '1',
+  `downloadable` tinyint(1) NOT NULL DEFAULT '0',
   `password` varchar(100) DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
