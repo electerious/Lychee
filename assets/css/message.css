@@ -68,6 +68,7 @@
 	}
 	.message p b {
 		font-weight: bold;
+		color: #fff;
 	}
 	.message p a {
 		color: #eee;
