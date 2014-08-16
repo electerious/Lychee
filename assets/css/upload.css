@@ -42,6 +42,7 @@
 		text-align: center;
 	}
 	.upload_message .close {
+		display: none;
 		position: absolute;
 		top: 0px;
 		right: 0px;

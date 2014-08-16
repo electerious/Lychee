@@ -214,6 +214,7 @@ build = {
 		modal += "<div class='upload_overlay fadeIn'>";
 		modal +=	"<div class='upload_message center'>";
 		modal +=		"<h1>" + title + "</h1>";
+		modal +=		"<a class='close icon-remove-sign'></a>";
 		modal +=		"<div class='rows'>";
 
 		for (var i = 0; i < files.length; i++) {
