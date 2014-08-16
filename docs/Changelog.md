@@ -1,10 +1,12 @@
 ## v2.6
 
-Released August 17, 2014
+Released August 16, 2014
 
-- `New` Uploader (#101)
+- `New` Rewritten and redesigned Uploader (#101)
+- `New` Custom server-import directory (#187)
 - `New` Plugin documentation
 - `Improved` Database and installation process (#202 #195)
+- `Improved` "No public albums" now easier to read (#205)
 - `Fixed` Don't show EXIF info when not available (#194)
 
 ## v2.5.6
