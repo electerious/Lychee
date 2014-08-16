@@ -16,26 +16,6 @@ upload = {
 
 	},
 
-	setIcon: function(icon) {
-
-		$(".upload_message a").remove();
-		$(".upload_message").prepend("<a class='icon-" + icon + "'></a>");
-
-	},
-
-	setProgress: function(progress) {
-
-		$(".progressbar div").css("width", progress + "%");
-
-	},
-
-	setText: function(text) {
-
-		$(".progressbar").remove();
-		$(".upload_message").append("<p>" + text + "</p>");
-
-	},
-
 	notify: function(title, text) {
 
 		var popup;
@@ -404,7 +384,6 @@ upload = {
 		if (force===true) {
 			$(".upload_overlay").remove();
 		} else {
-			upload.setProgress(100);
 			$(".upload_overlay").removeClass("fadeIn").css("opacity", 0);
 			setTimeout(function() { $(".upload_overlay").remove() }, 300);
 		}
