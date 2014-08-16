@@ -146,7 +146,7 @@ view = {
 
 				if (smartData===""&&albumsData==="") {
 					lychee.content.html('');
-					$("body").append(build.no_content("picture"));
+					$("body").append(build.no_content("share"));
 				} else {
 					lychee.content.html(smartData + albumsData);
 				}

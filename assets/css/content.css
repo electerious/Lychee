@@ -229,7 +229,7 @@
 		left: 50%;
 		height: 160px;
 		width: 180px;
-		margin-top: -80px;
+		margin-top: -60px;
 		margin-left: -90px;
 		padding-top: 20px;
 		color: rgba(20, 20, 20, 1);
@@ -237,8 +237,9 @@
 		text-align: center;
 	}
 	.no_content .icon {
-		font-size: 120px;
+		font-size: 80px;
 	}
 	.no_content p {
 		font-size: 18px;
+		font-weight: bold;
 	}

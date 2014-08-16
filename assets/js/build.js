@@ -139,9 +139,9 @@ build = {
 		no_content += "<div class='no_content fadeIn'>";
 		no_content +=	"<a class='icon icon-" + typ + "'></a>";
 
-		if (typ==="search")			no_content += "<p>No results</p>";
-		else if (typ==="picture")	no_content += "<p>No public albums</p>";
-		else if (typ==="cog")		no_content += "<p>No Configuration!</p>";
+		if (typ==="search")		no_content += "<p>No results</p>";
+		else if (typ==="share")	no_content += "<p>No public albums</p>";
+		else if (typ==="cog")	no_content += "<p>No configuration</p>";
 
 		no_content += "</div>";
 
