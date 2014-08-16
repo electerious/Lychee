@@ -36,16 +36,18 @@ upload = {
 
 	},
 
-	notify: function(title) {
+	notify: function(title, text) {
 
 		var popup;
+
+		if (!text||text==="") text = "You can now manage your new photo(s).";
 
 		if (!window.webkitNotifications) return false;
 
 		if (window.webkitNotifications.checkPermission()!==0) window.webkitNotifications.requestPermission();
 
 		if (window.webkitNotifications.checkPermission()===0&&title) {
-			popup = window.webkitNotifications.createNotification("", title, "You can now manage your new photo(s).");
+			popup = window.webkitNotifications.createNotification("", title, text);
 			popup.show();
 		}
 
@@ -56,6 +58,7 @@ upload = {
 		local: function(files) {
 
 			var albumID = album.getID(),
+				error = false,
 				process = function(files, file) {
 
 					var formData = new FormData(),
@@ -68,8 +71,19 @@ upload = {
 
 							$("#upload_files").val("");
 
-							upload.close();
-							upload.notify("Upload complete");
+							if (error===false) {
+
+								// Success
+								upload.close();
+								upload.notify("Upload complete");
+
+							} else {
+
+								// Error
+								$(".upload_message a.close").show();
+								upload.notify("Upload complete", "Failed to upload one or more photos.");
+
+							}
 
 							if (album.getID()===false) lychee.goto("0");
 							else album.load(albumID);
@@ -134,6 +148,9 @@ upload = {
 							$(".upload_message .rows .row:nth-child(" + (file.num+1) + ") p.notice")
 								.html("Server returned the status code " + xhr.status)
 								.show();
+
+							// Set global error
+							error = true;
 
 							// Throw error
 							lychee.error("Upload failed. Server returned the status code " + xhr.status + "!", xhr, xhr.responseText);
