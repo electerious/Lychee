@@ -56,9 +56,9 @@ build = {
 		if (!lychee.publicMode) {
 
 			if(albumJSON.star==1)		album += "<a class='badge red icon-star'></a>";
-			if(albumJSON.public==1)	album += "<a class='badge red icon-share'></a>";
+			if(albumJSON.public==1)		album += "<a class='badge red icon-share'></a>";
 			if(albumJSON.unsorted==1)	album += "<a class='badge red icon-reorder'></a>";
-			if(albumJSON.recent==1)	album += "<a class='badge red icon-time'></a>";
+			if(albumJSON.recent==1)		album += "<a class='badge red icon-time'></a>";
 
 		}
 
@@ -139,9 +139,9 @@ build = {
 		no_content += "<div class='no_content fadeIn'>";
 		no_content +=	"<a class='icon icon-" + typ + "'></a>";
 
-		if (typ==="search") no_content += "<p>No results</p>";
-		else if (typ==="picture") no_content += "<p>No public albums</p>";
-		else if (typ==="cog") no_content += "<p>No Configuration!</p>";
+		if (typ==="search")			no_content += "<p>No results</p>";
+		else if (typ==="picture")	no_content += "<p>No public albums</p>";
+		else if (typ==="cog")		no_content += "<p>No Configuration!</p>";
 
 		no_content += "</div>";
 
