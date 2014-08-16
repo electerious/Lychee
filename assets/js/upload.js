@@ -135,6 +135,9 @@ upload = {
 								.html("Server returned the status code " + xhr.status)
 								.show();
 
+							// Throw error
+							lychee.error("Upload failed. Server returned the status code " + xhr.status + "!", xhr, xhr.responseText);
+
 						}
 
 						// Check if there are file which are not finished
