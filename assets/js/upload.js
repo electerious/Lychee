@@ -69,6 +69,7 @@ upload = {
 							$("#upload_files").val("");
 
 							upload.close();
+							upload.notify("Upload complete");
 
 							if (album.getID()===false) lychee.goto("0");
 							else album.load(albumID);
@@ -112,33 +113,42 @@ upload = {
 
 					xhr.onload = function() {
 
-						// On success
-						if (xhr.status===200) {
+						var wait = false;
 
-							var wait;
+						file.ready = true;
 
-							// Set status to finished
+						// Set status
+						if (xhr.status===200&&xhr.responseText==="1") {
+
+							// Success
 							$(".upload_message .rows .row:nth-child(" + (file.num+1) + ") .status")
 								.html("Finished")
 								.addClass("success");
 
-							file.ready = true;
-							wait = false;
+						} else {
 
-							// Check if there are file which are not finished
-							for (var i = 0; i < files.length; i++) {
-
-								if (files[i].ready===false) {
-									wait = true;
-									break;
-								}
-
-							}
-
-							// Finish upload when all files are finished
-							if (wait===false) finish();
+							// Error
+							$(".upload_message .rows .row:nth-child(" + (file.num+1) + ") .status")
+								.html("Error")
+								.addClass("error");
+							$(".upload_message .rows .row:nth-child(" + (file.num+1) + ") p.notice")
+								.html("Server returned the status code " + xhr.status)
+								.show();
 
 						}
+
+						// Check if there are file which are not finished
+						for (var i = 0; i < files.length; i++) {
+
+							if (files[i].ready===false) {
+								wait = true;
+								break;
+							}
+
+						}
+
+						// Finish upload when all files are finished
+						if (wait===false) finish();
 
 					};
 

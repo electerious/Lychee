@@ -220,21 +220,14 @@ build = {
 
 			if (files[i].name.length>40) files[i].name = files[i].name.substr(0, 17) + "..." + files[i].name.substr(files[i].name.length-20, 20);
 
-			if (files[i].supported===true) {
+			modal += "<div class='row'>";
+			modal +=	"<a class='name'>" + lychee.escapeHTML(files[i].name) + "</a>";
 
-				modal += "<div class='row'>"
-				modal +=	"<a class='name'>" + lychee.escapeHTML(files[i].name) + "</a>"
-				modal +=	"<a class='status'></a>"
-				modal += "</div>";
+			if (files[i].supported===true)	modal += "<a class='status'></a>";
+			else							modal += "<a class='status error'>Not supported</a>";
 
-			} else {
-
-				modal += "<div class='row'>"
-				modal +=	"<a class='name'>" + lychee.escapeHTML(files[i].name) + "</a>"
-				modal +=	"<a class='status error'>Not supported</a>"
-				modal += "</div>";
-
-			}
+			modal +=	"<p class='notice'></p>";
+			modal += "</div>";
 
 		}
 
