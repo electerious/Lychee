@@ -157,8 +157,11 @@ var lychee = {
 
 	goto: function(url) {
 
-		if (url===undefined) url = "";
-		document.location.hash = url;
+		if (url===undefined) url = "#";
+		else url = "#" + url;
+
+		history.pushState(null, null, url);
+		lychee.load();
 
 	},
 
