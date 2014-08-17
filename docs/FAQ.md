@@ -45,5 +45,8 @@ No. Video support is not planned.
 #### Is it possible to create multiple users?
 [No, not yet.](https://github.com/electerious/Lychee/issues/132)
 
+#### Does Lychee use ImageMagick?
+Yes. Lychee uses ImageMagick when available.
+
 #### Blank screen when viewing a photo using iOS
 There's a problem with images compressed by ImageOptim. [Read more.](https://github.com/electerious/Lychee/issues/175#issuecomment-47403992)
