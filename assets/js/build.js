@@ -56,9 +56,9 @@ build = {
 		if (!lychee.publicMode) {
 
 			if(albumJSON.star==1)		album += "<a class='badge red icon-star'></a>";
-			if(albumJSON.public==1)	album += "<a class='badge red icon-share'></a>";
+			if(albumJSON.public==1)		album += "<a class='badge red icon-share'></a>";
 			if(albumJSON.unsorted==1)	album += "<a class='badge red icon-reorder'></a>";
-			if(albumJSON.recent==1)	album += "<a class='badge red icon-time'></a>";
+			if(albumJSON.recent==1)		album += "<a class='badge red icon-time'></a>";
 
 		}
 
@@ -139,9 +139,9 @@ build = {
 		no_content += "<div class='no_content fadeIn'>";
 		no_content +=	"<a class='icon icon-" + typ + "'></a>";
 
-		if (typ==="search") no_content += "<p>No results</p>";
-		else if (typ==="picture") no_content += "<p>No public albums</p>";
-		else if (typ==="cog") no_content += "<p>No Configuration!</p>";
+		if (typ==="search")		no_content += "<p>No results</p>";
+		else if (typ==="share")	no_content += "<p>No public albums</p>";
+		else if (typ==="cog")	no_content += "<p>No configuration</p>";
 
 		no_content += "</div>";
 
@@ -214,27 +214,21 @@ build = {
 		modal += "<div class='upload_overlay fadeIn'>";
 		modal +=	"<div class='upload_message center'>";
 		modal +=		"<h1>" + title + "</h1>";
+		modal +=		"<a class='close icon-remove-sign'></a>";
 		modal +=		"<div class='rows'>";
 
 		for (var i = 0; i < files.length; i++) {
 
 			if (files[i].name.length>40) files[i].name = files[i].name.substr(0, 17) + "..." + files[i].name.substr(files[i].name.length-20, 20);
 
-			if (files[i].supported===true) {
+			modal += "<div class='row'>";
+			modal +=	"<a class='name'>" + lychee.escapeHTML(files[i].name) + "</a>";
 
-				modal += "<div class='row'>"
-				modal +=	"<a class='name'>" + lychee.escapeHTML(files[i].name) + "</a>"
-				modal +=	"<a class='status'></a>"
-				modal += "</div>";
+			if (files[i].supported===true)	modal += "<a class='status'></a>";
+			else							modal += "<a class='status error'>Not supported</a>";
 
-			} else {
-
-				modal += "<div class='row'>"
-				modal +=	"<a class='name'>" + lychee.escapeHTML(files[i].name) + "</a>"
-				modal +=	"<a class='status error'>Not supported</a>"
-				modal += "</div>";
-
-			}
+			modal +=	"<p class='notice'></p>";
+			modal += "</div>";
 
 		}
 

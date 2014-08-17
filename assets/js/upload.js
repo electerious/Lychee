@@ -16,36 +16,18 @@ upload = {
 
 	},
 
-	setIcon: function(icon) {
-
-		$(".upload_message a").remove();
-		$(".upload_message").prepend("<a class='icon-" + icon + "'></a>");
-
-	},
-
-	setProgress: function(progress) {
-
-		$(".progressbar div").css("width", progress + "%");
-
-	},
-
-	setText: function(text) {
-
-		$(".progressbar").remove();
-		$(".upload_message").append("<p>" + text + "</p>");
-
-	},
-
-	notify: function(title) {
+	notify: function(title, text) {
 
 		var popup;
+
+		if (!text||text==="") text = "You can now manage your new photo(s).";
 
 		if (!window.webkitNotifications) return false;
 
 		if (window.webkitNotifications.checkPermission()!==0) window.webkitNotifications.requestPermission();
 
 		if (window.webkitNotifications.checkPermission()===0&&title) {
-			popup = window.webkitNotifications.createNotification("", title, "You can now manage your new photo(s).");
+			popup = window.webkitNotifications.createNotification("", title, text);
 			popup.show();
 		}
 
@@ -56,6 +38,7 @@ upload = {
 		local: function(files) {
 
 			var albumID = album.getID(),
+				error = false,
 				process = function(files, file) {
 
 					var formData = new FormData(),
@@ -68,7 +51,19 @@ upload = {
 
 							$("#upload_files").val("");
 
-							upload.close();
+							if (error===false) {
+
+								// Success
+								upload.close();
+								upload.notify("Upload complete");
+
+							} else {
+
+								// Error
+								$(".upload_message a.close").show();
+								upload.notify("Upload complete", "Failed to upload one or more photos.");
+
+							}
 
 							if (album.getID()===false) lychee.goto("0");
 							else album.load(albumID);
@@ -112,33 +107,48 @@ upload = {
 
 					xhr.onload = function() {
 
-						// On success
-						if (xhr.status===200) {
+						var wait = false;
 
-							var wait;
+						file.ready = true;
 
-							// Set status to finished
+						// Set status
+						if (xhr.status===200&&xhr.responseText==="1") {
+
+							// Success
 							$(".upload_message .rows .row:nth-child(" + (file.num+1) + ") .status")
 								.html("Finished")
 								.addClass("success");
 
-							file.ready = true;
-							wait = false;
+						} else {
 
-							// Check if there are file which are not finished
-							for (var i = 0; i < files.length; i++) {
+							// Error
+							$(".upload_message .rows .row:nth-child(" + (file.num+1) + ") .status")
+								.html("Error")
+								.addClass("error");
+							$(".upload_message .rows .row:nth-child(" + (file.num+1) + ") p.notice")
+								.html("Server returned an unknown response. Please take a look at the console of your browser for further details.")
+								.show();
 
-								if (files[i].ready===false) {
-									wait = true;
-									break;
-								}
+							// Set global error
+							error = true;
 
-							}
-
-							// Finish upload when all files are finished
-							if (wait===false) finish();
+							// Throw error
+							lychee.error("Upload failed. Server returned the status code " + xhr.status + "!", xhr, xhr.responseText);
 
 						}
+
+						// Check if there are file which are not finished
+						for (var i = 0; i < files.length; i++) {
+
+							if (files[i].ready===false) {
+								wait = true;
+								break;
+							}
+
+						}
+
+						// Finish upload when all files are finished
+						if (wait===false) finish();
 
 					};
 
@@ -374,7 +384,6 @@ upload = {
 		if (force===true) {
 			$(".upload_overlay").remove();
 		} else {
-			upload.setProgress(100);
 			$(".upload_overlay").removeClass("fadeIn").css("opacity", 0);
 			setTimeout(function() { $(".upload_overlay").remove() }, 300);
 		}

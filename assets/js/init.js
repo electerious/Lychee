@@ -164,9 +164,6 @@ $(document).ready(function(){
 		/* Add Dialog */
 		.on(event_name, ".button_add", function(e) { contextMenu.add(e) })
 
-		/* Upload */
-		.on("change", "#upload_files", function() { modal.close(); upload.start.local(this.files) })
-
 		/* Context Menu */
 		.on("contextmenu", ".photo", function(e) { contextMenu.photo(photo.getID(), e) })
 		.on("contextmenu", ".album", function(e) { contextMenu.album(album.getID(), e) })
@@ -177,12 +174,14 @@ $(document).ready(function(){
 		.on(event_name, "#infobox_overlay", view.infobox.hide)
 
 		/* Upload */
+		.on("change", "#upload_files", function() { modal.close(); upload.start.local(this.files) })
+		.on(event_name, ".upload_message a.close", upload.close)
 		.on("dragover", function(e) { e.preventDefault(); }, false)
 		.on("drop", function(e) {
 			e.stopPropagation();
 			e.preventDefault();
-			if (e.originalEvent.dataTransfer.files.length>0) upload.start.local(e.originalEvent.dataTransfer.files);
-			else if (e.originalEvent.dataTransfer.getData('Text').length>3) upload.start.url(e.originalEvent.dataTransfer.getData('Text'));
+			if (e.originalEvent.dataTransfer.files.length>0)				upload.start.local(e.originalEvent.dataTransfer.files);
+			else if (e.originalEvent.dataTransfer.getData('Text').length>3)	upload.start.url(e.originalEvent.dataTransfer.getData('Text'));
 			return true;
 		});
 

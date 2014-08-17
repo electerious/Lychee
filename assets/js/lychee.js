@@ -354,9 +354,12 @@ var lychee = {
 
 	error: function(errorThrown, params, data) {
 
-		console.log("Error Description: " + errorThrown);
-		console.log("Error Params: " + params);
-		console.log("Server Response: " + data);
+		console.error({
+			description: errorThrown,
+			params: params,
+			response: data
+		});
+
 		loadingBar.show("error", errorThrown);
 
 	}

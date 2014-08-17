@@ -42,6 +42,7 @@
 		text-align: center;
 	}
 	.upload_message .close {
+		display: none;
 		position: absolute;
 		top: 0px;
 		right: 0px;
@@ -119,3 +120,14 @@
 			.upload_message .rows .row a.status.success {
 				color: rgb(42, 213, 0);
 			}
+
+		.upload_message .rows .row p.notice {
+			display: none;
+			float: left;
+			padding: 2px 10px 5px;
+			width: calc(100% - 20px);
+			color: rgba(255,255,255,.5);
+			font-size: 12px;
+			overflow: hidden;
+			line-height: 16px;
+		}
