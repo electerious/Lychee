@@ -126,7 +126,7 @@ upload = {
 								.html("Error")
 								.addClass("error");
 							$(".upload_message .rows .row:nth-child(" + (file.num+1) + ") p.notice")
-								.html("Server returned the status code " + xhr.status)
+								.html("Server returned an unknown response. Please take a look at the console of your browser for further details.")
 								.show();
 
 							// Set global error
