@@ -64,6 +64,7 @@ view = {
 					$("#tools_albums, #tools_photo").hide();
 					$("#tools_album").show();
 					album.json.content === false ? $("#button_archive").hide() : $("#button_archive").show();
+					if (lychee.publicMode&&album.json.downloadable==="0") $("#button_archive").hide();
 					if (albumID==="s"||albumID==="f"||albumID==="r") {
 						$("#button_info_album, #button_trash_album, #button_share_album").hide();
 					} else if (albumID==="0") {
