@@ -441,6 +441,28 @@ class Album extends Module {
 
 	}
 
+	public function getDownloadable() {
+
+		# Check dependencies
+		self::dependencies(isset($this->database, $this->albumIDs));
+
+		# Call plugins
+		$this->plugins(__METHOD__, 0, func_get_args());
+
+		if ($this->albumIDs==='0'||$this->albumIDs==='s'||$this->albumIDs==='f') return false;
+
+		# Execute query
+		$albums	= $this->database->query("SELECT downloadable FROM lychee_albums WHERE id = '$this->albumIDs' LIMIT 1;");
+		$album	= $albums->fetch_object();
+
+		# Call plugins
+		$this->plugins(__METHOD__, 1, func_get_args());
+
+		if ($album->downloadable==1) return true;
+		return false;
+
+	}
+
 	public function setPublic($password, $visible, $downloadable) {
 
 		# Check dependencies
