@@ -237,12 +237,6 @@ view = {
 
 		},
 
-		description: function() {
-
-			$("#infobox .attr_description").html(album.json.description + " " + build.editIcon("edit_description_album"));
-
-		},
-
 		content: {
 
 			init: function() {
@@ -304,6 +298,12 @@ view = {
 				});
 
 			}
+
+		},
+
+		description: function() {
+
+			$("#infobox .attr_description").html(album.json.description + " " + build.editIcon("edit_description_album"));
 
 		},
 
