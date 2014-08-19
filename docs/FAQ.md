@@ -16,7 +16,7 @@ If possible, change these settings directly in your `php.ini`. We recommend to i
 	memory_limit = 256M
 
 #### Which browsers are supported?
-Lychee supports the latest versions of Google Chrome, Apple Safari, Mozilla Firefox and Opera. Photos you share with others can be viewed from every browser.
+Lychee supports the latest versions of Google Chrome, Apple Safari, Mozilla Firefox, Opera and Microsoft Internet Explorer. Make sure you are always running the newest version.
 
 #### What is new?
 Take a look at the [Changelog](Changelog.md) to see what's new.
