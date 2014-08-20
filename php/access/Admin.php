@@ -218,7 +218,7 @@ class Admin extends Access {
 	private function search() {
 
 		Module::dependencies(isset($_POST['term']));
-		echo json_encode(search($this->database, $this->settings, $_POST['term']));
+		echo json_encode(search($this->database, $this->tablePrefix, $this->settings, $_POST['term']));
 
 	}
 

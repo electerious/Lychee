@@ -29,9 +29,9 @@
 				require(LYCHEE . "php/autoload.php");
 				require(LYCHEE . "php/modules/misc.php");
 
-				$database = Database::connect($dbHost, $dbUser, $dbPassword, $dbName);
+				$database = Database::connect($dbHost, $dbUser, $dbPassword, $dbName, $dbTablePrefix);
 
-				echo getGraphHeader($database, $_GET['p']);
+				echo getGraphHeader($database, $dbTablePrefix, $_GET['p']);
 
 			}
 

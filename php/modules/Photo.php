@@ -143,7 +143,7 @@ class Photo extends Module {
 			}
 
 			# Save to DB
-			$query = "INSERT INTO lychee_photos (id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, checksum)
+			$rawQuery = "INSERT INTO {prefix}_photos (id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, checksum)
 				VALUES (
 					'" . $id . "',
 					'" . $info['title'] . "',
@@ -166,6 +166,7 @@ class Photo extends Module {
 					'" . $public . "',
 					'" . $star . "',
 					'" . $checksum . "');";
+                        $query = Database::prepareQuery($rawQuery, $this->tablePrefix);
 			$result = $this->database->query($query);
 
 			if (!$result) {
@@ -389,7 +390,7 @@ class Photo extends Module {
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Get photo
-		$photos	= $this->database->query("SELECT * FROM lychee_photos WHERE id = '$this->photoIDs' LIMIT 1;");
+		$photos	= $this->database->query(Database::prepareQuery("SELECT * FROM {prefix}_photos WHERE id = '$this->photoIDs' LIMIT 1;", $this->tablePrefix));
 		$photo	= $photos->fetch_assoc();
 
 		# Parse photo
@@ -404,7 +405,7 @@ class Photo extends Module {
 			if ($photo['album']!=0) {
 
 				# Get album
-				$albums = $this->database->query("SELECT public FROM lychee_albums WHERE id = '" . $photo['album'] . " LIMIT 1';");
+				$albums = $this->database->query(Database::prepareQuery("SELECT public FROM {prefix}_albums WHERE id = '" . $photo['album'] . " LIMIT 1';"), $this->tablePrefix);
 				$album = $albums->fetch_assoc();
 
 				# Parse album
@@ -527,7 +528,7 @@ class Photo extends Module {
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Get photo
-		$photos	= $this->database->query("SELECT title, url FROM lychee_photos WHERE id = '$this->photoIDs' LIMIT 1;");
+		$photos	= $this->database->query(Database::prepareQuery("SELECT title, url FROM {prefix}_photos WHERE id = '$this->photoIDs' LIMIT 1;", $this->tablePrefix));
 		$photo	= $photos->fetch_object();
 
 		# Get extension
@@ -567,7 +568,7 @@ class Photo extends Module {
 		if (strlen($title)>50) $title = substr($title, 0, 50);
 
 		# Set title
-		$result = $this->database->query("UPDATE lychee_photos SET title = '$title' WHERE id IN ($this->photoIDs);");
+		$result = $this->database->query(Database::prepareQuery("UPDATE {prefix}_photos SET title = '$title' WHERE id IN ($this->photoIDs);", $this->tablePrefix));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
@@ -593,7 +594,7 @@ class Photo extends Module {
 		if (strlen($description)>1000) $description = substr($description, 0, 1000);
 
 		# Set description
-		$result = $this->database->query("UPDATE lychee_photos SET description = '$description' WHERE id IN ('$this->photoIDs');");
+		$result = $this->database->query(Database::prepareQuery("UPDATE {prefix}_photos SET description = '$description' WHERE id IN ('$this->photoIDs');", $this->tablePrefix));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
@@ -618,7 +619,7 @@ class Photo extends Module {
 		$error	= false;
 
 		# Get photos
-		$photos	= $this->database->query("SELECT id, star FROM lychee_photos WHERE id IN ($this->photoIDs);");
+		$photos	= $this->database->query(Database::prepareQuery("SELECT id, star FROM {prefix}_photos WHERE id IN ($this->photoIDs);"), $this->tablePrefix);
 
 		# For each photo
 		while ($photo = $photos->fetch_object()) {
@@ -627,7 +628,7 @@ class Photo extends Module {
 			$star = ($photo->star==0 ? 1 : 0);
 
 			# Set star
-			$star = $this->database->query("UPDATE lychee_photos SET star = '$star' WHERE id = '$photo->id';");
+			$star = $this->database->query(Database::prepareQuery("UPDATE {prefix}_photos SET star = '$star' WHERE id = '$photo->id';", $this->tablePrefix));
 			if (!$star) $error = true;
 
 		}
@@ -652,7 +653,7 @@ class Photo extends Module {
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Get photo
-		$photos	= $this->database->query("SELECT public, album FROM lychee_photos WHERE id = '$this->photoIDs' LIMIT 1;");
+		$photos	= $this->database->query(Database::prepareQuery("SELECT public, album FROM {prefix}_photos WHERE id = '$this->photoIDs' LIMIT 1;", $this->tablePrefix));
 		$photo	= $photos->fetch_object();
 
 		# Check if public
@@ -680,14 +681,14 @@ class Photo extends Module {
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Get public
-		$photos	= $this->database->query("SELECT public FROM lychee_photos WHERE id = '$this->photoIDs' LIMIT 1;");
+		$photos	= $this->database->query(Database::prepareQuery("SELECT public FROM {prefix}_photos WHERE id = '$this->photoIDs' LIMIT 1;", $this->tablePrefix));
 		$photo	= $photos->fetch_object();
 
 		# Invert public
 		$public = ($photo->public==0 ? 1 : 0);
 
 		# Set public
-		$result = $this->database->query("UPDATE lychee_photos SET public = '$public' WHERE id = '$this->photoIDs';");
+		$result = $this->database->query(Database::prepareQuery("UPDATE {prefix}_photos SET public = '$public' WHERE id = '$this->photoIDs';", $this->tablePrefix));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
@@ -709,7 +710,7 @@ class Photo extends Module {
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Set album
-		$result = $this->database->query("UPDATE lychee_photos SET album = '$albumID' WHERE id IN ($this->photoIDs);");
+		$result = $this->database->query(Database::prepareQuery("UPDATE {prefix}_photos SET album = '$albumID' WHERE id IN ($this->photoIDs);", $this->tablePrefix));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
@@ -739,7 +740,7 @@ class Photo extends Module {
 		}
 
 		# Set tags
-		$result = $this->database->query("UPDATE lychee_photos SET tags = '$tags' WHERE id IN ($this->photoIDs);");
+		$result = $this->database->query(Database::prepareQuery("UPDATE {prefix}_photos SET tags = '$tags' WHERE id IN ($this->photoIDs);", $this->tablePrefix));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
@@ -761,7 +762,7 @@ class Photo extends Module {
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Get photos
-		$photos = $this->database->query("SELECT id, url, thumbUrl FROM lychee_photos WHERE id IN ($this->photoIDs);");
+		$photos = $this->database->query(Database::prepareQuery("SELECT id, url, thumbUrl FROM {prefix}_photos WHERE id IN ($this->photoIDs);", $this->tablePrefix));
 		if (!$photos) {
 			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
 			return false;
@@ -793,7 +794,7 @@ class Photo extends Module {
 			}
 
 			# Delete db entry
-			$delete = $this->database->query("DELETE FROM lychee_photos WHERE id = '$photo->id';");
+			$delete = $this->database->query(Database::prepareQuery("DELETE FROM {prefix}_photos WHERE id = '$photo->id';", $this->tablePrefix));
 			if (!$delete) {
 				Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
 				return false;
