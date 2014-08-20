@@ -64,10 +64,10 @@ class Database extends Module {
 
 	}
 
-	static function createConfig($host = 'localhost', $user, $password, $name = 'lychee') {
+	static function createConfig($host = 'localhost', $user, $password, $name = 'lychee', $tablePrefix = '') {
 
 		# Check dependencies
-		Module::dependencies(isset($host, $user, $password, $name));
+		Module::dependencies(isset($host, $user, $password, $name, $tablePrefix));
 
 		$database = new mysqli($host, $user, $password);
 
@@ -100,6 +100,7 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 \$dbUser = '$user'; # Username of the database
 \$dbPassword = '$password'; # Password of the database
 \$dbName = '$name'; # Database name
+\$dbTablePrefix = '$tablePrefix'; # Table prefix
 
 ?>";
 

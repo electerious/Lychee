@@ -17,8 +17,8 @@ var lychee = {
 	website: "http://lychee.electerious.com",
 
 	publicMode: false,
-	viewMode: false,
-	debugMode: false,
+	viewMode: true,
+	debugMode: true,
 
 	username: "",
 	checkForUpdates: false,
@@ -73,7 +73,6 @@ var lychee = {
 	},
 
 	api: function(params, callback, loading) {
-
 		if (loading===undefined) loadingBar.show();
 
 		$.ajax({
@@ -82,7 +81,7 @@ var lychee = {
 			data: "function=" + params,
 			dataType: "text",
 			success: function(data) {
-
+debugger;
 				setTimeout(function() { loadingBar.hide() }, 100);
 
 				if (typeof data==="string"&&data.substring(0, 7)==="Error: ") {
