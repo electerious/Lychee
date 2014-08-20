@@ -11,6 +11,7 @@ if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 class Photo extends Module {
 
 	private $database	= null;
+        private $tablePrefix	= null;
 	private $settings	= null;
 	private $photoIDs	= null;
 
@@ -26,13 +27,14 @@ class Photo extends Module {
 		'.gif'
 	);
 
-	public function __construct($database, $plugins, $settings, $photoIDs) {
+	public function __construct($database, $tablePrefix, $plugins, $settings, $photoIDs) {
 
 		# Init vars
-		$this->database	= $database;
-		$this->plugins	= $plugins;
-		$this->settings	= $settings;
-		$this->photoIDs	= $photoIDs;
+		$this->database     = $database;
+                $this->tablePrefix  = $tablePrefix;
+		$this->plugins      = $plugins;
+		$this->settings     = $settings;
+		$this->photoIDs     = $photoIDs;
 
 		return true;
 
@@ -656,7 +658,7 @@ class Photo extends Module {
 		# Check if public
 		if ($photo->public==1) return true;
 		else {
-			$album	= new Album($this->database, null, null, $photo->album);
+			$album	= new Album($this->database, $this->tablePrefix, null, null, $photo->album);
 			$acP		= $album->checkPassword($password);
 			$agP		= $album->getPublic();
 			if ($acP===true&&$agP===true) return true;

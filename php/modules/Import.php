@@ -115,7 +115,7 @@ class Import extends Module {
 
 	static function server($albumID = 0, $path, $useTemp = false) {
 
-		global $database, $plugins, $settings;
+		global $database, $tablePrefix, $plugins, $settings;
 
 		# Parse path
 		if (!isset($path)) $path = LYCHEE_UPLOADS_IMPORT;
@@ -173,7 +173,7 @@ class Import extends Module {
 				# Folder
 
 				$name				= mysqli_real_escape_string($database, basename($file));
-				$album				= new Album($database, null, null, null);
+				$album				= new Album($database, $tablePrefix, null, null, null);
 				$newAlbumID			= $album->add('[Import] ' . $name);
 				$contains['albums']	= true;
 

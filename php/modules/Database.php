@@ -10,10 +10,10 @@ if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 class Database extends Module {
 
-	static function connect($host = 'localhost', $user, $password, $name = 'lychee') {
+	static function connect($host = 'localhost', $user, $password, $name = 'lychee', $dbTablePrefix = 'lychee') {
 
 		# Check dependencies
-		Module::dependencies(isset($host, $user, $password, $name));
+		Module::dependencies(isset($host, $user, $password, $name, $dbTablePrefix));
 
 		$database = new mysqli($host, $user, $password);
 
@@ -29,11 +29,12 @@ class Database extends Module {
 			if (!Database::createDatabase($database, $name)) exit('Error: Could not create database!');
 
 		# Check tables
-		if (!$database->query('SELECT * FROM lychee_photos, lychee_albums, lychee_settings, lychee_log LIMIT 0;'))
-			if (!Database::createTables($database)) exit('Error: Could not create tables!');
+                $query = Database::prepareQuery('SELECT * FROM {prefix}_photos, {prefix}_albums, {prefix}_settings, {prefix}_log LIMIT 0;', $dbTablePrefix);
+
+		if (!$database->query($query))
+			if (!Database::createTables($database, $dbTablePrefix)) exit('Error: Could not create tables!');
 
 		return $database;
-
 	}
 
 	static function update($database, $dbName, $version = 0) {
@@ -64,7 +65,7 @@ class Database extends Module {
 
 	}
 
-	static function createConfig($host = 'localhost', $user, $password, $name = 'lychee', $tablePrefix = '') {
+	static function createConfig($host = 'localhost', $user, $password, $name = 'lychee', $tablePrefix = 'lychee') {
 
 		# Check dependencies
 		Module::dependencies(isset($host, $user, $password, $name, $tablePrefix));
@@ -78,9 +79,10 @@ class Database extends Module {
 
 			# Database doesn't exist
 			# Check if user can create a database
-			$result = $database->query('CREATE DATABASE lychee_dbcheck');
+                        $query = Database::prepareQuery('CREATE DATABASE {prefix}_dbcheck', $tablePrefix);
+			$result = $database->query($query);
 			if (!$result) return 'Warning: Creation failed!';
-			else $database->query('DROP DATABASE lychee_dbcheck');
+			else $database->query(Database::prepareQuery('DROP DATABASE {prefix}_dbcheck', $tablePrefix));
 
 		}
 
@@ -125,17 +127,18 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 	}
 
-	static function createTables($database) {
+	static function createTables($database, $tablePrefix) {
 
 		# Check dependencies
-		Module::dependencies(isset($database));
+		Module::dependencies(isset($database, $tablePrefix));
 
 		# Create log
-		if (!$database->query('SELECT * FROM lychee_log LIMIT 0;')) {
+                $query = Database::prepareQuery('SELECT * FROM {prefix}_log LIMIT 0;', $tablePrefix);
+		if (!$database->query($query)) {
 
 			# Read file
 			$file	= __DIR__ . '/../database/log_table.sql';
-			$query	= @file_get_contents($file);
+			$query	= Database::readSqlFile($file, $tablePrefix);
 
 			# Create table
 			if (!isset($query)||$query===false) return false;
@@ -144,15 +147,16 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 		}
 
 		# Create settings
-		if (!$database->query('SELECT * FROM lychee_settings LIMIT 0;')) {
+                $query = Database::prepareQuery('SELECT * FROM {prefix}_settings LIMIT 0;', $tablePrefix);
+		if (!$database->query($query)) {
 
 			# Read file
 			$file	= __DIR__ . '/../database/settings_table.sql';
-			$query	= @file_get_contents($file);
+			$query	= Database::readSqlFile($file, $tablePrefix);
 
 			# Create table
 			if (!isset($query)||$query===false) {
-				Log::error($database, __METHOD__, __LINE__, 'Could not load query for lychee_settings');
+				Log::error($database, __METHOD__, __LINE__, Database::prepareQuery('Could not load query for {prefix}_settings', $tablePrefix));
 				return false;
 			}
 			if (!$database->query($query)) {
@@ -162,11 +166,11 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 			# Read file
 			$file	= __DIR__ . '/../database/settings_content.sql';
-			$query	= @file_get_contents($file);
+			$query	= Database::readSqlFile($file, $tablePrefix);
 
 			# Add content
 			if (!isset($query)||$query===false) {
-				Log::error($database, __METHOD__, __LINE__, 'Could not load content-query for lychee_settings');
+				Log::error($database, __METHOD__, __LINE__, Database::prepareQuery('Could not load content-query for {prefix}_settings', $tablePrefix));
 				return false;
 			}
 			if (!$database->query($query)) {
@@ -177,15 +181,16 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 		}
 
 		# Create albums
-		if (!$database->query('SELECT * FROM lychee_albums LIMIT 0;')) {
+                $query = Database::prepareQuery('SELECT * FROM {prefix}_albums LIMIT 0;', $tablePrefix);
+		if (!$database->query($query)) {
 
 			# Read file
 			$file	= __DIR__ . '/../database/albums_table.sql';
-			$query	= @file_get_contents($file);
+			$query	= Database::readSqlFile($file, $tablePrefix);
 
 			# Create table
 			if (!isset($query)||$query===false) {
-				Log::error($database, __METHOD__, __LINE__, 'Could not load query for lychee_albums');
+				Log::error($database, __METHOD__, __LINE__, Database::prepareQuery('Could not load query for {prefix}_albums', $tablePrefix));
 				return false;
 			}
 			if (!$database->query($query)) {
@@ -196,15 +201,16 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 		}
 
 		# Create photos
-		if (!$database->query('SELECT * FROM lychee_photos LIMIT 0;')) {
+                $query = Database::prepareQuery('SELECT * FROM {prefix}_photos LIMIT 0;', $tablePrefix);
+		if (!$database->query($query)) {
 
 			# Read file
 			$file	= __DIR__ . '/../database/photos_table.sql';
-			$query	= @file_get_contents($file);
+			$query	= Database::readSqlFile($file, $tablePrefix);
 
 			# Create table
 			if (!isset($query)||$query===false) {
-				Log::error($database, __METHOD__, __LINE__, 'Could not load query for lychee_photos');
+				Log::error($database, __METHOD__, __LINE__, Database::prepareQuery('Could not load query for {prefix}_photos', $tablePrefix));
 				return false;
 			}
 			if (!$database->query($query)) {
@@ -218,6 +224,14 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 	}
 
+        static function readSqlFile($file, $tablePrefix) {
+            $rawQuery = @file_get_contents($file);
+            return str_replace('{prefix}', $tablePrefix, $rawQuery);
+        }
+
+        static function prepareQuery($rawQuery, $tablePrefix) {
+            return str_replace('{prefix}', $tablePrefix, $rawQuery);
+        }
 }
 
 ?>

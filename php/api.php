@@ -44,10 +44,10 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 	}
 
 	# Connect to database
-	$database = Database::connect($dbHost, $dbUser, $dbPassword, $dbName);
+	$database = Database::connect($dbHost, $dbUser, $dbPassword, $dbName, $dbTablePrefix);
 
 	# Load settings
-	$settings = new Settings($database);
+	$settings = new Settings($database, $dbTablePrefix);
 	$settings = $settings->get();
 
 	# Init plugins
@@ -77,7 +77,7 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 
 		define('LYCHEE_ACCESS_ADMIN', true);
 
-		$admin = new Admin($database, $plugins, $settings);
+		$admin = new Admin($database, $dbTablePrefix, $plugins, $settings);
 		$admin->check($fn);
 
 	} else {
@@ -89,7 +89,7 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 
 		define('LYCHEE_ACCESS_GUEST', true);
 
-		$guest = new Guest($database, $plugins, $settings);
+		$guest = new Guest($database, $dbTablePrefix, $plugins, $settings);
 		$guest->check($fn);
 
 	}

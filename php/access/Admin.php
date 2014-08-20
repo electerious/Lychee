@@ -70,7 +70,7 @@ class Admin extends Access {
 
 	private function getAlbums() {
 
-		$album = new Album($this->database, $this->plugins, $this->settings, null);
+		$album = new Album($this->database, $this->tablePrefix, $this->plugins, $this->settings, null);
 		echo json_encode($album->getAll(false));
 
 	}
@@ -78,7 +78,7 @@ class Admin extends Access {
 	private function getAlbum() {
 
 		Module::dependencies(isset($_POST['albumID']));
-		$album = new Album($this->database, $this->plugins, $this->settings, $_POST['albumID']);
+		$album = new Album($this->database, $this->tablePrefix, $this->plugins, $this->settings, $_POST['albumID']);
 		echo json_encode($album->get());
 
 	}
@@ -86,7 +86,7 @@ class Admin extends Access {
 	private function addAlbum() {
 
 		Module::dependencies(isset($_POST['title']));
-		$album = new Album($this->database, $this->plugins, $this->settings, null);
+		$album = new Album($this->database, $this->tablePrefix, $this->plugins, $this->settings, null);
 		echo $album->add($_POST['title']);
 
 	}
@@ -94,7 +94,7 @@ class Admin extends Access {
 	private function setAlbumTitle() {
 
 		Module::dependencies(isset($_POST['albumIDs'], $_POST['title']));
-		$album = new Album($this->database, $this->plugins, $this->settings, $_POST['albumIDs']);
+		$album = new Album($this->database, $this->tablePrefix, $this->plugins, $this->settings, $_POST['albumIDs']);
 		echo $album->setTitle($_POST['title']);
 
 	}
@@ -102,7 +102,7 @@ class Admin extends Access {
 	private function setAlbumDescription() {
 
 		Module::dependencies(isset($_POST['albumID'], $_POST['description']));
-		$album = new Album($this->database, $this->plugins, $this->settings, $_POST['albumID']);
+		$album = new Album($this->database, $this->tablePrefix, $this->plugins, $this->settings, $_POST['albumID']);
 		echo $album->setDescription($_POST['description']);
 
 	}
@@ -110,7 +110,7 @@ class Admin extends Access {
 	private function setAlbumPublic() {
 
 		Module::dependencies(isset($_POST['albumID'], $_POST['password'], $_POST['visible']));
-		$album = new Album($this->database, $this->plugins, $this->settings, $_POST['albumID']);
+		$album = new Album($this->database, $this->tablePrefix, $this->plugins, $this->settings, $_POST['albumID']);
 		echo $album->setPublic($_POST['password'], $_POST['visible']);
 
 	}
@@ -118,7 +118,7 @@ class Admin extends Access {
 	private function deleteAlbum() {
 
 		Module::dependencies(isset($_POST['albumIDs']));
-		$album = new Album($this->database, $this->plugins, $this->settings, $_POST['albumIDs']);
+		$album = new Album($this->database, $this->tablePrefix, $this->plugins, $this->settings, $_POST['albumIDs']);
 		echo $album->delete($_POST['albumIDs']);
 
 	}
@@ -128,7 +128,7 @@ class Admin extends Access {
 	private function getPhoto() {
 
 		Module::dependencies(isset($_POST['photoID'], $_POST['albumID']));
-		$photo = new Photo($this->database, $this->plugins, null, $_POST['photoID']);
+		$photo = new Photo($this->database, $this->tablePrefix, $this->plugins, null, $_POST['photoID']);
 		echo json_encode($photo->get($_POST['albumID']));
 
 	}
@@ -136,7 +136,7 @@ class Admin extends Access {
 	private function setPhotoTitle() {
 
 		Module::dependencies(isset($_POST['photoIDs'], $_POST['title']));
-		$photo = new Photo($this->database, $this->plugins, null, $_POST['photoIDs']);
+		$photo = new Photo($this->database, $this->tablePrefix, $this->plugins, null, $_POST['photoIDs']);
 		echo $photo->setTitle($_POST['title']);
 
 	}
@@ -144,7 +144,7 @@ class Admin extends Access {
 	private function setPhotoDescription() {
 
 		Module::dependencies(isset($_POST['photoID'], $_POST['description']));
-		$photo = new Photo($this->database, $this->plugins, null, $_POST['photoID']);
+		$photo = new Photo($this->database, $this->tablePrefix, $this->plugins, null, $_POST['photoID']);
 		echo $photo->setDescription($_POST['description']);
 
 	}
@@ -152,7 +152,7 @@ class Admin extends Access {
 	private function setPhotoStar() {
 
 		Module::dependencies(isset($_POST['photoIDs']));
-		$photo = new Photo($this->database, $this->plugins, null, $_POST['photoIDs']);
+		$photo = new Photo($this->database, $this->tablePrefix, $this->plugins, null, $_POST['photoIDs']);
 		echo $photo->setStar();
 
 	}
@@ -160,7 +160,7 @@ class Admin extends Access {
 	private function setPhotoPublic() {
 
 		Module::dependencies(isset($_POST['photoID']));
-		$photo = new Photo($this->database, $this->plugins, null, $_POST['photoID']);
+		$photo = new Photo($this->database, $this->tablePrefix, $this->plugins, null, $_POST['photoID']);
 		echo $photo->setPublic();
 
 	}
@@ -168,7 +168,7 @@ class Admin extends Access {
 	private function setPhotoAlbum() {
 
 		Module::dependencies(isset($_POST['photoIDs'], $_POST['albumID']));
-		$photo = new Photo($this->database, $this->plugins, null, $_POST['photoIDs']);
+		$photo = new Photo($this->database, $this->tablePrefix, $this->plugins, null, $_POST['photoIDs']);
 		echo $photo->setAlbum($_POST['albumID']);
 
 	}
@@ -176,7 +176,7 @@ class Admin extends Access {
 	private function setPhotoTags() {
 
 		Module::dependencies(isset($_POST['photoIDs'], $_POST['tags']));
-		$photo = new Photo($this->database, $this->plugins, null, $_POST['photoIDs']);
+		$photo = new Photo($this->database, $this->tablePrefix, $this->plugins, null, $_POST['photoIDs']);
 		echo $photo->setTags($_POST['tags']);
 
 	}
@@ -184,7 +184,7 @@ class Admin extends Access {
 	private function deletePhoto() {
 
 		Module::dependencies(isset($_POST['photoIDs']));
-		$photo = new Photo($this->database, $this->plugins, null, $_POST['photoIDs']);
+		$photo = new Photo($this->database, $this->tablePrefix, $this->plugins, null, $_POST['photoIDs']);
 		echo $photo->delete();
 
 	}
@@ -194,7 +194,7 @@ class Admin extends Access {
 	private function upload() {
 
 		Module::dependencies(isset($_FILES, $_POST['albumID']));
-		$photo = new Photo($this->database, $this->plugins, $this->settings, null);
+		$photo = new Photo($this->database, $this->tablePrefix, $this->plugins, $this->settings, null);
 		echo $photo->add($_FILES, $_POST['albumID']);
 
 	}
@@ -281,7 +281,7 @@ class Admin extends Access {
 	private function getAlbumArchive() {
 
 		Module::dependencies(isset($_GET['albumID']));
-		$album = new Album($this->database, $this->plugins, $this->settings, $_GET['albumID']);
+		$album = new Album($this->database, $this->tablePrefix, $this->plugins, $this->settings, $_GET['albumID']);
 		$album->getArchive();
 
 	}
@@ -289,7 +289,7 @@ class Admin extends Access {
 	private function getPhotoArchive() {
 
 		Module::dependencies(isset($_GET['photoID']));
-		$photo = new Photo($this->database, $this->plugins, null, $_GET['photoID']);
+		$photo = new Photo($this->database, $this->tablePrefix, $this->plugins, null, $_GET['photoID']);
 		$photo->getArchive();
 
 	}

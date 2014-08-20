@@ -46,7 +46,7 @@ class Guest extends Access {
 
 	private function getAlbums() {
 
-		$album = new Album($this->database, $this->plugins, $this->settings, null);
+		$album = new Album($this->database, $this->tablePrefix, $this->plugins, $this->settings, null);
 		echo json_encode($album->getAll(true));
 
 	}
@@ -54,7 +54,7 @@ class Guest extends Access {
 	private function getAlbum() {
 
 		Module::dependencies(isset($_POST['albumID'], $_POST['password']));
-		$album = new Album($this->database, $this->plugins, $this->settings, $_POST['albumID']);
+		$album = new Album($this->database, $this->tablePrefix, $this->plugins, $this->settings, $_POST['albumID']);
 
 		if ($album->getPublic()) {
 
@@ -74,7 +74,7 @@ class Guest extends Access {
 	private function checkAlbumAccess() {
 
 		Module::dependencies(isset($_POST['albumID'], $_POST['password']));
-		$album = new Album($this->database, $this->plugins, $this->settings, $_POST['albumID']);
+		$album = new Album($this->database, $this->tablePrefix, $this->plugins, $this->settings, $_POST['albumID']);
 
 		if ($album->getPublic()) {
 
@@ -96,7 +96,7 @@ class Guest extends Access {
 	private function getPhoto() {
 
 		Module::dependencies(isset($_POST['photoID'], $_POST['albumID'], $_POST['password']));
-		$photo = new Photo($this->database, $this->plugins, null, $_POST['photoID']);
+		$photo = new Photo($this->database, $this->tablePrefix, $this->plugins, null, $_POST['photoID']);
 
 		if ($photo->getPublic($_POST['password'])) echo json_encode($photo->get($_POST['albumID']));
 		else echo 'Warning: Wrong password!';
@@ -134,7 +134,7 @@ class Guest extends Access {
 	private function getAlbumArchive() {
 
 		Module::dependencies(isset($_GET['albumID'], $_GET['password']));
-		$album = new Album($this->database, $this->plugins, $this->settings, $_GET['albumID']);
+		$album = new Album($this->database, $this->tablePrefix, $this->plugins, $this->settings, $_GET['albumID']);
 
 		if ($album->getPublic()) {
 
@@ -154,7 +154,7 @@ class Guest extends Access {
 	private function getPhotoArchive() {
 
 		Module::dependencies(isset($_GET['photoID'], $_GET['password']));
-		$photo = new Photo($this->database, $this->plugins, null, $_GET['photoID']);
+		$photo = new Photo($this->database, $this->tablePrefix, $this->plugins, null, $_GET['photoID']);
 
 		# Photo Download
 		if ($photo->getPublic($_GET['password'])) {

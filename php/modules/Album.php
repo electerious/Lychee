@@ -11,16 +11,18 @@ if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 class Album extends Module {
 
 	private $database	= null;
+        private $tablePrefix    = null;
 	private $settings	= null;
 	private $albumIDs	= null;
 
-	public function __construct($database, $plugins, $settings, $albumIDs) {
+	public function __construct($database, $tablePrefix, $plugins, $settings, $albumIDs) {
 
 		# Init vars
-		$this->database	= $database;
-		$this->plugins	= $plugins;
-		$this->settings	= $settings;
-		$this->albumIDs	= $albumIDs;
+		$this->database     = $database;
+                $this->tablePrefix  = $tablePrefix;
+		$this->plugins      = $plugins;
+		$this->settings     = $settings;
+		$this->albumIDs     = $albumIDs;
 
 		return true;
 
@@ -39,7 +41,8 @@ class Album extends Module {
 
 		# Database
 		$sysstamp	= time();
-		$result		= $this->database->query("INSERT INTO lychee_albums (title, sysstamp, public, visible) VALUES ('$title', '$sysstamp', '$public', '$visible');");
+                $query = Database::prepareQuery("INSERT INTO {prefix}_albums (title, sysstamp, public, visible) VALUES ('$title', '$sysstamp', '$public', '$visible');", $this->tablePrefix);
+		$result		= $this->database->query($query);
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
@@ -64,26 +67,26 @@ class Album extends Module {
 		switch ($this->albumIDs) {
 
 			case 'f':	$return['public'] = false;
-						$query = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp FROM lychee_photos WHERE star = 1 " . $this->settings['sorting'];
+						$query = Database::prepareQuery("SELECT id, title, tags, public, star, album, thumbUrl, takestamp FROM {prefix}_photos WHERE star = 1 " . $this->settings['sorting'], $this->tablePrefix);
 						break;
 
 			case 's':	$return['public'] = false;
-						$query = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp FROM lychee_photos WHERE public = 1 " . $this->settings['sorting'];
+						$query = Database::prepareQuery("SELECT id, title, tags, public, star, album, thumbUrl, takestamp FROM {prefix}_photos WHERE public = 1 " . $this->settings['sorting'], $this->tablePrefix);
 						break;
 
 			case 'r':	$return['public'] = false;
-						$query = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp FROM lychee_photos WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY)) " . $this->settings['sorting'];
+						$query = Database::prepareQuery("SELECT id, title, tags, public, star, album, thumbUrl, takestamp FROM {prefix}_photos WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY)) " . $this->settings['sorting'], $this->tablePrefix);
 						break;
 
 			case '0':	$return['public'] = false;
-						$query = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp FROM lychee_photos WHERE album = 0 " . $this->settings['sorting'];
+						$query = Database::prepareQuery("SELECT id, title, tags, public, star, album, thumbUrl, takestamp FROM {prefix}_photos WHERE album = 0 " . $this->settings['sorting'], $this->tablePrefix);
 						break;
 
-			default:	$albums = $this->database->query("SELECT * FROM lychee_albums WHERE id = '$this->albumIDs' LIMIT 1;");
+			default:	$albums = $this->database->query(Database::prepareQuery("SELECT * FROM {prefix}_albums WHERE id = '$this->albumIDs' LIMIT 1;", $this->tablePrefix));
 						$return = $albums->fetch_assoc();
 						$return['sysdate']		= date('d M. Y', $return['sysstamp']);
 						$return['password']		= ($return['password']=='' ? false : true);
-						$query = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp FROM lychee_photos WHERE album = '$this->albumIDs' " . $this->settings['sorting'];
+						$query = Database::prepareQuery("SELECT id, title, tags, public, star, album, thumbUrl, takestamp FROM {prefix}_photos WHERE album = '$this->albumIDs' " . $this->settings['sorting'], $this->tablePrefix);
 						break;
 
 		}
@@ -145,7 +148,7 @@ class Album extends Module {
 	public function getAll($public) {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->settings, $public));
+		self::dependencies(isset($this->database, $this->tablePrefix, $this->settings, $public));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -154,8 +157,8 @@ class Album extends Module {
 		if ($public===false) $return = $this->getSmartInfo();
 
 		# Albums query
-		$query = 'SELECT id, title, public, sysstamp, password FROM lychee_albums WHERE public = 1 AND visible <> 0';
-		if ($public===false) $query = 'SELECT id, title, public, sysstamp, password FROM lychee_albums';
+		$query = Database::prepareQuery('SELECT id, title, public, sysstamp, password FROM {prefix}_albums WHERE public = 1 AND visible <> 0', $this->tablePrefix);
+		if ($public===false) $query = Database::prepareQuery('SELECT id, title, public, sysstamp, password FROM {prefix}_albums', $this->tablePrefix);
 
 		# Execute query
 		$albums = $this->database->query($query) OR exit('Error: ' . $this->database->error);
@@ -171,7 +174,8 @@ class Album extends Module {
 			if (($public===true&&$album['password']===false)||($public===false)) {
 
 				# Execute query
-				$thumbs = $this->database->query("SELECT thumbUrl FROM lychee_photos WHERE album = '" . $album['id'] . "' ORDER BY star DESC, " . substr($this->settings['sorting'], 9) . " LIMIT 3");
+                                $query = Database::prepareQuery("SELECT thumbUrl FROM {prefix}_photos WHERE album = '" . $album['id'] . "' ORDER BY star DESC, " . substr($this->settings['sorting'], 9) . " LIMIT 3", $this->tablePrefix);
+				$thumbs = $this->database->query($query);
 
 				# For each thumb
 				$k = 0;
@@ -203,7 +207,7 @@ class Album extends Module {
 		self::dependencies(isset($this->database, $this->settings));
 
 		# Unsorted
-		$unsorted	= $this->database->query("SELECT thumbUrl FROM lychee_photos WHERE album = 0 " . $this->settings['sorting']);
+		$unsorted	= $this->database->query(Database::prepareQuery("SELECT thumbUrl FROM {prefix}_photos WHERE album = 0 " . $this->settings['sorting'], $this->tablePrefix));
 		$i			= 0;
 		while($row = $unsorted->fetch_object()) {
 			if ($i<3) {
@@ -214,7 +218,7 @@ class Album extends Module {
 		$return['unsortedNum'] = $unsorted->num_rows;
 
 		# Public
-		$public	= $this->database->query("SELECT thumbUrl FROM lychee_photos WHERE public = 1 " . $this->settings['sorting']);
+		$public	= $this->database->query(Database::prepareQuery("SELECT thumbUrl FROM {prefix}_photos WHERE public = 1 " . $this->settings['sorting'], $this->tablePrefix));
 		$i			= 0;
 		while($row2 = $public->fetch_object()) {
 			if ($i<3) {
@@ -225,7 +229,7 @@ class Album extends Module {
 		$return['publicNum'] = $public->num_rows;
 
 		# Starred
-		$starred	= $this->database->query("SELECT thumbUrl FROM lychee_photos WHERE star = 1 " . $this->settings['sorting']);
+		$starred	= $this->database->query(Database::prepareQuery("SELECT thumbUrl FROM {prefix}_photos WHERE star = 1 " . $this->settings['sorting'], $this->tablePrefix));
 		$i			= 0;
 		while($row3 = $starred->fetch_object()) {
 			if ($i<3) {
@@ -236,7 +240,7 @@ class Album extends Module {
 		$return['starredNum'] = $starred->num_rows;
 
 		# Recent
-		$recent		= $this->database->query("SELECT thumbUrl FROM lychee_photos WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY)) " . $this->settings['sorting']);
+		$recent		= $this->database->query(Database::prepareQuery("SELECT thumbUrl FROM {prefix}_photos WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY)) " . $this->settings['sorting'], $this->tablePrefix));
 		$i			= 0;
 		while($row3 = $recent->fetch_object()) {
 			if ($i<3) {
@@ -267,24 +271,24 @@ class Album extends Module {
 		# Photos query
 		switch($this->albumIDs) {
 			case 's':
-				$photos = "SELECT title, url FROM lychee_photos WHERE public = '1';";
+				$photos = Database::prepareQuery("SELECT title, url FROM {prefix}_photos WHERE public = '1';", $this->tablePrefix);
 				$zipTitle = 'Public';
 				break;
 			case 'f':
-				$photos = "SELECT title, url FROM lychee_photos WHERE star = '1';";
+				$photos = Database::prepareQuery("SELECT title, url FROM {prefix}_photos WHERE star = '1';", $this->tablePrefix);
 				$zipTitle = 'Starred';
 				break;
 			case 'r':
-				$photos = "SELECT title, url FROM lychee_photos WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY));";
+				$photos = Database::prepareQuery("SELECT title, url FROM {prefix}_photos WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY));", $this->tablePrefix);
 				$zipTitle = 'Recent';
 				break;
 			default:
-				$photos = "SELECT title, url FROM lychee_photos WHERE album = '$this->albumIDs';";
+				$photos = Database::prepareQuery("SELECT title, url FROM {prefix}_photos WHERE album = '$this->albumIDs';", $this->tablePrefix);
 				$zipTitle = 'Unsorted';
 		}
 
 		# Set title
-		$album = $this->database->query("SELECT title FROM lychee_albums WHERE id = '$this->albumIDs' LIMIT 1;");
+		$album = $this->database->query(Database::prepareQuery("SELECT title FROM {prefix}_albums WHERE id = '$this->albumIDs' LIMIT 1;", $this->tablePrefix));
 		if ($this->albumIDs!=0&&is_numeric($this->albumIDs)) $zipTitle = $album->fetch_object()->title;
 
 		# Parse title
@@ -380,7 +384,7 @@ class Album extends Module {
 		if (strlen($title)>50) $title = substr($title, 0, 50);
 
 		# Execute query
-		$result = $this->database->query("UPDATE lychee_albums SET title = '$title' WHERE id IN ($this->albumIDs);");
+		$result = $this->database->query(Database::prepareQuery("UPDATE {prefix}_albums SET title = '$title' WHERE id IN ($this->albumIDs);", $this->tablePrefix));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
@@ -406,7 +410,7 @@ class Album extends Module {
 		if (strlen($description)>1000) $description = substr($description, 0, 1000);
 
 		# Execute query
-		$result = $this->database->query("UPDATE lychee_albums SET description = '$description' WHERE id IN ($this->albumIDs);");
+		$result = $this->database->query(Database::prepareQuery("UPDATE {prefix}_albums SET description = '$description' WHERE id IN ($this->albumIDs);", $this->tablePrefix));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
@@ -430,7 +434,7 @@ class Album extends Module {
 		if ($this->albumIDs==='0'||$this->albumIDs==='s'||$this->albumIDs==='f') return false;
 
 		# Execute query
-		$albums	= $this->database->query("SELECT public FROM lychee_albums WHERE id = '$this->albumIDs' LIMIT 1;");
+		$albums	= $this->database->query(Database::prepareQuery("SELECT public FROM {prefix}_albums WHERE id = '$this->albumIDs' LIMIT 1;", $this->tablePrefix));
 		$album	= $albums->fetch_object();
 
 		# Call plugins
@@ -450,7 +454,7 @@ class Album extends Module {
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Get public
-		$albums	= $this->database->query("SELECT id, public FROM lychee_albums WHERE id IN ('$this->albumIDs');");
+		$albums	= $this->database->query(Database::prepareQuery("SELECT id, public FROM {prefix}_albums WHERE id IN ('$this->albumIDs');", $this->tablePrefix));
 
 		while ($album = $albums->fetch_object()) {
 
@@ -461,7 +465,7 @@ class Album extends Module {
 			$visible = ($visible==='true' ? 1 : 0);
 
 			# Set public
-			$result = $this->database->query("UPDATE lychee_albums SET public = '$public', visible = '$visible', password = NULL WHERE id = '$album->id';");
+			$result = $this->database->query(Database::prepareQuery("UPDATE {prefix}_albums SET public = '$public', visible = '$visible', password = NULL WHERE id = '$album->id';", $this->tablePrefix));
 			if (!$result) {
 				Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
 				return false;
@@ -469,7 +473,7 @@ class Album extends Module {
 
 			# Reset permissions for photos
 			if ($public===1) {
-				$result = $this->database->query("UPDATE lychee_photos SET public = 0 WHERE album = '$album->id';");
+				$result = $this->database->query(Database::prepareQuery("UPDATE {prefix}_photos SET public = 0 WHERE album = '$album->id';", $this->tablePrefix));
 				if (!$result) {
 					Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
 					return false;
@@ -502,12 +506,12 @@ class Album extends Module {
 			$password = get_hashed_password($password);
 
 			# Set hashed password
-			$result = $this->database->query("UPDATE lychee_albums SET password = '$password' WHERE id IN ('$this->albumIDs');");
+			$result = $this->database->query(Database::prepareQuery("UPDATE {prefix}_albums SET password = '$password' WHERE id IN ('$this->albumIDs');", $this->tablePrefix));
 
 		} else {
 
 			# Unset password
-			$result = $this->database->query("UPDATE lychee_albums SET password = NULL WHERE id IN ('$this->albumIDs');");
+			$result = $this->database->query(Database::prepareQuery("UPDATE {prefix}_albums SET password = NULL WHERE id IN ('$this->albumIDs');", $this->tablePrefix));
 
 		}
 
@@ -531,7 +535,7 @@ class Album extends Module {
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Execute query
-		$albums	= $this->database->query("SELECT password FROM lychee_albums WHERE id = '$this->albumIDs' LIMIT 1;");
+		$albums	= $this->database->query(Database::prepareQuery("SELECT password FROM {prefix}_albums WHERE id = '$this->albumIDs' LIMIT 1;", $this->tablePrefix));
 		$album	= $albums->fetch_object();
 
 		# Call plugins
@@ -555,7 +559,7 @@ class Album extends Module {
 		$error = false;
 
 		# Execute query
-		$photos = $this->database->query("SELECT id FROM lychee_photos WHERE album IN ($albumIDs);");
+		$photos = $this->database->query(Database::prepareQuery("SELECT id FROM {prefix}_photos WHERE album IN ($albumIDs);", $this->tablePrefix));
 
 		# For each album delete photo
 		while ($row = $photos->fetch_object()) {
@@ -566,7 +570,7 @@ class Album extends Module {
 		}
 
 		# Delete albums
-		$result = $this->database->query("DELETE FROM lychee_albums WHERE id IN ($albumIDs);");
+		$result = $this->database->query(Database::prepareQuery("DELETE FROM {prefix}_albums WHERE id IN ($albumIDs);", $this->tablePrefix));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());

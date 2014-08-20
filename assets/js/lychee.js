@@ -81,8 +81,8 @@ var lychee = {
 			data: "function=" + params,
 			dataType: "text",
 			success: function(data) {
-debugger;
-				setTimeout(function() { loadingBar.hide() }, 100);
+
+                            setTimeout(function() { loadingBar.hide() }, 100);
 
 				if (typeof data==="string"&&data.substring(0, 7)==="Error: ") {
 					lychee.error(data.substring(7, data.length), params, data);

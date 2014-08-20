@@ -11,11 +11,13 @@ if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 class Settings extends Module {
 
 	private $database = null;
+        private $tablePrefix = null;
 
-	public function __construct($database) {
+	public function __construct($database, $dbTablePrefix) {
 
 		# Init vars
 		$this->database = $database;
+                $this->tablePrefix = $dbTablePrefix;
 
 		return true;
 
@@ -24,10 +26,12 @@ class Settings extends Module {
 	public function get() {
 
 		# Check dependencies
-		self::dependencies(isset($this->database));
+		self::dependencies(isset($this->database, $this->tablePrefix));
 
 		# Execute query
-		$settings = $this->database->query('SELECT * FROM lychee_settings;');
+                $query = Database::prepareQuery('SELECT * FROM {prefix}_settings;', $this->tablePrefix);
+
+		$settings = $this->database->query($query);
 
 		# Add each to return
 		while ($setting = $settings->fetch_object()) $return[$setting->key] = $setting->value;
@@ -42,7 +46,7 @@ class Settings extends Module {
 	public function setLogin($oldPassword = '', $username, $password) {
 
 		# Check dependencies
-		self::dependencies(isset($this->database));
+		self::dependencies(isset($this->database, $this->tablePrefix));
 
 		# Load settings
 		$settings = $this->get();
@@ -66,7 +70,7 @@ class Settings extends Module {
 	private function setUsername($username) {
 
 		# Check dependencies
-		self::dependencies(isset($this->database));
+		self::dependencies(isset($this->database, $this->tablePrefix));
 
 		# Parse
 		$username = htmlentities($username);
@@ -76,7 +80,8 @@ class Settings extends Module {
 		}
 
 		# Execute query
-		$result = $this->database->query("UPDATE lychee_settings SET value = '$username' WHERE `key` = 'username';");
+                $query = Database::prepareQuery("UPDATE {prefix}_settings SET value = '$username' WHERE `key` = 'username';", $this->tablePrefix);
+		$result = $this->database->query($query);
 
 		if (!$result) {
 			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
@@ -89,12 +94,13 @@ class Settings extends Module {
 	private function setPassword($password) {
 
 		# Check dependencies
-		self::dependencies(isset($this->database));
+		self::dependencies(isset($this->database, $this->tablePrefix));
 
 		$password = get_hashed_password($password);
 
 		# Execute query
-		$result = $this->database->query("UPDATE lychee_settings SET value = '$password' WHERE `key` = 'password';");
+                $query = Database::prepareQuery("UPDATE {prefix}_settings SET value = '$password' WHERE `key` = 'password';", $this->tablePrefix);
+		$result = $this->database->query($query);
 
 		if (!$result) {
 			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
@@ -107,7 +113,7 @@ class Settings extends Module {
 	public function setDropboxKey($key) {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $key));
+		self::dependencies(isset($this->database, $this->tablePrefix, $key));
 
 		if (strlen($key)<1||strlen($key)>50) {
 			Log::notice($this->database, __METHOD__, __LINE__, 'Dropbox key is either too short or too long');
@@ -115,7 +121,8 @@ class Settings extends Module {
 		}
 
 		# Execute query
-		$result = $this->database->query("UPDATE lychee_settings SET value = '$key' WHERE `key` = 'dropboxKey';");
+                $query = Database::prepareQuery("UPDATE {prefix}_settings SET value = '$key' WHERE `key` = 'dropboxKey';", $this->tablePrefix);
+		$result = $this->database->query($query);
 
 		if (!$result) {
 			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
@@ -128,7 +135,7 @@ class Settings extends Module {
 	public function setSorting($type, $order) {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $type, $order));
+		self::dependencies(isset($this->database, $this->tablePrefix, $type, $order));
 
 		$sorting = 'ORDER BY ';
 
@@ -176,7 +183,8 @@ class Settings extends Module {
 		}
 
 		# Execute query
-		$result = $this->database->query("UPDATE lychee_settings SET value = '$sorting' WHERE `key` = 'sorting';");
+                $query = Database::prepareQuery("UPDATE {prefix}_settings SET value = '$sorting' WHERE `key` = 'sorting';", $this->tablePrefix);
+		$result = $this->database->query($query);
 
 		if (!$result) {
 			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
