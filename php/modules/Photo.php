@@ -112,17 +112,13 @@ class Photo extends Module {
 
 			} else {
 
-				$query = "SELECT id, url, thumbUrl FROM lychee_photos WHERE checksum = '$checksum' LIMIT 1;";
-				$result = $this->database->query($query);
+				$exists = $this->exists($checksum);
 
-				if ($result->num_rows===1) {
-					$result		= $result->fetch_assoc();
-					$photo_name	= $result['url'];
-					$path		= LYCHEE_UPLOADS_BIG . $result['url'];
-					$path_thumb	= $result['thumbUrl'];
+				if ($exists!==false) {
+					$photo_name	= $exists['photo_name'];
+					$path		= $exists['path'];
+					$path_thumb	= $exists['path_thumb'];
 					$exists		= true;
-				} else {
-					$exists		= false;
 				}
 
 			}
@@ -211,6 +207,37 @@ class Photo extends Module {
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		return true;
+
+	}
+
+	private function exists($checksum) {
+
+		# Check dependencies
+		self::dependencies(isset($this->database, $checksum));
+
+		$query	= "SELECT id, url, thumbUrl FROM lychee_photos WHERE checksum = '$checksum' LIMIT 1;";
+		$result	= $this->database->query($query);
+
+		if (!$result) {
+			Log::error($this->database, __METHOD__, __LINE__, 'Could not check for existing photos with the same checksum');
+			return false;
+		}
+
+		if ($result->num_rows===1) {
+
+			$result = $result->fetch_assoc();
+
+			$return = array(
+				'photo_name'	=> $result['url'],
+				'path'			=> LYCHEE_UPLOADS_BIG . $result['url'],
+				'path_thumb'	=> $result['thumbUrl'],
+			);
+
+			return $return;
+
+		}
+
+		return false;
 
 	}
 
