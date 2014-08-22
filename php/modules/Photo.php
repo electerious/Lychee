@@ -225,12 +225,12 @@ class Photo extends Module {
 
 		if ($result->num_rows===1) {
 
-			$result = $result->fetch_assoc();
+			$result = $result->fetch_object();
 
 			$return = array(
-				'photo_name'	=> $result['url'],
-				'path'			=> LYCHEE_UPLOADS_BIG . $result['url'],
-				'path_thumb'	=> $result['thumbUrl'],
+				'photo_name'	=> $result->url,
+				'path'			=> LYCHEE_UPLOADS_BIG . $result->url,
+				'path_thumb'	=> $result->thumbUrl
 			);
 
 			return $return;
