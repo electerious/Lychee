@@ -441,7 +441,29 @@ class Album extends Module {
 
 	}
 
-	public function setPublic($password, $visible) {
+	public function getDownloadable() {
+
+		# Check dependencies
+		self::dependencies(isset($this->database, $this->albumIDs));
+
+		# Call plugins
+		$this->plugins(__METHOD__, 0, func_get_args());
+
+		if ($this->albumIDs==='0'||$this->albumIDs==='s'||$this->albumIDs==='f') return false;
+
+		# Execute query
+		$albums	= $this->database->query("SELECT downloadable FROM lychee_albums WHERE id = '$this->albumIDs' LIMIT 1;");
+		$album	= $albums->fetch_object();
+
+		# Call plugins
+		$this->plugins(__METHOD__, 1, func_get_args());
+
+		if ($album->downloadable==1) return true;
+		return false;
+
+	}
+
+	public function setPublic($password, $visible, $downloadable) {
 
 		# Check dependencies
 		self::dependencies(isset($this->database, $this->albumIDs));
@@ -460,8 +482,11 @@ class Album extends Module {
 			# Convert visible
 			$visible = ($visible==='true' ? 1 : 0);
 
+			# Convert downloadable
+			$downloadable = ($downloadable==='true' ? 1 : 0);
+
 			# Set public
-			$result = $this->database->query("UPDATE lychee_albums SET public = '$public', visible = '$visible', password = NULL WHERE id = '$album->id';");
+			$result = $this->database->query("UPDATE lychee_albums SET public = '$public', visible = '$visible', downloadable = '$downloadable', password = NULL WHERE id = '$album->id';");
 			if (!$result) {
 				Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
 				return false;

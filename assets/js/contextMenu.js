@@ -223,10 +223,8 @@ contextMenu = {
 			function() { photo.getArchive(photoID) }
 		];
 
-		items = [
-			["<a class='icon-resize-full'></a> Full Photo", 0],
-			["<a class='icon-circle-arrow-down'></a> Download", 1]
-		];
+		items = [["<a class='icon-resize-full'></a> Full Photo", 0]];
+		if ((album.json&&album.json.downloadable&&album.json.downloadable==="1"&&lychee.publicMode)||!lychee.publicMode) items.push(["<a class='icon-circle-arrow-down'></a> Download", 1]);
 
 		contextMenu.show(items, mouse_x, mouse_y, "right");
 

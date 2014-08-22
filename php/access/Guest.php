@@ -29,8 +29,8 @@ class Guest extends Access {
 			case 'logout':				$this->logout(); break;
 
 			# $_GET functions
-			case 'getAlbumArchive':	$this->getAlbumArchive(); break;
-			case 'getPhotoArchive':	$this->getPhotoArchive(); break;
+			case 'getAlbumArchive':		$this->getAlbumArchive(); break;
+			case 'getPhotoArchive':		$this->getPhotoArchive(); break;
 
 			# Error
 			default:					exit('Error: Function not found! Please check the spelling of the called function.');
@@ -136,7 +136,7 @@ class Guest extends Access {
 		Module::dependencies(isset($_GET['albumID'], $_GET['password']));
 		$album = new Album($this->database, $this->plugins, $this->settings, $_GET['albumID']);
 
-		if ($album->getPublic()) {
+		if ($album->getPublic()&&$album->getDownloadable()) {
 
 			# Album Public
 			if ($album->checkPassword($_GET['password'])) $album->getArchive();

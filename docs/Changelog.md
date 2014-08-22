@@ -1,3 +1,11 @@
+## v2.6.1
+
+Released August ??, 2014
+
+- `New` Support for IE >= 11 (#148)
+- `New` Choose if public album is downloadable or not (#191)
+- `Improved` Albums gradient overlay is less harsh (#200)
+
 ## v2.6
 
 Released August 16, 2014

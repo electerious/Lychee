@@ -287,11 +287,12 @@ album = {
 
 		var params,
 			password = "",
-			listed = false;
+			listed = false,
+			downloadable = false;
 
 		if (!visible.message()&&album.json.public==0) {
 
-			modal.show("Share Album", "This album will be shared with the following properties:</p><form><div class='choice'><input type='checkbox' name='listed' value='listed' checked><h2>Visible</h2><p>Listed to visitors of your Lychee.</p></div><div class='choice'><input type='checkbox' name='password' value='password'><h2>Password protected</h2><p>Only accessible with a valid password.<input class='text' type='password' placeholder='password' value='' style='display: none;'></p></div></form><p style='display: none;'>", [["Share Album", function() { album.setPublic(album.getID(), e) }], ["Cancel", function() {}]], -160);
+			modal.show("Share Album", "This album will be shared with the following properties:</p><form><div class='choice'><input type='checkbox' name='listed' value='listed' checked><h2>Visible</h2><p>Listed to visitors of your Lychee.</p></div><div class='choice'><input type='checkbox' name='downloadable' value='downloadable'><h2>Downloadable</h2><p>Visitors of your Lychee can download this album.</p></div><div class='choice'><input type='checkbox' name='password' value='password'><h2>Password protected</h2><p>Only accessible with a valid password.<input class='text' type='password' placeholder='password' value='' style='display: none;'></p></div></form><p style='display: none;'>", [["Share Album", function() { album.setPublic(album.getID(), e) }], ["Cancel", function() {}]], -170);
 
 			$(".message .choice input[name='password']").on("change", function() {
 
@@ -315,10 +316,11 @@ album = {
 			}
 
 			if ($(".message .choice input[name='listed']:checked").val()==="listed") listed = true;
+			if ($(".message .choice input[name='downloadable']:checked").val()==="downloadable") downloadable = true;
 
 		}
 
-		params = "setAlbumPublic&albumID=" + albumID + "&password=" + password + "&visible=" + listed;
+		params = "setAlbumPublic&albumID=" + albumID + "&password=" + password + "&visible=" + listed + "&downloadable=" + downloadable;
 
 		if (visible.album()) {
 

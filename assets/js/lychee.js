@@ -8,8 +8,8 @@
 var lychee = {
 
 	title: "",
-	version: "2.6",
-	version_code: "020600",
+	version: "2.6.1",
+	version_code: "020601",
 
 	api_path: "php/api.php",
 	update_path: "http://lychee.electerious.com/version/index.php",
@@ -157,8 +157,11 @@ var lychee = {
 
 	goto: function(url) {
 
-		if (url===undefined) url = "";
-		document.location.hash = url;
+		if (url===undefined) url = "#";
+		else url = "#" + url;
+
+		history.pushState(null, null, url);
+		lychee.load();
 
 	},
 

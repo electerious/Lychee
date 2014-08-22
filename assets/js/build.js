@@ -309,13 +309,13 @@ build = {
 
 		switch (photoJSON.public) {
 			case "0":
-				public = "Private";
+				public = "No";
 				break;
 			case "1":
-				public = "Public";
+				public = "Yes";
 				break;
 			case "2":
-				public = "Public (Album)";
+				public = "Yes (Album)";
 				break;
 			default:
 				public = "-";
@@ -354,7 +354,7 @@ build = {
 
 		infos = infos.concat([
 			["", "Share"],
-			["Visibility", public]
+			["Public", public]
 		]);
 
 		$.each(infos, function(index) {
@@ -401,8 +401,9 @@ build = {
 		if (!albumJSON) return "";
 
 		var infobox = "",
-			public,
-			password,
+			public = "-",
+			password = "-",
+			downloadable = "-",
 			editTitleHTML,
 			editDescriptionHTML,
 			infos;
@@ -412,13 +413,10 @@ build = {
 
 		switch (albumJSON.public) {
 			case "0":
-				public = "Private";
+				public = "No";
 				break;
 			case "1":
-				public = "Public";
-				break;
-			default:
-				public = "-";
+				public = "Yes";
 				break;
 		}
 
@@ -429,8 +427,14 @@ build = {
 			case true:
 				password = "Yes";
 				break;
-			default:
-				password = "-";
+		}
+
+		switch (albumJSON.downloadable) {
+			case "0":
+				downloadable = "No";
+				break;
+			case "1":
+				downloadable = "Yes";
 				break;
 		}
 
@@ -445,7 +449,8 @@ build = {
 			["Created", albumJSON.sysdate],
 			["Images", albumJSON.num],
 			["", "Share"],
-			["Visibility", public],
+			["Public", public],
+			["Downloadable", downloadable],
 			["Password", password]
 		];
 
