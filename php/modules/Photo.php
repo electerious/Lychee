@@ -96,26 +96,53 @@ class Photo extends Module {
 			$id = str_replace('.', '', microtime(true));
 			while(strlen($id)<14) $id .= 0;
 
+			# Set paths
 			$tmp_name	= $file['tmp_name'];
 			$photo_name	= md5($id) . $extension;
 			$path		= LYCHEE_UPLOADS_BIG . $photo_name;
 
-			# Import if not uploaded via web
-			if (!is_uploaded_file($tmp_name)) {
-				if (!@copy($tmp_name, $path)) {
-					Log::error($this->database, __METHOD__, __LINE__, 'Could not copy photo to uploads');
-					exit('Error: Could not copy photo to uploads!');
-				} else @unlink($tmp_name);
+			# Calculate checksum
+			$checksum = sha1_file($tmp_name);
+
+			# Check if image exists based on checksum
+			if ($checksum===false) {
+
+				$checksum	= '';
+				$exists		= false;
+
 			} else {
-				if (!@move_uploaded_file($tmp_name, $path)) {
-					Log::error($this->database, __METHOD__, __LINE__, 'Could not move photo to uploads');
-					exit('Error: Could not move photo to uploads!');
+
+				$query = "SELECT id, url, thumbUrl FROM lychee_photos WHERE checksum = '$checksum' LIMIT 1;";
+				$result = $this->database->query($query);
+
+				if ($result->num_rows===1) {
+					$result		= $result->fetch_assoc();
+					$photo_name	= $result['url'];
+					$path		= LYCHEE_UPLOADS_BIG . $result['url'];
+					$path_thumb	= $result['thumbUrl'];
+					$exists		= true;
+				} else {
+					$exists		= false;
 				}
+
 			}
 
-			# Calculate checksum
-			$checksum = sha1_file($path);
-			if ($checksum===false) $checksum = '';
+			if ($exists===false) {
+
+				# Import if not uploaded via web
+				if (!is_uploaded_file($tmp_name)) {
+					if (!@copy($tmp_name, $path)) {
+						Log::error($this->database, __METHOD__, __LINE__, 'Could not copy photo to uploads');
+						exit('Error: Could not copy photo to uploads!');
+					} else @unlink($tmp_name);
+				} else {
+					if (!@move_uploaded_file($tmp_name, $path)) {
+						Log::error($this->database, __METHOD__, __LINE__, 'Could not move photo to uploads');
+						exit('Error: Could not move photo to uploads!');
+					}
+				}
+
+			}
 
 			# Read infos
 			$info = $this->getInfo($path);
@@ -126,18 +153,25 @@ class Photo extends Module {
 			# Use description parameter if set
 			if ($description==='') $description = $info['description'];
 
-			# Set orientation based on EXIF data
-			if ($file['type']==='image/jpeg'&&isset($info['orientation'])&&$info['orientation']!==''&&isset($info['width'])&&isset($info['height'])) {
-				if (!$this->adjustFile($path, $info)) Log::notice($this->database, __METHOD__, __LINE__, 'Could not adjust photo (' . $info['title'] . ')');
-			}
+			if ($exists===false) {
 
-			# Set original date
-			if ($info['takestamp']!=='') @touch($path, $info['takestamp']);
+				# Set orientation based on EXIF data
+				if ($file['type']==='image/jpeg'&&isset($info['orientation'])&&$info['orientation']!==''&&isset($info['width'])&&isset($info['height'])) {
+					if (!$this->adjustFile($path, $info)) Log::notice($this->database, __METHOD__, __LINE__, 'Could not adjust photo (' . $info['title'] . ')');
+				}
 
-			# Create Thumb
-			if (!$this->createThumb($path, $photo_name)) {
-				Log::error($this->database, __METHOD__, __LINE__, 'Could not create thumbnail for photo');
-				exit('Error: Could not create thumbnail for photo!');
+				# Set original date
+				if ($info['takestamp']!=='') @touch($path, $info['takestamp']);
+
+				# Create Thumb
+				if (!$this->createThumb($path, $photo_name)) {
+					Log::error($this->database, __METHOD__, __LINE__, 'Could not create thumbnail for photo');
+					exit('Error: Could not create thumbnail for photo!');
+				}
+
+				# Set thumb url
+				$path_thumb = md5($id) . '.jpeg';
+
 			}
 
 			# Save to DB
@@ -159,7 +193,7 @@ class Photo extends Module {
 					'" . $info['shutter'] . "',
 					'" . $info['focal'] . "',
 					'" . $info['takestamp'] . "',
-					'" . md5($id) . ".jpeg',
+					'" . $path_thumb . "',
 					'" . $albumID . "',
 					'" . $public . "',
 					'" . $star . "',
