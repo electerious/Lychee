@@ -210,12 +210,15 @@ class Photo extends Module {
 
 	}
 
-	private function exists($checksum) {
+	private function exists($checksum, $photoID = null) {
 
 		# Check dependencies
 		self::dependencies(isset($this->database, $checksum));
 
-		$query	= "SELECT id, url, thumbUrl FROM lychee_photos WHERE checksum = '$checksum' LIMIT 1;";
+		# Exclude $photoID from select when $photoID is set
+		if (isset($photoID)) $query = "SELECT id, url, thumbUrl FROM lychee_photos WHERE checksum = '$checksum' AND id <> '$photoID' LIMIT 1;";
+		else $query = "SELECT id, url, thumbUrl FROM lychee_photos WHERE checksum = '$checksum' LIMIT 1;";
+
 		$result	= $this->database->query($query);
 
 		if (!$result) {
@@ -820,7 +823,7 @@ class Photo extends Module {
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Get photos
-		$photos = $this->database->query("SELECT id, url, thumbUrl FROM lychee_photos WHERE id IN ($this->photoIDs);");
+		$photos = $this->database->query("SELECT id, url, thumbUrl, checksum FROM lychee_photos WHERE id IN ($this->photoIDs);");
 		if (!$photos) {
 			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
 			return false;
@@ -829,26 +832,32 @@ class Photo extends Module {
 		# For each photo
 		while ($photo = $photos->fetch_object()) {
 
-			# Get retina thumb url
-			$thumbUrl2x = explode(".", $photo->thumbUrl);
-			$thumbUrl2x = $thumbUrl2x[0] . '@2x.' . $thumbUrl2x[1];
+			# Check if other photos are referring to this images
+			# If so, only delete the db entry
+			if ($this->exists($photo->checksum, $photo->id)===false) {
 
-			# Delete big
-			if (file_exists(LYCHEE_UPLOADS_BIG . $photo->url)&&!unlink(LYCHEE_UPLOADS_BIG . $photo->url)) {
-				Log::error($this->database, __METHOD__, __LINE__, 'Could not delete photo in uploads/big/');
-				return false;
-			}
+				# Get retina thumb url
+				$thumbUrl2x = explode(".", $photo->thumbUrl);
+				$thumbUrl2x = $thumbUrl2x[0] . '@2x.' . $thumbUrl2x[1];
 
-			# Delete thumb
-			if (file_exists(LYCHEE_UPLOADS_THUMB . $photo->thumbUrl)&&!unlink(LYCHEE_UPLOADS_THUMB . $photo->thumbUrl)) {
-				Log::error($this->database, __METHOD__, __LINE__, 'Could not delete photo in uploads/thumb/');
-				return false;
-			}
+				# Delete big
+				if (file_exists(LYCHEE_UPLOADS_BIG . $photo->url)&&!unlink(LYCHEE_UPLOADS_BIG . $photo->url)) {
+					Log::error($this->database, __METHOD__, __LINE__, 'Could not delete photo in uploads/big/');
+					return false;
+				}
 
-			# Delete thumb@2x
-			if (file_exists(LYCHEE_UPLOADS_THUMB . $thumbUrl2x)&&!unlink(LYCHEE_UPLOADS_THUMB . $thumbUrl2x))	 {
-				Log::error($this->database, __METHOD__, __LINE__, 'Could not delete high-res photo in uploads/thumb/');
-				return false;
+				# Delete thumb
+				if (file_exists(LYCHEE_UPLOADS_THUMB . $photo->thumbUrl)&&!unlink(LYCHEE_UPLOADS_THUMB . $photo->thumbUrl)) {
+					Log::error($this->database, __METHOD__, __LINE__, 'Could not delete photo in uploads/thumb/');
+					return false;
+				}
+
+				# Delete thumb@2x
+				if (file_exists(LYCHEE_UPLOADS_THUMB . $thumbUrl2x)&&!unlink(LYCHEE_UPLOADS_THUMB . $thumbUrl2x))	 {
+					Log::error($this->database, __METHOD__, __LINE__, 'Could not delete high-res photo in uploads/thumb/');
+					return false;
+				}
+
 			}
 
 			# Delete db entry
