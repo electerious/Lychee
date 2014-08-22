@@ -215,6 +215,10 @@ class Photo extends Module {
 		# Check dependencies
 		self::dependencies(isset($this->database, $checksum));
 
+		# Escape
+		$checksum = mysqli_real_escape_string($this->database, $checksum);
+		if (isset($photoID)) $photoID = mysqli_real_escape_string($this->database, $photoID);
+
 		# Exclude $photoID from select when $photoID is set
 		if (isset($photoID)) $query = "SELECT id, url, thumbUrl FROM lychee_photos WHERE checksum = '$checksum' AND id <> '$photoID' LIMIT 1;";
 		else $query = "SELECT id, url, thumbUrl FROM lychee_photos WHERE checksum = '$checksum' LIMIT 1;";
