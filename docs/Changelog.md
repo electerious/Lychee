@@ -1,6 +1,6 @@
 ## v2.6.1
 
-Released August ??, 2014
+Released August 22, 2014
 
 - `New` Support for IE >= 11 (#148)
 - `New` Choose if public album is downloadable or not (#191)
