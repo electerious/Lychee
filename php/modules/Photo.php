@@ -818,6 +818,41 @@ class Photo extends Module {
 
 	}
 
+	public function duplicate() {
+
+		# Check dependencies
+		self::dependencies(isset($this->database, $this->photoIDs));
+
+		# Call plugins
+		$this->plugins(__METHOD__, 0, func_get_args());
+
+		# Get photos
+		$photos = $this->database->query("SELECT id, checksum FROM lychee_photos WHERE id IN ($this->photoIDs);");
+		if (!$photos) {
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			return false;
+		}
+
+		# For each photo
+		while ($photo = $photos->fetch_object()) {
+
+			# Generate id
+			$id = str_replace('.', '', microtime(true));
+			while(strlen($id)<14) $id .= 0;
+
+			# Duplicate entry
+			$duplicate = $this->database->query("INSERT INTO lychee_photos(id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, checksum) SELECT '$id' AS id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, checksum FROM lychee_photos WHERE id = '$photo->id';");
+			if (!$duplicate) {
+				Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+				return false;
+			}
+
+		}
+
+		return true;
+
+	}
+
 	public function delete() {
 
 		# Check dependencies
