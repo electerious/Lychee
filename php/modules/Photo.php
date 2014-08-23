@@ -463,7 +463,8 @@ class Photo extends Module {
 		if (strlen($photo['takestamp'])>1) $photo['takedate'] = date('d M. Y', $photo['takestamp']);
 
 		# Parse url
-		$photo['url'] = LYCHEE_URL_UPLOADS_BIG . $photo['url'];
+		$photo['url']		= LYCHEE_URL_UPLOADS_BIG . $photo['url'];
+		$photo['thumbUrl']	= LYCHEE_URL_UPLOADS_THUMB . $photo['thumbUrl'];
 
 		if ($albumID!='false') {
 
