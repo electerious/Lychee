@@ -43,11 +43,11 @@ class Photo extends Module {
 	public function add($files, $albumID, $description = '', $tags = '') {
 
 		# Check dependencies
-		self::dependencies(isset($this->database));
+		self::dependencies(isset($this->database, $this->tablePrefix));
 
 		# Check permissions
 		if (hasPermissions(LYCHEE_UPLOADS_BIG)===false||hasPermissions(LYCHEE_UPLOADS_THUMB)===false) {
-			Log::error($this->database, __METHOD__, __LINE__, 'Wrong permissions in uploads/');
+			Log::error($this->database, $this->tablePrefix, __METHOD__, __LINE__, 'Wrong permissions in uploads/');
 			exit('Error: Wrong permissions in uploads-folder!');
 		}
 
@@ -105,12 +105,12 @@ class Photo extends Module {
 			# Import if not uploaded via web
 			if (!is_uploaded_file($tmp_name)) {
 				if (!@copy($tmp_name, $path)) {
-					Log::error($this->database, __METHOD__, __LINE__, 'Could not copy photo to uploads');
+					Log::error($this->database, $this->tablePrefix, __METHOD__, __LINE__, 'Could not copy photo to uploads');
 					exit('Error: Could not copy photo to uploads!');
 				} else @unlink($tmp_name);
 			} else {
 				if (!@move_uploaded_file($tmp_name, $path)) {
-					Log::error($this->database, __METHOD__, __LINE__, 'Could not move photo to uploads');
+					Log::error($this->database, $this->tablePrefix, __METHOD__, __LINE__, 'Could not move photo to uploads');
 					exit('Error: Could not move photo to uploads!');
 				}
 			}
@@ -130,7 +130,7 @@ class Photo extends Module {
 
 			# Set orientation based on EXIF data
 			if ($file['type']==='image/jpeg'&&isset($info['orientation'])&&$info['orientation']!==''&&isset($info['width'])&&isset($info['height'])) {
-				if (!$this->adjustFile($path, $info)) Log::notice($this->database, __METHOD__, __LINE__, 'Could not adjust photo (' . $info['title'] . ')');
+				if (!$this->adjustFile($path, $info)) Log::notice($this->database, $this->tablePrefix, __METHOD__, __LINE__, 'Could not adjust photo (' . $info['title'] . ')');
 			}
 
 			# Set original date
@@ -138,7 +138,7 @@ class Photo extends Module {
 
 			# Create Thumb
 			if (!$this->createThumb($path, $photo_name)) {
-				Log::error($this->database, __METHOD__, __LINE__, 'Could not create thumbnail for photo');
+				Log::error($this->database, $this->tablePrefix, __METHOD__, __LINE__, 'Could not create thumbnail for photo');
 				exit('Error: Could not create thumbnail for photo!');
 			}
 
@@ -170,7 +170,7 @@ class Photo extends Module {
 			$result = $this->database->query($query);
 
 			if (!$result) {
-				Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+				Log::error($this->database, $this->tablePrefix, __METHOD__, __LINE__, $this->database->error);
 				exit('Error: Could not save photo in database!');
 			}
 
@@ -186,7 +186,7 @@ class Photo extends Module {
 	private function createThumb($url, $filename, $width = 200, $height = 200) {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->settings, $url, $filename));
+		self::dependencies(isset($this->database, $this->tablePrefix, $this->settings, $url, $filename));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -240,7 +240,7 @@ class Photo extends Module {
 				case 'image/jpeg':	$sourceImg = imagecreatefromjpeg($url); break;
 				case 'image/png':	$sourceImg = imagecreatefrompng($url); break;
 				case 'image/gif':	$sourceImg = imagecreatefromgif($url); break;
-				default:			Log::error($this->database, __METHOD__, __LINE__, 'Type of photo is not supported');
+				default:			Log::error($this->database, $this->tablePrefix, __METHOD__, __LINE__, 'Type of photo is not supported');
 									return false;
 									break;
 			}
@@ -384,7 +384,7 @@ class Photo extends Module {
 	public function get($albumID) {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->photoIDs));
+		self::dependencies(isset($this->database, $this->tablePrefix, $this->photoIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -405,7 +405,7 @@ class Photo extends Module {
 			if ($photo['album']!=0) {
 
 				# Get album
-				$albums = $this->database->query(Database::prepareQuery("SELECT public FROM {prefix}_albums WHERE id = '" . $photo['album'] . " LIMIT 1';"), $this->tablePrefix);
+				$albums = $this->database->query(Database::prepareQuery("SELECT public FROM {prefix}_albums WHERE id = '" . $photo['album'] . " LIMIT 1';", $this->tablePrefix));
 				$album = $albums->fetch_assoc();
 
 				# Parse album
@@ -522,7 +522,7 @@ class Photo extends Module {
 	public function getArchive() {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->photoIDs));
+		self::dependencies(isset($this->database, $this->tablePrefix, $this->photoIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -534,7 +534,7 @@ class Photo extends Module {
 		# Get extension
 		$extension = getExtension($photo->url);
 		if ($extension===false) {
-			Log::error($this->database, __METHOD__, __LINE__, 'Invalid photo extension');
+			Log::error($this->database, $this->tablePrefix, __METHOD__, __LINE__, 'Invalid photo extension');
 			return false;
 		}
 
@@ -559,7 +559,7 @@ class Photo extends Module {
 	public function setTitle($title) {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->photoIDs));
+		self::dependencies(isset($this->database, $this->tablePrefix, $this->photoIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -574,7 +574,7 @@ class Photo extends Module {
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, $this->tablePrefix, __METHOD__, __LINE__, $this->database->error);
 			return false;
 		}
 		return true;
@@ -584,7 +584,7 @@ class Photo extends Module {
 	public function setDescription($description) {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->photoIDs));
+		self::dependencies(isset($this->database, $this->tablePrefix, $this->photoIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -600,7 +600,7 @@ class Photo extends Module {
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, $this->tablePrefix, __METHOD__, __LINE__, $this->database->error);
 			return false;
 		}
 		return true;
@@ -610,7 +610,7 @@ class Photo extends Module {
 	public function setStar() {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->photoIDs));
+		self::dependencies(isset($this->database, $this->tablePrefix, $this->photoIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -619,7 +619,7 @@ class Photo extends Module {
 		$error	= false;
 
 		# Get photos
-		$photos	= $this->database->query(Database::prepareQuery("SELECT id, star FROM {prefix}_photos WHERE id IN ($this->photoIDs);"), $this->tablePrefix);
+		$photos	= $this->database->query(Database::prepareQuery("SELECT id, star FROM {prefix}_photos WHERE id IN ($this->photoIDs);", $this->tablePrefix));
 
 		# For each photo
 		while ($photo = $photos->fetch_object()) {
@@ -637,7 +637,7 @@ class Photo extends Module {
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if ($error===true) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, $this->tablePrefix, __METHOD__, __LINE__, $this->database->error);
 			return false;
 		}
 		return true;
@@ -647,7 +647,7 @@ class Photo extends Module {
 	public function getPublic($password) {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->photoIDs));
+		self::dependencies(isset($this->database, $this->tablePrefix, $this->photoIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -675,7 +675,7 @@ class Photo extends Module {
 	public function setPublic() {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->photoIDs));
+		self::dependencies(isset($this->database, $this->tablePrefix, $this->photoIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -694,7 +694,7 @@ class Photo extends Module {
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, $this->tablePrefix, __METHOD__, __LINE__, $this->database->error);
 			return false;
 		}
 		return true;
@@ -704,7 +704,7 @@ class Photo extends Module {
 	function setAlbum($albumID) {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->photoIDs));
+		self::dependencies(isset($this->database, $this->tablePrefix, $this->photoIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -716,7 +716,7 @@ class Photo extends Module {
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, $this->tablePrefix, __METHOD__, __LINE__, $this->database->error);
 			return false;
 		}
 		return true;
@@ -726,7 +726,7 @@ class Photo extends Module {
 	public function setTags($tags) {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->photoIDs));
+		self::dependencies(isset($this->database, $this->tablePrefix, $this->photoIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -735,7 +735,7 @@ class Photo extends Module {
 		$tags = preg_replace('/(\ ,\ )|(\ ,)|(,\ )|(,{1,}\ {0,})|(,$|^,)/', ',', $tags);
 		$tags = preg_replace('/,$|^,|(\ ){0,}$/', '', $tags);
 		if (strlen($tags)>1000) {
-			Log::notice($this->database, __METHOD__, __LINE__, 'Length of tags higher than 1000');
+			Log::notice($this->database, $this->tablePrefix, __METHOD__, __LINE__, 'Length of tags higher than 1000');
 			return false;
 		}
 
@@ -746,7 +746,7 @@ class Photo extends Module {
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, $this->tablePrefix, __METHOD__, __LINE__, $this->database->error);
 			return false;
 		}
 		return true;
@@ -756,7 +756,7 @@ class Photo extends Module {
 	public function delete() {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->photoIDs));
+		self::dependencies(isset($this->database, $this->tablePrefix, $this->photoIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -764,7 +764,7 @@ class Photo extends Module {
 		# Get photos
 		$photos = $this->database->query(Database::prepareQuery("SELECT id, url, thumbUrl FROM {prefix}_photos WHERE id IN ($this->photoIDs);", $this->tablePrefix));
 		if (!$photos) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, $this->tablePrefix, __METHOD__, __LINE__, $this->database->error);
 			return false;
 		}
 
@@ -777,26 +777,26 @@ class Photo extends Module {
 
 			# Delete big
 			if (file_exists(LYCHEE_UPLOADS_BIG . $photo->url)&&!unlink(LYCHEE_UPLOADS_BIG . $photo->url)) {
-				Log::error($this->database, __METHOD__, __LINE__, 'Could not delete photo in uploads/big/');
+				Log::error($this->database, $this->tablePrefix, __METHOD__, __LINE__, 'Could not delete photo in uploads/big/');
 				return false;
 			}
 
 			# Delete thumb
 			if (file_exists(LYCHEE_UPLOADS_THUMB . $photo->thumbUrl)&&!unlink(LYCHEE_UPLOADS_THUMB . $photo->thumbUrl)) {
-				Log::error($this->database, __METHOD__, __LINE__, 'Could not delete photo in uploads/thumb/');
+				Log::error($this->database, $this->tablePrefix, __METHOD__, __LINE__, 'Could not delete photo in uploads/thumb/');
 				return false;
 			}
 
 			# Delete thumb@2x
 			if (file_exists(LYCHEE_UPLOADS_THUMB . $thumbUrl2x)&&!unlink(LYCHEE_UPLOADS_THUMB . $thumbUrl2x))	 {
-				Log::error($this->database, __METHOD__, __LINE__, 'Could not delete high-res photo in uploads/thumb/');
+				Log::error($this->database, $this->tablePrefix, __METHOD__, __LINE__, 'Could not delete high-res photo in uploads/thumb/');
 				return false;
 			}
 
 			# Delete db entry
 			$delete = $this->database->query(Database::prepareQuery("DELETE FROM {prefix}_photos WHERE id = '$photo->id';", $this->tablePrefix));
 			if (!$delete) {
-				Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+				Log::error($this->database, $this->tablePrefix, __METHOD__, __LINE__, $this->database->error);
 				return false;
 			}
 

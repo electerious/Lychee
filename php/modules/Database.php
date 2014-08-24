@@ -156,11 +156,11 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 			# Create table
 			if (!isset($query)||$query===false) {
-				Log::error($database, __METHOD__, __LINE__, Database::prepareQuery('Could not load query for {prefix}_settings', $tablePrefix));
+				Log::error($database, $tablePrefix, __METHOD__, __LINE__, Database::prepareQuery('Could not load query for {prefix}_settings', $tablePrefix));
 				return false;
 			}
 			if (!$database->query($query)) {
-				Log::error($database, __METHOD__, __LINE__, $database->error);
+				Log::error($database, $tablePrefix, __METHOD__, __LINE__, $database->error);
 				return false;
 			}
 
@@ -170,11 +170,11 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 			# Add content
 			if (!isset($query)||$query===false) {
-				Log::error($database, __METHOD__, __LINE__, Database::prepareQuery('Could not load content-query for {prefix}_settings', $tablePrefix));
+				Log::error($database, $tablePrefix, __METHOD__, __LINE__, Database::prepareQuery('Could not load content-query for {prefix}_settings', $tablePrefix));
 				return false;
 			}
 			if (!$database->query($query)) {
-				Log::error($database, __METHOD__, __LINE__, $database->error);
+				Log::error($database, $tablePrefix, __METHOD__, __LINE__, $database->error);
 				return false;
 			}
 
@@ -190,11 +190,11 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 			# Create table
 			if (!isset($query)||$query===false) {
-				Log::error($database, __METHOD__, __LINE__, Database::prepareQuery('Could not load query for {prefix}_albums', $tablePrefix));
+				Log::error($database, $tablePrefix, __METHOD__, __LINE__, Database::prepareQuery('Could not load query for {prefix}_albums', $tablePrefix));
 				return false;
 			}
 			if (!$database->query($query)) {
-				Log::error($database, __METHOD__, __LINE__, $database->error);
+				Log::error($database, $tablePrefix, __METHOD__, __LINE__, $database->error);
 				return false;
 			}
 
@@ -210,11 +210,11 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 			# Create table
 			if (!isset($query)||$query===false) {
-				Log::error($database, __METHOD__, __LINE__, Database::prepareQuery('Could not load query for {prefix}_photos', $tablePrefix));
+				Log::error($database, $tablePrefix, __METHOD__, __LINE__, Database::prepareQuery('Could not load query for {prefix}_photos', $tablePrefix));
 				return false;
 			}
 			if (!$database->query($query)) {
-				Log::error($database, __METHOD__, __LINE__, $database->error);
+				Log::error($database, $tablePrefix, __METHOD__, __LINE__, $database->error);
 				return false;
 			}
 

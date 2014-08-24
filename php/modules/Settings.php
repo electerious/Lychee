@@ -75,7 +75,7 @@ class Settings extends Module {
 		# Parse
 		$username = htmlentities($username);
 		if (strlen($username)>50) {
-			Log::notice($this->database, __METHOD__, __LINE__, 'Username is longer than 50 chars');
+			Log::notice($this->database, $this->tablePrefix, __METHOD__, __LINE__, 'Username is longer than 50 chars');
 			return false;
 		}
 
@@ -84,7 +84,7 @@ class Settings extends Module {
 		$result = $this->database->query($query);
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, $this->tablePrefix, __METHOD__, __LINE__, $this->database->error);
 			return false;
 		}
 		return true;
@@ -103,7 +103,7 @@ class Settings extends Module {
 		$result = $this->database->query($query);
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, $this->tablePrefix, __METHOD__, __LINE__, $this->database->error);
 			return false;
 		}
 		return true;
@@ -116,7 +116,7 @@ class Settings extends Module {
 		self::dependencies(isset($this->database, $this->tablePrefix, $key));
 
 		if (strlen($key)<1||strlen($key)>50) {
-			Log::notice($this->database, __METHOD__, __LINE__, 'Dropbox key is either too short or too long');
+			Log::notice($this->database, $this->tablePrefix, __METHOD__, __LINE__, 'Dropbox key is either too short or too long');
 			return false;
 		}
 
@@ -125,7 +125,7 @@ class Settings extends Module {
 		$result = $this->database->query($query);
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, $this->tablePrefix, __METHOD__, __LINE__, $this->database->error);
 			return false;
 		}
 		return true;
@@ -187,7 +187,7 @@ class Settings extends Module {
 		$result = $this->database->query($query);
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, $this->tablePrefix, __METHOD__, __LINE__, $this->database->error);
 			return false;
 		}
 		return true;

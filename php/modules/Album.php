@@ -31,7 +31,7 @@ class Album extends Module {
 	public function add($title = 'Untitled', $public = 0, $visible = 1) {
 
 		# Check dependencies
-		self::dependencies(isset($this->database));
+		self::dependencies(isset($this->database, $this->tablePrefix));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -48,7 +48,7 @@ class Album extends Module {
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, $this->tablePrefix, __METHOD__, __LINE__, $this->database->error);
 			return false;
 		}
 		return $this->database->insert_id;
@@ -58,7 +58,7 @@ class Album extends Module {
 	public function get() {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->settings, $this->albumIDs));
+		self::dependencies(isset($this->database, $this->tablePrefix, $this->settings, $this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -204,7 +204,7 @@ class Album extends Module {
 	private function getSmartInfo() {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->settings));
+		self::dependencies(isset($this->database, $this->tablePrefix, $this->settings));
 
 		# Unsorted
 		$unsorted	= $this->database->query(Database::prepareQuery("SELECT thumbUrl FROM {prefix}_photos WHERE album = 0 " . $this->settings['sorting'], $this->tablePrefix));
@@ -257,7 +257,7 @@ class Album extends Module {
 	public function getArchive() {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->database, $this->tablePrefix, $this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -299,7 +299,7 @@ class Album extends Module {
 		# Create zip
 		$zip = new ZipArchive();
 		if ($zip->open($filename, ZIPARCHIVE::CREATE)!==TRUE) {
-			Log::error($this->database, __METHOD__, __LINE__, 'Could not create ZipArchive');
+			Log::error($this->database, $this->tablePrefix, __METHOD__, __LINE__, 'Could not create ZipArchive');
 			return false;
 		}
 
@@ -308,7 +308,7 @@ class Album extends Module {
 
 		# Check if album empty
 		if ($photos->num_rows==0) {
-			Log::error($this->database, __METHOD__, __LINE__, 'Could not create ZipArchive without images');
+			Log::error($this->database, $this->tablePrefix, __METHOD__, __LINE__, 'Could not create ZipArchive without images');
 			return false;
 		}
 
@@ -375,7 +375,7 @@ class Album extends Module {
 	public function setTitle($title = 'Untitled') {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->database, $this->tablePrefix, $this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -390,7 +390,7 @@ class Album extends Module {
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, $this->tablePrefix, __METHOD__, __LINE__, $this->database->error);
 			return false;
 		}
 		return true;
@@ -400,7 +400,7 @@ class Album extends Module {
 	public function setDescription($description = '') {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->database, $this->tablePrefix, $this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -416,7 +416,7 @@ class Album extends Module {
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, $this->tablePrefix, __METHOD__, __LINE__, $this->database->error);
 			return false;
 		}
 		return true;
@@ -426,7 +426,7 @@ class Album extends Module {
 	public function getPublic() {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->database, $this->tablePrefix, $this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -448,7 +448,7 @@ class Album extends Module {
 	public function setPublic($password, $visible) {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->database, $this->tablePrefix, $this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -467,7 +467,7 @@ class Album extends Module {
 			# Set public
 			$result = $this->database->query(Database::prepareQuery("UPDATE {prefix}_albums SET public = '$public', visible = '$visible', password = NULL WHERE id = '$album->id';", $this->tablePrefix));
 			if (!$result) {
-				Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+				Log::error($this->database, $this->tablePrefix, __METHOD__, __LINE__, $this->database->error);
 				return false;
 			}
 
@@ -475,7 +475,7 @@ class Album extends Module {
 			if ($public===1) {
 				$result = $this->database->query(Database::prepareQuery("UPDATE {prefix}_photos SET public = 0 WHERE album = '$album->id';", $this->tablePrefix));
 				if (!$result) {
-					Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+					Log::error($this->database, $this->tablePrefix, __METHOD__, __LINE__, $this->database->error);
 					return false;
 				}
 			}
@@ -495,7 +495,7 @@ class Album extends Module {
 	private function setPassword($password) {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->database, $this->tablePrefix, $this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -519,7 +519,7 @@ class Album extends Module {
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, $this->tablePrefix, __METHOD__, __LINE__, $this->database->error);
 			return false;
 		}
 		return true;
@@ -529,7 +529,7 @@ class Album extends Module {
 	public function checkPassword($password) {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->database, $this->tablePrefix, $this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -550,7 +550,7 @@ class Album extends Module {
 	public function delete($albumIDs) {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->database, $this->tablePrefix, $this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -564,7 +564,7 @@ class Album extends Module {
 		# For each album delete photo
 		while ($row = $photos->fetch_object()) {
 
-			$photo = new Photo($this->database, $this->plugins, null, $row->id);
+			$photo = new Photo($this->database, $this->tablePrefix, $this->plugins, null, $row->id);
 			if (!$photo->delete($row->id)) $error = true;
 
 		}
@@ -577,7 +577,7 @@ class Album extends Module {
 
 		if ($error) return false;
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, $this->tablePrefix, __METHOD__, __LINE__, $this->database->error);
 			return false;
 		}
 		return true;

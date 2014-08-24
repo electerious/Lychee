@@ -255,7 +255,7 @@ class Admin extends Access {
 
 		Module::dependencies(isset($_POST['username'], $_POST['password']));
 		if (!isset($_POST['oldPassword'])) $_POST['oldPassword'] = '';
-		$this->settings = new Settings($this->database);
+		$this->settings = new Settings($this->database, $this->tablePrefix);
 		echo $this->settings->setLogin($_POST['oldPassword'], $_POST['username'], $_POST['password']);
 
 	}
@@ -263,7 +263,7 @@ class Admin extends Access {
 	private function setSorting() {
 
 		Module::dependencies(isset($_POST['type'], $_POST['order']));
-		$this->settings = new Settings($this->database);
+		$this->settings = new Settings($this->database, $this->tablePrefix);
 		echo $this->settings->setSorting($_POST['type'], $_POST['order']);
 
 	}
@@ -271,7 +271,7 @@ class Admin extends Access {
 	private function setDropboxKey() {
 
 		Module::dependencies(isset($_POST['key']));
-		$this->settings = new Settings($this->database);
+		$this->settings = new Settings($this->database, $this->tablePrefix);
 		echo $this->settings->setDropboxKey($_POST['key']);
 
 	}

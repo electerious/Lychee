@@ -16,9 +16,9 @@ class Plugins implements \SplSubject {
 	public $action	= null;
 	public $args	= null;
 
-	public function __construct($files, $database, $settings) {
+	public function __construct($files, $tablePrefix, $database, $settings) {
 
-		if (!isset($files)) return false;
+		if (!isset($files, $tablePrefix)) return false;
 
 		# Init vars
 		$plugins	= $this;
@@ -32,7 +32,7 @@ class Plugins implements \SplSubject {
 			$file = LYCHEE_PLUGINS . $file;
 
 			if (file_exists($file)===false) {
-				Log::warning($database, __METHOD__, __LINE__, 'Could not include plugin. File does not exist (' . $file . ').');
+				Log::warning($database, $tablePrefix, __METHOD__, __LINE__, 'Could not include plugin. File does not exist (' . $file . ').');
 				continue;
 			}
 

@@ -30,7 +30,7 @@ $database = new mysqli($dbHost, $dbUser, $dbPassword, $dbName);
 if (mysqli_connect_errno()!=0) $error .= ('Error 100: ' . mysqli_connect_errno() . ': ' . mysqli_connect_error() . '' . PHP_EOL);
 
 # Load settings
-$settings = new Settings($database);
+$settings = new Settings($database, $dbTablePrefix);
 $settings = $settings->get();
 
 # PHP Version

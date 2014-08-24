@@ -36,7 +36,7 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 
 		define('LYCHEE_ACCESS_INSTALLATION', true);
 
-		$installation = new Installation(null, null, null);
+		$installation = new Installation(null, null, null, null);
 		$installation->check($_POST['function']);
 
 		exit();
@@ -52,7 +52,7 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 
 	# Init plugins
 	$plugins = explode(';', $settings['plugins']);
-	$plugins = new Plugins($plugins, $database, $settings);
+	$plugins = new Plugins($plugins, $dbTablePrefix, $database, $settings);
 
 	# Escape
 	foreach(array_keys($_POST) as $key)	$_POST[$key] = mysqli_real_escape_string($database, urldecode($_POST[$key]));

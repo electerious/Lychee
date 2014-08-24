@@ -122,13 +122,13 @@ class Import extends Module {
 		if (substr($path, -1)==='/') $path = substr($path, 0, -1);
 
 		if (is_dir($path)===false) {
-			Log::error($database, __METHOD__, __LINE__, 'Given path is not a directory (' . $path . ')');
+			Log::error($database, $tablePrefix, __METHOD__, __LINE__, 'Given path is not a directory (' . $path . ')');
 			return 'Error: Given path is not a directory!';
 		}
 
 		# Skip folders of Lychee
 		if ($path===LYCHEE_UPLOADS_BIG||($path . '/')===LYCHEE_UPLOADS_BIG||$path===LYCHEE_UPLOADS_THUMB||($path . '/')===LYCHEE_UPLOADS_THUMB) {
-			Log::error($database, __METHOD__, __LINE__, 'Given path is a reserved path of Lychee (' . $path . ')');
+			Log::error($database, $tablePrefix, __METHOD__, __LINE__, 'Given path is a reserved path of Lychee (' . $path . ')');
 			return 'Error: Given path is a reserved path of Lychee!';
 		}
 
@@ -153,7 +153,7 @@ class Import extends Module {
 			# the file may still be unreadable by the user
 			if (!is_readable($file)) {
 				$error = true;
-				Log::error($database, __METHOD__, __LINE__, 'Could not read file or directory: ' . $file);
+				Log::error($database, $tablePrefix, __METHOD__, __LINE__, 'Could not read file or directory: ' . $file);
 				continue;
 			}
 
@@ -163,7 +163,7 @@ class Import extends Module {
 
 				if (!Import::photo($database, $plugins, $settings, $file, $albumID)) {
 					$error = true;
-					Log::error($database, __METHOD__, __LINE__, 'Could not import file: ' . $file);
+					Log::error($database, $tablePrefix, __METHOD__, __LINE__, 'Could not import file: ' . $file);
 					continue;
 				}
 				$contains['photos'] = true;
@@ -179,7 +179,7 @@ class Import extends Module {
 
 				if ($newAlbumID===false) {
 					$error = true;
-					Log::error($database, __METHOD__, __LINE__, 'Could not create album in Lychee (' . $newAlbumID . ')');
+					Log::error($database, $tablePrefix, __METHOD__, __LINE__, 'Could not create album in Lychee (' . $newAlbumID . ')');
 					continue;
 				}
 
@@ -187,7 +187,7 @@ class Import extends Module {
 
 				if ($import!==true&&$import!=='Notice: Import only contains albums!') {
 					$error = true;
-					Log::error($database, __METHOD__, __LINE__, 'Could not import folder. Function returned warning');
+					Log::error($database, $tablePrefix, __METHOD__, __LINE__, 'Could not import folder. Function returned warning');
 					continue;
 				}
 
