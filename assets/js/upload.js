@@ -101,6 +101,7 @@ upload = {
 
 					formData.append("function", "upload");
 					formData.append("albumID", albumID);
+					formData.append("tags", "");
 					formData.append(0, file);
 
 					xhr.open("POST", lychee.api_path);

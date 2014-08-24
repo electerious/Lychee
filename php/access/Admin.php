@@ -202,9 +202,9 @@ class Admin extends Access {
 
 	private function upload() {
 
-		Module::dependencies(isset($_FILES, $_POST['albumID']));
+		Module::dependencies(isset($_FILES, $_POST['albumID'], $_POST['tags']));
 		$photo = new Photo($this->database, $this->plugins, $this->settings, null);
-		echo $photo->add($_FILES, $_POST['albumID']);
+		echo $photo->add($_FILES, $_POST['albumID'], '', $_POST['tags']);
 
 	}
 
