@@ -19,7 +19,7 @@ paths = {
 		'../assets/js/*.js'
 	],
 	css: [
-		'../assets/scss/*.scss'
+		'../assets/scss/main.scss'
 	]
 }
 
