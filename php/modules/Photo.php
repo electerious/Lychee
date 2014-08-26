@@ -528,6 +528,9 @@ class Photo extends Module {
 				$temp = @$iptcInfo['2#120'][0];
 				if (isset($temp)&&strlen($temp)>0) $return['description'] = $temp;
 
+				$temp = @$iptcInfo['2#005'][0];
+				if (isset($temp)&&strlen($temp)>0&&$return['title']==='') $return['title'] = $temp;
+
 			}
 
 		}
