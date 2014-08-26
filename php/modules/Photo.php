@@ -152,7 +152,7 @@ class Photo extends Module {
 			if ($exists===false) {
 
 				# Set orientation based on EXIF data
-				if ($file['type']==='image/jpeg'&&isset($info['orientation'])&&$info['orientation']!==''&&isset($info['width'])&&isset($info['height'])) {
+				if ($file['type']==='image/jpeg'&&isset($info['orientation'], $info['width'], $info['height'])&&$info['orientation']!=='') {
 					if (!$this->adjustFile($path, $info)) Log::notice($this->database, __METHOD__, __LINE__, 'Could not adjust photo (' . $info['title'] . ')');
 				}
 
@@ -332,7 +332,7 @@ class Photo extends Module {
 
 	}
 
-	private function adjustFile($path, $info) {
+	public function adjustFile($path, $info) {
 
 		# Check dependencies
 		self::dependencies(isset($path, $info));
@@ -491,7 +491,7 @@ class Photo extends Module {
 
 	}
 
-	private function getInfo($url) {
+	public function getInfo($url) {
 
 		# Check dependencies
 		self::dependencies(isset($this->database, $url));
