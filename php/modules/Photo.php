@@ -656,7 +656,7 @@ class Photo extends Module {
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Parse
-		$description = htmlentities($description);
+		$description = htmlentities($description, ENT_COMPAT | ENT_HTML401, 'UTF-8');
 		if (strlen($description)>1000) $description = substr($description, 0, 1000);
 
 		# Set description
