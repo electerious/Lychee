@@ -103,6 +103,10 @@ class Photo extends Module {
 
 			# Calculate checksum
 			$checksum = sha1_file($tmp_name);
+			if ($checksum===false) {
+				Log::error($this->database, __METHOD__, __LINE__, 'Could not calculate checksum for photo');
+				exit('Error: Could not calculate checksum for photo!');
+			}
 
 			# Check if image exists based on checksum
 			if ($checksum===false) {
