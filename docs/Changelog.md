@@ -5,7 +5,9 @@ Released September ??, 2014
 - `New` Select all albums/photos with `cmd+a` or `ctrl+a`
 - `New` Detect duplicates and only save one file (#48)
 - `New` Duplicate photos (#186)
+- `New` Added contributing guide
 - `Improved` Use IPTC Title when Headline not available (#216)
+- `Improved` Diagnostics are showing system information
 - `Fixed` a problem with htmlentities and older PHP versions (#212)
 
 ## v2.6.1
