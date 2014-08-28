@@ -25,6 +25,10 @@ $error = '';
 if (!file_exists(LYCHEE_CONFIG_FILE)) exit('Error 001: Configuration not found. Please install Lychee first.');
 require(LYCHEE_CONFIG_FILE);
 
+# Show separator
+echo('Diagnostics' . PHP_EOL);
+echo('-----------' . PHP_EOL);
+
 # Database
 $database = new mysqli($dbHost, $dbUser, $dbPassword, $dbName);
 if (mysqli_connect_errno()!=0) $error .= ('Error 100: ' . mysqli_connect_errno() . ': ' . mysqli_connect_error() . '' . PHP_EOL);
@@ -65,10 +69,6 @@ if (hasPermissions(LYCHEE_UPLOADS_IMPORT)===false)		$error .= ('Error 502: Wrong
 if (hasPermissions(LYCHEE_UPLOADS)===false)				$error .= ('Error 503: Wrong permissions for \'uploads/\' (777 required)' . PHP_EOL);
 if (hasPermissions(LYCHEE_DATA)===false)				$error .= ('Error 504: Wrong permissions for \'data/\' (777 required)' . PHP_EOL);
 
-# Output
-if ($error=='') echo('Everything is fine. Lychee should work without problems!' . PHP_EOL . PHP_EOL);
-else echo $error;
-
 # Check dropboxKey
 if (!$settings['dropboxKey']) echo('Warning: Dropbox import not working. No property for dropboxKey.' . PHP_EOL);
 
@@ -77,5 +77,27 @@ if (ini_get('max_execution_time')<200&&ini_set('upload_max_filesize', '20M')===f
 
 # Check mysql version
 if ($database->server_version<50500) echo('Warning: Lychee uses the GBK charset to avoid sql injections on your MySQL version. Please update to MySQL 5.5 or higher to enable UTF-8 support.' . PHP_EOL);
+
+# Output
+if ($error=='') echo('No critical problems found. Lychee should work without problems!' . PHP_EOL);
+else echo $error;
+
+# Show separator
+echo(PHP_EOL . PHP_EOL . 'System Information' . PHP_EOL);
+echo('------------------' . PHP_EOL);
+
+# Load json
+$json = file_get_contents(LYCHEE_BUILD . 'package.json');
+$json = json_decode($json, true);
+
+# Output system information
+echo('Lychee Version:  ' . $json['version'] . PHP_EOL);
+echo('DB Version:      ' . $settings['version'] . PHP_EOL);
+echo('System:          ' . PHP_OS . PHP_EOL);
+echo('PHP Version:     ' . floatval(phpversion()) . PHP_EOL);
+echo('MySQL Version:   ' . $database->server_version . PHP_EOL);
+echo('Imagick:         ' . extension_loaded('imagick') . PHP_EOL);
+echo('Imagick Version: ' . @Imagick::getVersion()['versionNumber'] . PHP_EOL);
+echo('GD Version:      ' . gd_info()['GD Version'] . PHP_EOL);
 
 ?>

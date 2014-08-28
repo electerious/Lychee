@@ -11,6 +11,7 @@ define('LYCHEE', substr(__DIR__, 0, -3));
 
 # Define dirs
 define('LYCHEE_DATA', LYCHEE . 'data/');
+define('LYCHEE_BUILD', LYCHEE . 'build/');
 define('LYCHEE_UPLOADS', LYCHEE . 'uploads/');
 define('LYCHEE_UPLOADS_BIG', LYCHEE_UPLOADS . 'big/');
 define('LYCHEE_UPLOADS_MEDIUM', LYCHEE_UPLOADS . 'medium/');
