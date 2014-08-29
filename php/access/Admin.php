@@ -120,7 +120,7 @@ class Admin extends Access {
 
 		Module::dependencies(isset($_POST['albumIDs']));
 		$album = new Album($this->database, $this->plugins, $this->settings, $_POST['albumIDs']);
-		echo $album->delete($_POST['albumIDs']);
+		echo $album->delete();
 
 	}
 
