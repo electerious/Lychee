@@ -22,6 +22,9 @@ header('content-type: text/plain');
 if (!file_exists(LYCHEE_CONFIG_FILE)) exit('Error 001: Configuration not found. Please install Lychee first.');
 require(LYCHEE_CONFIG_FILE);
 
+# Define the table prefix
+defineTablePrefix($dbTablePrefix);
+
 # Declare
 $result = '';
 
@@ -34,19 +37,24 @@ if (mysqli_connect_errno()!=0) {
 }
 
 # Result
-$result = $database->query('SELECT FROM_UNIXTIME(time), type, function, line, text FROM lychee_log;');
+$query	= Database::prepare($database, "SELECT FROM_UNIXTIME(time), type, function, line, text FROM ?", [LYCHEE_TABLE_LOG]);
+$result	= $database->query($query);
 
 # Output
-if ($result === FALSE) {
+if ($result->num_rows===0) {
+
 	echo('Everything looks fine, Lychee has not reported any problems!' . PHP_EOL . PHP_EOL);
+
 } else {
-	while ( $row = $result->fetch_row() ) {
+
+	while($row = $result->fetch_row()) {
 
 		# Encode result before printing
 		$row = array_map("htmlentities", $row);
 
 		# Format: time TZ - type - function(line) - text
 		printf ("%s %s - %s - %s (%s) \t- %s\n", $row[0], date_default_timezone_get(), $row[1], $row[2], $row[3], $row[4]);
+
 	}
 
 }
