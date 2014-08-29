@@ -25,6 +25,9 @@ $error = '';
 if (!file_exists(LYCHEE_CONFIG_FILE)) exit('Error 001: Configuration not found. Please install Lychee first.');
 require(LYCHEE_CONFIG_FILE);
 
+# Define the table prefix
+defineTablePrefix($dbTablePrefix);
+
 # Show separator
 echo('Diagnostics' . PHP_EOL);
 echo('-----------' . PHP_EOL);
