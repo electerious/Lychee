@@ -86,6 +86,13 @@ class Database extends Module {
 
 		}
 
+		# Escape data
+		$host		= mysqli_real_escape_string($database, $host);
+		$user		= mysqli_real_escape_string($database, $user);
+		$password	= mysqli_real_escape_string($database, $password);
+		$name		= mysqli_real_escape_string($database, $name);
+		$prefix		= mysqli_real_escape_string($database, $prefix);
+
 		# Save config.php
 $config = "<?php
 
