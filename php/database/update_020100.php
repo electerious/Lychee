@@ -6,32 +6,39 @@
 # @copyright	2014 by Tobias Reich
 ###
 
-if(!$database->query("SELECT `tags` FROM `lychee_photos` LIMIT 1;")) {
-	$result = $database->query("ALTER TABLE `lychee_photos` ADD `tags` VARCHAR( 1000 ) NULL DEFAULT ''");
+$query = Database::prepare($database, "SELECT `tags` FROM `?` LIMIT 1", [LYCHEE_TABLE_PHOTOS]);
+if(!$database->query($query)) {
+	$query = Database::prepare($database, "ALTER TABLE `?` ADD `tags` VARCHAR( 1000 ) NULL DEFAULT ''", [LYCHEE_TABLE_PHOTOS]);
+	$result = $database->query($query);
 	if (!$result) {
 		Log::error($database, 'update_020100', __LINE__, 'Could not update database (' . $database->error . ')');
 		return false;
 	}
 }
 
-$result = $database->query("SELECT `key` FROM `lychee_settings` WHERE `key` = 'dropboxKey' LIMIT 1;");
+$query	= Database::prepare($database, "SELECT `key` FROM `?` WHERE `key` = 'dropboxKey' LIMIT 1", [LYCHEE_TABLE_SETTINGS]);
+$result	= $database->query($query);
 if ($result->num_rows===0) {
-	$result = $database->query("INSERT INTO `lychee_settings` (`key`, `value`) VALUES ('dropboxKey', '')");
+	$query	= Database::prepare($database, "INSERT INTO `?` (`key`, `value`) VALUES ('dropboxKey', '')", [LYCHEE_TABLE_SETTINGS]);
+	$result	= $database->query($query);
 	if (!$result) {
 		Log::error($database, 'update_020100', __LINE__, 'Could not update database (' . $database->error . ')');
 		return false;
 	}
 }
 
-$result = $database->query("SELECT `key` FROM `lychee_settings` WHERE `key` = 'version' LIMIT 1;");
+$query	= Database::prepare($database, "SELECT `key` FROM `?` WHERE `key` = 'version' LIMIT 1", [LYCHEE_TABLE_SETTINGS]);
+$result	= $database->query($query);
 if ($result->num_rows===0) {
-	$result = $database->query("INSERT INTO `lychee_settings` (`key`, `value`) VALUES ('version', '020100')");
+	$query	= Database::prepare($database, "INSERT INTO `?` (`key`, `value`) VALUES ('version', '020100')", [LYCHEE_TABLE_SETTINGS]);
+	$result	= $database->query($query);
 	if (!$result) {
 		Log::error($database, 'update_020100', __LINE__, 'Could not update database (' . $database->error . ')');
 		return false;
 	}
 } else {
-	$result = $database->query("UPDATE lychee_settings SET value = '020100' WHERE `key` = 'version';");
+	$query	= Database::prepare($database, "UPDATE ? SET value = '020100' WHERE `key` = 'version'", [LYCHEE_TABLE_SETTINGS]);
+	$result	= $database->query($query);
 	if (!$result) {
 		Log::error($database, 'update_020100', __LINE__, 'Could not update database (' . $database->error . ')');
 		return false;

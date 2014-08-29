@@ -7,7 +7,8 @@
 ###
 
 # Add a checksum
-$result = $database->query("SELECT `id`, `url` FROM `lychee_photos` WHERE `checksum` IS NULL;");
+$query	= Database::prepare($database, "SELECT `id`, `url` FROM `?` WHERE `checksum` IS NULL", [LYCHEE_TABLE_PHOTOS]);
+$result	= $database->query($query);
 if (!$result) {
 	Log::error($database, 'update_020602', __LINE__, 'Could not find photos without checksum (' . $database->error . ')');
 	return false;
@@ -15,7 +16,8 @@ if (!$result) {
 while ($photo = $result->fetch_object()) {
 	$checksum = sha1_file(LYCHEE_UPLOADS_BIG . $photo->url);
 	if ($checksum!==false) {
-		$setChecksum = $database->query("UPDATE `lychee_photos` SET `checksum` = '$checksum' WHERE `id` = '$photo->id';");
+		$query			= Database::prepare($database, "UPDATE `?` SET `checksum` = '?' WHERE `id` = '?'", [LYCHEE_TABLE_PHOTOS, $checksum, $photo->id]);
+		$setChecksum	= $database->query($query);
 		if (!$setChecksum) {
 			Log::error($database, 'update_020602', __LINE__, 'Could not update checksum (' . $database->error . ')');
 			return false;
@@ -27,7 +29,8 @@ while ($photo = $result->fetch_object()) {
 }
 
 # Set version
-$result = $database->query("UPDATE lychee_settings SET value = '020602' WHERE `key` = 'version';");
+$query	= Database::prepare($database, "UPDATE ? SET value = '020602' WHERE `key` = 'version'", [LYCHEE_TABLE_SETTINGS]);
+$result = $database->query($query);
 if (!$result) {
 	Log::error($database, 'update_020602', __LINE__, 'Could not update database (' . $database->error . ')');
 	return false;

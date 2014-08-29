@@ -6,13 +6,15 @@
 # @copyright	2014 by Tobias Reich
 ###
 
-$result = $database->query("ALTER TABLE `lychee_settings` CHANGE `value` `value` VARCHAR( 200 ) NULL DEFAULT ''");
+$query	= Database::prepare($database, "ALTER TABLE `?` CHANGE `value` `value` VARCHAR( 200 ) NULL DEFAULT ''", [LYCHEE_TABLE_SETTINGS]);
+$result	= $database->query($query);
 if (!$result) {
 	Log::error($database, 'update_020101', __LINE__, 'Could not update database (' . $database->error . ')');
 	return false;
 }
 
-$result = $database->query("UPDATE lychee_settings SET value = '020101' WHERE `key` = 'version';");
+$query	= Database::prepare($database, "UPDATE ? SET value = '020101' WHERE `key` = 'version'", [LYCHEE_TABLE_SETTINGS]);
+$result	= $database->query($query);
 if (!$result) {
 	Log::error($database, 'update_020101', __LINE__, 'Could not update database (' . $database->error . ')');
 	return false;
