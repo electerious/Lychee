@@ -66,7 +66,7 @@ class Database extends Module {
 
 	}
 
-	static function createConfig($host = 'localhost', $user, $password, $name = 'lychee') {
+	static function createConfig($host = 'localhost', $user, $password, $name = 'lychee', $prefix = '') {
 
 		# Check dependencies
 		Module::dependencies(isset($host, $user, $password, $name));
@@ -90,7 +90,7 @@ class Database extends Module {
 $config = "<?php
 
 ###
-# @name		Configuration
+# @name			Configuration
 # @author		Tobias Reich
 # @copyright	2014 Tobias Reich
 ###
@@ -102,6 +102,7 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 \$dbUser = '$user'; # Username of the database
 \$dbPassword = '$password'; # Password of the database
 \$dbName = '$name'; # Database name
+\$dbTablePrefix = '$prefix'; # Table prefix
 
 ?>";
 

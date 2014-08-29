@@ -13,21 +13,23 @@ var settings = {
 			dbUser,
 			dbPassword,
 			dbHost,
+			dbTablePrefix,
 			buttons,
 			params;
 
 		buttons = [
 			["Connect", function() {
 
-				dbHost = $(".message input.text#dbHost").val();
-				dbUser = $(".message input.text#dbUser").val();
-				dbPassword = $(".message input.text#dbPassword").val();
-				dbName = $(".message input.text#dbName").val();
+				dbHost			= $(".message input.text#dbHost").val();
+				dbUser			= $(".message input.text#dbUser").val();
+				dbPassword		= $(".message input.text#dbPassword").val();
+				dbName			= $(".message input.text#dbName").val();
+				dbTablePrefix	= $(".message input.text#dbTablePrefix").val();
 
 				if (dbHost.length<1) dbHost = "localhost";
 				if (dbName.length<1) dbName = "lychee";
 
-				params = "dbCreateConfig&dbName=" + escape(dbName) + "&dbUser=" + escape(dbUser) + "&dbPassword=" + escape(dbPassword) + "&dbHost=" + escape(dbHost);
+				params = "dbCreateConfig&dbName=" + escape(dbName) + "&dbUser=" + escape(dbUser) + "&dbPassword=" + escape(dbPassword) + "&dbHost=" + escape(dbHost) + "&dbTablePrefix=" + escape(dbTablePrefix);
 				lychee.api(params, function(data) {
 
 					if (data!==true) {
@@ -94,7 +96,7 @@ var settings = {
 			["", function() {}]
 		];
 
-		modal.show("Configuration", "Enter your database connection details below: <input id='dbHost' class='text less' type='text' placeholder='Host (optional)' value=''><input id='dbUser' class='text less' type='text' placeholder='Username' value=''><input id='dbPassword' class='text more' type='password' placeholder='Password' value=''><br>Lychee will create its own database. If required, you can enter the name of an existing database instead:<input id='dbName' class='text more' type='text' placeholder='Database (optional)' value=''>", buttons, -215, false);
+		modal.show("Configuration", "Enter your database connection details below: <input id='dbHost' class='text less' type='text' placeholder='Database Host (optional)' value=''><input id='dbUser' class='text less' type='text' placeholder='Database Username' value=''><input id='dbPassword' class='text more' type='password' placeholder='Database Password' value=''><br>Lychee will create its own database. If required, you can enter the name of an existing database instead:<input id='dbName' class='text less' type='text' placeholder='Database Name (optional)' value=''><input id='dbTablePrefix' class='text more' type='text' placeholder='Table prefix (optional)' value=''>", buttons, -235, false);
 
 	},
 
