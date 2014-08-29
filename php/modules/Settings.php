@@ -27,7 +27,8 @@ class Settings extends Module {
 		self::dependencies(isset($this->database));
 
 		# Execute query
-		$settings = $this->database->query('SELECT * FROM lychee_settings;');
+		$query		= Database::prepare($this->database, "SELECT * FROM ?", [LYCHEE_TABLE_SETTINGS]);
+		$settings	= $this->database->query($query);
 
 		# Add each to return
 		while ($setting = $settings->fetch_object()) $return[$setting->key] = $setting->value;
@@ -76,7 +77,8 @@ class Settings extends Module {
 		}
 
 		# Execute query
-		$result = $this->database->query("UPDATE lychee_settings SET value = '$username' WHERE `key` = 'username';");
+		$query	= Database::prepare($this->database, "UPDATE ? SET value = '?' WHERE `key` = 'username'", [LYCHEE_TABLE_SETTINGS, $username]);
+		$result	= $this->database->query($query);
 
 		if (!$result) {
 			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
@@ -94,7 +96,10 @@ class Settings extends Module {
 		$password = get_hashed_password($password);
 
 		# Execute query
-		$result = $this->database->query("UPDATE lychee_settings SET value = '$password' WHERE `key` = 'password';");
+		# Do not prepare $password because it is hashed and save
+		# Preparing (escaping) the password would destroy the hash
+		$query	= Database::prepare($this->database, "UPDATE ? SET value = '$password' WHERE `key` = 'password'", [LYCHEE_TABLE_SETTINGS]);
+		$result	= $this->database->query($query);
 
 		if (!$result) {
 			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
@@ -115,7 +120,8 @@ class Settings extends Module {
 		}
 
 		# Execute query
-		$result = $this->database->query("UPDATE lychee_settings SET value = '$key' WHERE `key` = 'dropboxKey';");
+		$query	= Database::prepare($this->database, "UPDATE ? SET value = '?' WHERE `key` = 'dropboxKey'", [LYCHEE_TABLE_SETTINGS, $key]);
+		$result = $this->database->query($query);
 
 		if (!$result) {
 			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
@@ -176,7 +182,10 @@ class Settings extends Module {
 		}
 
 		# Execute query
-		$result = $this->database->query("UPDATE lychee_settings SET value = '$sorting' WHERE `key` = 'sorting';");
+		# Do not prepare $sorting because it is a true statement
+		# Preparing (escaping) the sorting would destroy it
+		$query	= Database::prepare($this->database, "UPDATE ? SET value = '$sorting' WHERE `key` = 'sorting'", [LYCHEE_TABLE_SETTINGS]);
+		$result	= $this->database->query($query);
 
 		if (!$result) {
 			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
