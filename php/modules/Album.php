@@ -85,7 +85,7 @@ class Album extends Module {
 						$return = $albums->fetch_assoc();
 						$return['sysdate']		= date('d M. Y', $return['sysstamp']);
 						$return['password']		= ($return['password']=='' ? false : true);
-						$query = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp FROM lychee_photos WHERE album = '$this->albumIDs' " . $this->settings['sorting'];
+						$query = Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp FROM ? WHERE album = '?' " . $this->settings['sorting'], [LYCHEE_TABLE_PHOTOS, $this->albumIDs]);
 						break;
 
 		}
@@ -490,7 +490,7 @@ class Album extends Module {
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Get public
-		$query	= Database::prepare($this->database, "SELECT id, public FROM ? WHERE id IN ('?')", [LYCHEE_TABLE_ALBUMS, $this->albumIDs]);
+		$query	= Database::prepare($this->database, "SELECT id, public FROM ? WHERE id IN (?)", [LYCHEE_TABLE_ALBUMS, $this->albumIDs]);
 		$albums	= $this->database->query($query);
 
 		while ($album = $albums->fetch_object()) {
@@ -550,13 +550,13 @@ class Album extends Module {
 			# Set hashed password
 			# Do not prepare $password because it is hashed and save
 			# Preparing (escaping) the password would destroy the hash
-			$query	= Database::prepare($this->database, "UPDATE ? SET password = '$password' WHERE id IN ('?')", [LYCHEE_TABLE_ALBUMS, $this->albumIDs]);
+			$query	= Database::prepare($this->database, "UPDATE ? SET password = '$password' WHERE id IN (?)", [LYCHEE_TABLE_ALBUMS, $this->albumIDs]);
 			$result	= $this->database->query($query);
 
 		} else {
 
 			# Unset password
-			$query	= Database::prepare($this->database, "UPDATE ? SET password = NULL WHERE id IN ('?')", [LYCHEE_TABLE_ALBUMS, $this->albumIDs]);
+			$query	= Database::prepare($this->database, "UPDATE ? SET password = NULL WHERE id IN (?)", [LYCHEE_TABLE_ALBUMS, $this->albumIDs]);
 			$result	= $this->database->query($query);
 
 		}
