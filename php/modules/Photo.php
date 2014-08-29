@@ -241,7 +241,7 @@ class Photo extends Module {
 		$newUrl2x	= LYCHEE_UPLOADS_THUMB . $photoName[0] . '@2x.jpeg';
 
 		# create thumbnails with Imagick
-		if(extension_loaded('imagick')) {
+		if(extension_loaded('imagick')&&$this->settings['imagick']==='1') {
 
 			# Read image
 			$thumb = new Imagick();
@@ -319,7 +319,7 @@ class Photo extends Module {
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
 
-		if (extension_loaded('imagick')) {
+		if (extension_loaded('imagick')&&$this->settings['imagick']==='1') {
 
 			$rotateImage = 0;
 

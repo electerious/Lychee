@@ -28,6 +28,18 @@ while ($photo = $result->fetch_object()) {
 	}
 }
 
+# Add Imagick
+$query	= Database::prepare($database, "SELECT `key` FROM `?` WHERE `key` = 'imagick' LIMIT 1", [LYCHEE_TABLE_SETTINGS]);
+$result	= $database->query($query);
+if ($result->num_rows===0) {
+	$query	= Database::prepare($database, "INSERT INTO `?` (`key`, `value`) VALUES ('imagick', '1')", [LYCHEE_TABLE_SETTINGS]);
+	$result	= $database->query($query);
+	if (!$result) {
+		Log::error($database, 'update_020100', __LINE__, 'Could not update database (' . $database->error . ')');
+		return false;
+	}
+}
+
 # Set version
 $query	= Database::prepare($database, "UPDATE ? SET value = '020602' WHERE `key` = 'version'", [LYCHEE_TABLE_SETTINGS]);
 $result = $database->query($query);

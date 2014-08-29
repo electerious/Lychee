@@ -63,7 +63,8 @@ if (!isset($settings['password'])||$settings['password']=='')			$error .= ('Erro
 if (!isset($settings['thumbQuality'])||$settings['thumbQuality']=='')	$error .= ('Error 406: No or wrong property for thumbQuality in database' . PHP_EOL);
 if (!isset($settings['sorting'])||$settings['sorting']=='')				$error .= ('Error 407: Wrong property for sorting in database' . PHP_EOL);
 if (!isset($settings['plugins']))										$error .= ('Error 408: No property for plugins in database' . PHP_EOL);
-if (!isset($settings['checkForUpdates'])||($settings['checkForUpdates']!='0'&&$settings['checkForUpdates']!='1')) $error .= ('Error 409: No or wrong property for checkForUpdates in database' . PHP_EOL);
+if (!isset($settings['imagick'])||$settings['imagick']=='')				$error .= ('Error 409: No or wrong property for imagick in database' . PHP_EOL);
+if (!isset($settings['checkForUpdates'])||($settings['checkForUpdates']!='0'&&$settings['checkForUpdates']!='1')) $error .= ('Error 410: No or wrong property for checkForUpdates in database' . PHP_EOL);
 
 # Permissions
 if (hasPermissions(LYCHEE_UPLOADS_BIG)===false)			$error .= ('Error 500: Wrong permissions for \'uploads/big\' (777 required)' . PHP_EOL);
@@ -100,6 +101,7 @@ echo('System:          ' . PHP_OS . PHP_EOL);
 echo('PHP Version:     ' . floatval(phpversion()) . PHP_EOL);
 echo('MySQL Version:   ' . $database->server_version . PHP_EOL);
 echo('Imagick:         ' . extension_loaded('imagick') . PHP_EOL);
+echo('Imagick Active:  ' . $settings['imagick'] . PHP_EOL);
 echo('Imagick Version: ' . @Imagick::getVersion()['versionNumber'] . PHP_EOL);
 echo('GD Version:      ' . gd_info()['GD Version'] . PHP_EOL);
 
