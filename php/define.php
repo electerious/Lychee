@@ -26,4 +26,15 @@ define('LYCHEE_CONFIG_FILE', LYCHEE_DATA . 'config.php');
 define('LYCHEE_URL_UPLOADS_THUMB', 'uploads/thumb/');
 define('LYCHEE_URL_UPLOADS_BIG', 'uploads/big/');
 
+# Parse table prefix
+# Old users do not have the table prefix stored in their config-file
+if (!isset($dbTablePrefix)) $dbTablePrefix = '';
+else $dbTablePrefix .= '_';
+
+# Define tables
+define('LYCHEE_TABLE_ALBUMS', $dbTablePrefix . 'lychee_albums');
+define('LYCHEE_TABLE_LOG', $dbTablePrefix . 'lychee_log');
+define('LYCHEE_TABLE_PHOTOS', $dbTablePrefix . 'lychee_photos');
+define('LYCHEE_TABLE_SETTINGS', $dbTablePrefix . 'lychee_settings');
+
 ?>
