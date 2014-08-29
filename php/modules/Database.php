@@ -219,6 +219,28 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 	}
 
+	static function prepare($database, $query, $data) {
+
+		# Check dependencies
+		Module::dependencies(isset($database, $query, $data));
+
+		foreach ($data as $value) {
+
+			# Escape
+			$value = mysqli_real_escape_string($database, $value);
+
+			# Replace
+			$query = preg_replace('/\?/', $value, $query, 1);
+
+		}
+
+		# Add semicolon at the end
+		$query .= ';';
+
+		return $query;
+
+	}
+
 }
 
 ?>
