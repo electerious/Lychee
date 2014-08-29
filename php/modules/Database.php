@@ -29,7 +29,8 @@ class Database extends Module {
 			if (!Database::createDatabase($database, $name)) exit('Error: Could not create database!');
 
 		# Check tables
-		if (!$database->query('SELECT * FROM lychee_photos, lychee_albums, lychee_settings, lychee_log LIMIT 0;'))
+		$query = Database::prepare($database, 'SELECT * FROM ?, ?, ?, ? LIMIT 0', [LYCHEE_TABLE_PHOTOS, LYCHEE_TABLE_ALBUMS, LYCHEE_TABLE_SETTINGS, LYCHEE_TABLE_LOG]);
+		if (!$database->query($query))
 			if (!Database::createTables($database)) exit('Error: Could not create tables!');
 
 		return $database;
@@ -140,30 +141,36 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 		Module::dependencies(isset($database));
 
 		# Create log
-		if (!$database->query('SELECT * FROM lychee_log LIMIT 0;')) {
+		$exist = Database::prepare($database, 'SELECT * FROM ? LIMIT 0', [LYCHEE_TABLE_LOG]);
+		if (!$database->query($exist)) {
 
 			# Read file
 			$file	= __DIR__ . '/../database/log_table.sql';
 			$query	= @file_get_contents($file);
 
-			# Create table
 			if (!isset($query)||$query===false) return false;
+
+			# Create table
+			$query = Database::prepare($database, $query, [LYCHEE_TABLE_LOG]);
 			if (!$database->query($query)) return false;
 
 		}
 
 		# Create settings
-		if (!$database->query('SELECT * FROM lychee_settings LIMIT 0;')) {
+		$exist = Database::prepare($database, 'SELECT * FROM ? LIMIT 0', [LYCHEE_TABLE_SETTINGS]);
+		if (!$database->query($exist)) {
 
 			# Read file
 			$file	= __DIR__ . '/../database/settings_table.sql';
 			$query	= @file_get_contents($file);
 
-			# Create table
 			if (!isset($query)||$query===false) {
 				Log::error($database, __METHOD__, __LINE__, 'Could not load query for lychee_settings');
 				return false;
 			}
+
+			# Create table
+			$query = Database::prepare($database, $query, [LYCHEE_TABLE_SETTINGS]);
 			if (!$database->query($query)) {
 				Log::error($database, __METHOD__, __LINE__, $database->error);
 				return false;
@@ -173,11 +180,13 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 			$file	= __DIR__ . '/../database/settings_content.sql';
 			$query	= @file_get_contents($file);
 
-			# Add content
 			if (!isset($query)||$query===false) {
 				Log::error($database, __METHOD__, __LINE__, 'Could not load content-query for lychee_settings');
 				return false;
 			}
+
+			# Add content
+			$query = Database::prepare($database, $query, [LYCHEE_TABLE_SETTINGS]);
 			if (!$database->query($query)) {
 				Log::error($database, __METHOD__, __LINE__, $database->error);
 				return false;
@@ -186,17 +195,20 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 		}
 
 		# Create albums
-		if (!$database->query('SELECT * FROM lychee_albums LIMIT 0;')) {
+		$exist = Database::prepare($database, 'SELECT * FROM ? LIMIT 0', [LYCHEE_TABLE_ALBUMS]);
+		if (!$database->query($exist)) {
 
 			# Read file
 			$file	= __DIR__ . '/../database/albums_table.sql';
 			$query	= @file_get_contents($file);
 
-			# Create table
 			if (!isset($query)||$query===false) {
 				Log::error($database, __METHOD__, __LINE__, 'Could not load query for lychee_albums');
 				return false;
 			}
+
+			# Create table
+			$query = Database::prepare($database, $query, [LYCHEE_TABLE_ALBUMS]);
 			if (!$database->query($query)) {
 				Log::error($database, __METHOD__, __LINE__, $database->error);
 				return false;
@@ -205,17 +217,20 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 		}
 
 		# Create photos
-		if (!$database->query('SELECT * FROM lychee_photos LIMIT 0;')) {
+		$exist = Database::prepare($database, 'SELECT * FROM ? LIMIT 0', [LYCHEE_TABLE_PHOTOS]);
+		if (!$database->query($exist)) {
 
 			# Read file
 			$file	= __DIR__ . '/../database/photos_table.sql';
 			$query	= @file_get_contents($file);
 
-			# Create table
 			if (!isset($query)||$query===false) {
 				Log::error($database, __METHOD__, __LINE__, 'Could not load query for lychee_photos');
 				return false;
 			}
+
+			# Create table
+			$query = Database::prepare($database, $query, [LYCHEE_TABLE_PHOTOS]);
 			if (!$database->query($query)) {
 				Log::error($database, __METHOD__, __LINE__, $database->error);
 				return false;

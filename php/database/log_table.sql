@@ -2,7 +2,7 @@
 # Version 2.5
 # ------------------------------------------------------------
 
-CREATE TABLE IF NOT EXISTS `lychee_log` (
+CREATE TABLE IF NOT EXISTS `?` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `time` int(11) NOT NULL,
   `type` varchar(11) NOT NULL,

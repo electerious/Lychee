@@ -2,7 +2,7 @@
 # Version 2.5
 # ------------------------------------------------------------
 
-INSERT INTO `lychee_settings` (`key`, `value`)
+INSERT INTO `?` (`key`, `value`)
 VALUES
   ('version',''),
   ('username',''),
