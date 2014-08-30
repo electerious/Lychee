@@ -175,7 +175,7 @@ class Photo extends Module {
 			}
 
 			# Save to DB
-			$values	= [LYCHEE_TABLE_PHOTOS, $id, $info['title'], $photo_name, $description, $tags, $info['type'], $info['width'], $info['height'], $info['size'], $info['iso'], $info['aperture'], $info['make'], $info['model'], $info['shutter'], $info['focal'], $info['takestamp'], $path_thumb, $albumID, $public, $star, $checksum];
+			$values	= array(LYCHEE_TABLE_PHOTOS, $id, $info['title'], $photo_name, $description, $tags, $info['type'], $info['width'], $info['height'], $info['size'], $info['iso'], $info['aperture'], $info['make'], $info['model'], $info['shutter'], $info['focal'], $info['takestamp'], $path_thumb, $albumID, $public, $star, $checksum);
 			$query	= Database::prepare($this->database, "INSERT INTO ? (id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, checksum) VALUES ('?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?')", $values);
 			$result = $this->database->query($query);
 
@@ -199,8 +199,8 @@ class Photo extends Module {
 		self::dependencies(isset($this->database, $checksum));
 
 		# Exclude $photoID from select when $photoID is set
-		if (isset($photoID)) $query = Database::prepare($this->database, "SELECT id, url, thumbUrl FROM ? WHERE checksum = '?' AND id <> '?' LIMIT 1", [LYCHEE_TABLE_PHOTOS, $checksum, $photoID]);
-		else $query = Database::prepare($this->database, "SELECT id, url, thumbUrl FROM ? WHERE checksum = '?' LIMIT 1", [LYCHEE_TABLE_PHOTOS, $checksum]);
+		if (isset($photoID)) $query = Database::prepare($this->database, "SELECT id, url, thumbUrl FROM ? WHERE checksum = '?' AND id <> '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $checksum, $photoID));
+		else $query = Database::prepare($this->database, "SELECT id, url, thumbUrl FROM ? WHERE checksum = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $checksum));
 
 		$result	= $this->database->query($query);
 
@@ -434,7 +434,7 @@ class Photo extends Module {
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Get photo
-		$query	= Database::prepare($this->database, "SELECT * FROM ? WHERE id = '?' LIMIT 1", [LYCHEE_TABLE_PHOTOS, $this->photoIDs]);
+		$query	= Database::prepare($this->database, "SELECT * FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
 		$photos	= $this->database->query($query);
 		$photo	= $photos->fetch_assoc();
 
@@ -453,7 +453,7 @@ class Photo extends Module {
 			if ($photo['album']!=0) {
 
 				# Get album
-				$query	= Database::prepare($this->database, "SELECT public FROM ? WHERE id = '?' LIMIT 1", [LYCHEE_TABLE_ALBUMS, $photo['album']]);
+				$query	= Database::prepare($this->database, "SELECT public FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $photo['album']));
 				$albums	= $this->database->query($query);
 				$album	= $albums->fetch_assoc();
 
@@ -577,7 +577,7 @@ class Photo extends Module {
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Get photo
-		$query	= Database::prepare($this->database, "SELECT title, url FROM ? WHERE id = '?' LIMIT 1", [LYCHEE_TABLE_PHOTOS, $this->photoIDs]);
+		$query	= Database::prepare($this->database, "SELECT title, url FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
 		$photos	= $this->database->query($query);
 		$photo	= $photos->fetch_object();
 
@@ -618,7 +618,7 @@ class Photo extends Module {
 		if (strlen($title)>50) $title = substr($title, 0, 50);
 
 		# Set title
-		$query	= Database::prepare($this->database, "UPDATE ? SET title = '?' WHERE id IN (?)", [LYCHEE_TABLE_PHOTOS, $title, $this->photoIDs]);
+		$query	= Database::prepare($this->database, "UPDATE ? SET title = '?' WHERE id IN (?)", array(LYCHEE_TABLE_PHOTOS, $title, $this->photoIDs));
 		$result	= $this->database->query($query);
 
 		# Call plugins
@@ -645,7 +645,7 @@ class Photo extends Module {
 		if (strlen($description)>1000) $description = substr($description, 0, 1000);
 
 		# Set description
-		$query	= Database::prepare($this->database, "UPDATE ? SET description = '?' WHERE id IN ('?')", [LYCHEE_TABLE_PHOTOS, $description, $this->photoIDs]);
+		$query	= Database::prepare($this->database, "UPDATE ? SET description = '?' WHERE id IN ('?')", array(LYCHEE_TABLE_PHOTOS, $description, $this->photoIDs));
 		$result	= $this->database->query($query);
 
 		# Call plugins
@@ -671,7 +671,7 @@ class Photo extends Module {
 		$error	= false;
 
 		# Get photos
-		$query	= Database::prepare($this->database, "SELECT id, star FROM ? WHERE id IN (?)", [LYCHEE_TABLE_PHOTOS, $this->photoIDs]);
+		$query	= Database::prepare($this->database, "SELECT id, star FROM ? WHERE id IN (?)", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
 		$photos	= $this->database->query($query);
 
 		# For each photo
@@ -681,7 +681,7 @@ class Photo extends Module {
 			$star = ($photo->star==0 ? 1 : 0);
 
 			# Set star
-			$query	= Database::prepare($this->database, "UPDATE ? SET star = '?' WHERE id = '?'", [LYCHEE_TABLE_PHOTOS, $star, $photo->id]);
+			$query	= Database::prepare($this->database, "UPDATE ? SET star = '?' WHERE id = '?'", array(LYCHEE_TABLE_PHOTOS, $star, $photo->id));
 			$star	= $this->database->query($query);
 			if (!$star) $error = true;
 
@@ -707,7 +707,7 @@ class Photo extends Module {
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Get photo
-		$query	= Database::prepare($this->database, "SELECT public, album FROM ? WHERE id = '?' LIMIT 1", [LYCHEE_TABLE_PHOTOS, $this->photoIDs]);
+		$query	= Database::prepare($this->database, "SELECT public, album FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
 		$photos	= $this->database->query($query);
 		$photo	= $photos->fetch_object();
 
@@ -736,7 +736,7 @@ class Photo extends Module {
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Get public
-		$query	= Database::prepare($this->database, "SELECT public FROM ? WHERE id = '?' LIMIT 1", [LYCHEE_TABLE_PHOTOS, $this->photoIDs]);
+		$query	= Database::prepare($this->database, "SELECT public FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
 		$photos	= $this->database->query($query);
 		$photo	= $photos->fetch_object();
 
@@ -744,7 +744,7 @@ class Photo extends Module {
 		$public = ($photo->public==0 ? 1 : 0);
 
 		# Set public
-		$query	= Database::prepare($this->database, "UPDATE ? SET public = '?' WHERE id = '?'", [LYCHEE_TABLE_PHOTOS, $public, $this->photoIDs]);
+		$query	= Database::prepare($this->database, "UPDATE ? SET public = '?' WHERE id = '?'", array(LYCHEE_TABLE_PHOTOS, $public, $this->photoIDs));
 		$result	= $this->database->query($query);
 
 		# Call plugins
@@ -767,7 +767,7 @@ class Photo extends Module {
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Set album
-		$query	= Database::prepare($this->database, "UPDATE ? SET album = '?' WHERE id IN (?)", [LYCHEE_TABLE_PHOTOS, $albumID, $this->photoIDs]);
+		$query	= Database::prepare($this->database, "UPDATE ? SET album = '?' WHERE id IN (?)", array(LYCHEE_TABLE_PHOTOS, $albumID, $this->photoIDs));
 		$result	= $this->database->query($query);
 
 		# Call plugins
@@ -798,7 +798,7 @@ class Photo extends Module {
 		}
 
 		# Set tags
-		$query	= Database::prepare($this->database, "UPDATE ? SET tags = '?' WHERE id IN (?)", [LYCHEE_TABLE_PHOTOS, $tags, $this->photoIDs]);
+		$query	= Database::prepare($this->database, "UPDATE ? SET tags = '?' WHERE id IN (?)", array(LYCHEE_TABLE_PHOTOS, $tags, $this->photoIDs));
 		$result	= $this->database->query($query);
 
 		# Call plugins
@@ -821,7 +821,7 @@ class Photo extends Module {
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Get photos
-		$query	= Database::prepare($this->database, "SELECT id, checksum FROM ? WHERE id IN (?)", [LYCHEE_TABLE_PHOTOS, $this->photoIDs]);
+		$query	= Database::prepare($this->database, "SELECT id, checksum FROM ? WHERE id IN (?)", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
 		$photos	= $this->database->query($query);
 		if (!$photos) {
 			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
@@ -836,7 +836,7 @@ class Photo extends Module {
 			while(strlen($id)<14) $id .= 0;
 
 			# Duplicate entry
-			$values		= [LYCHEE_TABLE_PHOTOS, $id, LYCHEE_TABLE_PHOTOS, $photo->id];
+			$values		= array(LYCHEE_TABLE_PHOTOS, $id, LYCHEE_TABLE_PHOTOS, $photo->id);
 			$query		= Database::prepare($this->database, "INSERT INTO ? (id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, checksum) SELECT '?' AS id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, checksum FROM ? WHERE id = '?'", $values);
 			$duplicate	= $this->database->query($query);
 			if (!$duplicate) {
@@ -859,7 +859,7 @@ class Photo extends Module {
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Get photos
-		$query	= Database::prepare($this->database, "SELECT id, url, thumbUrl, checksum FROM ? WHERE id IN (?)", [LYCHEE_TABLE_PHOTOS, $this->photoIDs]);
+		$query	= Database::prepare($this->database, "SELECT id, url, thumbUrl, checksum FROM ? WHERE id IN (?)", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
 		$photos	= $this->database->query($query);
 		if (!$photos) {
 			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
@@ -898,7 +898,7 @@ class Photo extends Module {
 			}
 
 			# Delete db entry
-			$query	= Database::prepare($this->database, "DELETE FROM ? WHERE id = '?'", [LYCHEE_TABLE_PHOTOS, $photo->id]);
+			$query	= Database::prepare($this->database, "DELETE FROM ? WHERE id = '?'", array(LYCHEE_TABLE_PHOTOS, $photo->id));
 			$delete	= $this->database->query($query);
 			if (!$delete) {
 				Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
