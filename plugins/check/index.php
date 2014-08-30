@@ -102,7 +102,9 @@ echo('PHP Version:     ' . floatval(phpversion()) . PHP_EOL);
 echo('MySQL Version:   ' . $database->server_version . PHP_EOL);
 echo('Imagick:         ' . extension_loaded('imagick') . PHP_EOL);
 echo('Imagick Active:  ' . $settings['imagick'] . PHP_EOL);
-echo('Imagick Version: ' . @Imagick::getVersion()['versionNumber'] . PHP_EOL);
-echo('GD Version:      ' . gd_info()['GD Version'] . PHP_EOL);
+$imagickVersion = @Imagick::getVersion();
+echo('Imagick Version: ' . $imagickVersion['versionNumber'] . PHP_EOL);
+$gdVersion = gd_info();
+echo('GD Version:      ' . $gdVersion['GD Version'] . PHP_EOL);
 
 ?>
