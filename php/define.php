@@ -34,7 +34,7 @@ function defineTablePrefix($dbTablePrefix) {
 
 	# Parse table prefix
 	# Old users do not have the table prefix stored in their config-file
-	if (!isset($dbTablePrefix)) $dbTablePrefix = '';
+	if (!isset($dbTablePrefix)||$dbTablePrefix==='') $dbTablePrefix = '';
 	else $dbTablePrefix .= '_';
 
 	# Define tables
