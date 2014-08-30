@@ -7,7 +7,7 @@
 ###
 
 # Add a checksum
-$query	= Database::prepare($database, "SELECT `id`, `url` FROM `?` WHERE `checksum` IS NULL", [LYCHEE_TABLE_PHOTOS]);
+$query	= Database::prepare($database, "SELECT `id`, `url` FROM `?` WHERE `checksum` IS NULL", array(LYCHEE_TABLE_PHOTOS));
 $result	= $database->query($query);
 if (!$result) {
 	Log::error($database, 'update_020602', __LINE__, 'Could not find photos without checksum (' . $database->error . ')');
@@ -16,7 +16,7 @@ if (!$result) {
 while ($photo = $result->fetch_object()) {
 	$checksum = sha1_file(LYCHEE_UPLOADS_BIG . $photo->url);
 	if ($checksum!==false) {
-		$query			= Database::prepare($database, "UPDATE `?` SET `checksum` = '?' WHERE `id` = '?'", [LYCHEE_TABLE_PHOTOS, $checksum, $photo->id]);
+		$query			= Database::prepare($database, "UPDATE `?` SET `checksum` = '?' WHERE `id` = '?'", array(LYCHEE_TABLE_PHOTOS, $checksum, $photo->id));
 		$setChecksum	= $database->query($query);
 		if (!$setChecksum) {
 			Log::error($database, 'update_020602', __LINE__, 'Could not update checksum (' . $database->error . ')');
@@ -29,10 +29,10 @@ while ($photo = $result->fetch_object()) {
 }
 
 # Add Imagick
-$query	= Database::prepare($database, "SELECT `key` FROM `?` WHERE `key` = 'imagick' LIMIT 1", [LYCHEE_TABLE_SETTINGS]);
+$query	= Database::prepare($database, "SELECT `key` FROM `?` WHERE `key` = 'imagick' LIMIT 1", array(LYCHEE_TABLE_SETTINGS));
 $result	= $database->query($query);
 if ($result->num_rows===0) {
-	$query	= Database::prepare($database, "INSERT INTO `?` (`key`, `value`) VALUES ('imagick', '1')", [LYCHEE_TABLE_SETTINGS]);
+	$query	= Database::prepare($database, "INSERT INTO `?` (`key`, `value`) VALUES ('imagick', '1')", array(LYCHEE_TABLE_SETTINGS));
 	$result	= $database->query($query);
 	if (!$result) {
 		Log::error($database, 'update_020100', __LINE__, 'Could not update database (' . $database->error . ')');
@@ -41,7 +41,7 @@ if ($result->num_rows===0) {
 }
 
 # Set version
-$query	= Database::prepare($database, "UPDATE ? SET value = '020602' WHERE `key` = 'version'", [LYCHEE_TABLE_SETTINGS]);
+$query	= Database::prepare($database, "UPDATE ? SET value = '020602' WHERE `key` = 'version'", array(LYCHEE_TABLE_SETTINGS));
 $result = $database->query($query);
 if (!$result) {
 	Log::error($database, 'update_020602', __LINE__, 'Could not update database (' . $database->error . ')');

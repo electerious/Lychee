@@ -7,9 +7,9 @@
 ###
 
 # Add `checksum`
-$query = Database::prepare($database, "SELECT `checksum` FROM `?` LIMIT 1", [LYCHEE_TABLE_PHOTOS]);
+$query = Database::prepare($database, "SELECT `checksum` FROM `?` LIMIT 1", array(LYCHEE_TABLE_PHOTOS));
 if (!$database->query($query)) {
-	$query	= Database::prepare($database, "ALTER TABLE `?` ADD `checksum` VARCHAR(100) DEFAULT NULL", [LYCHEE_TABLE_PHOTOS]);
+	$query	= Database::prepare($database, "ALTER TABLE `?` ADD `checksum` VARCHAR(100) DEFAULT NULL", array(LYCHEE_TABLE_PHOTOS));
 	$result	= $database->query($query);
 	if (!$result) {
 		Log::error($database, 'update_020505', __LINE__, 'Could not update database (' . $database->error . ')');
@@ -18,7 +18,7 @@ if (!$database->query($query)) {
 }
 
 # Set version
-$query	= Database::prepare($database, "UPDATE ? SET value = '020505' WHERE `key` = 'version'", [LYCHEE_TABLE_SETTINGS]);
+$query	= Database::prepare($database, "UPDATE ? SET value = '020505' WHERE `key` = 'version'", array(LYCHEE_TABLE_SETTINGS));
 $result	= $database->query($query);
 if (!$result) {
 	Log::error($database, 'update_020505', __LINE__, 'Could not update database (' . $database->error . ')');

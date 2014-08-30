@@ -27,7 +27,7 @@ class Settings extends Module {
 		self::dependencies(isset($this->database));
 
 		# Execute query
-		$query		= Database::prepare($this->database, "SELECT * FROM ?", [LYCHEE_TABLE_SETTINGS]);
+		$query		= Database::prepare($this->database, "SELECT * FROM ?", array(LYCHEE_TABLE_SETTINGS));
 		$settings	= $this->database->query($query);
 
 		# Add each to return
@@ -77,7 +77,7 @@ class Settings extends Module {
 		}
 
 		# Execute query
-		$query	= Database::prepare($this->database, "UPDATE ? SET value = '?' WHERE `key` = 'username'", [LYCHEE_TABLE_SETTINGS, $username]);
+		$query	= Database::prepare($this->database, "UPDATE ? SET value = '?' WHERE `key` = 'username'", array(LYCHEE_TABLE_SETTINGS, $username));
 		$result	= $this->database->query($query);
 
 		if (!$result) {
@@ -98,7 +98,7 @@ class Settings extends Module {
 		# Execute query
 		# Do not prepare $password because it is hashed and save
 		# Preparing (escaping) the password would destroy the hash
-		$query	= Database::prepare($this->database, "UPDATE ? SET value = '$password' WHERE `key` = 'password'", [LYCHEE_TABLE_SETTINGS]);
+		$query	= Database::prepare($this->database, "UPDATE ? SET value = '$password' WHERE `key` = 'password'", array(LYCHEE_TABLE_SETTINGS));
 		$result	= $this->database->query($query);
 
 		if (!$result) {
@@ -120,7 +120,7 @@ class Settings extends Module {
 		}
 
 		# Execute query
-		$query	= Database::prepare($this->database, "UPDATE ? SET value = '?' WHERE `key` = 'dropboxKey'", [LYCHEE_TABLE_SETTINGS, $key]);
+		$query	= Database::prepare($this->database, "UPDATE ? SET value = '?' WHERE `key` = 'dropboxKey'", array(LYCHEE_TABLE_SETTINGS, $key));
 		$result = $this->database->query($query);
 
 		if (!$result) {
@@ -184,7 +184,7 @@ class Settings extends Module {
 		# Execute query
 		# Do not prepare $sorting because it is a true statement
 		# Preparing (escaping) the sorting would destroy it
-		$query	= Database::prepare($this->database, "UPDATE ? SET value = '$sorting' WHERE `key` = 'sorting'", [LYCHEE_TABLE_SETTINGS]);
+		$query	= Database::prepare($this->database, "UPDATE ? SET value = '$sorting' WHERE `key` = 'sorting'", array(LYCHEE_TABLE_SETTINGS));
 		$result	= $this->database->query($query);
 
 		if (!$result) {

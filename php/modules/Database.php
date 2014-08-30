@@ -29,7 +29,7 @@ class Database extends Module {
 			if (!Database::createDatabase($database, $name)) exit('Error: Could not create database!');
 
 		# Check tables
-		$query = Database::prepare($database, 'SELECT * FROM ?, ?, ?, ? LIMIT 0', [LYCHEE_TABLE_PHOTOS, LYCHEE_TABLE_ALBUMS, LYCHEE_TABLE_SETTINGS, LYCHEE_TABLE_LOG]);
+		$query = Database::prepare($database, 'SELECT * FROM ?, ?, ?, ? LIMIT 0', array(LYCHEE_TABLE_PHOTOS, LYCHEE_TABLE_ALBUMS, LYCHEE_TABLE_SETTINGS, LYCHEE_TABLE_LOG));
 		if (!$database->query($query))
 			if (!Database::createTables($database)) exit('Error: Could not create tables!');
 
@@ -141,7 +141,7 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 		Module::dependencies(isset($database));
 
 		# Create log
-		$exist = Database::prepare($database, 'SELECT * FROM ? LIMIT 0', [LYCHEE_TABLE_LOG]);
+		$exist = Database::prepare($database, 'SELECT * FROM ? LIMIT 0', array(LYCHEE_TABLE_LOG));
 		if (!$database->query($exist)) {
 
 			# Read file
@@ -151,13 +151,13 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 			if (!isset($query)||$query===false) return false;
 
 			# Create table
-			$query = Database::prepare($database, $query, [LYCHEE_TABLE_LOG]);
+			$query = Database::prepare($database, $query, array(LYCHEE_TABLE_LOG));
 			if (!$database->query($query)) return false;
 
 		}
 
 		# Create settings
-		$exist = Database::prepare($database, 'SELECT * FROM ? LIMIT 0', [LYCHEE_TABLE_SETTINGS]);
+		$exist = Database::prepare($database, 'SELECT * FROM ? LIMIT 0', array(LYCHEE_TABLE_SETTINGS));
 		if (!$database->query($exist)) {
 
 			# Read file
@@ -170,7 +170,7 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 			}
 
 			# Create table
-			$query = Database::prepare($database, $query, [LYCHEE_TABLE_SETTINGS]);
+			$query = Database::prepare($database, $query, array(LYCHEE_TABLE_SETTINGS));
 			if (!$database->query($query)) {
 				Log::error($database, __METHOD__, __LINE__, $database->error);
 				return false;
@@ -186,7 +186,7 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 			}
 
 			# Add content
-			$query = Database::prepare($database, $query, [LYCHEE_TABLE_SETTINGS]);
+			$query = Database::prepare($database, $query, array(LYCHEE_TABLE_SETTINGS));
 			if (!$database->query($query)) {
 				Log::error($database, __METHOD__, __LINE__, $database->error);
 				return false;
@@ -195,7 +195,7 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 		}
 
 		# Create albums
-		$exist = Database::prepare($database, 'SELECT * FROM ? LIMIT 0', [LYCHEE_TABLE_ALBUMS]);
+		$exist = Database::prepare($database, 'SELECT * FROM ? LIMIT 0', array(LYCHEE_TABLE_ALBUMS));
 		if (!$database->query($exist)) {
 
 			# Read file
@@ -208,7 +208,7 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 			}
 
 			# Create table
-			$query = Database::prepare($database, $query, [LYCHEE_TABLE_ALBUMS]);
+			$query = Database::prepare($database, $query, array(LYCHEE_TABLE_ALBUMS));
 			if (!$database->query($query)) {
 				Log::error($database, __METHOD__, __LINE__, $database->error);
 				return false;
@@ -217,7 +217,7 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 		}
 
 		# Create photos
-		$exist = Database::prepare($database, 'SELECT * FROM ? LIMIT 0', [LYCHEE_TABLE_PHOTOS]);
+		$exist = Database::prepare($database, 'SELECT * FROM ? LIMIT 0', array(LYCHEE_TABLE_PHOTOS));
 		if (!$database->query($exist)) {
 
 			# Read file
@@ -230,7 +230,7 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 			}
 
 			# Create table
-			$query = Database::prepare($database, $query, [LYCHEE_TABLE_PHOTOS]);
+			$query = Database::prepare($database, $query, array(LYCHEE_TABLE_PHOTOS));
 			if (!$database->query($query)) {
 				Log::error($database, __METHOD__, __LINE__, $database->error);
 				return false;
