@@ -242,6 +242,17 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 	}
 
+	static function setVersion($database, $version) {
+
+		$query	= Database::prepare($database, "UPDATE ? SET value = '?' WHERE `key` = 'version'", array(LYCHEE_TABLE_SETTINGS, $version));
+		$result = $database->query($query);
+		if (!$result) {
+			Log::error($database, __METHOD__, __LINE__, 'Could not update database (' . $database->error . ')');
+			return false;
+		}
+
+	}
+
 	static function prepare($database, $query, $data) {
 
 		# Check dependencies

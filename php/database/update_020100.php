@@ -37,12 +37,7 @@ if ($result->num_rows===0) {
 		return false;
 	}
 } else {
-	$query	= Database::prepare($database, "UPDATE ? SET value = '020100' WHERE `key` = 'version'", array(LYCHEE_TABLE_SETTINGS));
-	$result	= $database->query($query);
-	if (!$result) {
-		Log::error($database, 'update_020100', __LINE__, 'Could not update database (' . $database->error . ')');
-		return false;
-	}
+	if (Database::setVersion($database, '020100')===false) return false;
 }
 
 ?>

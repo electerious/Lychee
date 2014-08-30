@@ -41,11 +41,6 @@ if ($result->num_rows===0) {
 }
 
 # Set version
-$query	= Database::prepare($database, "UPDATE ? SET value = '020602' WHERE `key` = 'version'", array(LYCHEE_TABLE_SETTINGS));
-$result = $database->query($query);
-if (!$result) {
-	Log::error($database, 'update_020602', __LINE__, 'Could not update database (' . $database->error . ')');
-	return false;
-}
+if (Database::setVersion($database, '020602')===false) return false;
 
 ?>
