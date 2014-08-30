@@ -31,6 +31,7 @@
 				require(LYCHEE_CONFIG_FILE);
 
 				# Define the table prefix
+				if (!isset($dbTablePrefix)) $dbTablePrefix = '';
 				defineTablePrefix($dbTablePrefix);
 
 				$database = Database::connect($dbHost, $dbUser, $dbPassword, $dbName);

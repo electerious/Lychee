@@ -40,6 +40,7 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 	}
 
 	# Define the table prefix
+	if (!isset($dbTablePrefix)) $dbTablePrefix = '';
 	defineTablePrefix($dbTablePrefix);
 
 	# Connect to database
