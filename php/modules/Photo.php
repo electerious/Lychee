@@ -598,7 +598,7 @@ class Photo extends Module {
 		if ($photo->title=='') $photo->title = 'Untitled';
 
 		# Escape title
-		$zipTitle = str_replace($badChars, '', $zipTitle);
+		$photo->title = str_replace($badChars, '', $photo->title);
 
 		# Set headers
 		header("Content-Type: application/octet-stream");
