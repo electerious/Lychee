@@ -588,8 +588,17 @@ class Photo extends Module {
 			return false;
 		}
 
+		# Illicit chars
+		$badChars =	array_merge(
+						array_map('chr', range(0,31)),
+						array("<", ">", ":", '"', "/", "\\", "|", "?", "*")
+					);
+
 		# Parse title
 		if ($photo->title=='') $photo->title = 'Untitled';
+
+		# Escape title
+		$zipTitle = str_replace($badChars, '', $zipTitle);
 
 		# Set headers
 		header("Content-Type: application/octet-stream");
