@@ -302,7 +302,8 @@ build = {
 			public,
 			editTitleHTML,
 			editDescriptionHTML,
-			infos;
+			infos,
+			exifHash = "";
 
 		infobox += "<div class='header'><h1>About</h1><a class='icon-remove-sign'></a></div>";
 		infobox += "<div class='wrapper'>";
@@ -337,7 +338,9 @@ build = {
 			["Tags", build.tags(photoJSON.tags, forView)]
 		];
 
-		if ((photoJSON.takestamp+photoJSON.make+photoJSON.model+photoJSON.shutter+photoJSON.aperture+photoJSON.focal+photoJSON.iso)!="0") {
+		exifHash = photoJSON.takestamp+photoJSON.make+photoJSON.model+photoJSON.shutter+photoJSON.aperture+photoJSON.focal+photoJSON.iso;
+
+		if (exifHash!="0"&&exifHash!=="null") {
 
 			infos = infos.concat([
 				["", "Camera"],
