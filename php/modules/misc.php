@@ -16,7 +16,7 @@ function search($database, $settings, $term) {
 	$return['albums'] = '';
 
 	// Photos
-	$query	= Database::prepare($database, "SELECT id, title, tags, public, star, album, thumbUrl FROM ? WHERE title LIKE '%?%' OR description LIKE '%%' OR tags LIKE '%?%'", [LYCHEE_TABLE_PHOTOS, $term, $term, $term]);
+	$query	= Database::prepare($database, "SELECT id, title, tags, public, star, album, thumbUrl FROM ? WHERE title LIKE '%?%' OR description LIKE '%%' OR tags LIKE '%?%'", array(LYCHEE_TABLE_PHOTOS, $term, $term, $term));
 	$result	= $database->query($query);
 	while($row = $result->fetch_assoc()) {
 		$return['photos'][$row['id']]				= $row;
@@ -25,7 +25,7 @@ function search($database, $settings, $term) {
 	}
 
 	// Albums
-	$query	= Database::prepare($database, "SELECT id, title, public, sysstamp, password FROM ? WHERE title LIKE '%?%' OR description LIKE '%?%'", [LYCHEE_TABLE_ALBUMS, $term, $term]);
+	$query	= Database::prepare($database, "SELECT id, title, public, sysstamp, password FROM ? WHERE title LIKE '%?%' OR description LIKE '%?%'", array(LYCHEE_TABLE_ALBUMS, $term, $term));
 	$result = $database->query($query);
 	$i		= 0;
 	while($row = $result->fetch_object()) {
@@ -38,7 +38,7 @@ function search($database, $settings, $term) {
 		$return['albums'][$row->id]['password']	= ($row->password=='' ? false : true);
 
 		// Thumbs
-		$query		= Database::prepare($database, "SELECT thumbUrl FROM ? WHERE album = '?' " . $settings['sorting'] . " LIMIT 0, 3", [LYCHEE_TABLE_PHOTOS, $row->id]);
+		$query		= Database::prepare($database, "SELECT thumbUrl FROM ? WHERE album = '?' " . $settings['sorting'] . " LIMIT 0, 3", array(LYCHEE_TABLE_PHOTOS, $row->id));
 		$result2	= $database->query($query);
 		$k			= 0;
 		while($row2 = $result2->fetch_object()){
@@ -58,7 +58,7 @@ function getGraphHeader($database, $photoID) {
 
 	if (!isset($database, $photoID)) return false;
 
-	$query	= Database::prepare($database, "SELECT title, description, url FROM ? WHERE id = '?'", [LYCHEE_TABLE_PHOTOS, $photoID]);
+	$query	= Database::prepare($database, "SELECT title, description, url FROM ? WHERE id = '?'", array(LYCHEE_TABLE_PHOTOS, $photoID));
 	$result	= $database->query($query);
 	$row	= $result->fetch_object();
 

@@ -37,7 +37,7 @@ if (mysqli_connect_errno()!=0) {
 }
 
 # Result
-$query	= Database::prepare($database, "SELECT FROM_UNIXTIME(time), type, function, line, text FROM ?", [LYCHEE_TABLE_LOG]);
+$query	= Database::prepare($database, "SELECT FROM_UNIXTIME(time), type, function, line, text FROM ?", array(LYCHEE_TABLE_LOG));
 $result	= $database->query($query);
 
 # Output

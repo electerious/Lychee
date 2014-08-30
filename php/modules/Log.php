@@ -37,7 +37,7 @@ class Log extends Module {
 		$sysstamp = time();
 
 		# Save in database
-		$query	= Database::prepare($database, "INSERT INTO ? (time, type, function, line, text) VALUES ('?', '?', '?', '?', '?')", [LYCHEE_TABLE_LOG, $sysstamp, $type, $function, $line, $text]);
+		$query	= Database::prepare($database, "INSERT INTO ? (time, type, function, line, text) VALUES ('?', '?', '?', '?', '?')", array(LYCHEE_TABLE_LOG, $sysstamp, $type, $function, $line, $text));
 		$result	= $database->query($query);
 
 		if (!$result) return false;
