@@ -12,7 +12,7 @@ upload = {
 		upload.close(true);
 		$("body").append(build.uploadModal(title, files));
 
-		if (callback!=null&&callback!=undefined) callback();
+		if (callback!==null&&callback!==undefined) callback();
 
 	},
 
@@ -158,7 +158,7 @@ upload = {
 						if (e.lengthComputable) {
 
 							// Calculate progress
-							progress = (e.loaded / e.total * 100 | 0);
+							progress = (e.loaded / e.total * 100) || 0;
 
 							// Set progress when progress has changed
 							if (progress>pre_progress) {

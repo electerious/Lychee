@@ -270,7 +270,8 @@ contextMenu = {
 
 		var mouse_x = e.pageX,
 			mouse_y = e.pageY,
-			items;
+			items,
+			link = "";
 
 		mouse_y -= $(document).scrollTop();
 

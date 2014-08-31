@@ -153,6 +153,9 @@ photo = {
 		buttons = [
 			["", function() {
 
+				var nextPhoto,
+					previousPhoto;
+
 				photoIDs.forEach(function(id, index, array) {
 
 					// Change reference for the next and previous photo

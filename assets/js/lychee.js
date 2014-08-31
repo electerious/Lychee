@@ -149,7 +149,7 @@ var lychee = {
 
 	logout: function() {
 
-		lychee.api("logout", function(data) {
+		lychee.api("logout", function() {
 			window.location.reload();
 		});
 

@@ -86,7 +86,7 @@ album = {
 
 	},
 
-	parse: function(photo) {
+	parse: function() {
 
 		if (!album.json.title) album.json.title = "Untitled";
 
@@ -143,7 +143,7 @@ album = {
 
 					if (visible.albums()) {
 
-						albumIDs.forEach(function(id, index, array) {
+						albumIDs.forEach(function(id) {
 							albums.json.num--;
 							view.albums.content.delete(id);
 						});
@@ -224,7 +224,7 @@ album = {
 
 				} else if (visible.albums()) {
 
-					albumIDs.forEach(function(id, index, array) {
+					albumIDs.forEach(function(id) {
 						albums.json.content[id].title = newTitle;
 						view.albums.content.title(id);
 					});
