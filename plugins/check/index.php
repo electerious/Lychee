@@ -98,7 +98,7 @@ $json = json_decode($json, true);
 $imagick = extension_loaded('imagick');
 if ($imagick===false) $imagick = '-';
 
-$imagickVersion = @Imagick::getVersion();
+if ($imagick===true) $imagickVersion = @Imagick::getVersion();
 if (!isset($imagickVersion)||$imagickVersion==='') $imagickVersion = '-';
 
 $gdVersion = gd_info();
