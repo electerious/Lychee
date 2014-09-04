@@ -94,17 +94,23 @@ echo('------------------' . PHP_EOL);
 $json = file_get_contents(LYCHEE_BUILD . 'package.json');
 $json = json_decode($json, true);
 
+$imagick = extension_loaded('imagick');
+if ($imagick===false) $imagick = '-';
+
+$imagickVersion = @Imagick::getVersion();
+if (!isset($imagickVersion)||$imagickVersion==='') $imagickVersion = '-';
+
+$gdVersion = gd_info();
+
 # Output system information
 echo('Lychee Version:  ' . $json['version'] . PHP_EOL);
 echo('DB Version:      ' . $settings['version'] . PHP_EOL);
 echo('System:          ' . PHP_OS . PHP_EOL);
 echo('PHP Version:     ' . floatval(phpversion()) . PHP_EOL);
 echo('MySQL Version:   ' . $database->server_version . PHP_EOL);
-echo('Imagick:         ' . extension_loaded('imagick') . PHP_EOL);
+echo('Imagick:         ' . $imagick . PHP_EOL);
 echo('Imagick Active:  ' . $settings['imagick'] . PHP_EOL);
-$imagickVersion = @Imagick::getVersion();
 echo('Imagick Version: ' . $imagickVersion['versionNumber'] . PHP_EOL);
-$gdVersion = gd_info();
 echo('GD Version:      ' . $gdVersion['GD Version'] . PHP_EOL);
 
 ?>
