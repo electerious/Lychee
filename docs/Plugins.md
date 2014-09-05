@@ -70,7 +70,7 @@ $plugins->attach(new ExamplePlugin($database, $settings));
 
 Select the table `lychee_settings` and edit the value of `plugins` to the path of your plugin. The path must be relative from the `plugins/`-folder: `ExamplePlugin/index.php`.
 
-Divide multiple plugins with commas: `Plugin01/index.php,Plugin02/index.php`.
+Divide multiple plugins with semicolons: `Plugin01/index.php;Plugin02/index.php`.
 
 ### Available hooks
 
