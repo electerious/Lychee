@@ -1,6 +1,6 @@
 ## v2.6.2
 
-Released September ??, 2014
+Released September 12, 2014
 
 - `New` Select all albums/photos with `cmd+a` or `ctrl+a`
 - `New` Detect duplicates and only save one file (#48)
