@@ -8,8 +8,8 @@
 var lychee = {
 
 	title: "",
-	version: "2.6.1",
-	version_code: "020601",
+	version: "2.6.2",
+	version_code: "020602",
 
 	api_path: "php/api.php",
 	update_path: "http://lychee.electerious.com/version/index.php",
@@ -149,7 +149,7 @@ var lychee = {
 
 	logout: function() {
 
-		lychee.api("logout", function(data) {
+		lychee.api("logout", function() {
 			window.location.reload();
 		});
 

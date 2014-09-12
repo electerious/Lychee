@@ -117,6 +117,23 @@ photo = {
 
 	},
 
+	duplicate: function(photoIDs) {
+
+		var params;
+
+		if (!photoIDs) return false;
+		if (photoIDs instanceof Array===false) photoIDs = [photoIDs];
+
+		params = "duplicatePhoto&photoIDs=" + photoIDs;
+		lychee.api(params, function(data) {
+
+			if (data!==true) lychee.error(null, params, data);
+			else album.load(album.getID(), false);
+
+		});
+
+	},
+
 	delete: function(photoIDs) {
 
 		var params,
@@ -135,6 +152,9 @@ photo = {
 
 		buttons = [
 			["", function() {
+
+				var nextPhoto,
+					previousPhoto;
 
 				photoIDs.forEach(function(id, index, array) {
 

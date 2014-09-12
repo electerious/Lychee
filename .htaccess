@@ -1,6 +1,8 @@
 IndexIgnore *
 
+# ---
 # Uncomment these lines to change PHP parameters if you are using the PHP Apache module
+# ---
 #<IfModule mod_php5.c>
 #	php_value max_execution_time 200
 #	php_value post_max_size 200M
@@ -8,3 +10,10 @@ IndexIgnore *
 #	php_value upload_max_filesize 20M
 #	php_value max_file_uploads 100
 #</IfModule>
+
+# ---
+# Uncomment these lines when you want to allow access to the Lychee API from different origins
+# ---
+#Header add Access-Control-Allow-Origin "*"
+#Header add Access-Control-Allow-Headers "origin, x-requested-with, content-type"
+#Header add Access-Control-Allow-Methods "PUT, GET, POST, DELETE, OPTIONS"

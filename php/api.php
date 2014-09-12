@@ -17,13 +17,9 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 	session_start();
 	date_default_timezone_set('UTC');
 
-	# Define globals
+	# Load required files
 	require(__DIR__ . '/define.php');
-
-	# Load autoload
 	require(__DIR__ . '/autoload.php');
-
-	# Load modules
 	require(__DIR__ . '/modules/misc.php');
 
 	if (file_exists(LYCHEE_CONFIG_FILE)) require(LYCHEE_CONFIG_FILE);
@@ -42,6 +38,10 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 		exit();
 
 	}
+
+	# Define the table prefix
+	if (!isset($dbTablePrefix)) $dbTablePrefix = '';
+	defineTablePrefix($dbTablePrefix);
 
 	# Connect to database
 	$database = Database::connect($dbHost, $dbUser, $dbPassword, $dbName);

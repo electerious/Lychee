@@ -32,6 +32,7 @@ class Admin extends Access {
 			case 'setPhotoPublic':		$this->setPhotoPublic(); break;
 			case 'setPhotoAlbum':		$this->setPhotoAlbum(); break;
 			case 'setPhotoTags':		$this->setPhotoTags(); break;
+			case 'duplicatePhoto':		$this->duplicatePhoto(); break;
 			case 'deletePhoto':			$this->deletePhoto(); break;
 
 			# Add functions
@@ -119,7 +120,7 @@ class Admin extends Access {
 
 		Module::dependencies(isset($_POST['albumIDs']));
 		$album = new Album($this->database, $this->plugins, $this->settings, $_POST['albumIDs']);
-		echo $album->delete($_POST['albumIDs']);
+		echo $album->delete();
 
 	}
 
@@ -181,6 +182,14 @@ class Admin extends Access {
 
 	}
 
+	private function duplicatePhoto() {
+
+		Module::dependencies(isset($_POST['photoIDs']));
+		$photo = new Photo($this->database, $this->plugins, null, $_POST['photoIDs']);
+		echo $photo->duplicate();
+
+	}
+
 	private function deletePhoto() {
 
 		Module::dependencies(isset($_POST['photoIDs']));
@@ -193,9 +202,9 @@ class Admin extends Access {
 
 	private function upload() {
 
-		Module::dependencies(isset($_FILES, $_POST['albumID']));
+		Module::dependencies(isset($_FILES, $_POST['albumID'], $_POST['tags']));
 		$photo = new Photo($this->database, $this->plugins, $this->settings, null);
-		echo $photo->add($_FILES, $_POST['albumID']);
+		echo $photo->add($_FILES, $_POST['albumID'], '', $_POST['tags']);
 
 	}
 

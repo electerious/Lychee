@@ -12,7 +12,7 @@ upload = {
 		upload.close(true);
 		$("body").append(build.uploadModal(title, files));
 
-		if (callback!=null&&callback!=undefined) callback();
+		if (callback!==null&&callback!==undefined) callback();
 
 	},
 
@@ -101,6 +101,7 @@ upload = {
 
 					formData.append("function", "upload");
 					formData.append("albumID", albumID);
+					formData.append("tags", "");
 					formData.append(0, file);
 
 					xhr.open("POST", lychee.api_path);

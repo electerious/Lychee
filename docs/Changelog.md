@@ -1,3 +1,17 @@
+## v2.6.2
+
+Released September ??, 2014
+
+- `New` Select all albums/photos with `cmd+a` or `ctrl+a`
+- `New` Detect duplicates and only save one file (#48)
+- `New` Duplicate photos (#186)
+- `New` Added contributing guide
+- `New` Database table prefix for multiple Lychee installations (#196)
+- `Improved` Use IPTC Title when Headline not available (#216)
+- `Improved` Diagnostics are showing system information
+- `Improved` Harden against SQL injection attacks (#38)
+- `Fixed` a problem with htmlentities and older PHP versions (#212)
+
 ## v2.6.1
 
 Released August 22, 2014
