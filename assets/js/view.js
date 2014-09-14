@@ -121,6 +121,8 @@ view = {
 		},
 
 		content: {
+            
+            scroll_pos: 0,
 
 			init: function() {
 
@@ -155,6 +157,12 @@ view = {
 				}
 
 				$("img[data-type!='nonretina']").retina();
+                
+                //restore scroll
+                if (view.albums.content.scroll_pos != null) {
+                    //$("html, body").setanimate({ scrollTop: view.albums.content.scroll_pos }, "slow");
+                    $("html, body").scrollTop(view.albums.content.scroll_pos);
+                }
 
 			},
 
@@ -253,6 +261,7 @@ view = {
 
 				$("img[data-type!='svg']").retina();
                 
+                view.albums.content.scroll_pos = $(document).scrollTop();
                 //scroll to top
                 $("html, body").animate({ scrollTop: 0 }, "slow");
 
