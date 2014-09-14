@@ -8,6 +8,17 @@
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
+
+function debug_to_console( $data ) {
+
+    if ( is_array( $data ) )
+        $output = "<script>console.log( 'Debug Objects: " . implode( ',', $data) . "' );</script>";
+    else
+        $output = "<script>console.log( 'Debug Objects: " . $data . "' );</script>";
+
+    echo $output;
+}
+
 class Album extends Module {
 
 	private $database	= null;
@@ -64,26 +75,26 @@ class Album extends Module {
 		switch ($this->albumIDs) {
 
 			case 'f':	$return['public'] = false;
-						$query = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp FROM lychee_photos WHERE star = 1 " . $this->settings['sorting'];
+						$query = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM lychee_photos WHERE star = 1 " . $this->settings['sorting'];
 						break;
 
 			case 's':	$return['public'] = false;
-						$query = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp FROM lychee_photos WHERE public = 1 " . $this->settings['sorting'];
+						$query = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM lychee_photos WHERE public = 1 " . $this->settings['sorting'];
 						break;
 
 			case 'r':	$return['public'] = false;
-						$query = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp FROM lychee_photos WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY)) " . $this->settings['sorting'];
+						$query = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM lychee_photos WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY)) " . $this->settings['sorting'];
 						break;
 
 			case '0':	$return['public'] = false;
-						$query = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp FROM lychee_photos WHERE album = 0 " . $this->settings['sorting'];
+						$query = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM lychee_photos WHERE album = 0 " . $this->settings['sorting'];
 						break;
 
 			default:	$albums = $this->database->query("SELECT * FROM lychee_albums WHERE id = '$this->albumIDs' LIMIT 1;");
 						$return = $albums->fetch_assoc();
 						$return['sysdate']		= date('d M. Y', $return['sysstamp']);
 						$return['password']		= ($return['password']=='' ? false : true);
-						$query = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp FROM lychee_photos WHERE album = '$this->albumIDs' " . $this->settings['sorting'];
+						$query = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM lychee_photos WHERE album = '$this->albumIDs' " . $this->settings['sorting'];
 						break;
 
 		}
@@ -98,6 +109,9 @@ class Album extends Module {
 			$photo['previousPhoto']		= $previousPhotoID;
 			$photo['nextPhoto']			= '';
 			$photo['thumbUrl']			= LYCHEE_URL_UPLOADS_THUMB . $photo['thumbUrl'];
+            
+            # Parse url
+            $photo['url'] = LYCHEE_URL_UPLOADS_BIG . $photo['url'];
 
 			if (isset($photo['takestamp'])&&$photo['takestamp']!=='0') {
 				$photo['cameraDate']	= 1;
@@ -192,7 +206,7 @@ class Album extends Module {
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
-
+        
 		return $return;
 
 	}

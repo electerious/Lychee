@@ -181,7 +181,7 @@ var lychee = {
 		if (albumID&&photoID) {
 
 			// Trash data
-			albums.json = null;
+			//albums.json = null;
 			photo.json = null;
 
 			// Show Photo
@@ -190,11 +190,12 @@ var lychee = {
 				album.load(albumID, true);
 			}
 			photo.load(photoID, albumID);
+            photo.preloadNext(photoID,albumID);
 
 		} else if (albumID) {
 
 			// Trash data
-			albums.json = null;
+			//albums.json = null;
 			photo.json = null;
 
 			// Show Album
@@ -205,7 +206,7 @@ var lychee = {
 		} else {
 
 			// Trash data
-			albums.json = null;
+			//albums.json = null;
 			album.json = null;
 			photo.json = null;
 			search.code = "";
