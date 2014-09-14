@@ -289,6 +289,8 @@ album = {
 			password = "",
 			listed = false,
 			downloadable = false;
+        
+        albums.refresh();
 
 		if (!visible.message()&&album.json.public==0) {
 
@@ -300,7 +302,7 @@ album = {
 				else $(".message .choice input.text").hide();
 
 			});
-
+            
 			return true;
 
 		}

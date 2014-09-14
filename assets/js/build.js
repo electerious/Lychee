@@ -34,7 +34,7 @@ build = {
 			title = albumJSON.title,
 			typeThumb = "";
 
-		if (title.length>18) {
+		if (title != null && title.length>18) {
 			title = albumJSON.title.substr(0, 18) + "...";
 			longTitle = albumJSON.title;
 		}
@@ -76,7 +76,7 @@ build = {
 			longTitle = "",
 			title = photoJSON.title;
 
-		if (title.length>18) {
+		if (title != null && title.length>18) {
 			title = photoJSON.title.substr(0, 18) + "...";
 			longTitle = photoJSON.title;
 		}
@@ -195,8 +195,8 @@ build = {
 		modal +=		"<h1><a class='icon-lock'></a> Sign In</h1>";
 		modal +=		"<a class='close icon-remove-sign'></a>";
 		modal +=		"<div class='sign_in'>";
-		modal +=			"<input id='username' type='text' name='' value='' placeholder='username'>";
-		modal +=			"<input id='password' type='password' name='' value='' placeholder='password'>";
+		modal +=			"<input id='username' type='text' name='username' value='' placeholder='username'>";
+		modal +=			"<input id='password' type='password' name='password' value='' placeholder='password'>";
 		modal +=		"</div>";
 		modal +=		"<div id='version'>Version " + lychee.version + "<span> &#8211; <a target='_blank' href='" + lychee.updateURL + "'>Update available!</a><span></div>";
 		modal +=		"<a onclick='lychee.login()' class='button active'>Sign in</a>";
