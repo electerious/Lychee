@@ -146,6 +146,7 @@ album = {
 						albumIDs.forEach(function(id, index, array) {
 							albums.json.num--;
 							view.albums.content.delete(id);
+                            delete albums.json.content[id]
 						});
 
 					} else lychee.goto("");

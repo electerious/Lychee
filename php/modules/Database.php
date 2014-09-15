@@ -23,6 +23,9 @@ class Database extends Module {
 		# Avoid sql injection on older MySQL versions by using GBK
 		if ($database->server_version<50500) $database->set_charset('GBK');
 		else $database->set_charset("utf8");
+        
+        # Set unicode
+        $database->query('SET NAMES utf8;');
 
 		# Check database
 		if (!$database->select_db($name))

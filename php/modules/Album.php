@@ -6,6 +6,8 @@
 # @copyright	2014 by Tobias Reich
 ###
 
+header('Content-Type: text/html; charset=UTF-8');
+
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 
@@ -392,7 +394,7 @@ class Album extends Module {
 
 		# Parse
 		if (strlen($title)>50) $title = substr($title, 0, 50);
-
+        
 		# Execute query
 		$result = $this->database->query("UPDATE lychee_albums SET title = '$title' WHERE id IN ($this->albumIDs);");
 
