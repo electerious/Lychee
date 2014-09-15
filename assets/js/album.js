@@ -113,7 +113,10 @@ album = {
 
 					if (data===true) data = 1; // Avoid first album to be true
 
-					if (data!==false&&isNumber(data)) lychee.goto(data);
+					if (data!==false&&isNumber(data)) {
+                        albums.refresh();
+                        lychee.goto(data);
+                    }
 					else lychee.error(null, params, data);
 
 				});
