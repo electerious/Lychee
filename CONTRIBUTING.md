@@ -34,4 +34,4 @@ Please follow the conventions already established in the code.
 - **Comments**:<br>
   Please use single-line comments to annotate significant additions. Use `#` for comments in PHP; `//` for comments in JS and CSS.
   
-Merge you changes when the forked branch has been updated in the meanwhile. Make sure your code is 100% working before creating a Pull-Request on GitHub.
+Merge your changes when the forked branch has been updated in the meanwhile. Make sure your code is 100% working before creating a Pull-Request on GitHub.
