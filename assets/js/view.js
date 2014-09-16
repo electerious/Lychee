@@ -121,8 +121,8 @@ view = {
 		},
 
 		content: {
-            
-            scroll_pos: 0,
+			
+			scroll_pos: 0,
 
 			init: function() {
 
@@ -137,16 +137,16 @@ view = {
 				if (!lychee.publicMode) smartData = build.divider("Smart Albums") + build.album(albums.json.unsortedAlbum) + build.album(albums.json.starredAlbum) + build.album(albums.json.publicAlbum) + build.album(albums.json.recentAlbum);
 
 				/*  Albums */                     
-                    
-                if (albums.json.content) {
+					
+				if (albums.json.content) {
 					$.each(albums.json.content, function() {
 						albums.parse(this);
-                        
-                        //display albums in reverse order
+						
+						//display albums in reverse order
 						albumsData = build.album(this) + albumsData;
 					});
-                    
-                    if (!lychee.publicMode) albumsData = build.divider("Albums") + albumsData; 
+					
+					if (!lychee.publicMode) albumsData = build.divider("Albums") + albumsData; 
 				}
 
 				if (smartData===""&&albumsData==="") {
@@ -157,12 +157,12 @@ view = {
 				}
 
 				$("img[data-type!='nonretina']").retina();
-                
-                //restore scroll
-                if (view.albums.content.scroll_pos != null) {
-                    //$("html, body").setanimate({ scrollTop: view.albums.content.scroll_pos }, "slow");
-                    $("html, body").scrollTop(view.albums.content.scroll_pos);
-                }
+				
+				//restore scroll
+				if (view.albums.content.scroll_pos != null) {
+					//$("html, body").setanimate({ scrollTop: view.albums.content.scroll_pos }, "slow");
+					$("html, body").scrollTop(view.albums.content.scroll_pos);
+				}
 
 			},
 
@@ -260,10 +260,10 @@ view = {
 				lychee.content.html(photosData);
 
 				$("img[data-type!='svg']").retina();
-                
-                view.albums.content.scroll_pos = $(document).scrollTop();
-                //scroll to top
-                $("html, body").animate({ scrollTop: 0 }, "slow");
+				
+				view.albums.content.scroll_pos = $(document).scrollTop();
+				//scroll to top
+				$("html, body").animate({ scrollTop: 0 }, "slow");
 
 			},
 
@@ -470,7 +470,7 @@ view = {
 		photo: function() {
 
 			lychee.imageview.html(build.imageview(photo.json, photo.isSmall(), visible.controls()));
-            
+			
 			if ((album.json&&album.json.content&&album.json.content[photo.getID()]&&album.json.content[photo.getID()].nextPhoto==="")||lychee.viewMode) $("a#next").hide();
 			if ((album.json&&album.json.content&&album.json.content[photo.getID()]&&album.json.content[photo.getID()].previousPhoto==="")||lychee.viewMode) $("a#previous").hide();
 

@@ -13,12 +13,12 @@ if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 function debug_to_console( $data ) {
 
-    if ( is_array( $data ) )
-        $output = "<script>console.log( 'Debug Objects: " . implode( ',', $data) . "' );</script>";
-    else
-        $output = "<script>console.log( 'Debug Objects: " . $data . "' );</script>";
+	if ( is_array( $data ) )
+		$output = "<script>console.log( 'Debug Objects: " . implode( ',', $data) . "' );</script>";
+	else
+		$output = "<script>console.log( 'Debug Objects: " . $data . "' );</script>";
 
-    echo $output;
+	echo $output;
 }
 
 class Album extends Module {
@@ -111,9 +111,9 @@ class Album extends Module {
 			$photo['previousPhoto']		= $previousPhotoID;
 			$photo['nextPhoto']			= '';
 			$photo['thumbUrl']			= LYCHEE_URL_UPLOADS_THUMB . $photo['thumbUrl'];
-            
-            # Parse url
-            $photo['url'] = LYCHEE_URL_UPLOADS_BIG . $photo['url'];
+			
+			# Parse url
+			$photo['url'] = LYCHEE_URL_UPLOADS_BIG . $photo['url'];
 
 			if (isset($photo['takestamp'])&&$photo['takestamp']!=='0') {
 				$photo['cameraDate']	= 1;
@@ -208,7 +208,7 @@ class Album extends Module {
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
-        
+		
 		return $return;
 
 	}
@@ -394,7 +394,7 @@ class Album extends Module {
 
 		# Parse
 		if (strlen($title)>50) $title = substr($title, 0, 50);
-        
+		
 		# Execute query
 		$result = $this->database->query("UPDATE lychee_albums SET title = '$title' WHERE id IN ($this->albumIDs);");
 
