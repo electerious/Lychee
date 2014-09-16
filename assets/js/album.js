@@ -368,10 +368,11 @@ album = {
 
 	getArchive: function(albumID) {
 
-		var link;
+		var link,
+			url = "php/api.php?function=getAlbumArchive&albumID=" + albumID;
 
-		if (location.href.indexOf("index.html")>0) link = location.href.replace(location.hash, "").replace("index.html", "php/api.php?function=getAlbumArchive&albumID=" + albumID);
-		else link = location.href.replace(location.hash, "") + "php/api.php?function=getAlbumArchive&albumID=" + albumID;
+		if (location.href.indexOf("index.html")>0) link = location.href.replace(location.hash, "").replace("index.html", url);
+		else link = location.href.replace(location.hash, "") + url;
 
 		if (lychee.publicMode) link += "&password=" + password.value;
 
