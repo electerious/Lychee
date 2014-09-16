@@ -19,7 +19,7 @@ paths = {
 		'../assets/js/*.js'
 	],
 	css: [
-		'../assets/css/*.css'
+		'../assets/scss/main.scss'
 	]
 }
 
@@ -53,6 +53,7 @@ gulp.task('js', function () {
 gulp.task('css', function () {
 
 	gulp.src(paths.css)
+		.pipe(plugins.sass())
 		.pipe(plugins.concat('main.css', {newLine: "\n"}))
 		.pipe(plugins.autoprefixer('last 4 versions', '> 5%'))
 		.pipe(plugins.minifyCss())

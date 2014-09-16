@@ -24,10 +24,15 @@
 
 			if (isset($_GET['p'])&&$_GET['p']>0) {
 
-				require(__DIR__ . "/php/define.php");
+				# Load required files
+				require(__DIR__ . '/php/define.php');
+				require(__DIR__ . '/php/autoload.php');
+				require(__DIR__ . '/php/modules/misc.php');
 				require(LYCHEE_CONFIG_FILE);
-				require(LYCHEE . "php/autoload.php");
-				require(LYCHEE . "php/modules/misc.php");
+
+				# Define the table prefix
+				if (!isset($dbTablePrefix)) $dbTablePrefix = '';
+				defineTablePrefix($dbTablePrefix);
 
 				$database = Database::connect($dbHost, $dbUser, $dbPassword, $dbName);
 

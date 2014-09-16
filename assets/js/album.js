@@ -86,7 +86,7 @@ album = {
 
 	},
 
-	parse: function(photo) {
+	parse: function() {
 
 		if (!album.json.title) album.json.title = "Untitled";
 
@@ -146,7 +146,7 @@ album = {
 
 					if (visible.albums()) {
 
-						albumIDs.forEach(function(id, index, array) {
+						albumIDs.forEach(function(id) {
 							albums.json.num--;
 							view.albums.content.delete(id);
 							delete albums.json.content[id]
@@ -228,7 +228,7 @@ album = {
 
 				} else if (visible.albums()) {
 
-					albumIDs.forEach(function(id, index, array) {
+					albumIDs.forEach(function(id) {
 						albums.json.content[id].title = newTitle;
 						view.albums.content.title(id);
 					});
@@ -374,10 +374,11 @@ album = {
 
 	getArchive: function(albumID) {
 
-		var link;
+		var link,
+			url = "php/api.php?function=getAlbumArchive&albumID=" + albumID;
 
-		if (location.href.indexOf("index.html")>0) link = location.href.replace(location.hash, "").replace("index.html", "php/api.php?function=getAlbumArchive&albumID=" + albumID);
-		else link = location.href.replace(location.hash, "") + "php/api.php?function=getAlbumArchive&albumID=" + albumID;
+		if (location.href.indexOf("index.html")>0) link = location.href.replace(location.hash, "").replace("index.html", url);
+		else link = location.href.replace(location.hash, "") + url;
 
 		if (lychee.publicMode) link += "&password=" + password.value;
 

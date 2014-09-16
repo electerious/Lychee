@@ -36,14 +36,8 @@ class Log extends Module {
 		# Get time
 		$sysstamp = time();
 
-		# Escape
-		$type		= mysqli_real_escape_string($database, $type);
-		$function	= mysqli_real_escape_string($database, $function);
-		$line		= mysqli_real_escape_string($database, $line);
-		$text		= mysqli_real_escape_string($database, $text);
-
 		# Save in database
-		$query	= "INSERT INTO lychee_log (time, type, function, line, text) VALUES ('$sysstamp', '$type', '$function', '$line', '$text');";
+		$query	= Database::prepare($database, "INSERT INTO ? (time, type, function, line, text) VALUES ('?', '?', '?', '?', '?')", array(LYCHEE_TABLE_LOG, $sysstamp, $type, $function, $line, $text));
 		$result	= $database->query($query);
 
 		if (!$result) return false;

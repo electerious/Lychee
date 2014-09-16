@@ -7,12 +7,15 @@ The following keys and shortcuts can be used in Lychee. Single char-shortcuts ar
 |:-----------|:------------|
 | `u` | Upload photo |
 | `enter` | Confirm Dialog |
-| `esc` or `cmd`+`up` | Close/Back |
+| `esc` | Close/Back |
+| `cmd`+`up` | Close/Back |
 
 ### Albums
 | Key | Action |
 |:-----------|:------------|
 | `s` or `f` | Search |
+| `cmd`+`a` | Select all albums |
+| `ctrl`+`a` | Select all albums |
 
 ### Album
 | Key | Action |
@@ -22,6 +25,8 @@ The following keys and shortcuts can be used in Lychee. Single char-shortcuts ar
 | `i` | Show information |
 | `cmd`+`backspace` | Delete album |
 | `ctrl`+`backspace` | Delete album |
+| `cmd`+`a` | Select all photos |
+| `ctrl`+`a` | Select all photos |
 
 ### Photo
 | Key | Action |

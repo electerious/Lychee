@@ -132,6 +132,23 @@ photo = {
 
 	},
 
+	duplicate: function(photoIDs) {
+
+		var params;
+
+		if (!photoIDs) return false;
+		if (photoIDs instanceof Array===false) photoIDs = [photoIDs];
+
+		params = "duplicatePhoto&photoIDs=" + photoIDs;
+		lychee.api(params, function(data) {
+
+			if (data!==true) lychee.error(null, params, data);
+			else album.load(album.getID(), false);
+
+		});
+
+	},
+
 	delete: function(photoIDs) {
 
 		var params,
@@ -150,6 +167,9 @@ photo = {
 
 		buttons = [
 			["", function() {
+
+				var nextPhoto,
+					previousPhoto;
 
 				photoIDs.forEach(function(id, index, array) {
 
@@ -519,10 +539,11 @@ photo = {
 
 	getArchive: function(photoID) {
 
-		var link;
+		var link,
+			url = "php/api.php?function=getPhotoArchive&photoID=" + photoID;
 
-		if (location.href.indexOf("index.html")>0) link = location.href.replace(location.hash, "").replace("index.html", "php/api.php?function=getPhotoArchive&photoID=" + photoID);
-		else link = location.href.replace(location.hash, "") + "php/api.php?function=getPhotoArchive&photoID=" + photoID;
+		if (location.href.indexOf("index.html")>0) link = location.href.replace(location.hash, "").replace("index.html", url);
+		else link = location.href.replace(location.hash, "") + url;
 
 		if (lychee.publicMode) link += "&password=" + password.value;
 
@@ -538,8 +559,10 @@ photo = {
 
 	getViewLink: function(photoID) {
 
-		if (location.href.indexOf("index.html")>0) return location.href.replace("index.html" + location.hash, "view.php?p=" + photoID);
-		else return location.href.replace(location.hash, "view.php?p=" + photoID);
+		var url = "view.php?p=" + photoID;
+
+		if (location.href.indexOf("index.html")>0) return location.href.replace("index.html" + location.hash, url);
+		else return location.href.replace(location.hash, url);
 
 	}
 

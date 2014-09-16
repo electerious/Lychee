@@ -7,8 +7,10 @@
 ###
 
 # Add `checksum`
-if (!$database->query("SELECT `checksum` FROM `lychee_photos` LIMIT 1;")) {
-	$result = $database->query("ALTER TABLE `lychee_photos` ADD `checksum` VARCHAR(100) DEFAULT NULL");
+$query = Database::prepare($database, "SELECT `checksum` FROM `?` LIMIT 1", array(LYCHEE_TABLE_PHOTOS));
+if (!$database->query($query)) {
+	$query	= Database::prepare($database, "ALTER TABLE `?` ADD `checksum` VARCHAR(100) DEFAULT NULL", array(LYCHEE_TABLE_PHOTOS));
+	$result	= $database->query($query);
 	if (!$result) {
 		Log::error($database, 'update_020505', __LINE__, 'Could not update database (' . $database->error . ')');
 		return false;
@@ -16,10 +18,6 @@ if (!$database->query("SELECT `checksum` FROM `lychee_photos` LIMIT 1;")) {
 }
 
 # Set version
-$result = $database->query("UPDATE lychee_settings SET value = '020505' WHERE `key` = 'version';");
-if (!$result) {
-	Log::error($database, 'update_020505', __LINE__, 'Could not update database (' . $database->error . ')');
-	return false;
-}
+if (Database::setVersion($database, '020505')===false) return false;
 
 ?>

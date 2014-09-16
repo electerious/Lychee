@@ -164,6 +164,7 @@ contextMenu = {
 			function() { photo.setStar([photoID]) },
 			function() { photo.editTags([photoID]) },
 			function() { photo.setTitle([photoID]) },
+			function() { photo.duplicate([photoID]) },
 			function() { contextMenu.move([photoID], e, "right") },
 			function() { photo.delete([photoID]) }
 		];
@@ -173,8 +174,9 @@ contextMenu = {
 			["<a class='icon-tags'></a> Tags", 1],
 			["separator", -1],
 			["<a class='icon-edit'></a> Rename", 2],
-			["<a class='icon-folder-open'></a> Move", 3],
-			["<a class='icon-trash'></a> Delete", 4]
+			["<a class='icon-copy'></a> Duplicate", 3],
+			["<a class='icon-folder-open'></a> Move", 4],
+			["<a class='icon-trash'></a> Delete", 5]
 		];
 
 		contextMenu.show(items, mouse_x, mouse_y, "right");
@@ -195,6 +197,7 @@ contextMenu = {
 			function() { photo.setStar(photoIDs) },
 			function() { photo.editTags(photoIDs) },
 			function() { photo.setTitle(photoIDs) },
+			function() { photo.duplicate(photoIDs) },
 			function() { contextMenu.move(photoIDs, e, "right") },
 			function() { photo.delete(photoIDs) }
 		];
@@ -204,8 +207,9 @@ contextMenu = {
 			["<a class='icon-tags'></a> Tag All", 1],
 			["separator", -1],
 			["<a class='icon-edit'></a> Rename All", 2],
-			["<a class='icon-folder-open'></a> Move All", 3],
-			["<a class='icon-trash'></a> Delete All", 4]
+			["<a class='icon-copy'></a> Duplicate All", 3],
+			["<a class='icon-folder-open'></a> Move All", 4],
+			["<a class='icon-trash'></a> Delete All", 5]
 		];
 
 		contextMenu.show(items, mouse_x, mouse_y, "right");
@@ -266,7 +270,8 @@ contextMenu = {
 
 		var mouse_x = e.pageX,
 			mouse_y = e.pageY,
-			items;
+			items,
+			link = "";
 
 		mouse_y -= $(document).scrollTop();
 

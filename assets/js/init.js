@@ -104,6 +104,10 @@ $(document).ready(function(){
 		.bind(['command+backspace', 'ctrl+backspace'], function() {
 			if (visible.photo()&&!visible.message()) photo.delete([photo.getID()]);
 			else if (visible.album()&&!visible.message()) album.delete([album.getID()]);
+		})
+		.bind(['command+a', 'ctrl+a'], function() {
+			if (visible.album()&&!visible.message()) multiselect.selectAll();
+			else if (visible.albums()&&!visible.message()) multiselect.selectAll();
 		});
 
 	Mousetrap.bindGlobal('enter', function() {
