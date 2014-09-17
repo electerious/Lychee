@@ -113,7 +113,10 @@ album = {
 
 					if (data===true) data = 1; // Avoid first album to be true
 
-					if (data!==false&&isNumber(data)) lychee.goto(data);
+					if (data!==false&&isNumber(data)) {
+						albums.refresh();
+						lychee.goto(data);
+					}
 					else lychee.error(null, params, data);
 
 				});
@@ -146,6 +149,7 @@ album = {
 						albumIDs.forEach(function(id) {
 							albums.json.num--;
 							view.albums.content.delete(id);
+							delete albums.json.content[id]
 						});
 
 					} else lychee.goto("");
@@ -222,6 +226,11 @@ album = {
 					album.json.title = newTitle;
 					view.album.title();
 
+					if (albums.json) {
+						var id = albumIDs[0];
+						albums.json.content[id].title = newTitle;
+					}
+
 				} else if (visible.albums()) {
 
 					albumIDs.forEach(function(id) {
@@ -289,6 +298,8 @@ album = {
 			password = "",
 			listed = false,
 			downloadable = false;
+		
+		albums.refresh();
 
 		if (!visible.message()&&album.json.public==0) {
 
@@ -300,7 +311,7 @@ album = {
 				else $(".message .choice input.text").hide();
 
 			});
-
+			
 			return true;
 
 		}

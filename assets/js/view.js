@@ -10,7 +10,7 @@ view = {
 	header: {
 
 		show: function() {
-
+ 
 			var newMargin = -1*($("#imageview #image").height()/2)+20;
 
 			clearTimeout($(window).data("timeout"));
@@ -121,6 +121,8 @@ view = {
 		},
 
 		content: {
+			
+			scroll_pos: 0,
 
 			init: function() {
 
@@ -134,15 +136,17 @@ view = {
 				albums.parse(albums.json.recentAlbum);
 				if (!lychee.publicMode) smartData = build.divider("Smart Albums") + build.album(albums.json.unsortedAlbum) + build.album(albums.json.starredAlbum) + build.album(albums.json.publicAlbum) + build.album(albums.json.recentAlbum);
 
-				/*  Albums */
+				/*  Albums */                     
+					
 				if (albums.json.content) {
-
-					if (!lychee.publicMode) albumsData = build.divider("Albums");
 					$.each(albums.json.content, function() {
 						albums.parse(this);
-						albumsData += build.album(this);
+						
+						//display albums in reverse order
+						albumsData = build.album(this) + albumsData;
 					});
-
+					
+					if (!lychee.publicMode) albumsData = build.divider("Albums") + albumsData; 
 				}
 
 				if (smartData===""&&albumsData==="") {
@@ -153,6 +157,11 @@ view = {
 				}
 
 				$("img[data-type!='nonretina']").retina();
+				
+				//restore scroll
+				if (view.albums.content.scroll_pos != null) {
+					$("html, body").scrollTop(view.albums.content.scroll_pos);
+				}
 
 			},
 
@@ -163,7 +172,7 @@ view = {
 					title = albums.json.content[albumID].title;
 
 				if (albums.json.content[albumID].password) prefix = "<span class='icon-lock'></span> ";
-				if (title.length>18) {
+				if (title != null && title.length>18) {
 					longTitle = title;
 					title = title.substr(0, 18) + "...";
 				}
@@ -250,7 +259,10 @@ view = {
 				lychee.content.html(photosData);
 
 				$("img[data-type!='svg']").retina();
-
+				
+				view.albums.content.scroll_pos = $(document).scrollTop();
+				//scroll to top
+				$("html, body").scrollTop(0);
 			},
 
 			title: function(photoID) {
@@ -258,7 +270,7 @@ view = {
 				var longTitle = "",
 					title = album.json.content[photoID].title;
 
-				if (title.length>18) {
+				if (title != null && title.length>18) {
 					longTitle = title;
 					title = title.substr(0, 18) + "...";
 				}
@@ -456,7 +468,7 @@ view = {
 		photo: function() {
 
 			lychee.imageview.html(build.imageview(photo.json, photo.isSmall(), visible.controls()));
-
+			
 			if ((album.json&&album.json.content&&album.json.content[photo.getID()]&&album.json.content[photo.getID()].nextPhoto==="")||lychee.viewMode) $("a#next").hide();
 			if ((album.json&&album.json.content&&album.json.content[photo.getID()]&&album.json.content[photo.getID()].previousPhoto==="")||lychee.viewMode) $("a#previous").hide();
 

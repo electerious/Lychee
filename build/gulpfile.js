@@ -31,12 +31,21 @@ gulp.task('view', function () {
 		.pipe(gulp.dest('../assets/min/'));
 
 });
-
+/*
 gulp.task('js', function () {
 
 	gulp.src(paths.js)
 		.pipe(plugins.concat('main.js', {newLine: "\n"}))
 		.pipe(plugins.uglify())
+		.pipe(gulp.dest('../assets/min/'));
+
+});
+*/
+
+gulp.task('js', function () {
+
+	gulp.src(paths.js)
+		.pipe(plugins.concat('main.js', {newLine: "\n"}))
 		.pipe(gulp.dest('../assets/min/'));
 
 });
