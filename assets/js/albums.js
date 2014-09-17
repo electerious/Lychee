@@ -21,7 +21,7 @@ albums = {
 		startTime = new Date().getTime();
 
 	
-		if(this.json == null) {
+		if(albums.json == null) {
 			lychee.api("getAlbums", function(data) {
 	
 				/* Smart Albums */
@@ -101,7 +101,7 @@ albums = {
 	},
 	
 	refresh: function() {
-		this.json = null;
+		albums.json = null;
 	}
 
 };

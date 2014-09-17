@@ -6,8 +6,6 @@
 # @copyright	2014 by Tobias Reich
 ###
 
-header('Content-Type: text/html; charset=UTF-8');
-
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 

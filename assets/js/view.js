@@ -160,7 +160,6 @@ view = {
 				
 				//restore scroll
 				if (view.albums.content.scroll_pos != null) {
-					//$("html, body").setanimate({ scrollTop: view.albums.content.scroll_pos }, "slow");
 					$("html, body").scrollTop(view.albums.content.scroll_pos);
 				}
 
@@ -263,8 +262,7 @@ view = {
 				
 				view.albums.content.scroll_pos = $(document).scrollTop();
 				//scroll to top
-				$("html, body").animate({ scrollTop: 0 }, "slow");
-
+				$("html, body").scrollTop(0);
 			},
 
 			title: function(photoID) {
