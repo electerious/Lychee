@@ -365,8 +365,10 @@ album = {
 				newTitle = (newTitle==="") ? "Untitled" : newTitle;
 
 				if (visible.album()) {
-
+					var id = albumIDs[0];
+					
 					album.json.title = newTitle;
+					albums.json.content[id].title = newTitle;
 					view.album.title();
 
 				} else if (visible.albums()) {
@@ -553,7 +555,7 @@ albums = {
 		startTime = new Date().getTime();
 
 	
-		if(this.json == null) {
+		if(albums.json == null) {
 			lychee.api("getAlbums", function(data) {
 	
 				/* Smart Albums */
@@ -633,7 +635,7 @@ albums = {
 	},
 	
 	refresh: function() {
-		this.json = null;
+		albums.json = null;
 	}
 
 };
@@ -834,8 +836,8 @@ build = {
 		modal +=		"<h1><a class='icon-lock'></a> Sign In</h1>";
 		modal +=		"<a class='close icon-remove-sign'></a>";
 		modal +=		"<div class='sign_in'>";
-		modal +=			"<input id='username' type='text' name='username' value='' placeholder='username'>";
-		modal +=			"<input id='password' type='password' name='password' value='' placeholder='password'>";
+		modal +=			"<input id='username' type='text' value='' placeholder='username'>";
+		modal +=			"<input id='password' type='password' value='' placeholder='password'>";
 		modal +=		"</div>";
 		modal +=		"<div id='version'>Version " + lychee.version + "<span> &#8211; <a target='_blank' href='" + lychee.updateURL + "'>Update available!</a><span></div>";
 		modal +=		"<a onclick='lychee.login()' class='button active'>Sign in</a>";
@@ -4011,7 +4013,6 @@ view = {
 				
 				//restore scroll
 				if (view.albums.content.scroll_pos != null) {
-					//$("html, body").setanimate({ scrollTop: view.albums.content.scroll_pos }, "slow");
 					$("html, body").scrollTop(view.albums.content.scroll_pos);
 				}
 
@@ -4114,8 +4115,7 @@ view = {
 				
 				view.albums.content.scroll_pos = $(document).scrollTop();
 				//scroll to top
-				$("html, body").animate({ scrollTop: 0 }, "slow");
-
+				$("html, body").scrollTop(0);
 			},
 
 			title: function(photoID) {

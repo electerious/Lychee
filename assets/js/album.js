@@ -222,8 +222,10 @@ album = {
 				newTitle = (newTitle==="") ? "Untitled" : newTitle;
 
 				if (visible.album()) {
-
+					var id = albumIDs[0];
+					
 					album.json.title = newTitle;
+					albums.json.content[id].title = newTitle;
 					view.album.title();
 
 				} else if (visible.albums()) {
