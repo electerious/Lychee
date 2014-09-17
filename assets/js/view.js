@@ -10,7 +10,7 @@ view = {
 	header: {
 
 		show: function() {
- 
+
 			var newMargin = -1*($("#imageview #image").height()/2)+20;
 
 			clearTimeout($(window).data("timeout"));
@@ -121,32 +121,33 @@ view = {
 		},
 
 		content: {
-			
-			scroll_pos: 0,
+
+			scrollPosition: 0,
 
 			init: function() {
 
 				var smartData = "",
 					albumsData = "";
 
-				/*  Smart Albums */
+				/* Smart Albums */
 				albums.parse(albums.json.unsortedAlbum);
 				albums.parse(albums.json.publicAlbum);
 				albums.parse(albums.json.starredAlbum);
 				albums.parse(albums.json.recentAlbum);
 				if (!lychee.publicMode) smartData = build.divider("Smart Albums") + build.album(albums.json.unsortedAlbum) + build.album(albums.json.starredAlbum) + build.album(albums.json.publicAlbum) + build.album(albums.json.recentAlbum);
 
-				/*  Albums */                     
-					
+				/* Albums */
 				if (albums.json.content) {
+
 					$.each(albums.json.content, function() {
 						albums.parse(this);
-						
+
 						//display albums in reverse order
 						albumsData = build.album(this) + albumsData;
 					});
-					
-					if (!lychee.publicMode) albumsData = build.divider("Albums") + albumsData; 
+
+					if (!lychee.publicMode) albumsData = build.divider("Albums") + albumsData;
+
 				}
 
 				if (smartData===""&&albumsData==="") {
@@ -157,10 +158,10 @@ view = {
 				}
 
 				$("img[data-type!='nonretina']").retina();
-				
-				//restore scroll
-				if (view.albums.content.scroll_pos != null) {
-					$("html, body").scrollTop(view.albums.content.scroll_pos);
+
+				/* Restore scroll position */
+				if (view.albums.content.scrollPosition!==null) {
+					$("html, body").scrollTop(view.albums.content.scrollPosition);
 				}
 
 			},
@@ -172,7 +173,7 @@ view = {
 					title = albums.json.content[albumID].title;
 
 				if (albums.json.content[albumID].password) prefix = "<span class='icon-lock'></span> ";
-				if (title != null && title.length>18) {
+				if (title!==null&&title.length>18) {
 					longTitle = title;
 					title = title.substr(0, 18) + "...";
 				}
@@ -259,10 +260,11 @@ view = {
 				lychee.content.html(photosData);
 
 				$("img[data-type!='svg']").retina();
-				
-				view.albums.content.scroll_pos = $(document).scrollTop();
-				//scroll to top
+
+				/* Save and reset scroll position */
+				view.albums.content.scrollPosition = $(document).scrollTop();
 				$("html, body").scrollTop(0);
+
 			},
 
 			title: function(photoID) {
@@ -270,7 +272,7 @@ view = {
 				var longTitle = "",
 					title = album.json.content[photoID].title;
 
-				if (title != null && title.length>18) {
+				if (title!==null&&title.length>18) {
 					longTitle = title;
 					title = title.substr(0, 18) + "...";
 				}
@@ -468,7 +470,7 @@ view = {
 		photo: function() {
 
 			lychee.imageview.html(build.imageview(photo.json, photo.isSmall(), visible.controls()));
-			
+
 			if ((album.json&&album.json.content&&album.json.content[photo.getID()]&&album.json.content[photo.getID()].nextPhoto==="")||lychee.viewMode) $("a#next").hide();
 			if ((album.json&&album.json.content&&album.json.content[photo.getID()]&&album.json.content[photo.getID()].previousPhoto==="")||lychee.viewMode) $("a#previous").hide();
 

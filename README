@@ -1,9 +1,0 @@
-Experimental fork of Lychee, a photo management system, that features a number of improvements, including:
-
-* Faster photo browsing thanks to caching.
-* Default sort order of albums is changed from new to old.
-* Preserves scroll position when changing from albums to album and vice versa
-* Better Unicode support for values read from the database
-
-
-See http://github.com/electerious/Lychee for more details on Lychee

@@ -8,17 +8,6 @@
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
-
-function debug_to_console( $data ) {
-
-	if ( is_array( $data ) )
-		$output = "<script>console.log( 'Debug Objects: " . implode( ',', $data) . "' );</script>";
-	else
-		$output = "<script>console.log( 'Debug Objects: " . $data . "' );</script>";
-
-	echo $output;
-}
-
 class Album extends Module {
 
 	private $database	= null;
@@ -94,10 +83,9 @@ class Album extends Module {
 			default:	$query	= Database::prepare($this->database, "SELECT * FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
 						$albums = $this->database->query($query);
 						$return = $albums->fetch_assoc();
-						$return['sysdate']		= date('d M. Y', $return['sysstamp']);
-						$return['password']		= ($return['password']=='' ? false : true);
-
-						$query = Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE album = '?' " . $this->settings['sorting'], array(LYCHEE_TABLE_PHOTOS, $this->albumIDs));
+						$return['sysdate']	= date('d M. Y', $return['sysstamp']);
+						$return['password']	= ($return['password']=='' ? false : true);
+						$query	= Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE album = '?' " . $this->settings['sorting'], array(LYCHEE_TABLE_PHOTOS, $this->albumIDs));
 						break;
 
 		}
@@ -112,7 +100,7 @@ class Album extends Module {
 			$photo['previousPhoto']		= $previousPhotoID;
 			$photo['nextPhoto']			= '';
 			$photo['thumbUrl']			= LYCHEE_URL_UPLOADS_THUMB . $photo['thumbUrl'];
-			
+
 			# Parse url
 			$photo['url'] = LYCHEE_URL_UPLOADS_BIG . $photo['url'];
 
@@ -214,7 +202,7 @@ class Album extends Module {
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
-		
+
 		return $return;
 
 	}
@@ -407,7 +395,7 @@ class Album extends Module {
 
 		# Parse
 		if (strlen($title)>50) $title = substr($title, 0, 50);
-		
+
 		# Execute query
 		$query	= Database::prepare($this->database, "UPDATE ? SET title = '?' WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $title, $this->albumIDs));
 		$result = $this->database->query($query);

@@ -5,10 +5,10 @@
  * @copyright	2014 by Tobias Reich
  */
 
-cache = null;
 photo = {
 
 	json: null,
+	cache: null,
 
 	getID: function() {
 
@@ -49,19 +49,26 @@ photo = {
 		});
 
 	},
-	
+
 	//preload the next photo for better response time
 	preloadNext: function(photoID) {
-		if(album.json &&
-		   album.json.content && 
+
+		var nextPhoto,
+			url;
+
+		if (album.json &&
+		   album.json.content &&
 		   album.json.content[photoID] &&
 		   album.json.content[photoID].nextPhoto!="") {
-			
-			var nextPhoto    = album.json.content[photoID].nextPhoto;
-			var url   = album.json.content[nextPhoto].url; 
-			cache     = new Image();
-			cache.src = url;
+
+			nextPhoto	= album.json.content[photoID].nextPhoto;
+			url			= album.json.content[nextPhoto].url;
+
+			photo.cache		= new Image();
+			photo.cache.src	= url;
+
 		}
+
 	},
 
 	parse: function() {
@@ -331,7 +338,7 @@ photo = {
 			if (data!==true) lychee.error(null, params, data);
 
 		});
-		
+
 		albums.refresh();
 
 	},
@@ -339,15 +346,13 @@ photo = {
 	setPublic: function(photoID, e) {
 
 		var params;
-		
+
 		if (photo.json.public==2) {
+
 			modal.show("Public Album", "This photo is located in a public album. To make this photo private or public, edit the visibility of the associated album.", [["Show Album", function() { lychee.goto(photo.json.original_album) }], ["Close", function() {}]]);
 			return false;
 
 		}
-		
-		albums.refresh();
-
 
 		if (visible.photo()) {
 
@@ -366,6 +371,8 @@ photo = {
 			if (data!==true) lychee.error(null, params, data);
 
 		});
+
+		albums.refresh();
 
 	},
 

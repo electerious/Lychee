@@ -17,13 +17,13 @@ albums = {
 
 		lychee.animate(".album:nth-child(-n+50), .photo:nth-child(-n+50)", "contentZoomOut");
 		lychee.animate(".divider", "fadeOut");
-		
+
 		startTime = new Date().getTime();
 
-	
-		if(albums.json == null) {
+		if(albums.json===null) {
+
 			lychee.api("getAlbums", function(data) {
-	
+
 				/* Smart Albums */
 				data.unsortedAlbum = {
 					id: 0,
@@ -34,7 +34,7 @@ albums = {
 					thumb1: data.unsortedThumb1,
 					thumb2: data.unsortedThumb2
 				};
-	
+
 				data.starredAlbum = {
 					id: "f",
 					title: "Starred",
@@ -44,7 +44,7 @@ albums = {
 					thumb1: data.starredThumb1,
 					thumb2: data.starredThumb2
 				};
-	
+
 				data.publicAlbum = {
 					id: "s",
 					title: "Public",
@@ -54,7 +54,7 @@ albums = {
 					thumb1: data.publicThumb1,
 					thumb2: data.publicThumb2
 				};
-	
+
 				data.recentAlbum = {
 					id: "r",
 					title: "Recent",
@@ -64,26 +64,30 @@ albums = {
 					thumb1: data.recentThumb1,
 					thumb2: data.recentThumb2
 				};
-	
+
 				albums.json = data;
-			
+
 				durationTime = (new Date().getTime() - startTime);
 				if (durationTime>300) waitTime = 0; else waitTime = 300 - durationTime;
 				if (!visible.albums()&&!visible.photo()&&!visible.album()) waitTime = 0;
 				if (visible.album()&&lychee.content.html()==="") waitTime = 0;
-		
+
 				setTimeout(function() {
 					view.header.mode("albums");
-						view.albums.init();
-						lychee.animate(".album:nth-child(-n+50), .photo:nth-child(-n+50)", "contentZoomIn");
-	
-					}, waitTime);
-					});
-			} else {
+					view.albums.init();
+					lychee.animate(".album:nth-child(-n+50), .photo:nth-child(-n+50)", "contentZoomIn");
+				}, waitTime);
+			});
+
+		} else {
+
+			setTimeout(function() {
 				view.header.mode("albums");
 				view.albums.init();
 				lychee.animate(".album:nth-child(-n+50), .photo:nth-child(-n+50)", "contentZoomIn");
-			}
+			}, 300);
+
+		}
 	},
 
 	parse: function(album) {
@@ -99,9 +103,11 @@ albums = {
 		}
 
 	},
-	
+
 	refresh: function() {
+
 		albums.json = null;
+
 	}
 
 };

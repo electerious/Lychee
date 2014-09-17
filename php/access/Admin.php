@@ -9,7 +9,6 @@
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 if (!defined('LYCHEE_ACCESS_ADMIN')) exit('Error: You are not allowed to access this area!');
 
-
 class Admin extends Access {
 
 	public function check($fn) {
@@ -74,6 +73,7 @@ class Admin extends Access {
 
 		$album = new Album($this->database, $this->plugins, $this->settings, null);
 		echo json_encode($album->getAll(false));
+
 	}
 
 	private function getAlbum() {

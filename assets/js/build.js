@@ -34,7 +34,7 @@ build = {
 			title = albumJSON.title,
 			typeThumb = "";
 
-		if (title != null && title.length>18) {
+		if (title!==null&&title.length>18) {
 			title = albumJSON.title.substr(0, 18) + "...";
 			longTitle = albumJSON.title;
 		}
@@ -76,7 +76,7 @@ build = {
 			longTitle = "",
 			title = photoJSON.title;
 
-		if (title != null && title.length>18) {
+		if (title!==null&&title.length>18) {
 			title = photoJSON.title.substr(0, 18) + "...";
 			longTitle = photoJSON.title;
 		}
