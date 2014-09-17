@@ -153,7 +153,12 @@ album = {
 							delete albums.json.content[id];
 						});
 
-					} else lychee.goto("");
+					} else {
+
+						albums.refresh();
+						lychee.goto("");
+
+					}
 
 					if (data!==true) lychee.error(null, params, data);
 

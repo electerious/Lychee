@@ -154,6 +154,8 @@ photo = {
 
 		});
 
+		albums.refresh();
+
 	},
 
 	delete: function(photoIDs) {
@@ -205,6 +207,8 @@ photo = {
 					if (data!==true) lychee.error(null, params, data);
 
 				});
+
+				albums.refresh();
 
 			}],
 			["", function() {}]
