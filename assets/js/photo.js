@@ -146,6 +146,8 @@ photo = {
 		if (!photoIDs) return false;
 		if (photoIDs instanceof Array===false) photoIDs = [photoIDs];
 
+		albums.refresh();
+
 		params = "duplicatePhoto&photoIDs=" + photoIDs;
 		lychee.api(params, function(data) {
 
@@ -153,8 +155,6 @@ photo = {
 			else album.load(album.getID(), false);
 
 		});
-
-		albums.refresh();
 
 	},
 
@@ -201,14 +201,14 @@ photo = {
 				// Only when search is not active
 				if (!visible.albums()) lychee.goto(album.getID());
 
+				albums.refresh();
+
 				params = "deletePhoto&photoIDs=" + photoIDs;
 				lychee.api(params, function(data) {
 
 					if (data!==true) lychee.error(null, params, data);
 
 				});
-
-				albums.refresh();
 
 			}],
 			["", function() {}]
@@ -312,6 +312,8 @@ photo = {
 
 		});
 
+		albums.refresh();
+
 		params = "setPhotoAlbum&photoIDs=" + photoIDs + "&albumID=" + albumID;
 		lychee.api(params, function(data) {
 
@@ -336,14 +338,14 @@ photo = {
 			view.album.content.star(id);
 		});
 
+		albums.refresh();
+
 		params = "setPhotoStar&photoIDs=" + photoIDs;
 		lychee.api(params, function(data) {
 
 			if (data!==true) lychee.error(null, params, data);
 
 		});
-
-		albums.refresh();
 
 	},
 
@@ -369,14 +371,14 @@ photo = {
 		album.json.content[photoID].public = (album.json.content[photoID].public==0) ? 1 : 0;
 		view.album.content.public(photoID);
 
+		albums.refresh();
+
 		params = "setPhotoPublic&photoID=" + photoID;
 		lychee.api(params, function(data) {
 
 			if (data!==true) lychee.error(null, params, data);
 
 		});
-
-		albums.refresh();
 
 	},
 
