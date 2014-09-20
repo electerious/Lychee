@@ -53,12 +53,11 @@ view = {
 
 			var albumID = album.getID();
 
-			lychee.header.removeClass("view");
-
 			switch (mode) {
 
 				case "albums":
 
+					lychee.header.removeClass("view");
 					$("#tools_album, #tools_photo").hide();
 					$("#tools_albums").show();
 
@@ -66,6 +65,7 @@ view = {
 
 				case "album":
 
+					lychee.header.removeClass("view");
 					$("#tools_albums, #tools_photo").hide();
 					$("#tools_album").show();
 
@@ -84,6 +84,7 @@ view = {
 
 				case "photo":
 
+					lychee.header.addClass("view");
 					$("#tools_albums, #tools_album").hide();
 					$("#tools_photo").show();
 
