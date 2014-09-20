@@ -53,16 +53,22 @@ view = {
 
 			var albumID = album.getID();
 
+			lychee.header.removeClass("view");
+
 			switch (mode) {
+
 				case "albums":
-					lychee.header.removeClass("view");
+
 					$("#tools_album, #tools_photo").hide();
 					$("#tools_albums").show();
+
 					break;
+
 				case "album":
-					lychee.header.removeClass("view");
+
 					$("#tools_albums, #tools_photo").hide();
 					$("#tools_album").show();
+
 					album.json.content === false ? $("#button_archive").hide() : $("#button_archive").show();
 					if (lychee.publicMode&&album.json.downloadable==="0") $("#button_archive").hide();
 					if (albumID==="s"||albumID==="f"||albumID==="r") {
@@ -73,11 +79,14 @@ view = {
 					} else {
 						$("#button_info_album, #button_trash_album, #button_share_album").show();
 					}
+
 					break;
+
 				case "photo":
-					lychee.header.addClass("view");
+
 					$("#tools_albums, #tools_album").hide();
 					$("#tools_photo").show();
+
 					break;
 
 			}
