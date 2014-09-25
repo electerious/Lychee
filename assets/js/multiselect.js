@@ -193,9 +193,6 @@ multiselect = {
 
 	close: function() {
 
-		// Hide selection from the select all shortcut
-		window.getSelection().removeAllRanges();
-
 		multiselect.stopResize();
 
 		multiselect.position.top	= null;
