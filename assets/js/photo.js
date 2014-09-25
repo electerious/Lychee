@@ -46,7 +46,7 @@ photo = {
 			lychee.imageview.show();
 			setTimeout(function() {
 				lychee.content.show();
-				if (!mobileBrowser()) photo.preloadNext(photoID,albumID);
+				if (!mobileBrowser()) photo.preloadNext(photoID, albumID);
 			}, 300);
 
 		});
@@ -67,8 +67,9 @@ photo = {
 			nextPhoto	= album.json.content[photoID].nextPhoto;
 			url			= album.json.content[nextPhoto].url;
 
-			photo.cache		= new Image();
-			photo.cache.src	= url;
+			photo.cache			= new Image();
+			photo.cache.src		= url;
+			photo.cache.onload	= function() { photo.cache = null };
 
 		}
 
