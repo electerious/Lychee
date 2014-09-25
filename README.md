@@ -50,6 +50,7 @@ Here's a list of all available Plugins and Extensions:
 | Name | Description | |
 |:-----------|:------------|:------------|
 | lycheesync | Sync Lychee with any directory containing photos | [More &#187;](https://github.com/GustavePate/lycheesync) |
+| lycheeupload | Upload photos to Lychee via SSH | [More &#187;](https://github.com/r0x0r/lycheeupload) |
 | Jekyll | Liquid tag for Jekyll sites that allows embedding Lychee albums | [More &#187;](https://gist.github.com/tobru/9171700) |
 | lychee-redirect | Redirect from an album-name to a Lychee-album | [More &#187;](https://github.com/electerious/lychee-redirect) |
 | lychee-watermark | Adds a second watermarked photo when uploading images | [More &#187;](https://github.com/electerious/lychee-watermark) |
@@ -73,7 +74,7 @@ I am working hard on continuously developing and maintaining Lychee. Please cons
 
 (MIT License)
 
-Copyright (C) 2014 [Tobias Reich](http://electerious.com)  
+Copyright (C) 2014 [Tobias Reich](http://electerious.com)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
