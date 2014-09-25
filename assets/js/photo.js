@@ -46,7 +46,7 @@ photo = {
 			lychee.imageview.show();
 			setTimeout(function() {
 				lychee.content.show();
-				if (!mobileBrowser()) photo.preloadNext(photoID, albumID);
+				photo.preloadNext(photoID, albumID);
 			}, 300);
 
 		});
@@ -58,6 +58,10 @@ photo = {
 
 		var nextPhoto,
 			url;
+
+		// Never preload on mobile devices with bare RAM and
+		// mostly mobile internet
+		if (!mobileBrowser()) return false;
 
 		if (album.json &&
 		   album.json.content &&
