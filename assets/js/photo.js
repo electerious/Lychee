@@ -44,7 +44,10 @@ photo = {
 			view.photo.init();
 
 			lychee.imageview.show();
-			setTimeout(function() { lychee.content.show() }, 300);
+			setTimeout(function() {
+				lychee.content.show();
+				if (!mobileBrowser()) photo.preloadNext(photoID,albumID);
+			}, 300);
 
 		});
 
