@@ -99,6 +99,7 @@ $(document).ready(function(){
 		})
 		.bind(['i', 'ctrl+i'], function() {
 			if (visible.infobox()) view.infobox.hide();
+			else if (visible.multiselect()) return false;
 			else if (visible.infoboxbutton()) view.infobox.show();
 		})
 		.bind(['command+backspace', 'ctrl+backspace'], function() {
