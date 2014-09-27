@@ -99,7 +99,8 @@ $imagick = extension_loaded('imagick');
 if ($imagick===false) $imagick = '-';
 
 if ($imagick===true) $imagickVersion = @Imagick::getVersion();
-if (!isset($imagickVersion)||$imagickVersion==='') $imagickVersion = '-';
+if (!isset($imagickVersion, $imagickVersion['versionNumber'])||$imagickVersion==='') $imagickVersion = '-';
+else $imagickVersion = $imagickVersion['versionNumber'];
 
 $gdVersion = gd_info();
 
@@ -111,7 +112,7 @@ echo('PHP Version:     ' . floatval(phpversion()) . PHP_EOL);
 echo('MySQL Version:   ' . $database->server_version . PHP_EOL);
 echo('Imagick:         ' . $imagick . PHP_EOL);
 echo('Imagick Active:  ' . $settings['imagick'] . PHP_EOL);
-echo('Imagick Version: ' . $imagickVersion['versionNumber'] . PHP_EOL);
+echo('Imagick Version: ' . $imagickVersion . PHP_EOL);
 echo('GD Version:      ' . $gdVersion['GD Version'] . PHP_EOL);
 
 ?>
