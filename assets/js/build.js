@@ -195,7 +195,7 @@ build = {
 		modal +=		"<h1><a class='icon-lock'></a> Sign In</h1>";
 		modal +=		"<a class='close icon-remove-sign'></a>";
 		modal +=		"<div class='sign_in'>";
-		modal +=			"<input id='username' type='text' value='' placeholder='username'>";
+		modal +=			"<input id='username' type='text' value='' placeholder='username' autocapitalize='off' autocorrect='off'>";
 		modal +=			"<input id='password' type='password' value='' placeholder='password'>";
 		modal +=		"</div>";
 		modal +=		"<div id='version'>Version " + lychee.version + "<span> &#8211; <a target='_blank' href='" + lychee.updateURL + "'>Update available!</a><span></div>";
