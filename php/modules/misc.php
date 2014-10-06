@@ -16,7 +16,7 @@ function search($database, $settings, $term) {
 	$return['albums'] = '';
 
 	// Photos
-	$query	= Database::prepare($database, "SELECT id, title, tags, public, star, album, thumbUrl FROM ? WHERE title LIKE '%?%' OR description LIKE '%%' OR tags LIKE '%?%'", array(LYCHEE_TABLE_PHOTOS, $term, $term, $term));
+	$query	= Database::prepare($database, "SELECT id, title, tags, public, star, album, thumbUrl FROM ? WHERE title LIKE '%?%' OR description LIKE '%?%' OR tags LIKE '%?%'", array(LYCHEE_TABLE_PHOTOS, $term, $term, $term));
 	$result	= $database->query($query);
 	while($row = $result->fetch_assoc()) {
 		$return['photos'][$row['id']]				= $row;
