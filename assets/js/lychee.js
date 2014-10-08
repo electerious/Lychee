@@ -119,13 +119,22 @@ var lychee = {
 
 		params = "login&user=" + user + "&password=" + password;
 		lychee.api(params, function(data) {
+
 			if (data===true) {
-				localStorage.setItem("lychee_username", user);
+
+				// Use 'try' to catch a thrown error when Safari is in private mode
+				try { localStorage.setItem("lychee_username", user); }
+
 				window.location.reload();
+
 			} else {
+
+				// Show error and reactive button
 				$("#password").val("").addClass("error").focus();
 				$(".message .button.active").removeClass("pressed");
+
 			}
+
 		});
 
 	},
