@@ -46,7 +46,7 @@ photo = {
 			lychee.imageview.show();
 			setTimeout(function() {
 				lychee.content.show();
-				photo.preloadNext(photoID, albumID);
+				//photo.preloadNext(photoID, albumID);
 			}, 300);
 
 		});
