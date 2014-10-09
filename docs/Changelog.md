@@ -5,6 +5,7 @@ Released ??, 2014
 - `New` Caching for albums (Thanks @r0x0r, #232)
 - `New` Preload next photo (Thanks @r0x0r, #185, #232)
 - `New` Save scroll position of albums (Thanks @r0x0r, #232)
+- `New` Added Dockerfile (@renfredxh, #236)
 - `Improved` Newest album on the top (Thanks @r0x0r, #232)
 - `Fixed` Login in private mode (Safari)
 - `Fixed` Drag & Drop with open photo
