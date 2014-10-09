@@ -124,6 +124,7 @@ var lychee = {
 
 				// Use 'try' to catch a thrown error when Safari is in private mode
 				try { localStorage.setItem("lychee_username", user); }
+				catch (err) {}
 
 				window.location.reload();
 
