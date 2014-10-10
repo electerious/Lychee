@@ -61,7 +61,7 @@ photo = {
 
 		// Never preload on mobile devices with bare RAM and
 		// mostly mobile internet
-		if (!mobileBrowser()) return false;
+		if (mobileBrowser()) return false;
 
 		if (album.json &&
 		   album.json.content &&
