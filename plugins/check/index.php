@@ -69,6 +69,7 @@ if (!isset($settings['checkForUpdates'])||($settings['checkForUpdates']!='0'&&$s
 
 # Permissions
 if (hasPermissions(LYCHEE_UPLOADS_BIG)===false)			$error .= ('Error 500: Wrong permissions for \'uploads/big\' (777 required)' . PHP_EOL);
+if (hasPermissions(LYCHEE_UPLOADS_MEDIUM)===false)		$error .= ('Error 500: Wrong permissions for \'uploads/medium\' (777 required)' . PHP_EOL);
 if (hasPermissions(LYCHEE_UPLOADS_THUMB)===false)		$error .= ('Error 501: Wrong permissions for \'uploads/thumb\' (777 required)' . PHP_EOL);
 if (hasPermissions(LYCHEE_UPLOADS_IMPORT)===false)		$error .= ('Error 502: Wrong permissions for \'uploads/import\' (777 required)' . PHP_EOL);
 if (hasPermissions(LYCHEE_UPLOADS)===false)				$error .= ('Error 503: Wrong permissions for \'uploads/\' (777 required)' . PHP_EOL);
