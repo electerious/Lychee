@@ -4,6 +4,7 @@
   "description": "Self-hosted photo-management done right.",
   "authors": "Tobias Reich <tobias.reich.ich@gmail.com>",
   "license": "MIT",
+  "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/electerious/Lychee.git"
@@ -14,7 +15,7 @@
     "gulp-concat": "^2.4.1",
     "gulp-load-plugins": "^0.7.0",
     "gulp-minify-css": "^0.3.10",
-    "gulp-sass": "^1.0.0",
+    "gulp-sass": "^1.1.0",
     "gulp-uglify": "^1.0.1"
   }
 }

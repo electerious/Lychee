@@ -1,5 +1,6 @@
 {
   "name": "Lychee",
+  "private": true,
   "dependencies": {
     "jQuery": "~2.1.1",
     "js-md5": "~1.1.0",
