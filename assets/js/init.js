@@ -9,6 +9,21 @@ $(document).ready(function(){
 	/* Event Name */
 	var event_name = (mobileBrowser()) ? "touchend" : "click";
 
+	// normalize pageX, pageY for touchend event
+	function normalizeTouchend(e) {
+		if (e.type === "touchend" && (e.pageX==null||e.pageY==null)) {
+			// var touches = e.originalEvent.touches||e.originalEvent.changedTouches;
+			var touches = e.originalEvent.changedTouches;
+			if (touches.length>0) {
+				e.pageX = touches[0].pageX;
+				e.pageY = touches[0].pageY;
+			}
+			e.preventDefault();
+		}
+
+		return e;
+	}
+
 	/* Disable ContextMenu */
 	$(document).bind("contextmenu", function(e) { e.preventDefault() });
 
@@ -24,16 +39,16 @@ $(document).ready(function(){
 	$("#button_signin").on(event_name, lychee.loginDialog);
 	$("#button_settings").on("click", contextMenu.settings);
 	$("#button_share").on(event_name, function(e) {
-		if (photo.json.public==1||photo.json.public==2) contextMenu.sharePhoto(photo.getID(), e);
+		if (photo.json.public==1||photo.json.public==2) contextMenu.sharePhoto(photo.getID(), normalizeTouchend(e));
 		else photo.setPublic(photo.getID(), e);
 	});
 	$("#button_share_album").on(event_name, function(e) {
-		if (album.json.public==1) contextMenu.shareAlbum(album.getID(), e);
-		else album.setPublic(album.getID(), e);
+		if (album.json.public==1) contextMenu.shareAlbum(album.getID(), normalizeTouchend(e));
+		else album.setPublic(album.getID(), normalizeTouchend(e));
 	});
-	$("#button_more").on(event_name, function(e) { contextMenu.photoMore(photo.getID(), e) });
+	$("#button_more").on(event_name, function(e) { contextMenu.photoMore(photo.getID(), normalizeTouchend(e)) });
 	$("#button_trash_album").on(event_name, function() { album.delete([album.getID()]) });
-	$("#button_move").on(event_name, function(e) { contextMenu.move([photo.getID()], e) });
+	$("#button_move").on(event_name, function(e) { contextMenu.move([photo.getID()], normalizeTouchend(e)) });
 	$("#button_trash").on(event_name, function() { photo.delete([photo.getID()]) });
 	$("#button_info_album").on(event_name, function() { view.infobox.show() });
 	$("#button_info").on(event_name, function() { view.infobox.show() });
@@ -166,11 +181,11 @@ $(document).ready(function(){
 		.on(event_name, ".message .button:last", function() { if (modal.fns!==null) modal.fns[1](); if (!visible.signin()) modal.close() })
 
 		/* Add Dialog */
-		.on(event_name, ".button_add", function(e) { contextMenu.add(e) })
+		.on(event_name, ".button_add", function(e) { contextMenu.add(normalizeTouchend(e)) })
 
 		/* Context Menu */
-		.on("contextmenu", ".photo", function(e) { contextMenu.photo(photo.getID(), e) })
-		.on("contextmenu", ".album", function(e) { contextMenu.album(album.getID(), e) })
+		.on("contextmenu", ".photo", function(e) { contextMenu.photo(photo.getID(), normalizeTouchend(e)) })
+		.on("contextmenu", ".album", function(e) { contextMenu.album(album.getID(), normalizeTouchend(e)) })
 		.on(event_name, ".contextmenu_bg", contextMenu.close)
 		.on("contextmenu", ".contextmenu_bg", contextMenu.close)
 
