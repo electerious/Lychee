@@ -27,4 +27,4 @@ RUN chown www-data:www-data /app -R
 RUN chmod -R 777 uploads/ data/
 
 EXPOSE 80
-CMD scripts/start
+CMD src/commands/start

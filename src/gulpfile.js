@@ -7,19 +7,19 @@ var paths = {
 		'bower_components/js-md5/js/md5.min.js',
 		'bower_components/mousetrap/mousetrap.min.js',
 		'bower_components/mousetrap/plugins/global-bind/mousetrap-global-bind.min.js',
-		'../assets/js/_frameworks.js',
-		'../assets/js/build.js',
-		'../assets/js/view/main.js'
+		'../src/scripts/_frameworks.js',
+		'../src/scripts/build.js',
+		'../src/scripts/view/main.js'
 	],
 	js: [
 		'bower_components/jQuery/dist/jquery.min.js',
 		'bower_components/js-md5/js/md5.min.js',
 		'bower_components/mousetrap/mousetrap.min.js',
 		'bower_components/mousetrap/plugins/global-bind/mousetrap-global-bind.min.js',
-		'../assets/js/*.js'
+		'../src/scripts/*.js'
 	],
 	css: [
-		'../assets/scss/main.scss'
+		'../src/styles/main.scss'
 	]
 }
 
@@ -35,7 +35,7 @@ gulp.task('view', function() {
 	gulp.src(paths.view)
 		.pipe(plugins.concat('view.js', {newLine: "\n"}))
 		.pipe(plugins.uglify())
-		.pipe(gulp.dest('../assets/min/'));
+		.pipe(gulp.dest('../dist/'));
 
 });
 
@@ -45,7 +45,7 @@ gulp.task('js', function() {
 		.pipe(plugins.concat('main.js', {newLine: "\n"}))
 		.pipe(plugins.uglify())
 		.on('error', catchError)
-		.pipe(gulp.dest('../assets/min/'));
+		.pipe(gulp.dest('../dist/'));
 
 });
 
@@ -57,7 +57,7 @@ gulp.task('css', function() {
 		.pipe(plugins.concat('main.css', {newLine: "\n"}))
 		.pipe(plugins.autoprefixer('last 4 versions', '> 5%'))
 		.pipe(plugins.minifyCss())
-		.pipe(gulp.dest('../assets/min/'));
+		.pipe(gulp.dest('../dist/'));
 
 });
 

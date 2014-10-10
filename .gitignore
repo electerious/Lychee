@@ -1,16 +1,16 @@
-build/node_modules/
-build/bower_components/
+src/node_modules/
+src/bower_components/
 
-php/config.php
 data/config.php
 
 uploads/import/*
 uploads/big/*
 uploads/thumb/*
 plugins/*
-etc/*
 
 !uploads/import/index.html
 !uploads/big/index.html
 !uploads/thumb/index.html
+
 !plugins/check/
+!plugins/displaylog/

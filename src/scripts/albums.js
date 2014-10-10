@@ -93,13 +93,13 @@ albums = {
 	parse: function(album) {
 
 		if (album.password&&lychee.publicMode) {
-			album.thumb0 = "assets/img/password.svg";
-			album.thumb1 = "assets/img/password.svg";
-			album.thumb2 = "assets/img/password.svg";
+			album.thumb0 = "src/images/password.svg";
+			album.thumb1 = "src/images/password.svg";
+			album.thumb2 = "src/images/password.svg";
 		} else {
-			if (!album.thumb0) album.thumb0 = "assets/img/no_images.svg";
-			if (!album.thumb1) album.thumb1 = "assets/img/no_images.svg";
-			if (!album.thumb2) album.thumb2 = "assets/img/no_images.svg";
+			if (!album.thumb0) album.thumb0 = "src/images/no_images.svg";
+			if (!album.thumb1) album.thumb1 = "src/images/no_images.svg";
+			if (!album.thumb2) album.thumb2 = "src/images/no_images.svg";
 		}
 
 	},
