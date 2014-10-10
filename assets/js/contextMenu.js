@@ -8,7 +8,19 @@
 contextMenu = {
 
 	fns: null,
+	// normalize pageX, pageY for touchend event
+	normalizeTouchend: function(e) {
+		if (e.type === "touchend" && (e.pageX==null||e.pageY==null)) {
+			var touches = e.originalEvent.changedTouches;
+			if (touches.length>0) {
+				e.pageX = touches[0].pageX;
+				e.pageY = touches[0].pageY;
+			}
+			e.preventDefault();
+		}
 
+		return e;
+	},
 	show: function(items, mouse_x, mouse_y, orientation) {
 
 		contextMenu.close();
@@ -47,6 +59,7 @@ contextMenu = {
 	},
 
 	add: function(e) {
+		e = contextMenu.normalizeTouchend(e);
 
 		var mouse_x = e.pageX,
 			mouse_y = e.pageY - $(document).scrollTop(),
@@ -77,6 +90,7 @@ contextMenu = {
 	},
 
 	settings: function(e) {
+		e = contextMenu.normalizeTouchend(e);
 
 		var mouse_x = e.pageX,
 			mouse_y = e.pageY - $(document).scrollTop(),
@@ -109,6 +123,7 @@ contextMenu = {
 	},
 
 	album: function(albumID, e) {
+		e = contextMenu.normalizeTouchend(e);
 
 		var mouse_x = e.pageX,
 			mouse_y = e.pageY - $(document).scrollTop(),
@@ -133,6 +148,7 @@ contextMenu = {
 	},
 
 	albumMulti: function(albumIDs, e) {
+		e = contextMenu.normalizeTouchend(e);
 
 		var mouse_x = e.pageX,
 			mouse_y = e.pageY - $(document).scrollTop(),
@@ -155,6 +171,7 @@ contextMenu = {
 	},
 
 	photo: function(photoID, e) {
+		e = contextMenu.normalizeTouchend(e);
 
 		var mouse_x = e.pageX,
 			mouse_y = e.pageY - $(document).scrollTop(),
@@ -186,6 +203,7 @@ contextMenu = {
 	},
 
 	photoMulti: function(photoIDs, e) {
+		e = contextMenu.normalizeTouchend(e);
 
 		var mouse_x = e.pageX,
 			mouse_y = e.pageY - $(document).scrollTop(),
@@ -217,6 +235,7 @@ contextMenu = {
 	},
 
 	photoMore: function(photoID, e) {
+		e = contextMenu.normalizeTouchend(e);
 
 		var mouse_x = e.pageX,
 			mouse_y = e.pageY - $(document).scrollTop(),
@@ -235,6 +254,7 @@ contextMenu = {
 	},
 
 	move: function(photoIDs, e, orientation) {
+		e = contextMenu.normalizeTouchend(e);
 
 		var mouse_x = e.pageX,
 			mouse_y = e.pageY - $(document).scrollTop(),
@@ -267,6 +287,7 @@ contextMenu = {
 	},
 
 	sharePhoto: function(photoID, e) {
+		e = contextMenu.normalizeTouchend(e);
 
 		var mouse_x = e.pageX,
 			mouse_y = e.pageY,
@@ -305,6 +326,7 @@ contextMenu = {
 	},
 
 	shareAlbum: function(albumID, e) {
+		e = contextMenu.normalizeTouchend(e);
 
 		var mouse_x = e.pageX,
 			mouse_y = e.pageY,
