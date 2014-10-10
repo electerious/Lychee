@@ -1,6 +1,6 @@
 ## v2.6.3
 
-Released ??, 2014
+Released October 10, 2014
 
 - `New` Caching for albums (Thanks @r0x0r, #232)
 - `New` Save scroll position of albums (Thanks @r0x0r, #232)
