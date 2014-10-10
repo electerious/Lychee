@@ -44,9 +44,11 @@ class Photo extends Module {
 		self::dependencies(isset($this->database));
 
 		# Check permissions
-		if (hasPermissions(LYCHEE_UPLOADS_BIG)===false||hasPermissions(LYCHEE_UPLOADS_THUMB)===false) {
-			Log::error($this->database, __METHOD__, __LINE__, 'Wrong permissions in uploads/');
-			exit('Error: Wrong permissions in uploads-folder!');
+		if (hasPermissions(LYCHEE_UPLOADS_BIG)===false||
+			hasPermissions(LYCHEE_UPLOADS_THUMB)===false||
+			hasPermissions(LYCHEE_UPLOADS_MEDIUM)===false) {
+				Log::error($this->database, __METHOD__, __LINE__, 'Wrong permissions in uploads/');
+				exit('Error: Wrong permissions in uploads-folder!');
 		}
 
 		# Call plugins
@@ -169,6 +171,10 @@ class Photo extends Module {
 					exit('Error: Could not create thumbnail for photo!');
 				}
 
+				# Create Medium
+				if ($this->createMedium($path, $photo_name, $info['width'], $info['height'])) $medium = true;
+				else $medium = false;
+
 				# Set thumb url
 				$path_thumb = md5($id) . '.jpeg';
 
@@ -235,12 +241,11 @@ class Photo extends Module {
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
 
-		$info		= getimagesize($url);
 		$photoName	= explode(".", $filename);
 		$newUrl		= LYCHEE_UPLOADS_THUMB . $photoName[0] . '.jpeg';
 		$newUrl2x	= LYCHEE_UPLOADS_THUMB . $photoName[0] . '@2x.jpeg';
 
-		# create thumbnails with Imagick
+		# Create thumbnails with Imagick
 		if(extension_loaded('imagick')&&$this->settings['imagick']==='1') {
 
 			# Read image
@@ -265,6 +270,9 @@ class Photo extends Module {
 			$thumb2x->destroy();
 
 		} else {
+
+			# Get size of photo
+			$info = getimagesize($url);
 
 			# Set position and size
 			$thumb = imagecreatetruecolor($width, $height);
@@ -307,6 +315,48 @@ class Photo extends Module {
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
+		return true;
+
+	}
+
+	private function createMedium($url, $filename, $width, $height, $newWidth = 1920, $newHeight = 1080) {
+
+		# Check dependencies
+		self::dependencies(isset($this->database, $this->settings, $url, $filename, $width, $height));
+
+		# Call plugins
+		$this->plugins(__METHOD__, 0, func_get_args());
+
+		# Is photo big enough?
+		# is Imagick installed?
+		if (($width>$newWidth||$height>$newHeight)&&
+			(extension_loaded('imagick')&&$this->settings['imagick']==='1')) {
+
+			# $info = getimagesize($url);
+			$newUrl = LYCHEE_UPLOADS_MEDIUM . $filename;
+
+			# Read image
+			$medium = new Imagick();
+			$medium->readImage($url);
+			$medium->scaleImage($newWidth, $newHeight, true);
+			$medium->writeImage($newUrl);
+			$medium->clear();
+			$medium->destroy();
+
+			$error = false;
+
+		} else {
+
+			# Photo too small or
+			# Imagick not installed
+			$error = true;
+
+		}
+
+		# Call plugins
+		$this->plugins(__METHOD__, 1, func_get_args());
+
+		if ($error===true) return false;
 		return true;
 
 	}
