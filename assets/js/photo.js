@@ -8,6 +8,7 @@
 photo = {
 
 	json: null,
+	cache: null,
 
 	getID: function() {
 
@@ -43,9 +44,38 @@ photo = {
 			view.photo.init();
 
 			lychee.imageview.show();
-			setTimeout(function() { lychee.content.show() }, 300);
+			setTimeout(function() {
+				lychee.content.show();
+				//photo.preloadNext(photoID, albumID);
+			}, 300);
 
 		});
+
+	},
+
+	//preload the next photo for better response time
+	preloadNext: function(photoID) {
+
+		var nextPhoto,
+			url;
+
+		// Never preload on mobile devices with bare RAM and
+		// mostly mobile internet
+		if (mobileBrowser()) return false;
+
+		if (album.json &&
+		   album.json.content &&
+		   album.json.content[photoID] &&
+		   album.json.content[photoID].nextPhoto!="") {
+
+			nextPhoto	= album.json.content[photoID].nextPhoto;
+			url			= album.json.content[nextPhoto].url;
+
+			photo.cache			= new Image();
+			photo.cache.src		= url;
+			photo.cache.onload	= function() { photo.cache = null };
+
+		}
 
 	},
 
@@ -124,6 +154,8 @@ photo = {
 		if (!photoIDs) return false;
 		if (photoIDs instanceof Array===false) photoIDs = [photoIDs];
 
+		albums.refresh();
+
 		params = "duplicatePhoto&photoIDs=" + photoIDs;
 		lychee.api(params, function(data) {
 
@@ -176,6 +208,8 @@ photo = {
 
 				// Only when search is not active
 				if (!visible.albums()) lychee.goto(album.getID());
+
+				albums.refresh();
 
 				params = "deletePhoto&photoIDs=" + photoIDs;
 				lychee.api(params, function(data) {
@@ -286,6 +320,8 @@ photo = {
 
 		});
 
+		albums.refresh();
+
 		params = "setPhotoAlbum&photoIDs=" + photoIDs + "&albumID=" + albumID;
 		lychee.api(params, function(data) {
 
@@ -309,6 +345,8 @@ photo = {
 			album.json.content[id].star = (album.json.content[id].star==0) ? 1 : 0;
 			view.album.content.star(id);
 		});
+
+		albums.refresh();
 
 		params = "setPhotoStar&photoIDs=" + photoIDs;
 		lychee.api(params, function(data) {
@@ -340,6 +378,8 @@ photo = {
 
 		album.json.content[photoID].public = (album.json.content[photoID].public==0) ? 1 : 0;
 		view.album.content.public(photoID);
+
+		albums.refresh();
 
 		params = "setPhotoPublic&photoID=" + photoID;
 		lychee.api(params, function(data) {

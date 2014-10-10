@@ -65,6 +65,8 @@ upload = {
 
 							}
 
+							albums.refresh();
+
 							if (album.getID()===false) lychee.goto("0");
 							else album.load(albumID);
 
@@ -259,6 +261,8 @@ upload = {
 							upload.close();
 							upload.notify("Import complete");
 
+							albums.refresh();
+
 							if (album.getID()===false) lychee.goto("0");
 							else album.load(albumID);
 
@@ -305,6 +309,8 @@ upload = {
 
 						upload.close();
 						upload.notify("Import complete");
+
+						albums.refresh();
 
 						if (data==="Notice: Import only contains albums!") {
 							if (visible.albums()) lychee.load();
@@ -364,6 +370,8 @@ upload = {
 
 							upload.close();
 							upload.notify("Import complete");
+
+							albums.refresh();
 
 							if (album.getID()===false) lychee.goto("0");
 							else album.load(albumID);

@@ -54,15 +54,21 @@ view = {
 			var albumID = album.getID();
 
 			switch (mode) {
+
 				case "albums":
+
 					lychee.header.removeClass("view");
 					$("#tools_album, #tools_photo").hide();
 					$("#tools_albums").show();
+
 					break;
+
 				case "album":
+
 					lychee.header.removeClass("view");
 					$("#tools_albums, #tools_photo").hide();
 					$("#tools_album").show();
+
 					album.json.content === false ? $("#button_archive").hide() : $("#button_archive").show();
 					if (lychee.publicMode&&album.json.downloadable==="0") $("#button_archive").hide();
 					if (albumID==="s"||albumID==="f"||albumID==="r") {
@@ -73,11 +79,15 @@ view = {
 					} else {
 						$("#button_info_album, #button_trash_album, #button_share_album").show();
 					}
+
 					break;
+
 				case "photo":
+
 					lychee.header.addClass("view");
 					$("#tools_albums, #tools_album").hide();
 					$("#tools_photo").show();
+
 					break;
 
 			}
@@ -122,26 +132,31 @@ view = {
 
 		content: {
 
+			scrollPosition: 0,
+
 			init: function() {
 
 				var smartData = "",
 					albumsData = "";
 
-				/*  Smart Albums */
+				/* Smart Albums */
 				albums.parse(albums.json.unsortedAlbum);
 				albums.parse(albums.json.publicAlbum);
 				albums.parse(albums.json.starredAlbum);
 				albums.parse(albums.json.recentAlbum);
 				if (!lychee.publicMode) smartData = build.divider("Smart Albums") + build.album(albums.json.unsortedAlbum) + build.album(albums.json.starredAlbum) + build.album(albums.json.publicAlbum) + build.album(albums.json.recentAlbum);
 
-				/*  Albums */
+				/* Albums */
 				if (albums.json.content) {
 
-					if (!lychee.publicMode) albumsData = build.divider("Albums");
 					$.each(albums.json.content, function() {
 						albums.parse(this);
-						albumsData += build.album(this);
+
+						//display albums in reverse order
+						albumsData = build.album(this) + albumsData;
 					});
+
+					if (!lychee.publicMode) albumsData = build.divider("Albums") + albumsData;
 
 				}
 
@@ -154,6 +169,11 @@ view = {
 
 				$("img[data-type!='nonretina']").retina();
 
+				/* Restore scroll position */
+				if (view.albums.content.scrollPosition!==null) {
+					$("html, body").scrollTop(view.albums.content.scrollPosition);
+				}
+
 			},
 
 			title: function(albumID) {
@@ -163,7 +183,7 @@ view = {
 					title = albums.json.content[albumID].title;
 
 				if (albums.json.content[albumID].password) prefix = "<span class='icon-lock'></span> ";
-				if (title.length>18) {
+				if (title!==null&&title.length>18) {
 					longTitle = title;
 					title = title.substr(0, 18) + "...";
 				}
@@ -251,6 +271,10 @@ view = {
 
 				$("img[data-type!='svg']").retina();
 
+				/* Save and reset scroll position */
+				view.albums.content.scrollPosition = $(document).scrollTop();
+				$("html, body").scrollTop(0);
+
 			},
 
 			title: function(photoID) {
@@ -258,7 +282,7 @@ view = {
 				var longTitle = "",
 					title = album.json.content[photoID].title;
 
-				if (title.length>18) {
+				if (title!==null&&title.length>18) {
 					longTitle = title;
 					title = title.substr(0, 18) + "...";
 				}

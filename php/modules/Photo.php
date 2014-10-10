@@ -161,7 +161,7 @@ class Photo extends Module {
 				}
 
 				# Set original date
-				if ($info['takestamp']!=='') @touch($path, $info['takestamp']);
+				if ($info['takestamp']!==''&&$info['takestamp']!==0) @touch($path, $info['takestamp']);
 
 				# Create Thumb
 				if (!$this->createThumb($path, $photo_name)) {

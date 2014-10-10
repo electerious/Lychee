@@ -99,6 +99,7 @@ $(document).ready(function(){
 		})
 		.bind(['i', 'ctrl+i'], function() {
 			if (visible.infobox()) view.infobox.hide();
+			else if (visible.multiselect()) return false;
 			else if (visible.infoboxbutton()) view.infobox.show();
 		})
 		.bind(['command+backspace', 'ctrl+backspace'], function() {
@@ -182,11 +183,20 @@ $(document).ready(function(){
 		.on(event_name, ".upload_message a.close", upload.close)
 		.on("dragover", function(e) { e.preventDefault(); }, false)
 		.on("drop", function(e) {
+
 			e.stopPropagation();
 			e.preventDefault();
+
+			// Close open overlays or views which are correlating with the upload
+			if (visible.photo()) lychee.goto(album.getID());
+			if (visible.contextMenu()) contextMenu.close();
+
+			// Detect if dropped item is a file or a link
 			if (e.originalEvent.dataTransfer.files.length>0)				upload.start.local(e.originalEvent.dataTransfer.files);
 			else if (e.originalEvent.dataTransfer.getData('Text').length>3)	upload.start.url(e.originalEvent.dataTransfer.getData('Text'));
+
 			return true;
+
 		});
 
 	/* Init */

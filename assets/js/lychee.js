@@ -8,8 +8,8 @@
 var lychee = {
 
 	title: "",
-	version: "2.6.2",
-	version_code: "020602",
+	version: "2.6.3",
+	version_code: "020603",
 
 	api_path: "php/api.php",
 	update_path: "http://lychee.electerious.com/version/index.php",
@@ -119,13 +119,23 @@ var lychee = {
 
 		params = "login&user=" + user + "&password=" + password;
 		lychee.api(params, function(data) {
+
 			if (data===true) {
-				localStorage.setItem("lychee_username", user);
+
+				// Use 'try' to catch a thrown error when Safari is in private mode
+				try { localStorage.setItem("lychee_username", user); }
+				catch (err) {}
+
 				window.location.reload();
+
 			} else {
+
+				// Show error and reactive button
 				$("#password").val("").addClass("error").focus();
 				$(".message .button.active").removeClass("pressed");
+
 			}
+
 		});
 
 	},
@@ -181,7 +191,6 @@ var lychee = {
 		if (albumID&&photoID) {
 
 			// Trash data
-			albums.json = null;
 			photo.json = null;
 
 			// Show Photo
@@ -194,7 +203,6 @@ var lychee = {
 		} else if (albumID) {
 
 			// Trash data
-			albums.json = null;
 			photo.json = null;
 
 			// Show Album
@@ -205,7 +213,6 @@ var lychee = {
 		} else {
 
 			// Trash data
-			albums.json = null;
 			album.json = null;
 			photo.json = null;
 			search.code = "";

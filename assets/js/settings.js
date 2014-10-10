@@ -215,6 +215,8 @@ var settings = {
 				sorting[0] = $("select#settings_type").val();
 				sorting[1] = $("select#settings_order").val();
 
+				albums.refresh();
+
 				params = "setSorting&type=" + sorting[0] + "&order=" + sorting[1];
 				lychee.api(params, function(data) {
 

@@ -24,6 +24,9 @@ class Database extends Module {
 		if ($database->server_version<50500) $database->set_charset('GBK');
 		else $database->set_charset("utf8");
 
+		# Set unicode
+		$database->query('SET NAMES utf8;');
+
 		# Check database
 		if (!$database->select_db($name))
 			if (!Database::createDatabase($database, $name)) exit('Error: Could not create database!');
@@ -41,6 +44,7 @@ class Database extends Module {
 
 		# Check dependencies
 		Module::dependencies(isset($database, $dbName));
+		if (!isset($version)) return true;
 
 		# List of updates
 		$updates = array(
@@ -56,7 +60,7 @@ class Database extends Module {
 		# For each update
 		foreach ($updates as $update) {
 
-			if (isset($version)&&$update<=$version) continue;
+			if ($update<=$version) continue;
 
 			# Load update
 			include(__DIR__ . '/../database/update_' . $update . '.php');
