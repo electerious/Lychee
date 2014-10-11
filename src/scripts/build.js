@@ -103,7 +103,7 @@ build = {
 
 	},
 
-	imageview: function(photoJSON, isSmall, visibleControls) {
+	imageview: function(photoJSON, size, visibleControls) {
 
 		if (!photoJSON) return "";
 
@@ -112,19 +112,27 @@ build = {
 		view += "<div class='arrow_wrapper previous'><a id='previous' class='icon-caret-left'></a></div>";
 		view += "<div class='arrow_wrapper next'><a id='next' class='icon-caret-right'></a></div>";
 
-		if (isSmall) {
+		if (size==="big") {
+
+			if (visibleControls)
+				view += "<div id='image' style='background-image: url(" + photoJSON.url + ")'></div>";
+			else
+				view += "<div id='image' style='background-image: url(" + photoJSON.url + ");' class='full'></div>";
+
+		} else if (size==="medium") {
+
+			if (visibleControls)
+				view += "<div id='image' style='background-image: url(" + photoJSON.medium + ")'></div>";
+			else
+				view += "<div id='image' style='background-image: url(" + photoJSON.medium + ");' class='full'></div>";
+
+		} else if (size==='small') {
 
 			if (visibleControls)
 				view += "<div id='image' class='small' style='background-image: url(" + photoJSON.url + "); width: " + photoJSON.width + "px; height: " + photoJSON.height + "px; margin-top: -" + parseInt(photoJSON.height/2-20) + "px; margin-left: -" + photoJSON.width/2 + "px;'></div>";
 			else
 				view += "<div id='image' class='small' style='background-image: url(" + photoJSON.url + "); width: " + photoJSON.width + "px; height: " + photoJSON.height + "px; margin-top: -" + parseInt(photoJSON.height/2) + "px; margin-left: -" + photoJSON.width/2 + "px;'></div>";
 
-		} else {
-
-			if (visibleControls)
-				view += "<div id='image' style='background-image: url(" + photoJSON.url + ")'></div>";
-			else
-				view += "<div id='image' style='background-image: url(" + photoJSON.url + ");' class='full'></div>";
 
 		}
 

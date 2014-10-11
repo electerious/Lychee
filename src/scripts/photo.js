@@ -543,18 +543,30 @@ photo = {
 
 	},
 
-	isSmall: function() {
+	getSize: function() {
 
-		var size = {
-			width: false,
-			height: false
-		};
+		// Size can be 'big, medium, small'
+		// Default is big
+		// Small is centered in the middle of the screen
+		var size = 'big',
+			hasMedium = photo.json.medium!=="",
+			view = {
+				width: $(window).width()-60,
+				height: $(window).height()-100
+			};
 
-		if (photo.json.width<$(window).width()-60) size.width = true;
-		if (photo.json.height<$(window).height()-100) size.height = true;
+		// Medium available and
+		// Medium still bigger than screen
+		if (hasMedium===true&&
+			(1920>view.width&&1080>view.height)) size = 'medium';
 
-		if (size.width&&size.height) return true;
-		else return false;
+		// Medium not available and
+		// Photo smaller then screen
+		if (hasMedium===false&&
+			(photo.json.width<view.width&&
+			photo.json.width<view.height)) size = 'small';
+
+		return size;
 
 	},
 

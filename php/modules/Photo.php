@@ -124,6 +124,7 @@ class Photo extends Module {
 					$photo_name	= $exists['photo_name'];
 					$path		= $exists['path'];
 					$path_thumb	= $exists['path_thumb'];
+					$medium		= ($exists['medium']==='1' ? true : false);
 					$exists		= true;
 				}
 
@@ -181,8 +182,8 @@ class Photo extends Module {
 			}
 
 			# Save to DB
-			$values	= array(LYCHEE_TABLE_PHOTOS, $id, $info['title'], $photo_name, $description, $tags, $info['type'], $info['width'], $info['height'], $info['size'], $info['iso'], $info['aperture'], $info['make'], $info['model'], $info['shutter'], $info['focal'], $info['takestamp'], $path_thumb, $albumID, $public, $star, $checksum);
-			$query	= Database::prepare($this->database, "INSERT INTO ? (id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, checksum) VALUES ('?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?')", $values);
+			$values	= array(LYCHEE_TABLE_PHOTOS, $id, $info['title'], $photo_name, $description, $tags, $info['type'], $info['width'], $info['height'], $info['size'], $info['iso'], $info['aperture'], $info['make'], $info['model'], $info['shutter'], $info['focal'], $info['takestamp'], $path_thumb, $albumID, $public, $star, $checksum, $medium);
+			$query	= Database::prepare($this->database, "INSERT INTO ? (id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, checksum, medium) VALUES ('?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?')", $values);
 			$result = $this->database->query($query);
 
 			if (!$result) {
@@ -205,8 +206,8 @@ class Photo extends Module {
 		self::dependencies(isset($this->database, $checksum));
 
 		# Exclude $photoID from select when $photoID is set
-		if (isset($photoID)) $query = Database::prepare($this->database, "SELECT id, url, thumbUrl FROM ? WHERE checksum = '?' AND id <> '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $checksum, $photoID));
-		else $query = Database::prepare($this->database, "SELECT id, url, thumbUrl FROM ? WHERE checksum = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $checksum));
+		if (isset($photoID)) $query = Database::prepare($this->database, "SELECT id, url, thumbUrl, medium FROM ? WHERE checksum = '?' AND id <> '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $checksum, $photoID));
+		else $query = Database::prepare($this->database, "SELECT id, url, thumbUrl, medium FROM ? WHERE checksum = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $checksum));
 
 		$result	= $this->database->query($query);
 
@@ -222,7 +223,8 @@ class Photo extends Module {
 			$return = array(
 				'photo_name'	=> $result->url,
 				'path'			=> LYCHEE_UPLOADS_BIG . $result->url,
-				'path_thumb'	=> $result->thumbUrl
+				'path_thumb'	=> $result->thumbUrl,
+				'medium'		=> $result->medium
 			);
 
 			return $return;
@@ -319,7 +321,7 @@ class Photo extends Module {
 
 	}
 
-	private function createMedium($url, $filename, $width, $height, $newWidth = 1920, $newHeight = 1080) {
+	private function createMedium($url, $filename, $width, $height) {
 
 		# Check dependencies
 		self::dependencies(isset($this->database, $this->settings, $url, $filename, $width, $height));
@@ -327,9 +329,16 @@ class Photo extends Module {
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
 
+		# When changing these values,
+		# also change the size detection in the front-end
+		$newWidth = 1920;
+		$newHeight = 1080;
+
 		# Is photo big enough?
-		# is Imagick installed?
+		# Is medium activated?
+		# Is Imagick installed and activated?
 		if (($width>$newWidth||$height>$newHeight)&&
+			($this->settings['medium']==='1')&&
 			(extension_loaded('imagick')&&$this->settings['imagick']==='1')) {
 
 			# $info = getimagesize($url);
@@ -348,6 +357,7 @@ class Photo extends Module {
 		} else {
 
 			# Photo too small or
+			# Medium is deactivated or
 			# Imagick not installed
 			$error = true;
 
@@ -492,7 +502,11 @@ class Photo extends Module {
 		$photo['sysdate'] = date('d M. Y', substr($photo['id'], 0, -4));
 		if (strlen($photo['takestamp'])>1) $photo['takedate'] = date('d M. Y', $photo['takestamp']);
 
-		# Parse url
+		# Parse medium
+		if ($photo['medium']==='1') $photo['medium'] = LYCHEE_URL_UPLOADS_MEDIUM . $photo['url'];
+		else $photo['medium'] = '';
+
+		# Parse paths
 		$photo['url']		= LYCHEE_URL_UPLOADS_BIG . $photo['url'];
 		$photo['thumbUrl']	= LYCHEE_URL_UPLOADS_THUMB . $photo['thumbUrl'];
 
@@ -939,6 +953,12 @@ class Photo extends Module {
 				# Delete big
 				if (file_exists(LYCHEE_UPLOADS_BIG . $photo->url)&&!unlink(LYCHEE_UPLOADS_BIG . $photo->url)) {
 					Log::error($this->database, __METHOD__, __LINE__, 'Could not delete photo in uploads/big/');
+					return false;
+				}
+
+				# Delete medium
+				if (file_exists(LYCHEE_UPLOADS_MEDIUM . $photo->url)&&!unlink(LYCHEE_UPLOADS_MEDIUM . $photo->url)) {
+					Log::error($this->database, __METHOD__, __LINE__, 'Could not delete photo in uploads/medium/');
 					return false;
 				}
 
