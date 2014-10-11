@@ -51,3 +51,9 @@ This key is required to use the Dropbox import feature from your server. Lychee 
 	imagick = [0|1]
 	
 If `1`, Lychee will use Imagick when available. Disable [Imagick](http://www.imagemagick.org) if you have problems or if you are using an outdated version. Lychee will use [GD](http://php.net/manual/en/book.image.php) when Imagick is disabled or not available.
+
+#### Medium
+
+	medium = [0|1]
+	
+If `1`, Lychee will create a second, smaller version of your photo. This feature requires [Imagick](http://www.imagemagick.org) on your server and an activated `imagick` option the the settings table.
