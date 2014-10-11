@@ -15,7 +15,7 @@ After [installing Node.js](http://nodejs.org) you can use the included `npm` pac
 
 ### Build
 
-The Gruntfile is located in `build/` and can be easily executed using the `gulp` command.
+The Gruntfile is located in `src/` and can be easily executed using the `gulp` command.
 
 ### Watch for changes
 
