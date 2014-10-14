@@ -550,10 +550,17 @@ photo = {
 		// Small is centered in the middle of the screen
 		var size = 'big',
 			hasMedium = photo.json.medium!=="",
+			pixelRatio = window.devicePixelRatio,
 			view = {
 				width: $(window).width()-60,
 				height: $(window).height()-100
 			};
+
+		// Calculate pixel ratio of screen
+		if (pixelRatio!==undefined&&pixelRatio>1) {
+			view.width = view.width * pixelRatio;
+			view.height = view.height * pixelRatio;
+		}
 
 		// Medium available and
 		// Medium still bigger than screen
