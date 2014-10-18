@@ -53,7 +53,7 @@ photo = {
 
 	},
 
-	//preload the next photo for better response time
+	// Preload the next photo for better response time
 	preloadNext: function(photoID) {
 
 		var nextPhoto,
@@ -185,8 +185,8 @@ photo = {
 		buttons = [
 			["", function() {
 
-				var nextPhoto,
-					previousPhoto;
+				var nextPhoto = "",
+					previousPhoto = "";
 
 				photoIDs.forEach(function(id, index, array) {
 
@@ -206,10 +206,12 @@ photo = {
 
 				});
 
-				// Only when search is not active
-				if (!visible.albums()) lychee.goto(album.getID());
-
 				albums.refresh();
+
+				// Go to next photo if there is a next photo and
+				// next photo is not the current one. Show album otherwise.
+				if (visible.photo()&&nextPhoto!==""&&nextPhoto!==photo.getID()) lychee.goto(album.getID() + "/" + nextPhoto);
+				else if (!visible.albums()) lychee.goto(album.getID());
 
 				params = "deletePhoto&photoIDs=" + photoIDs;
 				lychee.api(params, function(data) {
