@@ -93,17 +93,17 @@ multiselect.resize = function(e) {
 			newHeight -= (multiselect.position.top + newHeight) - $(document).height() + 2;
 
 		$('#multiselect').css({
-			top: multiselect.position.top,
-			bottom: 'inherit',
-			height: newHeight
+			top:	multiselect.position.top,
+			bottom:	'inherit',
+			height:	newHeight
 		});
 
 	} else {
 
 		$('#multiselect').css({
-			top: 'inherit',
-			bottom: multiselect.position.bottom,
-			height: multiselect.position.top - e.pageY
+			top:	'inherit',
+			bottom:	multiselect.position.bottom,
+			height:	multiselect.position.top - e.pageY
 		});
 
 	}
@@ -116,17 +116,17 @@ multiselect.resize = function(e) {
 			newWidth -= (multiselect.position.left + newWidth) - $(document).width() + 2;
 
 		$('#multiselect').css({
-			right: 'inherit',
-			left: multiselect.position.left,
-			width: newWidth
+			right:	'inherit',
+			left:	multiselect.position.left,
+			width:	newWidth
 		});
 
 	} else {
 
 		$('#multiselect').css({
-			right: multiselect.position.right,
-			left: 'inherit',
-			width: multiselect.position.left - e.pageX
+			right:	multiselect.position.right,
+			left:	'inherit',
+			width:	multiselect.position.left - e.pageX
 		});
 
 	}
