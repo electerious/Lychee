@@ -549,12 +549,18 @@ photo = {
 		// Default is big
 		// Small is centered in the middle of the screen
 		var size = 'big',
+			scaled = false,
 			hasMedium = photo.json.medium!=="",
 			pixelRatio = window.devicePixelRatio,
 			view = {
 				width: $(window).width()-60,
 				height: $(window).height()-100
 			};
+
+		// Detect if the photo will be shown scaled,
+		// because the screen size is smaller than the photo
+		if (photo.json.width>view.width||
+			photo.json.width>view.height) scaled = true;
 
 		// Calculate pixel ratio of screen
 		if (pixelRatio!==undefined&&pixelRatio>1) {
@@ -567,9 +573,9 @@ photo = {
 		if (hasMedium===true&&
 			(1920>view.width&&1080>view.height)) size = 'medium';
 
-		// Medium not available and
+		// Photo not scaled
 		// Photo smaller then screen
-		if (hasMedium===false&&
+		if (scaled===false&&
 			(photo.json.width<view.width&&
 			photo.json.width<view.height)) size = 'small';
 
