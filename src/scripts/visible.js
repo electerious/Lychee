@@ -5,7 +5,7 @@
  * @copyright	2014 by Tobias Reich
  */
 
-visible = {};
+visible = {}
 
 visible.albums = function() {
 	if ($('#tools_albums').css('display')==='block') return true;

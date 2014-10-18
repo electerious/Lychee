@@ -5,7 +5,7 @@
  * @copyright	2014 by Tobias Reich
  */
 
-build = {};
+build = {}
 
 build.divider = function(title) {
 
