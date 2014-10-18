@@ -11,19 +11,19 @@ build.divider = function(title) {
 
 	return "<div class='divider fadeIn'><h1>" + title + "</h1></div>";
 
-},
+}
 
 build.editIcon = function(id) {
 
 	return "<div id='" + id + "' class='edit'><a class='icon-pencil'></a></div>";
 
-},
+}
 
 build.multiselect = function(top, left) {
 
 	return "<div id='multiselect' style='top: " + top + "px; left: " + left + "px;'></div>";
 
-},
+}
 
 build.album = function(albumJSON) {
 
@@ -66,7 +66,7 @@ build.album = function(albumJSON) {
 
 	return album;
 
-},
+}
 
 build.photo = function(photoJSON) {
 
@@ -101,7 +101,7 @@ build.photo = function(photoJSON) {
 
 	return photo;
 
-},
+}
 
 build.imageview = function(photoJSON, size, visibleControls) {
 
@@ -138,7 +138,7 @@ build.imageview = function(photoJSON, size, visibleControls) {
 
 	return view;
 
-},
+}
 
 build.no_content = function(typ) {
 
@@ -155,7 +155,7 @@ build.no_content = function(typ) {
 
 	return no_content;
 
-},
+}
 
 build.modal = function(title, text, button, marginTop, closeButton) {
 
@@ -192,7 +192,7 @@ build.modal = function(title, text, button, marginTop, closeButton) {
 
 	return modal;
 
-},
+}
 
 build.signInModal = function() {
 
@@ -213,7 +213,7 @@ build.signInModal = function() {
 
 	return modal;
 
-},
+}
 
 build.uploadModal = function(title, files) {
 
@@ -246,7 +246,7 @@ build.uploadModal = function(title, files) {
 
 	return modal;
 
-},
+}
 
 build.contextMenu = function(items) {
 
@@ -272,7 +272,7 @@ build.contextMenu = function(items) {
 
 	return menu;
 
-},
+}
 
 build.tags = function(tags, forView) {
 
@@ -300,7 +300,7 @@ build.tags = function(tags, forView) {
 
 	return html;
 
-},
+}
 
 build.infoboxPhoto = function(photoJSON, forView) {
 
@@ -405,7 +405,7 @@ build.infoboxPhoto = function(photoJSON, forView) {
 
 	return infobox;
 
-},
+}
 
 build.infoboxAlbum = function(albumJSON, forView) {
 
