@@ -110,7 +110,8 @@ upload = {
 
 					xhr.onload = function() {
 
-						var wait = false;
+						var wait = false,
+							errorText = "";
 
 						file.ready = true;
 
@@ -128,8 +129,12 @@ upload = {
 							$(".upload_message .rows .row:nth-child(" + (file.num+1) + ") .status")
 								.html("Error")
 								.addClass("error");
+
+							if (xhr.responseText.substr(0, 6)==="Error:") errorText = xhr.responseText.substr(6) + " Please take a look at the console of your browser for further details.";
+							else errorText = "Server returned an unknown response. Please take a look at the console of your browser for further details.";
+
 							$(".upload_message .rows .row:nth-child(" + (file.num+1) + ") p.notice")
-								.html("Server returned an unknown response. Please take a look at the console of your browser for further details.")
+								.html(errorText)
 								.show();
 
 							// Set global error
