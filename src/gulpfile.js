@@ -35,6 +35,7 @@ gulp.task('view', function() {
 	gulp.src(paths.view)
 		.pipe(plugins.concat('view.js', {newLine: "\n"}))
 		.pipe(plugins.uglify())
+		.on('error', catchError)
 		.pipe(gulp.dest('../dist/'));
 
 });
