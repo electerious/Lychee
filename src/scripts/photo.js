@@ -550,7 +550,7 @@ photo = {
 		// Size can be 'big, medium, small'
 		// Default is big
 		// Small is centered in the middle of the screen
-		var size = 'big',
+		var size = "big",
 			scaled = false,
 			hasMedium = photo.json.medium!=="",
 			pixelRatio = window.devicePixelRatio,
@@ -573,13 +573,13 @@ photo = {
 		// Medium available and
 		// Medium still bigger than screen
 		if (hasMedium===true&&
-			(1920>view.width&&1080>view.height)) size = 'medium';
+			(1920>view.width&&1080>view.height)) size = "medium";
 
 		// Photo not scaled
 		// Photo smaller then screen
 		if (scaled===false&&
 			(photo.json.width<view.width&&
-			photo.json.width<view.height)) size = 'small';
+			photo.json.width<view.height)) size = "small";
 
 		return size;
 
