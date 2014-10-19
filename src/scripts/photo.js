@@ -601,7 +601,13 @@ photo = {
 
 	getDirectLink: function() {
 
-		return $("#imageview #image").css("background-image").replace(/"/g,"").replace(/url\(|\)$/ig, "");
+		var url = "";
+
+		if (photo.json&&
+			photo.json.url&&
+			photo.json.url!=="") url = photo.json.url;
+
+		return url;
 
 	},
 
