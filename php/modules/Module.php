@@ -2,7 +2,6 @@
 
 ###
 # @name			Module
-# @author		Tobias Reich
 # @copyright	2014 by Tobias Reich
 ###
 

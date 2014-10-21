@@ -1,8 +1,7 @@
 <?php
 
 ###
-# @name		Settings Module
-# @author		Tobias Reich
+# @name			Settings Module
 # @copyright	2014 by Tobias Reich
 ###
 

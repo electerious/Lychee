@@ -1,8 +1,7 @@
 <?php
 
 ###
-# @name		Database Module
-# @author		Tobias Reich
+# @name			Database Module
 # @copyright	2014 by Tobias Reich
 ###
 

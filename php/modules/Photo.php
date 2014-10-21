@@ -1,8 +1,7 @@
 <?php
 
 ###
-# @name		Photo Module
-# @author		Tobias Reich
+# @name			Photo Module
 # @copyright	2014 by Tobias Reich
 ###
 

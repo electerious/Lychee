@@ -1,8 +1,7 @@
 <?php
 
 ###
-# @name		Session Module
-# @author		Tobias Reich
+# @name			Session Module
 # @copyright	2014 by Tobias Reich
 ###
 
