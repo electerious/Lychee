@@ -11,9 +11,6 @@ $(document).ready(function(){
 	/* Disable ContextMenu */
 	$(document).bind("contextmenu", function(e) { e.preventDefault() });
 
-	/* Tooltips */
-	if (!mobileBrowser()) $(".tools").tipsy({gravity: 'n', fade: false, delayIn: 0, opacity: 1});
-
 	/* Multiselect */
 	$("#content").on("mousedown", multiselect.show);
 	$(document).on("mouseup", multiselect.getSelection);
