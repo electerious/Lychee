@@ -200,9 +200,12 @@ build.uploadModal = (title, files) ->
 					<div class='rows'>
 			"""
 
-	console.log files
+	i		= 0
+	file	= null
 
-	files.forEach (file, i, files) ->
+	while i < files.length
+
+		file = files[i]
 
 		if file.name.length > 40
 			file.name = file.name.substr(0, 17) + '...' + file.name.substr(file.name.length-20, 20)
@@ -219,6 +222,8 @@ build.uploadModal = (title, files) ->
 					<p class='notice'></p>
 				</div>
 				"""
+
+		i++
 
 	html +=	"""
 					</div>
