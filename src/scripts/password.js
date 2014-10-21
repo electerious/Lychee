@@ -1,7 +1,5 @@
 /**
- * @name        Password Module
  * @description	Controls the access to password-protected albums and photos.
- * @author      Tobias Reich
  * @copyright   2014 by Tobias Reich
  */
 

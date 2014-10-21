@@ -1,7 +1,5 @@
 /**
- * @name		Lychee Module
  * @description	This module provides the basic functions of Lychee.
- * @author		Tobias Reich
  * @copyright	2014 by Tobias Reich
  */
 

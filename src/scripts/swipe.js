@@ -1,7 +1,5 @@
 /**
- * @name		Swipe Module
  * @description	Swipes and moves an object.
- * @author		Tobias Reich
  * @copyright	2014 by Tobias Reich
  */
 

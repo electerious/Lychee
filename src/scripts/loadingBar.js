@@ -1,7 +1,5 @@
 /**
- * @name		LoadingBar Module
  * @description	This module is used to show and hide the loading bar.
- * @author		Tobias Reich
  * @copyright	2014 by Tobias Reich
  */
 

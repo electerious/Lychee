@@ -1,7 +1,5 @@
 /**
- * @name        Search Module
  * @description	Searches through your photos and albums.
- * @author		Tobias Reich
  * @copyright	2014 by Tobias Reich
  */
 

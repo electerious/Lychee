@@ -1,7 +1,5 @@
 /**
- * @name		Album Module
  * @description	Takes care of every action an album can handle and execute.
- * @author		Tobias Reich
  * @copyright	2014 by Tobias Reich
  */
 

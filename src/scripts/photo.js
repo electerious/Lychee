@@ -1,7 +1,5 @@
 /**
- * @name		Photo Module
  * @description	Takes care of every action a photo can handle and execute.
- * @author		Tobias Reich
  * @copyright	2014 by Tobias Reich
  */
 

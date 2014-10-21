@@ -1,7 +1,5 @@
 /**
- * @name        Modal Module
  * @description	Build, show and hide a modal.
- * @author		Tobias Reich
  * @copyright	2014 by Tobias Reich
  */
 

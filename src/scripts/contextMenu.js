@@ -1,7 +1,5 @@
 /**
- * @name		ContextMenu Module
  * @description	This module is used for the context menu.
- * @author		Tobias Reich
  * @copyright	2014 by Tobias Reich
  */
 

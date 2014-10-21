@@ -1,7 +1,5 @@
 /**
- * @name		Settings Module
  * @description	Lets you change settings.
- * @author		Tobias Reich
  * @copyright	2014 by Tobias Reich
  */
 

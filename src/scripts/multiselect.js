@@ -1,7 +1,5 @@
 /**
- * @name		Multiselect Module
  * @description	Select multiple albums or photos.
- * @author		Tobias Reich
  * @copyright	2014 by Tobias Reich
  */
 

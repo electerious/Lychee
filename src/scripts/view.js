@@ -1,7 +1,5 @@
 /**
- * @name		UI View
  * @description	Responsible to reflect data changes to the UI.
- * @author		Tobias Reich
  * @copyright	2014 by Tobias Reich
  */
 
