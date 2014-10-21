@@ -1,8 +1,7 @@
 <?php
 
 ###
-# @name		Autoload
-# @author		Tobias Reich
+# @name			Autoload
 # @copyright	2014 by Tobias Reich
 ###
 

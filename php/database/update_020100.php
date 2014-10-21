@@ -2,7 +2,6 @@
 
 ###
 # @name			Update to version 2.1
-# @author		Tobias Reich
 # @copyright	2014 by Tobias Reich
 ###
 
