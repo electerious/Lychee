@@ -76,6 +76,9 @@ paths.main = {
 		'../dist/_main--javascript.js',
 		'../dist/_main--coffee.js'
 	],
+	scss: [
+		'../src/styles/*.scss'
+	],
 	styles: [
 		'../src/styles/main.scss'
 	]
@@ -142,6 +145,6 @@ gulp.task('watch', ['default'], function() {
 
 	gulp.watch(paths.main.js,		['main--scripts', 'clean']);
 	gulp.watch(paths.main.coffee,	['main--scripts', 'clean']);
-	gulp.watch(paths.main.styles,	['main--styles', 'clean']);
+	gulp.watch(paths.main.scss,		['main--styles', 'clean']);
 
 });
