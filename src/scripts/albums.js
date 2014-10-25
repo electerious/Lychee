@@ -27,7 +27,7 @@ albums = {
 					id: 0,
 					title: "Unsorted",
 					sysdate: data.unsortedNum + " photos",
-					unsorted: 1,
+					unsorted: "1",
 					thumb0: data.unsortedThumb0,
 					thumb1: data.unsortedThumb1,
 					thumb2: data.unsortedThumb2
@@ -37,7 +37,7 @@ albums = {
 					id: "f",
 					title: "Starred",
 					sysdate: data.starredNum + " photos",
-					star: 1,
+					star: "1",
 					thumb0: data.starredThumb0,
 					thumb1: data.starredThumb1,
 					thumb2: data.starredThumb2
@@ -47,7 +47,7 @@ albums = {
 					id: "s",
 					title: "Public",
 					sysdate: data.publicNum + " photos",
-					public: 1,
+					public: "1",
 					thumb0: data.publicThumb0,
 					thumb1: data.publicThumb1,
 					thumb2: data.publicThumb2
@@ -57,7 +57,7 @@ albums = {
 					id: "r",
 					title: "Recent",
 					sysdate: data.recentNum + " photos",
-					recent: 1,
+					recent: "1",
 					thumb0: data.recentThumb0,
 					thumb1: data.recentThumb1,
 					thumb2: data.recentThumb2
