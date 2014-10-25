@@ -67,6 +67,7 @@ paths.main = {
 		'bower_components/js-md5/js/md5.min.js',
 		'bower_components/mousetrap/mousetrap.min.js',
 		'bower_components/mousetrap/plugins/global-bind/mousetrap-global-bind.min.js',
+		'bower_components/basicContext/dist/basicContext.min.js',
 		'../src/scripts/*.js'
 	],
 	coffee: [
@@ -80,6 +81,7 @@ paths.main = {
 		'../src/styles/*.scss'
 	],
 	styles: [
+		'bower_components/basicContext/src/scss/basicContext.scss',
 		'../src/styles/main.scss'
 	]
 }
