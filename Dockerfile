@@ -4,9 +4,9 @@ FROM ubuntu:14.04
 RUN apt-get update
 RUN apt-get -y install git curl nano wget build-essential
 
-# Install apache and PHP
-RUN apt-get -y install apache2 mysql-server libapache2-mod-php5
-RUN apt-get -y install php5-mysql php5-gd php5-curl
+# Install Apache, PHP, MySQL, and ImageMagick
+RUN apt-get -y install apache2 mysql-server libapache2-mod-php5 imagemagick
+RUN apt-get -y install php5-mysql php5-gd php5-curl php5-imagick
 
 # Modify php.ini to contain the following settings:
 #   max_execution_time = 200
