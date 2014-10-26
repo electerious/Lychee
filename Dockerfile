@@ -16,7 +16,7 @@ RUN mkdir -p /app && rm -fr /var/www/html && ln -s /app /var/www/html
 WORKDIR /app
 
 # Clone lychee
-RUN git clone https://github.com/renfredxh/Lychee.git .
+RUN git clone https://github.com/electerious/Lychee.git .
 
 # Set file permissions
 RUN chown www-data:www-data /app -R
