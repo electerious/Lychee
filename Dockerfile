@@ -7,10 +7,6 @@ RUN apt-get -y install git curl nano wget build-essential
 # Install apache and PHP
 RUN apt-get -y install apache2 mysql-server libapache2-mod-php5
 RUN apt-get -y install php5-mysql php5-gd php5-curl
-#RUN sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/apache2/php.ini
-
-# Decouple database from container
-VOLUME ["/database"]
 
 # Configure the database to use our data dir
 RUN sed -i -e "s/^datadir\s*=.*/datadir = \/database/" /etc/mysql/my.cnf
