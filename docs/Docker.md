@@ -1,4 +1,4 @@
-### Installation Using Docker
+### Installation using Docker
 
 *Note: pre-installation of the latest version of [Git](http://git-scm.com/book/en/v2/Getting-Started-Installing-Git) and [Docker](https://docs.docker.com/installation/) is required to deploy Lychee using Docker.*
 
