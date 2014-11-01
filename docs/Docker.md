@@ -7,7 +7,7 @@ First, clone the latest version of Lychee and build it using the Dockerfile incl
 ```bash
 git clone https://github.com/electerious/Lychee.git
 cd Lychee
-sudo docker build -t lychee .
+docker build -t lychee .
 ```
 
 Once this is finished, remember to set the proper permissions on the `uploads` and `data` directories, so the container can mount these directories as volumes.
@@ -19,10 +19,10 @@ chmod -R 777 uploads/ data/
 Now you can use the `docker run` command to run your Lychee container.
 
 ```bash
-sudo docker run -v /var/lib/mysql --name lychee_data \
-                -v $(pwd)/data:/app/data \
-                -v $(pwd)/uploads:/app/uploads \
-                -i -t -d -p 8000:80 lychee
+docker run -v /var/lib/mysql --name lychee_data \
+           -v $(pwd)/data:/app/data \
+           -v $(pwd)/uploads:/app/uploads \
+           -i -t -d -p 8000:80 lychee
 ```
 
 Browse to [localhost:8000](http://localhost:8000/) (the port can be specified via the `-p` flag) and you will see Lychee's configuration page. The default database username is `root` with no password (you can manage MySQL users by running `docker exec -i -t <container_id> mysql`). After submitting your database configuration, you can sign in and create a new username and password and start using Lychee.   
