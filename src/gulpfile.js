@@ -170,11 +170,11 @@ gulp.task('default', ['view--scripts', 'main--scripts', 'main--styles'], functio
 
 gulp.task('watch', ['default'], function() {
 
-	gulp.watch(paths.view.js,		['view--scripts', 'clean']);
-	gulp.watch(paths.view.coffee,	['view--scripts', 'clean']);
+	gulp.watch(paths.view.js,		['view--scripts']);
+	gulp.watch(paths.view.coffee,	['view--scripts']);
 
-	gulp.watch(paths.main.js,		['main--scripts', 'clean']);
-	gulp.watch(paths.main.coffee,	['main--scripts', 'clean']);
-	gulp.watch(paths.main.scss,		['main--styles', 'clean']);
+	gulp.watch(paths.main.js,		['main--scripts']);
+	gulp.watch(paths.main.coffee,	['main--scripts']);
+	gulp.watch(paths.main.scss,		['main--styles']);
 
 });
