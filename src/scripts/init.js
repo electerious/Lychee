@@ -1,5 +1,5 @@
 /**
- * @name		Init Module
+ * @description	This module is used for bindings.
  * @copyright	2014 by Tobias Reich
  */
 
