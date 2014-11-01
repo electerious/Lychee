@@ -33,29 +33,38 @@ paths.view = {
 
 gulp.task('view--js', function() {
 
-	return	gulp.src(paths.view.js)
-				.pipe(plugins.concat('_view--javascript.js', {newLine: "\n"}))
-				.pipe(gulp.dest('../dist/'));
+	var stream =
+		gulp.src(paths.view.js)
+			.pipe(plugins.concat('_view--javascript.js', {newLine: "\n"}))
+			.pipe(gulp.dest('../dist/'));
+
+	return stream;
 
 });
 
 gulp.task('view--coffee', function() {
 
-	return	gulp.src(paths.view.coffee)
-				.pipe(plugins.coffee({bare: true}))
-				.on('error', catchError)
-				.pipe(plugins.concat('_view--coffee.js', {newLine: "\n"}))
-				.pipe(gulp.dest('../dist/'));
+	var stream =
+		gulp.src(paths.view.coffee)
+			.pipe(plugins.coffee({bare: true}))
+			.on('error', catchError)
+			.pipe(plugins.concat('_view--coffee.js', {newLine: "\n"}))
+			.pipe(gulp.dest('../dist/'));
+
+	return stream;
 
 });
 
 gulp.task('view--scripts', ['view--js', 'view--coffee'], function() {
 
-	return	gulp.src(paths.view.scripts)
-				.pipe(plugins.concat('view.js', {newLine: "\n"}))
-				.pipe(plugins.uglify())
-				.on('error', catchError)
-				.pipe(gulp.dest('../dist/'));
+	var stream =
+		gulp.src(paths.view.scripts)
+			.pipe(plugins.concat('view.js', {newLine: "\n"}))
+			.pipe(plugins.uglify())
+			.on('error', catchError)
+			.pipe(gulp.dest('../dist/'));
+
+	return stream;
 
 });
 
@@ -88,41 +97,53 @@ paths.main = {
 
 gulp.task('main--js', function() {
 
-	return	gulp.src(paths.main.js)
-				.pipe(plugins.concat('_main--javascript.js', {newLine: "\n"}))
-				.pipe(gulp.dest('../dist/'));
+	var stream =
+		gulp.src(paths.main.js)
+			.pipe(plugins.concat('_main--javascript.js', {newLine: "\n"}))
+			.pipe(gulp.dest('../dist/'));
+
+	return stream;
 
 });
 
 gulp.task('main--coffee', function() {
 
-	return	gulp.src(paths.main.coffee)
-				.pipe(plugins.coffee({bare: true}))
-				.on('error', catchError)
-				.pipe(plugins.concat('_main--coffee.js', {newLine: "\n"}))
-				.pipe(gulp.dest('../dist/'));
+	var stream =
+		gulp.src(paths.main.coffee)
+			.pipe(plugins.coffee({bare: true}))
+			.on('error', catchError)
+			.pipe(plugins.concat('_main--coffee.js', {newLine: "\n"}))
+			.pipe(gulp.dest('../dist/'));
+
+	return stream;
 
 });
 
 gulp.task('main--scripts', ['main--js', 'main--coffee'], function() {
 
-	return	gulp.src(paths.main.scripts)
-				.pipe(plugins.concat('main.js', {newLine: "\n"}))
-				.pipe(plugins.uglify())
-				.on('error', catchError)
-				.pipe(gulp.dest('../dist/'));
+	var stream =
+		gulp.src(paths.main.scripts)
+			.pipe(plugins.concat('main.js', {newLine: "\n"}))
+			.pipe(plugins.uglify())
+			.on('error', catchError)
+			.pipe(gulp.dest('../dist/'));
+
+	return stream;
 
 });
 
 gulp.task('main--styles', function() {
 
-	return	gulp.src(paths.main.styles)
-				.pipe(plugins.sass())
-				.on('error', catchError)
-				.pipe(plugins.concat('main.css', {newLine: "\n"}))
-				.pipe(plugins.autoprefixer('last 4 versions', '> 5%'))
-				.pipe(plugins.minifyCss())
-				.pipe(gulp.dest('../dist/'));
+	var stream =
+		gulp.src(paths.main.styles)
+			.pipe(plugins.sass())
+			.on('error', catchError)
+			.pipe(plugins.concat('main.css', {newLine: "\n"}))
+			.pipe(plugins.autoprefixer('last 4 versions', '> 5%'))
+			.pipe(plugins.minifyCss())
+			.pipe(gulp.dest('../dist/'));
+
+	return stream;
 
 });
 
@@ -130,15 +151,22 @@ gulp.task('main--styles', function() {
 
 gulp.task('clean', function() {
 
-	return	gulp.src('../dist/_*.*', { read: false })
-				.pipe(plugins.rimraf({ force: true }))
-				.on('error', catchError);
+	var stream =
+		gulp.src('../dist/_*.*', { read: false })
+			.pipe(plugins.rimraf({ force: true }))
+			.on('error', catchError);
+
+	return stream;
 
 });
 
 /* Tasks ----------------------------------------- */
 
-gulp.task('default', ['view--scripts', 'main--scripts', 'main--styles', 'clean']);
+gulp.task('default', ['view--scripts', 'main--scripts', 'main--styles'], function() {
+
+	gulp.start('clean');
+
+});
 
 gulp.task('watch', ['default'], function() {
 
