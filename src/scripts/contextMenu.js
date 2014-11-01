@@ -221,7 +221,7 @@ contextMenu.close = function(leaveSelection) {
 	context.close();
 
 	if (leaveSelection!==true) {
-		$(".photo.active, .album.active").removeClass("active");
+		$('.photo.active, .album.active').removeClass('active');
 		if (visible.multiselect()) multiselect.close();
 	}
 
