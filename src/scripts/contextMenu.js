@@ -5,260 +5,171 @@
 
 contextMenu = {
 
-	fns: null,
-
-	show: function(items, mouse_x, mouse_y, orientation) {
-
-		contextMenu.close();
-
-		$("body")
-			.css("overflow", "hidden")
-			.append(build.contextMenu(items));
-
-		// Do not leave the screen
-		if ((mouse_x+$(".contextmenu").outerWidth(true))>$("html").width()) orientation = "left";
-		if ((mouse_y+$(".contextmenu").outerHeight(true))>$("html").height()) mouse_y -= (mouse_y+$(".contextmenu").outerHeight(true)-$("html").height());
-
-		if (mouse_x>$(document).width()) mouse_x = $(document).width();
-		if (mouse_x<0) mouse_x = 0;
-		if (mouse_y>$(document).height()) mouse_y = $(document).height();
-		if (mouse_y<0) mouse_y = 0;
-
-		if (orientation==="left") mouse_x -= $(".contextmenu").outerWidth(true);
-
-		if (mouse_x===null||
-			mouse_x===undefined||
-			isNaN(mouse_x)||
-			mouse_y===null||
-			mouse_y===undefined||
-			isNaN(mouse_y)) {
-				mouse_x = "10px";
-				mouse_y = "10px";
-		}
-
-		$(".contextmenu").css({
-			"top": mouse_y,
-			"left": mouse_x,
-			"opacity": 0.98
-		});
-
-	},
-
 	add: function(e) {
 
-		var mouse_x = e.pageX,
-			mouse_y = e.pageY - $(document).scrollTop(),
-			items;
+		var items = [
+			{ type: 'item', title: 'Upload Photo', icon: 'icon-picture', fn: function() { $('#upload_files').click() } },
+			{ type: 'separator' },
+			{ type: 'item', title: 'Import from Link', icon: 'icon-link', fn: upload.start.url },
+			{ type: 'item', title: 'Import from Dropbox', icon: 'icon-folder-open', fn: upload.start.dropbox },
+			{ type: 'item', title: 'Import from Server', icon: 'icon-hdd', fn: upload.start.server },
+			{ type: 'separator' },
+			{ type: 'item', title: 'New Album', icon: 'icon-folder-close', fn: album.add }
+		];
+
+		context.show(items, e);
 
 		upload.notify();
-
-		contextMenu.fns = [
-			function() { $("#upload_files").click() },
-			function() { upload.start.url() },
-			function() { upload.start.dropbox() },
-			function() { upload.start.server() },
-			function() { album.add() }
-		];
-
-		items = [
-			["<a class='icon-picture'></a> Upload Photo", 0],
-			["separator", -1],
-			["<a class='icon-link'></a> Import from Link", 1],
-			["<a class='icon-folder-open'></a> Import from Dropbox", 2],
-			["<a class='icon-hdd'></a> Import from Server", 3],
-			["separator", -1],
-			["<a class='icon-folder-close'></a> New Album", 4]
-		];
-
-		contextMenu.show(items, mouse_x, mouse_y, "left");
 
 	},
 
 	settings: function(e) {
 
-		var mouse_x = e.pageX,
-			mouse_y = e.pageY - $(document).scrollTop(),
-			items;
-
-		contextMenu.fns = [
-			function() { settings.setLogin() },
-			function() { settings.setSorting() },
-			function() { settings.setDropboxKey() },
-			function() { window.open(lychee.website); },
-			function() { window.open("plugins/check/"); },
-			function() { window.open("plugins/displaylog/"); },
-			function() { lychee.logout() }
+		var items = [
+			{ type: 'item', title: 'Change Login', icon: 'icon-user', fn: settings.setLogin },
+			{ type: 'item', title: 'Change Sorting', icon: 'icon-sort', fn: settings.setSorting },
+			{ type: 'item', title: 'Set Dropbox', icon: 'icon-folder-open', fn: settings.setDropboxKey },
+			{ type: 'separator' },
+			{ type: 'item', title: 'About Lychee', icon: 'icon-info-sign', fn: function() { window.open(lychee.website) } },
+			{ type: 'item', title: 'Diagnostics', icon: 'icon-dashboard', fn: function() { window.open('plugins/check/') } },
+			{ type: 'item', title: 'Show Log', icon: 'icon-list', fn: function() { window.open('plugins/displaylog/') } },
+			{ type: 'separator' },
+			{ type: 'item', title: 'Sign Out', icon: 'icon-signout', fn: lychee.logout }
 		];
 
-		items = [
-			["<a class='icon-user'></a> Change Login", 0],
-			["<a class='icon-sort'></a> Change Sorting", 1],
-			["<a class='icon-folder-open'></a> Set Dropbox", 2],
-			["separator", -1],
-			["<a class='icon-info-sign'></a> About Lychee", 3],
-			["<a class='icon-dashboard'></a> Diagnostics", 4],
-			["<a class='icon-list'></a> Show Log", 5],
-			["separator", -1],
-			["<a class='icon-signout'></a> Sign Out", 6]
-		];
-
-		contextMenu.show(items, mouse_x, mouse_y, "right");
+		context.show(items, e);
 
 	},
 
 	album: function(albumID, e) {
 
-		var mouse_x = e.pageX,
-			mouse_y = e.pageY - $(document).scrollTop(),
-			items;
+		if (albumID==='0'||albumID==='f'||albumID==='s'||albumID==='r') return false;
 
-		if (albumID==="0"||albumID==="f"||albumID==="s"||albumID==="r") return false;
-
-		contextMenu.fns = [
-			function() { album.setTitle([albumID]) },
-			function() { album.delete([albumID]) }
+		var items = [
+			{ type: 'item', title: 'Rename', icon: 'icon-edit', fn: function() { album.setTitle([albumID]) } },
+			{ type: 'item', title: 'Delete', icon: 'icon-trash', fn: function() { album.delete([albumID]) } }
 		];
 
-		items = [
-			["<a class='icon-edit'></a> Rename", 0],
-			["<a class='icon-trash'></a> Delete", 1]
-		];
+		$('.album[data-id="' + albumID + '"]').addClass('active');
 
-		contextMenu.show(items, mouse_x, mouse_y, "right");
-
-		$(".album[data-id='" + albumID + "']").addClass("active");
+		context.show(items, e, function() {
+			$('.photo.active, .album.active').removeClass('active');
+			context.close();
+		});
 
 	},
 
 	albumMulti: function(albumIDs, e) {
 
-		var mouse_x = e.pageX,
-			mouse_y = e.pageY - $(document).scrollTop(),
-			items;
-
 		multiselect.stopResize();
 
-		contextMenu.fns = [
-			function() { album.setTitle(albumIDs) },
-			function() { album.delete(albumIDs) },
+		var items = [
+			{ type: 'item', title: 'Rename All', icon: 'icon-edit', fn: function() { album.setTitle(albumIDs) } },
+			{ type: 'item', title: 'Delete All', icon: 'icon-trash', fn: function() { album.delete(albumIDs) } }
 		];
 
-		items = [
-			["<a class='icon-edit'></a> Rename All", 0],
-			["<a class='icon-trash'></a> Delete All", 1]
-		];
-
-		contextMenu.show(items, mouse_x, mouse_y, "right");
+		context.show(items, e, function() {
+			context.close();
+			$('.photo.active, .album.active').removeClass('active');
+			if (visible.multiselect()) multiselect.close();
+		});
 
 	},
 
 	photo: function(photoID, e) {
 
-		var mouse_x = e.pageX,
-			mouse_y = e.pageY - $(document).scrollTop(),
-			items;
-
-		contextMenu.fns = [
-			function() { photo.setStar([photoID]) },
-			function() { photo.editTags([photoID]) },
-			function() { photo.setTitle([photoID]) },
-			function() { photo.duplicate([photoID]) },
-			function() { contextMenu.move([photoID], e, "right") },
-			function() { photo.delete([photoID]) }
+		var items = [
+			{ type: 'item', title: 'Star', icon: 'icon-star', fn: function() { photo.setStar([photoID]) } },
+			{ type: 'item', title: 'Tags', icon: 'icon-tags', fn: function() { photo.editTags([photoID]) } },
+			{ type: 'separator' },
+			{ type: 'item', title: 'Rename', icon: 'icon-edit', fn: function() { photo.setTitle([photoID]) } },
+			{ type: 'item', title: 'Duplicate', icon: 'icon-copy', fn: function() { photo.duplicate([photoID]) } },
+			{ type: 'item', title: 'Move', icon: 'icon-folder-open', fn: function() { contextMenu.move([photoID], e) } },
+			{ type: 'item', title: 'Delete', icon: 'icon-trash', fn: function() { photo.delete([photoID]) } }
 		];
 
-		items = [
-			["<a class='icon-star'></a> Star", 0],
-			["<a class='icon-tags'></a> Tags", 1],
-			["separator", -1],
-			["<a class='icon-edit'></a> Rename", 2],
-			["<a class='icon-copy'></a> Duplicate", 3],
-			["<a class='icon-folder-open'></a> Move", 4],
-			["<a class='icon-trash'></a> Delete", 5]
-		];
+		$('.photo[data-id="' + photoID + '"]').addClass('active');
 
-		contextMenu.show(items, mouse_x, mouse_y, "right");
-
-		$(".photo[data-id='" + photoID + "']").addClass("active");
+		context.show(items, e, function() {
+			context.close();
+			$('.photo.active, .album.active').removeClass('active');
+		});
 
 	},
 
 	photoMulti: function(photoIDs, e) {
 
-		var mouse_x = e.pageX,
-			mouse_y = e.pageY - $(document).scrollTop(),
-			items;
-
 		multiselect.stopResize();
 
-		contextMenu.fns = [
-			function() { photo.setStar(photoIDs) },
-			function() { photo.editTags(photoIDs) },
-			function() { photo.setTitle(photoIDs) },
-			function() { photo.duplicate(photoIDs) },
-			function() { contextMenu.move(photoIDs, e, "right") },
-			function() { photo.delete(photoIDs) }
+		var items = [
+			{ type: 'item', title: 'Star All', icon: 'icon-star', fn: function() { photo.setStar(photoIDs) } },
+			{ type: 'item', title: 'Tag All', icon: 'icon-tags', fn: function() { photo.editTags(photoIDs) } },
+			{ type: 'separator' },
+			{ type: 'item', title: 'Rename All', icon: 'icon-edit', fn: function() { photo.setTitle(photoIDs) } },
+			{ type: 'item', title: 'Duplicate All', icon: 'icon-copy', fn: function() { photo.duplicate(photoIDs) } },
+			{ type: 'item', title: 'Move All', icon: 'icon-folder-open', fn: function() { contextMenu.move(photoIDs, e) } },
+			{ type: 'item', title: 'Delete All', icon: 'icon-trash', fn: function() { photo.delete(photoIDs) } }
 		];
 
-		items = [
-			["<a class='icon-star'></a> Star All", 0],
-			["<a class='icon-tags'></a> Tag All", 1],
-			["separator", -1],
-			["<a class='icon-edit'></a> Rename All", 2],
-			["<a class='icon-copy'></a> Duplicate All", 3],
-			["<a class='icon-folder-open'></a> Move All", 4],
-			["<a class='icon-trash'></a> Delete All", 5]
-		];
-
-		contextMenu.show(items, mouse_x, mouse_y, "right");
+		context.show(items, e, function() {
+			context.close();
+			$('.photo.active, .album.active').removeClass('active');
+			if (visible.multiselect()) multiselect.close();
+		});
 
 	},
 
 	photoMore: function(photoID, e) {
 
-		var mouse_x = e.pageX,
-			mouse_y = e.pageY - $(document).scrollTop(),
-			items;
-
-		contextMenu.fns = [
-			function() { window.open(photo.getDirectLink()) },
-			function() { photo.getArchive(photoID) }
+		var items = [
+			{ type: 'item', title: 'Full Photo', icon: 'icon-resize-full', fn: function() { window.open(photo.getDirectLink()) } },
+			{ type: 'item', title: 'Download', icon: 'icon-circle-arrow-down', fn: function() { photo.getArchive(photoID) } }
 		];
 
-		items = [["<a class='icon-resize-full'></a> Full Photo", 0]];
-		if ((album.json&&album.json.downloadable&&album.json.downloadable==="1"&&lychee.publicMode)||!lychee.publicMode) items.push(["<a class='icon-circle-arrow-down'></a> Download", 1]);
+		// Remove download-item when
+		// 1) In public mode
+		// 2) Downloadable not 1 or not found
+		if (!(album.json&&album.json.downloadable&&album.json.downloadable==='1')&&
+			lychee.publicMode===true) items.splice(1, 1);
 
-		contextMenu.show(items, mouse_x, mouse_y, "right");
+		context.show(items, e);
 
 	},
 
-	move: function(photoIDs, e, orientation) {
+	move: function(photoIDs, e) {
 
-		var mouse_x = e.pageX,
-			mouse_y = e.pageY - $(document).scrollTop(),
-			items = [];
+		var items = [];
 
-		contextMenu.close(true);
+		// Show Unsorted when unsorted is not the current album
+		if (album.getID()!=='0') {
 
-		if (album.getID()!=="0") {
 			items = [
-				["Unsorted", 0, "photo.setAlbum([" + photoIDs + "], 0)"],
-				["separator", -1]
+				{ type: 'item', title: 'Unsorted', fn: function() { photo.setAlbum([photoIDs], 0) } },
+				{ type: 'separator' }
 			];
+
 		}
 
-		lychee.api("getAlbums", function(data) {
+		lychee.api('getAlbums', function(data) {
 
 			if (data.num===0) {
-				items = [["New Album", 0, "album.add()"]];
+
+				// Show 'Add album' when no album available
+				items = [
+					{ type: 'item', title: 'New Album', fn: album.add }
+				];
+
 			} else {
+
+				// Generate list of albums
 				$.each(data.content, function(index) {
-					if (this.id!=album.getID()) items.push([this.title, 0, "photo.setAlbum([" + photoIDs + "], " + this.id + ")"]);
+					var that = this;
+					if (that.id!=album.getID()) items.push({ type: 'item', title: that.title, fn: function() { photo.setAlbum([photoIDs], that.id) } });
 				});
+
 			}
 
-			if (!visible.photo()) contextMenu.show(items, mouse_x, mouse_y, "right");
-			else contextMenu.show(items, mouse_x, mouse_y, "left");
+			context.show(items, e);
 
 		});
 
@@ -266,70 +177,40 @@ contextMenu = {
 
 	sharePhoto: function(photoID, e) {
 
-		var mouse_x = e.pageX,
-			mouse_y = e.pageY,
-			items,
-			link = "";
+		var link = photo.getViewLink(photoID);
+		if (photo.json.public==='2') link = location.href;
 
-		mouse_y -= $(document).scrollTop();
-
-		contextMenu.fns = [
-			function() { photo.setPublic(photoID) },
-			function() { photo.share(photoID, 0) },
-			function() { photo.share(photoID, 1) },
-			function() { photo.share(photoID, 2) },
-			function() { photo.share(photoID, 3) },
-			function() { window.open(photo.getDirectLink()) }
+		var items = [
+			{ type: 'item', title: '<input readonly id="link" value="' + link + '">', fn: function() {}, class: 'noHover' },
+			{ type: 'separator' },
+			{ type: 'item', title: 'Make Private', icon: 'icon-eye-close', fn: function() { photo.setPublic(photoID) } },
+			{ type: 'separator' },
+			{ type: 'item', title: 'Twitter', icon: 'icon-twitter', fn: function() { photo.share(photoID, 0) } },
+			{ type: 'item', title: 'Facebook', icon: 'icon-facebook', fn: function() { photo.share(photoID, 1) } },
+			{ type: 'item', title: 'Mail', icon: 'icon-envelope', fn: function() { photo.share(photoID, 2) } },
+			{ type: 'item', title: 'Dropbox', icon: 'icon-hdd', fn: function() { photo.share(photoID, 3) } },
+			{ type: 'item', title: 'Direct Link', icon: 'icon-link', fn: function() { window.open(photo.getDirectLink()) } }
 		];
 
-		link = photo.getViewLink(photoID);
-		if (photo.json.public==="2") link = location.href;
-
-		items = [
-			["<input readonly id='link' value='" + link + "'>", -1],
-			["separator", -1],
-			["<a class='icon-eye-close'></a> Make Private", 0],
-			["separator", -1],
-			["<a class='icon-twitter'></a> Twitter", 1],
-			["<a class='icon-facebook'></a> Facebook", 2],
-			["<a class='icon-envelope'></a> Mail", 3],
-			["<a class='icon-hdd'></a> Dropbox", 4],
-			["<a class='icon-link'></a> Direct Link", 5]
-		];
-
-		contextMenu.show(items, mouse_x, mouse_y, "left");
-		$(".contextmenu input").focus().select();
+		context.show(items, e);
+		$('.context input#link').focus().select();
 
 	},
 
 	shareAlbum: function(albumID, e) {
 
-		var mouse_x = e.pageX,
-			mouse_y = e.pageY,
-			items;
-
-		mouse_y -= $(document).scrollTop();
-
-		contextMenu.fns = [
-			function() { album.setPublic(albumID) },
-			function() { album.share(0) },
-			function() { album.share(1) },
-			function() { album.share(2) },
-			function() { password.remove(albumID) }
+		var items = [
+			{ type: 'item', title: '<input readonly id="link" value="' + location.href + '">', fn: function() {}, class: 'noHover' },
+			{ type: 'separator' },
+			{ type: 'item', title: 'Make Private', icon: 'icon-eye-close', fn: function() { album.setPublic(albumID) } },
+			{ type: 'separator' },
+			{ type: 'item', title: 'Twitter', icon: 'icon-twitter', fn: function() { album.share(0) } },
+			{ type: 'item', title: 'Facebook', icon: 'icon-facebook', fn: function() { album.share(1) } },
+			{ type: 'item', title: 'Mail', icon: 'icon-envelope', fn: function() { album.share(2) } }
 		];
 
-		items = [
-			["<input readonly id='link' value='" + location.href + "'>", -1],
-			["separator", -1],
-			["<a class='icon-eye-close'></a> Make Private", 0],
-			["separator", -1],
-			["<a class='icon-twitter'></a> Twitter", 1],
-			["<a class='icon-facebook'></a> Facebook", 2],
-			["<a class='icon-envelope'></a> Mail", 3],
-		];
-
-		contextMenu.show(items, mouse_x, mouse_y, "left");
-		$(".contextmenu input").focus().select();
+		context.show(items, e);
+		$('.context input#link').focus().select();
 
 	},
 
@@ -337,10 +218,7 @@ contextMenu = {
 
 		if (!visible.contextMenu()) return false;
 
-		contextMenu.fns = [];
-
-		$(".contextmenu_bg, .contextmenu").remove();
-		$("body").css("overflow", "auto");
+		context.close();
 
 		if (leaveSelection!==true) {
 			$(".photo.active, .album.active").removeClass("active");
