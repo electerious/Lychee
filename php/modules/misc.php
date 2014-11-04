@@ -121,13 +121,14 @@ function get_hashed_password($password) {
 
 }
 
-function hasPermissions($path, $permissions = '0777') {
+function hasPermissions($path) {
 
-	/* assume that if running with the same uid as the owner of the directory it's ok */
-	$stat = @stat($path);
-	if ($stat && ($stat['uid'] == getmyuid())) return true;
-	if (substr(sprintf('%o', @fileperms($path)), -4)!=$permissions) return false;
-	else return true;
+	# Using built-in php function
+	if (is_writeable($path)) {
+          return true;
+        }
+        
+        return false;
 
 }
 
