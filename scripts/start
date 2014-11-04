@@ -2,7 +2,7 @@
 # Run this script to start Apache and MySQL
 #
 # Start MySQL
-mysqld &
+cd /usr ; /usr/bin/mysqld_safe &
 # Start Apache
 source /etc/apache2/envvars
 exec apache2 -D FOREGROUND
