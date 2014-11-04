@@ -27,7 +27,7 @@ WORKDIR /app
 RUN git clone https://github.com/electerious/Lychee.git .
 
 # Set file permissions
-RUN chown www-data:www-data /app -R
+RUN chown -R www-data:www-data /app
 RUN chmod -R 777 uploads/ data/
 
 EXPOSE 80
