@@ -43,11 +43,12 @@ class Photo extends Module {
 		self::dependencies(isset($this->database));
 
 		# Check permissions
-		if (hasPermissions(LYCHEE_UPLOADS_BIG)===false||
+		if (hasPermissions(LYCHEE_UPLOADS)===false||
+			hasPermissions(LYCHEE_UPLOADS_BIG)===false||
 			hasPermissions(LYCHEE_UPLOADS_THUMB)===false||
 			hasPermissions(LYCHEE_UPLOADS_MEDIUM)===false) {
-				Log::error($this->database, __METHOD__, __LINE__, 'Wrong permissions in uploads/');
-				exit('Error: Wrong permissions in uploads-folder!');
+				Log::error($this->database, __METHOD__, __LINE__, 'An upload-folder is missing or not readable and writable');
+				exit('Error: An upload-folder is missing or not readable and writable!');
 		}
 
 		# Call plugins
