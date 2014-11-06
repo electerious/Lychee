@@ -16,6 +16,13 @@ if (!$database->query($query)) {
 	}
 }
 
+# Create medium folder
+if (is_dir(LYCHEE_UPLOADS_MEDIUM)===false) {
+	# Only create the folder when it is missing
+	if (@mkdir(LYCHEE_UPLOADS_MEDIUM)===false)
+		Log::error($database, 'update_020700', __LINE__, 'Could not create medium-folder');
+}
+
 # Add medium to settings
 $query	= Database::prepare($database, "SELECT `key` FROM `?` WHERE `key` = 'medium' LIMIT 1", array(LYCHEE_TABLE_SETTINGS));
 $result	= $database->query($query);
