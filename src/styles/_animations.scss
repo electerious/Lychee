@@ -7,25 +7,29 @@
 	animation-name: fadeIn;
 	animation-duration: .3s;
 	animation-fill-mode: forwards;
-	animation-timing-function: cubic-bezier(0.51,.92,.24,1.15); }
+	animation-timing-function: cubic-bezier(0.51,.92,.24,1.15);
+}
 
 .fadeOut {
 	animation-name: fadeOut;
 	animation-duration: .3s;
 	animation-fill-mode: forwards;
-	animation-timing-function: cubic-bezier(0.51,.92,.24,1.15); }
+	animation-timing-function: cubic-bezier(0.51,.92,.24,1.15);
+}
 
 .contentZoomIn {
 	animation-name: zoomIn;
 	animation-duration: .2s;
 	animation-fill-mode: forwards;
-	animation-timing-function: cubic-bezier(0.51,.92,.24,1); }
+	animation-timing-function: cubic-bezier(0.51,.92,.24,1);
+}
 
 .contentZoomOut {
 	animation-name: zoomOut;
 	animation-duration: .2s;
 	animation-fill-mode: forwards;
-	animation-timing-function: cubic-bezier(0.51,.92,.24,1); }
+	animation-timing-function: cubic-bezier(0.51,.92,.24,1);
+}
 
 /* moveUp ------------------------------------------------*/
 @keyframes moveUp {
