@@ -161,7 +161,7 @@ class Album extends Module {
 
 		# Albums query
 		$query = Database::prepare($this->database, 'SELECT id, title, public, sysstamp, password FROM ? WHERE public = 1 AND visible <> 0 AND parent_id = ?', array(LYCHEE_TABLE_ALBUMS, $parent_id));
-		if ($public===false) $query = Database::prepare($this->database, 'SELECT id, title, public, sysstamp, password FROM ?', array(LYCHEE_TABLE_ALBUMS));
+		if ($public===false) $query = Database::prepare($this->database, 'SELECT id, title, public, sysstamp, password FROM ? WHERE parent_id = ?', array(LYCHEE_TABLE_ALBUMS, $parent_id));
 
 		# Execute query
 		$albums = $this->database->query($query);
