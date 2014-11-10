@@ -263,11 +263,26 @@ view = {
 			init: function() {
 
 				var photosData = "";
+        var albumsData = "";
+
+        if(album.json.subalbums.num > 0) {
+          $.each(album.json.subalbums.content, function (){
+            albums.parse(this);
+            //display albums in reverse order
+            albumsData = build.album(this) + albumsData;
+          });
+          if (albumsData.length > 0) {
+            albumsData = build.divider("Albums") + albumsData + build.divider("Images");
+            lychee.content.html(albumsData);
+          }
+        } else {
+          lychee.content.html("");
+        }
 
 				$.each(album.json.content, function() {
 					photosData += build.photo(this);
 				});
-				lychee.content.html(photosData);
+				lychee.content.append(photosData);
 
 				$("img[data-type!='svg']").retina();
 
