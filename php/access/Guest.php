@@ -44,10 +44,10 @@ class Guest extends Access {
 
 	# Album functions
 
-	private function getAlbums() {
+	private function getAlbums($parent_id = 0) {
 
 		$album = new Album($this->database, $this->plugins, $this->settings, null);
-		echo json_encode($album->getAll(true));
+		echo json_encode($album->getAll(true), $parent_id);
 
 	}
 

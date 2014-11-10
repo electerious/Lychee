@@ -4,6 +4,7 @@
 
 CREATE TABLE IF NOT EXISTS `?` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parent_id` int(11) NOT NULL,
   `title` varchar(50) NOT NULL,
   `description` varchar(1000) DEFAULT '',
   `sysstamp` int(11) NOT NULL,

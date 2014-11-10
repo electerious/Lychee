@@ -26,7 +26,7 @@ class Album extends Module {
 
 	}
 
-	public function add($title = 'Untitled', $public = 0, $visible = 1) {
+	public function add($title = 'Untitled', $public = 0, $visible = 1, $parent_id = 0) {
 
 		# Check dependencies
 		self::dependencies(isset($this->database));
@@ -39,7 +39,7 @@ class Album extends Module {
 
 		# Database
 		$sysstamp	= time();
-		$query		= Database::prepare($this->database, "INSERT INTO ? (title, sysstamp, public, visible) VALUES ('?', '?', '?', '?')", array(LYCHEE_TABLE_ALBUMS, $title, $sysstamp, $public, $visible));
+		$query		= Database::prepare($this->database, "INSERT INTO ? (title, sysstamp, public, visible, parent_id) VALUES ('?', '?', '?', '?', '?')", array(LYCHEE_TABLE_ALBUMS, $title, $sysstamp, $public, $visible, $parent_id));
 		$result		= $this->database->query($query);
 
 		# Call plugins
@@ -138,6 +138,7 @@ class Album extends Module {
 		}
 
 		$return['id']	= $this->albumIDs;
+    $return['subalbums'] = $this->getAll(true, $this->albumIDs);
 		$return['num']	= $photos->num_rows;
 
 		# Call plugins
@@ -147,7 +148,7 @@ class Album extends Module {
 
 	}
 
-	public function getAll($public) {
+	public function getAll($public, $parent_id = 0) {
 
 		# Check dependencies
 		self::dependencies(isset($this->database, $this->settings, $public));
@@ -159,7 +160,7 @@ class Album extends Module {
 		if ($public===false) $return = $this->getSmartInfo();
 
 		# Albums query
-		$query = Database::prepare($this->database, 'SELECT id, title, public, sysstamp, password FROM ? WHERE public = 1 AND visible <> 0', array(LYCHEE_TABLE_ALBUMS));
+		$query = Database::prepare($this->database, 'SELECT id, title, public, sysstamp, password FROM ? WHERE public = 1 AND visible <> 0 AND parent_id = ?', array(LYCHEE_TABLE_ALBUMS, $parent_id));
 		if ($public===false) $query = Database::prepare($this->database, 'SELECT id, title, public, sysstamp, password FROM ?', array(LYCHEE_TABLE_ALBUMS));
 
 		# Execute query
