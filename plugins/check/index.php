@@ -93,7 +93,7 @@ echo(PHP_EOL . PHP_EOL . 'System Information' . PHP_EOL);
 echo('------------------' . PHP_EOL);
 
 # Load json
-$json = file_get_contents(LYCHEE_BUILD . 'package.json');
+$json = file_get_contents(LYCHEE_SRC . 'package.json');
 $json = json_decode($json, true);
 
 $imagick = extension_loaded('imagick');
