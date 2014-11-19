@@ -5,8 +5,8 @@
 
 photo = {}
 
-photo.json = null;
-photo.cache = null;
+photo.json	= null;
+photo.cache	= null;
 
 photo.getID = function() {
 
@@ -175,24 +175,24 @@ photo.delete = function(photoIDs) {
 
 	if (photoIDs.length===1) {
 		// Get title if only one photo is selected
-		if (visible.photo()) photoTitle = photo.json.title;
-		else photoTitle = album.json.content[photoIDs].title;
-		if (photoTitle==='') photoTitle = 'Untitled';
+		if (visible.photo())	photoTitle = photo.json.title;
+		else					photoTitle = album.json.content[photoIDs].title;
+		if (photoTitle==='')	photoTitle = 'Untitled';
 	}
 
 	buttons = [
 		['', function() {
 
-			var nextPhoto =		'',
-				previousPhoto =	'';
+			var nextPhoto		= '',
+				previousPhoto	= '';
 
 			photoIDs.forEach(function(id, index, array) {
 
 				// Change reference for the next and previous photo
 				if (album.json.content[id].nextPhoto!==''||album.json.content[id].previousPhoto!=='') {
 
-					nextPhoto =		album.json.content[id].nextPhoto;
-					previousPhoto =	album.json.content[id].previousPhoto;
+					nextPhoto		= album.json.content[id].nextPhoto;
+					previousPhoto	= album.json.content[id].previousPhoto;
 
 					album.json.content[previousPhoto].nextPhoto = nextPhoto;
 					album.json.content[nextPhoto].previousPhoto = previousPhoto;
@@ -252,8 +252,8 @@ photo.setTitle = function(photoIDs) {
 
 	if (photoIDs.length===1) {
 		// Get old title if only one photo is selected
-		if (photo.json) oldTitle = photo.json.title;
-		else if (album.json) oldTitle = album.json.content[photoIDs].title;
+		if (photo.json)			oldTitle = photo.json.title;
+		else if (album.json)	oldTitle = album.json.content[photoIDs].title;
 		oldTitle = oldTitle.replace("'", '&apos;');
 	}
 
@@ -307,8 +307,8 @@ photo.setAlbum = function(photoIDs, albumID) {
 		// Change reference for the next and previous photo
 		if (album.json.content[id].nextPhoto!==''||album.json.content[id].previousPhoto!=='') {
 
-			nextPhoto =		album.json.content[id].nextPhoto;
-			previousPhoto =	album.json.content[id].previousPhoto;
+			nextPhoto		= album.json.content[id].nextPhoto;
+			previousPhoto	= album.json.content[id].previousPhoto;
 
 			album.json.content[previousPhoto].nextPhoto = nextPhoto;
 			album.json.content[nextPhoto].previousPhoto = previousPhoto;
@@ -428,8 +428,8 @@ photo.setDescription = function(photoID) {
 
 photo.editTags = function(photoIDs) {
 
-	var oldTags =	'',
-		tags =		'',
+	var oldTags		= '',
+		tags		= '',
 		buttons;
 
 	if (!photoIDs) return false;
@@ -514,9 +514,9 @@ photo.deleteTag = function(photoID, index) {
 
 photo.share = function(photoID, service) {
 
-	var link =		'',
-		url =		photo.getViewLink(photoID),
-		filename =	'unknown';
+	var link		= '',
+		url			= photo.getViewLink(photoID),
+		filename	= 'unknown';
 
 	switch (service) {
 		case 0:
@@ -548,10 +548,10 @@ photo.getSize = function() {
 	// Size can be 'big', 'medium' or 'small'
 	// Default is big
 	// Small is centered in the middle of the screen
-	var size =			'big',
-		scaled =		false,
-		hasMedium =		photo.json.medium!=='',
-		pixelRatio =	window.devicePixelRatio,
+	var size		= 'big',
+		scaled		= false,
+		hasMedium	= photo.json.medium!=='',
+		pixelRatio	= window.devicePixelRatio,
 		view = {
 			width:	$(window).width()-60,
 			height:	$(window).height()-100
@@ -564,8 +564,8 @@ photo.getSize = function() {
 
 	// Calculate pixel ratio of screen
 	if (pixelRatio!==undefined&&pixelRatio>1) {
-		view.width =	view.width * pixelRatio;
-		view.height =	view.height * pixelRatio;
+		view.width	= view.width * pixelRatio;
+		view.height	= view.height * pixelRatio;
 	}
 
 	// Medium available and
