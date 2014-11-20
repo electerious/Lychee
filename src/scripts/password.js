@@ -3,9 +3,11 @@
  * @copyright   2014 by Tobias Reich
  */
 
-password = {}
+password = {
 
-password.value = '';
+	value: ''
+
+}
 
 password.get = function(albumID, callback) {
 

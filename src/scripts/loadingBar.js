@@ -3,9 +3,11 @@
  * @copyright	2014 by Tobias Reich
  */
 
-loadingBar = {}
+loadingBar = {
 
-loadingBar.status = null;
+	status: null
+
+}
 
 loadingBar.show = function(status, errorText) {
 

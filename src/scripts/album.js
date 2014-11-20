@@ -3,9 +3,11 @@
  * @copyright	2014 by Tobias Reich
  */
 
-album = {}
+album = {
 
-album.json = null;
+	json: null
+
+}
 
 album.getID = function() {
 

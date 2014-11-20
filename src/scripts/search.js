@@ -3,9 +3,11 @@
  * @copyright	2014 by Tobias Reich
  */
 
-search = {}
+search = {
 
-search.code = null;
+	code: null
+
+}
 
 search.find = function(term) {
 

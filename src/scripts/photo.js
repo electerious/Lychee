@@ -3,10 +3,12 @@
  * @copyright	2014 by Tobias Reich
  */
 
-photo = {}
+photo = {
 
-photo.json	= null;
-photo.cache	= null;
+	json:	null,
+	cache:	null
+
+}
 
 photo.getID = function() {
 

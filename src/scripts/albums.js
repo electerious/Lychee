@@ -3,9 +3,11 @@
  * @copyright	2014 by Tobias Reich
  */
 
-albums = {}
+albums = {
 
-albums.json = null;
+	json: null
+
+}
 
 albums.load = function() {
 

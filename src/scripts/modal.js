@@ -3,9 +3,11 @@
  * @copyright	2014 by Tobias Reich
  */
 
-modal = {}
+modal = {
 
-modal.fns = null;
+	fns: null
+
+}
 
 modal.show = function(title, text, buttons, marginTop, closeButton) {
 
