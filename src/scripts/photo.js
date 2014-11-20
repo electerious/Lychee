@@ -174,10 +174,14 @@ photo.delete = function(photoIDs) {
 	if (photoIDs instanceof Array===false) photoIDs = [photoIDs];
 
 	if (photoIDs.length===1) {
+
 		// Get title if only one photo is selected
 		if (visible.photo())	photoTitle = photo.json.title;
 		else					photoTitle = album.json.content[photoIDs].title;
+
+		// Fallback for photos without a title
 		if (photoTitle==='')	photoTitle = 'Untitled';
+
 	}
 
 	buttons = [
@@ -552,7 +556,7 @@ photo.getSize = function() {
 		scaled		= false,
 		hasMedium	= photo.json.medium!=='',
 		pixelRatio	= window.devicePixelRatio,
-		view = {
+		view		= {
 			width:	$(window).width()-60,
 			height:	$(window).height()-100
 		};
@@ -613,7 +617,7 @@ photo.getViewLink = function(photoID) {
 
 	var url = 'view.php?p=' + photoID;
 
-	if (location.href.indexOf('index.html')>0) return location.href.replace('index.html' + location.hash, url);
-	else return location.href.replace(location.hash, url);
+	if (location.href.indexOf('index.html')>0)	return location.href.replace('index.html' + location.hash, url);
+	else										return location.href.replace(location.hash, url);
 
 }

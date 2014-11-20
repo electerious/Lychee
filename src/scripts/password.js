@@ -54,6 +54,6 @@ password.getDialog = function(albumID, callback) {
 		['Enter', function() { password.get(albumID, callback) }],
 		['Cancel', lychee.goto]
 	];
-	modal.show('<a class="icon-lock"></a> Enter Password', 'This album is protected by a password. Enter the password below to view the photos of this album: <input class="text" type="password" placeholder="password" value="">', buttons, -110, false);
+	modal.show("<a class='icon-lock'></a> Enter Password", "This album is protected by a password. Enter the password below to view the photos of this album: <input class='text' type='password' placeholder='password' value=''>", buttons, -110, false);
 
 }
