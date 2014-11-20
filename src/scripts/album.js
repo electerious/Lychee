@@ -63,9 +63,15 @@ album = {
 
 				album.json = data;
 
+				// Calculate delay
 				durationTime = (new Date().getTime() - startTime);
-				if (durationTime>300) waitTime = 0; else if (refresh) waitTime = 0; else waitTime = 300 - durationTime;
-				if (!visible.albums()&&!visible.photo()&&!visible.album()) waitTime = 0;
+				if (durationTime>300)	waitTime = 0;
+				else					waitTime = 300 - durationTime;
+
+				// Skip delay when refresh is true
+				// Skip delay when opening a blank Lychee
+				if (refresh===true)											waitTime = 0;
+				if (!visible.albums()&&!visible.photo()&&!visible.album())	waitTime = 0;
 
 				setTimeout(function() {
 

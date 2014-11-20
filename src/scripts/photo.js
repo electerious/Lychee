@@ -158,7 +158,7 @@ photo.duplicate = function(photoIDs) {
 	lychee.api(params, function(data) {
 
 		if (data!==true) lychee.error(null, params, data);
-		else album.load(album.getID(), false);
+		else album.load(album.getID());
 
 	});
 

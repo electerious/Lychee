@@ -3,93 +3,98 @@
  * @copyright	2014 by Tobias Reich
  */
 
-search = {
+search = {}
 
-	code: null,
+search.code = null;
 
-	find: function(term) {
+search.find = function(term) {
 
-		var params,
-			albumsData = "",
-			photosData = "",
-			code;
+	var params,
+		albumsData = '',
+		photosData = '',
+		code;
 
-		clearTimeout($(window).data("timeout"));
-		$(window).data("timeout", setTimeout(function() {
+	clearTimeout($(window).data('timeout'));
+	$(window).data('timeout', setTimeout(function() {
 
-			if ($("#search").val().length!==0) {
+		if ($('#search').val().length!==0) {
 
-				params = "search&term=" + term;
-				lychee.api(params, function(data) {
+			params = 'search&term=' + term;
+			lychee.api(params, function(data) {
 
-					if (data&&data.albums) {
-						albums.json = { content: data.albums };
-						$.each(albums.json.content, function() {
-							albums.parse(this);
-							albumsData += build.album(this);
-						});
-					}
+				// Build albums
+				if (data&&data.albums) {
+					albums.json = { content: data.albums };
+					$.each(albums.json.content, function() {
+						albums.parse(this);
+						albumsData += build.album(this);
+					});
+				}
 
-					if (data&&data.photos) {
-						album.json = { content: data.photos };
-						$.each(album.json.content, function() {
-							photosData += build.photo(this);
-						});
-					}
+				// Build photos
+				if (data&&data.photos) {
+					album.json = { content: data.photos };
+					$.each(album.json.content, function() {
+						photosData += build.photo(this);
+					});
+				}
 
-					if (albumsData===""&&photosData==="") code = "error";
-					else if (albumsData==="") code = build.divider("Photos")+photosData;
-					else if (photosData==="") code = build.divider("Albums")+albumsData;
-					else code = build.divider("Photos")+photosData+build.divider("Albums")+albumsData;
+				// 1. No albums and photos found
+				// 2. Only photos found
+				// 3. Only albums found
+				// 4. Albums and photos found
+				if (albumsData===''&&photosData==='')	code = 'error';
+				else if (albumsData==='')				code = build.divider('Photos') + photosData;
+				else if (photosData==='')				code = build.divider('Albums') + albumsData;
+				else									code = build.divider('Photos') + photosData + build.divider('Albums') + albumsData;
 
-					if (search.code!==md5(code)) {
+				// Only refresh view when search results are different
+				if (search.code!==md5(code)) {
 
-						$(".no_content").remove();
+					$('.no_content').remove();
 
-						lychee.animate(".album:nth-child(-n+50), .photo:nth-child(-n+50)", "contentZoomOut");
-						lychee.animate(".divider", "fadeOut");
+					lychee.animate('.album:nth-child(-n+50), .photo:nth-child(-n+50)', 'contentZoomOut');
+					lychee.animate('.divider', 'fadeOut');
 
-						search.code = md5(code);
+					search.code = md5(code);
 
-						setTimeout(function() {
+					setTimeout(function() {
 
-							if (code==="error") $("body").append(build.no_content("search"));
-							else {
-								lychee.content.html(code);
-								lychee.animate(".album:nth-child(-n+50), .photo:nth-child(-n+50)", "contentZoomIn");
-								$("img[data-type!='svg']").retina();
-							}
+						if (code==='error') $('body').append(build.no_content('search'));
+						else {
+							lychee.content.html(code);
+							lychee.animate('.album:nth-child(-n+50), .photo:nth-child(-n+50)', 'contentZoomIn');
+							$('img[data-type!="svg"]').retina();
+						}
 
-						}, 300);
+					}, 300);
 
-					}
+				}
 
-				});
+			});
 
-			} else search.reset();
+		} else search.reset();
 
-		}, 250));
+	}, 250));
 
-	},
+}
 
-	reset: function() {
+search.reset = function() {
 
-		$("#search").val("");
-		$(".no_content").remove();
+	$('#search').val('');
+	$('.no_content').remove();
 
-		if (search.code!=="") {
+	if (search.code!=='') {
 
-			// Trash data
-			albums.json = null;
-			album.json = null;
-			photo.json = null;
-			search.code = "";
+		// Trash data
+		albums.json	= null;
+		album.json	= null;
+		photo.json	= null;
+		search.code	= '';
 
-			lychee.animate(".divider", "fadeOut");
-			albums.load();
-
-		}
+		lychee.animate('.divider', 'fadeOut');
+		albums.load();
 
 	}
 
-};
+}
