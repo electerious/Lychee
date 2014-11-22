@@ -16,9 +16,6 @@ var catchError = function(err) {
 paths.view = {
 	js: [
 		'bower_components/jQuery/dist/jquery.min.js',
-		'bower_components/js-md5/js/md5.min.js',
-		'bower_components/mousetrap/mousetrap.min.js',
-		'bower_components/mousetrap/plugins/global-bind/mousetrap-global-bind.min.js',
 		'../src/scripts/_frameworks.js',
 		'../src/scripts/view/main.js'
 	],
