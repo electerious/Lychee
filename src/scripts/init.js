@@ -6,73 +6,73 @@
 $(document).ready(function() {
 
 	/* Event Name */
-	var event_name = (mobileBrowser()) ? "touchend" : "click";
+	var event_name = (mobileBrowser()) ? 'touchend' : 'click';
 
 	/* Disable ContextMenu */
-	$(document).bind("contextmenu", function(e) { e.preventDefault() });
+	$(document).bind('contextmenu', function(e) { e.preventDefault() });
 
 	/* Multiselect */
-	$("#content")	.on("mousedown",	multiselect.show);
-	$(document)		.on("mouseup",		multiselect.getSelection);
+	$('#content')	.on('mousedown',	multiselect.show);
+	$(document)		.on('mouseup',		multiselect.getSelection);
 
 	/* Header */
-	$("#button_share").on(event_name, function(e) {
+	$('#button_share').on(event_name, function(e) {
 		if (photo.json.public==1||photo.json.public==2)	contextMenu.sharePhoto(photo.getID(), e);
 		else											photo.setPublic(photo.getID(), e);
 	});
-	$("#button_share_album").on(event_name, function(e) {
+	$('#button_share_album').on(event_name, function(e) {
 		if (album.json.public==1)	contextMenu.shareAlbum(album.getID(), e);
 		else						album.setPublic(album.getID(), e);
 	});
-	$("#hostedwith")			.on(event_name, function() { window.open(lychee.website) });
-	$("#button_signin")			.on(event_name, lychee.loginDialog);
-	$("#button_settings")		.on(event_name, contextMenu.settings);
-	$("#button_more")			.on(event_name, function(e) { contextMenu.photoMore(photo.getID(), e) });
-	$("#button_trash_album")	.on(event_name, function() { album.delete([album.getID()]) });
-	$("#button_move")			.on(event_name, function(e) { contextMenu.move([photo.getID()], e) });
-	$("#button_trash")			.on(event_name, function() { photo.delete([photo.getID()]) });
-	$("#button_info_album")		.on(event_name, view.infobox.show);
-	$("#button_info")			.on(event_name, view.infobox.show);
-	$("#button_archive")		.on(event_name, function() { album.getArchive(album.getID()) });
-	$("#button_star")			.on(event_name, function() { photo.setStar([photo.getID()]) });
-	$("#button_back_home")		.on(event_name, function() { lychee.goto("") });
-	$("#button_back")			.on(event_name, function() { lychee.goto(album.getID()) });
+	$('#button_signin')			.on(event_name, lychee.loginDialog);
+	$('#button_settings')		.on(event_name, contextMenu.settings);
+	$('#button_info_album')		.on(event_name, view.infobox.show);
+	$('#button_info')			.on(event_name, view.infobox.show);
+	$('#button_more')			.on(event_name, function(e) { contextMenu.photoMore(photo.getID(), e) });
+	$('#button_move')			.on(event_name, function(e) { contextMenu.move([photo.getID()], e) });
+	$('#hostedwith')			.on(event_name, function() { window.open(lychee.website) });
+	$('#button_trash_album')	.on(event_name, function() { album.delete([album.getID()]) });
+	$('#button_trash')			.on(event_name, function() { photo.delete([photo.getID()]) });
+	$('#button_archive')		.on(event_name, function() { album.getArchive(album.getID()) });
+	$('#button_star')			.on(event_name, function() { photo.setStar([photo.getID()]) });
+	$('#button_back_home')		.on(event_name, function() { lychee.goto('') });
+	$('#button_back')			.on(event_name, function() { lychee.goto(album.getID()) });
 
 	/* Search */
-	$("#search").on("keyup click", function() { search.find($(this).val()) });
+	$('#search').on('keyup click', function() { search.find($(this).val()) });
 
 	/* Clear Search */
-	$("#clearSearch").on(event_name, function () {
-		$("#search").focus();
+	$('#clearSearch').on(event_name, function () {
+		$('#search').focus();
 		search.reset();
 	});
 
 	/* Image View */
 	lychee.imageview
-		.on(event_name, ".arrow_wrapper.previous",	photo.previous)
-		.on(event_name, ".arrow_wrapper.next",		photo.next);
+		.on(event_name, '.arrow_wrapper.previous',	photo.previous)
+		.on(event_name, '.arrow_wrapper.next',		photo.next);
 
 	/* Infobox */
-	$("#infobox")
-		.on(event_name, ".header a",				view.infobox.hide)
-		.on(event_name, "#edit_title_album",		function() { album.setTitle([album.getID()]) })
-		.on(event_name, "#edit_description_album",	function() { album.setDescription(album.getID()) })
-		.on(event_name, "#edit_title",				function() { photo.setTitle([photo.getID()]) })
-		.on(event_name, "#edit_description",		function() { photo.setDescription(photo.getID()) })
-		.on(event_name, "#edit_tags",				function() { photo.editTags([photo.getID()]) })
-		.on(event_name, "#tags .tag span",			function() { photo.deleteTag(photo.getID(), $(this).data('index')) });
+	$('#infobox')
+		.on(event_name, '.header a',				view.infobox.hide)
+		.on(event_name, '#edit_title_album',		function() { album.setTitle([album.getID()]) })
+		.on(event_name, '#edit_description_album',	function() { album.setDescription(album.getID()) })
+		.on(event_name, '#edit_title',				function() { photo.setTitle([photo.getID()]) })
+		.on(event_name, '#edit_description',		function() { photo.setDescription(photo.getID()) })
+		.on(event_name, '#edit_tags',				function() { photo.editTags([photo.getID()]) })
+		.on(event_name, '#tags .tag span',			function() { photo.deleteTag(photo.getID(), $(this).data('index')) });
 
 	/* Keyboard */
 	Mousetrap
-		.bind('left',			function() { if (visible.photo()) $("#imageview a#previous").click() })
-		.bind('right',			function() { if (visible.photo()) $("#imageview a#next").click() })
-		.bind(['u', 'ctrl+u'],	function() { $("#upload_files").click() })
+		.bind('left',			function() { if (visible.photo()) $('#imageview a#previous').click() })
+		.bind('right',			function() { if (visible.photo()) $('#imageview a#next').click() })
+		.bind(['u', 'ctrl+u'],	function() { $('#upload_files').click() })
 		.bind(['s', 'ctrl+s', 'f', 'ctrl+f'], function(e) {
 			if (visible.photo()) {
-				$("#button_star").click();
+				$('#button_star').click();
 			} else if (visible.albums()) {
 				e.preventDefault();
-				$("#search").focus();
+				$('#search').focus();
 			}
 		})
 		.bind(['r', 'ctrl+r'], function(e) {
@@ -106,17 +106,17 @@ $(document).ready(function() {
 		});
 
 	Mousetrap.bindGlobal('enter', function() {
-		if ($(".message .button.active").length) $(".message .button.active").addClass("pressed").click()
+		if ($('.message .button.active').length) $('.message .button.active').addClass('pressed').click()
 	});
 
 	Mousetrap.bindGlobal(['esc', 'command+up'], function(e) {
 		e.preventDefault();
-		if (visible.message()&&$(".message .close").length>0)		modal.close();
+		if (visible.message()&&$('.message .close').length>0)		modal.close();
 		else if (visible.contextMenu())								contextMenu.close();
 		else if (visible.infobox())									view.infobox.hide();
 		else if (visible.photo())									lychee.goto(album.getID());
-		else if (visible.album())									lychee.goto("");
-		else if (visible.albums()&&$("#search").val().length!==0)	search.reset();
+		else if (visible.album())									lychee.goto('');
+		else if (visible.albums()&&$('#search').val().length!==0)	search.reset();
 	});
 
 
@@ -133,7 +133,7 @@ $(document).ready(function() {
 			})
 
 			/* Swipe on mobile */
-			.swipe().on('swipeStart',	function() { if (visible.photo()) swipe.start($("#image")) })
+			.swipe().on('swipeStart',	function() { if (visible.photo()) swipe.start($('#image')) })
 			.swipe().on('swipeMove',	function(e) { if (visible.photo()) swipe.move(e.swipe) })
 			.swipe().on('swipeEnd',		function(e) { if (visible.photo()) swipe.stop(e.swipe, photo.previous, photo.next) });
 
@@ -143,40 +143,40 @@ $(document).ready(function() {
 	$(document)
 
 		/* Login */
-		.on("keyup", "#password", function() { if ($(this).val().length>0) $(this).removeClass("error") })
+		.on('keyup', '#password', function() { if ($(this).val().length>0) $(this).removeClass('error') })
 
 		/* Header */
-		.on(event_name, "#title.editable", function() {
+		.on(event_name, '#title.editable', function() {
 			if (visible.photo())	photo.setTitle([photo.getID()]);
 			else					album.setTitle([album.getID()]);
 		})
 
 		/* Navigation */
-		.on("click", ".album", function() { lychee.goto($(this).attr("data-id")) })
-		.on("click", ".photo", function() { lychee.goto(album.getID() + "/" + $(this).attr("data-id")) })
+		.on('click', '.album', function() { lychee.goto($(this).attr('data-id')) })
+		.on('click', '.photo', function() { lychee.goto(album.getID() + '/' + $(this).attr('data-id')) })
 
 		/* Modal */
-		.on(event_name, ".message .close",			modal.close)
-		.on(event_name, ".message .button:first",	function() { if (modal.fns!==null) modal.fns[0](); if (!visible.signin()) modal.close() })
-		.on(event_name, ".message .button:last",	function() { if (modal.fns!==null) modal.fns[1](); if (!visible.signin()) modal.close() })
+		.on(event_name, '.message .close',			modal.close)
+		.on(event_name, '.message .button:first',	function() { if (modal.fns!==null) modal.fns[0](); if (!visible.signin()) modal.close() })
+		.on(event_name, '.message .button:last',	function() { if (modal.fns!==null) modal.fns[1](); if (!visible.signin()) modal.close() })
 
 		/* Add Dialog */
-		.on(event_name, ".button_add", function(e) { contextMenu.add(e) })
+		.on(event_name, '.button_add', function(e) { contextMenu.add(e) })
 
 		/* Context Menu */
-		.on("contextmenu", ".photo",			function(e) { contextMenu.photo(photo.getID(), e) })
-		.on("contextmenu", ".album",			function(e) { contextMenu.album(album.getID(), e) })
-		.on("contextmenu", ".contextmenu_bg",	contextMenu.close)
-		.on(event_name, ".contextmenu_bg",		contextMenu.close)
+		.on('contextmenu', '.photo',			function(e) { contextMenu.photo(photo.getID(), e) })
+		.on('contextmenu', '.album',			function(e) { contextMenu.album(album.getID(), e) })
+		.on('contextmenu', '.contextmenu_bg',	contextMenu.close)
+		.on(event_name, '.contextmenu_bg',		contextMenu.close)
 
 		/* Infobox */
-		.on(event_name, "#infobox_overlay", view.infobox.hide)
+		.on(event_name, '#infobox_overlay', view.infobox.hide)
 
 		/* Upload */
-		.on("change", "#upload_files",				function() { modal.close(); upload.start.local(this.files) })
-		.on(event_name, ".upload_message a.close",	upload.close)
-		.on("dragover",								function(e) { e.preventDefault(); }, false)
-		.on("drop", function(e) {
+		.on('change', '#upload_files',				function() { modal.close(); upload.start.local(this.files) })
+		.on(event_name, '.upload_message a.close',	upload.close)
+		.on('dragover',								function(e) { e.preventDefault(); }, false)
+		.on('drop', function(e) {
 
 			e.stopPropagation();
 			e.preventDefault();
