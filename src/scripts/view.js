@@ -151,7 +151,7 @@ view.albums = {
 			if (!lychee.publicMode) smartData = build.divider('Smart Albums') + build.album(albums.json.unsortedAlbum) + build.album(albums.json.starredAlbum) + build.album(albums.json.publicAlbum) + build.album(albums.json.recentAlbum);
 
 			/* Albums */
-			if (albums.json.content) {
+			if (albums.json.content&&albums.json.num!==0) {
 
 				$.each(albums.json.content, function() {
 					albums.parse(this);
