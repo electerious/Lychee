@@ -161,7 +161,7 @@ $(document).ready(function() {
 		.on(event_name, '.message .button:last',	function() { if (modal.fns!==null) modal.fns[1](); if (!visible.signin()) modal.close() })
 
 		/* Add Dialog */
-		.on(event_name, '.button_add', function(e) { contextMenu.add(e) })
+		.on(event_name, '.button_add', contextMenu.add)
 
 		/* Context Menu */
 		.on('contextmenu', '.photo',			function(e) { contextMenu.photo(photo.getID(), e) })
