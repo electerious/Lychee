@@ -275,10 +275,12 @@ lychee.setMode = function(mode) {
 	Mousetrap
 		.unbind(['u', 'ctrl+u'])
 		.unbind(['s', 'ctrl+s'])
+		.unbind(['f', 'ctrl+f'])
 		.unbind(['r', 'ctrl+r'])
 		.unbind(['d', 'ctrl+d'])
 		.unbind(['t', 'ctrl+t'])
-		.unbind(['command+backspace', 'ctrl+backspace']);
+		.unbind(['command+backspace', 'ctrl+backspace'])
+		.unbind(['command+a', 'ctrl+a']);
 
 	if (mode==='public') {
 
