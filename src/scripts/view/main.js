@@ -39,32 +39,50 @@ key = function(e) {
 
 	var code = (e.keyCode ? e.keyCode : e.which);
 
-	if (code===27&&visibleInfobox()) {
+	if (code===27) {
 		hideInfobox();
 		e.preventDefault();
 	}
 
 }
 
-visibleInfobox = function() {
+getPhotoSize = function(photo) {
 
-	if (parseInt(infobox.css('right').replace('px', ''))<0)	return false;
-	else													return true;
+	// Size can be 'big', 'medium' or 'small'
+	// Default is big
+	// Small is centered in the middle of the screen
+	var size		= 'big',
+		scaled		= false,
+		hasMedium	= photo.medium!=='',
+		pixelRatio	= window.devicePixelRatio,
+		view		= {
+			width:	$(window).width()-60,
+			height:	$(window).height()-100
+		};
 
-}
+	// Detect if the photo will be shown scaled,
+	// because the screen size is smaller than the photo
+	if (photo.width>view.width||
+		photo.width>view.height) scaled = true;
 
-isPhotoSmall = function(photo) {
+	// Calculate pixel ratio of screen
+	if (pixelRatio!==undefined&&pixelRatio>1) {
+		view.width	= view.width * pixelRatio;
+		view.height	= view.height * pixelRatio;
+	}
 
-	var size = {
-		width:	false,
-		height:	false
-	};
+	// Medium available and
+	// Medium still bigger than screen
+	if (hasMedium===true&&
+		(1920>view.width&&1080>view.height)) size = 'medium';
 
-	if (photo.width<$(window).width()-60)		size.width = true;
-	if (photo.height<$(window).height()-100)	size.height = true;
+	// Photo not scaled
+	// Photo smaller then screen
+	if (scaled===false&&
+		(photo.width<view.width&&
+		photo.width<view.height)) size = 'small';
 
-	if (size.width&&size.height)	return true;
-	else							return false;
+	return size;
 
 }
 
@@ -88,14 +106,17 @@ loadPhotoInfo = function(photoID) {
 	var params = 'function=getPhoto&photoID=' + photoID + '&albumID=0&password=""';
 	$.ajax({type: 'POST', url: api_path, data: params, dataType: 'json', success: function(data) {
 
+		var size = getPhotoSize(data);
+
 		if (!data.title) data.title = 'Untitled';
 		document.title = 'Lychee - ' + data.title;
 		headerTitle.html(data.title);
 
 		imageview.attr('data-id', photoID);
 
-		if (isPhotoSmall(data))	imageview.html("<div id='image' class='small' style='background-image: url(" + data.url + "); width: " + data.width + "px; height: " + data.height + "px; margin-top: -" + parseInt((data.height/2)-20) + "px; margin-left: -" + data.width/2 + "px;'></div>");
-		else					imageview.html("<div id='image' style='background-image: url(" + data.url + ");'></div>");
+		if (size==='big')			imageview.html("<div id='image' style='background-image: url(" + data.url + ");'></div>");
+		else if (size==='medium')	imageview.html("<div id='image' style='background-image: url(" + data.medium + ");'></div>");
+		else						imageview.html("<div id='image' class='small' style='background-image: url(" + data.url + "); width: " + data.width + "px; height: " + data.height + "px; margin-top: -" + parseInt((data.height/2)-20) + "px; margin-left: -" + data.width/2 + "px;'></div>");
 
 		imageview
 			.removeClass('fadeOut')
