@@ -56,12 +56,15 @@ function getGraphHeader($database, $photoID) {
 
 	if (!isset($database, $photoID)) return false;
 
-	$query	= Database::prepare($database, "SELECT title, description, url FROM ? WHERE id = '?'", array(LYCHEE_TABLE_PHOTOS, $photoID));
+	$query	= Database::prepare($database, "SELECT title, description, url, medium FROM ? WHERE id = '?'", array(LYCHEE_TABLE_PHOTOS, $photoID));
 	$result	= $database->query($query);
 	$row	= $result->fetch_object();
 
-	$parseUrl	= parse_url("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-	$picture	= $parseUrl['scheme']."://".$parseUrl['host'].$parseUrl['path']."/../uploads/big/".$row->url;
+	if ($row->medium==='1')	$dir = 'medium';
+	else					$dir = 'big';
+
+	$parseUrl	= parse_url('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+	$picture	= $parseUrl['scheme'] . '://' . $parseUrl['host'] . $parseUrl['path'] . '/../uploads/' . $dir . '/' . $row->url;
 
 	$return = '<!-- General Meta Data -->';
 	$return .= '<meta name="title" content="'.$row->title.'" />';
