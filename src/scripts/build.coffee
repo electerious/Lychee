@@ -233,41 +233,6 @@ build.uploadModal = (title, files) ->
 
 	return html
 
-build.contextMenu = (items) ->
-
-	html =	"""
-			<div class='contextmenu_bg'></div>
-			<div class='contextmenu'>
-				<table>
-					<tbody>
-			"""
-
-	items.forEach (item, i, items) ->
-
-		if item[0] is 'separator' and item[1] is -1
-
-			html += "<tr class='separator'></tr>"
-
-		else if item[1] is -1
-
-			html += "<tr class='no_hover'><td>#{ item[0] }</td></tr>"
-
-		else if item[2]?
-
-			html += "<tr><td onclick='#{ item[2] }; window.contextMenu.close();'>#{ item[0] }</td></tr>"
-
-		else
-
-			html += "<tr><td onclick='window.contextMenu.fns[#{ item[1] }](); window.contextMenu.close();'>#{ item[0] }</td></tr>";
-
-	html +=	"""
-					</tbody>
-				</table>
-			</div>
-			"""
-
-	return html
-
 build.tags = (tags, forView) ->
 
 	html = ''
