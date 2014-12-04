@@ -17,7 +17,7 @@ contextMenu.add = function(e) {
 		{ type: 'item', title: 'New Album', icon: 'icon-folder-close', fn: album.add }
 	];
 
-	context.show(items, e);
+	basicContext.show(items, e);
 
 	upload.notify();
 
@@ -37,7 +37,7 @@ contextMenu.settings = function(e) {
 		{ type: 'item', title: 'Sign Out', icon: 'icon-signout', fn: lychee.logout }
 	];
 
-	context.show(items, e);
+	basicContext.show(items, e);
 
 }
 
@@ -52,10 +52,7 @@ contextMenu.album = function(albumID, e) {
 
 	$('.album[data-id="' + albumID + '"]').addClass('active');
 
-	context.show(items, e, function() {
-		$('.photo.active, .album.active').removeClass('active');
-		context.close();
-	});
+	basicContext.show(items, e, contextMenu.close);
 
 }
 
@@ -68,15 +65,15 @@ contextMenu.albumMulti = function(albumIDs, e) {
 		{ type: 'item', title: 'Delete All', icon: 'icon-trash', fn: function() { album.delete(albumIDs) } }
 	];
 
-	context.show(items, e, function() {
-		context.close();
-		$('.photo.active, .album.active').removeClass('active');
-		if (visible.multiselect()) multiselect.close();
-	});
+	basicContext.show(items, e, contextMenu.close);
 
 }
 
 contextMenu.photo = function(photoID, e) {
+
+	// Notice for 'Move':
+	// fn must call basicContext.close() first,
+	// in order to keep the selection
 
 	var items = [
 		{ type: 'item', title: 'Star', icon: 'icon-star', fn: function() { photo.setStar([photoID]) } },
@@ -84,20 +81,21 @@ contextMenu.photo = function(photoID, e) {
 		{ type: 'separator' },
 		{ type: 'item', title: 'Rename', icon: 'icon-edit', fn: function() { photo.setTitle([photoID]) } },
 		{ type: 'item', title: 'Duplicate', icon: 'icon-copy', fn: function() { photo.duplicate([photoID]) } },
-		{ type: 'item', title: 'Move', icon: 'icon-folder-open', fn: function() { contextMenu.move([photoID], e) } },
+		{ type: 'item', title: 'Move', icon: 'icon-folder-open', fn: function() { basicContext.close(); contextMenu.move([photoID], e); } },
 		{ type: 'item', title: 'Delete', icon: 'icon-trash', fn: function() { photo.delete([photoID]) } }
 	];
 
 	$('.photo[data-id="' + photoID + '"]').addClass('active');
 
-	context.show(items, e, function() {
-		context.close();
-		$('.photo.active, .album.active').removeClass('active');
-	});
+	basicContext.show(items, e, contextMenu.close);
 
 }
 
 contextMenu.photoMulti = function(photoIDs, e) {
+
+	// Notice for 'Move All':
+	// fn must call basicContext.close() first,
+	// in order to keep the selection and multiselect
 
 	multiselect.stopResize();
 
@@ -107,15 +105,11 @@ contextMenu.photoMulti = function(photoIDs, e) {
 		{ type: 'separator' },
 		{ type: 'item', title: 'Rename All', icon: 'icon-edit', fn: function() { photo.setTitle(photoIDs) } },
 		{ type: 'item', title: 'Duplicate All', icon: 'icon-copy', fn: function() { photo.duplicate(photoIDs) } },
-		{ type: 'item', title: 'Move All', icon: 'icon-folder-open', fn: function() { contextMenu.move(photoIDs, e) } },
+		{ type: 'item', title: 'Move All', icon: 'icon-folder-open', fn: function() { basicContext.close(); contextMenu.move(photoIDs, e); } },
 		{ type: 'item', title: 'Delete All', icon: 'icon-trash', fn: function() { photo.delete(photoIDs) } }
 	];
 
-	context.show(items, e, function() {
-		context.close();
-		$('.photo.active, .album.active').removeClass('active');
-		if (visible.multiselect()) multiselect.close();
-	});
+	basicContext.show(items, e, contextMenu.close);
 
 }
 
@@ -132,7 +126,7 @@ contextMenu.photoMore = function(photoID, e) {
 	if (!(album.json&&album.json.downloadable&&album.json.downloadable==='1')&&
 		lychee.publicMode===true) items.splice(1, 1);
 
-	context.show(items, e);
+	basicContext.show(items, e);
 
 }
 
@@ -144,7 +138,7 @@ contextMenu.move = function(photoIDs, e) {
 	if (album.getID()!=='0') {
 
 		items = [
-			{ type: 'item', title: 'Unsorted', fn: function() { photo.setAlbum([photoIDs], 0) } },
+			{ type: 'item', title: 'Unsorted', fn: function() { photo.setAlbum(photoIDs, 0) } },
 			{ type: 'separator' }
 		];
 
@@ -154,7 +148,7 @@ contextMenu.move = function(photoIDs, e) {
 
 		if (data.num===0) {
 
-			// Show 'Add album' when no album available
+			// Show only 'Add album' when no album available
 			items = [
 				{ type: 'item', title: 'New Album', fn: album.add }
 			];
@@ -163,13 +157,19 @@ contextMenu.move = function(photoIDs, e) {
 
 			// Generate list of albums
 			$.each(data.content, function(index) {
+
 				var that = this;
-				if (that.id!=album.getID()) items.push({ type: 'item', title: that.title, fn: function() { photo.setAlbum([photoIDs], that.id) } });
+
+				if (!that.thumb0) that.thumb0 = 'src/images/no_cover.svg';
+				that.title = "<img class='albumCover' width='16' height='16' src='" + that.thumb0 + "'><div class='albumTitle'>" + that.title + "</div>";
+
+				if (that.id!=album.getID()) items.push({ type: 'item', title: that.title, fn: function() { photo.setAlbum(photoIDs, that.id) } });
+
 			});
 
 		}
 
-		context.show(items, e);
+		basicContext.show(items, e, contextMenu.close);
 
 	});
 
@@ -192,8 +192,8 @@ contextMenu.sharePhoto = function(photoID, e) {
 		{ type: 'item', title: 'Direct Link', icon: 'icon-link', fn: function() { window.open(photo.getDirectLink()) } }
 	];
 
-	context.show(items, e);
-	$('.context input#link').focus().select();
+	basicContext.show(items, e);
+	$('.basicContext input#link').focus().select();
 
 }
 
@@ -209,20 +209,18 @@ contextMenu.shareAlbum = function(albumID, e) {
 		{ type: 'item', title: 'Mail', icon: 'icon-envelope', fn: function() { album.share(2) } }
 	];
 
-	context.show(items, e);
-	$('.context input#link').focus().select();
+	basicContext.show(items, e);
+	$('.basicContext input#link').focus().select();
 
 }
 
-contextMenu.close = function(leaveSelection) {
+contextMenu.close = function() {
 
 	if (!visible.contextMenu()) return false;
 
-	context.close();
+	basicContext.close();
 
-	if (leaveSelection!==true) {
-		$('.photo.active, .album.active').removeClass('active');
-		if (visible.multiselect()) multiselect.close();
-	}
+	$('.photo.active, .album.active').removeClass('active');
+	if (visible.multiselect()) multiselect.close();
 
 }

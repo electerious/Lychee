@@ -3,7 +3,7 @@
  */
 
 /* Context ------------------------------------------------*/
-.context {
+.basicContext {
 
 	padding: 5px 0 6px;
 	background: linear-gradient(to bottom, #444 0%, #2f2f2f 100%);
@@ -36,6 +36,17 @@
 				background: linear-gradient(to bottom, #6a84f2, #4967F0);
 			}
 		}
+
+			tr td .albumCover {
+				border-radius: 2px;
+				box-shadow: 0 0 0 1px rgba(0,0,0,.5);
+				position: absolute;
+			}
+
+			tr td .albumTitle {
+				display: inline-block;
+				margin: 0 0 3px 26px;
+			}
 
 	/* Link ------------------------------------------------*/
 	input#link {

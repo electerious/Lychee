@@ -55,8 +55,7 @@ visible.signin = function() {
 }
 
 visible.contextMenu = function() {
-	if ($('.contextContainer').length>0) return true;
-	return false;
+	return basicContext.visible();
 }
 
 visible.multiselect = function() {

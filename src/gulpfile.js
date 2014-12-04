@@ -87,7 +87,7 @@ paths.main = {
 		'../src/styles/*.scss'
 	],
 	styles: [
-		'bower_components/basicContext/src/scss/basicContext.scss',
+		'bower_components/basicContext/src/styles/main.scss',
 		'../src/styles/main.scss'
 	]
 }
