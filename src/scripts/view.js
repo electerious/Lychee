@@ -175,7 +175,7 @@ view.albums = {
 
 			// Restore scroll position
 			if (view.albums.content.scrollPosition!==null) {
-				$('html, body').scrollTop(view.albums.content.scrollPosition);
+				$(document).scrollTop(view.albums.content.scrollPosition);
 			}
 
 		},
@@ -269,16 +269,16 @@ view.album = {
 
 			var photosData = '';
 
+			// Save and reset scroll position
+			view.albums.content.scrollPosition = $(document).scrollTop();
+			$('html, body').scrollTop(0);
+
 			$.each(album.json.content, function() {
 				photosData += build.photo(this);
 			});
 			lychee.content.html(photosData);
 
 			$('img[data-type!="svg"]').retina();
-
-			/* Save and reset scroll position */
-			view.albums.content.scrollPosition = $(document).scrollTop();
-			$('html, body').scrollTop(0);
 
 		},
 
