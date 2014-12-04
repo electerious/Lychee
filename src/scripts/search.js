@@ -55,17 +55,19 @@ search.find = function(term) {
 
 					$('.no_content').remove();
 
-					lychee.animate('.album:nth-child(-n+50), .photo:nth-child(-n+50)', 'contentZoomOut');
+					lychee.animate('.album, .photo', 'contentZoomOut');
 					lychee.animate('.divider', 'fadeOut');
 
 					search.code = md5(code);
 
 					setTimeout(function() {
 
-						if (code==='error') $('body').append(build.no_content('search'));
-						else {
+						if (code==='error') {
+							lychee.content.html('');
+							$('body').append(build.no_content('search'));
+						} else {
 							lychee.content.html(code);
-							lychee.animate('.album:nth-child(-n+50), .photo:nth-child(-n+50)', 'contentZoomIn');
+							lychee.animate('.album, .photo', 'contentZoomIn');
 							$('img[data-type!="svg"]').retina();
 						}
 

@@ -36,7 +36,7 @@ album.load = function(albumID, refresh) {
 	password.get(albumID, function() {
 
 		if (!refresh) {
-			lychee.animate('.album:nth-child(-n+50), .photo:nth-child(-n+50)', 'contentZoomOut');
+			lychee.animate('.album, .photo', 'contentZoomOut');
 			lychee.animate('.divider', 'fadeOut');
 		}
 
@@ -79,7 +79,7 @@ album.load = function(albumID, refresh) {
 				view.album.init();
 
 				if (!refresh) {
-					lychee.animate('.album:nth-child(-n+50), .photo:nth-child(-n+50)', 'contentZoomIn');
+					lychee.animate('.album, .photo', 'contentZoomIn');
 					view.header.mode('album');
 				}
 

@@ -15,7 +15,7 @@ albums.load = function() {
 		durationTime,
 		waitTime;
 
-	lychee.animate('.album:nth-child(-n+50), .photo:nth-child(-n+50)', 'contentZoomOut');
+	lychee.animate('.album, .photo', 'contentZoomOut');
 	lychee.animate('.divider', 'fadeOut');
 
 	startTime = new Date().getTime();
@@ -79,7 +79,7 @@ albums.load = function() {
 			setTimeout(function() {
 				view.header.mode('albums');
 				view.albums.init();
-				lychee.animate('.album:nth-child(-n+50), .photo:nth-child(-n+50)', 'contentZoomIn');
+				lychee.animate('.album, .photo', 'contentZoomIn');
 			}, waitTime);
 		});
 
@@ -88,7 +88,7 @@ albums.load = function() {
 		setTimeout(function() {
 			view.header.mode('albums');
 			view.albums.init();
-			lychee.animate('.album:nth-child(-n+50), .photo:nth-child(-n+50)', 'contentZoomIn');
+			lychee.animate('.album, .photo', 'contentZoomIn');
 		}, 300);
 
 	}
