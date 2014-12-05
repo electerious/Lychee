@@ -222,10 +222,15 @@ lychee.load = function() {
 
 	} else {
 
+		// Trash albums.json when filled with search results
+		if (search.code!=='') {
+			albums.json = null;
+			search.code = '';
+		}
+
 		// Trash data
 		album.json = null;
 		photo.json = null;
-		search.code = '';
 
 		// Show Albums
 		if (visible.album()) view.album.hide();
