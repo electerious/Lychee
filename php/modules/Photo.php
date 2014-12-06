@@ -45,8 +45,7 @@ class Photo extends Module {
 		# Check permissions
 		if (hasPermissions(LYCHEE_UPLOADS)===false||
 			hasPermissions(LYCHEE_UPLOADS_BIG)===false||
-			hasPermissions(LYCHEE_UPLOADS_THUMB)===false||
-			hasPermissions(LYCHEE_UPLOADS_MEDIUM)===false) {
+			hasPermissions(LYCHEE_UPLOADS_THUMB)===false) {
 				Log::error($this->database, __METHOD__, __LINE__, 'An upload-folder is missing or not readable and writable');
 				exit('Error: An upload-folder is missing or not readable and writable!');
 		}
@@ -334,31 +333,50 @@ class Photo extends Module {
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
 
+		# Set to true when creation of medium-photo failed
+		$error = false;
+
 		# Size of the medium-photo
 		# When changing these values,
 		# also change the size detection in the front-end
 		$newWidth	= 1920;
 		$newHeight	= 1080;
 
+		# Check permissions
+		if (hasPermissions(LYCHEE_UPLOADS_MEDIUM)===false) {
+
+			# Permissions are missing
+			Log::notice($this->database, __METHOD__, __LINE__, 'Skipped creation of medium-photo, because uploads/medium/ is missing or not readable and writable.');
+			$error = true;
+
+		}
+
 		# Is photo big enough?
 		# Is medium activated?
 		# Is Imagick installed and activated?
-		if (($width>$newWidth||$height>$newHeight)&&
+		if (($error===false)&&
+			($width>$newWidth||$height>$newHeight)&&
 			($this->settings['medium']==='1')&&
 			(extension_loaded('imagick')&&$this->settings['imagick']==='1')) {
 
-			# $info = getimagesize($url);
 			$newUrl = LYCHEE_UPLOADS_MEDIUM . $filename;
 
 			# Read image
 			$medium = new Imagick();
 			$medium->readImage($url);
+
+			# Adjust image
 			$medium->scaleImage($newWidth, $newHeight, true);
-			$medium->writeImage($newUrl);
+
+			# Save image
+			try { $medium->writeImage($newUrl); }
+			catch (ImagickException $err) {
+				Log::notice($this->database, __METHOD__, __LINE__, 'Could not save medium-photo: ' . $err->getMessage());
+				$error = true;
+			}
+
 			$medium->clear();
 			$medium->destroy();
-
-			$error = false;
 
 		} else {
 
