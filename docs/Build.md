@@ -15,12 +15,12 @@ After [installing Node.js](http://nodejs.org) you can use the included `npm` pac
 
 ### Build
 
-The Gruntfile is located in `build/` and can be easily executed using the `gulp` command.
-	
+The Gruntfile is located in `src/` and can be easily executed using the `gulp` command.
+
 ### Watch for changes
 
-While developing, you might want to use the following command to watch for changes in `assets/js/` and `assets/css/`:
+While developing, you might want to use the following command to watch for changes:
 
 	gulp watch
-	
+
 `gulp` will automatically build Lychee everytime you save a file.

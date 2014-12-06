@@ -1,8 +1,7 @@
 <?php
 
 ###
-# @name		Plugins Module
-# @author		Tobias Reich
+# @name			Plugins Module
 # @copyright	2014 by Tobias Reich
 ###
 

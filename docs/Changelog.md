@@ -1,3 +1,22 @@
+## v2.7
+
+Released December 6, 2014
+
+- `New` Intermediate sized images for small screen devices #67
+- `New` Added Docker help (@renfredxh, #252)
+- `New` Move-Photo context shows album previews
+- `Improved` Upload shows server-errors
+- `Improved` Improved thumb creation
+- `Improved` Docker (@renfredxh, #252)
+- `Improved` CSS has been rewritten partly
+- `Improved` Front-end has been rewritten partly #245
+- `Improved` Folder- and code-structure has been updated
+- `Improved` Context-menu now based on [basicContext](https://github.com/electerious/basicContext) #245
+- `Fixed` OpenGraph image too big for some sites #69
+- `Fixed` Wrong sizes after EXIF rotation
+- `Fixed` Returning to 'Albums' after searching failed
+- `Fixed` Move-Photo not scrollable #215
+
 ## v2.6.3
 
 Released October 10, 2014

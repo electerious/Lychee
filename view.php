@@ -10,11 +10,11 @@
 		<meta name="description" content="">
 
 		<!-- CSS -->
-		<link type="text/css" rel="stylesheet" href="assets/min/main.css">
+		<link type="text/css" rel="stylesheet" href="dist/main.css">
 
 		<link rel="shortcut icon" href="favicon.ico">
-		<link rel="apple-touch-icon" href="assets/img/apple-touch-icon-iphone.png" sizes="120x120">
-		<link rel="apple-touch-icon" href="assets/img/apple-touch-icon-ipad.png" sizes="152x152">
+		<link rel="apple-touch-icon" href="src/images/apple-touch-icon-iphone.png" sizes="120x120">
+		<link rel="apple-touch-icon" href="src/images/apple-touch-icon-ipad.png" sizes="152x152">
 
 		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -63,7 +63,7 @@
 	<div id="infobox"></div>
 
 	<!-- JS -->
-	<script type="text/javascript" src="assets/min/view.js"></script>
+	<script type="text/javascript" src="dist/view.js"></script>
 
 	</body>
 </html>

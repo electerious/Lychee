@@ -24,5 +24,6 @@ CREATE TABLE IF NOT EXISTS `?` (
   `thumbUrl` varchar(50) NOT NULL,
   `album` varchar(30) NOT NULL DEFAULT '0',
   `checksum` VARCHAR(100) DEFAULT NULL,
+  `medium` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;

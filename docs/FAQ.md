@@ -18,6 +18,9 @@ If possible, change these settings directly in your `php.ini`. We recommend to i
 #### Which browsers are supported?
 Lychee supports the latest versions of Google Chrome, Apple Safari, Mozilla Firefox, Opera and Microsoft Internet Explorer. Make sure you are always running the newest version.
 
+#### Which image file formats are supported?
+You can upload `*.png`, `*.jpeg` and `*.gif` photos.
+
 #### What is new?
 Take a look at the [Changelog](Changelog.md) to see what's new.
 

@@ -1,11 +1,9 @@
 <?php
 
-/**
- * @name		Misc Module
- * @author		Philipp Maurer
- * @author		Tobias Reich
- * @copyright	2014 by Philipp Maurer, Tobias Reich
- */
+###
+# @name			Misc Module
+# @copyright	2014 by Tobias Reich
+###
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
@@ -15,7 +13,7 @@ function search($database, $settings, $term) {
 
 	$return['albums'] = '';
 
-	// Photos
+	# Photos
 	$query	= Database::prepare($database, "SELECT id, title, tags, public, star, album, thumbUrl FROM ? WHERE title LIKE '%?%' OR description LIKE '%?%' OR tags LIKE '%?%'", array(LYCHEE_TABLE_PHOTOS, $term, $term, $term));
 	$result	= $database->query($query);
 	while($row = $result->fetch_assoc()) {
@@ -24,20 +22,20 @@ function search($database, $settings, $term) {
 		$return['photos'][$row['id']]['sysdate']	= date('d M. Y', substr($row['id'], 0, -4));
 	}
 
-	// Albums
+	# Albums
 	$query	= Database::prepare($database, "SELECT id, title, public, sysstamp, password FROM ? WHERE title LIKE '%?%' OR description LIKE '%?%'", array(LYCHEE_TABLE_ALBUMS, $term, $term));
 	$result = $database->query($query);
 	$i		= 0;
 	while($row = $result->fetch_object()) {
 
-		// Info
+		# Info
 		$return['albums'][$row->id]['id']		= $row->id;
 		$return['albums'][$row->id]['title']	= $row->title;
 		$return['albums'][$row->id]['public']	= $row->public;
 		$return['albums'][$row->id]['sysdate']	= date('F Y', $row->sysstamp);
 		$return['albums'][$row->id]['password']	= ($row->password=='' ? false : true);
 
-		// Thumbs
+		# Thumbs
 		$query		= Database::prepare($database, "SELECT thumbUrl FROM ? WHERE album = '?' " . $settings['sorting'] . " LIMIT 0, 3", array(LYCHEE_TABLE_PHOTOS, $row->id));
 		$result2	= $database->query($query);
 		$k			= 0;
@@ -58,12 +56,15 @@ function getGraphHeader($database, $photoID) {
 
 	if (!isset($database, $photoID)) return false;
 
-	$query	= Database::prepare($database, "SELECT title, description, url FROM ? WHERE id = '?'", array(LYCHEE_TABLE_PHOTOS, $photoID));
+	$query	= Database::prepare($database, "SELECT title, description, url, medium FROM ? WHERE id = '?'", array(LYCHEE_TABLE_PHOTOS, $photoID));
 	$result	= $database->query($query);
 	$row	= $result->fetch_object();
 
-	$parseUrl	= parse_url("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-	$picture	= $parseUrl['scheme']."://".$parseUrl['host'].$parseUrl['path']."/../uploads/big/".$row->url;
+	if ($row->medium==='1')	$dir = 'medium';
+	else					$dir = 'big';
+
+	$parseUrl	= parse_url('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+	$picture	= $parseUrl['scheme'] . '://' . $parseUrl['host'] . $parseUrl['path'] . '/../uploads/' . $dir . '/' . $row->url;
 
 	$return = '<!-- General Meta Data -->';
 	$return .= '<meta name="title" content="'.$row->title.'" />';
@@ -121,13 +122,14 @@ function get_hashed_password($password) {
 
 }
 
-function hasPermissions($path, $permissions = '0777') {
+function hasPermissions($path) {
 
-	/* assume that if running with the same uid as the owner of the directory it's ok */
-	$stat = @stat($path);
-	if ($stat && ($stat['uid'] == getmyuid())) return true;
-	if (substr(sprintf('%o', @fileperms($path)), -4)!=$permissions) return false;
-	else return true;
+	// Check if the given path is readable and writable
+	// Both functions are also verifying that the path exists
+	if (is_readable($path)===true&&
+		is_writeable($path)===true) return true;
+
+	return false;
 
 }
 

@@ -1,8 +1,0 @@
-{
-  "name": "Lychee",
-  "dependencies": {
-    "jQuery": "~2.1.1",
-    "js-md5": "~1.1.0",
-    "mousetrap": "~1.4.6"
-  }
-}

@@ -2,7 +2,6 @@
 
 ###
 # @name			Installation Access
-# @author		Tobias Reich
 # @copyright	2014 by Tobias Reich
 ###
 

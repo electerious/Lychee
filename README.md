@@ -2,8 +2,8 @@
 
 #### A great looking and easy-to-use Photo-Management-System.
 
-![Lychee](http://l.electerious.com/uploads/big/136b4779d133a94666d5f0d151b8ea2f.png)
-![Lychee](http://l.electerious.com/uploads/big/580f1300f884c330fa34b652decb0571.png)
+![Lychee](http://l.electerious.com/uploads/big/68375288e048658e253a7c0c964f19b9.jpg)
+![Lychee](http://l.electerious.com/uploads/big/198f237580ea004529ab7b6faad90274.jpg)
 
 Lychee is a free photo-management tool, which runs on your server or web-space. Installing is a matter of seconds. Upload, manage and share photos like from a native application. Lychee comes with everything you need and all your photos are stored securely. Try the [Live Demo](http://electerious.com/lychee_demo/) or read more on our [Website](http://lychee.electerious.com).
 
@@ -38,6 +38,10 @@ In order to use the Dropbox import from your server, you need a valid drop-ins a
 ### Twitter Cards
 
 Lychee supports [Twitter Cards](https://dev.twitter.com/docs/cards) and [Open Graph](http://opengraphprotocol.org) for shared images (not albums). In order to use Twitter Cards you need to request an approval for your domain. Simply share an image with Lychee, copy its link and paste it in [Twitters Card Validator](https://dev.twitter.com/docs/cards/validation/validator).
+
+### Imagick
+
+Lychee uses [Imagick](http://www.imagemagick.org) when installed on your server. In this case you will benefit from a faster processing of your uploads, better looking thumbnails and intermediate sized images for small screen devices. You can disable the usage of [Imagick](http://www.imagemagick.org) in [the settings](docs/Settings.md).
 
 ### Plugins and Extensions
 

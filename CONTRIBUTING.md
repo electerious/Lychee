@@ -13,7 +13,7 @@ When reporting a bug on GitHub, make sure you include the following information:
 - How to reproduce the issue (step-by-step)
 - What you have already tried
 - Output of the diagnostics (`plugins/check/index.php`)
-- Browser and Browser version
+- Browser and system version
 - Attach files when you have problems which specific photos
 
 ## Coding Guidelines

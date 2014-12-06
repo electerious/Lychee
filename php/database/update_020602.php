@@ -2,7 +2,6 @@
 
 ###
 # @name			Update to version 2.6.2
-# @author		Tobias Reich
 # @copyright	2014 by Tobias Reich
 ###
 
@@ -35,7 +34,7 @@ if ($result->num_rows===0) {
 	$query	= Database::prepare($database, "INSERT INTO `?` (`key`, `value`) VALUES ('imagick', '1')", array(LYCHEE_TABLE_SETTINGS));
 	$result	= $database->query($query);
 	if (!$result) {
-		Log::error($database, 'update_020100', __LINE__, 'Could not update database (' . $database->error . ')');
+		Log::error($database, 'update_020602', __LINE__, 'Could not update database (' . $database->error . ')');
 		return false;
 	}
 }

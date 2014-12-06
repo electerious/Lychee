@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /data/
+Disallow: /dist/
+Disallow: /docs/
+Disallow: /php/
+Disallow: /plugins/
+Disallow: /src/
+Disallow: /uploads/

@@ -1,0 +1,167 @@
+/**
+ * @copyright   2014 by Tobias Reich
+ */
+
+header {
+
+	position: fixed;
+	height: 49px;
+	width: 100%;
+	background: linear-gradient(to bottom, #3E3E3E, #282828);
+	border-bottom: 1px solid #161616;
+	z-index: 1;
+	transition: transform .3s ease-out;
+
+	/* Modes ------------------------------------------------*/
+	&.hidden {
+		transform: translateY(-60px);
+	}
+
+	&.loading {
+		transform: translateY(2px);
+	}
+
+	&.error {
+		transform: translateY(40px);
+	}
+
+	&.view {
+		background: none;
+		border-bottom: none;
+
+		&.error {
+			background-color: rgba(10, 10, 10, .99);
+		}
+
+		.button,
+		#title,
+		.tools {
+			text-shadow: none !important;
+		}
+	}
+
+	/* Title ------------------------------------------------*/
+	#title {
+		position: absolute;
+		margin: 0 30%;
+		width: 40%;
+		padding: 15px 0;
+		color: #fff;
+		font-size: 16px;
+		font-weight: bold;
+		text-align: center;
+		text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
+
+		&.editable { cursor: pointer; }
+	}
+
+	/* Button ------------------------------------------------*/
+	.button {
+		color: #888;
+		font-family: 'FontAwesome';
+		font-size: 21px;
+		font-weight: bold;
+		text-decoration: none !important;
+		cursor: pointer;
+		text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
+
+		&:hover {
+			color: #fff;
+		}
+
+		&.left {
+			float: left;
+			position: absolute;
+			padding: 16px 10px 8px 18px;
+		}
+
+		&.right {
+			float: right;
+			position: relative;
+			padding: 16px 19px 13px 11px;
+		}
+	}
+
+	#tools_albums,
+	#tools_album,
+	#tools_photo,
+	#button_signin {
+		display: none;
+	}
+
+	/* Button Divider ------------------------------------------------*/
+	.button_divider {
+		float: right;
+		position: relative;
+		width: 14px;
+		height: 50px;
+	}
+
+	/* Search ------------------------------------------------*/
+	#search {
+		float: right;
+		width: 80px;
+		margin: 12px 12px 0 0;
+		padding: 5px 12px 6px 12px;
+		background-color: #383838;
+		color: #fff;
+		border: 1px solid rgba(0, 0, 0, .6);
+		box-shadow: 0 1px 0 rgba(255, 255, 255, .06);
+		outline: none;
+		border-radius: 50px;
+		opacity: .6;
+		transition: opacity .3s ease-out, transform .3s ease-out, box-shadow .3s, width .2s ease-out;
+
+		&:focus { width: 140px; }
+
+		&:focus ~ #clearSearch { opacity: 1; }
+	}
+
+	#clearSearch {
+		position: absolute;
+		top: 15px;
+		right: 81px;
+		padding: 0;
+		font-size: 20px;
+		opacity: 0;
+		transition: opacity .2s ease-out;
+
+		&:hover { opacity: 1; }
+	}
+
+	/* Tools ------------------------------------------------*/
+	.tools {
+		float: right;
+		padding: 14px 8px;
+		color: #888;
+		font-size: 21px;
+		text-shadow: 0 -1px 0 #222;
+		cursor: pointer;
+
+		&:first-of-type { margin-right: 6px; }
+
+		&:hover a { color: #fff; }
+
+		.icon-star { color: #f0ef77; }
+
+		.icon-share.active { color: #ff9737; }
+	}
+
+	/* Hosted with Lychee ------------------------------------------------*/
+	#hostedwith {
+		float: right;
+		padding: 5px 10px;
+		margin: 13px 9px;
+		color: #888;
+		font-size: 13px;
+		text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
+		display: none;
+		cursor: pointer;
+
+		&:hover {
+			background-color: rgba(0, 0, 0, .2);
+			border-radius: 100px;
+		}
+	}
+
+}

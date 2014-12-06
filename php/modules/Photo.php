@@ -1,8 +1,7 @@
 <?php
 
 ###
-# @name		Photo Module
-# @author		Tobias Reich
+# @name			Photo Module
 # @copyright	2014 by Tobias Reich
 ###
 
@@ -44,9 +43,12 @@ class Photo extends Module {
 		self::dependencies(isset($this->database));
 
 		# Check permissions
-		if (hasPermissions(LYCHEE_UPLOADS_BIG)===false||hasPermissions(LYCHEE_UPLOADS_THUMB)===false) {
-			Log::error($this->database, __METHOD__, __LINE__, 'Wrong permissions in uploads/');
-			exit('Error: Wrong permissions in uploads-folder!');
+		if (hasPermissions(LYCHEE_UPLOADS)===false||
+			hasPermissions(LYCHEE_UPLOADS_BIG)===false||
+			hasPermissions(LYCHEE_UPLOADS_THUMB)===false||
+			hasPermissions(LYCHEE_UPLOADS_MEDIUM)===false) {
+				Log::error($this->database, __METHOD__, __LINE__, 'An upload-folder is missing or not readable and writable');
+				exit('Error: An upload-folder is missing or not readable and writable!');
 		}
 
 		# Call plugins
@@ -122,6 +124,7 @@ class Photo extends Module {
 					$photo_name	= $exists['photo_name'];
 					$path		= $exists['path'];
 					$path_thumb	= $exists['path_thumb'];
+					$medium		= ($exists['medium']==='1' ? true : false);
 					$exists		= true;
 				}
 
@@ -156,18 +159,24 @@ class Photo extends Module {
 			if ($exists===false) {
 
 				# Set orientation based on EXIF data
-				if ($file['type']==='image/jpeg'&&isset($info['orientation'], $info['width'], $info['height'])&&$info['orientation']!=='') {
-					if (!$this->adjustFile($path, $info)) Log::notice($this->database, __METHOD__, __LINE__, 'Could not adjust photo (' . $info['title'] . ')');
+				if ($file['type']==='image/jpeg'&&isset($info['orientation'])&&$info['orientation']!=='') {
+					$adjustFile = $this->adjustFile($path, $info);
+					if ($adjustFile!==false) $info = $adjustFile;
+					else Log::notice($this->database, __METHOD__, __LINE__, 'Skipped adjustment of photo (' . $info['title'] . ')');
 				}
 
 				# Set original date
 				if ($info['takestamp']!==''&&$info['takestamp']!==0) @touch($path, $info['takestamp']);
 
 				# Create Thumb
-				if (!$this->createThumb($path, $photo_name)) {
+				if (!$this->createThumb($path, $photo_name, $info['type'], $info['width'], $info['height'])) {
 					Log::error($this->database, __METHOD__, __LINE__, 'Could not create thumbnail for photo');
 					exit('Error: Could not create thumbnail for photo!');
 				}
+
+				# Create Medium
+				if ($this->createMedium($path, $photo_name, $info['width'], $info['height'])) $medium = true;
+				else $medium = false;
 
 				# Set thumb url
 				$path_thumb = md5($id) . '.jpeg';
@@ -175,8 +184,8 @@ class Photo extends Module {
 			}
 
 			# Save to DB
-			$values	= array(LYCHEE_TABLE_PHOTOS, $id, $info['title'], $photo_name, $description, $tags, $info['type'], $info['width'], $info['height'], $info['size'], $info['iso'], $info['aperture'], $info['make'], $info['model'], $info['shutter'], $info['focal'], $info['takestamp'], $path_thumb, $albumID, $public, $star, $checksum);
-			$query	= Database::prepare($this->database, "INSERT INTO ? (id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, checksum) VALUES ('?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?')", $values);
+			$values	= array(LYCHEE_TABLE_PHOTOS, $id, $info['title'], $photo_name, $description, $tags, $info['type'], $info['width'], $info['height'], $info['size'], $info['iso'], $info['aperture'], $info['make'], $info['model'], $info['shutter'], $info['focal'], $info['takestamp'], $path_thumb, $albumID, $public, $star, $checksum, $medium);
+			$query	= Database::prepare($this->database, "INSERT INTO ? (id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, checksum, medium) VALUES ('?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?')", $values);
 			$result = $this->database->query($query);
 
 			if (!$result) {
@@ -199,8 +208,8 @@ class Photo extends Module {
 		self::dependencies(isset($this->database, $checksum));
 
 		# Exclude $photoID from select when $photoID is set
-		if (isset($photoID)) $query = Database::prepare($this->database, "SELECT id, url, thumbUrl FROM ? WHERE checksum = '?' AND id <> '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $checksum, $photoID));
-		else $query = Database::prepare($this->database, "SELECT id, url, thumbUrl FROM ? WHERE checksum = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $checksum));
+		if (isset($photoID)) $query = Database::prepare($this->database, "SELECT id, url, thumbUrl, medium FROM ? WHERE checksum = '?' AND id <> '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $checksum, $photoID));
+		else $query = Database::prepare($this->database, "SELECT id, url, thumbUrl, medium FROM ? WHERE checksum = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $checksum));
 
 		$result	= $this->database->query($query);
 
@@ -216,7 +225,8 @@ class Photo extends Module {
 			$return = array(
 				'photo_name'	=> $result->url,
 				'path'			=> LYCHEE_UPLOADS_BIG . $result->url,
-				'path_thumb'	=> $result->thumbUrl
+				'path_thumb'	=> $result->thumbUrl,
+				'medium'		=> $result->medium
 			);
 
 			return $return;
@@ -227,20 +237,23 @@ class Photo extends Module {
 
 	}
 
-	private function createThumb($url, $filename, $width = 200, $height = 200) {
+	private function createThumb($url, $filename, $type, $width, $height) {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->settings, $url, $filename));
+		self::dependencies(isset($this->database, $this->settings, $url, $filename, $type, $width, $height));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
 
-		$info		= getimagesize($url);
-		$photoName	= explode(".", $filename);
+		# Size of the thumbnail
+		$newWidth	= 200;
+		$newHeight	= 200;
+
+		$photoName	= explode('.', $filename);
 		$newUrl		= LYCHEE_UPLOADS_THUMB . $photoName[0] . '.jpeg';
 		$newUrl2x	= LYCHEE_UPLOADS_THUMB . $photoName[0] . '@2x.jpeg';
 
-		# create thumbnails with Imagick
+		# Create thumbnails with Imagick
 		if(extension_loaded('imagick')&&$this->settings['imagick']==='1') {
 
 			# Read image
@@ -253,34 +266,36 @@ class Photo extends Module {
 			$thumb2x = clone $thumb;
 
 			# Create 1st version
-			$thumb->cropThumbnailImage($width, $height);
+			$thumb->cropThumbnailImage($newWidth, $newHeight);
 			$thumb->writeImage($newUrl);
 			$thumb->clear();
 			$thumb->destroy();
 
 			# Create 2nd version
-			$thumb2x->cropThumbnailImage($width*2, $height*2);
+			$thumb2x->cropThumbnailImage($newWidth*2, $newHeight*2);
 			$thumb2x->writeImage($newUrl2x);
 			$thumb2x->clear();
 			$thumb2x->destroy();
 
 		} else {
 
-			# Set position and size
-			$thumb = imagecreatetruecolor($width, $height);
-			$thumb2x = imagecreatetruecolor($width*2, $height*2);
-			if ($info[0]<$info[1]) {
-				$newSize		= $info[0];
+			# Create image
+			$thumb		= imagecreatetruecolor($newWidth, $newHeight);
+			$thumb2x	= imagecreatetruecolor($newWidth*2, $newHeight*2);
+
+			# Set position
+			if ($width<$height) {
+				$newSize		= $width;
 				$startWidth		= 0;
-				$startHeight	= $info[1]/2 - $info[0]/2;
+				$startHeight	= $height/2 - $width/2;
 			} else {
-				$newSize		= $info[1];
-				$startWidth		= $info[0]/2 - $info[1]/2;
+				$newSize		= $height;
+				$startWidth		= $width/2 - $height/2;
 				$startHeight	= 0;
 			}
 
 			# Create new image
-			switch($info['mime']) {
+			switch($type) {
 				case 'image/jpeg':	$sourceImg = imagecreatefromjpeg($url); break;
 				case 'image/png':	$sourceImg = imagecreatefrompng($url); break;
 				case 'image/gif':	$sourceImg = imagecreatefromgif($url); break;
@@ -290,12 +305,12 @@ class Photo extends Module {
 			}
 
 			# Create thumb
-			fastimagecopyresampled($thumb, $sourceImg, 0, 0, $startWidth, $startHeight, $width, $height, $newSize, $newSize);
+			fastimagecopyresampled($thumb, $sourceImg, 0, 0, $startWidth, $startHeight, $newWidth, $newHeight, $newSize, $newSize);
 			imagejpeg($thumb, $newUrl, $this->settings['thumbQuality']);
 			imagedestroy($thumb);
 
 			# Create retina thumb
-			fastimagecopyresampled($thumb2x, $sourceImg, 0, 0, $startWidth, $startHeight, $width*2, $height*2, $newSize, $newSize);
+			fastimagecopyresampled($thumb2x, $sourceImg, 0, 0, $startWidth, $startHeight, $newWidth*2, $newHeight*2, $newSize, $newSize);
 			imagejpeg($thumb2x, $newUrl2x, $this->settings['thumbQuality']);
 			imagedestroy($thumb2x);
 
@@ -311,6 +326,57 @@ class Photo extends Module {
 
 	}
 
+	private function createMedium($url, $filename, $width, $height) {
+
+		# Check dependencies
+		self::dependencies(isset($this->database, $this->settings, $url, $filename, $width, $height));
+
+		# Call plugins
+		$this->plugins(__METHOD__, 0, func_get_args());
+
+		# Size of the medium-photo
+		# When changing these values,
+		# also change the size detection in the front-end
+		$newWidth	= 1920;
+		$newHeight	= 1080;
+
+		# Is photo big enough?
+		# Is medium activated?
+		# Is Imagick installed and activated?
+		if (($width>$newWidth||$height>$newHeight)&&
+			($this->settings['medium']==='1')&&
+			(extension_loaded('imagick')&&$this->settings['imagick']==='1')) {
+
+			# $info = getimagesize($url);
+			$newUrl = LYCHEE_UPLOADS_MEDIUM . $filename;
+
+			# Read image
+			$medium = new Imagick();
+			$medium->readImage($url);
+			$medium->scaleImage($newWidth, $newHeight, true);
+			$medium->writeImage($newUrl);
+			$medium->clear();
+			$medium->destroy();
+
+			$error = false;
+
+		} else {
+
+			# Photo too small or
+			# Medium is deactivated or
+			# Imagick not installed
+			$error = true;
+
+		}
+
+		# Call plugins
+		$this->plugins(__METHOD__, 1, func_get_args());
+
+		if ($error===true) return false;
+		return true;
+
+	}
+
 	public function adjustFile($path, $info) {
 
 		# Check dependencies
@@ -318,6 +384,8 @@ class Photo extends Module {
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
+
+		$swapSize = false;
 
 		if (extension_loaded('imagick')&&$this->settings['imagick']==='1') {
 
@@ -327,17 +395,20 @@ class Photo extends Module {
 
 				case 3:
 					$rotateImage = 180;
-					$imageOrientation = 1;
 					break;
 
 				case 6:
-					$rotateImage = 90;
-					$imageOrientation = 1;
+					$rotateImage	= 90;
+					$swapSize		= true;
 					break;
 
 				case 8:
-					$rotateImage = 270;
-					$imageOrientation = 1;
+					$rotateImage	= 270;
+					$swapSize		= true;
+					break;
+
+				default:
+					return false;
 					break;
 
 			}
@@ -346,7 +417,7 @@ class Photo extends Module {
 				$image = new Imagick();
 				$image->readImage($path);
 				$image->rotateImage(new ImagickPixel(), $rotateImage);
-				$image->setImageOrientation($imageOrientation);
+				$image->setImageOrientation(1);
 				$image->writeImage($path);
 				$image->clear();
 				$image->destroy();
@@ -356,7 +427,6 @@ class Photo extends Module {
 
 			$newWidth	= $info['width'];
 			$newHeight	= $info['height'];
-			$process	= false;
 			$sourceImg	= imagecreatefromjpeg($path);
 
 			switch ($info['orientation']) {
@@ -364,6 +434,7 @@ class Photo extends Module {
 				case 2:
 					# mirror
 					# not yet implemented
+					return false;
 					break;
 
 				case 3:
@@ -374,11 +445,13 @@ class Photo extends Module {
 				case 4:
 					# rotate 180 and mirror
 					# not yet implemented
+					return false;
 					break;
 
 				case 5:
 					# rotate 90 and mirror
 					# not yet implemented
+					return false;
 					break;
 
 				case 6:
@@ -386,11 +459,13 @@ class Photo extends Module {
 					$sourceImg	= imagerotate($sourceImg, -90, 0);
 					$newWidth	= $info['height'];
 					$newHeight	= $info['width'];
+					$swapSize	= true;
 					break;
 
 				case 7:
 					# rotate -90 and mirror
 					# not yet implemented
+					return false;
 					break;
 
 				case 8:
@@ -398,30 +473,38 @@ class Photo extends Module {
 					$sourceImg	= imagerotate($sourceImg, 90, 0);
 					$newWidth	= $info['height'];
 					$newHeight	= $info['width'];
+					$swapSize	= true;
+					break;
+
+				default:
+					return false;
 					break;
 
 			}
 
-			# Need to adjust photo?
-			if ($process===true) {
+			# Recreate photo
+			$newSourceImg = imagecreatetruecolor($newWidth, $newHeight);
+			imagecopyresampled($newSourceImg, $sourceImg, 0, 0, 0, 0, $newWidth, $newHeight, $newWidth, $newHeight);
+			imagejpeg($newSourceImg, $path, 100);
 
-				# Recreate photo
-				$newSourceImg = imagecreatetruecolor($newWidth, $newHeight);
-				imagecopyresampled($newSourceImg, $sourceImg, 0, 0, 0, 0, $newWidth, $newHeight, $newWidth, $newHeight);
-				imagejpeg($newSourceImg, $path, 100);
-
-				# Free memory
-				imagedestroy($sourceImg);
-				imagedestroy($newSourceImg);
-
-			}
+			# Free memory
+			imagedestroy($sourceImg);
+			imagedestroy($newSourceImg);
 
 		}
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
-		return true;
+		# SwapSize should be true when the image has been rotated
+		# Return new dimensions in this case
+		if ($swapSize===true) {
+			$swapSize		= $info['width'];
+			$info['width']	= $info['height'];
+			$info['height']	= $swapSize;
+		}
+
+		return $info;
 
 	}
 
@@ -442,7 +525,11 @@ class Photo extends Module {
 		$photo['sysdate'] = date('d M. Y', substr($photo['id'], 0, -4));
 		if (strlen($photo['takestamp'])>1) $photo['takedate'] = date('d M. Y', $photo['takestamp']);
 
-		# Parse url
+		# Parse medium
+		if ($photo['medium']==='1') $photo['medium'] = LYCHEE_URL_UPLOADS_MEDIUM . $photo['url'];
+		else $photo['medium'] = '';
+
+		# Parse paths
 		$photo['url']		= LYCHEE_URL_UPLOADS_BIG . $photo['url'];
 		$photo['thumbUrl']	= LYCHEE_URL_UPLOADS_THUMB . $photo['thumbUrl'];
 
@@ -889,6 +976,12 @@ class Photo extends Module {
 				# Delete big
 				if (file_exists(LYCHEE_UPLOADS_BIG . $photo->url)&&!unlink(LYCHEE_UPLOADS_BIG . $photo->url)) {
 					Log::error($this->database, __METHOD__, __LINE__, 'Could not delete photo in uploads/big/');
+					return false;
+				}
+
+				# Delete medium
+				if (file_exists(LYCHEE_UPLOADS_MEDIUM . $photo->url)&&!unlink(LYCHEE_UPLOADS_MEDIUM . $photo->url)) {
+					Log::error($this->database, __METHOD__, __LINE__, 'Could not delete photo in uploads/medium/');
 					return false;
 				}
 
