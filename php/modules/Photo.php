@@ -659,7 +659,15 @@ class Photo extends Module {
 			if (isset($temp)) $return['shutter'] = $exif['ExposureTime'] . ' s';
 
 			$temp = @$exif['FocalLength'];
-			if (isset($temp)) $return['focal'] = $temp . ' mm';
+			if (isset($temp)) {
+				if (strpos($temp, '/')!==FALSE) {
+					$temp = explode('/', $temp, 2);
+					$temp = $temp[0] / $temp[1];
+					$temp = round($temp, 1);
+					$return['focal'] = $temp . ' mm';
+				}
+				$return['focal'] = $temp . ' mm';
+			}
 
 			$temp = @$exif['DateTimeOriginal'];
 			if (isset($temp)) $return['takestamp'] = strtotime($temp);
