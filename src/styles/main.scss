@@ -42,6 +42,11 @@ input {
 	user-select: text !important;
 }
 
+.iconic {
+	width: 100%;
+	height: 100%;
+}
+
 @import 'animations';
 @import 'content';
 @import 'contextmenu';

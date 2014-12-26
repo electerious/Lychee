@@ -447,14 +447,14 @@ view.photo = {
 
 	star: function() {
 
-		$('#button_star a').removeClass('icon-star-empty icon-star');
 		if (photo.json.star==1) {
 			// Starred
-			$('#button_star a').addClass('icon-star');
-			$('#button_star').attr('title', 'Unstar Photo');
+			$('#button_star')
+				.addClass('active')
+				.attr('title', 'Unstar Photo');
 		} else {
 			// Unstarred
-			$('#button_star a').addClass('icon-star-empty');
+			$('#button_star').removeClass('active');
 			$('#button_star').attr('title', 'Star Photo');
 		}
 
@@ -464,13 +464,15 @@ view.photo = {
 
 		if (photo.json.public==1||photo.json.public==2) {
 			// Photo public
-			$('#button_share a').addClass('active');
-			$('#button_share').attr('title', 'Share Photo');
+			$('#button_share')
+				.addClass('active')
+				.attr('title', 'Share Photo');
 			if (photo.json.init) $('#infobox .attr_visibility').html('Public');
 		} else {
 			// Photo private
-			$('#button_share a').removeClass('active');
-			$('#button_share').attr('title', 'Make Public');
+			$('#button_share')
+				.removeClass('active')
+				.attr('title', 'Make Public');
 			if (photo.json.init) $('#infobox .attr_visibility').html('Private');
 		}
 

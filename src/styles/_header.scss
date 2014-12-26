@@ -55,38 +55,41 @@ header {
 		&.editable { cursor: pointer; }
 	}
 
-	/* Button ------------------------------------------------*/
-	.button {
-		color: #888;
-		font-family: 'FontAwesome';
-		font-size: 21px;
-		font-weight: bold;
-		text-decoration: none !important;
-		cursor: pointer;
-		text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
-
-		&:hover {
-			color: #fff;
-		}
-
-		&.left {
-			float: left;
-			position: absolute;
-			padding: 16px 10px 8px 18px;
-		}
-
-		&.right {
-			float: right;
-			position: relative;
-			padding: 16px 19px 13px 11px;
-		}
+	/* Toolbars ------------------------------------------------*/
+	.toolbar {
+		display: none;
+		position: absolute;
+		box-sizing: border-box;
+		width: 100%;
+		height: 100%;
+		padding: 0 10px;
 	}
 
-	#tools_albums,
-	#tools_album,
-	#tools_photo,
-	#button_signin {
-		display: none;
+	/* Button ------------------------------------------------*/
+	.button {
+		display: inline-block;
+		padding: 16px 8px 12px;
+		width: 15px;
+		cursor: pointer;
+
+		&.left { float: left; }
+
+		&.right { float: right; }
+
+		.iconic {
+			fill: #888;
+			filter: drop-shadow( 0 -1px 0 rgba(0, 0, 0, .2) );
+			transition: fill .2s ease;
+		}
+
+		&:hover .iconic { fill: #fff; }
+
+		&--star.active .iconic { fill: #f0ef77; }
+
+		&--eye.active .iconic { fill: #ff9737; }
+
+		&#button_signin { display: none; }
+
 	}
 
 	/* Button Divider ------------------------------------------------*/
@@ -127,24 +130,6 @@ header {
 		transition: opacity .2s ease-out;
 
 		&:hover { opacity: 1; }
-	}
-
-	/* Tools ------------------------------------------------*/
-	.tools {
-		float: right;
-		padding: 14px 8px;
-		color: #888;
-		font-size: 21px;
-		text-shadow: 0 -1px 0 #222;
-		cursor: pointer;
-
-		&:first-of-type { margin-right: 6px; }
-
-		&:hover a { color: #fff; }
-
-		.icon-star { color: #f0ef77; }
-
-		.icon-share.active { color: #ff9737; }
 	}
 
 	/* Hosted with Lychee ------------------------------------------------*/

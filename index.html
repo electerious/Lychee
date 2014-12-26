@@ -29,38 +29,71 @@
 	<!-- Header -->
 	<header>
 
+		<!-- Title -->
+		<a id="title"></a>
+
 		<!-- Buttons -->
-		<div id="tools_albums">
-			<a class="button left icon-cog" id="button_settings" title="Settings"></a>
-			<a class="button left icon-signout" id="button_signin" title="Sign In"></a>
+		<div class="toolbar" id="tools_albums">
+			<a class="button left" id="button_settings" title="Settings">
+				<svg viewBox="0 0 8 8" class="iconic"><use xlink:href="src/images/iconic.svg#cog"></use></svg>
+			</a>
+			<a class="button left" id="button_signin" title="Sign In">
+				<svg viewBox="0 0 8 8" class="iconic"><use xlink:href="src/images/iconic.svg#account-login"></use></svg>
+			</a>
 			<a id="hostedwith">Hosted with Lychee</a>
-			<a class="button right icon icon-plus button_add" title="Add"></a>
+			<a class="button right button_add" title="Add">
+				<svg viewBox="0 0 8 8" class="iconic"><use xlink:href="src/images/iconic.svg#plus"></use></svg>
+			</a>
 			<a class="button_divider"></a>
 			<input id="search" type="text" name="search" placeholder="Search …">
 			<a id="clearSearch" class="button right">&times;</a>
 		</div>
-		<div id="tools_album">
-			<a class="button left icon-arrow-left" id="button_back_home" title="Close Album"></a>
-			<a class="button right icon icon-plus button_add" title="Add"></a>
+		<div class="toolbar" id="tools_album">
+			<a class="button left" id="button_back_home" title="Close Album">
+				<svg viewBox="0 0 8 8" class="iconic"><use xlink:href="src/images/iconic.svg#chevron-left"></use></svg>
+			</a>
+			<a class="button right button_add" title="Add">
+				<svg viewBox="0 0 8 8" class="iconic"><use xlink:href="src/images/iconic.svg#plus"></use></svg>
+			</a>
 			<a class="button_divider"></a>
-			<div class="tools" id="button_trash_album" title="Delete Album"><a class="icon-trash"></a></div>
-			<div class="tools" id="button_info_album" title="Show Info"><a class="icon-info-sign"></a></div>
-			<div class="tools" id="button_archive" title="Download Album"><a class="icon-circle-arrow-down"></a></div>
-			<div class="tools" id="button_share_album" title="Share Album"><a class="icon-share"></a></div>
+			<a class="button right" id="button_trash_album" title="Delete Album">
+				<svg viewBox="0 0 8 8" class="iconic"><use xlink:href="src/images/iconic.svg#trash"></use></svg>
+			</a>
+			<a class="button right" id="button_info_album" title="Show Info">
+				<svg viewBox="0 0 8 8" class="iconic"><use xlink:href="src/images/iconic.svg#info"></use></svg>
+			</a>
+			<a class="button right" id="button_archive" title="Download Album">
+				<svg viewBox="0 0 8 8" class="iconic"><use xlink:href="src/images/iconic.svg#cloud-download"></use></svg>
+			</a>
+			<a class="button right" id="button_share_album" title="Share Album">
+				<svg viewBox="0 0 8 8" class="iconic iconic--eye"><use xlink:href="src/images/iconic.svg#eye"></use></svg>
+			</a>
 		</div>
-		<div id="tools_photo">
-			<a class="button left icon-arrow-left" id="button_back" title="Close Photo"></a>
-			<div class="tools" id="button_more" title="More"><a class="icon-caret-down"></a></div>
+		<div class="toolbar" id="tools_photo">
+			<a class="button left" id="button_back" title="Close Photo">
+				<svg viewBox="0 0 8 8" class="iconic"><use xlink:href="src/images/iconic.svg#chevron-left"></use></svg>
+			</a>
+			<a class="button right" id="button_more" title="More">
+				<svg viewBox="0 0 8 8" class="iconic"><use xlink:href="src/images/iconic.svg#ellipses"></use></svg>
+			</a>
 			<a class="button_divider"></a>
-			<div class="tools" id="button_trash" title="Delete"><a class="icon-trash"></a></div>
-			<div class="tools" id="button_move" title="Move"><a class="icon-folder-open"></a></div>
-			<div class="tools" id="button_info" title="Show Info"><a class="icon-info-sign"></a></div>
+			<a class="button right" id="button_trash" title="Delete">
+				<svg viewBox="0 0 8 8" class="iconic"><use xlink:href="src/images/iconic.svg#trash"></use></svg>
+			</a>
+			<a class="button right" id="button_info" title="Show Info">
+				<svg viewBox="0 0 8 8" class="iconic"><use xlink:href="src/images/iconic.svg#info"></use></svg>
+			</a>
+			<a class="button right" id="button_move" title="Move">
+				<svg viewBox="0 0 8 8" class="iconic"><use xlink:href="src/images/iconic.svg#folder"></use></svg>
+			</a>
 			<a class="button_divider"></a>
-			<div class="tools" id="button_share" title="Share Photo"><a class="icon-share"></a></div>
-			<div class="tools" id="button_star" title="Star Photo"><a class="icon-star-empty"></a></div>
+			<a class="button right button--eye" id="button_share" title="Share Photo">
+				<svg viewBox="0 0 8 8" class="iconic"><use xlink:href="src/images/iconic.svg#eye"></use></svg>
+			</a>
+			<a class="button right button--star" id="button_star" title="Star Photo">
+				<svg viewBox="0 0 8 8" class="iconic"><use xlink:href="src/images/iconic.svg#star"></use></svg>
+			</a>
 		</div>
-
-		<a id="title"></a>
 
 	</header>
 
