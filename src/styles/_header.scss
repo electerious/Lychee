@@ -122,14 +122,19 @@ header {
 
 	#clearSearch {
 		position: absolute;
-		top: 15px;
-		right: 81px;
+		top: 13px;
+		right: 78px;
 		padding: 0;
+		color: #888;
 		font-size: 20px;
 		opacity: 0;
-		transition: opacity .2s ease-out;
+		transition: opacity .2s ease-out, color .2s ease-out;
+		cursor: pointer;
 
-		&:hover { opacity: 1; }
+		&:hover {
+			color: #fff;
+			opacity: 1;
+		}
 	}
 
 	/* Hosted with Lychee ------------------------------------------------*/

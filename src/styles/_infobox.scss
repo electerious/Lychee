@@ -56,6 +56,7 @@
 		height: 49px;
 		width: 100%;
 		background-image: linear-gradient(to bottom, #2A2A2A, #131313);
+		border-bottom: 1px solid rgba(0, 0, 0, .7);
 	}
 
 	.header h1 {
@@ -69,17 +70,20 @@
 		text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
 	}
 
-	.header a {
+	.header .close {
 		float: right;
-		padding: 15px 65px 15px 15px;
-		color: #fff;
-		font-size: 20px;
-		font-weight: bold;
-		text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
-		opacity: .5;
+		padding: 16px 65px 12px 15px;
+		width: 15px;
 		cursor: pointer;
 
-		&:hover { opacity: 1; }
+		.iconic {
+			fill: #888;
+			filter: drop-shadow( 0 -1px 0 rgba(0, 0, 0, .2) );
+			transition: fill .2s ease;
+		}
+
+		&:hover .iconic { fill: #fff; }
+
 	}
 
 	/* Seperator ------------------------------------------------*/
@@ -90,7 +94,7 @@
 		box-shadow: 0 -1px 0 rgba(0, 0, 0, .5);
 
 		&:first-child {
-			border: none;
+			border-top: 1px solid rgba(255, 255, 255, .02);
 			box-shadow: none;
 		}
 

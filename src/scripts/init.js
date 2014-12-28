@@ -28,6 +28,7 @@ $(document).ready(function() {
 	$('#button_settings')		.on(event_name, contextMenu.settings);
 	$('#button_info_album')		.on(event_name, view.infobox.show);
 	$('#button_info')			.on(event_name, view.infobox.show);
+	$('.button_add')			.on(event_name, contextMenu.add);
 	$('#button_more')			.on(event_name, function(e) { contextMenu.photoMore(photo.getID(), e) });
 	$('#button_move')			.on(event_name, function(e) { contextMenu.move([photo.getID()], e) });
 	$('#hostedwith')			.on(event_name, function() { window.open(lychee.website) });
@@ -54,7 +55,7 @@ $(document).ready(function() {
 
 	/* Infobox */
 	$('#infobox')
-		.on(event_name, '.header a',				view.infobox.hide)
+		.on(event_name, '.header .close',			view.infobox.hide)
 		.on(event_name, '#edit_title_album',		function() { album.setTitle([album.getID()]) })
 		.on(event_name, '#edit_description_album',	function() { album.setDescription(album.getID()) })
 		.on(event_name, '#edit_title',				function() { photo.setTitle([photo.getID()]) })
@@ -160,13 +161,9 @@ $(document).ready(function() {
 		.on(event_name, '.message .button:first',	function() { if (modal.fns!==null) modal.fns[0](); if (!visible.signin()) modal.close() })
 		.on(event_name, '.message .button:last',	function() { if (modal.fns!==null) modal.fns[1](); if (!visible.signin()) modal.close() })
 
-		/* Add Dialog */
-		.on(event_name, '.button_add', contextMenu.add)
-
 		/* Context Menu */
-		.on('contextmenu', '.photo',			function(e) { contextMenu.photo(photo.getID(), e) })
-		.on('contextmenu', '.album',			function(e) { contextMenu.album(album.getID(), e) })
-		.on(event_name, '.contextmenu_bg',		contextMenu.close)
+		.on('contextmenu', '.photo', function(e) { contextMenu.photo(photo.getID(), e) })
+		.on('contextmenu', '.album', function(e) { contextMenu.album(album.getID(), e) })
 
 		/* Infobox */
 		.on(event_name, '#infobox_overlay', view.infobox.hide)
