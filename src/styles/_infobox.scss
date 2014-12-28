@@ -7,8 +7,8 @@
 	position: fixed;
 	width: 100%;
 	height: 100%;
-	top: 0px;
-	left: 0px;
+	top: 0;
+	left: 0;
 	background-color: rgba(0, 0, 0, .8);
 }
 
@@ -16,16 +16,15 @@
 
 	z-index: 4;
 	position: fixed;
-	right: 0px;
+	right: -370px;
 	width: 350px;
 	height: 100%;
 	background-color: rgba(20, 20, 20, .98);
 	box-shadow: -1px 0 2px rgba(0, 0, 0, .8);
-	display: none;
-	transform: translateX(370px);
+	transform: translateX(0);
 	transition: transform .3s cubic-bezier(.51, .92, .24, 1.15);
 
-	&.active { transform: translateX(50px); }
+	&.active { transform: translateX(-92%); }
 
 	/* Misc ------------------------------------------------*/
 	.wrapper {

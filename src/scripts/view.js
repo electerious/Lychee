@@ -360,14 +360,14 @@ view.album = {
 
 	password: function() {
 
-		if (album.json.password==1) $('#infobox .attr_password').html('Yes');
-		else $('#infobox .attr_password').html('No');
+		if (album.json.password==1)	$('#infobox .attr_password').html('Yes');
+		else						$('#infobox .attr_password').html('No');
 
 	},
 
 	infobox: function() {
 
-		if ((visible.album()||!album.json.init)&&!visible.photo()) lychee.infobox.html(build.infoboxAlbum(album.json)).show();
+		if ((visible.album()||!album.json.init)&&!visible.photo()) lychee.infobox.find('.wrapper').html(build.infoboxAlbum(album.json));
 
 	}
 
@@ -495,7 +495,7 @@ view.photo = {
 
 	infobox: function() {
 
-		lychee.infobox.html(build.infoboxPhoto(photo.json)).show();
+		lychee.infobox.find('.wrapper').html(build.infoboxPhoto(photo.json));
 
 	}
 

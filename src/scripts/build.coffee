@@ -8,9 +8,9 @@ window.build = {}
 build.iconic = (icon, classes, path) ->
 
 	path	= path || 'src/images/iconic.svg'
-	classes	= classes || 'iconic'
+	classes	= classes || ''
 
-	"<svg viewBox='0 0 8 8' class='#{ classes }'><use xlink:href='#{ path }##{ icon }'></use></svg>"
+	"<svg viewBox='0 0 8 8' class='iconic #{ classes }'><use xlink:href='#{ path }##{ icon }'></use></svg>"
 
 build.divider = (title) ->
 
@@ -264,10 +264,7 @@ build.tags = (tags, forView) ->
 
 build.infoboxPhoto = (data, forView) ->
 
-	html =	"""
-			<div class='header'><h1>About</h1><a class='close'>#{ build.iconic('circle-x') }</a></div>
-			<div class='wrapper'>
-			"""
+	html =	""
 
 	switch data.public
 		when '0' then	visible = 'No'
@@ -355,17 +352,13 @@ build.infoboxPhoto = (data, forView) ->
 	html +=	"""
 			</table>
 			<div class='bumper'></div>
-			</div>
 			"""
 
 	return html
 
 build.infoboxAlbum = (data, forView) ->
 
-	html =	"""
-			<div class='header'><h1>About</h1><a class='close'>#{ build.iconic('circle-x') }</a></div>
-			<div class='wrapper'>
-			"""
+	html =	""
 
 	switch data.public
 		when '0' then	visible = 'No'
@@ -425,7 +418,6 @@ build.infoboxAlbum = (data, forView) ->
 	html += """
 			</table>
 			<div class='bumper'></div>
-			</div>
 			"""
 
 	return html

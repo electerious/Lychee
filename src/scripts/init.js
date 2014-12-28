@@ -42,6 +42,9 @@ $(document).ready(function() {
 	/* Search */
 	$('#search').on('keyup click', function() { search.find($(this).val()) });
 
+	/* Infobox */
+	$('#infobox .header .close').on(event_name, view.infobox.hide);
+
 	/* Clear Search */
 	$('#clearSearch').on(event_name, function () {
 		$('#search').focus();
@@ -55,7 +58,6 @@ $(document).ready(function() {
 
 	/* Infobox */
 	$('#infobox')
-		.on(event_name, '.header .close',			view.infobox.hide)
 		.on(event_name, '#edit_title_album',		function() { album.setTitle([album.getID()]) })
 		.on(event_name, '#edit_description_album',	function() { album.setDescription(album.getID()) })
 		.on(event_name, '#edit_title',				function() { photo.setTitle([photo.getID()]) })
