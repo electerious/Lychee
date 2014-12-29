@@ -29,7 +29,7 @@
 			border-radius: 0;
 			transition: none;
 
-			&:hover { background: linear-gradient(to bottom, #2293EC, darken(#2293EC, 2%)); }
+			&:hover { background: linear-gradient(to bottom, #2293EC, darken(#2293EC, 5%)); }
 		}
 
 			tr td .albumCover {
@@ -48,7 +48,7 @@
 		width: 100%;
 		margin: -2px 0 -1px -2px;
 		padding: 5px 7px 6px 7px;
-		background-color: #444;
+		background-color: #333;
 		color: #fff;
 		border: 1px solid rgba(0, 0, 0, .4);
 		box-shadow: 0px 1px 0px rgba(255, 255, 255, .05);

@@ -4,18 +4,18 @@
 
 #content {
 	position: absolute;
-	padding: 50px 0px 33px 0px;
+	padding: 50px 0 33px;
 	width: 100%;
-	min-height: calc(100% - 90px);
+	min-height: calc(100% - 83px);
 	-webkit-overflow-scrolling: touch;
 }
 
-	/* Photo ------------------------------------------------*/
-	.photo  {
+	/* Albums and Photos ------------------------------------------------*/
+	.album,
+	.photo {
 		float: left;
-		display: inline-block;
-		width: 206px;
-		height: 206px;
+		width: 202px;
+		height: 202px;
 		margin: 30px 0 0 30px;
 		cursor: pointer;
 
@@ -24,74 +24,52 @@
 			width: 200px;
 			height: 200px;
 			background-color: #222;
-			border-radius: 2px;
-			border: 2px solid #ccc;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, .5);
+			border: 1px solid rgba(255, 255, 255, .5);
+			transition: opacity .3s ease-out, transform .3s ease-out, border-color .3s ease-out;
 		}
 
 		&:hover img,
 		&.active img {
-			box-shadow: 0 0 5px #005ecc;
-		}
-
-		&:active {
-			transition-duration: .1s;
-			transform: scale(.98);
+			border-color: #2293EC;
 		}
 	}
 
 	/* Album ------------------------------------------------*/
 	.album  {
-		float: left;
-		display: inline-block;
-		width: 204px;
-		height: 204px;
-		margin: 30px 0px 0px 30px;
-		cursor: pointer;
-
-		img {
-			position: absolute;
-			width: 200px;
-			height: 200px;
-			background-color: #222;
-			border-radius: 2px;
-			border: 2px solid #bbb;
-
-			&:first-child,
-			&:nth-child(2) {
-				transform: rotate(0) translateY(0) translateX(0);
-				opacity: 0;
-			}
+		img:first-child,
+		img:nth-child(2) {
+			transform: rotate(0) translateY(0) translateX(0);
+			opacity: 0;
 		}
 
-		&:hover img:first-child {
-			transform: rotate(-2deg) translateY(10px) translateX(-12px);
-			opacity: 1;
-		}
+		&:hover img:nth-child(1),
+		&:hover img:nth-child(2) { opacity: 1; }
 
-		&:hover img:nth-child(2) {
-			transform: rotate(5deg) translateY(-8px) translateX(12px);
-			opacity: 1;
-		}
+		&:hover img:nth-child(1) { transform: rotate(-2deg) translateY(10px) translateX(-12px); }
 
-		&:hover img,
-		&.active img {
-			box-shadow: 0 0 3px #2293EC;
-		}
+		&:hover img:nth-child(2) { transform: rotate(5deg) translateY(-8px) translateX(12px); }
+	}
+
+	/* Photo ------------------------------------------------*/
+	.photo:active  {
+		transition-duration: .1s;
+		transform: scale(.98);
 	}
 
 	/* Album/Photo Overlay ------------------------------------------------*/
 	.album .overlay,
 	.photo .overlay {
 		position: absolute;
+		margin: 0 1px;
 		width: 200px;
-		height: 200px;
-		margin: 2px;
-		background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 60%, rgba(0,0,0,0.5) 80%, rgba(0,0,0,0.9) 100%);
+		background: rgba(0, 0, 0, .6);
+		bottom: 1px;
 	}
 
 	// No overlay for empty albums
 	.album img[data-type^='nonretina'] + .overlay {
-		background: rgba(0, 0, 0, 0.2);
+		background: none;
 	}
 
 	.photo .overlay {
@@ -107,7 +85,7 @@
 	.photo .overlay h1 {
 		min-height: 19px;
 		width: 185px;
-		margin: 152px 0 3px 15px;
+		margin: 12px 0 5px 15px;
 		color: #fff;
 		font-size: 16px;
 		font-weight: bold;
@@ -116,19 +94,13 @@
 
 	.album .overlay a,
 	.photo .overlay a {
+		display: block;
+		margin: 0 0 12px 15px;
 		font-size: 11px;
-		color: #aaa;
+		color: #bbb;
 	}
 
-	.album .overlay a {
-		margin-left: 15px;
-	}
-
-	.photo .overlay a {
-		margin: 155px 0 5px 15px;
-
-		span { margin: 0 5px 0 0; }
-	}
+	.photo .overlay a span { margin: 0 6px 0 0; }
 
 	/* Badges ------------------------------------------------*/
 	.album .badge,
@@ -159,14 +131,16 @@
 	.divider {
 		float: left;
 		margin: 50px 0 0;
-		padding: 10px 0;
+		padding: 10px 0 0;
 		width: 100%;
 		opacity: 0;
-		background: rgba(0, 0, 0, .15);
+		border-top: 1px solid rgba(255, 255, 255, .02);
+		box-shadow: 0 -1px 0 0 rgba(0, 0, 0, .2);
 
 		&:first-child {
-			margin-top: 0;
-			border-top: none;
+			margin-top: 10px;
+			border-top: 0;
+			box-shadow: none;
 		}
 
 		h1 {
@@ -175,6 +149,7 @@
 			color: rgba(255, 255, 255, .6);
 			font-size: 14px;
 			font-weight: bold;
+			text-shadow: 0 -1px 0 rgba(0, 0, 0, .1);
 		}
 	}
 
@@ -189,7 +164,7 @@
 		margin-left: -90px;
 		padding-top: 20px;
 		color: rgba(15, 15, 15, 1);
-		text-shadow: 0px 1px 0px rgba(255, 255, 255, .01);
+		text-shadow: 0 1px 0 rgba(255, 255, 255, .01);
 		text-align: center;
 
 		.icon {
