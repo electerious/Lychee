@@ -7,8 +7,8 @@ header {
 	position: fixed;
 	height: 49px;
 	width: 100%;
-	background: linear-gradient(to bottom, #3E3E3E, #282828);
-	border-bottom: 1px solid #161616;
+	background: linear-gradient(to bottom, #222222, #1a1a1a);
+	border-bottom: 1px solid #0f0f0f;
 	z-index: 1;
 	transition: transform .3s ease-out;
 
@@ -29,15 +29,7 @@ header {
 		background: none;
 		border-bottom: none;
 
-		&.error {
-			background-color: rgba(10, 10, 10, .99);
-		}
-
-		.button,
-		#title,
-		.tools {
-			text-shadow: none !important;
-		}
+		&.error { background-color: rgba(10, 10, 10, .99); }
 	}
 
 	/* Title ------------------------------------------------*/
@@ -50,7 +42,7 @@ header {
 		font-size: 16px;
 		font-weight: bold;
 		text-align: center;
-		text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
+		text-shadow: 0 -1px 0 rgba(0, 0, 0, .2);
 
 		&.editable { cursor: pointer; }
 	}
@@ -68,7 +60,7 @@ header {
 	/* Button ------------------------------------------------*/
 	.button {
 		display: inline-block;
-		padding: 16px 8px 12px;
+		padding: 17px 8px 15px;
 		width: 15px;
 		cursor: pointer;
 
@@ -77,7 +69,7 @@ header {
 		&.right { float: right; }
 
 		.iconic {
-			fill: #888;
+			fill: #aaa;
 			filter: drop-shadow( 0 -1px 0 rgba(0, 0, 0, .2) );
 			transition: fill .2s ease;
 		}
@@ -106,10 +98,9 @@ header {
 		width: 80px;
 		margin: 12px 12px 0 0;
 		padding: 5px 12px 6px 12px;
-		background-color: #383838;
+		background-color: #222;
 		color: #fff;
-		border: 1px solid rgba(0, 0, 0, .6);
-		box-shadow: 0 1px 0 rgba(255, 255, 255, .06);
+		border: 0;
 		outline: none;
 		border-radius: 50px;
 		opacity: .6;
@@ -144,14 +135,12 @@ header {
 		margin: 13px 9px;
 		color: #888;
 		font-size: 13px;
-		text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
+		text-shadow: 0 -1px 0 rgba(0, 0, 0, .2);
+		border-radius: 100px;
 		display: none;
 		cursor: pointer;
 
-		&:hover {
-			background-color: rgba(0, 0, 0, .2);
-			border-radius: 100px;
-		}
+		&:hover { background-color: rgba(0, 0, 0, .3); }
 	}
 
 }

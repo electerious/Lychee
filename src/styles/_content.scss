@@ -8,22 +8,6 @@
 	width: 100%;
 	min-height: calc(100% - 90px);
 	-webkit-overflow-scrolling: touch;
-
- 	// Adds a gradient to the top
-	&::before {
-		content: '';
-		position: absolute;
-		left: 0px;
-		width: 100%;
-		height: 20px;
-		background: linear-gradient(to bottom, #262626, #222);
-		border-top: 1px solid #333;
-	}
-
-	// Removes the gradient when using the view
-	&.view::before {
-		display: none;
-	}
 }
 
 	/* Photo ------------------------------------------------*/
@@ -70,7 +54,7 @@
 			height: 200px;
 			background-color: #222;
 			border-radius: 2px;
-			border: 2px solid #ccc;
+			border: 2px solid #bbb;
 
 			&:first-child,
 			&:nth-child(2) {
@@ -91,7 +75,7 @@
 
 		&:hover img,
 		&.active img {
-			box-shadow: 0 0 5px #005ecc;
+			box-shadow: 0 0 3px #2293EC;
 		}
 	}
 
@@ -150,12 +134,11 @@
 	.album .badge,
 	.photo .badge {
 		position: absolute;
-		margin-top: -1px;
-		margin-left: 12px;
+		margin: -1px 0 0 12px;
 		padding: 12px 7px 3px 7px;
-		background: linear-gradient(to bottom, #d64b4b 0%, #ab2c2c 100%);
-		box-shadow: 0 0 3px rgba(0, 0, 0, .8);
-		border-radius: 0 0 3px 3px;
+		box-shadow: 0 0 2px rgba(0, 0, 0, .6);
+		background: #d02a32;
+		border-radius: 0 0 5px 5px;
 		border: 1px solid #fff;
 		border-top: none;
 		color: #fff;
@@ -163,55 +146,23 @@
 		text-shadow: 0 1px 0 rgba(0, 0, 0, .4);
 		opacity: .9;
 
-		&::after {
-			content: '';
-			position: absolute;
-			margin-top: -12px;
-			margin-left: -26px;
-			width: 38px;
-			height: 5px;
-			background: linear-gradient(to bottom, rgba(0,0,0,1) 0%,rgba(0,0,0,0) 100%);
-			opacity: .4;
+		&:nth-child(2n) { margin-left: 57px; }
+
+		.iconic {
+			fill: #fff;
+			width: 21px;
+			filter: drop-shadow( 0 -1px 0 rgba(0, 0, 0, .1) );
 		}
-
-		&:nth-child(2n) {
-			margin-left: 57px;
-		}
-	}
-
-	.album .badge.icon-star,
-	.photo .badge.icon-star {
-		padding: 12px 8px 3px 8px;
-
-		&::after { margin-left: -29px; }
-	}
-
-	.album .badge.icon-share,
-	.photo .badge.icon-share {
-		padding: 12px 6px 3px 8px;
-
-		&::after { margin-left: -31px; }
-	}
-
-	.album .badge.icon-time,
-	.photo .badge.icon-time {
-		padding: 12px 8px 3px 9px;
-
-		::after { margin-left: -29px; }
-	}
-
-	.album .badge.icon-reorder::after {
-		margin-left: -30px;
 	}
 
 	/* Divider ------------------------------------------------*/
 	.divider {
 		float: left;
+		margin: 50px 0 0;
+		padding: 10px 0;
 		width: 100%;
-		margin-top: 50px;
 		opacity: 0;
-		border-top: 1px solid rgba(255, 255, 255, .03);
-		box-shadow: 0 -1px 0 rgba(0, 0, 0, .25);
+		background: rgba(0, 0, 0, .15);
 
 		&:first-child {
 			margin-top: 0;
@@ -220,11 +171,10 @@
 
 		h1 {
 			float: left;
-			margin: 20px 0 0 30px;
-			color: #fff;
+			margin: 0 0 0 30px;
+			color: rgba(255, 255, 255, .6);
 			font-size: 14px;
 			font-weight: bold;
-			text-shadow: 0 -1px 0 rgba(0, 0, 0, .5);
 		}
 	}
 
@@ -238,8 +188,8 @@
 		margin-top: -60px;
 		margin-left: -90px;
 		padding-top: 20px;
-		color: rgba(20, 20, 20, 1);
-		text-shadow: 0px 1px 0px rgba(255, 255, 255, .05);
+		color: rgba(15, 15, 15, 1);
+		text-shadow: 0px 1px 0px rgba(255, 255, 255, .01);
 		text-align: center;
 
 		.icon {

@@ -59,10 +59,10 @@ build.album = (data) ->
 
 	if lychee.publicMode is false
 
-		if data.star is '1' then		html += "<a class='badge icon-star'></a>"
-		if data.public is '1' then		html += "<a class='badge icon-share'></a>"
-		if data.unsorted is '1' then	html += "<a class='badge icon-reorder'></a>"
-		if data.recent is '1' then		html += "<a class='badge icon-time'></a>"
+		if data.star is '1' then		html += "<a class='badge'>#{ build.iconic('star') }</a>"
+		if data.public is '1' then		html += "<a class='badge'>#{ build.iconic('eye') }</a>"
+		if data.unsorted is '1' then	html += "<a class='badge'>#{ build.iconic('list') }</a>"
+		if data.recent is '1' then		html += "<a class='badge'>#{ build.iconic('clock') }</a>"
 
 	html += "</div>"
 
@@ -94,8 +94,8 @@ build.photo = (data) ->
 
 	html += "</div>"
 
-	if data.star is '1' then html += "<a class='badge icon-star'></a>"
-	if lychee.publicMode is false and data.public is '1' and album.json.public isnt '1' then html += "<a class='badge icon-share'></a>"
+	if data.star is '1' then html += "<a class='badge'>#{ build.iconic('star') }</a>"
+	if lychee.publicMode is false and data.public is '1' and album.json.public isnt '1' then html += "<a class='badge'>#{ build.iconic('eye') }</a>"
 
 	html += "</div>"
 

@@ -6,23 +6,20 @@
 .basicContext {
 
 	padding: 5px 0 6px;
-	background: linear-gradient(to bottom, #444 0%, #2f2f2f 100%);
-	border: 1px solid rgba(0, 0, 0, .5);
-	border-bottom: 1px solid rgba(0, 0, 0, .6);
+	background: linear-gradient(to bottom, #333, #252525);
+	border: 1px solid rgba(0, 0, 0, .7);
+	border-bottom: 1px solid rgba(0, 0, 0, .8);
 	border-radius: 5px;
-	box-shadow: 0 1px 4px rgba(0, 0, 0, .15), inset 0px 1px 0px rgba(255, 255, 255, .08);
+	box-shadow: 0 1px 4px rgba(0, 0, 0, .2), inset 0 1px 0 rgba(255, 255, 255, .05);
 
 	/* Item ------------------------------------------------*/
 	tr {
 		margin-bottom: 2px;
 		color: #eee;
 		font-size: 14px;
-		text-shadow: 0 -1px 0px rgba(0, 0, 0, .2);
+		text-shadow: 0 -1px 0px rgba(0, 0, 0, .1);
 
-		&.separator {
-			background-color: rgba(0, 0, 0, .2);
-			border-bottom: 1px solid rgba(255, 255, 255, .1);
-		}
+		&.separator { background-color: rgba(0, 0, 0, .3); }
 	}
 
 		tr td {
@@ -32,9 +29,7 @@
 			border-radius: 0;
 			transition: none;
 
-			&:hover {
-				background: linear-gradient(to bottom, #6a84f2, #4967F0);
-			}
+			&:hover { background: linear-gradient(to bottom, #2293EC, darken(#2293EC, 2%)); }
 		}
 
 			tr td .albumCover {

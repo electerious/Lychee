@@ -19,8 +19,8 @@
 	right: -370px;
 	width: 350px;
 	height: 100%;
-	background-color: rgba(20, 20, 20, .98);
-	box-shadow: -1px 0 2px rgba(0, 0, 0, .8);
+	background-color: rgba(30, 30, 30, .98);
+	box-shadow: -1px 0 2px rgba(0, 0, 0, .7);
 	transform: translateX(0);
 	transition: transform .3s cubic-bezier(.51, .92, .24, 1.15);
 
@@ -54,8 +54,8 @@
 		float: left;
 		height: 49px;
 		width: 100%;
-		background-image: linear-gradient(to bottom, #2A2A2A, #131313);
-		border-bottom: 1px solid rgba(0, 0, 0, .7);
+		background: linear-gradient(to bottom, #1f1f1f, #1a1a1a);
+		border-bottom: 1px solid #0f0f0f;
 	}
 
 	.header h1 {
@@ -66,7 +66,7 @@
 		font-size: 16px;
 		font-weight: bold;
 		text-align: center;
-		text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
+		text-shadow: 0 -1px 0 rgba(0, 0, 0, .2);
 	}
 
 	.header .close {
@@ -88,21 +88,15 @@
 	/* Seperator ------------------------------------------------*/
 	.separator {
 		float: left;
+		padding: 8px 0;
 		width: 100%;
-		border-top: 1px solid rgba(255, 255, 255, .02);
-		box-shadow: 0 -1px 0 rgba(0, 0, 0, .5);
-
-		&:first-child {
-			border-top: 1px solid rgba(255, 255, 255, .02);
-			box-shadow: none;
-		}
+		background: rgba(0, 0, 0, .15);
 
 		h1 {
-			margin: 20px 0 5px 20px;
-			color: #fff;
+			margin: 0 0 0 20px;
+			color: rgba(255, 255, 255, .6);
 			font-size: 14px;
 			font-weight: bold;
-			text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
 		}
 	}
 
@@ -150,15 +144,14 @@
 
 	#tags .tag {
 		float: left;
-		padding: 4px 7px;
+		padding: 6px 10px;
 		margin: 0 6px 8px 0;
 		background-color: rgba(0, 0, 0, .5);
-		border: 2px solid rgba(255, 255, 255, .3);
 		border-radius: 100px;
 		font-size: 12px;
-		transition: border .3s;
+		transition: background-color .3s;
 
-		&:hover { border: 2px solid #aaa; }
+		&:hover { background-color: rgba(0, 0, 0, .3); }
 	}
 
 	#tags .tag span {
