@@ -87,7 +87,7 @@ build.photo = (data) ->
 					<h1 title='#{ longTitle }'>#{ title }</h1>
 			"""
 
-	if data.cameraDate is '1'
+	if data.cameraDate is 1
 		html += "<a><span class='icon-camera' title='Photo Date'></span>#{ data.sysdate }</a>"
 	else
 		html += "<a>#{ data.sysdate }</a>"
