@@ -8,12 +8,21 @@
 	width: 100%;
 	min-height: calc(100% - 83px);
 	-webkit-overflow-scrolling: touch;
+
+	&::before {
+		content: '';
+		position: absolute;
+		width: 100%;
+		height: 1px;
+		border-top: 1px solid rgba(255, 255, 255, .02);
+	}
 }
 
 	/* Albums and Photos ------------------------------------------------*/
 	.album,
 	.photo {
 		float: left;
+		position: relative;
 		width: 202px;
 		height: 202px;
 		margin: 30px 0 0 30px;
@@ -167,9 +176,7 @@
 		text-shadow: 0 1px 0 rgba(255, 255, 255, .01);
 		text-align: center;
 
-		.icon {
-			font-size: 80px;
-		}
+		.icon { font-size: 80px; }
 
 		p {
 			font-size: 18px;

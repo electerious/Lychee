@@ -64,9 +64,9 @@ header {
 		width: 15px;
 		cursor: pointer;
 
-		&.left { float: left; }
+		&--left { float: left; }
 
-		&.right { float: right; }
+		&--right { float: right; }
 
 		.iconic {
 			fill: #aaa;
