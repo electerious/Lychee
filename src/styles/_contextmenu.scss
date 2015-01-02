@@ -19,7 +19,10 @@
 		font-size: 14px;
 		text-shadow: 0 -1px 0px rgba(0, 0, 0, .1);
 
-		&.separator { background-color: rgba(0, 0, 0, .3); }
+		&.separator {
+			background-color: rgba(0, 0, 0, .2);
+			border-bottom: 1px solid rgba(255, 255, 255, .06);
+		}
 	}
 
 		tr td {
