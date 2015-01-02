@@ -5,7 +5,7 @@
 
 lychee = {
 
-	title:			'',
+	title:			document.title,
 	version:		'2.7.0',
 	version_code:	'020700',
 
@@ -77,10 +77,10 @@ lychee.api = function(params, callback) {
 	loadingBar.show();
 
 	$.ajax({
-		type:		'POST',
-		url:		lychee.api_path,
-		data:		'function=' + params,
-		dataType:	'text',
+		type: 'POST',
+		url: lychee.api_path,
+		data: 'function=' + params,
+		dataType: 'text',
 		success: function(data) {
 
 			setTimeout(function() { loadingBar.hide() }, 100);
@@ -168,9 +168,7 @@ lychee.loginDialog = function() {
 
 lychee.logout = function() {
 
-	lychee.api('logout', function() {
-		window.location.reload();
-	});
+	lychee.api('logout', window.location.reload);
 
 }
 
@@ -252,15 +250,14 @@ lychee.getUpdate = function() {
 
 lychee.setTitle = function(title, editable) {
 
-	if (lychee.title==='')	lychee.title = document.title;
+	var $title = lychee.header.find('#title');
 
-	if (title==='Albums')	document.title = lychee.title;
-	else					document.title = lychee.title + ' - ' + title;
+	document.title = lychee.title + ' - ' + title;
 
-	if (editable)	$('#title').addClass('editable');
-	else			$('#title').removeClass('editable');
+	if (editable)	$title.addClass('editable');
+	else			$title.removeClass('editable');
 
-	$('#title').html(title);
+	$title.html(title + build.iconic('caret-bottom'));
 
 }
 

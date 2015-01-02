@@ -106,8 +106,8 @@ build.imageview = (data, size, visibleControls) ->
 	return '' if not data?
 
 	html =	"""
-			<div class='arrow_wrapper previous'><a id='previous'>#{ build.iconic('caret-left') }</a></div>
-			<div class='arrow_wrapper next'><a id='next'>#{ build.iconic('caret-right') }</a></div>
+			<div class='arrow_wrapper arrow_wrapper--previous'><a id='previous'>#{ build.iconic('caret-left') }</a></div>
+			<div class='arrow_wrapper arrow_wrapper--next'><a id='next'>#{ build.iconic('caret-right') }</a></div>
 			"""
 
 	if size is 'big'

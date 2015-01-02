@@ -54,9 +54,9 @@
 		top: 60px;
 		z-index: 1;
 
-		&.previous { left: 0; }
+		&--previous { left: 0; }
 
-		&.next { right: 0; }
+		&--next { right: 0; }
 
 		a {
 			position: fixed;

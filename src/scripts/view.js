@@ -488,28 +488,28 @@ view.photo = {
 
 		lychee.imageview.html(build.imageview(photo.json, photo.getSize(), visible.controls()));
 
-		var nextArrow		= lychee.imageview.find('a#next'),
-			previousArrow	= lychee.imageview.find('a#previous'),
+		var $nextArrow		= lychee.imageview.find('a#next'),
+			$previousArrow	= lychee.imageview.find('a#previous'),
 			hasNext			= album.json&&album.json.content&&album.json.content[photo.getID()]&&album.json.content[photo.getID()].nextPhoto==='',
 			hasPrevious		= album.json&&album.json.content&&album.json.content[photo.getID()]&&album.json.content[photo.getID()].previousPhoto==='';
 
-		if (hasNext||lychee.viewMode) { nextArrow.hide(); }
+		if (hasNext||lychee.viewMode) { $nextArrow.hide(); }
 		else {
 
 			var nextPhotoID	= album.json.content[photo.getID()].nextPhoto,
 				nextPhoto	= album.json.content[nextPhotoID];
 
-			nextArrow.css('background-image', 'linear-gradient(to bottom, rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)), url("' + nextPhoto.thumbUrl + '")');
+			$nextArrow.css('background-image', 'linear-gradient(to bottom, rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)), url("' + nextPhoto.thumbUrl + '")');
 
 		}
 
-		if (hasPrevious||lychee.viewMode) { previousArrow.hide(); }
+		if (hasPrevious||lychee.viewMode) { $previousArrow.hide(); }
 		else {
 
 			var previousPhotoID	= album.json.content[photo.getID()].previousPhoto,
 				previousPhoto	= album.json.content[previousPhotoID];
 
-			previousArrow.css('background-image', 'linear-gradient(to bottom, rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)), url("' + previousPhoto.thumbUrl + '")');
+			$previousArrow.css('background-image', 'linear-gradient(to bottom, rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)), url("' + previousPhoto.thumbUrl + '")');
 
 		};
 

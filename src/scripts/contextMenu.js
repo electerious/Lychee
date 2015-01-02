@@ -69,6 +69,38 @@ contextMenu.albumMulti = function(albumIDs, e) {
 
 }
 
+contextMenu.albumTitle = function(albumID, e) {
+
+	var items = [
+		{ type: 'item', title: 'Rename', icon: 'icon-edit', fn: function() { album.setTitle([albumID]) } }
+	];
+
+	lychee.api('getAlbums', function(data) {
+
+		if (data.num!==0) {
+
+			items.push({ type: 'separator' });
+
+			// Generate list of albums
+			$.each(data.content, function(index) {
+
+				var that = this;
+
+				if (!that.thumb0) that.thumb0 = 'src/images/no_cover.svg';
+				that.title = "<img class='albumCover' width='16' height='16' src='" + that.thumb0 + "'><div class='albumTitle'>" + that.title + "</div>";
+
+				if (that.id!=album.getID()) items.push({ type: 'item', title: that.title, fn: function() { lychee.goto(that.id) } });
+
+			});
+
+		}
+
+		basicContext.show(items, e, contextMenu.close);
+
+	});
+
+}
+
 contextMenu.photo = function(photoID, e) {
 
 	// Notice for 'Move':
