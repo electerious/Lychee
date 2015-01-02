@@ -43,8 +43,22 @@ header {
 		font-weight: bold;
 		text-align: center;
 		text-shadow: 0 -1px 0 rgba(0, 0, 0, .2);
+		z-index: 1;
+
+		.iconic {
+			display: none;
+			margin: 0 0 0 10px;
+			width: 10px;
+			fill: rgba(255, 255, 255, .5);
+			filter: drop-shadow( 0 -1px 0 rgba(0, 0, 0, .2) );
+			transition: fill .2s ease;
+		}
+
+		&:hover .iconic { fill: rgba(255, 255, 255, 1); }
 
 		&.editable { cursor: pointer; }
+
+		&.editable .iconic { display: inline-block; }
 	}
 
 	/* Toolbars ------------------------------------------------*/
@@ -69,12 +83,12 @@ header {
 		&--right { float: right; }
 
 		.iconic {
-			fill: #aaa;
+			fill: rgba(255, 255, 255, .5);
 			filter: drop-shadow( 0 -1px 0 rgba(0, 0, 0, .2) );
 			transition: fill .2s ease;
 		}
 
-		&:hover .iconic { fill: #fff; }
+		&:hover .iconic { fill: rgba(255, 255, 255, 1); }
 
 		&--star.active .iconic { fill: #f0ef77; }
 
