@@ -6,7 +6,7 @@
 $(document).ready(function() {
 
 	/* Event Name */
-	var event_name = (mobileBrowser()) ? 'touchend' : 'click';
+	var eventName = (mobileBrowser()) ? 'touchend' : 'click';
 
 	/* Disable ContextMenu */
 	$(document).bind('contextmenu', function(e) { e.preventDefault() });
@@ -16,59 +16,59 @@ $(document).ready(function() {
 	$(document)		.on('mouseup',		multiselect.getSelection);
 
 	/* Header */
-	lychee.header.find('#title').on(event_name, function(e) {
+	lychee.header.find('#title').on(eventName, function(e) {
 		if (!$(this).hasClass('editable'))	return false;
 		if (visible.photo())				photo.setTitle([photo.getID()]);
 		else								contextMenu.albumTitle([album.getID()], e);
 	});
-	lychee.header.find('#button_share').on(event_name, function(e) {
+	lychee.header.find('#button_share').on(eventName, function(e) {
 		if (photo.json.public==1||photo.json.public==2)	contextMenu.sharePhoto(photo.getID(), e);
 		else											photo.setPublic(photo.getID(), e);
 	});
-	lychee.header.find('#button_share_album').on(event_name, function(e) {
+	lychee.header.find('#button_share_album').on(eventName, function(e) {
 		if (album.json.public==1)	contextMenu.shareAlbum(album.getID(), e);
 		else						album.setPublic(album.getID(), e);
 	});
-	lychee.header.find('#button_signin')		.on(event_name, lychee.loginDialog);
-	lychee.header.find('#button_settings')		.on(event_name, contextMenu.settings);
-	lychee.header.find('#button_info_album')	.on(event_name, view.infobox.show);
-	lychee.header.find('#button_info')			.on(event_name, view.infobox.show);
-	lychee.header.find('.button_add')			.on(event_name, contextMenu.add);
-	lychee.header.find('#button_more')			.on(event_name, function(e) { contextMenu.photoMore(photo.getID(), e) });
-	lychee.header.find('#button_move')			.on(event_name, function(e) { contextMenu.move([photo.getID()], e) });
-	lychee.header.find('#hostedwith')			.on(event_name, function() { window.open(lychee.website) });
-	lychee.header.find('#button_trash_album')	.on(event_name, function() { album.delete([album.getID()]) });
-	lychee.header.find('#button_trash')			.on(event_name, function() { photo.delete([photo.getID()]) });
-	lychee.header.find('#button_archive')		.on(event_name, function() { album.getArchive(album.getID()) });
-	lychee.header.find('#button_star')			.on(event_name, function() { photo.setStar([photo.getID()]) });
-	lychee.header.find('#button_back_home')		.on(event_name, function() { lychee.goto('') });
-	lychee.header.find('#button_back')			.on(event_name, function() { lychee.goto(album.getID()) });
+	lychee.header.find('#button_signin')		.on(eventName, lychee.loginDialog);
+	lychee.header.find('#button_settings')		.on(eventName, contextMenu.settings);
+	lychee.header.find('#button_info_album')	.on(eventName, view.infobox.show);
+	lychee.header.find('#button_info')			.on(eventName, view.infobox.show);
+	lychee.header.find('.button_add')			.on(eventName, contextMenu.add);
+	lychee.header.find('#button_more')			.on(eventName, function(e) { contextMenu.photoMore(photo.getID(), e) });
+	lychee.header.find('#button_move')			.on(eventName, function(e) { contextMenu.move([photo.getID()], e) });
+	lychee.header.find('#hostedwith')			.on(eventName, function() { window.open(lychee.website) });
+	lychee.header.find('#button_trash_album')	.on(eventName, function() { album.delete([album.getID()]) });
+	lychee.header.find('#button_trash')			.on(eventName, function() { photo.delete([photo.getID()]) });
+	lychee.header.find('#button_archive')		.on(eventName, function() { album.getArchive(album.getID()) });
+	lychee.header.find('#button_star')			.on(eventName, function() { photo.setStar([photo.getID()]) });
+	lychee.header.find('#button_back_home')		.on(eventName, function() { lychee.goto('') });
+	lychee.header.find('#button_back')			.on(eventName, function() { lychee.goto(album.getID()) });
 
 	/* Search */
 	lychee.header.find('#search').on('keyup click', function() { search.find($(this).val()) });
 
 	/* Clear Search */
-	lychee.header.find('#clearSearch').on(event_name, function () {
+	lychee.header.find('#clearSearch').on(eventName, function () {
 		lychee.header.find('#search').focus();
 		search.reset();
 	});
 
 	/* Infobox */
-	lychee.infobox.find('.header .close').on(event_name, view.infobox.hide);
+	lychee.infobox.find('.header .close').on(eventName, view.infobox.hide);
 
 	/* Image View */
 	lychee.imageview
-		.on(event_name, '.arrow_wrapper--previous',	photo.previous)
-		.on(event_name, '.arrow_wrapper--next',		photo.next);
+		.on(eventName, '.arrow_wrapper--previous',	photo.previous)
+		.on(eventName, '.arrow_wrapper--next',		photo.next);
 
 	/* Infobox */
 	lychee.infobox
-		.on(event_name, '#edit_title_album',		function() { album.setTitle([album.getID()]) })
-		.on(event_name, '#edit_description_album',	function() { album.setDescription(album.getID()) })
-		.on(event_name, '#edit_title',				function() { photo.setTitle([photo.getID()]) })
-		.on(event_name, '#edit_description',		function() { photo.setDescription(photo.getID()) })
-		.on(event_name, '#edit_tags',				function() { photo.editTags([photo.getID()]) })
-		.on(event_name, '#tags .tag span',			function() { photo.deleteTag(photo.getID(), $(this).data('index')) });
+		.on(eventName, '#edit_title_album',		function() { album.setTitle([album.getID()]) })
+		.on(eventName, '#edit_description_album',	function() { album.setDescription(album.getID()) })
+		.on(eventName, '#edit_title',				function() { photo.setTitle([photo.getID()]) })
+		.on(eventName, '#edit_description',		function() { photo.setDescription(photo.getID()) })
+		.on(eventName, '#edit_tags',				function() { photo.editTags([photo.getID()]) })
+		.on(eventName, '#tags .tag span',			function() { photo.deleteTag(photo.getID(), $(this).data('index')) });
 
 	/* Keyboard */
 	Mousetrap
@@ -158,20 +158,20 @@ $(document).ready(function() {
 		.on('click', '.photo', function() { lychee.goto(album.getID() + '/' + $(this).attr('data-id')) })
 
 		/* Modal */
-		.on(event_name, '.message .close',			modal.close)
-		.on(event_name, '.message .button:first',	function() { if (modal.fns!==null) modal.fns[0](); if (!visible.signin()) modal.close() })
-		.on(event_name, '.message .button:last',	function() { if (modal.fns!==null) modal.fns[1](); if (!visible.signin()) modal.close() })
+		.on(eventName, '.message .close',			modal.close)
+		.on(eventName, '.message .button:first',	function() { if (modal.fns!==null) modal.fns[0](); if (!visible.signin()) modal.close() })
+		.on(eventName, '.message .button:last',	function() { if (modal.fns!==null) modal.fns[1](); if (!visible.signin()) modal.close() })
 
 		/* Context Menu */
 		.on('contextmenu', '.photo', function(e) { contextMenu.photo(photo.getID(), e) })
 		.on('contextmenu', '.album', function(e) { contextMenu.album(album.getID(), e) })
 
 		/* Infobox */
-		.on(event_name, '#infobox_overlay', view.infobox.hide)
+		.on(eventName, '#infobox_overlay', view.infobox.hide)
 
 		/* Upload */
 		.on('change', '#upload_files',				function() { modal.close(); upload.start.local(this.files) })
-		.on(event_name, '.upload_message a.close',	upload.close)
+		.on(eventName, '.upload_message a.close',	upload.close)
 		.on('dragover',								function(e) { e.preventDefault(); }, false)
 		.on('drop', function(e) {
 
