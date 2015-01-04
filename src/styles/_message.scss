@@ -8,7 +8,7 @@
 	height: 100%;
 	top: 0;
 	left: 0;
-	background-color: rgba(0, 0, 0, .85);
+	background-color: black(.85);
 	z-index: 1000;
 }
 
@@ -21,12 +21,12 @@
 	margin-top: -95px;
 	background-image: linear-gradient(to bottom, rgb(75, 75, 75), rgb(45, 45, 45));
 	border-radius: 5px;
-	box-shadow: 0 0 5px #000, inset 0 1px 0 rgba(255, 255, 255, .08);
+	box-shadow: 0 0 5px black(1), inset 0 1px 0 white(.08);
 
 	/* Animation */
 	animation-name: moveUp;
 	animation-duration: .3s;
-	animation-timing-function: cubic-bezier(.51, .92, .24, 1.15);
+	animation-timing-function: $timingBounce;
 
 	/* Header ------------------------------------------------*/
 	h1 {
@@ -36,7 +36,7 @@
 		color: #fff;
 		font-size: 16px;
 		font-weight: bold;
-		text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
+		text-shadow: 0 -1px 0 black(.3);
 		text-align: center;
 	}
 
@@ -47,10 +47,10 @@
 		padding: 12px 14px 6px 7px;
 		color: #aaa;
 		font-size: 20px;
-		text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
+		text-shadow: 0 -1px 0 black(.3);
 		cursor: pointer;
 
-		&:hover { color: #fff; }
+		&:hover { color: white(1); }
 	}
 
 	/* Text ------------------------------------------------*/
@@ -61,12 +61,12 @@
 		padding: 12px 5% 15px 5%;
 		color: #eee;
 		font-size: 14px;
-		text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
+		text-shadow: 0 -1px 0 black(.3);
 		line-height: 20px;
 
 		b {
 			font-weight: bold;
-			color: #fff;
+			color: white(1);
 		}
 
 		a {
@@ -85,17 +85,17 @@
 		font-size: 14px;
 		font-weight: bold;
 		text-align: center;
-		text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
+		text-shadow: 0 -1px 0 black(.3);
 		border-radius: 5px;
-		border: 1px solid rgba(0,0,0,.4);
-		box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08), 0 1px 0 rgba(255, 255, 255, .05);
+		border: 1px solid black(.4);
+		box-shadow: inset 0 1px 0 white(.08), 0 1px 0 white(.05);
 		cursor: pointer;
 
 		&:first-of-type { margin: 15px 5% 18px 0; }
 
 		&.active {
 			color: #fff;
-			box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08), 0 1px 0 rgba(255, 255, 255, .1), 0 0 4px #005ecc;
+			box-shadow: inset 0 1px 0 white(.08), 0 1px 0 white(.1), 0 0 4px #005ecc;
 		}
 
 		&:hover { background-image: linear-gradient(to bottom, rgb(60, 60, 60), rgb(57, 57, 57)); }
@@ -112,9 +112,9 @@
 		margin-top: 10px;
 		background-color: transparent;
 		color: #fff;
-		text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
+		text-shadow: 0 -1px 0 black(.3);
 		border: none;
-		box-shadow: 0 1px 0 rgba(255, 255, 255, .1);
+		box-shadow: 0 1px 0 white(.1);
 		border-bottom: 1px solid #222;
 		border-radius: 0px;
 		outline: none;
@@ -141,7 +141,7 @@
 			color: #fff;
 			font-size: 14px;
 			font-weight: 700;
-			text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
+			text-shadow: 0 -1px 0 black(.3);
 		}
 
 		p {
@@ -164,7 +164,7 @@
 		margin-top: 23px;
 		margin-left: 5%;
 		color: #888;
-		text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
+		text-shadow: 0 -1px 0 black(.3);
 
 		span { display: none; }
 
@@ -182,7 +182,7 @@
 	padding: 5px 0;
 	color: #eee;
 	font-size: 14px;
-	text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
+	text-shadow: 0 -1px 0 black(.3);
 	line-height: 20px;
 
 	/* Input ------------------------------------------------*/
@@ -196,7 +196,7 @@
 		text-shadow: 0 -1px 0 #222;
 		border: none;
 		border-bottom: 1px solid #222;
-		box-shadow: 0 1px 0 rgba(255,255,255,.1);
+		box-shadow: 0 1px 0 white(.1);
 		border-radius: 0;
 		outline: none;
 

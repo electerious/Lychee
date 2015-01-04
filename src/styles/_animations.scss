@@ -7,28 +7,28 @@
 	animation-name: fadeIn;
 	animation-duration: .3s;
 	animation-fill-mode: forwards;
-	animation-timing-function: cubic-bezier(0.51,.92,.24,1.15);
+	animation-timing-function: $timingBounce;
 }
 
 .fadeOut {
 	animation-name: fadeOut;
 	animation-duration: .3s;
 	animation-fill-mode: forwards;
-	animation-timing-function: cubic-bezier(0.51,.92,.24,1.15);
+	animation-timing-function: $timingBounce;
 }
 
 .contentZoomIn {
 	animation-name: zoomIn;
 	animation-duration: .2s;
 	animation-fill-mode: forwards;
-	animation-timing-function: cubic-bezier(0.51,.92,.24,1);
+	animation-timing-function: $timing;
 }
 
 .contentZoomOut {
 	animation-name: zoomOut;
 	animation-duration: .2s;
 	animation-fill-mode: forwards;
-	animation-timing-function: cubic-bezier(0.51,.92,.24,1);
+	animation-timing-function: $timing;
 }
 
 /* moveUp ------------------------------------------------*/
@@ -115,7 +115,7 @@
 		opacity: 1;
 	}
 	50% {
-		opacity: 0.3;
+		opacity: .3;
 	}
 	100% {
 		opacity: 1;

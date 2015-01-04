@@ -7,21 +7,21 @@
 
 	padding: 5px 0 6px;
 	background: linear-gradient(to bottom, #333, #252525);
-	border: 1px solid rgba(0, 0, 0, .7);
-	border-bottom: 1px solid rgba(0, 0, 0, .8);
+	border: 1px solid black(.7);
+	border-bottom: 1px solid black(.8);
 	border-radius: 5px;
-	box-shadow: 0 1px 4px rgba(0, 0, 0, .2), inset 0 1px 0 rgba(255, 255, 255, .05);
+	box-shadow: 0 1px 4px black(.2), inset 0 1px 0 white(.05);
 
 	/* Item ------------------------------------------------*/
 	tr {
 		margin-bottom: 2px;
 		color: #eee;
 		font-size: 14px;
-		text-shadow: 0 -1px 0px rgba(0, 0, 0, .1);
+		text-shadow: 0 -1px 0px black(.1);
 
 		&.separator {
-			background-color: rgba(0, 0, 0, .2);
-			border-bottom: 1px solid rgba(255, 255, 255, .06);
+			background: black(.2);
+			border-bottom: 1px solid white(.06);
 		}
 	}
 
@@ -32,12 +32,12 @@
 			border-radius: 0;
 			transition: none;
 
-			&:hover { background: linear-gradient(to bottom, #2293EC, darken(#2293EC, 5%)); }
+			&:hover { background: linear-gradient(to bottom, $colorBlue, darken($colorBlue, 5%)); }
 		}
 
 			tr td .albumCover {
 				border-radius: 2px;
-				box-shadow: 0 0 0 1px rgba(0,0,0,.5);
+				box-shadow: 0 0 0 1px black(.5);
 				position: absolute;
 			}
 
@@ -51,10 +51,10 @@
 		width: 100%;
 		margin: -2px 0 -1px -2px;
 		padding: 5px 7px 6px 7px;
-		background-color: #333;
+		background: #333;
 		color: #fff;
-		border: 1px solid rgba(0, 0, 0, .4);
-		box-shadow: 0px 1px 0px rgba(255, 255, 255, .05);
+		border: 1px solid black(.4);
+		box-shadow: 0px 1px 0px white(.05);
 		outline: none;
 		border-radius: 3px;
 	}

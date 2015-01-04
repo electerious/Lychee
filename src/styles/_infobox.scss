@@ -9,7 +9,7 @@
 	height: 100%;
 	top: 0;
 	left: 0;
-	background-color: rgba(0, 0, 0, .8);
+	background-color: black(.8);
 }
 
 #infobox {
@@ -20,9 +20,9 @@
 	width: 350px;
 	height: 100%;
 	background-color: rgba(30, 30, 30, .98);
-	box-shadow: -1px 0 2px rgba(0, 0, 0, .7);
+	box-shadow: -1px 0 2px black(.7);
 	transform: translateX(0);
-	transition: transform .3s cubic-bezier(.51, .92, .24, 1.15);
+	transition: transform .3s $timingBounce;
 
 	&.active { transform: translateX(-92%); }
 
@@ -66,7 +66,7 @@
 		font-size: 16px;
 		font-weight: bold;
 		text-align: center;
-		text-shadow: 0 -1px 0 rgba(0, 0, 0, .2);
+		text-shadow: 0 -1px 0 black(.2);
 	}
 
 	.header .close {
@@ -77,8 +77,8 @@
 
 		.iconic {
 			fill: #888;
-			filter: drop-shadow( 0 -1px 0 rgba(0, 0, 0, .2) );
-			transition: fill .2s ease;
+			filter: drop-shadow(0 -1px 0 black(.2));
+			transition: fill .2s ease-out;
 		}
 
 		&:hover .iconic { fill: #fff; }
@@ -90,12 +90,12 @@
 		float: left;
 		padding: 12px 0 8px;
 		width: 100%;
-		border-top: 1px solid rgba(255, 255, 255, .02);
-		box-shadow: 0 -1px 0 0 rgba(0, 0, 0, .2);
+		border-top: 1px solid white(.02);
+		box-shadow: 0 -1px 0 0 black(.2);
 
 		h1 {
 			margin: 0 0 0 20px;
-			color: rgba(255, 255, 255, .6);
+			color: white(.6);
 			font-size: 14px;
 			font-weight: bold;
 		}
@@ -147,12 +147,12 @@
 		float: left;
 		padding: 6px 10px;
 		margin: 0 6px 8px 0;
-		background-color: rgba(0, 0, 0, .5);
+		background-color: black(.5);
 		border-radius: 100px;
 		font-size: 12px;
 		transition: background-color .3s;
 
-		&:hover { background-color: rgba(0, 0, 0, .3); }
+		&:hover { background-color: black(.3); }
 	}
 
 	#tags .tag span {

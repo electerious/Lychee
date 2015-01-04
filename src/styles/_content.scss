@@ -14,7 +14,7 @@
 		position: absolute;
 		width: 100%;
 		height: 1px;
-		border-top: 1px solid rgba(255, 255, 255, .02);
+		border-top: 1px solid white(.02);
 	}
 }
 
@@ -33,14 +33,14 @@
 			width: 200px;
 			height: 200px;
 			background-color: #222;
-			box-shadow: 0 2px 5px rgba(0, 0, 0, .5);
-			border: 1px solid rgba(255, 255, 255, .5);
+			box-shadow: 0 2px 5px black(.5);
+			border: 1px solid white(.5);
 			transition: opacity .3s ease-out, transform .3s ease-out, border-color .3s ease-out;
 		}
 
 		&:hover img,
 		&.active img {
-			border-color: #2293EC;
+			border-color: $colorBlue;
 		}
 	}
 
@@ -72,7 +72,7 @@
 		position: absolute;
 		margin: 0 1px;
 		width: 200px;
-		background: rgba(0, 0, 0, .6);
+		background: black(.6);
 		bottom: 1px;
 	}
 
@@ -117,14 +117,14 @@
 		position: absolute;
 		margin: -1px 0 0 12px;
 		padding: 12px 7px 3px 7px;
-		box-shadow: 0 0 2px rgba(0, 0, 0, .6);
-		background: #d02a32;
+		box-shadow: 0 0 2px black(.6);
+		background: $colorRed;
 		border-radius: 0 0 5px 5px;
 		border: 1px solid #fff;
 		border-top: none;
 		color: #fff;
 		font-size: 24px;
-		text-shadow: 0 1px 0 rgba(0, 0, 0, .4);
+		text-shadow: 0 1px 0 black(.4);
 		opacity: .9;
 
 		&:nth-child(2n) { margin-left: 57px; }
@@ -132,7 +132,7 @@
 		.iconic {
 			fill: #fff;
 			width: 21px;
-			filter: drop-shadow( 0 -1px 0 rgba(0, 0, 0, .1) );
+			filter: drop-shadow( 0 -1px 0 black(.1) );
 		}
 	}
 
@@ -143,8 +143,8 @@
 		padding: 10px 0 0;
 		width: 100%;
 		opacity: 0;
-		border-top: 1px solid rgba(255, 255, 255, .02);
-		box-shadow: 0 -1px 0 0 rgba(0, 0, 0, .2);
+		border-top: 1px solid white(.02);
+		box-shadow: 0 -1px 0 0 black(.2);
 
 		&:first-child {
 			margin-top: 10px;
@@ -155,10 +155,10 @@
 		h1 {
 			float: left;
 			margin: 0 0 0 30px;
-			color: rgba(255, 255, 255, .6);
+			color: white(.6);
 			font-size: 14px;
 			font-weight: bold;
-			text-shadow: 0 -1px 0 rgba(0, 0, 0, .1);
+			text-shadow: 0 -1px 0 black(.1);
 		}
 	}
 
@@ -173,7 +173,7 @@
 		margin-left: -90px;
 		padding-top: 20px;
 		color: rgba(15, 15, 15, 1);
-		text-shadow: 0 1px 0 rgba(255, 255, 255, .01);
+		text-shadow: 0 1px 0 white(.01);
 		text-align: center;
 
 		.icon { font-size: 80px; }

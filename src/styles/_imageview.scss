@@ -14,7 +14,7 @@
 	/* Modes ------------------------------------------------*/
 	&.view { background-color: inherit; }
 
-	&.full { background-color: rgba(0, 0, 0, 1); }
+	&.full { background-color: black(1); }
 
 	/* ImageView ------------------------------------------------*/
 	#image {
@@ -26,10 +26,10 @@
 		background-repeat: no-repeat;
 		background-position: 50% 50%;
 		background-size: contain;
-		transition: top .3s, right .3s, bottom .3s, left .3s, margin-top .3s, opacity .2s, transform .3s cubic-bezier(.51, .92, .24, 1.15);
+		transition: top .3s, right .3s, bottom .3s, left .3s, margin-top .3s, opacity .2s, transform .3s $timingBounce;
 		animation-name: zoomIn;
 		animation-duration: .3s;
-		animation-timing-function: cubic-bezier(.51, .92, .24, 1.15);
+		animation-timing-function: $timingBounce;
 
 		&.small {
 			top: 50%;
@@ -68,7 +68,7 @@
 			// The background-image will be styled dynamically via JS
 			// background-image: linear-gradient(to bottom, rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)), url('');
 			background-size: 100% 100%;
-			border: 1px solid rgba(255, 255, 255, .8);
+			border: 1px solid white(.8);
 			cursor: pointer;
 			opacity: .6;
 			z-index: 2;
@@ -91,8 +91,8 @@
 		a:hover { opacity: 1; }
 
 		.iconic {
-			fill: rgba(255, 255, 255, .8);
-			filter: drop-shadow( 0 1px 0 rgba(0, 0, 0, .4) );
+			fill: white(.8);
+			filter: drop-shadow(0 1px 0 black(.4));
 		}
 	}
 

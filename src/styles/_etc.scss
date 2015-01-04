@@ -1,0 +1,21 @@
+/**
+ * @copyright   2014 by Tobias Reich
+ */
+
+/* Functions ------------------------------------------------*/
+@function black($opacity) {
+	@return rgba(0, 0, 0, $opacity);
+}
+
+@function white($opacity) {
+	@return rgba(255, 255, 255, $opacity);
+}
+
+/* Vars ------------------------------------------------*/
+// Colors
+$colorBlue:		#2293EC;
+$colorRed:		#d02a32;
+
+// Animations
+$timing:		cubic-bezier(.51, .92, .24, 1);
+$timingBounce:	cubic-bezier(.51, .92, .24, 1.15);

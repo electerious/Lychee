@@ -42,19 +42,19 @@ header {
 		font-size: 16px;
 		font-weight: bold;
 		text-align: center;
-		text-shadow: 0 -1px 0 rgba(0, 0, 0, .2);
+		text-shadow: 0 -1px 0 black(.2);
 		z-index: 1;
 
 		.iconic {
 			display: none;
 			margin: 0 0 0 10px;
 			width: 10px;
-			fill: rgba(255, 255, 255, .5);
-			filter: drop-shadow( 0 -1px 0 rgba(0, 0, 0, .2) );
-			transition: fill .2s ease;
+			fill: white(.5);
+			filter: drop-shadow(0 -1px 0 black(.2));
+			transition: fill .2s ease-out;
 		}
 
-		&:hover .iconic { fill: rgba(255, 255, 255, 1); }
+		&:hover .iconic { fill: white(1); }
 
 		&.editable { cursor: pointer; }
 
@@ -83,12 +83,12 @@ header {
 		&--right { float: right; }
 
 		.iconic {
-			fill: rgba(255, 255, 255, .5);
-			filter: drop-shadow( 0 -1px 0 rgba(0, 0, 0, .2) );
-			transition: fill .2s ease;
+			fill: white(.5);
+			filter: drop-shadow(0 -1px 0 black(.2));
+			transition: fill .2s ease-out;
 		}
 
-		&:hover .iconic { fill: rgba(255, 255, 255, 1); }
+		&:hover .iconic { fill: white(1); }
 
 		&--star.active .iconic { fill: #f0ef77; }
 
@@ -118,7 +118,7 @@ header {
 		outline: none;
 		border-radius: 50px;
 		opacity: .6;
-		transition: opacity .3s ease-out, transform .3s ease-out, box-shadow .3s, width .2s ease-out;
+		transition: opacity .3s ease-out, transform .3s ease-out, box-shadow .3s ease-out, width .2s ease-out;
 
 		&:focus { width: 140px; }
 
@@ -149,12 +149,12 @@ header {
 		margin: 13px 9px;
 		color: #888;
 		font-size: 13px;
-		text-shadow: 0 -1px 0 rgba(0, 0, 0, .2);
+		text-shadow: 0 -1px 0 black(.2);
 		border-radius: 100px;
 		display: none;
 		cursor: pointer;
 
-		&:hover { background-color: rgba(0, 0, 0, .3); }
+		&:hover { background-color: black(.3); }
 	}
 
 }
