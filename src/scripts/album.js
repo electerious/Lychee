@@ -80,7 +80,7 @@ album.load = function(albumID, refresh) {
 
 				if (!refresh) {
 					lychee.animate('.album, .photo', 'contentZoomIn');
-					view.header.mode('album');
+					header.setMode('album');
 				}
 
 			}, waitTime);

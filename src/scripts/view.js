@@ -5,101 +5,6 @@
 
 view = {}
 
-view.header = {
-
-	show: function() {
-
-		var newMargin = -1*($('#imageview #image').height()/2)+20;
-
-		clearTimeout($(window).data('timeout'));
-
-		lychee.imageview.removeClass('full');
-		lychee.header.removeClass('hidden');
-		lychee.loadingBar.css('opacity', 1);
-
-		// Adjust position or size of photo
-		if ($('#imageview #image.small').length>0)	$('#imageview #image').css('margin-top', newMargin);
-		else										$('#imageview #image').removeClass('full');
-
-	},
-
-	hide: function(e, delay) {
-
-		var newMargin = -1*($('#imageview #image').height()/2);
-
-		if (delay===undefined) delay = 500;
-
-		if (visible.photo()&&!visible.infobox()&&!visible.contextMenu()&&!visible.message()) {
-
-			clearTimeout($(window).data('timeout'));
-
-			$(window).data('timeout', setTimeout(function() {
-
-				lychee.imageview.addClass('full');
-				lychee.header.addClass('hidden');
-				lychee.loadingBar.css('opacity', 0);
-
-				// Adjust position or size of photo
-				if ($('#imageview #image.small').length>0)	$('#imageview #image').css('margin-top', newMargin);
-				else										$('#imageview #image').addClass('full');
-
-			}, delay));
-
-		}
-
-	},
-
-	mode: function(mode) {
-
-		var albumID = album.getID();
-
-		switch (mode) {
-
-			case 'albums':
-
-				lychee.header.removeClass('view');
-				$('#tools_album, #tools_photo').hide();
-				$('#tools_albums').show();
-
-				break;
-
-			case 'album':
-
-				lychee.header.removeClass('view');
-				$('#tools_albums, #tools_photo').hide();
-				$('#tools_album').show();
-
-				// Hide download button when album empty
-				album.json.content === false ? $('#button_archive').hide() : $('#button_archive').show();
-
-				// Hide download button when not logged in and album not downloadable
-				if (lychee.publicMode&&album.json.downloadable==='0') $('#button_archive').hide();
-
-				if (albumID==='s'||albumID==='f'||albumID==='r') {
-					$('#button_info_album, #button_trash_album, #button_share_album').hide();
-				} else if (albumID==='0') {
-					$('#button_info_album, #button_share_album').hide();
-					$('#button_trash_album').show();
-				} else {
-					$('#button_info_album, #button_trash_album, #button_share_album').show();
-				}
-
-				break;
-
-			case 'photo':
-
-				lychee.header.addClass('view');
-				$('#tools_albums, #tools_album').hide();
-				$('#tools_photo').show();
-
-				break;
-
-		}
-
-	}
-
-}
-
 view.infobox = {
 
 	show: function() {
@@ -393,15 +298,15 @@ view.photo = {
 
 		// Change header
 		lychee.content.addClass('view');
-		view.header.mode('photo');
+		header.setMode('photo');
 
 		// Make body not scrollable
 		$('body').css('overflow', 'hidden');
 
 		// Fullscreen
 		$(document)
-			.bind('mouseenter', view.header.show)
-			.bind('mouseleave', view.header.hide);
+			.bind('mouseenter', header.show)
+			.bind('mouseleave', header.hide);
 
 		lychee.animate(lychee.imageview, 'fadeIn');
 
@@ -409,11 +314,11 @@ view.photo = {
 
 	hide: function() {
 
-		view.header.show();
+		header.show();
 		if (visible.infobox) view.infobox.hide();
 
 		lychee.content.removeClass('view');
-		view.header.mode('album');
+		header.setMode('album');
 
 		// Make body scrollable
 		$('body').css('overflow', 'auto');

@@ -18,7 +18,7 @@ build.divider = (title) ->
 
 build.editIcon = (id) ->
 
-	"<div id='#{ id }' class='edit'><a class='icon-pencil'></a></div>"
+	"<div id='#{ id }' class='edit'>#{ build.iconic('pencil') }</div>"
 
 build.multiselect = (top, left) ->
 

@@ -77,7 +77,7 @@ albums.load = function() {
 			if (visible.album()&&lychee.content.html()==='')			waitTime = 0;
 
 			setTimeout(function() {
-				view.header.mode('albums');
+				header.setMode('albums');
 				view.albums.init();
 				lychee.animate('.album, .photo', 'contentZoomIn');
 			}, waitTime);
@@ -86,7 +86,7 @@ albums.load = function() {
 	} else {
 
 		setTimeout(function() {
-			view.header.mode('albums');
+			header.setMode('albums');
 			view.albums.init();
 			lychee.animate('.album, .photo', 'contentZoomIn');
 		}, 300);

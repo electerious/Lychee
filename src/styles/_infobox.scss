@@ -36,11 +36,18 @@
 	}
 
 	.edit {
-		display: inline;
+		display: inline-block;
 		margin-left: 3px;
-		width: 20px;
-		height: 5px;
+		width: 10px;
 		cursor: pointer;
+
+		.iconic {
+			fill: white(.5);
+			filter: drop-shadow(0 -1px 0 black(.2));
+			transition: fill .2s ease-out;
+		}
+
+		&:hover .iconic { fill: white(1); }
 	}
 
 	.bumper {
@@ -82,7 +89,6 @@
 		}
 
 		&:hover .iconic { fill: #fff; }
-
 	}
 
 	/* Divider ------------------------------------------------*/
@@ -135,13 +141,9 @@
 		margin-bottom: 8px;
 	}
 
-	#tags .edit {
-		display: inline-block;
-	}
+	#tags .edit { margin-top: 6px; }
 
-	#tags .empty .edit {
-		display: inline;
-	}
+	#tags .empty .edit { margin-top: 0; }
 
 	#tags .tag {
 		float: left;

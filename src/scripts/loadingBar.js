@@ -21,7 +21,7 @@ loadingBar.show = function(status, errorText) {
 		if (!errorText)	errorText = 'Whoops, it looks like something went wrong. Please reload the site and try again!';
 
 		// Move header down
-		if (visible.controls()) lychee.header.addClass('error');
+		if (visible.controls()) header.dom().addClass('error');
 
 		// Modify loading
 		lychee.loadingBar
@@ -49,7 +49,7 @@ loadingBar.show = function(status, errorText) {
 		lychee.loadingBar.data('timeout', setTimeout(function() {
 
 			// Move header down
-			if (visible.controls()) lychee.header.addClass('loading');
+			if (visible.controls()) header.dom().addClass('loading');
 
 			// Modify loading
 			lychee.loadingBar
@@ -73,7 +73,7 @@ loadingBar.hide = function(force) {
 		loadingBar.status = null;
 
 		// Move header up
-		if (visible.controls()) lychee.header.removeClass('error loading');
+		if (visible.controls()) header.dom().removeClass('error loading');
 
 		// Modify loading
 		lychee.loadingBar

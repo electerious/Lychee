@@ -27,7 +27,6 @@ lychee = {
 	dropboxKey:		'',
 
 	loadingBar:		$('#loading'),
-	header:			$('header'),
 	content:		$('#content'),
 	imageview:		$('#imageview'),
 	infobox:		$('#infobox')
@@ -52,7 +51,7 @@ lychee.init = function() {
 
 		// No configuration
 		if (data==='Warning: No configuration!') {
-			lychee.header.hide();
+			header.dom().hide();
 			lychee.content.hide();
 			$('body').append(build.no_content('cog'));
 			settings.createConfig();
@@ -250,7 +249,7 @@ lychee.getUpdate = function() {
 
 lychee.setTitle = function(title, editable) {
 
-	var $title = lychee.header.find('#title');
+	var $title = header.dom('#title');
 
 	document.title = lychee.title + ' - ' + title;
 
@@ -286,7 +285,7 @@ lychee.setMode = function(mode) {
 
 	if (mode==='public') {
 
-		$('header #button_signin, header #hostedwith').show();
+		header.dom('#button_signin, #hostedwith').show();
 		lychee.publicMode = true;
 
 	} else if (mode==='view') {
