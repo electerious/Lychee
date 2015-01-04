@@ -1,8 +1,8 @@
 {
   "name": "Lychee",
-  "version": "2.7.0",
+  "version": "3.0.0",
   "description": "Self-hosted photo-management done right.",
-  "authors": "Tobias Reich <tobias.reich.ich@gmail.com>",
+  "authors": "Tobias Reich <tobias@electerious.com>",
   "license": "MIT",
   "private": true,
   "repository": {
