@@ -3,6 +3,7 @@
  */
 
 #content {
+
 	position: absolute;
 	padding: 50px 0 33px;
 	width: 100%;
@@ -16,7 +17,6 @@
 		height: 1px;
 		border-top: 1px solid white(.02);
 	}
-}
 
 	/* Albums and Photos ------------------------------------------------*/
 	.album,
@@ -183,3 +183,5 @@
 			font-weight: bold;
 		}
 	}
+
+}

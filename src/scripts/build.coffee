@@ -321,10 +321,10 @@ build.infoboxPhoto = (data, forView) ->
 
 			when ''
 
-				# Separator
+				# Divider
 				html +=	"""
 						</table>
-						<div class='separator'><h1>#{ info[1] }</h1></div>
+						<div class='divider'><h1>#{ info[1] }</h1></div>
 						<table>
 						"""
 
@@ -335,7 +335,7 @@ build.infoboxPhoto = (data, forView) ->
 
 					html +=	"""
 							</table>
-							<div class='separator'><h1>#{ info[0] }</h1></div>
+							<div class='divider'><h1>#{ info[0] }</h1></div>
 							<div id='tags'>#{ info[1] }</div>
 							"""
 
@@ -398,10 +398,10 @@ build.infoboxAlbum = (data, forView) ->
 
 		if info[0] is ''
 
-			# Separator
+			# Divider
 			html +=	"""
 					</table>
-					<div class='separator'><h1>#{ info[1] }</h1></div>
+					<div class='divider'><h1>#{ info[1] }</h1></div>
 					<table id='infos'>
 					"""
 
