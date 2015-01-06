@@ -73,6 +73,7 @@
 		margin: 0 1px;
 		width: 200px;
 		background: black(.6);
+		background: linear-gradient(to bottom, black(0), black(.6));
 		bottom: 1px;
 	}
 
@@ -81,9 +82,7 @@
 		background: none;
 	}
 
-	.photo .overlay {
-		opacity: 0;
-	}
+	.photo .overlay { opacity: 0; }
 
 	.photo:hover .overlay,
 	.photo.active .overlay {
@@ -96,6 +95,7 @@
 		width: 185px;
 		margin: 12px 0 5px 15px;
 		color: #fff;
+		text-shadow: 0 1px 3px black(.4);
 		font-size: 16px;
 		font-weight: bold;
 		overflow: hidden;
@@ -107,9 +107,13 @@
 		margin: 0 0 12px 15px;
 		font-size: 11px;
 		color: #bbb;
+		text-shadow: 0 1px 3px black(.4);
 	}
 
 	.photo .overlay a span { margin: 0 6px 0 0; }
+
+	.album img[data-type^='nonretina'] + .overlay h1,
+	.album img[data-type^='nonretina'] + .overlay a  { text-shadow: none; }
 
 	/* Badges ------------------------------------------------*/
 	.album .badge,
