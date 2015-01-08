@@ -8,12 +8,9 @@ $(document).ready(function() {
 	/* Event Name */
 	var eventName = (mobileBrowser()) ? 'touchend' : 'click';
 
-	/* Disable ContextMenu */
-	$(document).bind('contextmenu', function(e) { e.preventDefault() });
-
 	/* Multiselect */
-	$('#content')	.on('mousedown',	multiselect.show);
-	$(document)		.on('mouseup',		multiselect.getSelection);
+	$('#content')	.on('mousedown', 	function(e) { if (e.which===1) multiselect.show(e) });
+	$(document)		.on('mouseup',		function(e) { if (e.which===1) multiselect.getSelection(e) });
 
 	/* Header */
 	header.dom('#title').on(eventName, function(e) {
