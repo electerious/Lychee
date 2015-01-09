@@ -43,7 +43,7 @@
 
 		.iconic {
 			fill: white(.5);
-			filter: drop-shadow(0 -1px 0 black(.2));
+			filter: drop-shadow($shadow);
 			transition: fill .2s ease-out;
 		}
 
@@ -73,7 +73,7 @@
 		font-size: 16px;
 		font-weight: bold;
 		text-align: center;
-		text-shadow: 0 -1px 0 black(.2);
+		text-shadow: $shadow;
 	}
 
 	.header .close {
@@ -84,7 +84,7 @@
 
 		.iconic {
 			fill: #888;
-			filter: drop-shadow(0 -1px 0 black(.2));
+			filter: drop-shadow($shadow);
 			transition: fill .2s ease-out;
 		}
 
@@ -97,7 +97,7 @@
 		padding: 12px 0 8px;
 		width: 100%;
 		border-top: 1px solid white(.02);
-		box-shadow: 0 -1px 0 0 black(.2);
+		box-shadow: $shadow;
 
 		h1 {
 			margin: 0 0 0 20px;

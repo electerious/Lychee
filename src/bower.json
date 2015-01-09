@@ -5,6 +5,7 @@
     "jQuery": "~2.1.3",
     "js-md5": "~1.1.0",
     "mousetrap": "~1.4.6",
-    "basicContext": "~2.0.2"
+    "basicContext": "~2.0.2",
+    "basicModal": "~2.0.0"
   }
 }

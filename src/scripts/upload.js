@@ -229,86 +229,36 @@ upload.start = {
 	url: function() {
 
 		var albumID = album.getID(),
-			params,
-			extension,
-			buttons,
-			link,
-			files = [];
+			action;
 
 		if (albumID===false) albumID = 0;
 
-		buttons = [
-			['Import', function() {
+		action = function(data) {
 
-				link = $('.message input.text').val();
+			var params,
+				extension,
+				files = [];
 
-				if (link&&link.length>3) {
+			basicModal.close();
 
-					extension = link.split('.').pop();
-					if (extension!=='jpeg'&&extension!=='jpg'&&extension!=='png'&&extension!=='gif'&&extension!=='webp') {
-						loadingBar.show('error', 'The file format of this link is not supported.');
-						return false;
-					}
+			if (data.link&&data.link.length>3) {
 
-					files[0] = {
-						name:		link,
-						supported:	true
-					}
-
-					upload.show('Importing URL', files, function() {
-						$('.upload_message .rows .row .status').html('Importing');
-					});
-
-					params = 'importUrl&url=' + escape(encodeURI(link)) + '&albumID=' + albumID;
-					lychee.api(params, function(data) {
-
-						upload.close();
-						upload.notify('Import complete');
-
-						albums.refresh();
-
-						if (album.getID()===false) lychee.goto('0');
-						else album.load(albumID);
-
-						if (data!==true) lychee.error(null, params, data);
-
-					});
-
-				} else loadingBar.show('error', 'Link to short or too long. Please try another one!');
-
-			}],
-			['Cancel', function() {}]
-		];
-
-		modal.show('Import from Link', "Please enter the direct link to a photo to import it: <input class='text' type='text' placeholder='http://' value='http://'>", buttons);
-
-	},
-
-	server: function() {
-
-		var albumID = album.getID(),
-			params,
-			buttons,
-			files = [],
-			path;
-
-		if (albumID===false) albumID = 0;
-
-		buttons = [
-			['Import', function() {
-
-				path = $('.message input.text').val();
+				extension = data.link.split('.').pop();
+				if (extension!=='jpeg'&&extension!=='jpg'&&extension!=='png'&&extension!=='gif'&&extension!=='webp') {
+					loadingBar.show('error', 'The file format of this link is not supported.');
+					return false;
+				}
 
 				files[0] = {
-					name:		path,
+					name:		data.link,
 					supported:	true
-				};
+				}
 
-				upload.show('Importing from server', files, function() {
+				upload.show('Importing URL', files, function() {
 					$('.upload_message .rows .row .status').html('Importing');
 				});
 
-				params = 'importServer&albumID=' + albumID + '&path=' + escape(encodeURI(path));
+				params = 'importUrl&url=' + escape(encodeURI(data.link)) + '&albumID=' + albumID;
 				lychee.api(params, function(data) {
 
 					upload.close();
@@ -316,24 +266,90 @@ upload.start = {
 
 					albums.refresh();
 
-					if (data==='Notice: Import only contains albums!') {
-						if (visible.albums()) lychee.load();
-						else lychee.goto('');
-					}
-					else if (album.getID()===false) lychee.goto('0');
+					if (album.getID()===false) lychee.goto('0');
 					else album.load(albumID);
 
-					if (data==='Notice: Import only contains albums!') return true;
-					else if (data==='Warning: Folder empty!') lychee.error('Folder empty. No photos imported!', params, data);
-					else if (data!==true) lychee.error(null, params, data);
+					if (data!==true) lychee.error(null, params, data);
 
 				});
 
-			}],
-			['Cancel', function() {}]
-		];
+			} else loadingBar.show('error', 'Link to short or too long. Please try another one!');
 
-		modal.show('Import from Server', "This action will import all photos, folders and sub-folders which are located in the following directory. The <b>original files will be deleted</b> after the import when possible. <input class='text' type='text' maxlength='100' placeholder='Absolute path to directory' value='" + lychee.location + "uploads/import/'>", buttons);
+		}
+
+		basicModal.show({
+			body: "<p>Please enter the direct link to a photo to import it: <input class='text' data-name='link' type='text' placeholder='http://' value='http://'></p>",
+			buttons: {
+				action: {
+					title: 'Import',
+					fn: action
+				},
+				cancel: {
+					title: 'Cancel',
+					fn: basicModal.close
+				}
+			}
+		});
+
+	},
+
+	server: function() {
+
+		var albumID = album.getID(),
+			action;
+
+		if (albumID===false) albumID = 0;
+
+		action = function(data) {
+
+			var params,
+				files = [];
+
+			files[0] = {
+				name:		data.path,
+				supported:	true
+			};
+
+			upload.show('Importing from server', files, function() {
+				$('.upload_message .rows .row .status').html('Importing');
+			});
+
+			params = 'importServer&albumID=' + albumID + '&path=' + escape(encodeURI(data.path));
+			lychee.api(params, function(data) {
+
+				upload.close();
+				upload.notify('Import complete');
+
+				albums.refresh();
+
+				if (data==='Notice: Import only contains albums!') {
+					if (visible.albums()) lychee.load();
+					else lychee.goto('');
+				}
+				else if (album.getID()===false) lychee.goto('0');
+				else album.load(albumID);
+
+				if (data==='Notice: Import only contains albums!') return true;
+				else if (data==='Warning: Folder empty!') lychee.error('Folder empty. No photos imported!', params, data);
+				else if (data!==true) lychee.error(null, params, data);
+
+			});
+
+		}
+
+		basicModal.show({
+			body: "<p>This action will import all photos, folders and sub-folders which are located in the following directory. The <b>original files will be deleted</b> after the import when possible. <input class='text' data-name='path' type='text' maxlength='100' placeholder='Absolute path to directory' value='" + lychee.location + "uploads/import/'></p>",
+			buttons: {
+				action: {
+					title: 'Import',
+					fn: action
+				},
+				cancel: {
+					title: 'Cancel',
+					fn: basicModal.close
+				}
+			}
+		});
 
 	},
 

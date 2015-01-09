@@ -42,7 +42,7 @@ header {
 		font-size: 16px;
 		font-weight: bold;
 		text-align: center;
-		text-shadow: 0 -1px 0 black(.2);
+		text-shadow: $shadow;
 		z-index: 1;
 
 		.iconic {
@@ -50,7 +50,7 @@ header {
 			margin: 0 0 0 10px;
 			width: 10px;
 			fill: white(.5);
-			filter: drop-shadow(0 -1px 0 black(.2));
+			filter: drop-shadow($shadow);
 			transition: fill .2s ease-out;
 		}
 
@@ -84,7 +84,7 @@ header {
 
 		.iconic {
 			fill: white(.5);
-			filter: drop-shadow(0 -1px 0 black(.2));
+			filter: drop-shadow($shadow);
 			transition: fill .2s ease-out;
 		}
 
@@ -149,7 +149,7 @@ header {
 		margin: 13px 9px;
 		color: #888;
 		font-size: 13px;
-		text-shadow: 0 -1px 0 black(.2);
+		text-shadow: $shadow;
 		border-radius: 100px;
 		display: none;
 		cursor: pointer;

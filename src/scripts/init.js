@@ -71,8 +71,8 @@ $(document).ready(function() {
 	Mousetrap
 		.bind('left',			function() { if (visible.photo()) $('#imageview a#previous').click() })
 		.bind('right',			function() { if (visible.photo()) $('#imageview a#next').click() })
-		.bind(['u', 'ctrl+u'],	function() { $('#upload_files').click() })
-		.bind(['s', 'ctrl+s', 'f', 'ctrl+f'], function(e) {
+		.bind('u',	function() { $('#upload_files').click() })
+		.bind(['s', 'f'], function(e) {
 			if (visible.photo()) {
 				header.dom('#button_star').click();
 			} else if (visible.albums()) {
@@ -80,23 +80,23 @@ $(document).ready(function() {
 				header.dom('#search').focus();
 			}
 		})
-		.bind(['r', 'ctrl+r'], function(e) {
+		.bind('r', function(e) {
 			e.preventDefault();
 			if (visible.album())		album.setTitle(album.getID());
 			else if (visible.photo())	photo.setTitle([photo.getID()]);
 		})
-		.bind(['d', 'ctrl+d'], function(e) {
+		.bind('d', function(e) {
 			e.preventDefault();
 			if (visible.photo())		photo.setDescription(photo.getID());
 			else if (visible.album())	album.setDescription(album.getID());
 		})
-		.bind(['t', 'ctrl+t'], function(e) {
+		.bind('t', function(e) {
 			if (visible.photo()) {
 				e.preventDefault();
 				photo.editTags([photo.getID()]);
 			}
 		})
-		.bind(['i', 'ctrl+i'], function() {
+		.bind('i', function() {
 			if (visible.infobox())				view.infobox.hide();
 			else if (visible.multiselect())		return false;
 			else if (visible.infoboxbutton())	view.infobox.show();
@@ -111,12 +111,12 @@ $(document).ready(function() {
 		});
 
 	Mousetrap.bindGlobal('enter', function() {
-		if ($('.message .button.active').length) $('.message .button.active').addClass('pressed').click()
+		if (basicModal.visible()===true) basicModal.action();
 	});
 
 	Mousetrap.bindGlobal(['esc', 'command+up'], function(e) {
 		e.preventDefault();
-		if (visible.message()&&$('.message .close').length>0)		modal.close();
+		if (basicModal.visible()===true)							basicModal.cancel();
 		else if (visible.contextMenu())								contextMenu.close();
 		else if (visible.infobox())									view.infobox.hide();
 		else if (visible.photo())									lychee.goto(album.getID());

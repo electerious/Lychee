@@ -2,6 +2,80 @@
  * @copyright   2014 by Tobias Reich
  */
 
+.basicModalContainer {
+	background-color: black(.85);
+}
+
+.basicModal {
+
+	background: linear-gradient(to bottom, #444, #333);
+
+	border: 1px solid black(.7);
+	border-bottom: 1px solid black(.8);
+	box-shadow: 0 1px 4px black(.2), inset 0 1px 0 white(.05);
+
+	p {
+		display: block;
+		padding: 42px 30px 40px;
+		color: white(.9);
+		font-size: 14px;
+		text-align: left;
+		text-shadow: $shadow;
+		line-height: 20px;
+
+		b {
+			font-weight: bold;
+			color: white(1);
+		}
+
+		a {
+			color: white(.9);
+			text-decoration: none;
+			border-bottom: 1px dashed #888;
+		}
+	}
+
+	.basicModal__button {
+		padding: 13px 0 15px;
+		background: black(.02);
+		color: white(.5);
+		text-shadow: $shadow;
+		border-top: 1px solid black(.2);
+		box-shadow: inset 0 1px 0 white(.02);
+
+		&:hover { background: white(.02); }
+
+		&:active,
+		&--active { background: black(.1); }
+
+		&#basicModal__action {
+			color: $colorBlue;
+			box-shadow: inset 0 1px 0 white(.02), inset 1px 0 0 black(.2);
+		}
+
+		&#basicModal__action.red { color: $colorRed; }
+
+	}
+
+	/* Input ------------------------------------------------*/
+	input.text {
+		width: calc(100% - 4px);
+		padding: 9px 2px;
+		margin: 10px 0;
+		background-color: transparent;
+		color: #fff;
+		text-shadow: $shadow;
+		border: none;
+		border-bottom: 1px solid black(.4);
+		border-radius: 0;
+		box-shadow: 0 1px 0 white(.08);
+		outline: none;
+
+		&:focus { border-bottom-color: $colorBlue; }
+	}
+
+}
+
 .message_overlay {
 	position: fixed;
 	width: 100%;
@@ -112,7 +186,7 @@
 		margin-top: 10px;
 		background-color: transparent;
 		color: #fff;
-		text-shadow: 0 -1px 0 black(.3);
+		text-shadow: $shadow;
 		border: none;
 		box-shadow: 0 1px 0 white(.1);
 		border-bottom: 1px solid #222;

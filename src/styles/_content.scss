@@ -136,7 +136,7 @@
 		.iconic {
 			fill: #fff;
 			width: 21px;
-			filter: drop-shadow( 0 -1px 0 black(.1) );
+			filter: drop-shadow($shadowLight);
 		}
 	}
 
@@ -148,7 +148,7 @@
 		width: 100%;
 		opacity: 0;
 		border-top: 1px solid white(.02);
-		box-shadow: 0 -1px 0 0 black(.2);
+		box-shadow: $shadow;
 
 		&:first-child {
 			margin-top: 10px;
@@ -162,7 +162,7 @@
 			color: white(.6);
 			font-size: 14px;
 			font-weight: bold;
-			text-shadow: 0 -1px 0 black(.1);
+			text-shadow: $shadow;
 		}
 	}
 

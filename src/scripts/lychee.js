@@ -274,12 +274,12 @@ lychee.setMode = function(mode) {
 		.off('drop');
 
 	Mousetrap
-		.unbind(['u', 'ctrl+u'])
-		.unbind(['s', 'ctrl+s'])
-		.unbind(['f', 'ctrl+f'])
-		.unbind(['r', 'ctrl+r'])
-		.unbind(['d', 'ctrl+d'])
-		.unbind(['t', 'ctrl+t'])
+		.unbind('u')
+		.unbind('s')
+		.unbind('f')
+		.unbind('r')
+		.unbind('d')
+		.unbind('t')
 		.unbind(['command+backspace', 'ctrl+backspace'])
 		.unbind(['command+a', 'ctrl+a']);
 
@@ -290,7 +290,7 @@ lychee.setMode = function(mode) {
 
 	} else if (mode==='view') {
 
-		Mousetrap.unbind('esc');
+		Mousetrap.unbind(['esc', 'command+up']);
 		$('#button_back, a#next, a#previous').remove();
 		$('.no_content').remove();
 

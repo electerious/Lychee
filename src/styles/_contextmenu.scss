@@ -15,9 +15,9 @@
 	/* Item ------------------------------------------------*/
 	tr {
 		margin-bottom: 2px;
-		color: #eee;
+		color: white(.9);
 		font-size: 14px;
-		text-shadow: 0 -1px 0px black(.1);
+		text-shadow: $shadowLight;
 
 		&.separator {
 			background: black(.2);
@@ -28,7 +28,7 @@
 		tr td {
 			padding: 7px 25px 6px 12px;
 			min-width: auto;
-			color: #fff;
+			color: white(1);
 			border-radius: 0;
 			transition: none;
 
