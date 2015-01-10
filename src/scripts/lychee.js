@@ -167,7 +167,9 @@ lychee.loginDialog = function() {
 
 lychee.logout = function() {
 
-	lychee.api('logout', window.location.reload);
+	lychee.api('logout', function() {
+		window.location.reload();
+	});
 
 }
 
