@@ -168,9 +168,10 @@ photo.duplicate = function(photoIDs) {
 
 photo.delete = function(photoIDs) {
 
-	var params,
-		buttons,
-		photoTitle;
+	var action = {},
+		cancel = {},
+		msg = '',
+		photoTitle = '';
 
 	if (!photoIDs) return false;
 	if (photoIDs instanceof Array===false) photoIDs = [photoIDs];
@@ -186,72 +187,87 @@ photo.delete = function(photoIDs) {
 
 	}
 
-	buttons = [
-		['', function() {
+	action.fn = function() {
 
-			var nextPhoto		= '',
-				previousPhoto	= '';
+		var params			= '',
+			nextPhoto		= '',
+			previousPhoto	= '';
 
-			photoIDs.forEach(function(id, index, array) {
+		basicModal.close();
 
-				// Change reference for the next and previous photo
-				if (album.json.content[id].nextPhoto!==''||album.json.content[id].previousPhoto!=='') {
+		photoIDs.forEach(function(id, index, array) {
 
-					nextPhoto		= album.json.content[id].nextPhoto;
-					previousPhoto	= album.json.content[id].previousPhoto;
+			// Change reference for the next and previous photo
+			if (album.json.content[id].nextPhoto!==''||album.json.content[id].previousPhoto!=='') {
 
-					album.json.content[previousPhoto].nextPhoto = nextPhoto;
-					album.json.content[nextPhoto].previousPhoto = previousPhoto;
+				nextPhoto		= album.json.content[id].nextPhoto;
+				previousPhoto	= album.json.content[id].previousPhoto;
 
-				}
+				album.json.content[previousPhoto].nextPhoto = nextPhoto;
+				album.json.content[nextPhoto].previousPhoto = previousPhoto;
 
-				album.json.content[id] = null;
-				view.album.content.delete(id);
+			}
 
-			});
+			album.json.content[id] = null;
+			view.album.content.delete(id);
 
-			albums.refresh();
+		});
 
-			// Go to next photo if there is a next photo and
-			// next photo is not the current one. Show album otherwise.
-			if (visible.photo()&&nextPhoto!==''&&nextPhoto!==photo.getID()) lychee.goto(album.getID() + '/' + nextPhoto);
-			else if (!visible.albums()) lychee.goto(album.getID());
+		albums.refresh();
 
-			params = 'deletePhoto&photoIDs=' + photoIDs;
-			lychee.api(params, function(data) {
+		// Go to next photo if there is a next photo and
+		// next photo is not the current one. Show album otherwise.
+		if (visible.photo()&&nextPhoto!==''&&nextPhoto!==photo.getID()) lychee.goto(album.getID() + '/' + nextPhoto);
+		else if (!visible.albums()) lychee.goto(album.getID());
 
-				if (data!==true) lychee.error(null, params, data);
+		params = 'deletePhoto&photoIDs=' + photoIDs;
+		lychee.api(params, function(data) {
 
-			});
+			if (data!==true) lychee.error(null, params, data);
 
-		}],
-		['', function() {}]
-	];
+		});
+
+	}
 
 	if (photoIDs.length===1) {
 
-		buttons[0][0] = 'Delete Photo';
-		buttons[1][0] = 'Keep Photo';
+		action.title = 'Delete Photo';
+		cancel.title = 'Keep Photo';
 
-		modal.show('Delete Photo', "Are you sure you want to delete the photo '" + photoTitle + "'?<br>This action can't be undone!", buttons);
+		msg = "<p>Are you sure you want to delete the photo '" + photoTitle + "'?<br>This action can't be undone!</p>";
 
 	} else {
 
-		buttons[0][0] = 'Delete Photos';
-		buttons[1][0] = 'Keep Photos';
+		action.title = 'Delete Photo';
+		cancel.title = 'Keep Photo';
 
-		modal.show('Delete Photos', "Are you sure you want to delete all " + photoIDs.length + " selected photo?<br>This action can't be undone!", buttons);
+		msg = "<p>Are you sure you want to delete all " + photoIDs.length + " selected photo?<br>This action can't be undone!</p>";
 
 	}
+
+	basicModal.show({
+		body: msg,
+		buttons: {
+			action: {
+				title: action.title,
+				fn: action.fn,
+				class: 'red'
+			},
+			cancel: {
+				title: cancel.title,
+				fn: basicModal.close
+			}
+		}
+	});
 
 }
 
 photo.setTitle = function(photoIDs) {
 
 	var oldTitle = '',
-		newTitle,
-		params,
-		buttons;
+		input = '',
+		msg = '',
+		action;
 
 	if (!photoIDs) return false;
 	if (photoIDs instanceof Array===false) photoIDs = [photoIDs];
@@ -263,38 +279,53 @@ photo.setTitle = function(photoIDs) {
 		oldTitle = oldTitle.replace("'", '&apos;');
 	}
 
-	buttons = [
-		['Set Title', function() {
+	action = function(data) {
 
-			// Get input
-			newTitle = $('.message input.text').val();
+		var params,
+			newTitle = data.title;
 
-			// Remove html from input
-			newTitle = lychee.removeHTML(newTitle);
+		basicModal.close();
 
-			if (visible.photo()) {
-				photo.json.title = (newTitle==='') ? 'Untitled' : newTitle;
-				view.photo.title();
+		// Remove html from input
+		newTitle = lychee.removeHTML(newTitle);
+
+		if (visible.photo()) {
+			photo.json.title = (newTitle==='') ? 'Untitled' : newTitle;
+			view.photo.title();
+		}
+
+		photoIDs.forEach(function(id, index, array) {
+			album.json.content[id].title = newTitle;
+			view.album.content.title(id);
+		});
+
+		params = 'setPhotoTitle&photoIDs=' + photoIDs + '&title=' + escape(encodeURI(newTitle));
+		lychee.api(params, function(data) {
+
+			if (data!==true) lychee.error(null, params, data);
+
+		});
+
+	}
+
+	input = "<input class='text' data-name='title' type='text' maxlength='30' placeholder='Title' value='" + oldTitle + "'>";
+
+	if (photoIDs.length===1)	msg = "<p>Enter a new title for this photo: " + input + "</p>";
+	else						msg = "<p>Enter a title for all " + photoIDs.length + " selected photos: " + input + "</p>";
+
+	basicModal.show({
+		body: msg,
+		buttons: {
+			action: {
+				title: 'Set title',
+				fn: action
+			},
+			cancel: {
+				title: 'Cancel',
+				fn: basicModal.close
 			}
-
-			photoIDs.forEach(function(id, index, array) {
-				album.json.content[id].title = newTitle;
-				view.album.content.title(id);
-			});
-
-			params = 'setPhotoTitle&photoIDs=' + photoIDs + '&title=' + escape(encodeURI(newTitle));
-			lychee.api(params, function(data) {
-
-				if (data!==true) lychee.error(null, params, data);
-
-			});
-
-		}],
-		['Cancel', function() {}]
-	];
-
-	if (photoIDs.length===1) modal.show('Set Title', "Enter a new title for this photo: <input class='text' type='text' maxlength='30' placeholder='Title' value='" + oldTitle + "'>", buttons);
-	else modal.show('Set Titles', "Enter a title for all " + photoIDs.length + " selected photos: <input class='text' type='text' maxlength='30' placeholder='Title' value=''>", buttons);
+		}
+	});
 
 }
 
@@ -369,7 +400,29 @@ photo.setPublic = function(photoID, e) {
 
 	if (photo.json.public==2) {
 
-		modal.show('Public Album', "This photo is located in a public album. To make this photo private or public, edit the visibility of the associated album.", [['Show Album', function() { lychee.goto(photo.json.original_album) }], ['Close', function() {}]]);
+		var action;
+
+		action = function() {
+
+			basicModal.close();
+			lychee.goto(photo.json.original_album);
+
+		}
+
+		basicModal.show({
+			body: "<p>This photo is located in a public album. To make this photo private or public, edit the visibility of the associated album.</p>",
+			buttons: {
+				action: {
+					title: 'Show Album',
+					fn: action
+				},
+				cancel: {
+					title: 'Cancel',
+					fn: basicModal.close
+				}
+			}
+		});
+
 		return false;
 
 	}
@@ -399,44 +452,53 @@ photo.setPublic = function(photoID, e) {
 photo.setDescription = function(photoID) {
 
 	var oldDescription = photo.json.description.replace("'", '&apos;'),
-		description,
-		params,
-		buttons;
+		action;
 
-	buttons = [
-		['Set Description', function() {
+	action = function(data) {
 
-			// Get input
-			description = $('.message input.text').val();
+		var params,
+			description = data.description;
 
-			// Remove html from input
-			description = lychee.removeHTML(description);
+		basicModal.close();
 
-			if (visible.photo()) {
-				photo.json.description = description;
-				view.photo.description();
+		// Remove html from input
+		description = lychee.removeHTML(description);
+
+		if (visible.photo()) {
+			photo.json.description = description;
+			view.photo.description();
+		}
+
+		params = 'setPhotoDescription&photoID=' + photoID + '&description=' + escape(encodeURI(description));
+		lychee.api(params, function(data) {
+
+			if (data!==true) lychee.error(null, params, data);
+
+		});
+
+	}
+
+	basicModal.show({
+		body: "<p>Enter a description for this photo: <input class='text' data-name='description' type='text' maxlength='800' placeholder='Description' value='" + oldDescription + "'></p>",
+		buttons: {
+			action: {
+				title: 'Set Description',
+				fn: action
+			},
+			cancel: {
+				title: 'Cancel',
+				fn: basicModal.close
 			}
-
-			params = 'setPhotoDescription&photoID=' + photoID + '&description=' + escape(encodeURI(description));
-			lychee.api(params, function(data) {
-
-				if (data!==true) lychee.error(null, params, data);
-
-			});
-
-		}],
-		['Cancel', function() {}]
-	];
-
-	modal.show('Set Description', "Enter a description for this photo: <input class='text' type='text' maxlength='800' placeholder='Description' value='" + oldDescription + "'>", buttons);
+		}
+	});
 
 }
 
 photo.editTags = function(photoIDs) {
 
 	var oldTags		= '',
-		tags		= '',
-		buttons;
+		msg			= '',
+		input		= '';
 
 	if (!photoIDs) return false;
 	if (photoIDs instanceof Array===false) photoIDs = [photoIDs];
@@ -456,19 +518,31 @@ photo.editTags = function(photoIDs) {
 	// Improve tags
 	oldTags = oldTags.replace(/,/g, ', ');
 
-	buttons = [
-		['Set Tags', function() {
+	action = function(data) {
 
-			tags = $('.message input.text').val();
+		basicModal.close();
+		photo.setTags(photoIDs, data.tags);
 
-			photo.setTags(photoIDs, tags);
+	}
 
-		}],
-		['Cancel', function() {}]
-	];
+	input = "<input class='text' data-name='tags' type='text' maxlength='800' placeholder='Tags' value='" + oldTags + "'>";
 
-	if (photoIDs.length===1) modal.show('Set Tags', "Enter your tags for this photo. You can add multiple tags by separating them with a comma: <input class='text' type='text' maxlength='800' placeholder='Tags' value='" + oldTags + "'>", buttons);
-	else modal.show('Set Tags', "Enter your tags for all " + photoIDs.length + " selected photos. Existing tags will be overwritten. You can add multiple tags by separating them with a comma: <input class='text' type='text' maxlength='800' placeholder='Tags' value='" + oldTags + "'>", buttons);
+	if (photoIDs.length===1)	msg = "<p>Enter your tags for this photo. You can add multiple tags by separating them with a comma: " + input + "</p>";
+	else						msg = "<p>Enter your tags for all " + photoIDs.length + " selected photos. Existing tags will be overwritten. You can add multiple tags by separating them with a comma: " + input + "</p>";
+
+	basicModal.show({
+		body: msg,
+		buttons: {
+			action: {
+				title: 'Set Tags',
+				fn: action
+			},
+			cancel: {
+				title: 'Cancel',
+				fn: basicModal.close
+			}
+		}
+	});
 
 }
 

@@ -251,12 +251,9 @@ album.setTitle = function(albumIDs) {
 	action = function(data) {
 
 		var params,
-			newTitle;
+			newTitle = data.title;
 
 		basicModal.close();
-
-		// Get input
-		newTitle = data.title;
 
 		// Remove html from input
 		newTitle = lychee.removeHTML(newTitle);
@@ -301,7 +298,7 @@ album.setTitle = function(albumIDs) {
 		body: msg,
 		buttons: {
 			action: {
-				title: 'Set title',
+				title: 'Set Title',
 				fn: action
 			},
 			cancel: {
@@ -315,23 +312,25 @@ album.setTitle = function(albumIDs) {
 
 album.setDescription = function(photoID) {
 
-	var oldDescription = album.json.description.replace("'", '&apos;');
+	var oldDescription = album.json.description.replace("'", '&apos;'),
+		action;
 
 	action = function(data) {
 
-		var params;
+		var params,
+			description = data.description;
 
 		basicModal.close();
 
 		// Remove html from input
-		data.description = lychee.removeHTML(data.description);
+		description = lychee.removeHTML(description);
 
 		if (visible.album()) {
-			album.json.description = data.description;
+			album.json.description = description;
 			view.album.description();
 		}
 
-		params = 'setAlbumDescription&albumID=' + photoID + '&description=' + escape(encodeURI(data.description));
+		params = 'setAlbumDescription&albumID=' + photoID + '&description=' + escape(encodeURI(description));
 		lychee.api(params, function(data) {
 
 			if (data!==true) lychee.error(null, params, data);
@@ -378,11 +377,9 @@ album.setPublic = function(albumID, e) {
 		};
 
 		msg = "<p class='less'>This album will be shared with the following properties:</p><form>";
-
 		msg += "<div class='choice'><label><input type='checkbox' name='listed' checked><span class='checkbox'>" + build.iconic('check') + "</span><span class='label'>Visible</span></label><p>Listed to visitors of your Lychee.</p></div>";
 		msg += "<div class='choice'><label><input type='checkbox' name='downloadable'><span class='checkbox'>" + build.iconic('check') + "</span><span class='label'>Downloadable</span></label><p>Visitors of your Lychee can download this album.</p></div>";
 		msg += "<div class='choice'><label><input type='checkbox' name='password'><span class='checkbox'>" + build.iconic('check') + "</span><span class='label'>Password protected</span></label><p>Only accessible with a valid password.</p><input class='text' data-name='password' type='password' placeholder='password' value=''></div>";
-
 		msg += "</form>"
 
 		basicModal.show({
