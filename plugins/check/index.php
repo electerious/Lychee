@@ -21,59 +21,60 @@ header('content-type: text/plain');
 # Declare
 $error = '';
 
+# Show separator
+echo('Diagnostics' . PHP_EOL);
+echo('-----------' . PHP_EOL);
+
+# PHP Version
+if (floatval(phpversion())<5.2)		$error .= ('Error: Upgrade to PHP 5.2 or higher!' . PHP_EOL);
+
+# Extensions
+if (!extension_loaded('session'))	$error .= ('Error: PHP session extension not activated' . PHP_EOL);
+if (!extension_loaded('exif'))		$error .= ('Error: PHP exif extension not activated' . PHP_EOL);
+if (!extension_loaded('mbstring'))	$error .= ('Error: PHP mbstring extension not activated' . PHP_EOL);
+if (!extension_loaded('gd'))		$error .= ('Error: PHP gd extension not activated' . PHP_EOL);
+if (!extension_loaded('mysqli'))	$error .= ('Error: PHP mysqli extension not activated' . PHP_EOL);
+if (!extension_loaded('json'))		$error .= ('Error: PHP json extension not activated' . PHP_EOL);
+if (!extension_loaded('zip'))		$error .= ('Error: PHP zip extension not activated' . PHP_EOL);
+
+# Permissions
+if (hasPermissions(LYCHEE_UPLOADS_BIG)===false)			$error .= ('Error: \'uploads/big\' missing or not readable and writable (777 required)' . PHP_EOL);
+if (hasPermissions(LYCHEE_UPLOADS_MEDIUM)===false)		$error .= ('Error: \'uploads/medium\' missing or not readable and writable (777 required)' . PHP_EOL);
+if (hasPermissions(LYCHEE_UPLOADS_THUMB)===false)		$error .= ('Error: \'uploads/thumb\' missing or not readable and writable (777 required)' . PHP_EOL);
+if (hasPermissions(LYCHEE_UPLOADS_IMPORT)===false)		$error .= ('Error: \'uploads/import\' missing or not readable and writable (777 required)' . PHP_EOL);
+if (hasPermissions(LYCHEE_UPLOADS)===false)				$error .= ('Error: \'uploads/\' missing or not readable and writable (777 required)' . PHP_EOL);
+if (hasPermissions(LYCHEE_DATA)===false)				$error .= ('Error: \'data/\' missing or not readable and writable (777 required)' . PHP_EOL);
+
 # Load config
-if (!file_exists(LYCHEE_CONFIG_FILE)) exit('Error 001: Configuration not found. Please install Lychee first.');
-require(LYCHEE_CONFIG_FILE);
+if (!file_exists(LYCHEE_CONFIG_FILE))	exit('Error: Configuration not found. Please install Lychee for additional tests.');
+else									require(LYCHEE_CONFIG_FILE);
 
 # Define the table prefix
 if (!isset($dbTablePrefix)) $dbTablePrefix = '';
 defineTablePrefix($dbTablePrefix);
 
-# Show separator
-echo('Diagnostics' . PHP_EOL);
-echo('-----------' . PHP_EOL);
-
 # Database
 $database = new mysqli($dbHost, $dbUser, $dbPassword, $dbName);
-if (mysqli_connect_errno()!=0) $error .= ('Error 100: ' . mysqli_connect_errno() . ': ' . mysqli_connect_error() . '' . PHP_EOL);
+if (mysqli_connect_errno()!=0) $error .= ('Error: ' . mysqli_connect_errno() . ': ' . mysqli_connect_error() . '' . PHP_EOL);
 
 # Load settings
 $settings = new Settings($database);
 $settings = $settings->get();
 
-# PHP Version
-if (floatval(phpversion())<5.2)		$error .= ('Error 200: Please upgrade to PHP 5.2 or higher!' . PHP_EOL);
-
-# Extensions
-if (!extension_loaded('exif'))		$error .= ('Error 300: PHP exif extension not activated' . PHP_EOL);
-if (!extension_loaded('mbstring'))	$error .= ('Error 301: PHP mbstring extension not activated' . PHP_EOL);
-if (!extension_loaded('gd'))		$error .= ('Error 302: PHP gd extension not activated' . PHP_EOL);
-if (!extension_loaded('mysqli'))	$error .= ('Error 303: PHP mysqli extension not activated' . PHP_EOL);
-if (!extension_loaded('json'))		$error .= ('Error 304: PHP json extension not activated' . PHP_EOL);
-if (!extension_loaded('zip'))		$error .= ('Error 305: PHP zip extension not activated' . PHP_EOL);
-
 # Config
-if (!isset($dbName)||$dbName==='')	$error .= ('Error 400: No property for $dbName in config.php' . PHP_EOL);
-if (!isset($dbUser)||$dbUser==='')	$error .= ('Error 401: No property for $dbUser in config.php' . PHP_EOL);
-if (!isset($dbPassword))			$error .= ('Error 402: No property for $dbPassword in config.php' . PHP_EOL);
-if (!isset($dbHost)||$dbHost==='')	$error .= ('Error 403: No property for $dbHost in config.php' . PHP_EOL);
+if (!isset($dbName)||$dbName==='')	$error .= ('Error: No property for $dbName in config.php' . PHP_EOL);
+if (!isset($dbUser)||$dbUser==='')	$error .= ('Error: No property for $dbUser in config.php' . PHP_EOL);
+if (!isset($dbPassword))			$error .= ('Error: No property for $dbPassword in config.php' . PHP_EOL);
+if (!isset($dbHost)||$dbHost==='')	$error .= ('Error: No property for $dbHost in config.php' . PHP_EOL);
 
 # Settings
-if (!isset($settings['username'])||$settings['username']=='')			$error .= ('Error 404: Username empty or not set in database' . PHP_EOL);
-if (!isset($settings['password'])||$settings['password']=='')			$error .= ('Error 405: Password empty or not set in database' . PHP_EOL);
-if (!isset($settings['thumbQuality'])||$settings['thumbQuality']=='')	$error .= ('Error 406: No or wrong property for thumbQuality in database' . PHP_EOL);
-if (!isset($settings['sorting'])||$settings['sorting']=='')				$error .= ('Error 407: Wrong property for sorting in database' . PHP_EOL);
-if (!isset($settings['plugins']))										$error .= ('Error 408: No property for plugins in database' . PHP_EOL);
-if (!isset($settings['imagick'])||$settings['imagick']=='')				$error .= ('Error 409: No or wrong property for imagick in database' . PHP_EOL);
-if (!isset($settings['checkForUpdates'])||($settings['checkForUpdates']!='0'&&$settings['checkForUpdates']!='1')) $error .= ('Error 410: No or wrong property for checkForUpdates in database' . PHP_EOL);
-
-# Permissions
-if (hasPermissions(LYCHEE_UPLOADS_BIG)===false)			$error .= ('Error 500: \'uploads/big\' missing or not readable and writable (777 required)' . PHP_EOL);
-if (hasPermissions(LYCHEE_UPLOADS_MEDIUM)===false)		$error .= ('Error 500: \'uploads/medium\' missing or not readable and writable (777 required)' . PHP_EOL);
-if (hasPermissions(LYCHEE_UPLOADS_THUMB)===false)		$error .= ('Error 501: \'uploads/thumb\' missing or not readable and writable (777 required)' . PHP_EOL);
-if (hasPermissions(LYCHEE_UPLOADS_IMPORT)===false)		$error .= ('Error 502: \'uploads/import\' missing or not readable and writable (777 required)' . PHP_EOL);
-if (hasPermissions(LYCHEE_UPLOADS)===false)				$error .= ('Error 503: \'uploads/\' missing or not readable and writable (777 required)' . PHP_EOL);
-if (hasPermissions(LYCHEE_DATA)===false)				$error .= ('Error 504: \'data/\' missing or not readable and writable (777 required)' . PHP_EOL);
+if (!isset($settings['username'])||$settings['username']=='')			$error .= ('Error: Username empty or not set in database' . PHP_EOL);
+if (!isset($settings['password'])||$settings['password']=='')			$error .= ('Error: Password empty or not set in database' . PHP_EOL);
+if (!isset($settings['thumbQuality'])||$settings['thumbQuality']=='')	$error .= ('Error: No or wrong property for thumbQuality in database' . PHP_EOL);
+if (!isset($settings['sorting'])||$settings['sorting']=='')				$error .= ('Error: Wrong property for sorting in database' . PHP_EOL);
+if (!isset($settings['plugins']))										$error .= ('Error: No property for plugins in database' . PHP_EOL);
+if (!isset($settings['imagick'])||$settings['imagick']=='')				$error .= ('Error: No or wrong property for imagick in database' . PHP_EOL);
+if (!isset($settings['checkForUpdates'])||($settings['checkForUpdates']!='0'&&$settings['checkForUpdates']!='1')) $error .= ('Error: No or wrong property for checkForUpdates in database' . PHP_EOL);
 
 # Check dropboxKey
 if (!$settings['dropboxKey']) echo('Warning: Dropbox import not working. No property for dropboxKey.' . PHP_EOL);
@@ -85,8 +86,8 @@ if (ini_get('max_execution_time')<200&&ini_set('upload_max_filesize', '20M')===f
 if ($database->server_version<50500) echo('Warning: Lychee uses the GBK charset to avoid sql injections on your MySQL version. Please update to MySQL 5.5 or higher to enable UTF-8 support.' . PHP_EOL);
 
 # Output
-if ($error=='') echo('No critical problems found. Lychee should work without problems!' . PHP_EOL);
-else echo $error;
+if ($error==='')	echo('No critical problems found. Lychee should work without problems!' . PHP_EOL);
+else				echo $error;
 
 # Show separator
 echo(PHP_EOL . PHP_EOL . 'System Information' . PHP_EOL);
@@ -96,13 +97,14 @@ echo('------------------' . PHP_EOL);
 $json = file_get_contents(LYCHEE_SRC . 'package.json');
 $json = json_decode($json, true);
 
+# About imagick
 $imagick = extension_loaded('imagick');
-if ($imagick===false) $imagick = '-';
+if ($imagick===true)	$imagickVersion = @Imagick::getVersion();
+else					$imagick = '-';
+if (!isset($imagickVersion, $imagickVersion['versionNumber'])||$imagickVersion==='')	$imagickVersion = '-';
+else																					$imagickVersion = $imagickVersion['versionNumber'];
 
-if ($imagick===true) $imagickVersion = @Imagick::getVersion();
-if (!isset($imagickVersion, $imagickVersion['versionNumber'])||$imagickVersion==='') $imagickVersion = '-';
-else $imagickVersion = $imagickVersion['versionNumber'];
-
+# About GD
 $gdVersion = gd_info();
 
 # Output system information
