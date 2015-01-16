@@ -230,7 +230,9 @@ album.delete = function(albumIDs) {
 album.setTitle = function(albumIDs) {
 
 	var oldTitle = '',
-		input;
+		input = '',
+		msg = '',
+		action;
 
 	if (!albumIDs) return false;
 	if (albumIDs instanceof Array===false) albumIDs = [albumIDs];
@@ -292,8 +294,8 @@ album.setTitle = function(albumIDs) {
 
 	input = "<input class='text' data-name='title' type='text' maxlength='30' placeholder='Title' value='" + oldTitle + "'>";
 
-	if (albumIDs.length===1)	msg = "<p>Enter a new title for this album: " + msg + "</p>";
-	else						msg = "<p>Enter a title for all " + albumIDs.length + " selected albums: " + msg +"</p>";
+	if (albumIDs.length===1)	msg = "<p>Enter a new title for this album: " + input + "</p>";
+	else						msg = "<p>Enter a title for all " + albumIDs.length + " selected albums: " + input +"</p>";
 
 	basicModal.show({
 		body: msg,
@@ -313,37 +315,44 @@ album.setTitle = function(albumIDs) {
 
 album.setDescription = function(photoID) {
 
-	var oldDescription = album.json.description.replace("'", '&apos;'),
-		description,
-		params,
-		buttons;
+	var oldDescription = album.json.description.replace("'", '&apos;');
 
-	buttons = [
-		['Set Description', function() {
+	action = function(data) {
 
-			// Get input
-			description = $('.message input.text').val();
+		var params;
 
-			// Remove html from input
-			description = lychee.removeHTML(description);
+		basicModal.close();
 
-			if (visible.album()) {
-				album.json.description = description;
-				view.album.description();
+		// Remove html from input
+		data.description = lychee.removeHTML(data.description);
+
+		if (visible.album()) {
+			album.json.description = data.description;
+			view.album.description();
+		}
+
+		params = 'setAlbumDescription&albumID=' + photoID + '&description=' + escape(encodeURI(data.description));
+		lychee.api(params, function(data) {
+
+			if (data!==true) lychee.error(null, params, data);
+
+		});
+
+	}
+
+	basicModal.show({
+		body: "<p>Please enter a description for this album: <input class='text' data-name='description' type='text' maxlength='800' placeholder='Description' value='" + oldDescription + "'></p>",
+		buttons: {
+			action: {
+				title: 'Set Description',
+				fn: action
+			},
+			cancel: {
+				title: 'Cancel',
+				fn: basicModal.close
 			}
-
-			params = 'setAlbumDescription&albumID=' + photoID + '&description=' + escape(encodeURI(description));
-			lychee.api(params, function(data) {
-
-				if (data!==true) lychee.error(null, params, data);
-
-			});
-
-		}],
-		['Cancel', function() {}]
-	];
-
-	modal.show('Set Description', "Please enter a description for this album: <input class='text' type='text' maxlength='800' placeholder='Description' value='" + oldDescription + "'>", buttons);
+		}
+	});
 
 }
 
@@ -356,14 +365,44 @@ album.setPublic = function(albumID, e) {
 
 	albums.refresh();
 
-	if (!visible.message()&&album.json.public==0) {
+	if (!basicModal.visible()&&album.json.public==0) {
 
-		modal.show('Share Album', "This album will be shared with the following properties:</p><form><div class='choice'><input type='checkbox' name='listed' value='listed' checked><h2>Visible</h2><p>Listed to visitors of your Lychee.</p></div><div class='choice'><input type='checkbox' name='downloadable' value='downloadable'><h2>Downloadable</h2><p>Visitors of your Lychee can download this album.</p></div><div class='choice'><input type='checkbox' name='password' value='password'><h2>Password protected</h2><p>Only accessible with a valid password.<input class='text' type='password' placeholder='password' value='' style='display: none;'></p></div></form><p style='display: none;'>", [['Share Album', function() { album.setPublic(album.getID(), e) }], ['Cancel', function() {}]], -170);
+		var msg = '',
+			action;
 
-		$('.message .choice input[name="password"]').on('change', function() {
+		action = function() {
 
-			if ($(this).prop('checked')===true)	$('.message .choice input.text').show();
-			else								$('.message .choice input.text').hide();
+			basicModal.close();
+			album.setPublic(album.getID(), e);
+
+		};
+
+		msg = "<p class='less'>This album will be shared with the following properties:</p><form>";
+
+		msg += "<div class='choice'><label><input type='checkbox' name='listed' checked><span class='checkbox'>" + build.iconic('check') + "</span><span class='label'>Visible</span></label><p>Listed to visitors of your Lychee.</p></div>";
+		msg += "<div class='choice'><label><input type='checkbox' name='downloadable'><span class='checkbox'>" + build.iconic('check') + "</span><span class='label'>Downloadable</span></label><p>Visitors of your Lychee can download this album.</p></div>";
+		msg += "<div class='choice'><label><input type='checkbox' name='password'><span class='checkbox'>" + build.iconic('check') + "</span><span class='label'>Password protected</span></label><p>Only accessible with a valid password.</p><input class='text' data-name='password' type='password' placeholder='password' value=''></div>";
+
+		msg += "</form>"
+
+		basicModal.show({
+			body: msg,
+			buttons: {
+				action: {
+					title: 'Share Album',
+					fn: action
+				},
+				cancel: {
+					title: 'Cancel',
+					fn: basicModal.close
+				}
+			}
+		});
+
+		$('.basicModal .choice input[name="password"]').on('change', function() {
+
+			if ($(this).prop('checked')===true)	$('.basicModal .choice input[data-name="password"]').show();
+			else								$('.basicModal .choice input[data-name="password"]').hide();
 
 		});
 
@@ -371,18 +410,18 @@ album.setPublic = function(albumID, e) {
 
 	}
 
-	if (visible.message()) {
+	if (basicModal.visible()) {
 
-		if ($('.message .choice input[name="password"]:checked').val()==='password') {
-			password			= md5($('.message input.text').val());
+		if ($('.basicModal .choice input[name="password"]:checked').length===1) {
+			password			= md5($('.basicModal .choice input[name="password"]').val());
 			album.json.password	= 1;
 		} else {
 			password			= '';
 			album.json.password	= 0;
 		}
 
-		if ($('.message .choice input[name="listed"]:checked').val()==='listed')				listed = true;
-		if ($('.message .choice input[name="downloadable"]:checked').val()==='downloadable')	downloadable = true;
+		if ($('.basicModal .choice input[name="listed"]:checked').length===1)		listed = true;
+		if ($('.basicModal .choice input[name="downloadable"]:checked').length===1)	downloadable = true;
 
 	}
 

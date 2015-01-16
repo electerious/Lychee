@@ -33,8 +33,11 @@
 			text-decoration: none;
 			border-bottom: 1px dashed #888;
 		}
+
+		&.less { padding-bottom: 30px; }
 	}
 
+	/* Buttons ------------------------------------------------*/
 	.basicModal__button {
 		padding: 13px 0 15px;
 		background: black(.02);
@@ -57,7 +60,7 @@
 
 	}
 
-	/* Input ------------------------------------------------*/
+	/* Inputs ------------------------------------------------*/
 	input.text {
 		width: calc(100% - 4px);
 		padding: 9px 2px;
@@ -72,6 +75,81 @@
 		outline: none;
 
 		&:focus { border-bottom-color: $colorBlue; }
+	}
+
+	/* Radio Buttons ------------------------------------------------*/
+	.choice {
+		padding: 0 30px 15px;
+		width: calc(100% - 60px);
+		color: #fff;
+
+		&:last-child { padding-bottom: 40px; }
+
+		label {
+			float: left;
+			color: white(1);
+			font-size: 14px;
+			font-weight: 700;
+			text-shadow: $shadow;
+		}
+
+		label input {
+			position: absolute;
+			margin: 0;
+			opacity: 0;
+		}
+
+		label .checkbox {
+			float: left;
+			display: block;
+			width: 16px;
+			height: 16px;
+			background: black(.5);
+			border-radius: 3px;
+			box-shadow: 0 0 0 1px black(.7);
+
+			.iconic {
+				box-sizing: border-box;
+				fill: $colorBlue;
+				padding: 2px;
+				opacity: 0;
+				transform: scale(0);
+				transition: opacity .2s $timing, transform .2s $timing;
+			}
+		}
+
+		/* Checked */
+		label input:checked ~ .checkbox {
+			background: black(.5);
+			.iconic {
+				opacity: 1;
+				transform: scale(1);
+			}
+		}
+
+		/* Active */
+		label input:active ~ .checkbox {
+			background: black(.3);
+			.iconic { opacity: .8; }
+		}
+
+		label .label { margin: 0 0 0 18px; }
+
+		p {
+			clear: both;
+			padding: 4px 0 0 35px;
+			margin: 0;
+			width: calc(100% - 35px);
+			color: white(.6);
+			font-size: 13px;
+		}
+
+		input.text {
+			display: none;
+			margin-top: 5px;
+			margin-left: 35px;
+			width: calc(100% - 39px);
+		}
 	}
 
 }
