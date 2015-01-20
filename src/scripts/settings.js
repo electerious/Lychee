@@ -7,7 +7,7 @@ settings = {}
 
 settings.createConfig = function() {
 
-	var msg,
+	var msg = '',
 		action;
 
 	action = function(data) {
@@ -102,14 +102,14 @@ settings.createConfig = function() {
 
 	}
 
-	msg	= "<p>Enter your database connection details below:";
-	msg += "<input data-name='dbHost' class='text less' type='text' placeholder='Database Host (optional)' value=''>";
-	msg += "<input data-name='dbUser' class='text less' type='text' placeholder='Database Username' value=''>";
-	msg += "<input data-name='dbPassword' class='text more' type='password' placeholder='Database Password' value=''>";
+	msg	+= "<p>Enter your database connection details below:";
+	msg += "<input data-name='dbHost' class='text' type='text' placeholder='Database Host (optional)' value=''>";
+	msg += "<input data-name='dbUser' class='text' type='text' placeholder='Database Username' value=''>";
+	msg += "<input data-name='dbPassword' class='text' type='password' placeholder='Database Password' value=''>";
 	msg += "</p>";
 	msg += "<p>Lychee will create its own database. If required, you can enter the name of an existing database instead:";
-	msg += "<input data-name='dbName' class='text less' type='text' placeholder='Database Name (optional)' value=''>";
-	msg += "<input data-name='dbTablePrefix' class='text more' type='text' placeholder='Table prefix (optional)' value=''>";
+	msg += "<input data-name='dbName' class='text' type='text' placeholder='Database Name (optional)' value=''>";
+	msg += "<input data-name='dbTablePrefix' class='text' type='text' placeholder='Table prefix (optional)' value=''>";
 	msg += "</p>";
 
 	basicModal.show({
@@ -184,46 +184,63 @@ settings.createLogin = function() {
 
 settings.setLogin = function() {
 
-	var old_password,
-		username,
-		password,
-		params,
-		buttons;
+	var msg = '',
+		action;
 
-	buttons = [
-		['Change Login', function() {
+	action = function(data) {
 
-			old_password	= $('.message input.text#old_password').val();
-			username		= $('.message input.text#username').val();
-			password		= $('.message input.text#password').val();
+		var oldPassword		= data.oldPassword	|| '',
+			username		= data.username		|| '',
+			password		= data.password		|| '',
+			params;
 
-			if (old_password.length<1) {
-				loadingBar.show('error', 'Your old password was entered incorrectly. Please try again!');
-				return false;
+		if (oldPassword.length<1) {
+			basicModal.error('oldPassword');
+			return false;
+		}
+
+		if (username.length<1) {
+			basicModal.error('username');
+			return false;
+		}
+
+		if (password.length<1) {
+			basicModal.error('password');
+			return false;
+		}
+
+		basicModal.close();
+
+		params = 'setLogin&oldPassword=' + md5(oldPassword) + '&username=' + escape(username) + '&password=' + md5(password);
+		lychee.api(params, function(data) {
+
+			if (data!==true) lychee.error(null, params, data);
+
+		});
+
+	}
+
+	msg += "<p>Enter your current password:";
+	msg += "<input data-name='oldPassword' class='text' type='password' placeholder='Current Password' value=''>";
+	msg += "</p>"
+	msg += "<p>Your username and password will be changed to the following:";
+	msg += "<input data-name='username' class='text' type='text' placeholder='New Username' value=''>";
+	msg += "<input data-name='password' class='text' type='password' placeholder='New Password' value=''>";
+	msg += "</p>";
+
+	basicModal.show({
+		body: msg,
+		buttons: {
+			action: {
+				title: 'Change Login',
+				fn: action
+			},
+			cancel: {
+				title: 'Cancel',
+				fn: basicModal.close
 			}
-
-			if (username.length<1) {
-				loadingBar.show('error', 'Your new username was entered incorrectly. Please try again!');
-				return false;
-			}
-
-			if (password.length<1) {
-				loadingBar.show('error', 'Your new password was entered incorrectly. Please try again!');
-				return false;
-			}
-
-			params = 'setLogin&oldPassword=' + md5(old_password) + '&username=' + escape(username) + '&password=' + md5(password);
-			lychee.api(params, function(data) {
-
-				if (data!==true) lychee.error(null, params, data);
-
-			});
-
-		}],
-		['Cancel', function() {}]
-	];
-
-	modal.show('Change Login', "Enter your current password: <input id='old_password' class='text more' type='password' placeholder='Current Password' value=''><br>Your username and password will be changed to the following: <input id='username' class='text less' type='text' placeholder='New Username' value=''><input id='password' class='text' type='password' placeholder='New Password' value=''>", buttons, -171);
+		}
+	});
 
 }
 
