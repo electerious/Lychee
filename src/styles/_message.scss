@@ -79,6 +79,8 @@
 
 		&:focus { border-bottom-color: $colorBlue; }
 
+		&.error { border-bottom-color: $colorRed; }
+
 		&:first-child { margin-top: 10px; }
 
 		&:last-child { margin-bottom: 10px; }
