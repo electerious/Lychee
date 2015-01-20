@@ -64,7 +64,6 @@
 	input.text {
 		width: calc(100% - 4px);
 		padding: 9px 2px;
-		margin: 10px 0;
 		background-color: transparent;
 		color: #fff;
 		text-shadow: $shadow;
@@ -75,6 +74,10 @@
 		outline: none;
 
 		&:focus { border-bottom-color: $colorBlue; }
+
+		&:first-child { margin-top: 10px; }
+
+		&:last-child { margin-bottom: 10px; }
 	}
 
 	/* Radio Buttons ------------------------------------------------*/
