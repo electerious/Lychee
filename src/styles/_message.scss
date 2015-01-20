@@ -16,7 +16,7 @@
 
 	p {
 		display: block;
-		padding: 42px 30px 40px;
+		padding: 10px 30px;
 		color: white(.9);
 		font-size: 14px;
 		text-align: left;
@@ -35,6 +35,10 @@
 		}
 
 		&.less { padding-bottom: 30px; }
+
+		&:first-of-type { padding-top: 42px; }
+
+		&:last-of-type { padding-bottom: 40px; }
 	}
 
 	/* Buttons ------------------------------------------------*/
@@ -140,7 +144,7 @@
 
 		p {
 			clear: both;
-			padding: 4px 0 0 35px;
+			padding: 2px 0 0 35px;
 			margin: 0;
 			width: calc(100% - 35px);
 			color: white(.6);
