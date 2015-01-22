@@ -305,6 +305,8 @@ upload.start = {
 			var params,
 				files = [];
 
+			basicModal.close();
+
 			files[0] = {
 				name:		data.path,
 				supported:	true
