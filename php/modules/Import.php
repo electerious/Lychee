@@ -71,9 +71,11 @@ class Import extends Module {
 		}
 
 		# Skip folders of Lychee
-		if ($path===LYCHEE_UPLOADS_BIG||($path . '/')===LYCHEE_UPLOADS_BIG||$path===LYCHEE_UPLOADS_THUMB||($path . '/')===LYCHEE_UPLOADS_THUMB) {
-			Log::error($database, __METHOD__, __LINE__, 'Given path is a reserved path of Lychee (' . $path . ')');
-			return 'Error: Given path is a reserved path of Lychee!';
+		if ($path===LYCHEE_UPLOADS_BIG||($path . '/')===LYCHEE_UPLOADS_BIG||
+			$path===LYCHEE_UPLOADS_MEDIUM||($path . '/')===LYCHEE_UPLOADS_MEDIUM||
+			$path===LYCHEE_UPLOADS_THUMB||($path . '/')===LYCHEE_UPLOADS_THUMB) {
+				Log::error($database, __METHOD__, __LINE__, 'The given path is a reserved path of Lychee (' . $path . ')');
+				return 'Error: Given path is a reserved path of Lychee!';
 		}
 
 		$error				= false;
