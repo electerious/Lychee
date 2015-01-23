@@ -44,9 +44,13 @@ class Session extends Module {
 		# Path to Lychee for the server-import dialog
 		$return['config']['location'] = LYCHEE;
 
-		# No login
-		if ($this->settings['username']===''&&$this->settings['password']==='') $return['config']['login'] = false;
-		else $return['config']['login'] = true;
+		# Check if login credentials exist and login if they don't
+		if ($this->noLogin()===true) {
+			$public = false;
+			$return['config']['login'] = false;
+		} else {
+			$return['config']['login'] = true;
+		}
 
 		if ($public===false) {
 
@@ -104,6 +108,21 @@ class Session extends Module {
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
+
+		return false;
+
+	}
+
+	private function noLogin() {
+
+		# Check dependencies
+		self::dependencies(isset($this->settings));
+
+		# Check if login credentials exist and login if they don't
+		if ($this->settings['username']===''&&$this->settings['password']==='') {
+			$_SESSION['login'] = true;
+			return true;
+		}
 
 		return false;
 
