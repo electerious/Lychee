@@ -17,8 +17,8 @@ class Installation extends Access {
 			case 'dbCreateConfig':	$this->dbCreateConfig(); break;
 
 			# Error
-			default:					exit('Warning: No configuration!');
-										return false; break;
+			default:				exit('Warning: No configuration!');
+									return false; break;
 
 		}
 
