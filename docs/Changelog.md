@@ -2,8 +2,13 @@
 
 Released January ?, 2015
 
+- `Improved` auto-login after first installation
+- `Fixed` Disabled import of the medium-folder
+- `Fixed` Error when using single apostrophe in text #290
 - `Fixed` $medium is now a tinyint like defined in the database structure
-- `Fixed` Prevented a warning caused by set_charset #291
+- `Fixed` incorrect height calculation for photos
+- `Fixed` creation of test db #295
+- `Fixed` a warning caused by set_charset #291
 
 ## v2.7
 
