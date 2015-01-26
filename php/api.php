@@ -54,18 +54,18 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 	$plugins = new Plugins($plugins, $database, $settings);
 
 	# Escape
-	foreach(array_keys($_POST) as $key)	$_POST[$key] = mysqli_real_escape_string($database, urldecode($_POST[$key]));
-	foreach(array_keys($_GET) as $key)	$_GET[$key] = mysqli_real_escape_string($database, urldecode($_GET[$key]));
+	foreach(array_keys($_POST) as $key)	$_POST[$key] = urldecode($_POST[$key]);
+	foreach(array_keys($_GET) as $key)	$_GET[$key] = urldecode($_GET[$key]);
 
 	# Validate parameters
 	if (isset($_POST['albumIDs'])&&preg_match('/^[0-9\,]{1,}$/', $_POST['albumIDs'])!==1)	exit('Error: Wrong parameter type for albumIDs!');
 	if (isset($_POST['photoIDs'])&&preg_match('/^[0-9\,]{1,}$/', $_POST['photoIDs'])!==1)	exit('Error: Wrong parameter type for photoIDs!');
-	if (isset($_POST['albumID'])&&preg_match('/^[0-9sfr]{1,}$/', $_POST['albumID'])!==1)		exit('Error: Wrong parameter type for albumID!');
+	if (isset($_POST['albumID'])&&preg_match('/^[0-9sfr]{1,}$/', $_POST['albumID'])!==1)	exit('Error: Wrong parameter type for albumID!');
 	if (isset($_POST['photoID'])&&preg_match('/^[0-9]{14}$/', $_POST['photoID'])!==1)		exit('Error: Wrong parameter type for photoID!');
 
 	# Function for switch statement
-	if (isset($_POST['function'])) $fn = $_POST['function'];
-	else $fn = $_GET['function'];
+	if (isset($_POST['function']))	$fn = $_POST['function'];
+	else							$fn = $_GET['function'];
 
 	if (isset($_SESSION['login'])&&$_SESSION['login']==true) {
 

@@ -57,62 +57,7 @@ class Import extends Module {
 
 	}
 
-	/*static function move($database, $path) {
-
-		# Determine OS type and set move cmd (Windows untested!)
-		$myos = substr(PHP_OS,0,3);
-		$myos = strtoupper($myos);
-
-		if ($myos==='WIN') $osmv = 'MOVE';
-		else $osmv = 'mv';
-
-		# Generate tmp dir name by hashing epoch time & random number
-		$tmpdirname = md5(time() . rand());
-
-		# Make temporary directory
-		if (@mkdir(LYCHEE_DATA . $tmpdirname)===false) {
-			Log::error($database, __METHOD__, __LINE__, 'Failed to create temporary directory');
-			return false;
-		}
-
-		# Get list of files and move them to tmpdir
-		$files = glob($path . '*');
-		if (isset($files)) {
-
-			foreach ($files as $file) {
-
-				# Prevent unsupported files from being moved
-				if (is_dir($file)===false&&@exif_imagetype($file)===false) continue;
-
-				$out = '';
-				$ret = '';
-				$file = escapeshellarg($file);
-				$cmd = $osmv . " $file " . LYCHEE_DATA . $tmpdirname;
-
-				@exec($cmd, $out, $ret);
-
-				if (isset($ret)&&($ret>0)) Log::error($database, __METHOD__, __LINE__, "Failed to move directory or file ($ret):" . $file);
-
-			}
-
-		}
-
-		# If no files could be copied to the temp dir, remove
-		$files = glob(LYCHEE_DATA . $tmpdirname . '/*');
-		if (count($files)===0) {
-			rmdir(LYCHEE_DATA . $tmpdirname);
-			Log::error($database, __METHOD__, __LINE__, 'Import failed, because files could not be temporary moved to ' . LYCHEE_DATA);
-			return false;
-		}
-
-		# Set new path
-		$path = LYCHEE_DATA . $tmpdirname;
-
-		return $path;
-
-	}*/
-
-	static function server($albumID = 0, $path, $useTemp = false) {
+	static function server($albumID = 0, $path) {
 
 		global $database, $plugins, $settings;
 
@@ -126,18 +71,12 @@ class Import extends Module {
 		}
 
 		# Skip folders of Lychee
-		if ($path===LYCHEE_UPLOADS_BIG||($path . '/')===LYCHEE_UPLOADS_BIG||$path===LYCHEE_UPLOADS_THUMB||($path . '/')===LYCHEE_UPLOADS_THUMB) {
-			Log::error($database, __METHOD__, __LINE__, 'Given path is a reserved path of Lychee (' . $path . ')');
-			return 'Error: Given path is a reserved path of Lychee!';
+		if ($path===LYCHEE_UPLOADS_BIG||($path . '/')===LYCHEE_UPLOADS_BIG||
+			$path===LYCHEE_UPLOADS_MEDIUM||($path . '/')===LYCHEE_UPLOADS_MEDIUM||
+			$path===LYCHEE_UPLOADS_THUMB||($path . '/')===LYCHEE_UPLOADS_THUMB) {
+				Log::error($database, __METHOD__, __LINE__, 'The given path is a reserved path of Lychee (' . $path . ')');
+				return 'Error: Given path is a reserved path of Lychee!';
 		}
-
-		/*if ($useTemp===true) {
-			$path = Import::move($database, $path);
-			if ($path===false) {
-				Log::error($database, __METHOD__, __LINE__, 'Failed to move import to temporary directory');
-				return false;
-			}
-		}*/
 
 		$error				= false;
 		$contains['photos']	= false;
@@ -182,7 +121,7 @@ class Import extends Module {
 					continue;
 				}
 
-				$import = Import::server($newAlbumID, $file . '/', false);
+				$import = Import::server($newAlbumID, $file . '/');
 
 				if ($import!==true&&$import!=='Notice: Import only contains albums!') {
 					$error = true;
@@ -193,11 +132,6 @@ class Import extends Module {
 			}
 
 		}
-
-		# Delete tmpdir if import was successful
-		/*if ($error===false&&$useTemp===true&&file_exists(LYCHEE_DATA . $tmpdirname)) {
-			if (@rmdir(LYCHEE_DATA . $tmpdirname)===false) Log::error($database, __METHOD__, __LINE__, 'Could not delete temp-folder (' . LYCHEE_DATA . $tmpdirname . ') after successful import');
-		}*/
 
 		if ($contains['photos']===false&&$contains['albums']===false)	return 'Warning: Folder empty or no readable files to process!';
 		if ($contains['photos']===false&&$contains['albums']===true)	return 'Notice: Import only contains albums!';
