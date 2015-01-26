@@ -640,7 +640,7 @@ photo.getSize = function() {
 	// Detect if the photo will be shown scaled,
 	// because the screen size is smaller than the photo
 	if (photo.json.width>view.width||
-		photo.json.width>view.height) scaled = true;
+		photo.json.height>view.height) scaled = true;
 
 	// Calculate pixel ratio of screen
 	if (pixelRatio!==undefined&&pixelRatio>1) {

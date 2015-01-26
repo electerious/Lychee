@@ -123,7 +123,7 @@ class Photo extends Module {
 					$photo_name	= $exists['photo_name'];
 					$path		= $exists['path'];
 					$path_thumb	= $exists['path_thumb'];
-					$medium		= ($exists['medium']==='1' ? true : false);
+					$medium		= ($exists['medium']==='1' ? 1 : 0);
 					$exists		= true;
 				}
 
@@ -174,8 +174,8 @@ class Photo extends Module {
 				}
 
 				# Create Medium
-				if ($this->createMedium($path, $photo_name, $info['width'], $info['height'])) $medium = true;
-				else $medium = false;
+				if ($this->createMedium($path, $photo_name, $info['width'], $info['height'])) $medium = 1;
+				else $medium = 0;
 
 				# Set thumb url
 				$path_thumb = md5($id) . '.jpeg';

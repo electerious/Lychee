@@ -20,8 +20,8 @@ class Database extends Module {
 		if ($database->connect_errno) exit('Error: ' . $database->connect_error);
 
 		# Avoid sql injection on older MySQL versions by using GBK
-		if ($database->server_version<50500) $database->set_charset('GBK');
-		else $database->set_charset('utf8');
+		if ($database->server_version<50500) @$database->set_charset('GBK');
+		else @$database->set_charset('utf8');
 
 		# Set unicode
 		$database->query('SET NAMES utf8;');
@@ -84,10 +84,9 @@ class Database extends Module {
 		if (!$database->select_db($name)) {
 
 			# Database doesn't exist
-			# Check if user can create a database
-			$result = $database->query('CREATE DATABASE lychee_dbcheck');
-			if (!$result) return 'Warning: Creation failed!';
-			else $database->query('DROP DATABASE lychee_dbcheck');
+			# Check if user can create the database
+			$result = Database::createDatabase($database, $name);
+			if ($result===false) return 'Warning: Creation failed!';
 
 		}
 
@@ -131,8 +130,8 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 		Module::dependencies(isset($database, $name));
 
 		# Create database
-		$result = $database->query("CREATE DATABASE IF NOT EXISTS $name;");
-		$database->select_db($name);
+		$query	= Database::prepare($database, 'CREATE DATABASE IF NOT EXISTS ?', array($name));
+		$result = $database->query($query);
 
 		if (!$database->select_db($name)||!$result) return false;
 		return true;
