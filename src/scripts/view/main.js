@@ -12,8 +12,8 @@ var header		= $('header'),
 $(document).ready(function(){
 
 	/* Event Name */
-	if (mobileBrowser())	event_name = 'touchend';
-	else					event_name = 'click';
+	if ('ontouchend' in document.documentElement)	event_name = 'touchend';
+	else											event_name = 'click';
 
 	/* Window */
 	$(window).keydown(key);

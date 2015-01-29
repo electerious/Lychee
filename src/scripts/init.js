@@ -6,7 +6,7 @@
 $(document).ready(function() {
 
 	/* Event Name */
-	var eventName = (mobileBrowser()) ? 'touchend' : 'click';
+	var eventName = ('ontouchend' in document.documentElement) ? 'touchend' : 'click';
 
 	/* Multiselect */
 	$('#content')	.on('mousedown', 	function(e) { if (e.which===1) multiselect.show(e) });
@@ -125,7 +125,7 @@ $(document).ready(function() {
 	});
 
 
-	if (mobileBrowser()) {
+	if ('ontouchend' in document.documentElement) {
 
 		$(document)
 

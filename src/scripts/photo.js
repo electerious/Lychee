@@ -61,7 +61,7 @@ photo.preloadNext = function(photoID) {
 
 	// Never preload on mobile devices with bare RAM and
 	// mostly mobile internet
-	if (mobileBrowser()) return false;
+	// {{ code }}
 
 	if (album.json &&
 	   album.json.content &&
