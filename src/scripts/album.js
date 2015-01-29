@@ -376,11 +376,36 @@ album.setPublic = function(albumID, e) {
 
 		};
 
-		msg = "<p class='less'>This album will be shared with the following properties:</p><form>";
-		msg += "<div class='choice'><label><input type='checkbox' name='listed' checked><span class='checkbox'>" + build.iconic('check') + "</span><span class='label'>Visible</span></label><p>Listed to visitors of your Lychee.</p></div>";
-		msg += "<div class='choice'><label><input type='checkbox' name='downloadable'><span class='checkbox'>" + build.iconic('check') + "</span><span class='label'>Downloadable</span></label><p>Visitors of your Lychee can download this album.</p></div>";
-		msg += "<div class='choice'><label><input type='checkbox' name='password'><span class='checkbox'>" + build.iconic('check') + "</span><span class='label'>Password protected</span></label><p>Only accessible with a valid password.</p><input class='text' data-name='password' type='password' placeholder='password' value=''></div>";
-		msg += "</form>"
+		msg =	`
+				<p class='less'>This album will be shared with the following properties:</p>
+				<form>
+					<div class='choice'>
+						<label>
+							<input type='checkbox' name='listed' checked>
+							<span class='checkbox'>${ build.iconic('check') }</span>
+							<span class='label'>Visible</span>
+						</label>
+						<p>Listed to visitors of your Lychee.</p>
+					</div>
+					<div class='choice'>
+						<label>
+							<input type='checkbox' name='downloadable'>
+							<span class='checkbox'>${ build.iconic('check') }</span>
+							<span class='label'>Downloadable</span>
+						</label>
+						<p>Visitors of your Lychee can download this album.</p>
+					</div>
+					<div class='choice'>
+						<label>
+							<input type='checkbox' name='password'>
+							<span class='checkbox'>${ build.iconic('check') }</span>
+							<span class='label'>Password protected</span>
+						</label>
+						<p>Only accessible with a valid password.</p>
+						<input class='text' data-name='password' type='password' placeholder='password' value=''>
+					</div>
+				</form>
+				`
 
 		basicModal.show({
 			body: msg,
@@ -410,7 +435,7 @@ album.setPublic = function(albumID, e) {
 	if (basicModal.visible()) {
 
 		if ($('.basicModal .choice input[name="password"]:checked').length===1) {
-			password			= md5($('.basicModal .choice input[name="password"]').val());
+			password			= md5($('.basicModal .choice input[data-name="password"]').val());
 			album.json.password	= 1;
 		} else {
 			password			= '';
