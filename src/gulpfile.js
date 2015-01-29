@@ -15,7 +15,6 @@ var catchError = function(err) {
 
 paths.view = {
 	js: [
-		'bower_components/jQuery/dist/jquery.min.js',
 		'../src/scripts/_gup.js',
 		'../src/scripts/view/main.js'
 	],
@@ -23,6 +22,7 @@ paths.view = {
 		'../src/scripts/build.coffee'
 	],
 	scripts: [
+		'bower_components/jQuery/dist/jquery.min.js',
 		'../dist/_view--javascript.js',
 		'../dist/_view--coffee.js'
 	]
@@ -32,6 +32,8 @@ gulp.task('view--js', function() {
 
 	var stream =
 		gulp.src(paths.view.js)
+			.pipe(plugins['6to5']())
+			.on('error', catchError)
 			.pipe(plugins.concat('_view--javascript.js', {newLine: "\n"}))
 			.pipe(gulp.dest('../dist/'));
 
@@ -69,18 +71,18 @@ gulp.task('view--scripts', ['view--js', 'view--coffee'], function() {
 
 paths.main = {
 	js: [
-		'bower_components/jQuery/dist/jquery.min.js',
-		'bower_components/js-md5/js/md5.min.js',
-		'bower_components/mousetrap/mousetrap.min.js',
-		'bower_components/mousetrap/plugins/global-bind/mousetrap-global-bind.min.js',
-		'bower_components/basicContext/dist/basicContext.min.js',
-		'bower_components/basicModal/dist/basicModal.min.js',
 		'../src/scripts/*.js'
 	],
 	coffee: [
 		'../src/scripts/*.coffee'
 	],
 	scripts: [
+		'bower_components/jQuery/dist/jquery.min.js',
+		'bower_components/js-md5/js/md5.min.js',
+		'bower_components/mousetrap/mousetrap.min.js',
+		'bower_components/mousetrap/plugins/global-bind/mousetrap-global-bind.min.js',
+		'bower_components/basicContext/dist/basicContext.min.js',
+		'bower_components/basicModal/dist/basicModal.min.js',
 		'../dist/_main--javascript.js',
 		'../dist/_main--coffee.js'
 	],
@@ -98,6 +100,8 @@ gulp.task('main--js', function() {
 
 	var stream =
 		gulp.src(paths.main.js)
+			.pipe(plugins['6to5']())
+			.on('error', catchError)
 			.pipe(plugins.concat('_main--javascript.js', {newLine: "\n"}))
 			.pipe(gulp.dest('../dist/'));
 
