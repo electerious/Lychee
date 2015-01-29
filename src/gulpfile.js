@@ -1,6 +1,6 @@
 var	gulp = require('gulp'),
-	plugins = require("gulp-load-plugins")(),
-	paths = {}
+	plugins = require('gulp-load-plugins')(),
+	paths = {};
 
 /* Error Handler -------------------------------- */
 
