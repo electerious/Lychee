@@ -447,8 +447,6 @@ album.setPublic = function(albumID, e) {
 
 	}
 
-	params = 'setAlbumPublic&albumID=' + albumID + '&password=' + password + '&visible=' + listed + '&downloadable=' + downloadable;
-
 	if (visible.album()) {
 
 		album.json.public	= (album.json.public==0) ? 1 : 0;
@@ -461,6 +459,7 @@ album.setPublic = function(albumID, e) {
 
 	}
 
+	params = 'setAlbumPublic&albumID=' + albumID + '&password=' + password + '&visible=' + listed + '&downloadable=' + downloadable;
 	lychee.api(params, function(data) {
 
 		if (data!==true) lychee.error(null, params, data);

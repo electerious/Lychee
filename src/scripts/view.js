@@ -205,15 +205,15 @@ view.album = {
 
 		star: function(photoID) {
 
-			$('.photo[data-id="' + photoID + '"] .icon-star').remove();
-			if (album.json.content[photoID].star==1) $('.photo[data-id="' + photoID + '"]').append("<a class='badge red icon-star'></a>");
+			$('.photo[data-id="' + photoID + '"] .iconic-star').remove();
+			if (album.json.content[photoID].star==1) $('.photo[data-id="' + photoID + '"]').append("<a class='badge iconic-star'>" + build.iconic('star') + "</a>");
 
 		},
 
 		public: function(photoID) {
 
-			$('.photo[data-id="' + photoID + '"] .icon-share').remove();
-			if (album.json.content[photoID].public==1) $('.photo[data-id="' + photoID + '"]').append("<a class='badge red icon-share'></a>");
+			$('.photo[data-id="' + photoID + '"] .iconic-share').remove();
+			if (album.json.content[photoID].public==1) $('.photo[data-id="' + photoID + '"]').append("<a class='badge iconic-share'>" + build.iconic('eye') + "</a>");
 
 		},
 
@@ -253,7 +253,7 @@ view.album = {
 		if (album.json.public==1) {
 			$('#button_share_album a').addClass('active');
 			$('#button_share_album').attr('title', 'Share Album');
-			$('.photo .icon-share').remove();
+			$('.photo .iconic-share').remove();
 			if (album.json.init) $('#infobox .attr_visibility').html('Public');
 		} else {
 			$('#button_share_album a').removeClass('active');
