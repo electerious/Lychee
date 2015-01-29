@@ -423,7 +423,7 @@ album.setPublic = function(albumID, e) {
 
 		$('.basicModal .choice input[name="password"]').on('change', function() {
 
-			if ($(this).prop('checked')===true)	$('.basicModal .choice input[data-name="password"]').show();
+			if ($(this).prop('checked')===true)	$('.basicModal .choice input[data-name="password"]').show().focus();
 			else								$('.basicModal .choice input[data-name="password"]').hide();
 
 		});
