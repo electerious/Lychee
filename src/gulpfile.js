@@ -16,7 +16,7 @@ var catchError = function(err) {
 paths.view = {
 	js: [
 		'bower_components/jQuery/dist/jquery.min.js',
-		'../src/scripts/_frameworks.js',
+		'../src/scripts/_gup.js',
 		'../src/scripts/view/main.js'
 	],
 	coffee: [
