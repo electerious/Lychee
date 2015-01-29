@@ -39,6 +39,10 @@
 		&:first-of-type { padding-top: 42px; }
 
 		&:last-of-type { padding-bottom: 40px; }
+
+		&.signIn:first-of-type { padding-top: 30px; }
+
+		&.signIn:last-of-type { padding-bottom: 30px; }
 	}
 
 	/* Buttons ------------------------------------------------*/
@@ -72,9 +76,11 @@
 		color: #fff;
 		text-shadow: $shadow;
 		border: none;
-		border-bottom: 1px solid black(.4);
+		// Do not use rgba() for border-bottom
+		// to avoid a blurry line in Safari on non-retina screens
+		border-bottom: 1px solid #222;
 		border-radius: 0;
-		box-shadow: 0 1px 0 white(.08);
+		box-shadow: 0 1px 0 white(.05);
 		outline: none;
 
 		&:focus { border-bottom-color: $colorBlue; }
@@ -159,6 +165,18 @@
 			margin-left: 35px;
 			width: calc(100% - 39px);
 		}
+	}
+
+	/* Version ------------------------------------------------*/
+	.version {
+		padding: 0px 30px 20px;
+		color: #888;
+		font-size: 12px;
+		text-align: left;
+
+		span { display: none; }
+
+		span a { color: #888; }
 	}
 
 }

@@ -178,25 +178,6 @@ build.modal = (title, text, button, marginTop, closeButton) ->
 
 	return html
 
-build.signInModal = ->
-
-	html =	"""
-			<div class='message_overlay'>
-				<div class='message center'>
-					<h1><a class='icon-lock'></a> Sign In</h1>
-					<a class='close icon-remove-sign'></a>
-					<div class='sign_in'>
-						<input id='username' type='text' value='' placeholder='username' autocapitalize='off' autocorrect='off'>
-						<input id='password' type='password' value='' placeholder='password'>
-					</div>
-					<div id='version'>Version #{ lychee.version }<span> &#8211; <a target='_blank' href='#{ lychee.updateURL }'>Update available!</a><span></div>
-					<a onclick='lychee.login()' class='button active'>Sign in</a>
-				</div>
-			</div>
-			"""
-
-	return html
-
 build.uploadModal = (title, files) ->
 
 	html =	"""

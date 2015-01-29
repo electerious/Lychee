@@ -117,10 +117,10 @@ lychee.api = function(params, callback) {
 
 }
 
-lychee.login = function() {
+lychee.login = function(data) {
 
-	var user		= $('input#username').val(),
-		password	= md5($('input#password').val()),
+	var user		= data.username,
+		password	= md5(data.password),
 		params;
 
 	params = 'login&user=' + user + '&password=' + password;
@@ -137,8 +137,7 @@ lychee.login = function() {
 		} else {
 
 			// Show error and reactive button
-			$('#password').val('').addClass('error').focus();
-			$('.message .button.active').removeClass('pressed');
+			basicModal.error('password');
 
 		}
 
@@ -148,16 +147,34 @@ lychee.login = function() {
 
 lychee.loginDialog = function() {
 
-	var local_username;
+	var localUsername,
+		msg = '';
 
-	$('body').append(build.signInModal());
-	$('#username').focus();
+	msg += "<p class='signIn'>";
+	msg += "<input class='text' data-name='username' type='text' value='' placeholder='username' autocapitalize='off' autocorrect='off'>";
+	msg += "<input class='text' data-name='password' type='password' value='' placeholder='password'>";
+	msg += "</p>";
+	msg += "<p class='version'>Lychee " + lychee.version + "<span> &#8211; <a target='_blank' href='" + lychee.updateURL + "'>Update available!</a><span></p>";
+
+	basicModal.show({
+		body: msg,
+		buttons: {
+			action: {
+				title: 'Sign In',
+				fn: lychee.login
+			},
+			cancel: {
+				title: 'Cancel',
+				fn: basicModal.close
+			}
+		}
+	});
 
 	if (localStorage) {
-		local_username = localStorage.getItem('lychee_username');
-		if (local_username!==null) {
-			if (local_username.length>0) $('#username').val(local_username);
-			$('#password').focus();
+		localUsername = localStorage.getItem('lychee_username');
+		if (localUsername!==null) {
+			if (localUsername.length>0) $('.basicModal input[data-name="username"]').val(localUsername);
+			$('.basicModal input[data-name="password"]').focus();
 		}
 	}
 
@@ -244,7 +261,7 @@ lychee.getUpdate = function() {
 
 	$.ajax({
 		url: lychee.update_path,
-		success: function(data) { if (parseInt(data)>parseInt(lychee.version_code)) $('#version span').show(); }
+		success: function(data) { if (parseInt(data)>parseInt(lychee.version_code)) $('.version span').show(); }
 	});
 
 }
