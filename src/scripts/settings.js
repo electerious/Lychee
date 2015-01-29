@@ -304,29 +304,50 @@ settings.setSorting = function() {
 
 settings.setDropboxKey = function(callback) {
 
-	var buttons,
-		params,
-		key;
+	var action,
+		msg = "";
 
-	buttons = [
-		['Set Key', function() {
+	action = function(data) {
 
-			key = $('.message input.text#key').val();
+		var params,
+			key = data.key;
 
-			params = 'setDropboxKey&key=' + key;
-			lychee.api(params, function(data) {
+		if (data.key.length<1) {
+			basicModal.error('key');
+			return false;
+		}
 
-				if (data===true) {
-					lychee.dropboxKey = key;
-					if (callback) lychee.loadDropbox(callback);
-				} else lychee.error(null, params, data);
+		basicModal.close();
 
-			});
+		params = 'setDropboxKey&key=' + key;
+		lychee.api(params, function(data) {
 
-		}],
-		['Cancel', function() {}]
-	];
+			if (data===true) {
+				lychee.dropboxKey = key;
+				if (callback) lychee.loadDropbox(callback);
+			} else lychee.error(null, params, data);
 
-	modal.show('Set Dropbox Key', "In order to import photos from your Dropbox, you need a valid drop-ins app key from <a href='https://www.dropbox.com/developers/apps/create'>their website</a>. Generate yourself a personal key and enter it below: <input id='key' class='text' type='text' placeholder='Dropbox API Key' value='" + lychee.dropboxKey + "'>", buttons);
+		});
+
+	}
+
+	msg += "<p>";
+	msg += "In order to import photos from your Dropbox, you need a valid drop-ins app key from <a href='https://www.dropbox.com/developers/apps/create'>their website</a>. Generate yourself a personal key and enter it below:";
+	msg += "<input class='text' data-name='key' type='text' placeholder='Dropbox API Key' value='" + lychee.dropboxKey + "'>";
+	msg += "</p>";
+
+	basicModal.show({
+		body: msg,
+		buttons: {
+			action: {
+				title: 'Set Dropbox Key',
+				fn: action
+			},
+			cancel: {
+				title: 'Cancel',
+				fn: basicModal.close
+			}
+		}
+	});
 
 }
