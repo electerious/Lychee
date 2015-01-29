@@ -150,11 +150,13 @@ lychee.loginDialog = function() {
 	var localUsername,
 		msg = '';
 
-	msg += "<p class='signIn'>";
-	msg += "<input class='text' data-name='username' type='text' value='' placeholder='username' autocapitalize='off' autocorrect='off'>";
-	msg += "<input class='text' data-name='password' type='password' value='' placeholder='password'>";
-	msg += "</p>";
-	msg += "<p class='version'>Lychee " + lychee.version + "<span> &#8211; <a target='_blank' href='" + lychee.updateURL + "'>Update available!</a><span></p>";
+	msg =	`
+			<p class='signIn'>
+				<input class='text' data-name='username' type='text' value='' placeholder='username' autocapitalize='off' autocorrect='off'>
+				<input class='text' data-name='password' type='password' value='' placeholder='password'>
+			</p>
+			<p class='version'>Lychee ${ lychee.version }<span> &#8211; <a target='_blank' href='${ lychee.updateURL }'>Update available!</a><span></p>
+			`
 
 	basicModal.show({
 		body: msg,
