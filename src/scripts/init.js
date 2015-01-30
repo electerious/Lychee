@@ -163,7 +163,6 @@ $(document).ready(function() {
 
 		/* Upload */
 		.on('change', '#upload_files',				function() { basicModal.close(); upload.start.local(this.files) })
-		.on(eventName, '.upload_message a.close',	upload.close)
 		.on('dragover',								function(e) { e.preventDefault(); }, false)
 		.on('drop', function(e) {
 

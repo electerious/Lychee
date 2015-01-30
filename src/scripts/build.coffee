@@ -152,11 +152,8 @@ build.no_content = (typ) ->
 build.uploadModal = (title, files) ->
 
 	html =	"""
-			<div class='upload_overlay fadeIn'>
-				<div class='upload_message center'>
-					<h1>#{ title }</h1>
-					<a class='close icon-remove-sign'></a>
-					<div class='rows'>
+			<h1>#{ title }</h1>
+			<div class='rows'>
 			"""
 
 	i		= 0
@@ -185,8 +182,6 @@ build.uploadModal = (title, files) ->
 		i++
 
 	html +=	"""
-					</div>
-				</div>
 			</div>
 			"""
 

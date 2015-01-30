@@ -88,7 +88,6 @@ lychee.api = function(params, callback) {
 			if (typeof data==='string'&&
 				data.substring(0, 7)==='Error: ') {
 					lychee.error(data.substring(7, data.length), params, data);
-					upload.close(true);
 					return false;
 			}
 
@@ -110,7 +109,6 @@ lychee.api = function(params, callback) {
 		error: function(jqXHR, textStatus, errorThrown) {
 
 			lychee.error('Server error or API not found.', params, errorThrown);
-			upload.close(true);
 
 		}
 	});
