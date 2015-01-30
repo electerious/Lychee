@@ -26,15 +26,15 @@ contextMenu.add = function(e) {
 contextMenu.settings = function(e) {
 
 	var items = [
-		{ type: 'item', title: 'Change Login', icon: 'icon-user', fn: settings.setLogin },
-		{ type: 'item', title: 'Change Sorting', icon: 'icon-sort', fn: settings.setSorting },
-		{ type: 'item', title: 'Set Dropbox', icon: 'icon-folder-open', fn: settings.setDropboxKey },
+		{ type: 'item', title: build.iconic('person') + 'Change Login', fn: settings.setLogin },
+		{ type: 'item', title: build.iconic('sort-ascending') + 'Change Sorting', fn: settings.setSorting },
+		{ type: 'item', title: build.iconic('box') + 'Set Dropbox', fn: settings.setDropboxKey },
 		{ type: 'separator' },
-		{ type: 'item', title: 'About Lychee', icon: 'icon-info-sign', fn: function() { window.open(lychee.website) } },
-		{ type: 'item', title: 'Diagnostics', icon: 'icon-dashboard', fn: function() { window.open('plugins/check/') } },
-		{ type: 'item', title: 'Show Log', icon: 'icon-list', fn: function() { window.open('plugins/displaylog/') } },
+		{ type: 'item', title: build.iconic('info') + 'About Lychee', fn: function() { window.open(lychee.website) } },
+		{ type: 'item', title: build.iconic('wrench') + 'Diagnostics', fn: function() { window.open('plugins/check/') } },
+		{ type: 'item', title: build.iconic('align-left') + 'Show Log', fn: function() { window.open('plugins/displaylog/') } },
 		{ type: 'separator' },
-		{ type: 'item', title: 'Sign Out', icon: 'icon-signout', fn: lychee.logout }
+		{ type: 'item', title: build.iconic('account-logout') + 'Sign Out', fn: lychee.logout }
 	];
 
 	basicContext.show(items, e);
