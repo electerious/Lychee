@@ -8,13 +8,13 @@ contextMenu = {}
 contextMenu.add = function(e) {
 
 	var items = [
-		{ type: 'item', title: 'Upload Photo', icon: 'icon-picture', fn: function() { $('#upload_files').click() } },
+		{ type: 'item', title: build.iconic('image') + 'Upload Photo', fn: function() { $('#upload_files').click() } },
 		{ type: 'separator' },
-		{ type: 'item', title: 'Import from Link', icon: 'icon-link', fn: upload.start.url },
-		{ type: 'item', title: 'Import from Dropbox', icon: 'icon-folder-open', fn: upload.start.dropbox },
-		{ type: 'item', title: 'Import from Server', icon: 'icon-hdd', fn: upload.start.server },
+		{ type: 'item', title: build.iconic('link-intact') + 'Import from Link', fn: upload.start.url },
+		{ type: 'item', title: build.iconic('box') + 'Import from Dropbox', fn: upload.start.dropbox },
+		{ type: 'item', title: build.iconic('terminal') + 'Import from Server', fn: upload.start.server },
 		{ type: 'separator' },
-		{ type: 'item', title: 'New Album', icon: 'icon-folder-close', fn: album.add }
+		{ type: 'item', title: build.iconic('folder') + 'New Album', fn: album.add }
 	];
 
 	basicContext.show(items, e);
@@ -46,8 +46,8 @@ contextMenu.album = function(albumID, e) {
 	if (albumID==='0'||albumID==='f'||albumID==='s'||albumID==='r') return false;
 
 	var items = [
-		{ type: 'item', title: 'Rename', icon: 'icon-edit', fn: function() { album.setTitle([albumID]) } },
-		{ type: 'item', title: 'Delete', icon: 'icon-trash', fn: function() { album.delete([albumID]) } }
+		{ type: 'item', title: build.iconic('pencil') + 'Rename', fn: function() { album.setTitle([albumID]) } },
+		{ type: 'item', title: build.iconic('trash') + 'Delete', fn: function() { album.delete([albumID]) } }
 	];
 
 	$('.album[data-id="' + albumID + '"]').addClass('active');
@@ -61,8 +61,8 @@ contextMenu.albumMulti = function(albumIDs, e) {
 	multiselect.stopResize();
 
 	var items = [
-		{ type: 'item', title: 'Rename All', icon: 'icon-edit', fn: function() { album.setTitle(albumIDs) } },
-		{ type: 'item', title: 'Delete All', icon: 'icon-trash', fn: function() { album.delete(albumIDs) } }
+		{ type: 'item', title: build.iconic('pencil') + 'Rename All', fn: function() { album.setTitle(albumIDs) } },
+		{ type: 'item', title: build.iconic('trash') + 'Delete All', fn: function() { album.delete(albumIDs) } }
 	];
 
 	basicContext.show(items, e, contextMenu.close);
@@ -72,7 +72,7 @@ contextMenu.albumMulti = function(albumIDs, e) {
 contextMenu.albumTitle = function(albumID, e) {
 
 	var items = [
-		{ type: 'item', title: 'Rename', icon: 'icon-edit', fn: function() { album.setTitle([albumID]) } }
+		{ type: 'item', title: build.iconic('pencil') + 'Rename', fn: function() { album.setTitle([albumID]) } }
 	];
 
 	lychee.api('getAlbums', function(data) {
@@ -108,13 +108,13 @@ contextMenu.photo = function(photoID, e) {
 	// in order to keep the selection
 
 	var items = [
-		{ type: 'item', title: 'Star', icon: 'icon-star', fn: function() { photo.setStar([photoID]) } },
-		{ type: 'item', title: 'Tags', icon: 'icon-tags', fn: function() { photo.editTags([photoID]) } },
+		{ type: 'item', title: build.iconic('star') + 'Star', fn: function() { photo.setStar([photoID]) } },
+		{ type: 'item', title: build.iconic('tag') + 'Tags', fn: function() { photo.editTags([photoID]) } },
 		{ type: 'separator' },
-		{ type: 'item', title: 'Rename', icon: 'icon-edit', fn: function() { photo.setTitle([photoID]) } },
-		{ type: 'item', title: 'Duplicate', icon: 'icon-copy', fn: function() { photo.duplicate([photoID]) } },
-		{ type: 'item', title: 'Move', icon: 'icon-folder-open', fn: function() { basicContext.close(); contextMenu.move([photoID], e); } },
-		{ type: 'item', title: 'Delete', icon: 'icon-trash', fn: function() { photo.delete([photoID]) } }
+		{ type: 'item', title: build.iconic('pencil') + 'Rename', fn: function() { photo.setTitle([photoID]) } },
+		{ type: 'item', title: build.iconic('layers') + 'Duplicate', fn: function() { photo.duplicate([photoID]) } },
+		{ type: 'item', title: build.iconic('folder') + 'Move', fn: function() { basicContext.close(); contextMenu.move([photoID], e); } },
+		{ type: 'item', title: build.iconic('trash') + 'Delete', fn: function() { photo.delete([photoID]) } }
 	];
 
 	$('.photo[data-id="' + photoID + '"]').addClass('active');
@@ -132,13 +132,13 @@ contextMenu.photoMulti = function(photoIDs, e) {
 	multiselect.stopResize();
 
 	var items = [
-		{ type: 'item', title: 'Star All', icon: 'icon-star', fn: function() { photo.setStar(photoIDs) } },
-		{ type: 'item', title: 'Tag All', icon: 'icon-tags', fn: function() { photo.editTags(photoIDs) } },
+		{ type: 'item', title: build.iconic('star') + 'Star All', fn: function() { photo.setStar(photoIDs) } },
+		{ type: 'item', title: build.iconic('tag') + 'Tag All', fn: function() { photo.editTags(photoIDs) } },
 		{ type: 'separator' },
-		{ type: 'item', title: 'Rename All', icon: 'icon-edit', fn: function() { photo.setTitle(photoIDs) } },
-		{ type: 'item', title: 'Duplicate All', icon: 'icon-copy', fn: function() { photo.duplicate(photoIDs) } },
-		{ type: 'item', title: 'Move All', icon: 'icon-folder-open', fn: function() { basicContext.close(); contextMenu.move(photoIDs, e); } },
-		{ type: 'item', title: 'Delete All', icon: 'icon-trash', fn: function() { photo.delete(photoIDs) } }
+		{ type: 'item', title: build.iconic('pencil') + 'Rename All', fn: function() { photo.setTitle(photoIDs) } },
+		{ type: 'item', title: build.iconic('layers') + 'Duplicate All', fn: function() { photo.duplicate(photoIDs) } },
+		{ type: 'item', title: build.iconic('folder') + 'Move All', fn: function() { basicContext.close(); contextMenu.move(photoIDs, e); } },
+		{ type: 'item', title: build.iconic('trash') + 'Delete All', fn: function() { photo.delete(photoIDs) } }
 	];
 
 	basicContext.show(items, e, contextMenu.close);
@@ -148,8 +148,8 @@ contextMenu.photoMulti = function(photoIDs, e) {
 contextMenu.photoMore = function(photoID, e) {
 
 	var items = [
-		{ type: 'item', title: 'Full Photo', icon: 'icon-resize-full', fn: function() { window.open(photo.getDirectLink()) } },
-		{ type: 'item', title: 'Download', icon: 'icon-circle-arrow-down', fn: function() { photo.getArchive(photoID) } }
+		{ type: 'item', title: build.iconic('fullscreen-enter') + 'Full Photo', fn: function() { window.open(photo.getDirectLink()) } },
+		{ type: 'item', title: build.iconic('cloud-download') + 'Download', fn: function() { photo.getArchive(photoID) } }
 	];
 
 	// Remove download-item when
