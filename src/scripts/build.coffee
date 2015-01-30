@@ -149,35 +149,6 @@ build.no_content = (typ) ->
 
 	return html
 
-build.modal = (title, text, button, marginTop, closeButton) ->
-
-	if marginTop? then	custom_style = "style='margin-top: #{ marginTop }px;'"
-	else				custom_style = ''
-
-	html =	"""
-			<div class='message_overlay fadeIn'>
-				<div class='message center' #{ custom_style }>
-					<h1>#{ title }</h1>
-			"""
-
-	if closeButton isnt false then html += "<a class='close icon-remove-sign'></a>"
-
-	html += "<p>#{ text }</p>"
-
-	$.each button, (index) ->
-
-		if this[0] isnt ''
-
-			if index is 0 then	html += "<a class='button active'>#{ this[0] }</a>"
-			else				html += "<a class='button'>#{ this[0] }</a>"
-
-	html +=	"""
-				</div>
-			</div>
-			"""
-
-	return html
-
 build.uploadModal = (title, files) ->
 
 	html =	"""
