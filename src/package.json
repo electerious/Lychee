@@ -13,7 +13,6 @@
     "gulp": "^3.8.10",
     "gulp-6to5": "^3.0.0",
     "gulp-autoprefixer": "2.1.0",
-    "gulp-coffee": "^2.2.0",
     "gulp-concat": "^2.4.3",
     "gulp-load-plugins": "^0.8.0",
     "gulp-minify-css": "^0.4.3",
