@@ -13,17 +13,11 @@ header {
 	transition: transform .3s ease-out;
 
 	/* Modes ------------------------------------------------*/
-	&.hidden {
-		transform: translateY(-60px);
-	}
+	&.hidden { transform: translateY(-60px); }
 
-	&.loading {
-		transform: translateY(2px);
-	}
+	&.loading { transform: translateY(2px); }
 
-	&.error {
-		transform: translateY(40px);
-	}
+	&.error { transform: translateY(40px); }
 
 	&.view {
 		background: none;
