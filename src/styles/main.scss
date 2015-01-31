@@ -26,9 +26,7 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 	font-smoothing: antialiased;
 
-	&.view {
-		background-color: #0f0f0f;
-	}
+	&.view { background-color: #0f0f0f; }
 }
 
 input {
@@ -41,6 +39,8 @@ input {
 	width: 100%;
 	height: 100%;
 }
+
+#upload { display: none; }
 
 @import 'animations';
 @import 'content';
