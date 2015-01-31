@@ -146,7 +146,7 @@
 	#tags .empty .edit { margin-top: 0; }
 
 	#tags .tag {
-		float: left;
+		display: inline-block;
 		padding: 6px 10px;
 		margin: 0 6px 8px 0;
 		background-color: black(.5);
