@@ -110,7 +110,12 @@
 		text-shadow: 0 1px 3px black(.4);
 	}
 
-	.photo .overlay a span { margin: 0 6px 0 0; }
+	.photo .overlay a .iconic {
+		fill: #bbb;
+		margin: 0 5px 0 0;
+		width: 8px;
+		filter: drop-shadow(0 1px 3px black(.4));
+	}
 
 	.album img[data-type^='nonretina'] + .overlay h1,
 	.album img[data-type^='nonretina'] + .overlay a  { text-shadow: none; }
@@ -120,22 +125,21 @@
 	.photo .badge {
 		position: absolute;
 		margin: -1px 0 0 12px;
-		padding: 12px 7px 3px 7px;
+		padding: 12px 8px 6px;
 		box-shadow: 0 0 2px black(.6);
 		background: $colorRed;
 		border-radius: 0 0 5px 5px;
 		border: 1px solid #fff;
 		border-top: none;
 		color: #fff;
-		font-size: 24px;
 		text-shadow: 0 1px 0 black(.4);
 		opacity: .9;
 
-		&:nth-child(2n) { margin-left: 57px; }
+		&:nth-child(2n) { margin-left: 54px; }
 
 		.iconic {
 			fill: #fff;
-			width: 21px;
+			width: 16px;
 			filter: drop-shadow($shadowLight);
 		}
 	}
@@ -174,13 +178,17 @@
 	top: 50%;
 	left: 50%;
 	padding-top: 20px;
-	color: rgba(10, 10, 10, 1);
 	color: black(.9);
-	text-shadow: 0 1px 0 white(.02);
+	text-shadow: 0 1px 0 white(.03);
 	text-align: center;
 	transform: translateX(-50%) translateY(-50%);
 
-	.icon { font-size: 80px; }
+	.iconic {
+		fill: black(.9);
+		margin: 0 0 10px;
+		width: 60px;
+		filter: drop-shadow(0 1px 0 white(.03));
+	}
 
 	p {
 		font-size: 18px;

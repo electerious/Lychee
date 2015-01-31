@@ -209,19 +209,21 @@ contextMenu.move = function(photoIDs, e) {
 
 contextMenu.sharePhoto = function(photoID, e) {
 
-	var link = photo.getViewLink(photoID);
+	var link	= photo.getViewLink(photoID),
+		file	= 'ionicons';
+
 	if (photo.json.public==='2') link = location.href;
 
 	var items = [
 		{ type: 'item', title: '<input readonly id="link" value="' + link + '">', fn: function() {}, class: 'noHover' },
 		{ type: 'separator' },
-		{ type: 'item', title: 'Make Private', icon: 'icon-eye-close', fn: function() { photo.setPublic(photoID) } },
+		{ type: 'item', title: build.iconic('twitter', file, file) + 'Twitter', fn: function() { photo.share(photoID, 0) } },
+		{ type: 'item', title: build.iconic('facebook', file, file) + 'Facebook', fn: function() { photo.share(photoID, 1) } },
+		{ type: 'item', title: build.iconic('envelope-closed') + 'Mail', fn: function() { photo.share(photoID, 2) } },
+		{ type: 'item', title: build.iconic('dropbox', file, file) + 'Dropbox', fn: function() { photo.share(photoID, 3) } },
+		{ type: 'item', title: build.iconic('link-intact') + 'Direct Link', fn: function() { window.open(photo.getDirectLink()) } },
 		{ type: 'separator' },
-		{ type: 'item', title: 'Twitter', icon: 'icon-twitter', fn: function() { photo.share(photoID, 0) } },
-		{ type: 'item', title: 'Facebook', icon: 'icon-facebook', fn: function() { photo.share(photoID, 1) } },
-		{ type: 'item', title: 'Mail', icon: 'icon-envelope', fn: function() { photo.share(photoID, 2) } },
-		{ type: 'item', title: 'Dropbox', icon: 'icon-hdd', fn: function() { photo.share(photoID, 3) } },
-		{ type: 'item', title: 'Direct Link', icon: 'icon-link', fn: function() { window.open(photo.getDirectLink()) } }
+		{ type: 'item', title: build.iconic('ban') + 'Make Private', fn: function() { photo.setPublic(photoID) } }
 	];
 
 	basicContext.show(items, e);
@@ -231,14 +233,16 @@ contextMenu.sharePhoto = function(photoID, e) {
 
 contextMenu.shareAlbum = function(albumID, e) {
 
+	var file = 'ionicons';
+
 	var items = [
 		{ type: 'item', title: '<input readonly id="link" value="' + location.href + '">', fn: function() {}, class: 'noHover' },
 		{ type: 'separator' },
-		{ type: 'item', title: 'Make Private', icon: 'icon-eye-close', fn: function() { album.setPublic(albumID) } },
+		{ type: 'item', title: build.iconic('twitter', file, file) + 'Twitter', fn: function() { album.share(0) } },
+		{ type: 'item', title: build.iconic('facebook', file, file) + 'Facebook', fn: function() { album.share(1) } },
+		{ type: 'item', title: build.iconic('envelope-closed') + 'Mail', fn: function() { album.share(2) } },
 		{ type: 'separator' },
-		{ type: 'item', title: 'Twitter', icon: 'icon-twitter', fn: function() { album.share(0) } },
-		{ type: 'item', title: 'Facebook', icon: 'icon-facebook', fn: function() { album.share(1) } },
-		{ type: 'item', title: 'Mail', icon: 'icon-envelope', fn: function() { album.share(2) } }
+		{ type: 'item', title: build.iconic('ban') + 'Make Private', fn: function() { album.setPublic(albumID) } }
 	];
 
 	basicContext.show(items, e);

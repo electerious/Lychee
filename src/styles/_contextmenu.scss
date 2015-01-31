@@ -55,6 +55,12 @@
 				filter: drop-shadow($shadow);
 			}
 
+			tr td .iconic.ionicons {
+				margin: 0 8px -2px 0;
+				width: 14px;
+				height: 14px;
+			}
+
 	/* Link ------------------------------------------------*/
 	input#link {
 		width: 100%;

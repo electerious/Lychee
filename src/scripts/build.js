@@ -5,16 +5,17 @@
 
 window.build = {}
 
-build.iconic = function(icon, classes, path) {
+build.iconic = function(icon, classes, file) {
 
-	var html = '';
+	var html	= '',
+		path	= 'src/images/';
 
-	path	= path		|| 'src/images/iconic.svg';
+	file	= file		|| 'iconic';
 	classes	= classes	|| '';
 
 	html =	`
 			<svg viewBox='0 0 8 8' class='iconic ${ classes }'>
-				<use xlink:href='${ path }#${ icon }' />
+				<use xlink:href='${ path }${ file }.svg#${ icon }' />
 			</svg>
 			`
 
@@ -80,24 +81,8 @@ build.album = function(data) {
 				<img src='${ data.thumb1 }' width='200' height='200' alt='thumb' data-type='nonretina'>
 				<img src='${ data.thumb0 }' width='200' height='200' alt='thumb' data-type='${ typeThumb }'>
 				<div class='overlay'>
-			`
-
-	if (data.password&&lychee.publicMode===false) {
-
-		html +=	`
-				<h1 title='${ longTitle }'>
-					<span class='icon-lock'></span> ${ title }
-				</h1>
-				`
-
-	} else {
-
-		html +=	`<h1 title='${ longTitle }'>${ title }</h1>`
-
-	}
-
-	html +=	`
-					<a>${ data.sysdate }</a>
+				<h1 title='${ longTitle }'>${ title }</h1>
+				<a>${ data.sysdate }</a>
 				</div>
 			`
 
@@ -107,6 +92,7 @@ build.album = function(data) {
 		if (data.public==='1')		html += `<a class='badge icn-share'>${ build.iconic('eye') }</a>`;
 		if (data.unsorted==='1')	html += `<a class='badge'>${ build.iconic('list') }</a>`;
 		if (data.recent==='1')		html += `<a class='badge'>${ build.iconic('clock') }</a>`;
+		if (data.password===true)	html += `<a class='badge'>${ build.iconic('lock-locked') }</a>`;
 
 	}
 
@@ -138,16 +124,17 @@ build.photo = function(data) {
 					<h1 title='${ longTitle }'>${ title }</h1>
 			`
 
-	if (data.cameraDate===1)	html += `<a><span class='icon-camera' title='Photo Date'></span>${ data.sysdate }</a>`;
+	if (data.cameraDate===1)	html += `<a><span title='Camera Date'>${ build.iconic('camera-slr') }</span>${ data.sysdate }</a>`;
 	else						html += `<a>${ data.sysdate }</a>`;
 
 	html += '</div>';
 
-	if (data.star==='1')
-		html += `<a class='badge iconic-star'>${ build.iconic('star') }</a>`;
+	if (lychee.publicMode===false) {
 
-	if (lychee.publicMode===false&&data.public==='1'&&album.json.public!=='1')
-		html += `<a class='badge iconic-share'>${ build.iconic('eye') }</a>`;
+		if (data.star==='1') html += `<a class='badge iconic-star'>${ build.iconic('star') }</a>`;
+		if (data.public==='1'&&album.json.public!=='1') html += `<a class='badge iconic-share'>${ build.iconic('eye') }</a>`;
+
+	}
 
 	html += '</div>';
 
@@ -199,16 +186,16 @@ build.no_content = function(typ) {
 
 	html =	`
 			<div class='no_content fadeIn'>
-				<a class='icon icon-${ typ }'></a>
+				${ build.iconic(typ) }
 			`
 
 	switch (typ) {
-		case 'search':		html += '<p>No results</p>';
-							break;
-		case 'share':		html += '<p>No public albums</p>';
-							break;
-		case 'cog':			html += '<p>No configuration</p>';
-							break;
+		case 'magnifying-glass':	html += '<p>No results</p>';
+									break;
+		case 'eye':					html += '<p>No public albums</p>';
+									break;
+		case 'cog':					html += '<p>No configuration</p>';
+									break;
 	}
 
 	html += '</div>';
@@ -269,7 +256,7 @@ build.tags = function(tags, forView) {
 		tags = tags.split(',');
 
 		tags.forEach(function(tag, index, array) {
-			html += `<a class='tag'>${ tag }<span class='icon-remove' data-index='${ index }'></span></a>`
+			html += `<a class='tag'>${ tag }<span data-index='${ index }'>${ build.iconic('x') }</span></a>`
 		});
 
 		html += editTagsHTML;

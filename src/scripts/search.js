@@ -64,7 +64,7 @@ search.find = function(term) {
 
 						if (code==='error') {
 							lychee.content.html('');
-							$('body').append(build.no_content('search'));
+							$('body').append(build.no_content('magnifying-glass'));
 						} else {
 							lychee.content.html(code);
 							lychee.animate('.album, .photo', 'contentZoomIn');
