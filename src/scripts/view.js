@@ -1,6 +1,6 @@
 /**
  * @description	Responsible to reflect data changes to the UI.
- * @copyright	2014 by Tobias Reich
+ * @copyright	2015 by Tobias Reich
  */
 
 view = {}

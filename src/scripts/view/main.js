@@ -1,6 +1,6 @@
 /**
  * @description	Used to view single photos with view.php
- * @copyright	2014 by Tobias Reich
+ * @copyright	2015 by Tobias Reich
  */
 
 var header		= $('header'),

@@ -1,6 +1,6 @@
 /**
  * @description	This module is used for bindings.
- * @copyright	2014 by Tobias Reich
+ * @copyright	2015 by Tobias Reich
  */
 
 $(document).ready(function() {

@@ -1,6 +1,6 @@
 /**
  * @description	This module is used to show and hide the loading bar.
- * @copyright	2014 by Tobias Reich
+ * @copyright	2015 by Tobias Reich
  */
 
 loadingBar = {

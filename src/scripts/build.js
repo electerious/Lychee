@@ -1,6 +1,6 @@
 /**
  * @description	This module is used to generate HTML-Code.
- * @copyright	2014 by Tobias Reich
+ * @copyright	2015 by Tobias Reich
  */
 
 window.build = {}

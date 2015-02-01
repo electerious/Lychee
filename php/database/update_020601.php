@@ -2,7 +2,7 @@
 
 ###
 # @name			Update to version 2.6.1
-# @copyright	2014 by Tobias Reich
+# @copyright	2015 by Tobias Reich
 ###
 
 # Add `downloadable`
