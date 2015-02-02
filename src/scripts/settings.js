@@ -19,6 +19,11 @@ settings.createConfig = function() {
 			dbTablePrefix	= data.dbTablePrefix	|| '',
 			params;
 
+		if (dbUser.length<1) {
+			basicModal.error('dbUser');
+			return false;
+		}
+
 		if (dbHost.length<1) dbHost = 'localhost';
 		if (dbName.length<1) dbName = 'lychee';
 
