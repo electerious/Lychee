@@ -22,8 +22,15 @@ settings.createConfig = function() {
 		if (dbHost.length<1) dbHost = 'localhost';
 		if (dbName.length<1) dbName = 'lychee';
 
-		params = 'dbCreateConfig&dbName=' + escape(dbName) + '&dbUser=' + escape(dbUser) + '&dbPassword=' + escape(dbPassword) + '&dbHost=' + escape(dbHost) + '&dbTablePrefix=' + escape(dbTablePrefix);
-		lychee.api(params, function(data) {
+		params = {
+			dbName,
+			dbUser,
+			dbPassword,
+			dbHost,
+			dbTablePrefix
+		}
+
+		api.post('dbCreateConfig', params, function(data) {
 
 			if (data!==true) {
 
@@ -152,7 +159,13 @@ settings.createLogin = function() {
 		basicModal.close();
 
 		params = 'setLogin&username=' + escape(username) + '&password=' + md5(password);
-		lychee.api(params, function(data) {
+
+		params = {
+			username,
+			password: md5(password)
+		}
+
+		api.post('setLogin', params, function(data) {
 
 			if (data!==true) {
 
@@ -221,8 +234,13 @@ settings.setLogin = function() {
 
 		basicModal.close();
 
-		params = 'setLogin&oldPassword=' + md5(oldPassword) + '&username=' + escape(username) + '&password=' + md5(password);
-		lychee.api(params, function(data) {
+		params = {
+			oldPassword: md5(oldPassword),
+			username,
+			password: md5(password)
+		}
+
+		api.post('setLogin', params, function(data) {
 
 			if (data!==true) lychee.error(null, params, data);
 
@@ -274,8 +292,12 @@ settings.setSorting = function() {
 		basicModal.close();
 		albums.refresh();
 
-		params = 'setSorting&type=' + sorting[0] + '&order=' + sorting[1];
-		lychee.api(params, function(data) {
+		params = {
+			type: sorting[0],
+			order: sorting[1]
+		}
+
+		api.post('setSorting', params, function(data) {
 
 			if (data===true) {
 				lychee.sorting = 'ORDER BY ' + sorting[0] + ' ' + sorting[1];
@@ -339,8 +361,7 @@ settings.setDropboxKey = function(callback) {
 
 	action = function(data) {
 
-		var params,
-			key = data.key;
+		var key = data.key;
 
 		if (data.key.length<1) {
 			basicModal.error('key');
@@ -349,8 +370,7 @@ settings.setDropboxKey = function(callback) {
 
 		basicModal.close();
 
-		params = 'setDropboxKey&key=' + key;
-		lychee.api(params, function(data) {
+		api.post('setDropboxKey', { key }, function(data) {
 
 			if (data===true) {
 				lychee.dropboxKey = key;

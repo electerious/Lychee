@@ -42,8 +42,12 @@ album.load = function(albumID, refresh) {
 
 		startTime = new Date().getTime();
 
-		params = 'getAlbum&albumID=' + albumID + '&password=' + password.value;
-		lychee.api(params, function(data) {
+		params = {
+			albumID,
+			password: password.value
+		}
+
+		api.post('getAlbum', params, function(data) {
 
 			if (data==='Warning: Album private!') {
 				if (document.location.hash.replace('#', '').split('/')[1]!=undefined) {
@@ -103,15 +107,20 @@ album.add = function() {
 
 	action = function(data) {
 
-		var params,
-			isNumber = function(n) { return !isNaN(parseFloat(n)) && isFinite(n) };
+		var isNumber,
+			title = data.title;
 
 		basicModal.close();
 
-		if (data.title.length===0) data.title = 'Untitled';
+		isNumber = function(n) {
 
-		params = 'addAlbum&title=' + escape(encodeURI(data.title));
-		lychee.api(params, function(data) {
+			return !isNaN(parseFloat(n)) && isFinite(n)
+
+		}
+
+		if (title.length===0) title = 'Untitled';
+
+		api.post('addAlbum', { title }, function(data) {
 
 			// Avoid first album to be true
 			if (data===true) data = 1;
@@ -159,8 +168,11 @@ album.delete = function(albumIDs) {
 
 		basicModal.close();
 
-		params = 'deleteAlbum&albumIDs=' + albumIDs;
-		lychee.api(params, function(data) {
+		params = {
+			albumIDs: albumIDs.join()
+		}
+
+		api.post('deleteAlbum', params, function(data) {
 
 			if (visible.albums()) {
 
@@ -280,8 +292,12 @@ album.setTitle = function(albumIDs) {
 
 		}
 
-		params = 'setAlbumTitle&albumIDs=' + albumIDs + '&title=' + escape(encodeURI(newTitle));
-		lychee.api(params, function(data) {
+		params = {
+			albumIDs: albumIDs.join(),
+			title: newTitle
+		}
+
+		api.post('setAlbumTitle', params, function(data) {
 
 			if (data!==true) lychee.error(null, params, data);
 
@@ -310,7 +326,7 @@ album.setTitle = function(albumIDs) {
 
 }
 
-album.setDescription = function(photoID) {
+album.setDescription = function(albumID) {
 
 	var oldDescription = album.json.description.replace("'", '&apos;'),
 		action;
@@ -330,8 +346,12 @@ album.setDescription = function(photoID) {
 			view.album.description();
 		}
 
-		params = 'setAlbumDescription&albumID=' + photoID + '&description=' + escape(encodeURI(description));
-		lychee.api(params, function(data) {
+		params = {
+			albumID,
+			description
+		}
+
+		api.post('setAlbumDescription', params, function(data) {
 
 			if (data!==true) lychee.error(null, params, data);
 
@@ -459,8 +479,14 @@ album.setPublic = function(albumID, e) {
 
 	}
 
-	params = 'setAlbumPublic&albumID=' + albumID + '&password=' + password + '&visible=' + listed + '&downloadable=' + downloadable;
-	lychee.api(params, function(data) {
+	params = {
+		albumID,
+		password,
+		visible: listed,
+		downloadable
+	}
+
+	api.post('setAlbumPublic', params, function(data) {
 
 		if (data!==true) lychee.error(null, params, data);
 
@@ -495,7 +521,7 @@ album.share = function(service) {
 album.getArchive = function(albumID) {
 
 	var link,
-		url = 'php/api.php?function=getAlbumArchive&albumID=' + albumID;
+		url = api.path + '?function=getAlbumArchive&albumID=' + albumID;
 
 	if (location.href.indexOf('index.html')>0)	link = location.href.replace(location.hash, '').replace('index.html', url);
 	else										link = location.href.replace(location.hash, '') + url;

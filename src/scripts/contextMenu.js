@@ -75,7 +75,7 @@ contextMenu.albumTitle = function(albumID, e) {
 		{ type: 'item', title: build.iconic('pencil') + 'Rename', fn: function() { album.setTitle([albumID]) } }
 	];
 
-	lychee.api('getAlbums', function(data) {
+	api.post('getAlbums', {}, function(data) {
 
 		if (data.num!==0) {
 
@@ -176,7 +176,7 @@ contextMenu.move = function(photoIDs, e) {
 
 	}
 
-	lychee.api('getAlbums', function(data) {
+	api.post('getAlbums', {}, function(data) {
 
 		if (data.num===0) {
 

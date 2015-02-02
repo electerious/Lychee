@@ -22,7 +22,7 @@ albums.load = function() {
 
 	if (albums.json===null) {
 
-		lychee.api('getAlbums', function(data) {
+		api.post('getAlbums', {}, function(data) {
 
 			/* Smart Albums */
 			data.unsortedAlbum = {

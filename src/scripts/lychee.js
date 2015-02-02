@@ -9,7 +9,6 @@ lychee = {
 	version:		'3.0.0',
 	version_code:	'030000',
 
-	api_path:		'php/api.php',
 	update_path:	'http://lychee.electerious.com/version/index.php',
 	updateURL:		'https://github.com/electerious/Lychee',
 	website:		'http://lychee.electerious.com',
@@ -37,8 +36,11 @@ lychee.init = function() {
 
 	var params;
 
-	params = 'init&version=' + lychee.version_code;
-	lychee.api(params, function(data) {
+	params = {
+		version: lychee.version_code
+	}
+
+	api.post('init', params, function(data) {
 
 		if (data.loggedIn!==true) {
 			lychee.setMode('public');
@@ -71,58 +73,18 @@ lychee.init = function() {
 
 }
 
-lychee.api = function(params, callback) {
-
-	loadingBar.show();
-
-	$.ajax({
-		type: 'POST',
-		url: lychee.api_path,
-		data: 'function=' + params,
-		dataType: 'text',
-		success: function(data) {
-
-			setTimeout(function() { loadingBar.hide() }, 100);
-
-			// Catch errors
-			if (typeof data==='string'&&
-				data.substring(0, 7)==='Error: ') {
-					lychee.error(data.substring(7, data.length), params, data);
-					return false;
-			}
-
-			// Convert 1 to true and an empty string to false
-			if (data==='1')		data = true;
-			else if (data==='')	data = false;
-
-			// Convert to JSON if string start with '{' and ends with '}'
-			if (typeof data==='string'&&
-				data.substring(0, 1)==='{'&&
-				data.substring(data.length-1, data.length)==='}') data = $.parseJSON(data);
-
-			// Output response when debug mode is enabled
-			if (lychee.debugMode) console.log(data);
-
-			callback(data);
-
-		},
-		error: function(jqXHR, textStatus, errorThrown) {
-
-			lychee.error('Server error or API not found.', params, errorThrown);
-
-		}
-	});
-
-}
-
 lychee.login = function(data) {
 
 	var user		= data.username,
 		password	= md5(data.password),
 		params;
 
-	params = 'login&user=' + user + '&password=' + password;
-	lychee.api(params, function(data) {
+	params = {
+		user,
+		password
+	}
+
+	api.post('login', params, function(data) {
 
 		if (data===true) {
 
@@ -184,7 +146,7 @@ lychee.loginDialog = function() {
 
 lychee.logout = function() {
 
-	lychee.api('logout', function() {
+	api.post('logout', {}, function() {
 		window.location.reload();
 	});
 

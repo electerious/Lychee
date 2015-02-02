@@ -11,8 +11,7 @@ search = {
 
 search.find = function(term) {
 
-	var params,
-		albumsData = '',
+	var albumsData = '',
 		photosData = '',
 		code;
 
@@ -21,8 +20,7 @@ search.find = function(term) {
 
 		if ($('#search').val().length!==0) {
 
-			params = 'search&term=' + term;
-			lychee.api(params, function(data) {
+			api.post('search', { term }, function(data) {
 
 				// Build albums
 				if (data&&data.albums) {

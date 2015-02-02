@@ -111,7 +111,7 @@ upload.start = {
 				formData.append('tags', '');
 				formData.append(0, file);
 
-				xhr.open('POST', lychee.api_path);
+				xhr.open('POST', api.path);
 
 				xhr.onload = function() {
 
@@ -267,8 +267,12 @@ upload.start = {
 
 					$('.basicModal .rows .row .status').html('Importing');
 
-					params = 'importUrl&url=' + escape(encodeURI(data.link)) + '&albumID=' + albumID;
-					lychee.api(params, function(data) {
+					params = {
+						url: data.link,
+						albumID
+					}
+
+					api.post('importUrl', params, function(data) {
 
 						basicModal.close();
 						upload.notify('Import complete');
@@ -326,8 +330,12 @@ upload.start = {
 
 				$('.basicModal .rows .row .status').html('Importing');
 
-				params = 'importServer&albumID=' + albumID + '&path=' + escape(encodeURI(data.path));
-				lychee.api(params, function(data) {
+				params = {
+					albumID,
+					path: data.path
+				}
+
+				api.post('importServer', params, function(data) {
 
 					basicModal.close();
 					upload.notify('Import complete');
@@ -397,8 +405,12 @@ upload.start = {
 
 				$('.basicModal .rows .row .status').html('Importing');
 
-				params = 'importUrl&url=' + escape(links) + '&albumID=' + albumID;
-				lychee.api(params, function(data) {
+				params = {
+					url: links,
+					albumID
+				}
+
+				api.post('importUrl', params, function(data) {
 
 					basicModal.close();
 					upload.notify('Import complete');

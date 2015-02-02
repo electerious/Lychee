@@ -31,8 +31,13 @@ password.get = function(albumID, callback) {
 	} else {
 
 		// Check password
-		params = 'checkAlbumAccess&albumID=' + albumID + '&password=' + md5(passwd);
-		lychee.api(params, function(data) {
+
+		params = {
+			albumID,
+			password: md5(passwd)
+		}
+
+		api.post('checkAlbumAccess', params, function(data) {
 
 			if (data===true) {
 				basicModal.close();

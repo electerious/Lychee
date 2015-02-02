@@ -27,8 +27,13 @@ photo.load = function(photoID, albumID) {
 	var params,
 		checkPasswd;
 
-	params = 'getPhoto&photoID=' + photoID + '&albumID=' + albumID + '&password=' + password.value;
-	lychee.api(params, function(data) {
+	params = {
+		photoID,
+		albumID,
+		password: password.value
+	}
+
+	api.post('getPhoto', params, function(data) {
 
 		if (data==='Warning: Wrong password!') {
 			checkPasswd = function() {
@@ -156,8 +161,11 @@ photo.duplicate = function(photoIDs) {
 
 	albums.refresh();
 
-	params = 'duplicatePhoto&photoIDs=' + photoIDs;
-	lychee.api(params, function(data) {
+	params = {
+		photoIDs: photoIDs.join()
+	}
+
+	api.post('duplicatePhoto', params, function(data) {
 
 		if (data!==true) lychee.error(null, params, data);
 		else album.load(album.getID());
@@ -220,8 +228,11 @@ photo.delete = function(photoIDs) {
 		if (visible.photo()&&nextPhoto!==''&&nextPhoto!==photo.getID()) lychee.goto(album.getID() + '/' + nextPhoto);
 		else if (!visible.albums()) lychee.goto(album.getID());
 
-		params = 'deletePhoto&photoIDs=' + photoIDs;
-		lychee.api(params, function(data) {
+		params = {
+			photoIDs: photoIDs.join()
+		}
+
+		api.post('deletePhoto', params, function(data) {
 
 			if (data!==true) lychee.error(null, params, data);
 
@@ -299,8 +310,12 @@ photo.setTitle = function(photoIDs) {
 			view.album.content.title(id);
 		});
 
-		params = 'setPhotoTitle&photoIDs=' + photoIDs + '&title=' + escape(encodeURI(newTitle));
-		lychee.api(params, function(data) {
+		params = {
+			photoIDs: photoIDs.join(),
+			title: newTitle
+		}
+
+		api.post('setPhotoTitle', params, function(data) {
 
 			if (data!==true) lychee.error(null, params, data);
 
@@ -359,8 +374,12 @@ photo.setAlbum = function(photoIDs, albumID) {
 
 	albums.refresh();
 
-	params = 'setPhotoAlbum&photoIDs=' + photoIDs + '&albumID=' + albumID;
-	lychee.api(params, function(data) {
+	params = {
+		photoIDs: photoIDs.join(),
+		albumID
+	}
+
+	api.post('setPhotoAlbum', params, function(data) {
 
 		if (data!==true) lychee.error(null, params, data);
 
@@ -385,8 +404,11 @@ photo.setStar = function(photoIDs) {
 
 	albums.refresh();
 
-	params = 'setPhotoStar&photoIDs=' + photoIDs;
-	lychee.api(params, function(data) {
+	params = {
+		photoIDs: photoIDs.join()
+	}
+
+	api.post('setPhotoStar', params, function(data) {
 
 		if (data!==true) lychee.error(null, params, data);
 
@@ -395,8 +417,6 @@ photo.setStar = function(photoIDs) {
 }
 
 photo.setPublic = function(photoID, e) {
-
-	var params;
 
 	if (photo.json.public==2) {
 
@@ -440,8 +460,7 @@ photo.setPublic = function(photoID, e) {
 
 	albums.refresh();
 
-	params = 'setPhotoPublic&photoID=' + photoID;
-	lychee.api(params, function(data) {
+	api.post('setPhotoPublic', { photoID }, function(data) {
 
 		if (data!==true) lychee.error(null, params, data);
 
@@ -469,8 +488,12 @@ photo.setDescription = function(photoID) {
 			view.photo.description();
 		}
 
-		params = 'setPhotoDescription&photoID=' + photoID + '&description=' + escape(encodeURI(description));
-		lychee.api(params, function(data) {
+		params = {
+			photoID,
+			description
+		}
+
+		api.post('setPhotoDescription', params, function(data) {
 
 			if (data!==true) lychee.error(null, params, data);
 
@@ -569,8 +592,12 @@ photo.setTags = function(photoIDs, tags) {
 		album.json.content[id].tags = tags;
 	});
 
-	params = 'setPhotoTags&photoIDs=' + photoIDs + '&tags=' + tags;
-	lychee.api(params, function(data) {
+	params = {
+		photoIDs: photoIDs.join(),
+		tags
+	}
+
+	api.post('setPhotoTags', params, function(data) {
 
 		if (data!==true) lychee.error(null, params, data);
 
@@ -666,7 +693,7 @@ photo.getSize = function() {
 photo.getArchive = function(photoID) {
 
 	var link,
-		url = 'php/api.php?function=getPhotoArchive&photoID=' + photoID;
+		url = api.path + '?function=getPhotoArchive&photoID=' + photoID;
 
 	if (location.href.indexOf('index.html')>0)	link = location.href.replace(location.hash, '').replace('index.html', url);
 	else										link = location.href.replace(location.hash, '') + url;
