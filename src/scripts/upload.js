@@ -106,7 +106,7 @@ upload.start = {
 
 				}
 
-				formData.append('function', 'upload');
+				formData.append('function', 'Photo::add');
 				formData.append('albumID', albumID);
 				formData.append('tags', '');
 				formData.append(0, file);
@@ -272,7 +272,7 @@ upload.start = {
 						albumID
 					}
 
-					api.post('importUrl', params, function(data) {
+					api.post('Import::url', params, function(data) {
 
 						basicModal.close();
 						upload.notify('Import complete');
@@ -335,7 +335,7 @@ upload.start = {
 					path: data.path
 				}
 
-				api.post('importServer', params, function(data) {
+				api.post('Import::server', params, function(data) {
 
 					basicModal.close();
 					upload.notify('Import complete');
@@ -410,7 +410,7 @@ upload.start = {
 					albumID
 				}
 
-				api.post('importUrl', params, function(data) {
+				api.post('Import::url', params, function(data) {
 
 					basicModal.close();
 					upload.notify('Import complete');

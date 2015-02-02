@@ -14,11 +14,11 @@ class Installation extends Access {
 
 		switch ($fn) {
 
-			case 'dbCreateConfig':	$this->dbCreateConfig(); break;
+			case 'Database::createConfig':	$this->dbCreateConfig(); break;
 
 			# Error
-			default:				exit('Warning: No configuration!');
-									return false; break;
+			default:						exit('Warning: No configuration!');
+											return false; break;
 
 		}
 

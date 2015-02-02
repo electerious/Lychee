@@ -75,7 +75,7 @@ contextMenu.albumTitle = function(albumID, e) {
 		{ type: 'item', title: build.iconic('pencil') + 'Rename', fn: function() { album.setTitle([albumID]) } }
 	];
 
-	api.post('getAlbums', {}, function(data) {
+	api.post('Album::getAll', {}, function(data) {
 
 		if (data.num!==0) {
 
@@ -176,7 +176,7 @@ contextMenu.move = function(photoIDs, e) {
 
 	}
 
-	api.post('getAlbums', {}, function(data) {
+	api.post('Album::getAll', {}, function(data) {
 
 		if (data.num===0) {
 

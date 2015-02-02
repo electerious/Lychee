@@ -47,7 +47,7 @@ album.load = function(albumID, refresh) {
 			password: password.value
 		}
 
-		api.post('getAlbum', params, function(data) {
+		api.post('Album::get', params, function(data) {
 
 			if (data==='Warning: Album private!') {
 				if (document.location.hash.replace('#', '').split('/')[1]!=undefined) {
@@ -120,7 +120,7 @@ album.add = function() {
 
 		if (title.length===0) title = 'Untitled';
 
-		api.post('addAlbum', { title }, function(data) {
+		api.post('Album::add', { title }, function(data) {
 
 			// Avoid first album to be true
 			if (data===true) data = 1;
@@ -172,7 +172,7 @@ album.delete = function(albumIDs) {
 			albumIDs: albumIDs.join()
 		}
 
-		api.post('deleteAlbum', params, function(data) {
+		api.post('Album::delete', params, function(data) {
 
 			if (visible.albums()) {
 
@@ -297,7 +297,7 @@ album.setTitle = function(albumIDs) {
 			title: newTitle
 		}
 
-		api.post('setAlbumTitle', params, function(data) {
+		api.post('Album::setTitle', params, function(data) {
 
 			if (data!==true) lychee.error(null, params, data);
 
@@ -351,7 +351,7 @@ album.setDescription = function(albumID) {
 			description
 		}
 
-		api.post('setAlbumDescription', params, function(data) {
+		api.post('Album::setDescription', params, function(data) {
 
 			if (data!==true) lychee.error(null, params, data);
 
@@ -486,7 +486,7 @@ album.setPublic = function(albumID, e) {
 		downloadable
 	}
 
-	api.post('setAlbumPublic', params, function(data) {
+	api.post('Album::setPublic', params, function(data) {
 
 		if (data!==true) lychee.error(null, params, data);
 
@@ -521,7 +521,7 @@ album.share = function(service) {
 album.getArchive = function(albumID) {
 
 	var link,
-		url = api.path + '?function=getAlbumArchive&albumID=' + albumID;
+		url = api.path + '?function=Album::getArchive&albumID=' + albumID;
 
 	if (location.href.indexOf('index.html')>0)	link = location.href.replace(location.hash, '').replace('index.html', url);
 	else										link = location.href.replace(location.hash, '') + url;

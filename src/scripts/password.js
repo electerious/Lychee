@@ -37,7 +37,7 @@ password.get = function(albumID, callback) {
 			password: md5(passwd)
 		}
 
-		api.post('checkAlbumAccess', params, function(data) {
+		api.post('Album::getPublic', params, function(data) {
 
 			if (data===true) {
 				basicModal.close();

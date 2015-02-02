@@ -33,7 +33,7 @@ photo.load = function(photoID, albumID) {
 		password: password.value
 	}
 
-	api.post('getPhoto', params, function(data) {
+	api.post('Photo::get', params, function(data) {
 
 		if (data==='Warning: Wrong password!') {
 			checkPasswd = function() {
@@ -165,7 +165,7 @@ photo.duplicate = function(photoIDs) {
 		photoIDs: photoIDs.join()
 	}
 
-	api.post('duplicatePhoto', params, function(data) {
+	api.post('Photo::duplicate', params, function(data) {
 
 		if (data!==true) lychee.error(null, params, data);
 		else album.load(album.getID());
@@ -232,7 +232,7 @@ photo.delete = function(photoIDs) {
 			photoIDs: photoIDs.join()
 		}
 
-		api.post('deletePhoto', params, function(data) {
+		api.post('Photo::delete', params, function(data) {
 
 			if (data!==true) lychee.error(null, params, data);
 
@@ -315,7 +315,7 @@ photo.setTitle = function(photoIDs) {
 			title: newTitle
 		}
 
-		api.post('setPhotoTitle', params, function(data) {
+		api.post('Photo::setTitle', params, function(data) {
 
 			if (data!==true) lychee.error(null, params, data);
 
@@ -379,7 +379,7 @@ photo.setAlbum = function(photoIDs, albumID) {
 		albumID
 	}
 
-	api.post('setPhotoAlbum', params, function(data) {
+	api.post('Photo::setAlbum', params, function(data) {
 
 		if (data!==true) lychee.error(null, params, data);
 
@@ -408,7 +408,7 @@ photo.setStar = function(photoIDs) {
 		photoIDs: photoIDs.join()
 	}
 
-	api.post('setPhotoStar', params, function(data) {
+	api.post('Photo::setStar', params, function(data) {
 
 		if (data!==true) lychee.error(null, params, data);
 
@@ -460,7 +460,7 @@ photo.setPublic = function(photoID, e) {
 
 	albums.refresh();
 
-	api.post('setPhotoPublic', { photoID }, function(data) {
+	api.post('Photo::setPublic', { photoID }, function(data) {
 
 		if (data!==true) lychee.error(null, params, data);
 
@@ -493,7 +493,7 @@ photo.setDescription = function(photoID) {
 			description
 		}
 
-		api.post('setPhotoDescription', params, function(data) {
+		api.post('Photo::setDescription', params, function(data) {
 
 			if (data!==true) lychee.error(null, params, data);
 
@@ -597,7 +597,7 @@ photo.setTags = function(photoIDs, tags) {
 		tags
 	}
 
-	api.post('setPhotoTags', params, function(data) {
+	api.post('Photo::setTags', params, function(data) {
 
 		if (data!==true) lychee.error(null, params, data);
 
@@ -693,7 +693,7 @@ photo.getSize = function() {
 photo.getArchive = function(photoID) {
 
 	var link,
-		url = api.path + '?function=getPhotoArchive&photoID=' + photoID;
+		url = api.path + '?function=Photo::getArchive&photoID=' + photoID;
 
 	if (location.href.indexOf('index.html')>0)	link = location.href.replace(location.hash, '').replace('index.html', url);
 	else										link = location.href.replace(location.hash, '') + url;

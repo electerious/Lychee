@@ -15,21 +15,21 @@ class Guest extends Access {
 		switch ($fn) {
 
 			# Album functions
-			case 'getAlbums':			$this->getAlbums(); break;
-			case 'getAlbum':			$this->getAlbum(); break;
-			case 'checkAlbumAccess':	$this->checkAlbumAccess(); break;
+			case 'Album::getAll':		$this->getAlbums(); break;
+			case 'Album::get':			$this->getAlbum(); break;
+			case 'Album::getPublic':	$this->checkAlbumAccess(); break;
 
 			# Photo functions
-			case 'getPhoto':			$this->getPhoto(); break;
+			case 'Photo::get':			$this->getPhoto(); break;
 
 			# Session functions
-			case 'init':				$this->init(); break;
-			case 'login':				$this->login(); break;
-			case 'logout':				$this->logout(); break;
+			case 'Session::init':		$this->init(); break;
+			case 'Session::login':		$this->login(); break;
+			case 'Session::logout':		$this->logout(); break;
 
 			# $_GET functions
-			case 'getAlbumArchive':		$this->getAlbumArchive(); break;
-			case 'getPhotoArchive':		$this->getPhotoArchive(); break;
+			case 'Album::getArchive':	$this->getAlbumArchive(); break;
+			case 'Photo::getArchive':	$this->getPhotoArchive(); break;
 
 			# Error
 			default:					exit('Error: Function not found! Please check the spelling of the called function.');

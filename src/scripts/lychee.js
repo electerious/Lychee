@@ -40,7 +40,7 @@ lychee.init = function() {
 		version: lychee.version_code
 	}
 
-	api.post('init', params, function(data) {
+	api.post('Session::init', params, function(data) {
 
 		if (data.loggedIn!==true) {
 			lychee.setMode('public');
@@ -84,7 +84,7 @@ lychee.login = function(data) {
 		password
 	}
 
-	api.post('login', params, function(data) {
+	api.post('Session::login', params, function(data) {
 
 		if (data===true) {
 
@@ -146,7 +146,7 @@ lychee.loginDialog = function() {
 
 lychee.logout = function() {
 
-	api.post('logout', {}, function() {
+	api.post('Session::logout', {}, function() {
 		window.location.reload();
 	});
 

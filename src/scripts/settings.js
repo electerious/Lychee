@@ -35,7 +35,7 @@ settings.createConfig = function() {
 			dbTablePrefix
 		}
 
-		api.post('dbCreateConfig', params, function(data) {
+		api.post('Database::createConfig', params, function(data) {
 
 			if (data!==true) {
 
@@ -163,14 +163,12 @@ settings.createLogin = function() {
 
 		basicModal.close();
 
-		params = 'setLogin&username=' + escape(username) + '&password=' + md5(password);
-
 		params = {
 			username,
 			password: md5(password)
 		}
 
-		api.post('setLogin', params, function(data) {
+		api.post('Settings::setLogin', params, function(data) {
 
 			if (data!==true) {
 
@@ -245,7 +243,7 @@ settings.setLogin = function() {
 			password: md5(password)
 		}
 
-		api.post('setLogin', params, function(data) {
+		api.post('Settings::setLogin', params, function(data) {
 
 			if (data!==true) lychee.error(null, params, data);
 
@@ -302,7 +300,7 @@ settings.setSorting = function() {
 			order: sorting[1]
 		}
 
-		api.post('setSorting', params, function(data) {
+		api.post('Settings::setSorting', params, function(data) {
 
 			if (data===true) {
 				lychee.sorting = 'ORDER BY ' + sorting[0] + ' ' + sorting[1];
@@ -375,7 +373,7 @@ settings.setDropboxKey = function(callback) {
 
 		basicModal.close();
 
-		api.post('setDropboxKey', { key }, function(data) {
+		api.post('Settings::setDropboxKey', { key }, function(data) {
 
 			if (data===true) {
 				lychee.dropboxKey = key;

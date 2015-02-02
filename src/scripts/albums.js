@@ -22,7 +22,7 @@ albums.load = function() {
 
 	if (albums.json===null) {
 
-		api.post('getAlbums', {}, function(data) {
+		api.post('Album::getAll', {}, function(data) {
 
 			/* Smart Albums */
 			data.unsortedAlbum = {
