@@ -11,7 +11,7 @@ contextMenu.add = function(e) {
 		{ type: 'item', title: build.iconic('image') + 'Upload Photo', fn: function() { $('#upload_files').click() } },
 		{ type: 'separator' },
 		{ type: 'item', title: build.iconic('link-intact') + 'Import from Link', fn: upload.start.url },
-		{ type: 'item', title: build.iconic('box') + 'Import from Dropbox', fn: upload.start.dropbox },
+		{ type: 'item', title: build.iconic('dropbox', 'ionicons', 'ionicons') + 'Import from Dropbox', fn: upload.start.dropbox },
 		{ type: 'item', title: build.iconic('terminal') + 'Import from Server', fn: upload.start.server },
 		{ type: 'separator' },
 		{ type: 'item', title: build.iconic('folder') + 'New Album', fn: album.add }
@@ -28,7 +28,7 @@ contextMenu.settings = function(e) {
 	var items = [
 		{ type: 'item', title: build.iconic('person') + 'Change Login', fn: settings.setLogin },
 		{ type: 'item', title: build.iconic('sort-ascending') + 'Change Sorting', fn: settings.setSorting },
-		{ type: 'item', title: build.iconic('box') + 'Set Dropbox', fn: settings.setDropboxKey },
+		{ type: 'item', title: build.iconic('dropbox', 'ionicons', 'ionicons') + 'Set Dropbox', fn: settings.setDropboxKey },
 		{ type: 'separator' },
 		{ type: 'item', title: build.iconic('info') + 'About Lychee', fn: function() { window.open(lychee.website) } },
 		{ type: 'item', title: build.iconic('wrench') + 'Diagnostics', fn: function() { window.open('plugins/check/') } },
