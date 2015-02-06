@@ -15,8 +15,8 @@ $(document).ready(function() {
 	/* Header */
 	header.dom('#title').on(eventName, function(e) {
 		if (!$(this).hasClass('editable'))	return false;
-		if (visible.photo())				photo.setTitle([photo.getID()]);
-		else								contextMenu.albumTitle([album.getID()], e);
+		if (visible.photo())				contextMenu.photoTitle(album.getID(), photo.getID(), e);
+		else								contextMenu.albumTitle(album.getID(), e);
 	});
 	header.dom('#button_share').on(eventName, function(e) {
 		if (photo.json.public==1||photo.json.public==2)	contextMenu.sharePhoto(photo.getID(), e);

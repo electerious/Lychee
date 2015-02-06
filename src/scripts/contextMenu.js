@@ -77,19 +77,21 @@ contextMenu.albumTitle = function(albumID, e) {
 
 	api.post('Album::getAll', {}, function(data) {
 
-		if (data.num!==0) {
+		if (data.num>1) {
 
 			items.push({ type: 'separator' });
 
 			// Generate list of albums
 			$.each(data.content, function(index) {
 
-				var that = this;
+				var that	= this,
+					title	= '';
 
 				if (!that.thumb0) that.thumb0 = 'src/images/no_cover.svg';
-				that.title = "<img class='albumCover' width='16' height='16' src='" + that.thumb0 + "'><div class='albumTitle'>" + that.title + "</div>";
 
-				if (that.id!=album.getID()) items.push({ type: 'item', title: that.title, fn: function() { lychee.goto(that.id) } });
+				title = "<img class='cover' width='16' height='16' src='" + that.thumb0 + "'><div class='title'>" + that.title + "</div>";
+
+				if (that.id!=albumID) items.push({ type: 'item', title, fn: function() { lychee.goto(that.id) } });
 
 			});
 
@@ -140,6 +142,36 @@ contextMenu.photoMulti = function(photoIDs, e) {
 		{ type: 'item', title: build.iconic('folder') + 'Move All', fn: function() { basicContext.close(); contextMenu.move(photoIDs, e); } },
 		{ type: 'item', title: build.iconic('trash') + 'Delete All', fn: function() { photo.delete(photoIDs) } }
 	];
+
+	basicContext.show(items, e, contextMenu.close);
+
+}
+
+contextMenu.photoTitle = function(albumID, photoID, e) {
+
+	var items = [
+		{ type: 'item', title: build.iconic('pencil') + 'Rename', fn: function() { photo.setTitle([photoID]) } }
+	];
+
+	var data = album.json;
+
+	if (data.num>1) {
+
+		items.push({ type: 'separator' });
+
+		// Generate list of albums
+		$.each(data.content, function(index) {
+
+			var that	= this,
+				title	= '';
+
+			title = "<img class='cover' width='16' height='16' src='" + that.thumbUrl + "'><div class='title'>" + that.title + "</div>";
+
+			if (that.id!=photoID) items.push({ type: 'item', title, fn: function() { lychee.goto(albumID + '/' + that.id) } });
+
+		});
+
+	}
 
 	basicContext.show(items, e, contextMenu.close);
 
