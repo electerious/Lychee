@@ -35,13 +35,14 @@
 			&:hover { background: linear-gradient(to bottom, $colorBlue, darken($colorBlue, 5%)); }
 		}
 
-			tr td .albumCover {
+			tr td .cover {
+				background-color: #222;
 				border-radius: 2px;
 				box-shadow: 0 0 0 1px black(.5);
 				position: absolute;
 			}
 
-			tr td .albumTitle {
+			tr td .title {
 				display: inline-block;
 				margin: 0 0 3px 26px;
 			}

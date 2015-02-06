@@ -230,14 +230,10 @@ lychee.getUpdate = function() {
 
 lychee.setTitle = function(title, editable) {
 
-	var $title = header.dom('#title');
-
 	document.title = lychee.title + ' - ' + title;
 
-	if (editable)	$title.addClass('editable');
-	else			$title.removeClass('editable');
-
-	$title.html(title + build.iconic('caret-bottom'));
+	header.setEditable(editable);
+	header.setTitle(title);
 
 }
 
@@ -247,7 +243,6 @@ lychee.setMode = function(mode) {
 	$('#button_trash, #button_move, #button_share, #button_star').remove();
 
 	$(document)
-		.on('mouseenter',	'#title.editable', function() { $(this).removeClass('editable') })
 		.off('click',		'#title.editable')
 		.off('touchend',	'#title.editable')
 		.off('contextmenu',	'.photo')
