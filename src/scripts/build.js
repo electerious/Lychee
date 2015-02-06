@@ -334,6 +334,7 @@ build.infoboxPhoto = function(data, forView) {
 
 	infos.forEach(function(info, i, items) {
 
+		// Set default for empty values
 		if (info[1]===''||info[1]===null||info[1]===undefined) info[1] = '-';
 
 		switch (info[0]) {
@@ -456,6 +457,9 @@ build.infoboxAlbum = function(data, forView) {
 	]
 
 	infos.forEach(function(info, i, items) {
+
+		// Set default for empty values
+		if (info[1]===''||info[1]===null||info[1]===undefined) info[1] = '-';
 
 		if (info[0]==='') {
 
