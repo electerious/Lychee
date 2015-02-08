@@ -1,7 +1,7 @@
 <?php
 
 ###
-# @name			Update to version 2.6.2
+# @name			Update to version 2.7.0
 # @copyright	2015 by Tobias Reich
 ###
 
