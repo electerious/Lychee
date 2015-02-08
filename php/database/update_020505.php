@@ -5,6 +5,8 @@
 # @copyright	2015 by Tobias Reich
 ###
 
+if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
+
 # Add `checksum`
 $query = Database::prepare($database, "SELECT `checksum` FROM `?` LIMIT 1", array(LYCHEE_TABLE_PHOTOS));
 if (!$database->query($query)) {

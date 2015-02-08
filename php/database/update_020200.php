@@ -5,6 +5,8 @@
 # @copyright	2015 by Tobias Reich
 ###
 
+if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
+
 $query = Database::prepare($database, "SELECT `visible` FROM `?` LIMIT 1", array(LYCHEE_TABLE_ALBUMS));
 if (!$database->query($query)) {
 	$query	= Database::prepare($database, "ALTER TABLE `?` ADD `visible` TINYINT(1) NOT NULL DEFAULT 1", array(LYCHEE_TABLE_ALBUMS));

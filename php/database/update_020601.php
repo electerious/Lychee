@@ -5,6 +5,8 @@
 # @copyright	2015 by Tobias Reich
 ###
 
+if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
+
 # Add `downloadable`
 $query = Database::prepare($database, "SELECT `downloadable` FROM `?` LIMIT 1", array(LYCHEE_TABLE_ALBUMS));
 if (!$database->query($query)) {

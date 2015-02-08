@@ -5,6 +5,8 @@
 # @copyright	2015 by Tobias Reich
 ###
 
+if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
+
 $query	= Database::prepare($database, "ALTER TABLE `?` CHANGE `value` `value` VARCHAR( 200 ) NULL DEFAULT ''", array(LYCHEE_TABLE_SETTINGS));
 $result	= $database->query($query);
 if (!$result) {
