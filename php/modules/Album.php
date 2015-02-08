@@ -547,21 +547,22 @@ class Album extends Module {
 		if (strlen($password)>0) {
 
 			# Get hashed password
-			$password = get_hashed_password($password);
+			$password = getHashedString($password);
 
 			# Set hashed password
 			# Do not prepare $password because it is hashed and save
 			# Preparing (escaping) the password would destroy the hash
 			$query	= Database::prepare($this->database, "UPDATE ? SET password = '$password' WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
-			$result	= $this->database->query($query);
 
 		} else {
 
 			# Unset password
 			$query	= Database::prepare($this->database, "UPDATE ? SET password = NULL WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
-			$result	= $this->database->query($query);
 
 		}
+
+		# Execute query
+		$result	= $this->database->query($query);
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
@@ -591,7 +592,7 @@ class Album extends Module {
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if ($album->password=='') return true;
-		else if ($album->password===$password||$album->password===crypt($password, $album->password)) return true;
+		else if ($album->password===crypt($password, $album->password)) return true;
 		return false;
 
 	}

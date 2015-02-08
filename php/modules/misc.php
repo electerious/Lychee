@@ -97,7 +97,7 @@ function getExtension($filename) {
 
 }
 
-function get_hashed_password($password) {
+function getHashedString($password) {
 
 	# Inspired by http://alias.io/2010/01/store-passwords-safely-with-php-and-mysql/
 

@@ -76,7 +76,7 @@ lychee.init = function() {
 lychee.login = function(data) {
 
 	var user		= data.username,
-		password	= md5(data.password),
+		password	= data.password,
 		params;
 
 	params = {

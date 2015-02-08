@@ -34,14 +34,14 @@ password.get = function(albumID, callback) {
 
 		params = {
 			albumID,
-			password: md5(passwd)
+			password: passwd
 		}
 
 		api.post('Album::getPublic', params, function(data) {
 
 			if (data===true) {
 				basicModal.close();
-				password.value = md5(passwd);
+				password.value = passwd;
 				callback();
 			} else {
 				basicModal.error('password');

@@ -455,7 +455,7 @@ album.setPublic = function(albumID, e) {
 	if (basicModal.visible()) {
 
 		if ($('.basicModal .choice input[name="password"]:checked').length===1) {
-			password			= md5($('.basicModal .choice input[data-name="password"]').val());
+			password			= $('.basicModal .choice input[data-name="password"]').val();
 			album.json.password	= 1;
 		} else {
 			password			= '';

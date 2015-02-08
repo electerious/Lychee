@@ -88,20 +88,18 @@ class Session extends Module {
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
 
-		# Check login with MD5 hash
-		if ($username===$this->settings['username']&&$password===$this->settings['password']) {
-			$_SESSION['login'] = true;
-			return true;
-		}
+		$username = crypt($username, $this->settings['username']);
+		$password = crypt($password, $this->settings['password']);
 
 		# Check login with crypted hash
-		if ($username===$this->settings['username']&&$this->settings['password']===crypt($password, $this->settings['password'])) {
-			$_SESSION['login'] = true;
-			return true;
+		if ($this->settings['username']===$username&&
+			$this->settings['password']===$password) {
+				$_SESSION['login'] = true;
+				return true;
 		}
 
 		# No login
-		if ($this->settings['username']===''&&$this->settings['password']==='') {
+		if ($this->noLogin()===true) {
 			$_SESSION['login'] = true;
 			return true;
 		}
@@ -119,9 +117,10 @@ class Session extends Module {
 		self::dependencies(isset($this->settings));
 
 		# Check if login credentials exist and login if they don't
-		if ($this->settings['username']===''&&$this->settings['password']==='') {
-			$_SESSION['login'] = true;
-			return true;
+		if ($this->settings['username']===''&&
+			$this->settings['password']==='') {
+				$_SESSION['login'] = true;
+				return true;
 		}
 
 		return false;

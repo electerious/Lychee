@@ -50,10 +50,10 @@ class Settings extends Module {
 		if ($oldPassword===$settings['password']||$settings['password']===crypt($oldPassword, $settings['password'])) {
 
 			# Save username
-			if (!$this->setUsername($username)) exit('Error: Updating username failed!');
+			if ($this->setUsername($username)!==true) exit('Error: Updating username failed!');
 
 			# Save password
-			if (!$this->setPassword($password)) exit('Error: Updating password failed!');
+			if ($this->setPassword($password)!==true) exit('Error: Updating password failed!');
 
 			return true;
 
@@ -68,15 +68,13 @@ class Settings extends Module {
 		# Check dependencies
 		self::dependencies(isset($this->database));
 
-		# Parse
-		$username = htmlentities($username);
-		if (strlen($username)>50) {
-			Log::notice($this->database, __METHOD__, __LINE__, 'Username is longer than 50 chars');
-			return false;
-		}
+		# Hash username
+		$username = getHashedString($username);
 
 		# Execute query
-		$query	= Database::prepare($this->database, "UPDATE ? SET value = '?' WHERE `key` = 'username'", array(LYCHEE_TABLE_SETTINGS, $username));
+		# Do not prepare $username because it is hashed and save
+		# Preparing (escaping) the username would destroy the hash
+		$query	= Database::prepare($this->database, "UPDATE ? SET value = '$username' WHERE `key` = 'username'", array(LYCHEE_TABLE_SETTINGS));
 		$result	= $this->database->query($query);
 
 		if (!$result) {
@@ -92,7 +90,8 @@ class Settings extends Module {
 		# Check dependencies
 		self::dependencies(isset($this->database));
 
-		$password = get_hashed_password($password);
+		# Hash password
+		$password = getHashedString($password);
 
 		# Execute query
 		# Do not prepare $password because it is hashed and save

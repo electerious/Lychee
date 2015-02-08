@@ -165,7 +165,7 @@ settings.createLogin = function() {
 
 		params = {
 			username,
-			password: md5(password)
+			password
 		}
 
 		api.post('Settings::setLogin', params, function(data) {
@@ -238,9 +238,9 @@ settings.setLogin = function() {
 		basicModal.close();
 
 		params = {
-			oldPassword: md5(oldPassword),
+			oldPassword,
 			username,
-			password: md5(password)
+			password
 		}
 
 		api.post('Settings::setLogin', params, function(data) {
