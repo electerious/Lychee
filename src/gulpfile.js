@@ -29,7 +29,7 @@ gulp.task('view--js', function() {
 
 	var stream =
 		gulp.src(paths.view.js)
-			.pipe(plugins['6to5']())
+			.pipe(plugins.babel())
 			.on('error', catchError)
 			.pipe(plugins.concat('_view--javascript.js', {newLine: "\n"}))
 			.pipe(gulp.dest('../dist/'));
@@ -80,7 +80,7 @@ gulp.task('main--js', function() {
 
 	var stream =
 		gulp.src(paths.main.js)
-			.pipe(plugins['6to5']())
+			.pipe(plugins.babel())
 			.on('error', catchError)
 			.pipe(plugins.concat('_main--javascript.js', {newLine: "\n"}))
 			.pipe(gulp.dest('../dist/'));
