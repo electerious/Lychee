@@ -58,8 +58,8 @@ class Guest extends Access {
 		if ($album->getPublic()) {
 
 			# Album public
-			if ($album->checkPassword($_POST['password'])) echo json_encode($album->get());
-			else echo 'Warning: Wrong password!';
+			if ($album->checkPassword($_POST['password']))	echo json_encode($album->get());
+			else											echo 'Warning: Wrong password!';
 
 		} else {
 
@@ -78,8 +78,8 @@ class Guest extends Access {
 		if ($album->getPublic()) {
 
 			# Album public
-			if ($album->checkPassword($_POST['password'])) echo true;
-			else echo false;
+			if ($album->checkPassword($_POST['password']))	echo true;
+			else											echo false;
 
 		} else {
 
@@ -97,8 +97,8 @@ class Guest extends Access {
 		Module::dependencies(isset($_POST['photoID'], $_POST['albumID'], $_POST['password']));
 		$photo = new Photo($this->database, $this->plugins, null, $_POST['photoID']);
 
-		if ($photo->getPublic($_POST['password'])) echo json_encode($photo->get($_POST['albumID']));
-		else echo 'Warning: Wrong password!';
+		if ($photo->getPublic($_POST['password']))	echo json_encode($photo->get($_POST['albumID']));
+		else										echo 'Warning: Wrong password!';
 
 	}
 
@@ -138,8 +138,8 @@ class Guest extends Access {
 		if ($album->getPublic()&&$album->getDownloadable()) {
 
 			# Album Public
-			if ($album->checkPassword($_GET['password'])) $album->getArchive();
-			else exit('Warning: Wrong password!');
+			if ($album->checkPassword($_GET['password']))	$album->getArchive();
+			else											exit('Warning: Wrong password!');
 
 		} else {
 
