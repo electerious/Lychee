@@ -107,6 +107,7 @@ class Import extends Module {
 					continue;
 				}
 				$contains['photos'] = true;
+				unlink($file);
 
 			} else if (is_dir($file)) {
 
