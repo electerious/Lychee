@@ -76,13 +76,13 @@ build.album = function(data) {
 	if (data.thumb0.split('.').pop()==='svg') typeThumb = 'nonretina';
 
 	html =	`
-			<div  class='album' data-id='${ data.id }' data-password='${ data.password }'>
+			<div class='album' data-id='${ data.id }' data-password='${ data.password }'>
 				<img src='${ data.thumb2 }' width='200' height='200' alt='thumb' data-type='nonretina'>
 				<img src='${ data.thumb1 }' width='200' height='200' alt='thumb' data-type='nonretina'>
 				<img src='${ data.thumb0 }' width='200' height='200' alt='thumb' data-type='${ typeThumb }'>
 				<div class='overlay'>
-				<h1 title='${ longTitle }'>${ title }</h1>
-				<a>${ data.sysdate }</a>
+					<h1 title='${ longTitle }'>${ title }</h1>
+					<a>${ data.sysdate }</a>
 				</div>
 			`
 
