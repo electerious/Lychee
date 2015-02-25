@@ -152,3 +152,11 @@ These hooks are called from `php/modules/Session.php`.
 | Session::login:after |  |
 | Session::logout:before | User logs out |
 | Session::logout:after |  |
+
+##### Import
+These hooks are called from `php/modules/Import.php`.
+
+| Name | Description |
+|:-----------|:------------|:------------|
+| Import::server:before | User imports photos from the server |
+| Import::server:after |  |
