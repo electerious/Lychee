@@ -117,5 +117,6 @@ echo('Imagick:         ' . $imagick . PHP_EOL);
 echo('Imagick Active:  ' . $settings['imagick'] . PHP_EOL);
 echo('Imagick Version: ' . $imagickVersion . PHP_EOL);
 echo('GD Version:      ' . $gdVersion['GD Version'] . PHP_EOL);
+echo('Plugins:         ' . $settings['plugins'] . PHP_EOL);
 
 ?>
