@@ -82,6 +82,11 @@ class Import extends Module {
 		$contains['photos']	= false;
 		$contains['albums']	= false;
 
+		# Invoke plugins directly, as instance method not valid here
+		# Note that updated albumId and path explicitly passed, rather
+		# than using func_get_args() which will only return original ones
+		$plugins->activate(__METHOD__ . ":before", array($albumID, $path));
+
 		# Get all files
 		$files = glob($path . '/*');
 
@@ -132,6 +137,11 @@ class Import extends Module {
 			}
 
 		}
+
+		# Invoke plugins directly, as instance method not valid here
+		# Note that updated albumId and path explicitly passed, rather
+		# than using func_get_args() which will only return original ones
+		$plugins->activate(__METHOD__ . ":after", array($albumID, $path));
 
 		if ($contains['photos']===false&&$contains['albums']===false)	return 'Warning: Folder empty or no readable files to process!';
 		if ($contains['photos']===false&&$contains['albums']===true)	return 'Notice: Import only contains albums!';
