@@ -201,9 +201,9 @@ lychee.load = function() {
 	} else {
 
 		// Trash albums.json when filled with search results
-		if (search.code!=='') {
+		if (search.hash!==null) {
 			albums.json = null;
-			search.code = '';
+			search.hash = null;
 		}
 
 		// Trash data

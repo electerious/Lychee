@@ -13,6 +13,13 @@ function search($database, $settings, $term) {
 
 	$return['albums'] = '';
 
+	# Initialize return var
+	$return = array(
+		'photos'	=> null,
+		'albums'	=> null,
+		'hash'		=> ''
+	);
+
 	# Photos
 	$query	= Database::prepare($database, "SELECT id, title, tags, public, star, album, thumbUrl FROM ? WHERE title LIKE '%?%' OR description LIKE '%?%' OR tags LIKE '%?%'", array(LYCHEE_TABLE_PHOTOS, $term, $term, $term));
 	$result	= $database->query($query);
@@ -47,6 +54,9 @@ function search($database, $settings, $term) {
 		$i++;
 
 	}
+
+	# Hash
+	$return['hash'] = md5(json_encode($return));
 
 	return $return;
 
