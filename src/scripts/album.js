@@ -456,10 +456,10 @@ album.setPublic = function(albumID, e) {
 
 		if ($('.basicModal .choice input[name="password"]:checked').length===1) {
 			password			= $('.basicModal .choice input[data-name="password"]').val();
-			album.json.password	= 1;
+			album.json.password	= '1';
 		} else {
 			password			= '';
-			album.json.password	= 0;
+			album.json.password	= '0';
 		}
 
 		if ($('.basicModal .choice input[name="listed"]:checked').length===1)		listed = true;
@@ -469,8 +469,8 @@ album.setPublic = function(albumID, e) {
 
 	if (visible.album()) {
 
-		album.json.public	= (album.json.public==0) ? 1 : 0;
-		album.json.password	= (album.json.public==0) ? 0 : album.json.password;
+		album.json.public	= (album.json.public==='0') ? '1' : '0';
+		album.json.password	= (album.json.public==='0') ? '0' : album.json.password;
 
 		view.album.public();
 		view.album.password();
@@ -526,7 +526,7 @@ album.getArchive = function(albumID) {
 	if (location.href.indexOf('index.html')>0)	link = location.href.replace(location.hash, '').replace('index.html', url);
 	else										link = location.href.replace(location.hash, '') + url;
 
-	if (lychee.publicMode) link += '&password=' + password.value;
+	if (lychee.publicMode===true) link += '&password=' + password.value;
 
 	location.href = link;
 

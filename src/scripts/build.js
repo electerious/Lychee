@@ -92,7 +92,7 @@ build.album = function(data) {
 		if (data.public==='1')		html += `<a class='badge icn-share'>${ build.iconic('eye') }</a>`;
 		if (data.unsorted==='1')	html += `<a class='badge'>${ build.iconic('list') }</a>`;
 		if (data.recent==='1')		html += `<a class='badge'>${ build.iconic('clock') }</a>`;
-		if (data.password===true)	html += `<a class='badge'>${ build.iconic('lock-locked') }</a>`;
+		if (data.password==='1')	html += `<a class='badge'>${ build.iconic('lock-locked') }</a>`;
 
 	}
 
@@ -244,12 +244,12 @@ build.uploadModal = function(title, files) {
 
 }
 
-build.tags = function(tags, forView) {
+build.tags = function(tags, forView = false) {
 
 	var html			= '',
 		editTagsHTML	= '';
 
-	if (forView!==true&&lychee.publicMode!==true) editTagsHTML = ' ' + build.editIcon('edit_tags');
+	if (forView===false&&lychee.publicMode===false) editTagsHTML = ' ' + build.editIcon('edit_tags');
 
 	if (tags!=='') {
 
@@ -271,7 +271,7 @@ build.tags = function(tags, forView) {
 
 }
 
-build.infoboxPhoto = function(data, forView) {
+build.infoboxPhoto = function(data, forView = false) {
 
 	var html				= '',
 		visible				= '',
@@ -293,7 +293,7 @@ build.infoboxPhoto = function(data, forView) {
 
 	}
 
-	if (forView!==true&&lychee.publicMode!==true) {
+	if (forView===false&&lychee.publicMode===false) {
 		editTitleHTML		= ' ' + build.editIcon('edit_title');
 		editDescriptionHTML	= ' ' + build.editIcon('edit_description');
 	}
@@ -355,7 +355,7 @@ build.infoboxPhoto = function(data, forView) {
 			case 'Tags':
 
 				// Tags
-				if (forView!==true&&lychee.publicMode===false) {
+				if (forView===false&&lychee.publicMode===false) {
 
 					html +=	`
 							</table>
@@ -395,7 +395,7 @@ build.infoboxPhoto = function(data, forView) {
 
 }
 
-build.infoboxAlbum = function(data, forView) {
+build.infoboxAlbum = function(data, forView = false) {
 
 	var html				= '',
 		visible				= '',
@@ -418,9 +418,9 @@ build.infoboxAlbum = function(data, forView) {
 
 	switch (data.password) {
 
-		case false:	password = 'No';
+		case '0':	password = 'No';
 					break;
-		case true:	password = 'Yes';
+		case '1':	password = 'Yes';
 					break;
 		default:	password = '-';
 					break;
@@ -438,7 +438,7 @@ build.infoboxAlbum = function(data, forView) {
 
 	}
 
-	if (forView!==true&&lychee.publicMode!==true) {
+	if (forView===false&&lychee.publicMode===false) {
 		editTitleHTML		= ' ' + build.editIcon('edit_title_album');
 		editDescriptionHTML	= ' ' + build.editIcon('edit_description_album');
 	}

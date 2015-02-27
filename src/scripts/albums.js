@@ -96,7 +96,7 @@ albums.load = function() {
 
 albums.parse = function(album) {
 
-	if (album.password&&lychee.publicMode) {
+	if (album.password==='1'&&lychee.publicMode===true) {
 		album.thumb0 = 'src/images/password.svg';
 		album.thumb1 = 'src/images/password.svg';
 		album.thumb2 = 'src/images/password.svg';

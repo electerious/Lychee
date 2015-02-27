@@ -49,7 +49,7 @@ view.albums = {
 				albumsData	= '';
 
 			/* Smart Albums */
-			if (!lychee.publicMode) {
+			if (lychee.publicMode===false) {
 
 				albums.parse(albums.json.smartalbums.unsorted);
 				albums.parse(albums.json.smartalbums.public);
@@ -70,7 +70,8 @@ view.albums = {
 					albumsData = build.album(this) + albumsData;
 				});
 
-				if (!lychee.publicMode) albumsData = build.divider('Albums') + albumsData;
+				// Add divider
+				if (lychee.publicMode===false) albumsData = build.divider('Albums') + albumsData;
 
 			}
 
@@ -275,8 +276,8 @@ view.album = {
 
 	password: function() {
 
-		if (album.json.password==1)	$('#infobox .attr_password').html('Yes');
-		else						$('#infobox .attr_password').html('No');
+		if (album.json.password==='1')	$('#infobox .attr_password').html('Yes');
+		else							$('#infobox .attr_password').html('No');
 
 	},
 
