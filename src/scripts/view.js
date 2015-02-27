@@ -209,14 +209,14 @@ view.album = {
 		star: function(photoID) {
 
 			$('.photo[data-id="' + photoID + '"] .iconic-star').remove();
-			if (album.json.content[photoID].star==1) $('.photo[data-id="' + photoID + '"]').append("<a class='badge iconic-star'>" + build.iconic('star') + "</a>");
+			if (album.json.content[photoID].star==='1') $('.photo[data-id="' + photoID + '"]').append("<a class='badge iconic-star'>" + build.iconic('star') + "</a>");
 
 		},
 
 		public: function(photoID) {
 
 			$('.photo[data-id="' + photoID + '"] .iconic-share').remove();
-			if (album.json.content[photoID].public==1) $('.photo[data-id="' + photoID + '"]').append("<a class='badge iconic-share'>" + build.iconic('eye') + "</a>");
+			if (album.json.content[photoID].public==='1') $('.photo[data-id="' + photoID + '"]').append("<a class='badge iconic-share'>" + build.iconic('eye') + "</a>");
 
 		},
 
@@ -253,7 +253,7 @@ view.album = {
 
 	public: function() {
 
-		if (album.json.public==1) {
+		if (album.json.public==='1') {
 
 			$('#button_share_album')
 				.addClass('active')
@@ -378,7 +378,7 @@ view.photo = {
 
 	public: function() {
 
-		if (photo.json.public==1||photo.json.public==2) {
+		if (photo.json.public==='1'||photo.json.public==='2') {
 			// Photo public
 			$('#button_share')
 				.addClass('active')

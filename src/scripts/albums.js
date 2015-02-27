@@ -25,45 +25,7 @@ albums.load = function() {
 		api.post('Album::getAll', {}, function(data) {
 
 			/* Smart Albums */
-			data.smartalbums.unsorted = {
-				id:			0,
-				title:		'Unsorted',
-				sysdate:	data.smartalbums.unsorted.num + ' photos',
-				unsorted: 	'1',
-				thumb0:		data.smartalbums.unsorted.thumb0,
-				thumb1:		data.smartalbums.unsorted.thumb1,
-				thumb2:		data.smartalbums.unsorted.thumb2
-			};
-
-			data.smartalbums.starred = {
-				id:			'f',
-				title:		'Starred',
-				sysdate:	data.smartalbums.starred.num + ' photos',
-				star:		'1',
-				thumb0:		data.smartalbums.starred.thumb0,
-				thumb1:		data.smartalbums.starred.thumb1,
-				thumb2:		data.smartalbums.starred.thumb2
-			};
-
-			data.smartalbums.public = {
-				id:			's',
-				title:		'Public',
-				sysdate:	data.smartalbums.public.num + ' photos',
-				public:		'1',
-				thumb0:		data.smartalbums.public.thumb0,
-				thumb1:		data.smartalbums.public.thumb1,
-				thumb2:		data.smartalbums.public.thumb2
-			};
-
-			data.smartalbums.recent = {
-				id:			'r',
-				title:		'Recent',
-				sysdate:	data.smartalbums.recent.num + ' photos',
-				recent:		'1',
-				thumb0:		data.smartalbums.recent.thumb0,
-				thumb1:		data.smartalbums.recent.thumb1,
-				thumb2:		data.smartalbums.recent.thumb2
-			};
+			if (lychee.publicMode===false) albums._createSmartAlbums(data.smartalbums);
 
 			albums.json = data;
 
@@ -105,6 +67,50 @@ albums.parse = function(album) {
 		if (!album.thumb1) album.thumb1 = 'src/images/no_images.svg';
 		if (!album.thumb2) album.thumb2 = 'src/images/no_images.svg';
 	}
+
+}
+
+albums._createSmartAlbums = function(data) {
+
+	data.unsorted = {
+		id:			0,
+		title:		'Unsorted',
+		sysdate:	data.unsorted.num + ' photos',
+		unsorted: 	'1',
+		thumb0:		data.unsorted.thumb0,
+		thumb1:		data.unsorted.thumb1,
+		thumb2:		data.unsorted.thumb2
+	};
+
+	data.starred = {
+		id:			'f',
+		title:		'Starred',
+		sysdate:	data.starred.num + ' photos',
+		star:		'1',
+		thumb0:		data.starred.thumb0,
+		thumb1:		data.starred.thumb1,
+		thumb2:		data.starred.thumb2
+	};
+
+	data.public = {
+		id:			's',
+		title:		'Public',
+		sysdate:	data.public.num + ' photos',
+		public:		'1',
+		thumb0:		data.public.thumb0,
+		thumb1:		data.public.thumb1,
+		thumb2:		data.public.thumb2
+	};
+
+	data.recent = {
+		id:			'r',
+		title:		'Recent',
+		sysdate:	data.recent.num + ' photos',
+		recent:		'1',
+		thumb0:		data.recent.thumb0,
+		thumb1:		data.recent.thumb1,
+		thumb2:		data.recent.thumb2
+	};
 
 }
 

@@ -393,12 +393,12 @@ photo.setStar = function(photoIDs) {
 
 	if (!photoIDs) return false;
 	if (visible.photo()) {
-		photo.json.star = (photo.json.star==0) ? 1 : 0;
+		photo.json.star = (photo.json.star==='0') ? '1' : '0';
 		view.photo.star();
 	}
 
 	photoIDs.forEach(function(id, index, array) {
-		album.json.content[id].star = (album.json.content[id].star==0) ? 1 : 0;
+		album.json.content[id].star = (album.json.content[id].star==='0') ? '1' : '0';
 		view.album.content.star(id);
 	});
 
@@ -449,13 +449,13 @@ photo.setPublic = function(photoID, e) {
 
 	if (visible.photo()) {
 
-		photo.json.public = (photo.json.public==0) ? 1 : 0;
+		photo.json.public = (photo.json.public==='0') ? '1' : '0';
 		view.photo.public();
-		if (photo.json.public==1) contextMenu.sharePhoto(photoID, e);
+		if (photo.json.public==='1') contextMenu.sharePhoto(photoID, e);
 
 	}
 
-	album.json.content[photoID].public = (album.json.content[photoID].public==0) ? 1 : 0;
+	album.json.content[photoID].public = (album.json.content[photoID].public==='0') ? '1' : '0';
 	view.album.content.public(photoID);
 
 	albums.refresh();

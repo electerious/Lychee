@@ -384,7 +384,7 @@ album.setPublic = function(albumID, e) {
 
 	albums.refresh();
 
-	if (!basicModal.visible()&&album.json.public==0) {
+	if (!basicModal.visible()&&album.json.public==='0') {
 
 		var msg = '',
 			action;
@@ -475,7 +475,7 @@ album.setPublic = function(albumID, e) {
 		view.album.public();
 		view.album.password();
 
-		if (album.json.public==1) contextMenu.shareAlbum(albumID, e);
+		if (album.json.public==='1') contextMenu.shareAlbum(albumID, e);
 
 	}
 
