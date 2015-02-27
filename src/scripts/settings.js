@@ -1,259 +1,357 @@
 /**
  * @description	Lets you change settings.
- * @copyright	2014 by Tobias Reich
+ * @copyright	2015 by Tobias Reich
  */
 
 settings = {}
 
 settings.createConfig = function() {
 
-	var dbName,
-		dbUser,
-		dbPassword,
-		dbHost,
-		dbTablePrefix,
-		buttons,
-		params;
+	var msg = '',
+		action;
 
-	buttons = [
-		['Connect', function() {
+	action = function(data) {
 
-			dbHost			= $('.message input.text#dbHost').val();
-			dbUser			= $('.message input.text#dbUser').val();
-			dbPassword		= $('.message input.text#dbPassword').val();
-			dbName			= $('.message input.text#dbName').val();
-			dbTablePrefix	= $('.message input.text#dbTablePrefix').val();
+		var dbName			= data.dbName			|| '',
+			dbUser			= data.dbUser			|| '',
+			dbPassword		= data.dbPassword		|| '',
+			dbHost			= data.dbHost			|| '',
+			dbTablePrefix	= data.dbTablePrefix	|| '',
+			params;
 
-			if (dbHost.length<1) dbHost = 'localhost';
-			if (dbName.length<1) dbName = 'lychee';
+		if (dbUser.length<1) {
+			basicModal.error('dbUser');
+			return false;
+		}
 
-			params = 'dbCreateConfig&dbName=' + escape(dbName) + '&dbUser=' + escape(dbUser) + '&dbPassword=' + escape(dbPassword) + '&dbHost=' + escape(dbHost) + '&dbTablePrefix=' + escape(dbTablePrefix);
-			lychee.api(params, function(data) {
+		if (dbHost.length<1) dbHost = 'localhost';
+		if (dbName.length<1) dbName = 'lychee';
 
-				if (data!==true) {
+		params = {
+			dbName,
+			dbUser,
+			dbPassword,
+			dbHost,
+			dbTablePrefix
+		}
 
-					// Configuration failed
-					setTimeout(function() {
+		api.post('Database::createConfig', params, function(data) {
 
-						// Connection failed
-						if (data.indexOf('Warning: Connection failed!')!==-1) {
+			if (data!==true) {
 
-							buttons = [
-								['Retry', function() { setTimeout(settings.createConfig, 400) }],
-								['', function() {}]
-							];
-							modal.show('Connection Failed', 'Unable to connect to host database because access was denied. Double-check your host, username and password and ensure that access from your current location is permitted.', buttons, null, false);
-							return false;
+				// Connection failed
+				if (data.indexOf('Warning: Connection failed!')!==-1) {
 
+					basicModal.show({
+						body: '<p>Unable to connect to host database because access was denied. Double-check your host, username and password and ensure that access from your current location is permitted.</p>',
+						buttons: {
+							action: {
+								title: 'Retry',
+								fn: settings.createConfig
+							}
 						}
+					});
 
-						// Creation failed
-						if (data.indexOf('Warning: Creation failed!')!==-1) {
-
-							buttons = [
-								['Retry', function() { setTimeout(settings.createConfig, 400) }],
-								['', function() {}]
-							];
-							modal.show('Creation Failed', 'Unable to create the database. Double-check your host, username and password and ensure that the specified user has the rights to modify and add content to the database.', buttons, null, false);
-							return false;
-
-						}
-
-						// Could not create file
-						if (data.indexOf('Warning: Could not create file!')!==-1) {
-
-							buttons = [
-								['Retry', function() { setTimeout(settings.createConfig, 400) }],
-								['', function() {}]
-							];
-							modal.show('Saving Failed', "Unable to save this configuration. Permission denied in <b>'data/'</b>. Please set the read, write and execute rights for others in <b>'data/'</b> and <b>'uploads/'</b>. Take a look the readme for more information.", buttons, null, false);
-							return false;
-
-						}
-
-						// Something went wrong
-						buttons = [
-							['Retry', function() { setTimeout(settings.createConfig, 400) }],
-							['', function() {}]
-						];
-						modal.show('Configuration Failed', 'Something unexpected happened. Please try again and check your installation and server. Take a look the readme for more information.', buttons, null, false);
-						return false;
-
-					}, 400);
-
-				} else {
-
-					// Configuration successful
-					window.location.reload();
+					return false;
 
 				}
 
-			});
+				// Creation failed
+				if (data.indexOf('Warning: Creation failed!')!==-1) {
 
-		}],
-		['', function() {}]
-	];
+					basicModal.show({
+						body: '<p>Unable to create the database. Double-check your host, username and password and ensure that the specified user has the rights to modify and add content to the database.</p>',
+						buttons: {
+							action: {
+								title: 'Retry',
+								fn: settings.createConfig
+							}
+						}
+					});
 
-	modal.show('Configuration', "Enter your database connection details below: <input id='dbHost' class='text less' type='text' placeholder='Database Host (optional)' value=''><input id='dbUser' class='text less' type='text' placeholder='Database Username' value=''><input id='dbPassword' class='text more' type='password' placeholder='Database Password' value=''><br>Lychee will create its own database. If required, you can enter the name of an existing database instead:<input id='dbName' class='text less' type='text' placeholder='Database Name (optional)' value=''><input id='dbTablePrefix' class='text more' type='text' placeholder='Table prefix (optional)' value=''>", buttons, -235, false);
+					return false;
+
+				}
+
+				// Could not create file
+				if (data.indexOf('Warning: Could not create file!')!==-1) {
+
+					basicModal.show({
+						body: "<p>Unable to save this configuration. Permission denied in <b>'data/'</b>. Please set the read, write and execute rights for others in <b>'data/'</b> and <b>'uploads/'</b>. Take a look at the readme for more information.</p>",
+						buttons: {
+							action: {
+								title: 'Retry',
+								fn: settings.createConfig
+							}
+						}
+					});
+
+					return false;
+
+				}
+
+				// Something went wrong
+				basicModal.show({
+					body: '<p>Something unexpected happened. Please try again and check your installation and server. Take a look at the readme for more information.</p>',
+					buttons: {
+						action: {
+							title: 'Retry',
+							fn: settings.createConfig
+						}
+					}
+				});
+
+				return false;
+
+			} else {
+
+				// Configuration successful
+				window.location.reload();
+
+			}
+
+		});
+
+	}
+
+	msg =	`
+			<p>
+				Enter your database connection details below:
+				<input data-name='dbHost' class='text' type='text' placeholder='Database Host (optional)' value=''>
+				<input data-name='dbUser' class='text' type='text' placeholder='Database Username' value=''>
+				<input data-name='dbPassword' class='text' type='password' placeholder='Database Password' value=''>
+			</p>
+			<p>
+				Lychee will create its own database. If required, you can enter the name of an existing database instead:
+				<input data-name='dbName' class='text' type='text' placeholder='Database Name (optional)' value=''>
+				<input data-name='dbTablePrefix' class='text' type='text' placeholder='Table prefix (optional)' value=''>
+			</p>
+			`
+
+	basicModal.show({
+		body: msg,
+		buttons: {
+			action: {
+				title: 'Connect',
+				fn: action
+			}
+		}
+	});
 
 }
 
 settings.createLogin = function() {
 
-	var username,
-		password,
-		params,
-		buttons;
+	var action,
+		msg = '';
 
-	buttons = [
-		['Create Login', function() {
+	action = function(data) {
 
-			username = $('.message input.text#username').val();
-			password = $('.message input.text#password').val();
+		var params,
+			username = data.username,
+			password = data.password;
 
-			if (username.length<1||password.length<1) {
+		if (username.length<1) {
+			basicModal.error('username');
+			return false;
+		}
 
-				setTimeout(function() {
+		if (password.length<1) {
+			basicModal.error('password');
+			return false;
+		}
 
-					buttons = [
-						['Retry', function() { setTimeout(settings.createLogin, 400) }],
-						['', function() {}]
-					];
-					modal.show('Wrong Input', 'The username or password you entered is not long enough. Please try again with another username and password!', buttons, null, false);
-					return false;
+		basicModal.close();
 
-				}, 400);
+		params = {
+			username,
+			password
+		}
 
-			} else {
+		api.post('Settings::setLogin', params, function(data) {
 
-				params = 'setLogin&username=' + escape(username) + '&password=' + md5(password);
-				lychee.api(params, function(data) {
+			if (data!==true) {
 
-					if (data!==true) {
-
-						setTimeout(function() {
-
-							buttons = [
-								['Retry', function() { setTimeout(settings.createLogin, 400) }],
-								['', function() {}]
-							];
-							modal.show('Creation Failed', 'Unable to save login. Please try again with another username and password!', buttons, null, false);
-							return false;
-
-						}, 400);
-
+				basicModal.show({
+					body: '<p>Unable to save login. Please try again with another username and password!</p>',
+					buttons: {
+						action: {
+							title: 'Retry',
+							fn: settings.createLogin
+						}
 					}
-
 				});
 
 			}
 
-		}],
-		['', function() {}]
-	];
+		});
 
-	modal.show('Create Login', "Enter a username and password for your installation: <input id='username' class='text less' type='text' placeholder='New Username' value=''><input id='password' class='text' type='password' placeholder='New Password' value=''>", buttons, -122, false);
+	}
+
+	msg =	`
+			<p>
+				Enter a username and password for your installation:
+				<input data-name='username' class='text' type='text' placeholder='New Username' value=''>
+				<input data-name='password' class='text' type='password' placeholder='New Password' value=''>
+			</p>
+			`
+
+	basicModal.show({
+		body: msg,
+		buttons: {
+			action: {
+				title: 'Create Login',
+				fn: action
+			}
+		}
+	});
 
 }
 
 settings.setLogin = function() {
 
-	var old_password,
-		username,
-		password,
-		params,
-		buttons;
+	var msg = '',
+		action;
 
-	buttons = [
-		['Change Login', function() {
+	action = function(data) {
 
-			old_password	= $('.message input.text#old_password').val();
-			username		= $('.message input.text#username').val();
-			password		= $('.message input.text#password').val();
+		var oldPassword		= data.oldPassword	|| '',
+			username		= data.username		|| '',
+			password		= data.password		|| '',
+			params;
 
-			if (old_password.length<1) {
-				loadingBar.show('error', 'Your old password was entered incorrectly. Please try again!');
-				return false;
+		if (oldPassword.length<1) {
+			basicModal.error('oldPassword');
+			return false;
+		}
+
+		if (username.length<1) {
+			basicModal.error('username');
+			return false;
+		}
+
+		if (password.length<1) {
+			basicModal.error('password');
+			return false;
+		}
+
+		basicModal.close();
+
+		params = {
+			oldPassword,
+			username,
+			password
+		}
+
+		api.post('Settings::setLogin', params, function(data) {
+
+			if (data!==true) lychee.error(null, params, data);
+
+		});
+
+	}
+
+	msg =	`
+			<p>
+				Enter your current password:
+				<input data-name='oldPassword' class='text' type='password' placeholder='Current Password' value=''>
+			</p>
+			<p>
+				Your username and password will be changed to the following:
+				<input data-name='username' class='text' type='text' placeholder='New Username' value=''>
+				<input data-name='password' class='text' type='password' placeholder='New Password' value=''>
+			</p>
+			`
+
+	basicModal.show({
+		body: msg,
+		buttons: {
+			action: {
+				title: 'Change Login',
+				fn: action
+			},
+			cancel: {
+				title: 'Cancel',
+				fn: basicModal.close
 			}
-
-			if (username.length<1) {
-				loadingBar.show('error', 'Your new username was entered incorrectly. Please try again!');
-				return false;
-			}
-
-			if (password.length<1) {
-				loadingBar.show('error', 'Your new password was entered incorrectly. Please try again!');
-				return false;
-			}
-
-			params = 'setLogin&oldPassword=' + md5(old_password) + '&username=' + escape(username) + '&password=' + md5(password);
-			lychee.api(params, function(data) {
-
-				if (data!==true) lychee.error(null, params, data);
-
-			});
-
-		}],
-		['Cancel', function() {}]
-	];
-
-	modal.show('Change Login', "Enter your current password: <input id='old_password' class='text more' type='password' placeholder='Current Password' value=''><br>Your username and password will be changed to the following: <input id='username' class='text less' type='text' placeholder='New Username' value=''><input id='password' class='text' type='password' placeholder='New Password' value=''>", buttons, -171);
+		}
+	});
 
 }
 
 settings.setSorting = function() {
 
-	var buttons,
-		sorting,
-		params;
+	var sorting = [],
+		action,
+		msg = '';
 
-	buttons = [
-		['Change Sorting', function() {
+	action = function() {
 
-			sorting[0] = $('select#settings_type').val();
-			sorting[1] = $('select#settings_order').val();
+		var params;
 
-			albums.refresh();
+		sorting[0] = $('.basicModal select#settings_type').val();
+		sorting[1] = $('.basicModal select#settings_order').val();
 
-			params = 'setSorting&type=' + sorting[0] + '&order=' + sorting[1];
-			lychee.api(params, function(data) {
+		basicModal.close();
+		albums.refresh();
 
-				if (data===true) {
-					lychee.sorting = 'ORDER BY ' + sorting[0] + ' ' + sorting[1];
-					lychee.load();
-				} else lychee.error(null, params, data);
+		params = {
+			type: sorting[0],
+			order: sorting[1]
+		}
 
-			});
+		api.post('Settings::setSorting', params, function(data) {
 
-		}],
-		['Cancel', function() {}]
-	];
+			if (data===true) {
+				lychee.sorting = 'ORDER BY ' + sorting[0] + ' ' + sorting[1];
+				lychee.load();
+			} else lychee.error(null, params, data);
 
-	modal.show('Change Sorting',
-		"Sort photos by \
-			<select id='settings_type'> \
-				<option value='id'>Upload Time</option> \
-				<option value='takestamp'>Take Date</option> \
-				<option value='title'>Title</option> \
-				<option value='description'>Description</option> \
-				<option value='public'>Public</option> \
-				<option value='star'>Star</option> \
-				<option value='type'>Photo Format</option> \
-			</select> \
-			in an \
-			<select id='settings_order'> \
-				<option value='ASC'>Ascending</option> \
-				<option value='DESC'>Descending</option> \
-			</select> \
-			order.\
-		", buttons);
+		});
+
+	}
+
+	msg =	`
+			<p>
+				Sort photos by
+				<select id='settings_type'>
+					<option value='id'>Upload Time</option>
+					<option value='takestamp'>Take Date</option>
+					<option value='title'>Title</option>
+					<option value='description'>Description</option>
+					<option value='public'>Public</option>
+					<option value='star'>Star</option>
+					<option value='type'>Photo Format</option>
+				</select>
+				in an
+				<select id='settings_order'>
+					<option value='ASC'>Ascending</option>
+					<option value='DESC'>Descending</option>
+				</select>
+				order.
+			</p>
+			`
+
+	basicModal.show({
+		body: msg,
+		buttons: {
+			action: {
+				title: 'Change Sorting',
+				fn: action
+			},
+			cancel: {
+				title: 'Cancel',
+				fn: basicModal.close
+			}
+		}
+	});
 
 	if (lychee.sorting!=='') {
 
 		sorting = lychee.sorting.replace('ORDER BY ', '').split(' ');
 
-		$('select#settings_type').val(sorting[0]);
-		$('select#settings_order').val(sorting[1]);
+		$('.basicModal select#settings_type').val(sorting[0]);
+		$('.basicModal select#settings_order').val(sorting[1]);
 
 	}
 
@@ -261,29 +359,50 @@ settings.setSorting = function() {
 
 settings.setDropboxKey = function(callback) {
 
-	var buttons,
-		params,
-		key;
+	var action,
+		msg = "";
 
-	buttons = [
-		['Set Key', function() {
+	action = function(data) {
 
-			key = $('.message input.text#key').val();
+		var key = data.key;
 
-			params = 'setDropboxKey&key=' + key;
-			lychee.api(params, function(data) {
+		if (data.key.length<1) {
+			basicModal.error('key');
+			return false;
+		}
 
-				if (data===true) {
-					lychee.dropboxKey = key;
-					if (callback) lychee.loadDropbox(callback);
-				} else lychee.error(null, params, data);
+		basicModal.close();
 
-			});
+		api.post('Settings::setDropboxKey', { key }, function(data) {
 
-		}],
-		['Cancel', function() {}]
-	];
+			if (data===true) {
+				lychee.dropboxKey = key;
+				if (callback) lychee.loadDropbox(callback);
+			} else lychee.error(null, params, data);
 
-	modal.show('Set Dropbox Key', "In order to import photos from your Dropbox, you need a valid drop-ins app key from <a href='https://www.dropbox.com/developers/apps/create'>their website</a>. Generate yourself a personal key and enter it below: <input id='key' class='text' type='text' placeholder='Dropbox API Key' value='" + lychee.dropboxKey + "'>", buttons);
+		});
+
+	}
+
+	msg =	`
+			<p>
+				In order to import photos from your Dropbox, you need a valid drop-ins app key from <a href='https://www.dropbox.com/developers/apps/create'>their website</a>. Generate yourself a personal key and enter it below:
+				<input class='text' data-name='key' type='text' placeholder='Dropbox API Key' value='${ lychee.dropboxKey }'>
+			</p>
+			`
+
+	basicModal.show({
+		body: msg,
+		buttons: {
+			action: {
+				title: 'Set Dropbox Key',
+				fn: action
+			},
+			cancel: {
+				title: 'Cancel',
+				fn: basicModal.close
+			}
+		}
+	});
 
 }

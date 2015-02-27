@@ -1,6 +1,6 @@
 var	gulp = require('gulp'),
-	plugins = require("gulp-load-plugins")(),
-	paths = {}
+	plugins = require('gulp-load-plugins')(),
+	paths = {};
 
 /* Error Handler -------------------------------- */
 
@@ -15,16 +15,13 @@ var catchError = function(err) {
 
 paths.view = {
 	js: [
-		'bower_components/jQuery/dist/jquery.min.js',
-		'../src/scripts/_frameworks.js',
+		'../src/scripts/_gup.js',
+		'../src/scripts/build.js',
 		'../src/scripts/view/main.js'
 	],
-	coffee: [
-		'../src/scripts/build.coffee'
-	],
 	scripts: [
-		'../dist/_view--javascript.js',
-		'../dist/_view--coffee.js'
+		'bower_components/jQuery/dist/jquery.min.js',
+		'../dist/_view--javascript.js'
 	]
 }
 
@@ -32,6 +29,8 @@ gulp.task('view--js', function() {
 
 	var stream =
 		gulp.src(paths.view.js)
+			.pipe(plugins.babel())
+			.on('error', catchError)
 			.pipe(plugins.concat('_view--javascript.js', {newLine: "\n"}))
 			.pipe(gulp.dest('../dist/'));
 
@@ -39,20 +38,7 @@ gulp.task('view--js', function() {
 
 });
 
-gulp.task('view--coffee', function() {
-
-	var stream =
-		gulp.src(paths.view.coffee)
-			.pipe(plugins.coffee({bare: true}))
-			.on('error', catchError)
-			.pipe(plugins.concat('_view--coffee.js', {newLine: "\n"}))
-			.pipe(gulp.dest('../dist/'));
-
-	return stream;
-
-});
-
-gulp.task('view--scripts', ['view--js', 'view--coffee'], function() {
+gulp.task('view--scripts', ['view--js'], function() {
 
 	var stream =
 		gulp.src(paths.view.scripts)
@@ -69,25 +55,23 @@ gulp.task('view--scripts', ['view--js', 'view--coffee'], function() {
 
 paths.main = {
 	js: [
+		'../src/scripts/*.js'
+	],
+	scripts: [
 		'bower_components/jQuery/dist/jquery.min.js',
 		'bower_components/js-md5/js/md5.min.js',
 		'bower_components/mousetrap/mousetrap.min.js',
 		'bower_components/mousetrap/plugins/global-bind/mousetrap-global-bind.min.js',
 		'bower_components/basicContext/dist/basicContext.min.js',
-		'../src/scripts/*.js'
-	],
-	coffee: [
-		'../src/scripts/*.coffee'
-	],
-	scripts: [
-		'../dist/_main--javascript.js',
-		'../dist/_main--coffee.js'
+		'bower_components/basicModal/dist/basicModal.min.js',
+		'../dist/_main--javascript.js'
 	],
 	scss: [
 		'../src/styles/*.scss'
 	],
 	styles: [
 		'bower_components/basicContext/src/styles/main.scss',
+		'bower_components/basicModal/src/styles/main.scss',
 		'../src/styles/main.scss'
 	]
 }
@@ -96,6 +80,8 @@ gulp.task('main--js', function() {
 
 	var stream =
 		gulp.src(paths.main.js)
+			.pipe(plugins.babel())
+			.on('error', catchError)
 			.pipe(plugins.concat('_main--javascript.js', {newLine: "\n"}))
 			.pipe(gulp.dest('../dist/'));
 
@@ -103,20 +89,7 @@ gulp.task('main--js', function() {
 
 });
 
-gulp.task('main--coffee', function() {
-
-	var stream =
-		gulp.src(paths.main.coffee)
-			.pipe(plugins.coffee({bare: true}))
-			.on('error', catchError)
-			.pipe(plugins.concat('_main--coffee.js', {newLine: "\n"}))
-			.pipe(gulp.dest('../dist/'));
-
-	return stream;
-
-});
-
-gulp.task('main--scripts', ['main--js', 'main--coffee'], function() {
+gulp.task('main--scripts', ['main--js'], function() {
 
 	var stream =
 		gulp.src(paths.main.scripts)
@@ -168,10 +141,8 @@ gulp.task('default', ['view--scripts', 'main--scripts', 'main--styles'], functio
 gulp.task('watch', ['default'], function() {
 
 	gulp.watch(paths.view.js,		['view--scripts']);
-	gulp.watch(paths.view.coffee,	['view--scripts']);
 
 	gulp.watch(paths.main.js,		['main--scripts']);
-	gulp.watch(paths.main.coffee,	['main--scripts']);
 	gulp.watch(paths.main.scss,		['main--styles']);
 
 });

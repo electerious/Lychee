@@ -1,6 +1,6 @@
 /**
  * @description	Takes care of every action an album can handle and execute.
- * @copyright	2014 by Tobias Reich
+ * @copyright	2015 by Tobias Reich
  */
 
 album = {
@@ -42,8 +42,12 @@ album.load = function(albumID, refresh) {
 
 		startTime = new Date().getTime();
 
-		params = 'getAlbum&albumID=' + albumID + '&password=' + password.value;
-		lychee.api(params, function(data) {
+		params = {
+			albumID,
+			password: password.value
+		}
+
+		api.post('Album::get', params, function(data) {
 
 			if (data==='Warning: Album private!') {
 				if (document.location.hash.replace('#', '').split('/')[1]!=undefined) {
@@ -80,7 +84,7 @@ album.load = function(albumID, refresh) {
 
 				if (!refresh) {
 					lychee.animate('.album, .photo', 'contentZoomIn');
-					view.header.mode('album');
+					header.setMode('album');
 				}
 
 			}, waitTime);
@@ -99,116 +103,148 @@ album.parse = function() {
 
 album.add = function() {
 
-	var title,
-		params,
-		buttons,
-		isNumber = function(n) { return !isNaN(parseFloat(n)) && isFinite(n) };
+	var action;
 
-	buttons = [
-		['Create Album', function() {
+	action = function(data) {
 
-			title = $('.message input.text').val();
+		var isNumber,
+			title = data.title;
 
-			if (title.length===0) title = 'Untitled';
+		basicModal.close();
 
-			modal.close();
+		isNumber = function(n) {
 
-			params = 'addAlbum&title=' + escape(encodeURI(title));
-			lychee.api(params, function(data) {
+			return !isNaN(parseFloat(n)) && isFinite(n)
 
-				// Avoid first album to be true
-				if (data===true) data = 1;
+		}
 
-				if (data!==false&&isNumber(data)) {
-					albums.refresh();
-					lychee.goto(data);
-				} else {
-					lychee.error(null, params, data);
-				}
+		if (title.length===0) title = 'Untitled';
 
-			});
+		api.post('Album::add', { title }, function(data) {
 
-		}],
-		['Cancel', function() {}]
-	];
+			// Avoid first album to be true
+			if (data===true) data = 1;
 
-	modal.show('New Album', "Enter a title for this album: <input class='text' type='text' maxlength='30' placeholder='Title' value='Untitled'>", buttons);
+			if (data!==false&&isNumber(data)) {
+				albums.refresh();
+				lychee.goto(data);
+			} else {
+				lychee.error(null, params, data);
+			}
+
+		});
+
+	}
+
+	basicModal.show({
+		body: "<p>Enter a title for the new album: <input class='text' data-name='title' type='text' maxlength='30' placeholder='Title' value='Untitled'></p>",
+		buttons: {
+			action: {
+				title: 'Create Album',
+				fn: action
+			},
+			cancel: {
+				title: 'Cancel',
+				fn: basicModal.close
+			}
+		}
+	});
 
 }
 
 album.delete = function(albumIDs) {
 
-	var params,
-		buttons,
-		albumTitle;
+	var action = {},
+		cancel = {},
+		msg = '',
+		albumTitle = '';
 
 	if (!albumIDs) return false;
 	if (albumIDs instanceof Array===false) albumIDs = [albumIDs];
 
-	buttons = [
-		['', function() {
+	action.fn = function() {
 
-			params = 'deleteAlbum&albumIDs=' + albumIDs;
-			lychee.api(params, function(data) {
+		var params;
 
-				if (visible.albums()) {
+		basicModal.close();
 
-					albumIDs.forEach(function(id) {
-						albums.json.num--;
-						view.albums.content.delete(id);
-						delete albums.json.content[id];
-					});
+		params = {
+			albumIDs: albumIDs.join()
+		}
 
-				} else {
+		api.post('Album::delete', params, function(data) {
 
-					albums.refresh();
-					lychee.goto('');
+			if (visible.albums()) {
 
-				}
+				albumIDs.forEach(function(id) {
+					albums.json.num--;
+					view.albums.content.delete(id);
+					delete albums.json.content[id];
+				});
 
-				if (data!==true) lychee.error(null, params, data);
+			} else {
 
-			});
+				albums.refresh();
+				lychee.goto('');
 
-		}],
-		['', function() {}]
-	];
+			}
+
+			if (data!==true) lychee.error(null, params, data);
+
+		});
+
+	}
 
 	if (albumIDs.toString()==='0') {
 
-		buttons[0][0] = 'Clear Unsorted';
-		buttons[1][0] = 'Keep Unsorted';
+		action.title = 'Clear Unsorted';
+		cancel.title = 'Keep Unsorted';
 
-		modal.show('Clear Unsorted', "Are you sure you want to delete all photos from 'Unsorted'?<br>This action can't be undone!", buttons);
+		msg = "<p>Are you sure you want to delete all photos from 'Unsorted'?<br>This action can't be undone!</p>";
 
 	} else if (albumIDs.length===1) {
 
-		buttons[0][0] = 'Delete Album and Photos';
-		buttons[1][0] = 'Keep Album';
+		action.title = 'Delete Album and Photos';
+		cancel.title = 'Keep Album';
 
 		// Get title
 		if (album.json)			albumTitle = album.json.title;
 		else if (albums.json)	albumTitle = albums.json.content[albumIDs].title;
 
-		modal.show('Delete Album', "Are you sure you want to delete the album '" + albumTitle + "' and all of the photos it contains? This action can't be undone!", buttons);
+		msg = "<p>Are you sure you want to delete the album '" + albumTitle + "' and all of the photos it contains? This action can't be undone!</p>";
 
 	} else {
 
-		buttons[0][0] = 'Delete Albums and Photos';
-		buttons[1][0] = 'Keep Albums';
+		action.title = 'Delete Albums and Photos';
+		cancel.title = 'Keep Albums';
 
-		modal.show('Delete Albums', "Are you sure you want to delete all " + albumIDs.length + " selected albums and all of the photos they contain? This action can't be undone!", buttons);
+		msg = "<p>Are you sure you want to delete all " + albumIDs.length + " selected albums and all of the photos they contain? This action can't be undone!</p>";
 
 	}
+
+	basicModal.show({
+		body: msg,
+		buttons: {
+			action: {
+				title: action.title,
+				fn: action.fn,
+				class: 'red'
+			},
+			cancel: {
+				title: cancel.title,
+				fn: basicModal.close
+			}
+		}
+	});
 
 }
 
 album.setTitle = function(albumIDs) {
 
 	var oldTitle = '',
-		newTitle,
-		params,
-		buttons;
+		input = '',
+		msg = '',
+		action;
 
 	if (!albumIDs) return false;
 	if (albumIDs instanceof Array===false) albumIDs = [albumIDs];
@@ -224,86 +260,118 @@ album.setTitle = function(albumIDs) {
 
 	}
 
-	buttons = [
-		['Set Title', function() {
+	action = function(data) {
 
-			// Get input
-			newTitle = $('.message input.text').val();
+		var params,
+			newTitle = data.title;
 
-			// Remove html from input
-			newTitle = lychee.removeHTML(newTitle);
+		basicModal.close();
 
-			// Set to Untitled when empty
-			newTitle = (newTitle==='') ? 'Untitled' : newTitle;
+		// Remove html from input
+		newTitle = lychee.removeHTML(newTitle);
 
-			if (visible.album()) {
+		// Set to Untitled when empty
+		newTitle = (newTitle==='') ? 'Untitled' : newTitle;
 
-				album.json.title = newTitle;
-				view.album.title();
+		if (visible.album()) {
 
-				if (albums.json) {
-					var id = albumIDs[0];
-					albums.json.content[id].title = newTitle;
-				}
+			album.json.title = newTitle;
+			view.album.title();
 
-			} else if (visible.albums()) {
-
-				albumIDs.forEach(function(id) {
-					albums.json.content[id].title = newTitle;
-					view.albums.content.title(id);
-				});
-
+			if (albums.json) {
+				var id = albumIDs[0];
+				albums.json.content[id].title = newTitle;
 			}
 
-			params = 'setAlbumTitle&albumIDs=' + albumIDs + '&title=' + escape(encodeURI(newTitle));
-			lychee.api(params, function(data) {
+		} else if (visible.albums()) {
 
-				if (data!==true) lychee.error(null, params, data);
-
+			albumIDs.forEach(function(id) {
+				albums.json.content[id].title = newTitle;
+				view.albums.content.title(id);
 			});
 
-		}],
-		['Cancel', function() {}]
-	];
+		}
 
-	if (albumIDs.length===1) modal.show('Set Title', "Enter a new title for this album: <input class='text' type='text' maxlength='30' placeholder='Title' value='" + oldTitle + "'>", buttons);
-	else modal.show('Set Titles', "Enter a title for all " + albumIDs.length + " selected album: <input class='text' type='text' maxlength='30' placeholder='Title' value='" + oldTitle + "'>", buttons);
+		params = {
+			albumIDs: albumIDs.join(),
+			title: newTitle
+		}
+
+		api.post('Album::setTitle', params, function(data) {
+
+			if (data!==true) lychee.error(null, params, data);
+
+		});
+
+	}
+
+	input = "<input class='text' data-name='title' type='text' maxlength='30' placeholder='Title' value='" + oldTitle + "'>";
+
+	if (albumIDs.length===1)	msg = "<p>Enter a new title for this album: " + input + "</p>";
+	else						msg = "<p>Enter a title for all " + albumIDs.length + " selected albums: " + input +"</p>";
+
+	basicModal.show({
+		body: msg,
+		buttons: {
+			action: {
+				title: 'Set Title',
+				fn: action
+			},
+			cancel: {
+				title: 'Cancel',
+				fn: basicModal.close
+			}
+		}
+	});
 
 }
 
-album.setDescription = function(photoID) {
+album.setDescription = function(albumID) {
 
 	var oldDescription = album.json.description.replace("'", '&apos;'),
-		description,
-		params,
-		buttons;
+		action;
 
-	buttons = [
-		['Set Description', function() {
+	action = function(data) {
 
-			// Get input
-			description = $('.message input.text').val();
+		var params,
+			description = data.description;
 
-			// Remove html from input
-			description = lychee.removeHTML(description);
+		basicModal.close();
 
-			if (visible.album()) {
-				album.json.description = description;
-				view.album.description();
+		// Remove html from input
+		description = lychee.removeHTML(description);
+
+		if (visible.album()) {
+			album.json.description = description;
+			view.album.description();
+		}
+
+		params = {
+			albumID,
+			description
+		}
+
+		api.post('Album::setDescription', params, function(data) {
+
+			if (data!==true) lychee.error(null, params, data);
+
+		});
+
+	}
+
+	basicModal.show({
+		body: "<p>Please enter a description for this album: <input class='text' data-name='description' type='text' maxlength='800' placeholder='Description' value='" + oldDescription + "'></p>",
+		buttons: {
+			action: {
+				title: 'Set Description',
+				fn: action
+			},
+			cancel: {
+				title: 'Cancel',
+				fn: basicModal.close
 			}
-
-			params = 'setAlbumDescription&albumID=' + photoID + '&description=' + escape(encodeURI(description));
-			lychee.api(params, function(data) {
-
-				if (data!==true) lychee.error(null, params, data);
-
-			});
-
-		}],
-		['Cancel', function() {}]
-	];
-
-	modal.show('Set Description', "Please enter a description for this album: <input class='text' type='text' maxlength='800' placeholder='Description' value='" + oldDescription + "'>", buttons);
+		}
+	});
 
 }
 
@@ -316,14 +384,67 @@ album.setPublic = function(albumID, e) {
 
 	albums.refresh();
 
-	if (!visible.message()&&album.json.public==0) {
+	if (!basicModal.visible()&&album.json.public==0) {
 
-		modal.show('Share Album', "This album will be shared with the following properties:</p><form><div class='choice'><input type='checkbox' name='listed' value='listed' checked><h2>Visible</h2><p>Listed to visitors of your Lychee.</p></div><div class='choice'><input type='checkbox' name='downloadable' value='downloadable'><h2>Downloadable</h2><p>Visitors of your Lychee can download this album.</p></div><div class='choice'><input type='checkbox' name='password' value='password'><h2>Password protected</h2><p>Only accessible with a valid password.<input class='text' type='password' placeholder='password' value='' style='display: none;'></p></div></form><p style='display: none;'>", [['Share Album', function() { album.setPublic(album.getID(), e) }], ['Cancel', function() {}]], -170);
+		var msg = '',
+			action;
 
-		$('.message .choice input[name="password"]').on('change', function() {
+		action = function() {
 
-			if ($(this).prop('checked')===true)	$('.message .choice input.text').show();
-			else								$('.message .choice input.text').hide();
+			basicModal.close();
+			album.setPublic(album.getID(), e);
+
+		};
+
+		msg =	`
+				<p class='less'>This album will be shared with the following properties:</p>
+				<form>
+					<div class='choice'>
+						<label>
+							<input type='checkbox' name='listed' checked>
+							<span class='checkbox'>${ build.iconic('check') }</span>
+							<span class='label'>Visible</span>
+						</label>
+						<p>Listed to visitors of your Lychee.</p>
+					</div>
+					<div class='choice'>
+						<label>
+							<input type='checkbox' name='downloadable'>
+							<span class='checkbox'>${ build.iconic('check') }</span>
+							<span class='label'>Downloadable</span>
+						</label>
+						<p>Visitors of your Lychee can download this album.</p>
+					</div>
+					<div class='choice'>
+						<label>
+							<input type='checkbox' name='password'>
+							<span class='checkbox'>${ build.iconic('check') }</span>
+							<span class='label'>Password protected</span>
+						</label>
+						<p>Only accessible with a valid password.</p>
+						<input class='text' data-name='password' type='password' placeholder='password' value=''>
+					</div>
+				</form>
+				`
+
+		basicModal.show({
+			body: msg,
+			buttons: {
+				action: {
+					title: 'Share Album',
+					fn: action
+				},
+				cancel: {
+					title: 'Cancel',
+					fn: basicModal.close
+				}
+			}
+		});
+
+		$('.basicModal .choice input[name="password"]').on('change', function() {
+
+			if ($(this).prop('checked')===true)	$('.basicModal .choice input[data-name="password"]').show().focus();
+			else								$('.basicModal .choice input[data-name="password"]').hide();
 
 		});
 
@@ -331,22 +452,20 @@ album.setPublic = function(albumID, e) {
 
 	}
 
-	if (visible.message()) {
+	if (basicModal.visible()) {
 
-		if ($('.message .choice input[name="password"]:checked').val()==='password') {
-			password			= md5($('.message input.text').val());
+		if ($('.basicModal .choice input[name="password"]:checked').length===1) {
+			password			= $('.basicModal .choice input[data-name="password"]').val();
 			album.json.password	= 1;
 		} else {
 			password			= '';
 			album.json.password	= 0;
 		}
 
-		if ($('.message .choice input[name="listed"]:checked').val()==='listed')				listed = true;
-		if ($('.message .choice input[name="downloadable"]:checked').val()==='downloadable')	downloadable = true;
+		if ($('.basicModal .choice input[name="listed"]:checked').length===1)		listed = true;
+		if ($('.basicModal .choice input[name="downloadable"]:checked').length===1)	downloadable = true;
 
 	}
-
-	params = 'setAlbumPublic&albumID=' + albumID + '&password=' + password + '&visible=' + listed + '&downloadable=' + downloadable;
 
 	if (visible.album()) {
 
@@ -360,7 +479,14 @@ album.setPublic = function(albumID, e) {
 
 	}
 
-	lychee.api(params, function(data) {
+	params = {
+		albumID,
+		password,
+		visible: listed,
+		downloadable
+	}
+
+	api.post('Album::setPublic', params, function(data) {
 
 		if (data!==true) lychee.error(null, params, data);
 
@@ -395,7 +521,7 @@ album.share = function(service) {
 album.getArchive = function(albumID) {
 
 	var link,
-		url = 'php/api.php?function=getAlbumArchive&albumID=' + albumID;
+		url = api.path + '?function=Album::getArchive&albumID=' + albumID;
 
 	if (location.href.indexOf('index.html')>0)	link = location.href.replace(location.hash, '').replace('index.html', url);
 	else										link = location.href.replace(location.hash, '') + url;

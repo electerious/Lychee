@@ -1,6 +1,6 @@
 /**
  * @description	Takes care of every action albums can handle and execute.
- * @copyright	2014 by Tobias Reich
+ * @copyright	2015 by Tobias Reich
  */
 
 albums = {
@@ -22,7 +22,7 @@ albums.load = function() {
 
 	if (albums.json===null) {
 
-		lychee.api('getAlbums', function(data) {
+		api.post('Album::getAll', {}, function(data) {
 
 			/* Smart Albums */
 			data.unsortedAlbum = {
@@ -77,7 +77,7 @@ albums.load = function() {
 			if (visible.album()&&lychee.content.html()==='')			waitTime = 0;
 
 			setTimeout(function() {
-				view.header.mode('albums');
+				header.setMode('albums');
 				view.albums.init();
 				lychee.animate('.album, .photo', 'contentZoomIn');
 			}, waitTime);
@@ -86,7 +86,7 @@ albums.load = function() {
 	} else {
 
 		setTimeout(function() {
-			view.header.mode('albums');
+			header.setMode('albums');
 			view.albums.init();
 			lychee.animate('.album, .photo', 'contentZoomIn');
 		}, 300);

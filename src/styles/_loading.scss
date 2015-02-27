@@ -1,5 +1,5 @@
 /**
- * @copyright   2014 by Tobias Reich
+ * @copyright   2015 by Tobias Reich
  */
 
 #loading {
@@ -9,7 +9,7 @@
 	height: 3px;
 	background-size: 100px 3px;
 	background-repeat: repeat-x;
-	border-bottom: 1px solid rgba(0, 0, 0, .3);
+	border-bottom: 1px solid black(.3);
 	display: none;
 	animation-name: moveBackground;
 	animation-duration: .3s;
@@ -29,11 +29,11 @@
 
 	/* Content ------------------------------------------------*/
 	h1 {
-		margin: 13px 13px 0px 13px;
+		margin: 13px 13px 0 13px;
 		color: #ddd;
 		font-size: 14px;
 		font-weight: bold;
-		text-shadow: 0px 1px 0px #000;
+		text-shadow: 0 1px 0 black(1);
 		text-transform: capitalize;
 
 		span {

@@ -1,6 +1,6 @@
 /**
  * @description	Controls the access to password-protected albums and photos.
- * @copyright   2014 by Tobias Reich
+ * @copyright   2015 by Tobias Reich
  */
 
 password = {
@@ -11,7 +11,7 @@ password = {
 
 password.get = function(albumID, callback) {
 
-	var passwd = $('.message input.text').val(),
+	var passwd = $('.basicModal input.text').val(),
 		params;
 
 	if (!lychee.publicMode)												callback();
@@ -31,15 +31,20 @@ password.get = function(albumID, callback) {
 	} else {
 
 		// Check password
-		params = 'checkAlbumAccess&albumID=' + albumID + '&password=' + md5(passwd);
-		lychee.api(params, function(data) {
+
+		params = {
+			albumID,
+			password: passwd
+		}
+
+		api.post('Album::getPublic', params, function(data) {
 
 			if (data===true) {
-				password.value = md5(passwd);
+				basicModal.close();
+				password.value = passwd;
 				callback();
 			} else {
-				lychee.goto('');
-				loadingBar.show('error', 'Access denied. Wrong password!');
+				basicModal.error('password');
 			}
 
 		});
@@ -50,12 +55,36 @@ password.get = function(albumID, callback) {
 
 password.getDialog = function(albumID, callback) {
 
-	var buttons;
+	var action,
+		cancel,
+		msg = '';
 
-	buttons = [
-		['Enter', function() { password.get(albumID, callback) }],
-		['Cancel', lychee.goto]
-	];
-	modal.show("<a class='icon-lock'></a> Enter Password", "This album is protected by a password. Enter the password below to view the photos of this album: <input class='text' type='password' placeholder='password' value=''>", buttons, -110, false);
+	action = function() { password.get(albumID, callback) }
+
+	cancel = function() {
+		basicModal.close();
+		lychee.goto();
+	}
+
+	msg =	`
+			<p>
+				This album is protected by a password. Enter the password below to view the photos of this album:
+				<input data-name='password' class='text' type='password' placeholder='password' value=''>
+			</p>
+			`
+
+	basicModal.show({
+		body: msg,
+		buttons: {
+			action: {
+				title: 'Enter',
+				fn: action
+			},
+			cancel: {
+				title: 'Cancel',
+				fn: cancel
+			}
+		}
+	});
 
 }

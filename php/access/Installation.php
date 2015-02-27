@@ -2,7 +2,7 @@
 
 ###
 # @name			Installation Access
-# @copyright	2014 by Tobias Reich
+# @copyright	2015 by Tobias Reich
 ###
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
@@ -14,11 +14,11 @@ class Installation extends Access {
 
 		switch ($fn) {
 
-			case 'dbCreateConfig':	$this->dbCreateConfig(); break;
+			case 'Database::createConfig':	$this->dbCreateConfig(); break;
 
 			# Error
-			default:				exit('Warning: No configuration!');
-									return false; break;
+			default:						exit('Warning: No configuration!');
+											return false; break;
 
 		}
 

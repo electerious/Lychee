@@ -48,9 +48,12 @@
 	<!-- Header -->
 	<header class="view">
 
-		<!-- Buttons -->
-		<div class="tools" id="button_direct" title="Direct Link"><a class="icon-link"></a></div>
-		<div class="tools" id="button_info" title="Show Info"><a class="icon-info-sign"></a></div>
+		<a class="button button--right" id="button_info" title="About Photo">
+			<svg viewBox="0 0 8 8" class="iconic"><use xlink:href="src/images/iconic.svg#info"></use></svg>
+		</a>
+		<a class="button button--right" id="button_direct" title="Direct Link">
+			<svg viewBox="0 0 8 8" class="iconic"><use xlink:href="src/images/iconic.svg#link-intact"></use></svg>
+		</a>
 
 		<a id="title" class="view"></a>
 
@@ -60,7 +63,16 @@
 	<div id="imageview" class="view"></div>
 
 	<!-- Infobox -->
-	<div id="infobox"></div>
+	<div id="infobox">
+		<div class='header'>
+			<h1>About</h1>
+			<a class='close' title='Close About'>
+				<svg viewBox="0 0 8 8" class="iconic"><use xlink:href="src/images/iconic.svg#circle-x"></use></svg>
+			</a>
+		</div>
+		<div class='wrapper'>
+		</div>
+	</div>
 
 	<!-- JS -->
 	<script type="text/javascript" src="dist/view.js"></script>

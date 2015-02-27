@@ -2,7 +2,7 @@
 
 ###
 # @name			Misc Module
-# @copyright	2014 by Tobias Reich
+# @copyright	2015 by Tobias Reich
 ###
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
@@ -64,12 +64,13 @@ function getGraphHeader($database, $photoID) {
 	else					$dir = 'big';
 
 	$parseUrl	= parse_url('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+	$url		= $parseUrl['scheme'] . '://' . $parseUrl['host'] . $parseUrl['path'] . '?' . $parseUrl['query'];
 	$picture	= $parseUrl['scheme'] . '://' . $parseUrl['host'] . $parseUrl['path'] . '/../uploads/' . $dir . '/' . $row->url;
 
 	$return = '<!-- General Meta Data -->';
-	$return .= '<meta name="title" content="'.$row->title.'" />';
-	$return .= '<meta name="description" content="'.$row->description.' - via Lychee" />';
-	$return .= '<link rel="image_src" type="image/jpeg" href="'.$picture.'" />';
+	$return .= '<meta name="title" content="'.$row->title.'">';
+	$return .= '<meta name="description" content="'.$row->description.' - via Lychee">';
+	$return .= '<link rel="image_src" type="image/jpeg" href="'.$picture.'">';
 
 	$return .= '<!-- Twitter Meta Data -->';
 	$return .= '<meta name="twitter:card" content="photo">';
@@ -79,6 +80,8 @@ function getGraphHeader($database, $photoID) {
 	$return .= '<!-- Facebook Meta Data -->';
 	$return .= '<meta property="og:title" content="'.$row->title.'">';
 	$return .= '<meta property="og:image" content="'.$picture.'">';
+	$return .= '<meta property="og:description" content="'.$row->description.' - via Lychee">';
+	$return .= '<meta property="og:url" content="'.$url.'">';
 
 	return $return;
 
@@ -94,7 +97,7 @@ function getExtension($filename) {
 
 }
 
-function get_hashed_password($password) {
+function getHashedString($password) {
 
 	# Inspired by http://alias.io/2010/01/store-passwords-safely-with-php-and-mysql/
 

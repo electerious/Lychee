@@ -2,7 +2,7 @@
 
 ###
 # @name			API
-# @copyright	2014 by Tobias Reich
+# @copyright	2015 by Tobias Reich
 ###
 
 @ini_set('max_execution_time', '200');
@@ -52,10 +52,6 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 	# Init plugins
 	$plugins = explode(';', $settings['plugins']);
 	$plugins = new Plugins($plugins, $database, $settings);
-
-	# Escape
-	foreach(array_keys($_POST) as $key)	$_POST[$key] = urldecode($_POST[$key]);
-	foreach(array_keys($_GET) as $key)	$_GET[$key] = urldecode($_GET[$key]);
 
 	# Validate parameters
 	if (isset($_POST['albumIDs'])&&preg_match('/^[0-9\,]{1,}$/', $_POST['albumIDs'])!==1)	exit('Error: Wrong parameter type for albumIDs!');

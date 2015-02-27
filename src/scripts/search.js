@@ -1,6 +1,6 @@
 /**
  * @description	Searches through your photos and albums.
- * @copyright	2014 by Tobias Reich
+ * @copyright	2015 by Tobias Reich
  */
 
 search = {
@@ -11,8 +11,7 @@ search = {
 
 search.find = function(term) {
 
-	var params,
-		albumsData = '',
+	var albumsData = '',
 		photosData = '',
 		code;
 
@@ -21,8 +20,7 @@ search.find = function(term) {
 
 		if ($('#search').val().length!==0) {
 
-			params = 'search&term=' + term;
-			lychee.api(params, function(data) {
+			api.post('search', { term }, function(data) {
 
 				// Build albums
 				if (data&&data.albums) {
@@ -64,7 +62,7 @@ search.find = function(term) {
 
 						if (code==='error') {
 							lychee.content.html('');
-							$('body').append(build.no_content('search'));
+							$('body').append(build.no_content('magnifying-glass'));
 						} else {
 							lychee.content.html(code);
 							lychee.animate('.album, .photo', 'contentZoomIn');

@@ -1,6 +1,6 @@
 /**
  * @description	Used to view single photos with view.php
- * @copyright	2014 by Tobias Reich
+ * @copyright	2015 by Tobias Reich
  */
 
 var header		= $('header'),
@@ -12,19 +12,19 @@ var header		= $('header'),
 $(document).ready(function(){
 
 	/* Event Name */
-	if (mobileBrowser())	event_name = 'touchend';
-	else					event_name = 'click';
+	if ('ontouchend' in document.documentElement)	eventName = 'touchend';
+	else											eventName = 'click';
 
 	/* Window */
 	$(window).keydown(key);
 
 	/* Infobox */
-	$(document)			.on(event_name, '#infobox .header a', hideInfobox);
-	$(document)			.on(event_name, '#infobox_overlay', hideInfobox);
-	$('#button_info')	.on(event_name, showInfobox);
+	infobox.find('.header .close').on(eventName, hideInfobox);
+	$(document)			.on(eventName, '#infobox_overlay', hideInfobox);
+	$('#button_info')	.on(eventName, showInfobox);
 
 	/* Direct Link */
-	$('#button_direct').on(event_name, function() {
+	$('#button_direct').on(eventName, function() {
 
 		var link = $('#imageview #image').css('background-image').replace(/"/g,'').replace(/url\(|\)$/ig, '');
 		window.open(link, '_newtab');
@@ -123,7 +123,7 @@ loadPhotoInfo = function(photoID) {
 			.addClass('fadeIn')
 			.show();
 
-		infobox.html(build.infoboxPhoto(data, true)).show();
+		infobox.find('.wrapper').html(build.infoboxPhoto(data, true));
 
 	}, error: ajaxError });
 

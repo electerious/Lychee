@@ -1,5 +1,5 @@
 /**
- * @copyright   2014 by Tobias Reich
+ * @copyright   2015 by Tobias Reich
  */
 
 #infobox_overlay {
@@ -7,25 +7,24 @@
 	position: fixed;
 	width: 100%;
 	height: 100%;
-	top: 0px;
-	left: 0px;
-	background-color: rgba(0, 0, 0, .8);
+	top: 0;
+	left: 0;
+	background-color: black(.8);
 }
 
 #infobox {
 
 	z-index: 4;
 	position: fixed;
-	right: 0px;
+	right: -370px;
 	width: 350px;
 	height: 100%;
-	background-color: rgba(20, 20, 20, .98);
-	box-shadow: -1px 0 2px rgba(0, 0, 0, .8);
-	display: none;
-	transform: translateX(370px);
-	transition: transform .3s cubic-bezier(.51, .92, .24, 1.15);
+	background-color: rgba(30, 30, 30, .98);
+	box-shadow: -1px 0 2px black(.7);
+	transform: translateX(0);
+	transition: transform .3s $timingBounce;
 
-	&.active { transform: translateX(50px); }
+	&.active { transform: translateX(-92%); }
 
 	/* Misc ------------------------------------------------*/
 	.wrapper {
@@ -37,11 +36,18 @@
 	}
 
 	.edit {
-		display: inline;
+		display: inline-block;
 		margin-left: 3px;
-		width: 20px;
-		height: 5px;
+		width: 10px;
 		cursor: pointer;
+
+		.iconic {
+			fill: white(.5);
+			filter: drop-shadow($shadow);
+			transition: fill .2s ease-out;
+		}
+
+		&:hover .iconic { fill: white(1); }
 	}
 
 	.bumper {
@@ -55,7 +61,8 @@
 		float: left;
 		height: 49px;
 		width: 100%;
-		background-image: linear-gradient(to bottom, #2A2A2A, #131313);
+		background: linear-gradient(to bottom, #1f1f1f, #1a1a1a);
+		border-bottom: 1px solid #0f0f0f;
 	}
 
 	.header h1 {
@@ -66,40 +73,37 @@
 		font-size: 16px;
 		font-weight: bold;
 		text-align: center;
-		text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
+		text-shadow: $shadow;
 	}
 
-	.header a {
+	.header .close {
 		float: right;
-		padding: 15px 65px 15px 15px;
-		color: #fff;
-		font-size: 20px;
-		font-weight: bold;
-		text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
-		opacity: .5;
+		padding: 16px 65px 12px 15px;
+		width: 15px;
 		cursor: pointer;
 
-		&:hover { opacity: 1; }
-	}
-
-	/* Seperator ------------------------------------------------*/
-	.separator {
-		float: left;
-		width: 100%;
-		border-top: 1px solid rgba(255, 255, 255, .02);
-		box-shadow: 0 -1px 0 rgba(0, 0, 0, .5);
-
-		&:first-child {
-			border: none;
-			box-shadow: none;
+		.iconic {
+			fill: #888;
+			filter: drop-shadow($shadow);
+			transition: fill .2s ease-out;
 		}
 
+		&:hover .iconic { fill: #fff; }
+	}
+
+	/* Divider ------------------------------------------------*/
+	.divider {
+		float: left;
+		padding: 12px 0 8px;
+		width: 100%;
+		border-top: 1px solid white(.02);
+		box-shadow: $shadow;
+
 		h1 {
-			margin: 20px 0 5px 20px;
-			color: #fff;
+			margin: 0 0 0 20px;
+			color: white(.6);
 			font-size: 14px;
 			font-weight: bold;
-			text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
 		}
 	}
 
@@ -137,43 +141,42 @@
 		margin-bottom: 8px;
 	}
 
-	#tags .edit {
-		display: inline-block;
-	}
+	#tags .edit { margin-top: 6px; }
 
-	#tags .empty .edit {
-		display: inline;
-	}
+	#tags .empty .edit { margin-top: 0; }
 
 	#tags .tag {
-		float: left;
-		padding: 4px 7px;
+		display: inline-block;
+		padding: 6px 10px;
 		margin: 0 6px 8px 0;
-		background-color: rgba(0, 0, 0, .5);
-		border: 2px solid rgba(255, 255, 255, .3);
+		background-color: black(.5);
 		border-radius: 100px;
 		font-size: 12px;
-		transition: border .3s;
+		transition: background-color .3s;
 
-		&:hover { border: 2px solid #aaa; }
+		&:hover { background-color: black(.3); }
 	}
 
 	#tags .tag span {
 		float: right;
-		width: 0;
 		padding: 0;
 		margin: 0 0 -2px 0;
-		color: red;
-		font-size: 11px;
+		width: 0;
 		cursor: pointer;
 		overflow: hidden;
 		transform: scale(0);
 		transition: width .3s, margin .3s, transform .3s;
+
+		.iconic {
+			fill: $colorRed;
+			width: 8px;
+			filter: drop-shadow($shadowLight);
+		}
 	}
 
 	#tags .tag:hover span {
-		width: 10px;
-		margin: 0 0 -2px 6px;
+		width: 9px;
+		margin: 0 0 -2px 5px;
 		transform: scale(1);
 	}
 

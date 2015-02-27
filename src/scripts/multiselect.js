@@ -1,6 +1,6 @@
 /**
  * @description	Select multiple albums or photos.
- * @copyright	2014 by Tobias Reich
+ * @copyright	2015 by Tobias Reich
  */
 
 multiselect = {}
@@ -16,7 +16,6 @@ multiselect.position = {
 
 multiselect.show = function(e) {
 
-	if (mobileBrowser())	return false;
 	if (lychee.publicMode)	return false;
 	if (visible.search())	return false;
 	if (visible.infobox())	return false;
@@ -40,7 +39,6 @@ multiselect.selectAll = function() {
 		newWidth,
 		newHeight;
 
-	if (mobileBrowser())		return false;
 	if (lychee.publicMode)		return false;
 	if (visible.search())		return false;
 	if (visible.infobox())		return false;
