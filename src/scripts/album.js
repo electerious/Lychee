@@ -179,7 +179,7 @@ album.delete = function(albumIDs) {
 				albumIDs.forEach(function(id) {
 					albums.json.num--;
 					view.albums.content.delete(id);
-					delete albums.json.content[id];
+					delete albums.json.albums[id];
 				});
 
 			} else {
@@ -209,7 +209,7 @@ album.delete = function(albumIDs) {
 
 		// Get title
 		if (album.json)			albumTitle = album.json.title;
-		else if (albums.json)	albumTitle = albums.json.content[albumIDs].title;
+		else if (albums.json)	albumTitle = albums.json.albums[albumIDs].title;
 
 		msg = "<p>Are you sure you want to delete the album '" + albumTitle + "' and all of the photos it contains? This action can't be undone!</p>";
 
@@ -253,7 +253,7 @@ album.setTitle = function(albumIDs) {
 
 		// Get old title if only one album is selected
 		if (album.json)			oldTitle = album.json.title;
-		else if (albums.json)	oldTitle = albums.json.content[albumIDs].title;
+		else if (albums.json)	oldTitle = albums.json.albums[albumIDs].title;
 
 		if (!oldTitle) oldTitle = '';
 		oldTitle = oldTitle.replace("'", '&apos;');
@@ -280,13 +280,13 @@ album.setTitle = function(albumIDs) {
 
 			if (albums.json) {
 				var id = albumIDs[0];
-				albums.json.content[id].title = newTitle;
+				albums.json.albums[id].title = newTitle;
 			}
 
 		} else if (visible.albums()) {
 
 			albumIDs.forEach(function(id) {
-				albums.json.content[id].title = newTitle;
+				albums.json.albums[id].title = newTitle;
 				view.albums.content.title(id);
 			});
 

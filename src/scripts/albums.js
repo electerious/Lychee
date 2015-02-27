@@ -25,44 +25,44 @@ albums.load = function() {
 		api.post('Album::getAll', {}, function(data) {
 
 			/* Smart Albums */
-			data.unsortedAlbum = {
+			data.smartalbums.unsorted = {
 				id:			0,
 				title:		'Unsorted',
-				sysdate:	data.unsortedNum + ' photos',
+				sysdate:	data.smartalbums.unsorted.num + ' photos',
 				unsorted: 	'1',
-				thumb0:		data.unsortedThumb0,
-				thumb1:		data.unsortedThumb1,
-				thumb2:		data.unsortedThumb2
+				thumb0:		data.smartalbums.unsorted.thumb0,
+				thumb1:		data.smartalbums.unsorted.thumb1,
+				thumb2:		data.smartalbums.unsorted.thumb2
 			};
 
-			data.starredAlbum = {
+			data.smartalbums.starred = {
 				id:			'f',
 				title:		'Starred',
-				sysdate:	data.starredNum + ' photos',
+				sysdate:	data.smartalbums.starred.num + ' photos',
 				star:		'1',
-				thumb0:		data.starredThumb0,
-				thumb1:		data.starredThumb1,
-				thumb2:		data.starredThumb2
+				thumb0:		data.smartalbums.starred.thumb0,
+				thumb1:		data.smartalbums.starred.thumb1,
+				thumb2:		data.smartalbums.starred.thumb2
 			};
 
-			data.publicAlbum = {
+			data.smartalbums.public = {
 				id:			's',
 				title:		'Public',
-				sysdate:	data.publicNum + ' photos',
+				sysdate:	data.smartalbums.public.num + ' photos',
 				public:		'1',
-				thumb0:		data.publicThumb0,
-				thumb1:		data.publicThumb1,
-				thumb2:		data.publicThumb2
+				thumb0:		data.smartalbums.public.thumb0,
+				thumb1:		data.smartalbums.public.thumb1,
+				thumb2:		data.smartalbums.public.thumb2
 			};
 
-			data.recentAlbum = {
+			data.smartalbums.recent = {
 				id:			'r',
 				title:		'Recent',
-				sysdate:	data.recentNum + ' photos',
+				sysdate:	data.smartalbums.recent.num + ' photos',
 				recent:		'1',
-				thumb0:		data.recentThumb0,
-				thumb1:		data.recentThumb1,
-				thumb2:		data.recentThumb2
+				thumb0:		data.smartalbums.recent.thumb0,
+				thumb1:		data.smartalbums.recent.thumb1,
+				thumb2:		data.smartalbums.recent.thumb2
 			};
 
 			albums.json = data;
@@ -79,7 +79,7 @@ albums.load = function() {
 			setTimeout(function() {
 				header.setMode('albums');
 				view.albums.init();
-				lychee.animate('.album, .photo', 'contentZoomIn');
+				lychee.animate('.album', 'contentZoomIn');
 			}, waitTime);
 		});
 

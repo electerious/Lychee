@@ -82,7 +82,7 @@ contextMenu.albumTitle = function(albumID, e) {
 			items.push({ type: 'separator' });
 
 			// Generate list of albums
-			$.each(data.content, function(index) {
+			$.each(data.albums, function(index) {
 
 				var that	= this,
 					title	= '';
@@ -220,7 +220,7 @@ contextMenu.move = function(photoIDs, e) {
 		} else {
 
 			// Generate list of albums
-			$.each(data.content, function(index) {
+			$.each(data.albums, function(index) {
 
 				var that = this;
 

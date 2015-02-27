@@ -49,16 +49,21 @@ view.albums = {
 				albumsData	= '';
 
 			/* Smart Albums */
-			albums.parse(albums.json.unsortedAlbum);
-			albums.parse(albums.json.publicAlbum);
-			albums.parse(albums.json.starredAlbum);
-			albums.parse(albums.json.recentAlbum);
-			if (!lychee.publicMode) smartData = build.divider('Smart Albums') + build.album(albums.json.unsortedAlbum) + build.album(albums.json.starredAlbum) + build.album(albums.json.publicAlbum) + build.album(albums.json.recentAlbum);
+			if (!lychee.publicMode) {
+
+				albums.parse(albums.json.smartalbums.unsorted);
+				albums.parse(albums.json.smartalbums.public);
+				albums.parse(albums.json.smartalbums.starred);
+				albums.parse(albums.json.smartalbums.recent);
+
+				smartData = build.divider('Smart Albums') + build.album(albums.json.smartalbums.unsorted) + build.album(albums.json.smartalbums.public) + build.album(albums.json.smartalbums.starred) + build.album(albums.json.smartalbums.recent);
+
+			}
 
 			/* Albums */
-			if (albums.json.content&&albums.json.num!==0) {
+			if (albums.json.albums&&albums.json.num!==0) {
 
-				$.each(albums.json.content, function() {
+				$.each(albums.json.albums, function() {
 					albums.parse(this);
 
 					// Display albums in reverse order
@@ -88,7 +93,7 @@ view.albums = {
 		title: function(albumID) {
 
 			var longTitle	= '',
-				title		= albums.json.content[albumID].title;
+				title		= albums.json.albums[albumID].title;
 
 			if (title!==null&&title.length>18) {
 				longTitle	= title;
