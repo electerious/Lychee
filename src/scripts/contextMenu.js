@@ -225,7 +225,7 @@ contextMenu.move = function(photoIDs, e) {
 				var that = this;
 
 				if (!that.thumb0) that.thumb0 = 'src/images/no_cover.svg';
-				that.title = "<img class='albumCover' width='16' height='16' src='" + that.thumb0 + "'><div class='albumTitle'>" + that.title + "</div>";
+				that.title = "<img class='cover' width='16' height='16' src='" + that.thumb0 + "'><div class='title'>" + that.title + "</div>";
 
 				if (that.id!=album.getID()) items.push({ type: 'item', title: that.title, fn: function() { photo.setAlbum(photoIDs, that.id) } });
 
