@@ -179,7 +179,7 @@ album.delete = function(albumIDs) {
 				albumIDs.forEach(function(id) {
 					albums.json.num--;
 					view.albums.content.delete(id);
-					delete albums.json.content[id];
+					delete albums.json.albums[id];
 				});
 
 			} else {
@@ -209,7 +209,7 @@ album.delete = function(albumIDs) {
 
 		// Get title
 		if (album.json)			albumTitle = album.json.title;
-		else if (albums.json)	albumTitle = albums.json.content[albumIDs].title;
+		else if (albums.json)	albumTitle = albums.json.albums[albumIDs].title;
 
 		msg = "<p>Are you sure you want to delete the album '" + albumTitle + "' and all of the photos it contains? This action can't be undone!</p>";
 
@@ -253,7 +253,7 @@ album.setTitle = function(albumIDs) {
 
 		// Get old title if only one album is selected
 		if (album.json)			oldTitle = album.json.title;
-		else if (albums.json)	oldTitle = albums.json.content[albumIDs].title;
+		else if (albums.json)	oldTitle = albums.json.albums[albumIDs].title;
 
 		if (!oldTitle) oldTitle = '';
 		oldTitle = oldTitle.replace("'", '&apos;');
@@ -280,13 +280,13 @@ album.setTitle = function(albumIDs) {
 
 			if (albums.json) {
 				var id = albumIDs[0];
-				albums.json.content[id].title = newTitle;
+				albums.json.albums[id].title = newTitle;
 			}
 
 		} else if (visible.albums()) {
 
 			albumIDs.forEach(function(id) {
-				albums.json.content[id].title = newTitle;
+				albums.json.albums[id].title = newTitle;
 				view.albums.content.title(id);
 			});
 
@@ -384,7 +384,7 @@ album.setPublic = function(albumID, e) {
 
 	albums.refresh();
 
-	if (!basicModal.visible()&&album.json.public==0) {
+	if (!basicModal.visible()&&album.json.public==='0') {
 
 		var msg = '',
 			action;
@@ -456,10 +456,10 @@ album.setPublic = function(albumID, e) {
 
 		if ($('.basicModal .choice input[name="password"]:checked').length===1) {
 			password			= $('.basicModal .choice input[data-name="password"]').val();
-			album.json.password	= 1;
+			album.json.password	= '1';
 		} else {
 			password			= '';
-			album.json.password	= 0;
+			album.json.password	= '0';
 		}
 
 		if ($('.basicModal .choice input[name="listed"]:checked').length===1)		listed = true;
@@ -469,13 +469,13 @@ album.setPublic = function(albumID, e) {
 
 	if (visible.album()) {
 
-		album.json.public	= (album.json.public==0) ? 1 : 0;
-		album.json.password	= (album.json.public==0) ? 0 : album.json.password;
+		album.json.public	= (album.json.public==='0') ? '1' : '0';
+		album.json.password	= (album.json.public==='0') ? '0' : album.json.password;
 
 		view.album.public();
 		view.album.password();
 
-		if (album.json.public==1) contextMenu.shareAlbum(albumID, e);
+		if (album.json.public==='1') contextMenu.shareAlbum(albumID, e);
 
 	}
 
@@ -526,7 +526,7 @@ album.getArchive = function(albumID) {
 	if (location.href.indexOf('index.html')>0)	link = location.href.replace(location.hash, '').replace('index.html', url);
 	else										link = location.href.replace(location.hash, '') + url;
 
-	if (lychee.publicMode) link += '&password=' + password.value;
+	if (lychee.publicMode===true) link += '&password=' + password.value;
 
 	location.href = link;
 

@@ -83,7 +83,7 @@ class Album extends Module {
 						$albums = $this->database->query($query);
 						$return = $albums->fetch_assoc();
 						$return['sysdate']	= date('d M. Y', $return['sysstamp']);
-						$return['password']	= ($return['password']=='' ? false : true);
+						$return['password']	= ($return['password']=='' ? '0' : '1');
 						$query	= Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE album = '?' " . $this->settings['sorting'], array(LYCHEE_TABLE_PHOTOS, $this->albumIDs));
 						break;
 
@@ -154,8 +154,15 @@ class Album extends Module {
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
 
+		# Initialize return var
+		$return = array(
+			'smartalbums'	=> null,
+			'albums'		=> null,
+			'num'			=> 0
+		);
+
 		# Get SmartAlbums
-		if ($public===false) $return = $this->getSmartInfo();
+		if ($public===false) $return['smartalbums'] = $this->getSmartInfo();
 
 		# Albums query
 		$query = Database::prepare($this->database, 'SELECT id, title, public, sysstamp, password FROM ? WHERE public = 1 AND visible <> 0', array(LYCHEE_TABLE_ALBUMS));
@@ -173,7 +180,7 @@ class Album extends Module {
 
 			# Parse info
 			$album['sysdate']	= date('F Y', $album['sysstamp']);
-			$album['password']	= ($album['password'] != '');
+			$album['password']	= ($album['password']=='' ? '0' : '1');
 
 			# Thumbs
 			if (($public===true&&$album['password']===false)||($public===false)) {
@@ -192,7 +199,7 @@ class Album extends Module {
 			}
 
 			# Add to return
-			$return['content'][$album['id']] = $album;
+			$return['albums'][$album['id']] = $album;
 
 		}
 
@@ -211,29 +218,25 @@ class Album extends Module {
 		# Check dependencies
 		self::dependencies(isset($this->database, $this->settings));
 
+		# Initialize return var
+		$return = array(
+			'unsorted'	=> null,
+			'public'	=> null,
+			'starred'	=> null,
+			'recent'	=> null
+		);
+
 		# Unsorted
 		$query		= Database::prepare($this->database, 'SELECT thumbUrl FROM ? WHERE album = 0 ' . $this->settings['sorting'], array(LYCHEE_TABLE_PHOTOS));
 		$unsorted	= $this->database->query($query);
 		$i			= 0;
 		while($row = $unsorted->fetch_object()) {
 			if ($i<3) {
-				$return["unsortedThumb$i"] = LYCHEE_URL_UPLOADS_THUMB . $row->thumbUrl;
+				$return['unsorted']["thumb$i"] = LYCHEE_URL_UPLOADS_THUMB . $row->thumbUrl;
 				$i++;
 			} else break;
 		}
-		$return['unsortedNum'] = $unsorted->num_rows;
-
-		# Public
-		$query		= Database::prepare($this->database, 'SELECT thumbUrl FROM ? WHERE public = 1 ' . $this->settings['sorting'], array(LYCHEE_TABLE_PHOTOS));
-		$public		= $this->database->query($query);
-		$i			= 0;
-		while($row2 = $public->fetch_object()) {
-			if ($i<3) {
-				$return["publicThumb$i"] = LYCHEE_URL_UPLOADS_THUMB . $row2->thumbUrl;
-				$i++;
-			} else break;
-		}
-		$return['publicNum'] = $public->num_rows;
+		$return['unsorted']['num'] = $unsorted->num_rows;
 
 		# Starred
 		$query		= Database::prepare($this->database, 'SELECT thumbUrl FROM ? WHERE star = 1 ' . $this->settings['sorting'], array(LYCHEE_TABLE_PHOTOS));
@@ -241,11 +244,23 @@ class Album extends Module {
 		$i			= 0;
 		while($row3 = $starred->fetch_object()) {
 			if ($i<3) {
-				$return["starredThumb$i"] = LYCHEE_URL_UPLOADS_THUMB . $row3->thumbUrl;
+				$return['starred']["thumb$i"] = LYCHEE_URL_UPLOADS_THUMB . $row3->thumbUrl;
 				$i++;
 			} else break;
 		}
-		$return['starredNum'] = $starred->num_rows;
+		$return['starred']['num'] = $starred->num_rows;
+
+		# Public
+		$query		= Database::prepare($this->database, 'SELECT thumbUrl FROM ? WHERE public = 1 ' . $this->settings['sorting'], array(LYCHEE_TABLE_PHOTOS));
+		$public		= $this->database->query($query);
+		$i			= 0;
+		while($row2 = $public->fetch_object()) {
+			if ($i<3) {
+				$return['public']["thumb$i"] = LYCHEE_URL_UPLOADS_THUMB . $row2->thumbUrl;
+				$i++;
+			} else break;
+		}
+		$return['public']['num'] = $public->num_rows;
 
 		# Recent
 		$query		= Database::prepare($this->database, 'SELECT thumbUrl FROM ? WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY)) ' . $this->settings['sorting'], array(LYCHEE_TABLE_PHOTOS));
@@ -253,11 +268,11 @@ class Album extends Module {
 		$i			= 0;
 		while($row3 = $recent->fetch_object()) {
 			if ($i<3) {
-				$return["recentThumb$i"] = LYCHEE_URL_UPLOADS_THUMB . $row3->thumbUrl;
+				$return['recent']["thumb$i"] = LYCHEE_URL_UPLOADS_THUMB . $row3->thumbUrl;
 				$i++;
 			} else break;
 		}
-		$return['recentNum'] = $recent->num_rows;
+		$return['recent']['num'] = $recent->num_rows;
 
 		return $return;
 

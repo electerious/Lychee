@@ -59,7 +59,6 @@ paths.main = {
 	],
 	scripts: [
 		'bower_components/jQuery/dist/jquery.min.js',
-		'bower_components/js-md5/js/md5.min.js',
 		'bower_components/mousetrap/mousetrap.min.js',
 		'bower_components/mousetrap/plugins/global-bind/mousetrap-global-bind.min.js',
 		'bower_components/basicContext/dist/basicContext.min.js',

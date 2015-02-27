@@ -91,7 +91,7 @@ header.setMode = function(mode) {
 			album.json.content === false ? $('#button_archive').hide() : $('#button_archive').show();
 
 			// Hide download button when not logged in and album not downloadable
-			if (lychee.publicMode&&album.json.downloadable==='0') $('#button_archive').hide();
+			if (lychee.publicMode===true&&album.json.downloadable==='0') $('#button_archive').hide();
 
 			if (albumID==='s'||albumID==='f'||albumID==='r') {
 				$('#button_info_album, #button_trash_album, #button_share_album').hide();

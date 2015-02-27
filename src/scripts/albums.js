@@ -25,45 +25,7 @@ albums.load = function() {
 		api.post('Album::getAll', {}, function(data) {
 
 			/* Smart Albums */
-			data.unsortedAlbum = {
-				id:			0,
-				title:		'Unsorted',
-				sysdate:	data.unsortedNum + ' photos',
-				unsorted: 	'1',
-				thumb0:		data.unsortedThumb0,
-				thumb1:		data.unsortedThumb1,
-				thumb2:		data.unsortedThumb2
-			};
-
-			data.starredAlbum = {
-				id:			'f',
-				title:		'Starred',
-				sysdate:	data.starredNum + ' photos',
-				star:		'1',
-				thumb0:		data.starredThumb0,
-				thumb1:		data.starredThumb1,
-				thumb2:		data.starredThumb2
-			};
-
-			data.publicAlbum = {
-				id:			's',
-				title:		'Public',
-				sysdate:	data.publicNum + ' photos',
-				public:		'1',
-				thumb0:		data.publicThumb0,
-				thumb1:		data.publicThumb1,
-				thumb2:		data.publicThumb2
-			};
-
-			data.recentAlbum = {
-				id:			'r',
-				title:		'Recent',
-				sysdate:	data.recentNum + ' photos',
-				recent:		'1',
-				thumb0:		data.recentThumb0,
-				thumb1:		data.recentThumb1,
-				thumb2:		data.recentThumb2
-			};
+			if (lychee.publicMode===false) albums._createSmartAlbums(data.smartalbums);
 
 			albums.json = data;
 
@@ -79,7 +41,7 @@ albums.load = function() {
 			setTimeout(function() {
 				header.setMode('albums');
 				view.albums.init();
-				lychee.animate('.album, .photo', 'contentZoomIn');
+				lychee.animate('.album', 'contentZoomIn');
 			}, waitTime);
 		});
 
@@ -96,7 +58,7 @@ albums.load = function() {
 
 albums.parse = function(album) {
 
-	if (album.password&&lychee.publicMode) {
+	if (album.password==='1'&&lychee.publicMode===true) {
 		album.thumb0 = 'src/images/password.svg';
 		album.thumb1 = 'src/images/password.svg';
 		album.thumb2 = 'src/images/password.svg';
@@ -105,6 +67,50 @@ albums.parse = function(album) {
 		if (!album.thumb1) album.thumb1 = 'src/images/no_images.svg';
 		if (!album.thumb2) album.thumb2 = 'src/images/no_images.svg';
 	}
+
+}
+
+albums._createSmartAlbums = function(data) {
+
+	data.unsorted = {
+		id:			0,
+		title:		'Unsorted',
+		sysdate:	data.unsorted.num + ' photos',
+		unsorted: 	'1',
+		thumb0:		data.unsorted.thumb0,
+		thumb1:		data.unsorted.thumb1,
+		thumb2:		data.unsorted.thumb2
+	};
+
+	data.starred = {
+		id:			'f',
+		title:		'Starred',
+		sysdate:	data.starred.num + ' photos',
+		star:		'1',
+		thumb0:		data.starred.thumb0,
+		thumb1:		data.starred.thumb1,
+		thumb2:		data.starred.thumb2
+	};
+
+	data.public = {
+		id:			's',
+		title:		'Public',
+		sysdate:	data.public.num + ' photos',
+		public:		'1',
+		thumb0:		data.public.thumb0,
+		thumb1:		data.public.thumb1,
+		thumb2:		data.public.thumb2
+	};
+
+	data.recent = {
+		id:			'r',
+		title:		'Recent',
+		sysdate:	data.recent.num + ' photos',
+		recent:		'1',
+		thumb0:		data.recent.thumb0,
+		thumb1:		data.recent.thumb1,
+		thumb2:		data.recent.thumb2
+	};
 
 }
 

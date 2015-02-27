@@ -21,7 +21,7 @@ visible.photo = function() {
 }
 
 visible.search = function() {
-	if (search.code!==null&&search.code!=='') return true;
+	if (search.hash!==null) return true;
 	return false;
 }
 

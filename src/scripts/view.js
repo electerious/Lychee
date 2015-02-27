@@ -49,23 +49,29 @@ view.albums = {
 				albumsData	= '';
 
 			/* Smart Albums */
-			albums.parse(albums.json.unsortedAlbum);
-			albums.parse(albums.json.publicAlbum);
-			albums.parse(albums.json.starredAlbum);
-			albums.parse(albums.json.recentAlbum);
-			if (!lychee.publicMode) smartData = build.divider('Smart Albums') + build.album(albums.json.unsortedAlbum) + build.album(albums.json.starredAlbum) + build.album(albums.json.publicAlbum) + build.album(albums.json.recentAlbum);
+			if (lychee.publicMode===false) {
+
+				albums.parse(albums.json.smartalbums.unsorted);
+				albums.parse(albums.json.smartalbums.public);
+				albums.parse(albums.json.smartalbums.starred);
+				albums.parse(albums.json.smartalbums.recent);
+
+				smartData = build.divider('Smart Albums') + build.album(albums.json.smartalbums.unsorted) + build.album(albums.json.smartalbums.public) + build.album(albums.json.smartalbums.starred) + build.album(albums.json.smartalbums.recent);
+
+			}
 
 			/* Albums */
-			if (albums.json.content&&albums.json.num!==0) {
+			if (albums.json.albums&&albums.json.num!==0) {
 
-				$.each(albums.json.content, function() {
+				$.each(albums.json.albums, function() {
 					albums.parse(this);
 
 					// Display albums in reverse order
 					albumsData = build.album(this) + albumsData;
 				});
 
-				if (!lychee.publicMode) albumsData = build.divider('Albums') + albumsData;
+				// Add divider
+				if (lychee.publicMode===false) albumsData = build.divider('Albums') + albumsData;
 
 			}
 
@@ -88,7 +94,7 @@ view.albums = {
 		title: function(albumID) {
 
 			var longTitle	= '',
-				title		= albums.json.content[albumID].title;
+				title		= albums.json.albums[albumID].title;
 
 			if (title!==null&&title.length>18) {
 				longTitle	= title;
@@ -203,14 +209,14 @@ view.album = {
 		star: function(photoID) {
 
 			$('.photo[data-id="' + photoID + '"] .iconic-star').remove();
-			if (album.json.content[photoID].star==1) $('.photo[data-id="' + photoID + '"]').append("<a class='badge iconic-star'>" + build.iconic('star') + "</a>");
+			if (album.json.content[photoID].star==='1') $('.photo[data-id="' + photoID + '"]').append("<a class='badge iconic-star'>" + build.iconic('star') + "</a>");
 
 		},
 
 		public: function(photoID) {
 
 			$('.photo[data-id="' + photoID + '"] .iconic-share').remove();
-			if (album.json.content[photoID].public==1) $('.photo[data-id="' + photoID + '"]').append("<a class='badge iconic-share'>" + build.iconic('eye') + "</a>");
+			if (album.json.content[photoID].public==='1') $('.photo[data-id="' + photoID + '"]').append("<a class='badge iconic-share'>" + build.iconic('eye') + "</a>");
 
 		},
 
@@ -247,7 +253,7 @@ view.album = {
 
 	public: function() {
 
-		if (album.json.public==1) {
+		if (album.json.public==='1') {
 
 			$('#button_share_album')
 				.addClass('active')
@@ -270,8 +276,8 @@ view.album = {
 
 	password: function() {
 
-		if (album.json.password==1)	$('#infobox .attr_password').html('Yes');
-		else						$('#infobox .attr_password').html('No');
+		if (album.json.password==='1')	$('#infobox .attr_password').html('Yes');
+		else							$('#infobox .attr_password').html('No');
 
 	},
 
@@ -372,7 +378,7 @@ view.photo = {
 
 	public: function() {
 
-		if (photo.json.public==1||photo.json.public==2) {
+		if (photo.json.public==='1'||photo.json.public==='2') {
 			// Photo public
 			$('#button_share')
 				.addClass('active')
