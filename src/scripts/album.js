@@ -454,6 +454,7 @@ album.setPublic = function(albumID, e) {
 
 	if (basicModal.visible()) {
 
+		// Set password
 		if ($('.basicModal .choice input[name="password"]:checked').length===1) {
 			password			= $('.basicModal .choice input[data-name="password"]').val();
 			album.json.password	= '1';
@@ -462,18 +463,28 @@ album.setPublic = function(albumID, e) {
 			album.json.password	= '0';
 		}
 
-		if ($('.basicModal .choice input[name="listed"]:checked').length===1)		listed = true;
-		if ($('.basicModal .choice input[name="downloadable"]:checked').length===1)	downloadable = true;
+		// Set downloadable
+		if ($('.basicModal .choice input[name="downloadable"]:checked').length===1) {
+			downloadable			= true;
+			album.json.downloadable	= '1';
+		} else {
+			downloadable			= false;
+			album.json.downloadable	= '0';
+		}
+
+		if ($('.basicModal .choice input[name="listed"]:checked').length===1) listed = true;
 
 	}
 
 	if (visible.album()) {
 
-		album.json.public	= (album.json.public==='0') ? '1' : '0';
-		album.json.password	= (album.json.public==='0') ? '0' : album.json.password;
+		album.json.public		= (album.json.public==='0') ? '1' : '0';
+		album.json.password		= (album.json.public==='0') ? '0' : album.json.password;
+		album.json.downloadable	= (album.json.public==='0') ? '0' : album.json.downloadable;
 
 		view.album.public();
 		view.album.password();
+		view.album.downloadable();
 
 		if (album.json.public==='1') contextMenu.shareAlbum(albumID, e);
 

@@ -261,7 +261,7 @@ view.album = {
 
 			$('.photo .iconic-share').remove();
 
-			if (album.json.init) $('#infobox .attr_visibility').html('Public');
+			if (album.json.init) $('#infobox .attr_public').html('Yes');
 
 		} else {
 
@@ -269,7 +269,7 @@ view.album = {
 				.removeClass('active')
 				.attr('title', 'Make Public');
 
-			if (album.json.init) $('#infobox .attr_visibility').html('Private');
+			if (album.json.init) $('#infobox .attr_public').html('No');
 		}
 
 	},
@@ -278,6 +278,13 @@ view.album = {
 
 		if (album.json.password==='1')	$('#infobox .attr_password').html('Yes');
 		else							$('#infobox .attr_password').html('No');
+
+	},
+
+	downloadable: function() {
+
+		if (album.json.downloadable==='1')	$('#infobox .attr_downloadable').html('Yes');
+		else								$('#infobox .attr_downloadable').html('No');
 
 	},
 
