@@ -183,7 +183,7 @@ class Album extends Module {
 			$album['password']	= ($album['password']=='' ? '0' : '1');
 
 			# Thumbs
-			if (($public===true&&$album['password']===false)||($public===false)) {
+			if (($public===true&&$album['password']==='0')||($public===false)) {
 
 				# Execute query
 				$query	= Database::prepare($this->database, "SELECT thumbUrl FROM ? WHERE album = '?' ORDER BY star DESC, " . substr($this->settings['sorting'], 9) . " LIMIT 3", array(LYCHEE_TABLE_PHOTOS, $album['id']));
