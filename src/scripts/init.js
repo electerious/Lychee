@@ -19,12 +19,12 @@ $(document).ready(function() {
 		else								contextMenu.albumTitle(album.getID(), e);
 	});
 	header.dom('#button_share').on(eventName, function(e) {
-		if (photo.json.public==1||photo.json.public==2)	contextMenu.sharePhoto(photo.getID(), e);
-		else											photo.setPublic(photo.getID(), e);
+		if (photo.json.public==='1'||photo.json.public==='2')	contextMenu.sharePhoto(photo.getID(), e);
+		else													photo.setPublic(photo.getID(), e);
 	});
 	header.dom('#button_share_album').on(eventName, function(e) {
-		if (album.json.public==1)	contextMenu.shareAlbum(album.getID(), e);
-		else						album.setPublic(album.getID(), e);
+		if (album.json.public==='1')	contextMenu.shareAlbum(album.getID(), e);
+		else							album.setPublic(album.getID(), true, e);
 	});
 	header.dom('#button_signin')		.on(eventName, lychee.loginDialog);
 	header.dom('#button_settings')		.on(eventName, contextMenu.settings);

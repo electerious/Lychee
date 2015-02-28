@@ -418,7 +418,7 @@ photo.setStar = function(photoIDs) {
 
 photo.setPublic = function(photoID, e) {
 
-	if (photo.json.public==2) {
+	if (photo.json.public==='2') {
 
 		var action;
 
