@@ -390,13 +390,13 @@ view.photo = {
 			$('#button_share')
 				.addClass('active')
 				.attr('title', 'Share Photo');
-			if (photo.json.init) $('#infobox .attr_visibility').html('Public');
+			if (photo.json.init) $('#infobox .attr_public').html('Yes');
 		} else {
 			// Photo private
 			$('#button_share')
 				.removeClass('active')
 				.attr('title', 'Make Public');
-			if (photo.json.init) $('#infobox .attr_visibility').html('Private');
+			if (photo.json.init) $('#infobox .attr_public').html('No');
 		}
 
 	},
