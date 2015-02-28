@@ -544,8 +544,8 @@ class Photo extends Module {
 		if (strlen($photo['takestamp'])>1) $photo['takedate'] = date('d M. Y', $photo['takestamp']);
 
 		# Parse medium
-		if ($photo['medium']==='1') $photo['medium'] = LYCHEE_URL_UPLOADS_MEDIUM . $photo['url'];
-		else $photo['medium'] = '';
+		if ($photo['medium']==='1')	$photo['medium'] = LYCHEE_URL_UPLOADS_MEDIUM . $photo['url'];
+		else						$photo['medium'] = '';
 
 		# Parse paths
 		$photo['url']		= LYCHEE_URL_UPLOADS_BIG . $photo['url'];
