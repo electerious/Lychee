@@ -498,7 +498,7 @@ class Album extends Module {
 
 	}
 
-	public function setPublic($password, $visible, $downloadable) {
+	public function setPublic($public, $password, $visible, $downloadable) {
 
 		# Check dependencies
 		self::dependencies(isset($this->database, $this->albumIDs));
@@ -506,39 +506,27 @@ class Album extends Module {
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
 
-		# Get public
-		$query	= Database::prepare($this->database, "SELECT id, public FROM ? WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
-		$albums	= $this->database->query($query);
+		# Convert values
+		$public			= ($public==='1' ? 1 : 0);
+		$visible		= ($visible==='1' ? 1 : 0);
+		$downloadable	= ($downloadable==='1' ? 1 : 0);
 
-		while ($album = $albums->fetch_object()) {
+		# Set public
+		$query	= Database::prepare($this->database, "UPDATE ? SET public = '?', visible = '?', downloadable = '?', password = NULL WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $public, $visible, $downloadable, $this->albumIDs));
+		$result	= $this->database->query($query);
+		if (!$result) {
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			return false;
+		}
 
-			# Invert public
-			$public = ($album->public=='0' ? 1 : 0);
-
-			# Convert visible
-			$visible = ($visible==='true' ? 1 : 0);
-
-			# Convert downloadable
-			$downloadable = ($downloadable==='true' ? 1 : 0);
-
-			# Set public
-			$query	= Database::prepare($this->database, "UPDATE ? SET public = '?', visible = '?', downloadable = '?', password = NULL WHERE id = '?'", array(LYCHEE_TABLE_ALBUMS, $public, $visible, $downloadable, $album->id));
+		# Reset permissions for photos
+		if ($public===1) {
+			$query	= Database::prepare($this->database, "UPDATE ? SET public = 0 WHERE album IN (?)", array(LYCHEE_TABLE_PHOTOS, $this->albumIDs));
 			$result	= $this->database->query($query);
 			if (!$result) {
 				Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
 				return false;
 			}
-
-			# Reset permissions for photos
-			if ($public===1) {
-				$query	= Database::prepare($this->database, "UPDATE ? SET public = 0 WHERE album = '?'", array(LYCHEE_TABLE_PHOTOS, $album->id));
-				$result	= $this->database->query($query);
-				if (!$result) {
-					Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
-					return false;
-				}
-			}
-
 		}
 
 		# Call plugins

@@ -274,7 +274,8 @@ contextMenu.shareAlbum = function(albumID, e) {
 		{ type: 'item', title: build.iconic('facebook', file, file) + 'Facebook', fn: function() { album.share(1) } },
 		{ type: 'item', title: build.iconic('envelope-closed') + 'Mail', fn: function() { album.share(2) } },
 		{ type: 'separator' },
-		{ type: 'item', title: build.iconic('ban') + 'Make Private', fn: function() { album.setPublic(albumID) } }
+		{ type: 'item', title: build.iconic('pencil') + 'Edit Sharing', fn: function() { album.setPublic(albumID, true, e) } },
+		{ type: 'item', title: build.iconic('ban') + 'Make Private', fn: function() { album.setPublic(albumID, false) } }
 	];
 
 	basicContext.show(items, e);

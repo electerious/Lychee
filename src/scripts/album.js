@@ -375,33 +375,41 @@ album.setDescription = function(albumID) {
 
 }
 
-album.setPublic = function(albumID, e) {
+album.setPublic = function(albumID, modal, e) {
 
 	var params,
-		password		= '',
-		listed			= false,
-		downloadable	= false;
+		password		= '';
 
 	albums.refresh();
 
-	if (!basicModal.visible()&&album.json.public==='0') {
+	if (modal===true) {
 
-		var msg = '',
-			action;
+		let msg		= '',
+			text	= '',
+			action	= {};
 
-		action = function() {
+		action.fn = function() {
 
-			basicModal.close();
-			album.setPublic(album.getID(), e);
+			// Current function without showing the modal
+			album.setPublic(album.getID(), false, e);
 
 		};
 
+		// Album public = Editing a shared album
+		if (album.json.public==='1') {
+			action.title	= 'Edit Sharing';
+			text			= 'The sharing-properties of this album will be changed to the following:';
+		} else {
+			action.title	= 'Share Album';
+			text			= 'This album will be shared with the following properties:';
+		}
+
 		msg =	`
-				<p class='less'>This album will be shared with the following properties:</p>
+				<p class='less'>${ text }</p>
 				<form>
 					<div class='choice'>
 						<label>
-							<input type='checkbox' name='listed' checked>
+							<input type='checkbox' name='visible'>
 							<span class='checkbox'>${ build.iconic('check') }</span>
 							<span class='label'>Visible</span>
 						</label>
@@ -431,8 +439,8 @@ album.setPublic = function(albumID, e) {
 			body: msg,
 			buttons: {
 				action: {
-					title: 'Share Album',
-					fn: action
+					title: action.title,
+					fn: action.fn
 				},
 				cancel: {
 					title: 'Cancel',
@@ -440,6 +448,11 @@ album.setPublic = function(albumID, e) {
 				}
 			}
 		});
+
+		// Active visible by default (public = 0)
+		if ((album.json.public==='1'&&album.json.visible==='1')||
+			(album.json.public==='0'))							$('.basicModal .choice input[name="visible"]').click();
+		if (album.json.downloadable==='1')						$('.basicModal .choice input[name="downloadable"]').click();
 
 		$('.basicModal .choice input[name="password"]').on('change', function() {
 
@@ -452,7 +465,19 @@ album.setPublic = function(albumID, e) {
 
 	}
 
+	// Set data
 	if (basicModal.visible()) {
+
+		// Visible modal => Set album public
+		album.json.public = '1';
+
+		// Set visible
+		if ($('.basicModal .choice input[name="visible"]:checked').length===1)	album.json.visible = '1';
+		else																	album.json.visible = '0';
+
+		// Set downloadable
+		if ($('.basicModal .choice input[name="downloadable"]:checked').length===1)	album.json.downloadable	= '1';
+		else 																		album.json.downloadable	= '0';
 
 		// Set password
 		if ($('.basicModal .choice input[name="password"]:checked').length===1) {
@@ -463,28 +488,26 @@ album.setPublic = function(albumID, e) {
 			album.json.password	= '0';
 		}
 
-		// Set downloadable
-		if ($('.basicModal .choice input[name="downloadable"]:checked').length===1) {
-			downloadable			= true;
-			album.json.downloadable	= '1';
-		} else {
-			downloadable			= false;
-			album.json.downloadable	= '0';
-		}
+		// Modal input has been processed, now it can be closed
+		basicModal.close();
 
-		if ($('.basicModal .choice input[name="listed"]:checked').length===1) listed = true;
+	} else {
+
+		// Modal not visible => Set album private
+		album.json.public = '0';
 
 	}
 
+	// Set data and refresh view
 	if (visible.album()) {
 
-		album.json.public		= (album.json.public==='0') ? '1' : '0';
-		album.json.password		= (album.json.public==='0') ? '0' : album.json.password;
+		album.json.visible		= (album.json.public==='0') ? '0' : album.json.visible;
 		album.json.downloadable	= (album.json.public==='0') ? '0' : album.json.downloadable;
+		album.json.password		= (album.json.public==='0') ? '0' : album.json.password;
 
 		view.album.public();
-		view.album.password();
 		view.album.downloadable();
+		view.album.password();
 
 		if (album.json.public==='1') contextMenu.shareAlbum(albumID, e);
 
@@ -492,9 +515,10 @@ album.setPublic = function(albumID, e) {
 
 	params = {
 		albumID,
-		password,
-		visible: listed,
-		downloadable
+		public:			album.json.public,
+		password:		password,
+		visible:		album.json.visible,
+		downloadable:	album.json.downloadable
 	}
 
 	api.post('Album::setPublic', params, function(data) {
