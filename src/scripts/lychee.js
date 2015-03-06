@@ -41,30 +41,45 @@ lychee.init = function() {
 
 	api.post('Session::init', params, function(data) {
 
-		if (data.loggedIn!==true) {
-			lychee.setMode('public');
-		} else {
-			lychee.username		= data.config.username		|| '';
-			lychee.sorting		= data.config.sorting		|| '';
-			lychee.dropboxKey	= data.config.dropboxKey	|| '';
-			lychee.location		= data.config.location		|| '';
-		}
+		// Check status
+		// 0 = No configuration
+		// 1 = Logged out
+		// 2 = Logged in
 
-		// No configuration
-		if (data==='Warning: No configuration!') {
+		if (data.status===2) {
+
+			// Logged in
+
+			lychee.username			= data.config.username			|| '';
+			lychee.sorting			= data.config.sorting			|| '';
+			lychee.dropboxKey		= data.config.dropboxKey		|| '';
+			lychee.location			= data.config.location			|| '';
+			lychee.checkForUpdates	= data.config.checkForUpdates	|| true;
+
+			// No username and password
+			if (data.config.login===false) settings.createLogin();
+
+		} else if (data.status===1) {
+
+			// Logged out
+
+			lychee.setMode('public');
+
+		} else if (data.status===0) {
+
+			// No configuration
+
+			lychee.setMode('public');
+
 			header.dom().hide();
 			lychee.content.hide();
 			$('body').append(build.no_content('cog'));
 			settings.createConfig();
+
 			return true;
+
 		}
 
-		// No login
-		if (data.config.login===false) {
-			settings.createLogin();
-		}
-
-		lychee.checkForUpdates = data.config.checkForUpdates;
 		$(window).bind('popstate', lychee.load);
 		lychee.load();
 

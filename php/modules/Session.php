@@ -55,9 +55,12 @@ class Session extends Module {
 		if ($public===false) {
 
 			# Logged in
-			$return['loggedIn'] = true;
+			$return['status'] = LYCHEE_STATUS_LOGGEDIN;
 
 		} else {
+
+			# Logged out
+			$return['status'] = LYCHEE_STATUS_LOGGEDOUT;
 
 			# Unset unused vars
 			unset($return['config']['username']);
@@ -67,9 +70,6 @@ class Session extends Module {
 			unset($return['config']['login']);
 			unset($return['config']['location']);
 			unset($return['config']['plugins']);
-
-			# Logged out
-			$return['loggedIn'] = false;
 
 		}
 
