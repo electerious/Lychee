@@ -24,7 +24,6 @@ header.show = function() {
 
 	lychee.imageview.removeClass('full');
 	header.dom().removeClass('hidden');
-	lychee.loadingBar.css('opacity', 1);
 
 	// Adjust position or size of photo
 	if ($('#imageview #image.small').length>0)	$('#imageview #image').css('margin-top', newMargin);
@@ -46,7 +45,6 @@ header.hide = function(e, delay) {
 
 			lychee.imageview.addClass('full');
 			header.dom().addClass('hidden');
-			lychee.loadingBar.css('opacity', 0);
 
 			// Adjust position or size of photo
 			if ($('#imageview #image.small').length>0)	$('#imageview #image').css('margin-top', newMargin);

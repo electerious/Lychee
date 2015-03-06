@@ -5,7 +5,15 @@
 
 loadingBar = {
 
-	status: null
+	status:	null,
+	_dom:	$('#loading')
+
+}
+
+loadingBar.dom = function(selector) {
+
+	if (selector===undefined||selector===null||selector==='') return loadingBar._dom;
+	return loadingBar._dom.find(selector);
 
 }
 
@@ -21,10 +29,10 @@ loadingBar.show = function(status, errorText) {
 		if (!errorText)	errorText = 'Whoops, it looks like something went wrong. Please reload the site and try again!';
 
 		// Move header down
-		if (visible.controls()) header.dom().addClass('error');
+		if (visible.header()) header.dom().addClass('error');
 
 		// Modify loading
-		lychee.loadingBar
+		loadingBar.dom()
 			.removeClass('loading uploading error')
 			.addClass(status)
 			.html('<h1>Error: <span>' + errorText + '</span></h1>')
@@ -32,8 +40,12 @@ loadingBar.show = function(status, errorText) {
 			.css('height', '40px');
 
 		// Set timeout
-		clearTimeout(lychee.loadingBar.data('timeout'));
-		lychee.loadingBar.data('timeout', setTimeout(function() { loadingBar.hide(true) }, 3000));
+		clearTimeout(loadingBar._timeout);
+		loadingBar._timeout = setTimeout(function() {
+
+			loadingBar.hide(true)
+
+		}, 3000);
 
 		return true;
 
@@ -45,19 +57,19 @@ loadingBar.show = function(status, errorText) {
 		loadingBar.status = 'loading';
 
 		// Set timeout
-		clearTimeout(lychee.loadingBar.data('timeout'));
-		lychee.loadingBar.data('timeout', setTimeout(function() {
+		clearTimeout(loadingBar._timeout);
+		loadingBar._timeout = setTimeout(function() {
 
 			// Move header down
-			if (visible.controls()) header.dom().addClass('loading');
+			if (visible.header()) header.dom().addClass('loading');
 
 			// Modify loading
-			lychee.loadingBar
+			loadingBar.dom()
 				.removeClass('loading uploading error')
 				.addClass('loading')
 				.show();
 
-		}, 1000));
+		}, 1000);
 
 		return true;
 
@@ -73,16 +85,16 @@ loadingBar.hide = function(force) {
 		loadingBar.status = null;
 
 		// Move header up
-		if (visible.controls()) header.dom().removeClass('error loading');
+		if (visible.header()) header.dom().removeClass('error loading');
 
 		// Modify loading
-		lychee.loadingBar
+		loadingBar.dom()
 			.html('')
 			.css('height', '3px');
 
 		// Set timeout
-		clearTimeout(lychee.loadingBar.data('timeout'));
-		setTimeout(function() { lychee.loadingBar.hide() }, 300);
+		clearTimeout(loadingBar._timeout);
+		setTimeout(function() { loadingBar.dom().hide() }, 300);
 
 	}
 

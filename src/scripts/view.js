@@ -409,7 +409,7 @@ view.photo = {
 
 	photo: function() {
 
-		lychee.imageview.html(build.imageview(photo.json, photo.getSize(), visible.controls()));
+		lychee.imageview.html(build.imageview(photo.json, photo.getSize(), visible.header()));
 
 		var $nextArrow		= lychee.imageview.find('a#next'),
 			$previousArrow	= lychee.imageview.find('a#previous'),

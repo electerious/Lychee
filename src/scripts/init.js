@@ -132,7 +132,7 @@ $(document).ready(function() {
 			/* Fullscreen on mobile */
 			.on('touchend', '#image', function(e) {
 				if (swipe.obj===null||(swipe.offset>=-5&&swipe.offset<=5)) {
-					if (visible.controls())	header.hide(e, 0);
+					if (visible.header())	header.hide(e, 0);
 					else					header.show();
 				}
 			})

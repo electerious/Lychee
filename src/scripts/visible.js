@@ -37,8 +37,8 @@ visible.infoboxbutton = function() {
 	return false;
 }
 
-visible.controls = function() {
-	if (lychee.loadingBar.css('opacity')<1) return false;
+visible.header = function() {
+	if (header.dom().hasClass('hidden')===true) return false;
 	return true;
 }
 

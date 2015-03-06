@@ -25,7 +25,6 @@ lychee = {
 	dropbox:		false,
 	dropboxKey:		'',
 
-	loadingBar:		$('#loading'),
 	content:		$('#content'),
 	imageview:		$('#imageview'),
 	infobox:		$('#infobox')
