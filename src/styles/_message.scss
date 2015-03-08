@@ -57,7 +57,10 @@
 		&:hover { background: white(.02); }
 
 		&:active,
-		&--active { background: black(.1); }
+		&--active {
+			transition: none;
+			background: black(.1);
+		}
 
 		&#basicModal__action {
 			color: $colorBlue;

@@ -47,6 +47,11 @@
 		}
 
 		&:hover .iconic { fill: white(1); }
+
+		&:active .iconic {
+			transition: none;
+			fill: white(.8);
+		}
 	}
 
 	.bumper {
@@ -81,12 +86,17 @@
 		width: 15px;
 
 		.iconic {
-			fill: #888;
+			fill: white(.5);
 			filter: drop-shadow($shadow);
 			transition: fill .2s ease-out;
 		}
 
-		&:hover .iconic { fill: #fff; }
+		&:hover .iconic { fill: white(1); }
+
+		&:active .iconic {
+			transition: none;
+			fill: white(.8);
+		}
 	}
 
 	/* Divider ------------------------------------------------*/
@@ -150,7 +160,7 @@
 		background-color: black(.5);
 		border-radius: 100px;
 		font-size: 12px;
-		transition: background-color .3s;
+		transition: background-color .2s;
 
 		&:hover { background-color: black(.3); }
 	}
@@ -162,12 +172,19 @@
 		width: 0;
 		overflow: hidden;
 		transform: scale(0);
-		transition: width .3s, margin .3s, transform .3s;
+		transition: width .2s, margin .2s, transform .2s, fill .2s ease-out;
 
 		.iconic {
 			fill: $colorRed;
 			width: 8px;
 			filter: drop-shadow($shadowLight);
+		}
+
+		&:hover .iconic { fill: lighten($colorRed, 10%); }
+
+		&:active .iconic {
+			transition: none;
+			fill: darken($colorRed, 10%);
 		}
 	}
 

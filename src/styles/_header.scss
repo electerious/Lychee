@@ -50,6 +50,11 @@ header {
 
 		&:hover .iconic { fill: white(1); }
 
+		&:active .iconic {
+			transition: none;
+			fill: white(.8);
+		}
+
 		&.editable .iconic { display: inline-block; }
 	}
 
@@ -80,6 +85,11 @@ header {
 		}
 
 		&:hover .iconic { fill: white(1); }
+
+		&:active .iconic {
+			transition: none;
+			fill: white(.8);
+		}
 
 		&--star.active .iconic { fill: #f0ef77; }
 

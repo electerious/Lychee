@@ -34,6 +34,8 @@
 			cursor: default;
 
 			&:hover { background: linear-gradient(to bottom, $colorBlue, darken($colorBlue, 5%)); }
+
+			&:active { background: linear-gradient(to bottom, darken($colorBlue, 10%), darken($colorBlue, 15%)); }
 		}
 
 			tr td .cover {

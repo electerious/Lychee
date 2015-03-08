@@ -41,6 +41,11 @@
 		&.active img {
 			border-color: $colorBlue;
 		}
+
+		&:active img {
+			transition: none;
+			border-color: darken($colorBlue, 15%);
+		}
 	}
 
 	/* Album ------------------------------------------------*/
@@ -57,12 +62,6 @@
 		&:hover img:nth-child(1) { transform: rotate(-2deg) translateY(10px) translateX(-12px); }
 
 		&:hover img:nth-child(2) { transform: rotate(5deg) translateY(-8px) translateX(12px); }
-	}
-
-	/* Photo ------------------------------------------------*/
-	.photo:active  {
-		transition-duration: .1s;
-		transform: scale(.98);
 	}
 
 	/* Album/Photo Overlay ------------------------------------------------*/
