@@ -31,6 +31,7 @@
 			color: white(1);
 			border-radius: 0;
 			transition: none;
+			cursor: default;
 
 			&:hover { background: linear-gradient(to bottom, $colorBlue, darken($colorBlue, 5%)); }
 		}
@@ -78,7 +79,6 @@
 	/* No Hover ------------------------------------------------*/
 	tr.noHover td:hover {
 		background: none;
-		cursor: default;
 	}
 
 }

@@ -39,7 +39,6 @@
 		display: inline-block;
 		margin-left: 3px;
 		width: 10px;
-		cursor: pointer;
 
 		.iconic {
 			fill: white(.5);
@@ -80,7 +79,6 @@
 		float: right;
 		padding: 16px 65px 12px 15px;
 		width: 15px;
-		cursor: pointer;
 
 		.iconic {
 			fill: #888;
@@ -162,7 +160,6 @@
 		padding: 0;
 		margin: 0 0 -2px 0;
 		width: 0;
-		cursor: pointer;
 		overflow: hidden;
 		transform: scale(0);
 		transition: width .3s, margin .3s, transform .3s;

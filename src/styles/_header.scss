@@ -50,8 +50,6 @@ header {
 
 		&:hover .iconic { fill: white(1); }
 
-		&.editable { cursor: pointer; }
-
 		&.editable .iconic { display: inline-block; }
 	}
 
@@ -70,7 +68,6 @@ header {
 		display: inline-block;
 		padding: 17px 8px 15px;
 		width: 15px;
-		cursor: pointer;
 
 		&--left { float: left; }
 
@@ -128,7 +125,6 @@ header {
 		font-size: 20px;
 		opacity: 0;
 		transition: opacity .2s ease-out, color .2s ease-out;
-		cursor: pointer;
 
 		&:hover {
 			color: #fff;
@@ -146,7 +142,6 @@ header {
 		text-shadow: $shadow;
 		border-radius: 100px;
 		display: none;
-		cursor: pointer;
 
 		&:hover { background-color: black(.3); }
 	}
