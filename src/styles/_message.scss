@@ -174,14 +174,15 @@
 
 	/* Version ------------------------------------------------*/
 	.version {
-		padding: 0px 30px 20px;
-		color: #888;
+		margin: -5px 0 0;
+		padding: 0 30px 30px !important;
+		color: white(.3);
 		font-size: 12px;
-		text-align: left;
+		text-align: right;
 
 		span { display: none; }
 
-		span a { color: #888; }
+		span a { color: white(.3); }
 	}
 
 	/* Title ------------------------------------------------*/

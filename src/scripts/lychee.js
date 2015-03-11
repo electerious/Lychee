@@ -17,7 +17,7 @@ lychee = {
 	viewMode:		false,
 	debugMode:		false,
 
-	checkForUpdates:false,
+	checkForUpdates:'1',
 	username:		'',
 	sorting:		'',
 	location:		'',
@@ -54,14 +54,16 @@ lychee.init = function() {
 			lychee.sorting			= data.config.sorting			|| '';
 			lychee.dropboxKey		= data.config.dropboxKey		|| '';
 			lychee.location			= data.config.location			|| '';
-			lychee.checkForUpdates	= data.config.checkForUpdates	|| true;
+			lychee.checkForUpdates	= data.config.checkForUpdates	|| '1';
 
-			// No username and password
+			// Show dialog when there is no username and password
 			if (data.config.login===false) settings.createLogin();
 
 		} else if (data.status===1) {
 
 			// Logged out
+
+			lychee.checkForUpdates = data.config.checkForUpdates || '1';
 
 			lychee.setMode('public');
 
