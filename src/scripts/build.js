@@ -124,7 +124,7 @@ build.photo = function(data) {
 					<h1 title='${ longTitle }'>${ title }</h1>
 			`
 
-	if (data.cameraDate===1)	html += `<a><span title='Camera Date'>${ build.iconic('camera-slr') }</span>${ data.sysdate }</a>`;
+	if (data.cameraDate==='1')	html += `<a><span title='Camera Date'>${ build.iconic('camera-slr') }</span>${ data.sysdate }</a>`;
 	else						html += `<a>${ data.sysdate }</a>`;
 
 	html += '</div>';

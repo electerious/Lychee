@@ -526,6 +526,46 @@ class Photo extends Module {
 
 	}
 
+	public static function prepareData($data) {
+
+		# This function requires the following photo-attributes and turns them
+		# into a front-end friendly format: id, title, tags, public, star, album, thumbUrl, takestamp, url
+		# Note that some attributes remain unchanged
+
+		# Init
+		$photo = null;
+
+		# Set unchanged attribute
+		$photo['id']		= $data['id'];
+		$photo['title']		= $data['title'];
+		$photo['tags']		= $data['tags'];
+		$photo['public']	= $data['public'];
+		$photo['star']		= $data['star'];
+		$photo['album']		= $data['album'];
+
+		# Parse urls
+		$photo['thumbUrl']	= LYCHEE_URL_UPLOADS_THUMB . $data['thumbUrl'];
+		$photo['url']		= LYCHEE_URL_UPLOADS_BIG . $data['url'];
+
+		# Use takestamp as sysdate when possible
+		if (isset($data['takestamp'])&&$data['takestamp']!=='0') {
+
+			# Use takestamp
+			$photo['cameraDate']	= '1';
+			$photo['sysdate']		= date('d F Y', $data['takestamp']);
+
+		} else {
+
+			# Use sysstamp from the id
+			$photo['cameraDate']	= '0';
+			$photo['sysdate']		= date('d F Y', substr($data['id'], 0, -4));
+
+		}
+
+		return $photo;
+
+	}
+
 	public function get($albumID) {
 
 		# Check dependencies

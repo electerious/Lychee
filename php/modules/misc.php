@@ -21,12 +21,13 @@ function search($database, $settings, $term) {
 	);
 
 	# Photos
-	$query	= Database::prepare($database, "SELECT id, title, tags, public, star, album, thumbUrl FROM ? WHERE title LIKE '%?%' OR description LIKE '%?%' OR tags LIKE '%?%'", array(LYCHEE_TABLE_PHOTOS, $term, $term, $term));
+	$query	= Database::prepare($database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE title LIKE '%?%' OR description LIKE '%?%' OR tags LIKE '%?%'", array(LYCHEE_TABLE_PHOTOS, $term, $term, $term));
 	$result	= $database->query($query);
-	while($row = $result->fetch_assoc()) {
-		$return['photos'][$row['id']]				= $row;
-		$return['photos'][$row['id']]['thumbUrl']	= LYCHEE_URL_UPLOADS_THUMB . $row['thumbUrl'];
-		$return['photos'][$row['id']]['sysdate']	= date('d M. Y', substr($row['id'], 0, -4));
+	while($photo = $result->fetch_assoc()) {
+
+		$photo = Photo::prepareData($photo);
+		$return['photos'][$photo['id']] = $photo;
+
 	}
 
 	# Albums
