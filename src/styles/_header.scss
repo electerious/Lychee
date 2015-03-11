@@ -114,15 +114,21 @@ header {
 		width: 80px;
 		margin: 12px 12px 0 0;
 		padding: 5px 12px 6px 12px;
-		background-color: #222;
+		background-color: #1d1d1d;
 		color: #fff;
-		border: 0;
+		border: 1px solid black(.9);
+		box-shadow: 0 1px 0 white(.04);
 		outline: none;
 		border-radius: 50px;
 		opacity: .6;
-		transition: opacity .3s ease-out, transform .3s ease-out, box-shadow .3s ease-out, width .2s ease-out;
+		transition: opacity .3s ease-out, box-shadow .3s ease-out, width .2s ease-out;
 
-		&:focus { width: 140px; }
+		&:focus {
+			width: 140px;
+			border-color: $colorBlue;
+			box-shadow: 0 1px 0 white(0);
+			opacity: 1;
+		}
 
 		&:focus ~ #clearSearch { opacity: 1; }
 	}
@@ -132,15 +138,13 @@ header {
 		top: 13px;
 		right: 78px;
 		padding: 0;
-		color: #888;
+		color: white(.5);
 		font-size: 20px;
 		opacity: 0;
-		transition: opacity .2s ease-out, color .2s ease-out;
+		transition: color .2s ease-out;
+		cursor: default;
 
-		&:hover {
-			color: #fff;
-			opacity: 1;
-		}
+		&:hover { color: white(1); }
 	}
 
 	/* Hosted with Lychee ------------------------------------------------*/
