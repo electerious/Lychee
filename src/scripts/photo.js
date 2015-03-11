@@ -529,8 +529,9 @@ photo.editTags = function(photoIDs) {
 	// Get tags
 	if (visible.photo())						oldTags = photo.json.tags;
 	if (visible.album()&&photoIDs.length===1)	oldTags = album.json.content[photoIDs].tags;
+	if (visible.search()&&photoIDs.length===1)	oldTags = album.json.content[photoIDs].tags;
 	if (visible.album()&&photoIDs.length>1) {
-		var same = true;
+		let same = true;
 		photoIDs.forEach(function(id, index, array) {
 			if(album.json.content[id].tags===album.json.content[photoIDs[0]].tags&&same===true) same = true;
 			else same = false;
