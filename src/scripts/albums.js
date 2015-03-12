@@ -59,13 +59,13 @@ albums.load = function() {
 albums.parse = function(album) {
 
 	if (album.password==='1'&&lychee.publicMode===true) {
-		album.thumb0 = 'src/images/password.svg';
-		album.thumb1 = 'src/images/password.svg';
-		album.thumb2 = 'src/images/password.svg';
+		album.thumbs[0] = 'src/images/password.svg';
+		album.thumbs[1] = 'src/images/password.svg';
+		album.thumbs[2] = 'src/images/password.svg';
 	} else {
-		if (!album.thumb0) album.thumb0 = 'src/images/no_images.svg';
-		if (!album.thumb1) album.thumb1 = 'src/images/no_images.svg';
-		if (!album.thumb2) album.thumb2 = 'src/images/no_images.svg';
+		if (!album.thumbs[0])	album.thumbs[0]	= 'src/images/no_images.svg';
+		if (!album.thumbs[1])	album.thumbs[1]	= 'src/images/no_images.svg';
+		if (!album.thumbs[2])	album.thumbs[2]	= 'src/images/no_images.svg';
 	}
 
 }
@@ -77,9 +77,7 @@ albums._createSmartAlbums = function(data) {
 		title:		'Unsorted',
 		sysdate:	data.unsorted.num + ' photos',
 		unsorted: 	'1',
-		thumb0:		data.unsorted.thumb0,
-		thumb1:		data.unsorted.thumb1,
-		thumb2:		data.unsorted.thumb2
+		thumbs:		data.unsorted.thumbs
 	};
 
 	data.starred = {
@@ -87,9 +85,7 @@ albums._createSmartAlbums = function(data) {
 		title:		'Starred',
 		sysdate:	data.starred.num + ' photos',
 		star:		'1',
-		thumb0:		data.starred.thumb0,
-		thumb1:		data.starred.thumb1,
-		thumb2:		data.starred.thumb2
+		thumbs:		data.starred.thumbs
 	};
 
 	data.public = {
@@ -97,9 +93,7 @@ albums._createSmartAlbums = function(data) {
 		title:		'Public',
 		sysdate:	data.public.num + ' photos',
 		public:		'1',
-		thumb0:		data.public.thumb0,
-		thumb1:		data.public.thumb1,
-		thumb2:		data.public.thumb2
+		thumbs:		data.public.thumbs
 	};
 
 	data.recent = {
@@ -107,9 +101,7 @@ albums._createSmartAlbums = function(data) {
 		title:		'Recent',
 		sysdate:	data.recent.num + ' photos',
 		recent:		'1',
-		thumb0:		data.recent.thumb0,
-		thumb1:		data.recent.thumb1,
-		thumb2:		data.recent.thumb2
+		thumbs:		data.recent.thumbs
 	};
 
 }

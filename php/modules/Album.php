@@ -52,6 +52,36 @@ class Album extends Module {
 
 	}
 
+	public static function prepareData($data) {
+
+		# This function requires the following album-attributes and turns them
+		# into a front-end friendly format: id, title, public, sysstamp, password
+		# Note that some attributes remain unchanged
+
+		# Check dependencies
+		self::dependencies(isset($data));
+
+		# Init
+		$album = null;
+
+		# Set unchanged attributes
+		$album['id']		= $data['id'];
+		$album['title']		= $data['title'];
+		$album['public']	= $data['public'];
+
+		# Parse date
+		$album['sysdate'] = date('F Y', $data['sysstamp']);
+
+		# Parse password
+		$album['password'] = ($data['password']=='' ? '0' : '1');
+
+		# Set placeholder for thumbs
+		$album['thumbs'] = array();
+
+		return $album;
+
+	}
+
 	public function get() {
 
 		# Check dependencies
@@ -172,9 +202,8 @@ class Album extends Module {
 		# For each album
 		while ($album = $albums->fetch_assoc()) {
 
-			# Parse info
-			$album['sysdate']	= date('F Y', $album['sysstamp']);
-			$album['password']	= ($album['password']=='' ? '0' : '1');
+			# Turn data from the database into a front-end friendly format
+			$album = Album::prepareData($album);
 
 			# Thumbs
 			if (($public===true&&$album['password']==='0')||
@@ -187,7 +216,7 @@ class Album extends Module {
 					# For each thumb
 					$k = 0;
 					while ($thumb = $thumbs->fetch_object()) {
-						$album["thumb$k"] = LYCHEE_URL_UPLOADS_THUMB . $thumb->thumbUrl;
+						$album['thumbs'][$k] = LYCHEE_URL_UPLOADS_THUMB . $thumb->thumbUrl;
 						$k++;
 					}
 
@@ -221,54 +250,87 @@ class Album extends Module {
 			'recent'	=> null
 		);
 
+		###
 		# Unsorted
+		###
+
 		$query		= Database::prepare($this->database, 'SELECT thumbUrl FROM ? WHERE album = 0 ' . $this->settings['sorting'], array(LYCHEE_TABLE_PHOTOS));
 		$unsorted	= $this->database->query($query);
 		$i			= 0;
+
+		$return['unsorted'] = array(
+			'thumbs'	=> array(),
+			'num'		=> $unsorted->num_rows
+		);
+
 		while($row = $unsorted->fetch_object()) {
 			if ($i<3) {
-				$return['unsorted']["thumb$i"] = LYCHEE_URL_UPLOADS_THUMB . $row->thumbUrl;
+				$return['unsorted']['thumbs'][$i] = LYCHEE_URL_UPLOADS_THUMB . $row->thumbUrl;
 				$i++;
 			} else break;
 		}
-		$return['unsorted']['num'] = $unsorted->num_rows;
 
+		###
 		# Starred
+		###
+
 		$query		= Database::prepare($this->database, 'SELECT thumbUrl FROM ? WHERE star = 1 ' . $this->settings['sorting'], array(LYCHEE_TABLE_PHOTOS));
 		$starred	= $this->database->query($query);
 		$i			= 0;
+
+		$return['starred'] = array(
+			'thumbs'	=> array(),
+			'num'		=> $starred->num_rows
+		);
+
 		while($row3 = $starred->fetch_object()) {
 			if ($i<3) {
-				$return['starred']["thumb$i"] = LYCHEE_URL_UPLOADS_THUMB . $row3->thumbUrl;
+				$return['starred']['thumbs'][$i] = LYCHEE_URL_UPLOADS_THUMB . $row3->thumbUrl;
 				$i++;
 			} else break;
 		}
-		$return['starred']['num'] = $starred->num_rows;
 
+		###
 		# Public
+		###
+
 		$query		= Database::prepare($this->database, 'SELECT thumbUrl FROM ? WHERE public = 1 ' . $this->settings['sorting'], array(LYCHEE_TABLE_PHOTOS));
 		$public		= $this->database->query($query);
 		$i			= 0;
+
+		$return['public'] = array(
+			'thumbs'	=> array(),
+			'num'		=> $public->num_rows
+		);
+
 		while($row2 = $public->fetch_object()) {
 			if ($i<3) {
-				$return['public']["thumb$i"] = LYCHEE_URL_UPLOADS_THUMB . $row2->thumbUrl;
+				$return['public']['thumbs'][$i] = LYCHEE_URL_UPLOADS_THUMB . $row2->thumbUrl;
 				$i++;
 			} else break;
 		}
-		$return['public']['num'] = $public->num_rows;
 
+		###
 		# Recent
+		###
+
 		$query		= Database::prepare($this->database, 'SELECT thumbUrl FROM ? WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY)) ' . $this->settings['sorting'], array(LYCHEE_TABLE_PHOTOS));
 		$recent		= $this->database->query($query);
 		$i			= 0;
+
+		$return['recent'] = array(
+			'thumbs'	=> array(),
+			'num'		=> $recent->num_rows
+		);
+
 		while($row3 = $recent->fetch_object()) {
 			if ($i<3) {
-				$return['recent']["thumb$i"] = LYCHEE_URL_UPLOADS_THUMB . $row3->thumbUrl;
+				$return['recent']['thumbs'][$i] = LYCHEE_URL_UPLOADS_THUMB . $row3->thumbUrl;
 				$i++;
 			} else break;
 		}
-		$return['recent']['num'] = $recent->num_rows;
 
+		# Return SmartAlbums
 		return $return;
 
 	}

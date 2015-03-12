@@ -532,10 +532,13 @@ class Photo extends Module {
 		# into a front-end friendly format: id, title, tags, public, star, album, thumbUrl, takestamp, url
 		# Note that some attributes remain unchanged
 
+		# Check dependencies
+		self::dependencies(isset($data));
+
 		# Init
 		$photo = null;
 
-		# Set unchanged attribute
+		# Set unchanged attributes
 		$photo['id']		= $data['id'];
 		$photo['title']		= $data['title'];
 		$photo['tags']		= $data['tags'];

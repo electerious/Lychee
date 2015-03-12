@@ -87,9 +87,9 @@ contextMenu.albumTitle = function(albumID, e) {
 				var that	= this,
 					title	= '';
 
-				if (!that.thumb0) that.thumb0 = 'src/images/no_cover.svg';
+				if (!that.thumbs[0]) that.thumbs[0] = 'src/images/no_cover.svg';
 
-				title = "<img class='cover' width='16' height='16' src='" + that.thumb0 + "'><div class='title'>" + that.title + "</div>";
+				title = "<img class='cover' width='16' height='16' src='" + that.thumbs[0] + "'><div class='title'>" + that.title + "</div>";
 
 				if (that.id!=albumID) items.push({ type: 'item', title, fn: function() { lychee.goto(that.id) } });
 
@@ -224,8 +224,8 @@ contextMenu.move = function(photoIDs, e) {
 
 				var that = this;
 
-				if (!that.thumb0) that.thumb0 = 'src/images/no_cover.svg';
-				that.title = "<img class='cover' width='16' height='16' src='" + that.thumb0 + "'><div class='title'>" + that.title + "</div>";
+				if (!that.thumbs[0]) that.thumbs[0] = 'src/images/no_cover.svg';
+				that.title = "<img class='cover' width='16' height='16' src='" + that.thumbs[0] + "'><div class='title'>" + that.title + "</div>";
 
 				if (that.id!=album.getID()) items.push({ type: 'item', title: that.title, fn: function() { photo.setAlbum(photoIDs, that.id) } });
 
