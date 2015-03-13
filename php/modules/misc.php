@@ -20,9 +20,13 @@ function search($database, $settings, $term) {
 		'hash'		=> ''
 	);
 
+	###
 	# Photos
+	###
+
 	$query	= Database::prepare($database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE title LIKE '%?%' OR description LIKE '%?%' OR tags LIKE '%?%'", array(LYCHEE_TABLE_PHOTOS, $term, $term, $term));
 	$result	= $database->query($query);
+
 	while($photo = $result->fetch_assoc()) {
 
 		$photo = Photo::prepareData($photo);
@@ -30,29 +34,31 @@ function search($database, $settings, $term) {
 
 	}
 
+	###
 	# Albums
+	###
+
 	$query	= Database::prepare($database, "SELECT id, title, public, sysstamp, password FROM ? WHERE title LIKE '%?%' OR description LIKE '%?%'", array(LYCHEE_TABLE_ALBUMS, $term, $term));
 	$result = $database->query($query);
-	$i		= 0;
-	while($row = $result->fetch_object()) {
 
-		# Info
-		$return['albums'][$row->id]['id']		= $row->id;
-		$return['albums'][$row->id]['title']	= $row->title;
-		$return['albums'][$row->id]['public']	= $row->public;
-		$return['albums'][$row->id]['sysdate']	= date('F Y', $row->sysstamp);
-		$return['albums'][$row->id]['password']	= ($row->password=='' ? false : true);
+	while($album = $result->fetch_assoc()) {
+
+		# Turn data from the database into a front-end friendly format
+		$album = Album::prepareData($album);
 
 		# Thumbs
-		$query		= Database::prepare($database, "SELECT thumbUrl FROM ? WHERE album = '?' " . $settings['sorting'] . " LIMIT 0, 3", array(LYCHEE_TABLE_PHOTOS, $row->id));
-		$result2	= $database->query($query);
-		$k			= 0;
-		while($row2 = $result2->fetch_object()){
-			$return['albums'][$row->id]["thumb$k"] = LYCHEE_URL_UPLOADS_THUMB . $row2->thumbUrl;
+		$query	= Database::prepare($database, "SELECT thumbUrl FROM ? WHERE album = '?' " . $settings['sorting'] . " LIMIT 0, 3", array(LYCHEE_TABLE_PHOTOS, $album['id']));
+		$thumbs	= $database->query($query);
+
+		# For each thumb
+		$k = 0;
+		while ($thumb = $thumbs->fetch_object()) {
+			$album['thumbs'][$k] = LYCHEE_URL_UPLOADS_THUMB . $thumb->thumbUrl;
 			$k++;
 		}
 
-		$i++;
+		# Add to return
+		$return['albums'][$album['id']] = $album;
 
 	}
 
