@@ -29,15 +29,15 @@ header.show = function() {
 	if ($('#imageview #image.small').length>0)	$('#imageview #image').css('margin-top', newMargin);
 	else										$('#imageview #image').removeClass('full');
 
+	return true;
+
 }
 
-header.hide = function(e, delay) {
+header.hide = function(e, delay = 500) {
 
-	var newMargin = -1*($('#imageview #image').height()/2);
+	if (visible.photo()&&!visible.sidebar()&&!visible.contextMenu()&&!visible.message()) {
 
-	if (delay===undefined) delay = 500;
-
-	if (visible.photo()&&!visible.infobox()&&!visible.contextMenu()&&!visible.message()) {
+		var newMargin = -1*($('#imageview #image').height()/2);
 
 		clearTimeout($(window).data('timeout'));
 
@@ -52,16 +52,21 @@ header.hide = function(e, delay) {
 
 		}, delay));
 
+		return true;
+
 	}
+
+	return false;
 
 }
 
-header.setTitle = function(title) {
+header.setTitle = function(title = 'Untitled') {
 
-	var $title	= header.dom('#title'),
-		title	= title || 'Untitled';
+	var $title	= header.dom('#title');
 
 	$title.html(title + build.iconic('caret-bottom'));
+
+	return true;
 
 }
 
@@ -77,6 +82,7 @@ header.setMode = function(mode) {
 			$('#tools_album, #tools_photo').hide();
 			$('#tools_albums').show();
 
+			return true;
 			break;
 
 		case 'album':
@@ -100,6 +106,7 @@ header.setMode = function(mode) {
 				$('#button_info_album, #button_trash_album, #button_share_album').show();
 			}
 
+			return true;
 			break;
 
 		case 'photo':
@@ -108,9 +115,12 @@ header.setMode = function(mode) {
 			$('#tools_albums, #tools_album').hide();
 			$('#tools_photo').show();
 
+			return true;
 			break;
 
 	}
+
+	return false;
 
 }
 
@@ -123,5 +133,7 @@ header.setEditable = function(editable) {
 
 	if (editable)	$title.addClass('editable');
 	else			$title.removeClass('editable');
+
+	return true;
 
 }
