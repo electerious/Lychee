@@ -37,7 +37,7 @@ album.load = function(albumID, refresh) {
 
 		if (!refresh) {
 			lychee.animate('.album, .photo', 'contentZoomOut');
-			lychee.animate('.divider', 'fadeOut');
+			lychee.animate('#content .divider', 'fadeOut');
 		}
 
 		startTime = new Date().getTime();

@@ -16,7 +16,7 @@ albums.load = function() {
 		waitTime;
 
 	lychee.animate('.album, .photo', 'contentZoomOut');
-	lychee.animate('.divider', 'fadeOut');
+	lychee.animate('#content .divider', 'fadeOut');
 
 	startTime = new Date().getTime();
 
