@@ -11,18 +11,17 @@ album = {
 
 album.getID = function() {
 
-	var id;
+	var id = null;
 
 	if (photo.json)			id = photo.json.album;
 	else if (album.json)	id = album.json.id;
-	else					id = $('.album:hover, .album.active').attr('data-id');
 
 	// Search
-	if (!id) id = $('.album:hover, .album.active').attr('data-id');
-	if (!id) id = $('.photo:hover, .photo.active').attr('data-album-id');
+	if ($.isNumeric(id)===false) id = $('.album:hover, .album.active').attr('data-id');
+	if ($.isNumeric(id)===false) id = $('.photo:hover, .photo.active').attr('data-album-id');
 
-	if (id)	return id;
-	else	return false;
+	if ($.isNumeric(id)===true)	return id;
+	else						return false;
 
 }
 

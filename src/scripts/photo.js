@@ -12,13 +12,13 @@ photo = {
 
 photo.getID = function() {
 
-	var id;
+	var id = null;
 
-	if (photo.json) id = photo.json.id;
-	else id = $('.photo:hover, .photo.active').attr('data-id');
+	if (photo.json)	id = photo.json.id;
+	else			id = $('.photo:hover, .photo.active').attr('data-id');
 
-	if (id) return id;
-	else return false;
+	if ($.isNumeric(id)===false)	return id;
+	else							return false;
 
 }
 
