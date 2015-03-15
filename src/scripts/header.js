@@ -16,6 +16,51 @@ header.dom = function(selector) {
 
 }
 
+header.bind = function() {
+
+	// Event Name
+	var eventName = ('ontouchend' in document.documentElement) ? 'touchend' : 'click';
+
+	/* Buttons */
+	header.dom('#title').on(eventName, function(e) {
+		if (!$(this).hasClass('editable'))	return false;
+		if (visible.photo())				contextMenu.photoTitle(album.getID(), photo.getID(), e);
+		else								contextMenu.albumTitle(album.getID(), e);
+	});
+	header.dom('#button_share').on(eventName, function(e) {
+		if (photo.json.public==='1'||photo.json.public==='2')	contextMenu.sharePhoto(photo.getID(), e);
+		else													photo.setPublic(photo.getID(), e);
+	});
+	header.dom('#button_share_album').on(eventName, function(e) {
+		if (album.json.public==='1')	contextMenu.shareAlbum(album.getID(), e);
+		else							album.setPublic(album.getID(), true, e);
+	});
+	header.dom('#button_signin')		.on(eventName, lychee.loginDialog);
+	header.dom('#button_settings')		.on(eventName, contextMenu.settings);
+	header.dom('#button_info_album')	.on(eventName, sidebar.toggle);
+	header.dom('#button_info')			.on(eventName, sidebar.toggle);
+	header.dom('.button_add')			.on(eventName, contextMenu.add);
+	header.dom('#button_more')			.on(eventName, function(e) { contextMenu.photoMore(photo.getID(), e) });
+	header.dom('#button_move')			.on(eventName, function(e) { contextMenu.move([photo.getID()], e) });
+	header.dom('#hostedwith')			.on(eventName, function() { window.open(lychee.website) });
+	header.dom('#button_trash_album')	.on(eventName, function() { album.delete([album.getID()]) });
+	header.dom('#button_trash')			.on(eventName, function() { photo.delete([photo.getID()]) });
+	header.dom('#button_archive')		.on(eventName, function() { album.getArchive(album.getID()) });
+	header.dom('#button_star')			.on(eventName, function() { photo.setStar([photo.getID()]) });
+	header.dom('#button_back_home')		.on(eventName, function() { lychee.goto('') });
+	header.dom('#button_back')			.on(eventName, function() { lychee.goto(album.getID()) });
+
+	/* Search */
+	header.dom('#search').on('keyup click', function() { search.find($(this).val()) });
+	header.dom('#clearSearch').on(eventName, function () {
+		header.dom('#search').focus();
+		search.reset();
+	});
+
+	return true;
+
+}
+
 header.show = function() {
 
 	var newMargin = -1*($('#imageview #image').height()/2)+20;

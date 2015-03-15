@@ -14,6 +14,15 @@ multiselect.position = {
 
 }
 
+multiselect.bind = function() {
+
+	$('#content')	.on('mousedown', 	function(e) { if (e.which===1) multiselect.show(e) });
+	$(document)		.on('mouseup',		function(e) { if (e.which===1) multiselect.getSelection(e) });
+
+	return true;
+
+}
+
 multiselect.show = function(e) {
 
 	if (lychee.publicMode)	return false;
