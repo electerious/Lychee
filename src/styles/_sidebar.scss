@@ -141,9 +141,13 @@
 		display: inline-block;
 	}
 
+	#tags > div {
+		display: inline-block;
+	}
+
 	#tags .empty {
 		font-size: 14px;
-		margin-bottom: 8px;
+		margin: 0 2px 8px 0;
 	}
 
 	#tags .edit { margin-top: 6px; }

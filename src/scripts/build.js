@@ -244,12 +244,10 @@ build.uploadModal = function(title, files) {
 
 }
 
-build.tags = function(tags, forView = false) {
+build.tags = function(tags) {
 
 	var html			= '',
 		editTagsHTML	= '';
-
-	if (forView===false&&lychee.publicMode===false) editTagsHTML = ' ' + build.editIcon('edit_tags');
 
 	if (tags!=='') {
 
@@ -259,136 +257,11 @@ build.tags = function(tags, forView = false) {
 			html += `<a class='tag'>${ tag }<span data-index='${ index }'>${ build.iconic('x') }</span></a>`
 		});
 
-		html += editTagsHTML;
-
 	} else {
 
-		html = `<div class='empty'>No Tags${ editTagsHTML }</div>`;
+		html = `<div class='empty'>No Tags</div>`;
 
 	}
-
-	return html;
-
-}
-
-build.sidebarPhoto = function(data, forView = false) {
-
-	var html				= '',
-		visible				= '',
-		editTitleHTML		= '',
-		editDescriptionHTML	= '',
-		exifHash			= '',
-		info				= [];
-
-	switch (data.public) {
-
-		case '0':	visible = 'No';
-					break;
-		case '1':	visible = 'Yes';
-					break;
-		case '2':	visible = 'Yes (Album)';
-					break;
-		default:	visible = '-';
-					break;
-
-	}
-
-	if (forView===false&&lychee.publicMode===false) {
-		editTitleHTML		= ' ' + build.editIcon('edit_title');
-		editDescriptionHTML	= ' ' + build.editIcon('edit_description');
-	}
-
-	infos = [
-		['', 'Basics'],
-		['Title', data.title + editTitleHTML],
-		['Uploaded', data.sysdate],
-		['Description', data.description + editDescriptionHTML],
-		['', 'Image'],
-		['Size', data.size],
-		['Format', data.type],
-		['Resolution', data.width + ' x ' + data.height],
-		['Tags', build.tags(data.tags, forView)]
-	]
-
-	exifHash = data.takestamp+data.make+data.model+data.shutter+data.aperture+data.focal+data.iso;
-
-	if (exifHash!=='0') {
-
-		infos = infos.concat([
-			['', 'Camera'],
-			['Captured', data.takedate],
-			['Make', data.make],
-			['Type/Model', data.model],
-			['Shutter Speed', data.shutter],
-			['Aperture', data.aperture],
-			['Focal Length', data.focal],
-			['ISO', data.iso]
-		]);
-
-	}
-
-	infos = infos.concat([
-		['', 'Share'],
-		['Public', visible]
-	]);
-
-	infos.forEach(function(info, i, items) {
-
-		// Set default for empty values
-		if (info[1]===''||info[1]===null||info[1]===undefined) info[1] = '-';
-
-		switch (info[0]) {
-
-			case '':
-
-				// Divider
-				html +=	`
-						</table>
-						<div class='divider'>
-							<h1>${ info[1] }</h1>
-						</div>
-						<table>
-						`
-
-				break;
-
-			case 'Tags':
-
-				// Tags
-				if (forView===false&&lychee.publicMode===false) {
-
-					html +=	`
-							</table>
-							<div class='divider'>
-								<h1>${ info[0] }</h1>
-							</div>
-							<div id='tags'>${ info[1] }</div>
-							`
-
-				}
-
-				break;
-
-			default:
-
-				// Item
-				html += `
-						<tr>
-							<td>${ info[0] }</td>
-							<td class='attr_${ info[0].toLowerCase() }'>${ info[1] }</td>
-						</tr>
-						`
-
-				break;
-
-		}
-
-
-	});
-
-	html +=	`
-			</table>
-			`
 
 	return html;
 

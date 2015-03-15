@@ -137,7 +137,7 @@ view.album = {
 					lychee.setTitle('Unsorted', false);
 					break;
 				default:
-					if (album.json.init) sidebar.changeAttr('title', album.json.title, true);
+					if (album.json.init) sidebar.changeAttr('title', album.json.title);
 					lychee.setTitle(album.json.title, true);
 					break;
 			}
@@ -216,7 +216,7 @@ view.album = {
 
 	description: function() {
 
-		sidebar.changeAttr('description', album.json.description, true);
+		sidebar.changeAttr('description', album.json.description);
 
 	},
 
@@ -334,14 +334,14 @@ view.photo = {
 
 	title: function() {
 
-		if (photo.json.init) sidebar.changeAttr('title', photo.json.title, true);
+		if (photo.json.init) sidebar.changeAttr('title', photo.json.title);
 		lychee.setTitle(photo.json.title, true);
 
 	},
 
 	description: function() {
 
-		if (photo.json.init) sidebar.changeAttr('description', photo.json.description, true);
+		if (photo.json.init) sidebar.changeAttr('description', photo.json.description);
 
 	},
 
@@ -380,7 +380,7 @@ view.photo = {
 
 	tags: function() {
 
-		sidebar.dom('#tags').html(build.tags(photo.json.tags));
+		sidebar.changeAttr('tags', build.tags(photo.json.tags));
 		sidebar.bind();
 
 	},
@@ -418,7 +418,10 @@ view.photo = {
 
 	sidebar: function() {
 
-		sidebar.dom('.wrapper').html(build.sidebarPhoto(photo.json));
+		var structure	= sidebar.createStructure.photo(photo.json),
+			html		= sidebar.render(structure);
+
+		sidebar.dom('.wrapper').html(html);
 		sidebar.bind();
 
 	}
