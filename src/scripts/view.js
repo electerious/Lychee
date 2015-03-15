@@ -266,8 +266,13 @@ view.album = {
 	sidebar: function() {
 
 		if ((visible.album()||!album.json.init)&&!visible.photo()) {
-			sidebar.dom('.wrapper').html(build.sidebarAlbum(album.json));
+
+			let structure	= sidebar.createStructure.album(album.json),
+				html		= sidebar.render(structure);
+
+			sidebar.dom('.wrapper').html(html);
 			sidebar.bind();
+
 		}
 
 	}

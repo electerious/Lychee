@@ -212,6 +212,94 @@ sidebar.createStructure.photo = function(data) {
 
 }
 
+sidebar.createStructure.album = function(data) {
+
+	if (data===undefined||data===null||data==='') return false;
+
+	var editable		= false,
+		structure		= {},
+		visible			= '',
+		password		= '',
+		downloadable	= '';
+
+	// Enable editable when user logged in
+	if (lychee.publicMode===false) editable = true;
+
+	// Set value for public
+	switch (data.public) {
+
+		case '0':	visible = 'No';
+					break;
+		case '1':	visible = 'Yes';
+					break;
+		default:	visible = '-';
+					break;
+
+	}
+
+	// Set value for password
+	switch (data.password) {
+
+		case '0':	password = 'No';
+					break;
+		case '1':	password = 'Yes';
+					break;
+		default:	password = '-';
+					break;
+
+	}
+
+	// Set value for downloadable
+	switch (data.downloadable) {
+
+		case '0':	downloadable = 'No';
+					break;
+		case '1':	downloadable = 'Yes';
+					break;
+		default:	downloadable = '-';
+					break;
+
+	}
+
+	structure.basics = {
+		title: 'Basics',
+		type: sidebar.types.DEFAULT,
+		rows: [
+			{ title: 'Title',		value: data.title,			editable },
+			{ title: 'Description', value: data.description,	editable }
+		]
+	}
+
+	structure.album = {
+		title: 'Album',
+		type: sidebar.types.DEFAULT,
+		rows: [
+			{ title: 'Created',		value: data.sysdate },
+			{ title: 'Images',		value: data.num }
+		]
+	}
+
+	structure.share = {
+		title: 'Share',
+		type: sidebar.types.DEFAULT,
+		rows: [
+			{ title: 'Public',			value: visible },
+			{ title: 'Downloadable',	value: downloadable },
+			{ title: 'Password',		value: password }
+		]
+	}
+
+	// Construct all parts of the structure
+	structure = [
+		structure.basics,
+		structure.album,
+		structure.share
+	]
+
+	return structure;
+
+}
+
 sidebar.render = function(structure) {
 
 	if (structure===undefined||structure===null||structure==='') return false;
