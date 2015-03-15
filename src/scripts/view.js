@@ -249,10 +249,10 @@ view.album = {
 
 	},
 
-	password: function() {
+	visible: function() {
 
-		if (album.json.password==='1')	sidebar.changeAttr('password', 'Yes');
-		else							sidebar.changeAttr('password', 'No');
+		if (album.json.visible==='1')	sidebar.changeAttr('visible', 'Yes');
+		else							sidebar.changeAttr('visible', 'No');
 
 	},
 
@@ -260,6 +260,13 @@ view.album = {
 
 		if (album.json.downloadable==='1')	sidebar.changeAttr('downloadable', 'Yes');
 		else								sidebar.changeAttr('downloadable', 'No');
+
+	},
+
+	password: function() {
+
+		if (album.json.password==='1')	sidebar.changeAttr('password', 'Yes');
+		else							sidebar.changeAttr('password', 'No');
 
 	},
 

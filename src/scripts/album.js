@@ -505,6 +505,7 @@ album.setPublic = function(albumID, modal, e) {
 		album.json.password		= (album.json.public==='0') ? '0' : album.json.password;
 
 		view.album.public();
+		view.album.visible();
 		view.album.downloadable();
 		view.album.password();
 

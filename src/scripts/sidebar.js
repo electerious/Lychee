@@ -113,7 +113,7 @@ sidebar.createStructure.photo = function(data) {
 	var editable	= false,
 		exifHash	= data.takestamp + data.make + data.model + data.shutter + data.aperture + data.focal + data.iso,
 		structure	= {},
-		visible		= '';
+		public		= '';
 
 	// Enable editable when user logged in
 	if (lychee.publicMode===false) editable = true;
@@ -121,13 +121,13 @@ sidebar.createStructure.photo = function(data) {
 	// Set value for public
 	switch (data.public) {
 
-		case '0':	visible = 'No';
+		case '0':	public = 'No';
 					break;
-		case '1':	visible = 'Yes';
+		case '1':	public = 'Yes';
 					break;
-		case '2':	visible = 'Yes (Album)';
+		case '2':	public = 'Yes (Album)';
 					break;
-		default:	visible = '-';
+		default:	public = '-';
 					break;
 
 	}
@@ -195,7 +195,7 @@ sidebar.createStructure.photo = function(data) {
 		title: 'Sharing',
 		type: sidebar.types.DEFAULT,
 		rows: [
-			{ title: 'Public', value: visible },
+			{ title: 'Public', value: public },
 		]
 	}
 
@@ -218,9 +218,10 @@ sidebar.createStructure.album = function(data) {
 
 	var editable		= false,
 		structure		= {},
+		public			= '',
 		visible			= '',
-		password		= '',
-		downloadable	= '';
+		downloadable	= '',
+		password		= '';
 
 	// Enable editable when user logged in
 	if (lychee.publicMode===false) editable = true;
@@ -228,23 +229,23 @@ sidebar.createStructure.album = function(data) {
 	// Set value for public
 	switch (data.public) {
 
+		case '0':	public = 'No';
+					break;
+		case '1':	public = 'Yes';
+					break;
+		default:	public = '-';
+					break;
+
+	}
+
+	// Set value for visible
+	switch (data.visible) {
+
 		case '0':	visible = 'No';
 					break;
 		case '1':	visible = 'Yes';
 					break;
 		default:	visible = '-';
-					break;
-
-	}
-
-	// Set value for password
-	switch (data.password) {
-
-		case '0':	password = 'No';
-					break;
-		case '1':	password = 'Yes';
-					break;
-		default:	password = '-';
 					break;
 
 	}
@@ -257,6 +258,18 @@ sidebar.createStructure.album = function(data) {
 		case '1':	downloadable = 'Yes';
 					break;
 		default:	downloadable = '-';
+					break;
+
+	}
+
+	// Set value for password
+	switch (data.password) {
+
+		case '0':	password = 'No';
+					break;
+		case '1':	password = 'Yes';
+					break;
+		default:	password = '-';
 					break;
 
 	}
@@ -283,7 +296,8 @@ sidebar.createStructure.album = function(data) {
 		title: 'Share',
 		type: sidebar.types.DEFAULT,
 		rows: [
-			{ title: 'Public',			value: visible },
+			{ title: 'Public',			value: public },
+			{ title: 'Visible',			value: visible },
 			{ title: 'Downloadable',	value: downloadable },
 			{ title: 'Password',		value: password }
 		]
