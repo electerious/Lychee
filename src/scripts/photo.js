@@ -17,8 +17,8 @@ photo.getID = function() {
 	if (photo.json)	id = photo.json.id;
 	else			id = $('.photo:hover, .photo.active').attr('data-id');
 
-	if ($.isNumeric(id)===false)	return id;
-	else							return false;
+	if ($.isNumeric(id)===true)	return id;
+	else						return false;
 
 }
 
