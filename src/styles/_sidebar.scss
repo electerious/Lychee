@@ -2,62 +2,24 @@
  * @copyright   2015 by Tobias Reich
  */
 
-#infobox_overlay {
-	z-index: 3;
-	position: fixed;
-	width: 100%;
-	height: 100%;
-	top: 0;
-	left: 0;
-	background-color: black(.8);
-}
+#sidebar {
 
-#infobox {
-
-	z-index: 4;
 	position: fixed;
+	top: 50px;
 	right: -370px;
 	width: 350px;
-	height: 100%;
-	background-color: rgba(30, 30, 30, .98);
-	box-shadow: -1px 0 2px black(.7);
+	height: calc(100% - 50px);
+	background-color: rgba(25, 25, 25, .98);
+	border-left: 1px solid black(.2);
 	transform: translateX(0);
 	transition: transform .3s $timingBounce;
 
-	&.active { transform: translateX(-92%); }
+	&.active { transform: translateX(-320px); }
 
-	/* Misc ------------------------------------------------*/
-	.wrapper {
-		float: left;
-		height: 100%;
-		width: 300px;
-		overflow: scroll;
-		-webkit-overflow-scrolling: touch;
-	}
-
-	.edit {
-		display: inline-block;
-		margin-left: 3px;
-		width: 10px;
-
-		.iconic {
-			fill: white(.5);
-			filter: drop-shadow($shadow);
-			transition: fill .2s ease-out;
-		}
-
-		&:hover .iconic { fill: white(1); }
-
-		&:active .iconic {
-			transition: none;
-			fill: white(.8);
-		}
-	}
-
-	.bumper {
-		float: left;
-		width: 100%;
-		height: 50px;
+	&.notSelectable table tr td:last-child {
+		-webkit-user-select: none !important;
+		-moz-user-select: none !important;
+		user-select: none !important;
 	}
 
 	/* Header ------------------------------------------------*/
@@ -65,14 +27,14 @@
 		float: left;
 		height: 49px;
 		width: 100%;
-		background: linear-gradient(to bottom, #1f1f1f, #1a1a1a);
-		border-bottom: 1px solid #0f0f0f;
+		background: linear-gradient(to bottom, white(.02), black(0));
+		border-top: 1px solid $colorBlue;
 	}
 
 	.header h1 {
 		position: absolute;
-		margin: 15px 30% 15px calc(30% - 25px);
-		width: 40%;
+		margin: 15px 50px 15px 0;
+		width: calc(100% - 50px);
 		color: #fff;
 		font-size: 16px;
 		font-weight: bold;
@@ -99,6 +61,15 @@
 		}
 	}
 
+	/* Wrapper ------------------------------------------------*/
+	.wrapper {
+		float: left;
+		height: calc(100% - 49px);
+		width: 300px;
+		overflow: scroll;
+		-webkit-overflow-scrolling: touch;
+	}
+
 	/* Divider ------------------------------------------------*/
 	.divider {
 		float: left;
@@ -107,11 +78,36 @@
 		border-top: 1px solid white(.02);
 		box-shadow: $shadow;
 
+		&:first-child {
+			border-top: 0;
+			box-shaodw: none;
+		}
+
 		h1 {
 			margin: 0 0 0 20px;
 			color: white(.6);
 			font-size: 14px;
 			font-weight: bold;
+		}
+	}
+
+	/* Edit ------------------------------------------------*/
+	.edit {
+		display: inline-block;
+		margin-left: 3px;
+		width: 10px;
+
+		.iconic {
+			fill: white(.5);
+			filter: drop-shadow($shadow);
+			transition: fill .2s ease-out;
+		}
+
+		&:hover .iconic { fill: white(1); }
+
+		&:active .iconic {
+			transition: none;
+			fill: white(.8);
 		}
 	}
 
@@ -127,13 +123,14 @@
 		font-size: 14px;
 		line-height: 19px;
 
-		-webkit-user-select: text;
-		-moz-user-select: text;
-		user-select: text;
-
 		&:first-child { width: 110px; }
 
-		&:last-child { padding-right: 10px; }
+		&:last-child {
+			padding-right: 10px;
+			-webkit-user-select: text;
+			-moz-user-select: text;
+			user-select: text;
+		}
 	}
 
 	/* Tags ------------------------------------------------*/

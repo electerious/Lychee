@@ -96,6 +96,8 @@ header {
 
 		&--eye.active .iconic { fill: #ff9737; }
 
+		&--info.active .iconic { fill: $colorBlue; }
+
 		&#button_signin { display: none; }
 
 	}

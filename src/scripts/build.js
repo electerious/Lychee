@@ -271,7 +271,7 @@ build.tags = function(tags, forView = false) {
 
 }
 
-build.infoboxPhoto = function(data, forView = false) {
+build.sidebarPhoto = function(data, forView = false) {
 
 	var html				= '',
 		visible				= '',
@@ -388,14 +388,13 @@ build.infoboxPhoto = function(data, forView = false) {
 
 	html +=	`
 			</table>
-			<div class='bumper'></div>
 			`
 
 	return html;
 
 }
 
-build.infoboxAlbum = function(data, forView = false) {
+build.sidebarAlbum = function(data, forView = false) {
 
 	var html				= '',
 		visible				= '',
@@ -439,8 +438,8 @@ build.infoboxAlbum = function(data, forView = false) {
 	}
 
 	if (forView===false&&lychee.publicMode===false) {
-		editTitleHTML		= ' ' + build.editIcon('edit_title_album');
-		editDescriptionHTML	= ' ' + build.editIcon('edit_description_album');
+		editTitleHTML		= ' ' + build.editIcon('edit_title');
+		editDescriptionHTML	= ' ' + build.editIcon('edit_description');
 	}
 
 	infos = [
@@ -488,7 +487,6 @@ build.infoboxAlbum = function(data, forView = false) {
 
 	html += `
 			</table>
-			<div class='bumper'></div>
 			`
 
 	return html;

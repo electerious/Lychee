@@ -26,8 +26,7 @@ lychee = {
 	dropboxKey:		'',
 
 	content:		$('#content'),
-	imageview:		$('#imageview'),
-	infobox:		$('#infobox')
+	imageview:		$('#imageview')
 
 }
 
@@ -227,8 +226,8 @@ lychee.load = function() {
 		photo.json = null;
 
 		// Show Albums
-		if (visible.album()) view.album.hide();
 		if (visible.photo()) view.photo.hide();
+		if (visible.sidebar()) sidebar.toggle();
 		albums.load();
 
 	}

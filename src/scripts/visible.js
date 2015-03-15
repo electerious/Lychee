@@ -25,12 +25,12 @@ visible.search = function() {
 	return false;
 }
 
-visible.infobox = function() {
-	if ($('#infobox.active').length>0) return true;
+visible.sidebar = function() {
+	if (sidebar.dom().hasClass('active')===true) return true;
 	return false;
 }
 
-visible.infoboxbutton = function() {
+visible.sidebarbutton = function() {
 	if (visible.albums()) return false;
 	if (visible.photo()) return true;
 	if (visible.album()&&$('#button_info_album:visible').length>0) return true;

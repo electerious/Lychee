@@ -18,10 +18,11 @@ multiselect.show = function(e) {
 
 	if (lychee.publicMode)	return false;
 	if (visible.search())	return false;
-	if (visible.infobox())	return false;
 	if (!visible.albums()&&!visible.album)			return false;
 	if ($('.album:hover, .photo:hover').length!==0)	return false;
 	if (visible.multiselect())						$('#multiselect').remove();
+
+	sidebar.setSelectable(false);
 
 	multiselect.position.top	= e.pageY;
 	multiselect.position.right	= -1 * (e.pageX - $(document).width());
@@ -41,9 +42,10 @@ multiselect.selectAll = function() {
 
 	if (lychee.publicMode)		return false;
 	if (visible.search())		return false;
-	if (visible.infobox())		return false;
 	if (!visible.albums()&&!visible.album)	return false;
 	if (visible.multiselect())	$('#multiselect').remove();
+
+	sidebar.setSelectable(false);
 
 	multiselect.position.top	= 70;
 	multiselect.position.right	= 40;
@@ -188,6 +190,8 @@ multiselect.getSelection = function(e) {
 }
 
 multiselect.close = function() {
+
+	sidebar.setSelectable(true);
 
 	multiselect.stopResize();
 

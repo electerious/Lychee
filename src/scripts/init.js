@@ -28,8 +28,8 @@ $(document).ready(function() {
 	});
 	header.dom('#button_signin')		.on(eventName, lychee.loginDialog);
 	header.dom('#button_settings')		.on(eventName, contextMenu.settings);
-	header.dom('#button_info_album')	.on(eventName, view.infobox.show);
-	header.dom('#button_info')			.on(eventName, view.infobox.show);
+	header.dom('#button_info_album')	.on(eventName, sidebar.toggle);
+	header.dom('#button_info')			.on(eventName, sidebar.toggle);
 	header.dom('.button_add')			.on(eventName, contextMenu.add);
 	header.dom('#button_more')			.on(eventName, function(e) { contextMenu.photoMore(photo.getID(), e) });
 	header.dom('#button_move')			.on(eventName, function(e) { contextMenu.move([photo.getID()], e) });
@@ -50,22 +50,10 @@ $(document).ready(function() {
 		search.reset();
 	});
 
-	/* Infobox */
-	lychee.infobox.find('.header .close').on(eventName, view.infobox.hide);
-
 	/* Image View */
 	lychee.imageview
 		.on(eventName, '.arrow_wrapper--previous',	photo.previous)
 		.on(eventName, '.arrow_wrapper--next',		photo.next);
-
-	/* Infobox */
-	lychee.infobox
-		.on(eventName, '#edit_title_album',			function() { album.setTitle([album.getID()]) })
-		.on(eventName, '#edit_description_album',	function() { album.setDescription(album.getID()) })
-		.on(eventName, '#edit_title',				function() { photo.setTitle([photo.getID()]) })
-		.on(eventName, '#edit_description',			function() { photo.setDescription(photo.getID()) })
-		.on(eventName, '#edit_tags',				function() { photo.editTags([photo.getID()]) })
-		.on(eventName, '#tags .tag span',			function() { photo.deleteTag(photo.getID(), $(this).data('index')) });
 
 	/* Keyboard */
 	Mousetrap
@@ -97,9 +85,8 @@ $(document).ready(function() {
 			}
 		})
 		.bind('i', function() {
-			if (visible.infobox())				view.infobox.hide();
-			else if (visible.multiselect())		return false;
-			else if (visible.infoboxbutton())	view.infobox.show();
+			if (visible.multiselect())		return false;
+			else							sidebar.toggle();
 		})
 		.bind(['command+backspace', 'ctrl+backspace'], function() {
 			if (visible.photo()&&!visible.message())		photo.delete([photo.getID()]);
@@ -118,7 +105,6 @@ $(document).ready(function() {
 		e.preventDefault();
 		if (basicModal.visible()===true)							basicModal.cancel();
 		else if (visible.contextMenu())								contextMenu.close();
-		else if (visible.infobox())									view.infobox.hide();
 		else if (visible.photo())									lychee.goto(album.getID());
 		else if (visible.album())									lychee.goto('');
 		else if (visible.albums()&&$('#search').val().length!==0)	search.reset();
@@ -157,9 +143,6 @@ $(document).ready(function() {
 		/* Context Menu */
 		.on('contextmenu', '.photo', function(e) { contextMenu.photo(photo.getID(), e) })
 		.on('contextmenu', '.album', function(e) { contextMenu.album(album.getID(), e) })
-
-		/* Infobox */
-		.on(eventName, '#infobox_overlay', view.infobox.hide)
 
 		/* Upload */
 		.on('change', '#upload_files',				function() { basicModal.close(); upload.start.local(this.files) })

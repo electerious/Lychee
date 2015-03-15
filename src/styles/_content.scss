@@ -18,6 +18,8 @@
 		border-top: 1px solid white(.02);
 	}
 
+	&.sidebar { width: calc(100% - 300px); }
+
 	/* Albums and Photos ------------------------------------------------*/
 	.album,
 	.photo {
