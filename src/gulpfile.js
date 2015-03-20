@@ -142,7 +142,7 @@ gulp.task('main--scripts', ['main--js', 'main--coffee', 'main--i18n'], function(
 	var stream =
 		gulp.src(paths.main.scripts)
 			.pipe(plugins.concat('main.js', {newLine: "\n"}))
-			// .pipe(plugins.uglify())
+			.pipe(plugins.uglify())
 			.on('error', catchError)
 			.pipe(gulp.dest('../dist/'));
 
