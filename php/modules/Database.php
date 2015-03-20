@@ -114,6 +114,7 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 \$dbPassword = '$password'; # Password of the database
 \$dbName = '$name'; # Database name
 \$dbTablePrefix = '$prefix'; # Table prefix
+\$lang = 'en'; # Language
 
 ?>";
 

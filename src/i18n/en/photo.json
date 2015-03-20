@@ -1,0 +1,21 @@
+{
+	"untitled": "Untitled",
+	"cancel": "Cancel",
+	"close": "Close",
+	"title": "Title",
+	"description": "Description",
+	"tags": "Tags",
+	"delPhotos": "Delete {NUM_PHOTOS, plural, one {Photo} other {Photos}}",
+	"keepPhotos": "Keep {NUM_PHOTOS, plural, one {Photo} other {Photos}}",
+	"delPhotosAreYouSure": "Are you sure you want to delete {NUM_PHOTOS, plural, one {the photo '{PHOTO_TITLE}'} other {all # selected photos}}?<br>This action can't be undone!",
+	"setTitle": "Set Title",
+	"setTitles": "Set {NUM_PHOTOS, plural, one {Title} other {Titles}}",
+	"setTitlesEnter": "Enter a new title for {NUM_PHOTOS, plural, one {this photo} other {all # selected photos}}:",
+	"pubAlbum": "Public Album",
+	"pubAlbumInfo": "This photo is located in a public album. To make this photo private or public, edit the visibility of the associated album.",
+	"showAlbum": "Show Album",
+	"setDesc": "Set Description",
+	"setDescEnter": "Enter a description for this photo",
+	"setTags": "Set Tags",
+	"setTagsEnter": "Enter your tags for {NUM_PHOTOS, plural, one {this photo.} other {all # selected photos. Existing tags will be overwritten.}} You can add multiple tags by separating them with a comma"
+}

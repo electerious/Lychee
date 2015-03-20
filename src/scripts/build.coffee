@@ -3,6 +3,8 @@
 # @copyright	2014 by Tobias Reich
 ###
 
+_b = i18n.build
+
 window.build = {}
 
 build.divider = (title) ->
@@ -21,14 +23,14 @@ build.album = (data) ->
 
 	return '' if not data?
 
-	title		= data.title
-	longTitle	= ''
-	typeThumb	= ''
+	title     = data.title
+	longTitle = ''
+	typeThumb = ''
 
 	if title? and title.length > 18
 
-		title		= data.title.substr(0, 18) + '...'
-		longTitle	= data.title
+		title     = data.title.substr(0, 18) + '&hellip;'
+		longTitle = data.title
 
 	if data.thumb0.split('.').pop() is 'svg' then typeThumb = 'nonretina'
 
@@ -52,10 +54,10 @@ build.album = (data) ->
 
 	if lychee.publicMode is false
 
-		if data.star is '1' then		html += "<a class='badge icon-star'></a>"
-		if data.public is '1' then		html += "<a class='badge icon-share'></a>"
-		if data.unsorted is '1' then	html += "<a class='badge icon-reorder'></a>"
-		if data.recent is '1' then		html += "<a class='badge icon-time'></a>"
+		if data.star is '1' then     html += "<a class='badge icon-star'></a>"
+		if data.public is '1' then   html += "<a class='badge icon-share'></a>"
+		if data.unsorted is '1' then html += "<a class='badge icon-reorder'></a>"
+		if data.recent is '1' then   html += "<a class='badge icon-time'></a>"
 
 	html += "</div>"
 
@@ -65,13 +67,13 @@ build.photo = (data) ->
 
 	return '' if not data?
 
-	title		= data.title
-	longTitle	= ''
+	title     = data.title
+	longTitle = ''
 
 	if title? and title.length > 18
 
-		title		= data.title.substr(0, 18) + '...'
-		longTitle	= data.title
+		title     = data.title.substr(0, 18) + '&hellip;'
+		longTitle = data.title
 
 	html =	"""
 			<div class='photo' data-album-id='#{ data.album }' data-id='#{ data.id }'>
@@ -134,9 +136,9 @@ build.no_content = (typ) ->
 			"""
 
 	switch typ
-		when 'search' then		html += "<p>No results</p>"
-		when 'share' then		html += "<p>No public albums</p>"
-		when 'cog' then			html += "<p>No configuration</p>"
+		when 'search' then html += "<p>#{_b.noSearch()}</p>"
+		when 'share' then  html += "<p>#{_b.noShare()}</p>"
+		when 'cog' then    html += "<p>#{_b.noCog()}</p>"
 
 	html += "</div>"
 
@@ -144,8 +146,8 @@ build.no_content = (typ) ->
 
 build.modal = (title, text, button, marginTop, closeButton) ->
 
-	if marginTop? then	custom_style = "style='margin-top: #{ marginTop }px;'"
-	else				custom_style = ''
+	if marginTop? then custom_style = "style='margin-top: #{ marginTop }px;'"
+	else               custom_style = ''
 
 	html =	"""
 			<div class='message_overlay fadeIn'>
@@ -161,8 +163,8 @@ build.modal = (title, text, button, marginTop, closeButton) ->
 
 		if this[0] isnt ''
 
-			if index is 0 then	html += "<a class='button active'>#{ this[0] }</a>"
-			else				html += "<a class='button'>#{ this[0] }</a>"
+			if index is 0 then html += "<a class='button active'>#{ this[0] }</a>"
+			else               html += "<a class='button'>#{ this[0] }</a>"
 
 	html +=	"""
 				</div>
@@ -176,13 +178,13 @@ build.signInModal = ->
 	html =	"""
 			<div class='message_overlay'>
 				<div class='message center'>
-					<h1><a class='icon-lock'></a> Sign In</h1>
+					<h1><a class='icon-lock'></a> #{_b.signIn()}</h1>
 					<a class='close icon-remove-sign'></a>
 					<div class='sign_in'>
-						<input id='username' type='text' value='' placeholder='username' autocapitalize='off' autocorrect='off'>
-						<input id='password' type='password' value='' placeholder='password'>
+						<input id='username' type='text' value='' placeholder='#{_b.username()}' autocapitalize='off' autocorrect='off'>
+						<input id='password' type='password' value='' placeholder='#{_b.password()}'>
 					</div>
-					<div id='version'>Version #{ lychee.version }<span> &#8211; <a target='_blank' href='#{ lychee.updateURL }'>Update available!</a><span></div>
+					<div id='version'>#{_b.version()} #{ lychee.version }<span> &#8211; <a target='_blank' href='#{ lychee.updateURL }'>#{_b.updateAvail()}</a><span></div>
 					<a onclick='lychee.login()' class='button active'>Sign in</a>
 				</div>
 			</div>
@@ -208,15 +210,15 @@ build.uploadModal = (title, files) ->
 		file = files[i]
 
 		if file.name.length > 40
-			file.name = file.name.substr(0, 17) + '...' + file.name.substr(file.name.length-20, 20)
+			file.name = file.name.substr(0, 17) + '&hellip;' + file.name.substr(file.name.length-20, 20)
 
 		html +=	"""
 				<div class='row'>
 					<a class='name'>#{ lychee.escapeHTML(file.name) }</a>
 				"""
 
-		if file.supported is true then	html += "<a class='status'></a>"
-		else							html += "<a class='status error'>Not supported</a>"
+		if file.supported is true then html += "<a class='status'></a>"
+		else                           html += "<a class='status error'>#{_b.notSupported()}</a>"
 
 		html +=	"""
 					<p class='notice'></p>
@@ -237,8 +239,8 @@ build.tags = (tags, forView) ->
 
 	html = ''
 
-	if forView is true or lychee.publicMode is true then	editTagsHTML = ''
-	else													editTagsHTML = ' ' + build.editIcon('edit_tags')
+	if forView is true or lychee.publicMode is true then editTagsHTML = ''
+	else                                                 editTagsHTML = ' ' + build.editIcon('edit_tags')
 
 	if tags isnt ''
 
@@ -251,39 +253,39 @@ build.tags = (tags, forView) ->
 
 	else
 
-		html = "<div class='empty'>No Tags#{ editTagsHTML }</div>"
+		html = "<div class='empty'>#{_b.noTags()}#{ editTagsHTML }</div>"
 
 	return html
 
 build.infoboxPhoto = (data, forView) ->
 
 	html =	"""
-			<div class='header'><h1>About</h1><a class='icon-remove-sign'></a></div>
+			<div class='header'><h1>#{_b.about()}</h1><a class='icon-remove-sign'></a></div>
 			<div class='wrapper'>
 			"""
 
 	switch data.public
-		when '0' then	visible = 'No'
-		when '1' then	visible = 'Yes'
-		when '2' then	visible = 'Yes (Album)'
-		else			visible = '-'
+		when '0' then visible = _b.no()
+		when '1' then visible = _b.yes()
+		when '2' then visible = _b.yesAlbum()
+		else          visible = '-'
 
-	if forView is true or lychee.publicMode is true then	editTitleHTML = ''
-	else													editTitleHTML = ' ' + build.editIcon('edit_title')
+	if forView is true or lychee.publicMode is true then editTitleHTML = ''
+	else                                                 editTitleHTML = ' ' + build.editIcon('edit_title')
 
-	if forView is true or lychee.publicMode is true then	editDescriptionHTML = ''
-	else													editDescriptionHTML = ' ' + build.editIcon('edit_description')
+	if forView is true or lychee.publicMode is true then editDescriptionHTML = ''
+	else                                                 editDescriptionHTML = ' ' + build.editIcon('edit_description')
 
 	infos = [
-		['', 'Basics']
-		['Title', data.title + editTitleHTML]
-		['Uploaded', data.sysdate]
-		['Description', data.description + editDescriptionHTML]
-		['', 'Image']
-		['Size', data.size]
-		['Format', data.type]
-		['Resolution', data.width + ' x ' + data.height]
-		['Tags', build.tags(data.tags, forView)]
+		['', _b.basics()]
+		[_b.title(), data.title + editTitleHTML]
+		[_b.uploaded(), data.sysdate]
+		[_b.description(), data.description + editDescriptionHTML]
+		['', _b.image()]
+		[_b.size(), data.size]
+		[_b.format(), data.type]
+		[_b.resolution(), data.width + ' x ' + data.height]
+		[_b.tags(), build.tags(data.tags, forView)]
 	]
 
 	exifHash = data.takestamp+data.make+data.model+data.shutter+data.aperture+data.focal+data.iso
@@ -291,19 +293,19 @@ build.infoboxPhoto = (data, forView) ->
 	if exifHash isnt '0' or exifHash isnt '0'
 
 		infos = infos.concat [
-			['', 'Camera']
-			['Captured', data.takedate]
-			['Make', data.make]
-			['Type/Model', data.model]
-			['Shutter Speed', data.shutter]
-			['Aperture', data.aperture]
-			['Focal Length', data.focal]
-			['ISO', data.iso]
+			['', _b.camera()]
+			[_b.takedate(), data.takedate]
+			[_b.make(), data.make]
+			[_b.model(), data.model]
+			[_b.shutter(), data.shutter]
+			[_b.aperture(), data.aperture]
+			[_b.focal(), data.focal]
+			[_b.iso(), data.iso]
 		]
 
 	infos = infos.concat [
-		['', 'Share']
-		['Public', visible]
+		['', _b.share()]
+		[_b.public(), visible]
 	]
 
 	infos.forEach (info, i, items) ->
@@ -356,42 +358,42 @@ build.infoboxPhoto = (data, forView) ->
 build.infoboxAlbum = (data, forView) ->
 
 	html =	"""
-			<div class='header'><h1>About</h1><a class='icon-remove-sign'></a></div>
+			<div class='header'><h1>#{_b.about()}</h1><a class='icon-remove-sign'></a></div>
 			<div class='wrapper'>
 			"""
 
 	switch data.public
-		when '0' then	visible = 'No'
-		when '1' then	visible = 'Yes'
-		else			visible = '-'
+		when '0' then visible = 'No'
+		when '1' then visible = 'Yes'
+		else          visible = '-'
 
 	switch data.password
-		when false then	password = 'No'
-		when true then	password = 'Yes'
-		else			password = '-'
+		when false then password = 'No'
+		when true then  password = 'Yes'
+		else            password = '-'
 
 	switch data.downloadable
-		when '0' then	downloadable = 'No'
-		when '1' then	downloadable = 'Yes'
-		else			downloadable = '-'
+		when '0' then downloadable = 'No'
+		when '1' then downloadable = 'Yes'
+		else          downloadable = '-'
 
-	if forView is true or lychee.publicMode is true then	editTitleHTML = ''
-	else													editTitleHTML = ' ' + build.editIcon('edit_title_album')
+	if forView is true or lychee.publicMode is true then editTitleHTML = ''
+	else                                                 editTitleHTML = ' ' + build.editIcon('edit_title_album')
 
-	if forView is true or lychee.publicMode is true then	editDescriptionHTML = ''
-	else													editDescriptionHTML = ' ' + build.editIcon('edit_description_album')
+	if forView is true or lychee.publicMode is true then editDescriptionHTML = ''
+	else                                                 editDescriptionHTML = ' ' + build.editIcon('edit_description_album')
 
 	infos = [
-		['', 'Basics']
-		['Title', data.title + editTitleHTML]
-		['Description', data.description + editDescriptionHTML]
-		['', 'Album']
-		['Created', data.sysdate]
-		['Images', data.num]
-		['', 'Share']
-		['Public', visible]
-		['Downloadable', downloadable]
-		['Password', password]
+		['', _b.basics()]
+		[_b.title(), data.title + editTitleHTML]
+		[_b.description(), data.description + editDescriptionHTML]
+		['', _b.album()]
+		[_b.created(), data.sysdate]
+		[_b.images(), data.num]
+		['', _b.share()]
+		[_b.public(), visible]
+		[_b.downloadable(), downloadable]
+		[_b.usesPassword(), password]
 	]
 
 	infos.forEach (info, i, items) ->

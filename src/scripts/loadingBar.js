@@ -3,6 +3,8 @@
  * @copyright	2014 by Tobias Reich
  */
 
+var _lb = i18n.loadingBar;
+
 loadingBar = {
 
 	status: null
@@ -18,7 +20,7 @@ loadingBar.show = function(status, errorText) {
 
 		// Parse text
 		if (errorText)	errorText = errorText.replace('<br>', '');
-		if (!errorText)	errorText = 'Whoops, it looks like something went wrong. Please reload the site and try again!';
+		if (!errorText)	errorText = _lb.somethingWrong();
 
 		// Move header down
 		if (visible.controls()) lychee.header.addClass('error');
@@ -27,7 +29,7 @@ loadingBar.show = function(status, errorText) {
 		lychee.loadingBar
 			.removeClass('loading uploading error')
 			.addClass(status)
-			.html('<h1>Error: <span>' + errorText + '</span></h1>')
+			.html('<h1>' + _lb.error() + ': <span>' + errorText + '</span></h1>')
 			.show()
 			.css('height', '40px');
 

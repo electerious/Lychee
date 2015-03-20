@@ -1,5 +1,12 @@
 <!DOCTYPE HTML>
-<html>
+<?php
+require(__DIR__ . '/php/define.php');
+require(__DIR__ . '/php/autoload.php');
+require(__DIR__ . '/php/modules/misc.php');
+require(LYCHEE_CONFIG_FILE);
+if (!isset($lang)) $lang = 'en';
+?>
+<html lang="<?php echo $lang; ?>">
 	<head>
 
 		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
@@ -79,6 +86,7 @@
 	</div>
 
 	<!-- JS -->
+	<script type="text/javascript" src="dist/i18n/<?php echo $lang; ?>.js"></script>
 	<script async type="text/javascript" src="dist/main.js"></script>
 
 	</body>

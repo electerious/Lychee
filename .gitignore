@@ -1,6 +1,9 @@
 src/node_modules/
 src/bower_components/
 
+dist/_main--*
+dist/_view--*
+
 data/config.php
 
 uploads/big/*

@@ -3,6 +3,8 @@
  * @copyright	2014 by Tobias Reich
  */
 
+var _as = i18n.albums;
+
 albums = {
 
 	json: null
@@ -27,7 +29,7 @@ albums.load = function() {
 			/* Smart Albums */
 			data.unsortedAlbum = {
 				id:			0,
-				title:		'Unsorted',
+				title:		_as.unsorted(),
 				sysdate:	data.unsortedNum + ' photos',
 				unsorted: 	'1',
 				thumb0:		data.unsortedThumb0,
@@ -37,7 +39,7 @@ albums.load = function() {
 
 			data.starredAlbum = {
 				id:			'f',
-				title:		'Starred',
+				title:		_as.starred(),
 				sysdate:	data.starredNum + ' photos',
 				star:		'1',
 				thumb0:		data.starredThumb0,
@@ -47,7 +49,7 @@ albums.load = function() {
 
 			data.publicAlbum = {
 				id:			's',
-				title:		'Public',
+				title:		_as.public(),
 				sysdate:	data.publicNum + ' photos',
 				public:		'1',
 				thumb0:		data.publicThumb0,
@@ -57,7 +59,7 @@ albums.load = function() {
 
 			data.recentAlbum = {
 				id:			'r',
-				title:		'Recent',
+				title:		_as.recent(),
 				sysdate:	data.recentNum + ' photos',
 				recent:		'1',
 				thumb0:		data.recentThumb0,

@@ -3,6 +3,8 @@
  * @copyright	2014 by Tobias Reich
  */
 
+var _u = i18n.upload;
+
 upload = {}
 
 upload.show = function(title, files, callback) {
@@ -19,7 +21,7 @@ upload.notify = function(title, text) {
 
 	var popup;
 
-	if (!text||text==='') text = 'You can now manage your new photo(s).';
+	if (!text||text==='') text = _u.done();
 
 	if (!window.webkitNotifications) return false;
 
@@ -54,13 +56,13 @@ upload.start = {
 
 							// Success
 							upload.close();
-							upload.notify('Upload complete');
+							upload.notify(_u.complete());
 
 						} else {
 
 							// Error
 							$('.upload_message a.close').show();
-							upload.notify('Upload complete', 'Failed to upload one or more photos.');
+							upload.notify(_u.complete(), _u.failed());
 
 						}
 
@@ -119,18 +121,18 @@ upload.start = {
 
 						// Success
 						$('.upload_message .rows .row:nth-child(' + (file.num+1) + ') .status')
-							.html('Finished')
+							.html(_u.finished())
 							.addClass('success');
 
 					} else {
 
 						// Error
 						$('.upload_message .rows .row:nth-child(' + (file.num+1) + ') .status')
-							.html('Error')
+							.html(_u.error())
 							.addClass('error');
 
-						if (xhr.responseText.substr(0, 6)==='Error:') errorText = xhr.responseText.substr(6) + ' Please take a look at the console of your browser for further details.';
-						else errorText = 'Server returned an unknown response. Please take a look at the console of your browser for further details.';
+						if (xhr.responseText.substr(0, 6)==='Error:') errorText = xhr.responseText.substr(6) + ' ' + _u.seeConsole();
+						else errorText = _u.unknownResponse() + ' ' + _u.seeConsole();
 
 						$('.upload_message .rows .row:nth-child(' + (file.num+1) + ') p.notice')
 							.html(errorText)
@@ -140,7 +142,7 @@ upload.start = {
 						error = true;
 
 						// Throw error
-						lychee.error('Upload failed. Server returned the status code ' + xhr.status + '!', xhr, xhr.responseText);
+						lychee.error(_u.failedWithStatus({STATUS: xhr.status}), xhr, xhr.responseText);
 
 					}
 
@@ -180,7 +182,7 @@ upload.start = {
 							$('.upload_message .rows').scrollTop(scrollPos);
 
 							// Set status to processing
-							$('.upload_message .rows .row:nth-child(' + (file.num+1) + ') .status').html('Processing');
+							$('.upload_message .rows .row:nth-child(' + (file.num+1) + ') .status').html(_u.processing());
 
 							// Upload next file
 							if (file.next!==null) process(files, file.next);
@@ -217,7 +219,7 @@ upload.start = {
 
 		}
 
-		window.onbeforeunload = function() { return 'Lychee is currently uploading!'; };
+		window.onbeforeunload = function() { return _u.isUploading(); };
 
 		upload.show('Uploading', files);
 
@@ -238,7 +240,7 @@ upload.start = {
 		if (albumID===false) albumID = 0;
 
 		buttons = [
-			['Import', function() {
+			[_u.import(), function() {
 
 				link = $('.message input.text').val();
 
@@ -246,7 +248,7 @@ upload.start = {
 
 					extension = link.split('.').pop();
 					if (extension!=='jpeg'&&extension!=='jpg'&&extension!=='png'&&extension!=='gif'&&extension!=='webp') {
-						loadingBar.show('error', 'The file format of this link is not supported.');
+						loadingBar.show('error', _u.unsupportedLinkFormat());
 						return false;
 					}
 
@@ -255,15 +257,15 @@ upload.start = {
 						supported:	true
 					}
 
-					upload.show('Importing URL', files, function() {
-						$('.upload_message .rows .row .status').html('Importing');
+					upload.show(_u.importingUrl(), files, function() {
+						$('.upload_message .rows .row .status').html(_u.importing());
 					});
 
 					params = 'importUrl&url=' + escape(encodeURI(link)) + '&albumID=' + albumID;
 					lychee.api(params, function(data) {
 
 						upload.close();
-						upload.notify('Import complete');
+						upload.notify(_u.importComplete());
 
 						albums.refresh();
 
@@ -274,13 +276,13 @@ upload.start = {
 
 					});
 
-				} else loadingBar.show('error', 'Link to short or too long. Please try another one!');
+				} else loadingBar.show('error', _u.unsupportedLinkLength());
 
 			}],
 			['Cancel', function() {}]
 		];
 
-		modal.show('Import from Link', "Please enter the direct link to a photo to import it: <input class='text' type='text' placeholder='http://' value='http://'>", buttons);
+		modal.show(_u.importFromLink(), _u.directLinkEnter() + ": <input class='text' type='text' placeholder='http://' value='http://'>", buttons);
 
 	},
 
@@ -295,7 +297,7 @@ upload.start = {
 		if (albumID===false) albumID = 0;
 
 		buttons = [
-			['Import', function() {
+			[_u.import(), function() {
 
 				path = $('.message input.text').val();
 
@@ -304,7 +306,7 @@ upload.start = {
 					supported:	true
 				};
 
-				upload.show('Importing from server', files, function() {
+				upload.show(_u.importingServer(), files, function() {
 					$('.upload_message .rows .row .status').html('Importing');
 				});
 
@@ -312,7 +314,7 @@ upload.start = {
 				lychee.api(params, function(data) {
 
 					upload.close();
-					upload.notify('Import complete');
+					upload.notify(_u.importingComplete());
 
 					albums.refresh();
 
@@ -324,16 +326,16 @@ upload.start = {
 					else album.load(albumID);
 
 					if (data==='Notice: Import only contains albums!') return true;
-					else if (data==='Warning: Folder empty!') lychee.error('Folder empty. No photos imported!', params, data);
+					else if (data==='Warning: Folder empty!') lychee.error(_u.serverFolderEmpty(), params, data);
 					else if (data!==true) lychee.error(null, params, data);
 
 				});
 
 			}],
-			['Cancel', function() {}]
+			[_u.cancel(), function() {}]
 		];
 
-		modal.show('Import from Server', "This action will import all photos, folders and sub-folders which are located in the following directory. The <b>original files will be deleted</b> after the import when possible. <input class='text' type='text' maxlength='100' placeholder='Absolute path to directory' value='" + lychee.location + "uploads/import/'>", buttons);
+		modal.show(_u.importFromServer(), _u.importFromServerInfo() + " <input class='text' type='text' maxlength='100' placeholder='" + _u.absPath() + "' value='" + lychee.location + "uploads/import/'>", buttons);
 
 	},
 
@@ -365,15 +367,15 @@ upload.start = {
 					// Remove last comma
 					links = links.substr(0, links.length-1);
 
-					upload.show('Importing from Dropbox', files, function() {
-						$('.upload_message .rows .row .status').html('Importing');
+					upload.show(_u.importingDropbox(), files, function() {
+						$('.upload_message .rows .row .status').html(_u.importing());
 					});
 
 					params = 'importUrl&url=' + escape(links) + '&albumID=' + albumID;
 					lychee.api(params, function(data) {
 
 						upload.close();
-						upload.notify('Import complete');
+						upload.notify(_u.importingComplete());
 
 						albums.refresh();
 
