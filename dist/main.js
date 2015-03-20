@@ -575,57 +575,64 @@ albums.load = function() {
 
 		lychee.api('getAlbums', function(data) {
 
+			for (var key in data.content) {
+				if (data.content.hasOwnProperty(key)) {
+					var album = data.content[key];
+					album.sysdate = lychee.localizeMonth(album.sysdate);
+				}
+			}
+
 			/* Smart Albums */
 			data.unsortedAlbum = {
-				id:			0,
-				title:		_as.unsorted(),
-				sysdate:	data.unsortedNum + ' photos',
-				unsorted: 	'1',
-				thumb0:		data.unsortedThumb0,
-				thumb1:		data.unsortedThumb1,
-				thumb2:		data.unsortedThumb2
+				id:       0,
+				title:    _as.unsorted(),
+				sysdate:  _as.photos({NUM_PHOTOS: data.unsortedNum}),
+				unsorted: '1',
+				thumb0:   data.unsortedThumb0,
+				thumb1:   data.unsortedThumb1,
+				thumb2:   data.unsortedThumb2
 			};
 
 			data.starredAlbum = {
-				id:			'f',
-				title:		_as.starred(),
-				sysdate:	data.starredNum + ' photos',
-				star:		'1',
-				thumb0:		data.starredThumb0,
-				thumb1:		data.starredThumb1,
-				thumb2:		data.starredThumb2
+				id:      'f',
+				title:   _as.starred(),
+				sysdate: _as.photos({NUM_PHOTOS: data.starredNum}),
+				star:    '1',
+				thumb0:  data.starredThumb0,
+				thumb1:  data.starredThumb1,
+				thumb2:  data.starredThumb2
 			};
 
 			data.publicAlbum = {
-				id:			's',
-				title:		_as.public(),
-				sysdate:	data.publicNum + ' photos',
-				public:		'1',
-				thumb0:		data.publicThumb0,
-				thumb1:		data.publicThumb1,
-				thumb2:		data.publicThumb2
+				id:      's',
+				title:   _as.public(),
+				sysdate: _as.photos({NUM_PHOTOS: data.publicNum}),
+				public:  '1',
+				thumb0:  data.publicThumb0,
+				thumb1:  data.publicThumb1,
+				thumb2:  data.publicThumb2
 			};
 
 			data.recentAlbum = {
-				id:			'r',
-				title:		_as.recent(),
-				sysdate:	data.recentNum + ' photos',
-				recent:		'1',
-				thumb0:		data.recentThumb0,
-				thumb1:		data.recentThumb1,
-				thumb2:		data.recentThumb2
+				id:      'r',
+				title:   _as.recent(),
+				sysdate: _as.photos({NUM_PHOTOS: data.recentNum}),
+				recent:  '1',
+				thumb0:  data.recentThumb0,
+				thumb1:  data.recentThumb1,
+				thumb2:  data.recentThumb2
 			};
 
 			albums.json = data;
 
 			// Calculate delay
 			durationTime = (new Date().getTime() - startTime);
-			if (durationTime>300)	waitTime = 0;
-			else					waitTime = 300 - durationTime;
+			if (durationTime>300) waitTime = 0;
+			else                  waitTime = 300 - durationTime;
 
 			// Skip delay when opening a blank Lychee
-			if (!visible.albums()&&!visible.photo()&&!visible.album())	waitTime = 0;
-			if (visible.album()&&lychee.content.html()==='')			waitTime = 0;
+			if (!visible.albums()&&!visible.photo()&&!visible.album()) waitTime = 0;
+			if (visible.album()&&lychee.content.html()==='')           waitTime = 0;
 
 			setTimeout(function() {
 				view.header.mode('albums');
@@ -1574,6 +1581,18 @@ lychee.error = function(errorThrown, params, data) {
 	});
 
 	loadingBar.show('error', errorThrown);
+
+}
+
+lychee.localizeMonth = function(date) {
+
+	return moment(date, 'MMMM YYYY', 'en').locale(window.locale).format('MMMM YYYY');
+
+}
+
+lychee.localizeDate = function(date) {
+
+	return moment(date, 'DD MMM. YYYY', 'en').locale(window.locale).format('ll');
 
 }
 
@@ -3626,16 +3645,16 @@ view.album = {
 
 			switch (album.getID()) {
 				case 'f':
-					lychee.setTitle('Starred', false);
+					lychee.setTitle(_as.starred(), false);
 					break;
 				case 's':
-					lychee.setTitle('Public', false);
+					lychee.setTitle(_as.public(), false);
 					break;
 				case 'r':
-					lychee.setTitle('Recent', false);
+					lychee.setTitle(_as.recent(), false);
 					break;
 				case '0':
-					lychee.setTitle('Unsorted', false);
+					lychee.setTitle(_as.unsorted(), false);
 					break;
 				default:
 					if (album.json.init) $('#infobox .attr_title').html(album.json.title + ' ' + build.editIcon('edit_title_album'));
@@ -4023,9 +4042,9 @@ build.photo = function(data) {
   }
   html = "<div class='photo' data-album-id='" + data.album + "' data-id='" + data.id + "'>\n	<img src='" + data.thumbUrl + "' width='200' height='200' alt='thumb'>\n	<div class='overlay'>\n		<h1 title='" + longTitle + "'>" + title + "</h1>";
   if (data.cameraDate === '1') {
-    html += "<a><span class='icon-camera' title='Photo Date'></span>" + data.sysdate + "</a>";
+    html += "<a><span class='icon-camera' title='" + _b.photoDate() + ("'></span>" + data.sysdate + "</a>");
   } else {
-    html += "<a>" + data.sysdate + "</a>";
+    html += "<a>" + (lychee.localizeDate(data.sysdate)) + "</a>";
   }
   html += "</div>";
   if (data.star === '1') {
@@ -4183,10 +4202,10 @@ build.infoboxPhoto = function(data, forView) {
   } else {
     editDescriptionHTML = ' ' + build.editIcon('edit_description');
   }
-  infos = [['', _b.basics()], [_b.title(), data.title + editTitleHTML], [_b.uploaded(), data.sysdate], [_b.description(), data.description + editDescriptionHTML], ['', _b.image()], [_b.size(), data.size], [_b.format(), data.type], [_b.resolution(), data.width + ' x ' + data.height], [_b.tags(), build.tags(data.tags, forView)]];
+  infos = [['', _b.basics()], [_b.title(), data.title + editTitleHTML], [_b.uploaded(), lychee.localizeDate(data.sysdate)], [_b.description(), data.description + editDescriptionHTML], ['', _b.image()], [_b.size(), data.size], [_b.format(), data.type], [_b.resolution(), data.width + ' x ' + data.height], [_b.tags(), build.tags(data.tags, forView)]];
   exifHash = data.takestamp + data.make + data.model + data.shutter + data.aperture + data.focal + data.iso;
   if (exifHash !== '0' || exifHash !== '0') {
-    infos = infos.concat([['', _b.camera()], [_b.takedate(), data.takedate], [_b.make(), data.make], [_b.model(), data.model], [_b.shutter(), data.shutter], [_b.aperture(), data.aperture], [_b.focal(), data.focal], [_b.iso(), data.iso]]);
+    infos = infos.concat([['', _b.camera()], [_b.takedate(), lychee.localizeDate(data.takedate)], [_b.make(), data.make], [_b.model(), data.model], [_b.shutter(), data.shutter], [_b.aperture(), data.aperture], [_b.focal(), data.focal], [_b.iso(), data.iso]]);
   }
   infos = infos.concat([['', _b.share()], [_b["public"](), visible]]);
   infos.forEach(function(info, i, items) {
@@ -4252,7 +4271,7 @@ build.infoboxAlbum = function(data, forView) {
   } else {
     editDescriptionHTML = ' ' + build.editIcon('edit_description_album');
   }
-  infos = [['', _b.basics()], [_b.title(), data.title + editTitleHTML], [_b.description(), data.description + editDescriptionHTML], ['', _b.album()], [_b.created(), data.sysdate], [_b.images(), data.num], ['', _b.share()], [_b["public"](), visible], [_b.downloadable(), downloadable], [_b.usesPassword(), password]];
+  infos = [['', _b.basics()], [_b.title(), data.title + editTitleHTML], [_b.description(), data.description + editDescriptionHTML], ['', _b.album()], [_b.created(), lychee.localizeDate(data.sysdate)], [_b.images(), data.num], ['', _b.share()], [_b["public"](), visible], [_b.downloadable(), downloadable], [_b.usesPassword(), password]];
   infos.forEach(function(info, i, items) {
     if (info[0] === '') {
       return html += "</table>\n<div class='separator'><h1>" + info[1] + "</h1></div>\n<table id='infos'>";

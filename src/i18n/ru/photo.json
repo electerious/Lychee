@@ -7,7 +7,7 @@
 	"tags": "Метки",
 	"delPhotos": "Удалить {NUM_PHOTOS, plural, one {фотографию} other {фотографии}}",
 	"keepPhotos": "Оставить {NUM_PHOTOS, plural, one {фотографию} other {фотографии}}",
-	"delPhotosAreYouSure": "Are you sure you want to delete {NUM_PHOTOS, plural, one {the photo '{PHOTO_TITLE}'} other {all # selected photos}}?<br>This action can't be undone!",
+	"delPhotosAreYouSure": "Вы точно хотите удалить {NUM_PHOTOS, plural, one {фотографию '{PHOTO_TITLE}'} few {# выбранные фотографии} other {# выбранных фотографий}}?<br>Это действие нельзя отменить!",
 	"setTitle": "Изменить название",
 	"setTitles": "Изменить {NUM_PHOTOS, plural, one {название} other {названия}}",
 	"setTitlesEnter": "Введите новое название для {NUM_PHOTOS, plural, one {этой фотографии} other {# выбранных фотографий}}:",

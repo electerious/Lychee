@@ -125,10 +125,12 @@ gulp.task('main--i18n', function() {
 	var stream = merge();
 
 	['en', 'ru'].forEach(function(lang) {
-		stream.add(gulp.src('../src/i18n/' + lang + '/*.json')
-			.pipe(plugins.messageformat({locale: lang}))
-			.pipe(plugins.uglify())
-			.pipe(gulp.dest('../dist/i18n/')));
+		stream.add(
+			merge(gulp.src('../src/i18n/' + lang + '/*.json').pipe(plugins.messageformat({locale: lang})),
+				gulp.src(['bower_components/moment/min/moment.min.js','bower_components/moment/locale/' + lang + '.js'])
+			).pipe(plugins.concat(lang + '.js', {newLine: "\n"}))
+			 .pipe(plugins.uglify())
+			 .pipe(gulp.dest('../dist/i18n/')));
 	});
 
 	return stream;

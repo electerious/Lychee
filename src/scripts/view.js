@@ -244,16 +244,16 @@ view.album = {
 
 			switch (album.getID()) {
 				case 'f':
-					lychee.setTitle('Starred', false);
+					lychee.setTitle(_as.starred(), false);
 					break;
 				case 's':
-					lychee.setTitle('Public', false);
+					lychee.setTitle(_as.public(), false);
 					break;
 				case 'r':
-					lychee.setTitle('Recent', false);
+					lychee.setTitle(_as.recent(), false);
 					break;
 				case '0':
-					lychee.setTitle('Unsorted', false);
+					lychee.setTitle(_as.unsorted(), false);
 					break;
 				default:
 					if (album.json.init) $('#infobox .attr_title').html(album.json.title + ' ' + build.editIcon('edit_title_album'));

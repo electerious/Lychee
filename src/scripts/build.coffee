@@ -43,14 +43,14 @@ build.album = (data) ->
 			"""
 
 	if data.password and lychee.publicMode is false
-		html += "<h1 title='#{ longTitle }'><span class='icon-lock'></span> #{ title }</h1>";
+		html += "<h1 title='#{ longTitle }'><span class='icon-lock'></span> #{ title }</h1>"
 	else
 		html += "<h1 title='#{ longTitle }'>#{ title }</h1>"
 
 	html +=	"""
 					<a>#{ data.sysdate }</a>
 				</div>
-			"""
+			""" # the date is localized in the loading process, because of smart albums that have count instead of date
 
 	if lychee.publicMode is false
 
@@ -83,9 +83,9 @@ build.photo = (data) ->
 			"""
 
 	if data.cameraDate is '1'
-		html += "<a><span class='icon-camera' title='Photo Date'></span>#{ data.sysdate }</a>"
+		html += "<a><span class='icon-camera' title='" + _b.photoDate() + "'></span>#{ data.sysdate }</a>"
 	else
-		html += "<a>#{ data.sysdate }</a>"
+		html += "<a>#{ lychee.localizeDate(data.sysdate) }</a>"
 
 	html += "</div>"
 
@@ -279,7 +279,7 @@ build.infoboxPhoto = (data, forView) ->
 	infos = [
 		['', _b.basics()]
 		[_b.title(), data.title + editTitleHTML]
-		[_b.uploaded(), data.sysdate]
+		[_b.uploaded(), lychee.localizeDate(data.sysdate)]
 		[_b.description(), data.description + editDescriptionHTML]
 		['', _b.image()]
 		[_b.size(), data.size]
@@ -294,7 +294,7 @@ build.infoboxPhoto = (data, forView) ->
 
 		infos = infos.concat [
 			['', _b.camera()]
-			[_b.takedate(), data.takedate]
+			[_b.takedate(), lychee.localizeDate(data.takedate)]
 			[_b.make(), data.make]
 			[_b.model(), data.model]
 			[_b.shutter(), data.shutter]
@@ -388,7 +388,7 @@ build.infoboxAlbum = (data, forView) ->
 		[_b.title(), data.title + editTitleHTML]
 		[_b.description(), data.description + editDescriptionHTML]
 		['', _b.album()]
-		[_b.created(), data.sysdate]
+		[_b.created(), lychee.localizeDate(data.sysdate)]
 		[_b.images(), data.num]
 		['', _b.share()]
 		[_b.public(), visible]
