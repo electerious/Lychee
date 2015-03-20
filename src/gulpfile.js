@@ -124,7 +124,7 @@ gulp.task('main--i18n', function() {
 
 	var stream = merge();
 
-	['en'].forEach(function(lang) {
+	['en', 'ru'].forEach(function(lang) {
 		stream.add(gulp.src('../src/i18n/' + lang + '/*.json')
 			.pipe(plugins.messageformat({locale: lang}))
 			.pipe(plugins.uglify())

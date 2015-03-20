@@ -1823,7 +1823,7 @@ multiselect.close = function() {
  * @copyright   2014 by Tobias Reich
  */
 
-var _p = i18n.password;
+var _pw = i18n.password;
 
 password = {
 
@@ -1861,7 +1861,7 @@ password.get = function(albumID, callback) {
 				callback();
 			} else {
 				lychee.goto('');
-				loadingBar.show('error', _p.wrongPassword());
+				loadingBar.show('error', _pw.wrongPassword());
 			}
 
 		});
@@ -1875,11 +1875,11 @@ password.getDialog = function(albumID, callback) {
 	var buttons;
 
 	buttons = [
-		[_p.enter(), function() { password.get(albumID, callback) }],
-		[_p.cancel(), lychee.goto]
+		[_pw.enter(), function() { password.get(albumID, callback) }],
+		[_pw.cancel(), lychee.goto]
 	];
-	modal.show("<a class='icon-lock'></a> " + _p.enterPassword(),
-	           _p.protectedInfo() + ": <input class='text' type='password' placeholder='" + _p.password() + "' value=''>",
+	modal.show("<a class='icon-lock'></a> " + _pw.enterPassword(),
+	           _pw.protectedInfo() + ": <input class='text' type='password' placeholder='" + _pw.password() + "' value=''>",
 	           buttons, -110, false);
 
 }
@@ -4196,7 +4196,7 @@ build.infoboxPhoto = function(data, forView) {
     switch (info[0]) {
       case '':
         return html += "</table>\n<div class='separator'><h1>" + info[1] + "</h1></div>\n<table>";
-      case 'Tags':
+      case _b.tags():
         if (forView !== true && lychee.publicMode === false) {
           return html += "</table>\n<div class='separator'><h1>" + info[0] + "</h1></div>\n<div id='tags'>" + info[1] + "</div>";
         }
@@ -4214,30 +4214,30 @@ build.infoboxAlbum = function(data, forView) {
   html = "<div class='header'><h1>" + (_b.about()) + "</h1><a class='icon-remove-sign'></a></div>\n<div class='wrapper'>";
   switch (data["public"]) {
     case '0':
-      visible = 'No';
+      visible = _b.no();
       break;
     case '1':
-      visible = 'Yes';
+      visible = _b.yes();
       break;
     default:
       visible = '-';
   }
   switch (data.password) {
     case false:
-      password = 'No';
+      password = _b.no();
       break;
     case true:
-      password = 'Yes';
+      password = _b.yes();
       break;
     default:
       password = '-';
   }
   switch (data.downloadable) {
     case '0':
-      downloadable = 'No';
+      downloadable = _b.no();
       break;
     case '1':
-      downloadable = 'Yes';
+      downloadable = _b.yes();
       break;
     default:
       downloadable = '-';

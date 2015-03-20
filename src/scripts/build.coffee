@@ -326,7 +326,7 @@ build.infoboxPhoto = (data, forView) ->
 						<table>
 						"""
 
-			when 'Tags'
+			when _b.tags()
 
 				# Tags
 				if forView isnt true and lychee.publicMode is false
@@ -363,18 +363,18 @@ build.infoboxAlbum = (data, forView) ->
 			"""
 
 	switch data.public
-		when '0' then visible = 'No'
-		when '1' then visible = 'Yes'
+		when '0' then visible = _b.no()
+		when '1' then visible = _b.yes()
 		else          visible = '-'
 
 	switch data.password
-		when false then password = 'No'
-		when true then  password = 'Yes'
+		when false then password = _b.no()
+		when true then  password = _b.yes()
 		else            password = '-'
 
 	switch data.downloadable
-		when '0' then downloadable = 'No'
-		when '1' then downloadable = 'Yes'
+		when '0' then downloadable = _b.no()
+		when '1' then downloadable = _b.yes()
 		else          downloadable = '-'
 
 	if forView is true or lychee.publicMode is true then editTitleHTML = ''

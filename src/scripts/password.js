@@ -3,7 +3,7 @@
  * @copyright   2014 by Tobias Reich
  */
 
-var _p = i18n.password;
+var _pw = i18n.password;
 
 password = {
 
@@ -41,7 +41,7 @@ password.get = function(albumID, callback) {
 				callback();
 			} else {
 				lychee.goto('');
-				loadingBar.show('error', _p.wrongPassword());
+				loadingBar.show('error', _pw.wrongPassword());
 			}
 
 		});
@@ -55,11 +55,11 @@ password.getDialog = function(albumID, callback) {
 	var buttons;
 
 	buttons = [
-		[_p.enter(), function() { password.get(albumID, callback) }],
-		[_p.cancel(), lychee.goto]
+		[_pw.enter(), function() { password.get(albumID, callback) }],
+		[_pw.cancel(), lychee.goto]
 	];
-	modal.show("<a class='icon-lock'></a> " + _p.enterPassword(),
-	           _p.protectedInfo() + ": <input class='text' type='password' placeholder='" + _p.password() + "' value=''>",
+	modal.show("<a class='icon-lock'></a> " + _pw.enterPassword(),
+	           _pw.protectedInfo() + ": <input class='text' type='password' placeholder='" + _pw.password() + "' value=''>",
 	           buttons, -110, false);
 
 }

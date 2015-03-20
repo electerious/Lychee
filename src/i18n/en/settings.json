@@ -23,8 +23,6 @@
 	"wrongInputInfo": "The username or password you entered is not long enough. Please try again with another username and password!",
 	"loginCreationFailedInfo": "Unable to save login. Please try again with another username and password!",
 	"loginEnter": "Enter a username and password for your installation",
-	"newUsername": "New Username",
-	"newPassword": "New Password",
 	"changeLogin": "Change Login",
 	"wrongOldPassword": "Your old password was entered incorrectly. Please try again!",
 	"wrongNewPassword": "Your new password was entered incorrectly. Please try again!",
