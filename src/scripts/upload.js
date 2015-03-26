@@ -221,7 +221,7 @@ upload.start = {
 
 		window.onbeforeunload = function() { return _u.isUploading(); };
 
-		upload.show('Uploading', files);
+		upload.show(_u.uploading(), files);
 
 		// Upload first file
 		process(files, files[0]);
@@ -279,7 +279,7 @@ upload.start = {
 				} else loadingBar.show('error', _u.unsupportedLinkLength());
 
 			}],
-			['Cancel', function() {}]
+			[_u.cancel(), function() {}]
 		];
 
 		modal.show(_u.importFromLink(), _u.directLinkEnter() + ": <input class='text' type='text' placeholder='http://' value='http://'>", buttons);

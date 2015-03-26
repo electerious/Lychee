@@ -185,7 +185,7 @@ build.signInModal = ->
 						<input id='password' type='password' value='' placeholder='#{_b.password()}'>
 					</div>
 					<div id='version'>#{_b.version()} #{ lychee.version }<span> &#8211; <a target='_blank' href='#{ lychee.updateURL }'>#{_b.updateAvail()}</a><span></div>
-					<a onclick='lychee.login()' class='button active'>Sign in</a>
+					<a onclick='lychee.login()' class='button active'>#{_b.signIn()}</a>
 				</div>
 			</div>
 			"""

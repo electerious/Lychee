@@ -37,7 +37,7 @@ albums.load = function() {
 			data.unsortedAlbum = {
 				id:       0,
 				title:    _as.unsorted(),
-				sysdate:  _as.photos({NUM_PHOTOS: data.unsortedNum}),
+				sysdate:  _as.photos({NUM_PHOTOS: data.unsortedNum || 0}),
 				unsorted: '1',
 				thumb0:   data.unsortedThumb0,
 				thumb1:   data.unsortedThumb1,
@@ -47,7 +47,7 @@ albums.load = function() {
 			data.starredAlbum = {
 				id:      'f',
 				title:   _as.starred(),
-				sysdate: _as.photos({NUM_PHOTOS: data.starredNum}),
+				sysdate: _as.photos({NUM_PHOTOS: data.starredNum || 0}),
 				star:    '1',
 				thumb0:  data.starredThumb0,
 				thumb1:  data.starredThumb1,
@@ -57,7 +57,7 @@ albums.load = function() {
 			data.publicAlbum = {
 				id:      's',
 				title:   _as.public(),
-				sysdate: _as.photos({NUM_PHOTOS: data.publicNum}),
+				sysdate: _as.photos({NUM_PHOTOS: data.publicNum || 0}),
 				public:  '1',
 				thumb0:  data.publicThumb0,
 				thumb1:  data.publicThumb1,
@@ -67,7 +67,7 @@ albums.load = function() {
 			data.recentAlbum = {
 				id:      'r',
 				title:   _as.recent(),
-				sysdate: _as.photos({NUM_PHOTOS: data.recentNum}),
+				sysdate: _as.photos({NUM_PHOTOS: data.recentNum || 0}),
 				recent:  '1',
 				thumb0:  data.recentThumb0,
 				thumb1:  data.recentThumb1,
