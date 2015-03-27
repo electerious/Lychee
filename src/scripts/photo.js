@@ -3,6 +3,8 @@
  * @copyright	2014 by Tobias Reich
  */
 
+var _p = i18n.photo;
+
 photo = {
 
 	json:	null,
@@ -81,7 +83,7 @@ photo.preloadNext = function(photoID) {
 
 photo.parse = function() {
 
-	if (!photo.json.title) photo.json.title = 'Untitled';
+	if (!photo.json.title) photo.json.title = _p.untitled();
 
 }
 
@@ -182,7 +184,7 @@ photo.delete = function(photoIDs) {
 		else					photoTitle = album.json.content[photoIDs].title;
 
 		// Fallback for photos without a title
-		if (photoTitle==='')	photoTitle = 'Untitled';
+		if (photoTitle==='')	photoTitle = _p.untitled();
 
 	}
 
@@ -228,21 +230,10 @@ photo.delete = function(photoIDs) {
 		['', function() {}]
 	];
 
-	if (photoIDs.length===1) {
+	buttons[0][0] = _p.delPhotos({NUM_PHOTOS: photoIDs.length});
+	buttons[1][0] = _p.keepPhotos({NUM_PHOTOS: photoIDs.length});
 
-		buttons[0][0] = 'Delete Photo';
-		buttons[1][0] = 'Keep Photo';
-
-		modal.show('Delete Photo', "Are you sure you want to delete the photo '" + photoTitle + "'?<br>This action can't be undone!", buttons);
-
-	} else {
-
-		buttons[0][0] = 'Delete Photos';
-		buttons[1][0] = 'Keep Photos';
-
-		modal.show('Delete Photos', "Are you sure you want to delete all " + photoIDs.length + " selected photo?<br>This action can't be undone!", buttons);
-
-	}
+	modal.show(buttons[0][0], _p.delPhotosAreYouSure({NUM_PHOTOS: photoIDs.length, PHOTO_TITLE: photoTitle}), buttons);
 
 }
 
@@ -264,7 +255,7 @@ photo.setTitle = function(photoIDs) {
 	}
 
 	buttons = [
-		['Set Title', function() {
+		[_p.setTitle(), function() {
 
 			// Get input
 			newTitle = $('.message input.text').val();
@@ -273,7 +264,7 @@ photo.setTitle = function(photoIDs) {
 			newTitle = lychee.removeHTML(newTitle);
 
 			if (visible.photo()) {
-				photo.json.title = (newTitle==='') ? 'Untitled' : newTitle;
+				photo.json.title = (newTitle==='') ? _p.untitled() : newTitle;
 				view.photo.title();
 			}
 
@@ -290,11 +281,12 @@ photo.setTitle = function(photoIDs) {
 			});
 
 		}],
-		['Cancel', function() {}]
+		[_p.cancel(), function() {}]
 	];
 
-	if (photoIDs.length===1) modal.show('Set Title', "Enter a new title for this photo: <input class='text' type='text' maxlength='30' placeholder='Title' value='" + oldTitle + "'>", buttons);
-	else modal.show('Set Titles', "Enter a title for all " + photoIDs.length + " selected photos: <input class='text' type='text' maxlength='30' placeholder='Title' value=''>", buttons);
+	modal.show(_p.setTitles({NUM_PHOTOS: photoIDs.length}),
+	           _p.setTitlesEnter({NUM_PHOTOS: photoIDs.length}) + "<input class='text' type='text' maxlength='30' placeholder='" + _p.title() + "' value='" + oldTitle + "'>",
+	           buttons);
 
 }
 
@@ -369,7 +361,9 @@ photo.setPublic = function(photoID, e) {
 
 	if (photo.json.public==2) {
 
-		modal.show('Public Album', "This photo is located in a public album. To make this photo private or public, edit the visibility of the associated album.", [['Show Album', function() { lychee.goto(photo.json.original_album) }], ['Close', function() {}]]);
+		modal.show(_p.pubAlbum(), _p.pubAlbumInfo(),
+		           [[_p.showAlbum(), function() { lychee.goto(photo.json.original_album) }],
+		            [_p.close(), function() {}]]);
 		return false;
 
 	}
@@ -404,7 +398,7 @@ photo.setDescription = function(photoID) {
 		buttons;
 
 	buttons = [
-		['Set Description', function() {
+		[_p.setDesc(), function() {
 
 			// Get input
 			description = $('.message input.text').val();
@@ -425,10 +419,12 @@ photo.setDescription = function(photoID) {
 			});
 
 		}],
-		['Cancel', function() {}]
+		[_p.cancel(), function() {}]
 	];
 
-	modal.show('Set Description', "Enter a description for this photo: <input class='text' type='text' maxlength='800' placeholder='Description' value='" + oldDescription + "'>", buttons);
+	modal.show(_p.setDesc(),
+	           _p.setDescEnter() + ": <input class='text' type='text' maxlength='800' placeholder='" + _p.description() + "' value='" + oldDescription + "'>",
+	           buttons);
 
 }
 
@@ -457,18 +453,19 @@ photo.editTags = function(photoIDs) {
 	oldTags = oldTags.replace(/,/g, ', ');
 
 	buttons = [
-		['Set Tags', function() {
+		[_p.setTags(), function() {
 
 			tags = $('.message input.text').val();
 
 			photo.setTags(photoIDs, tags);
 
 		}],
-		['Cancel', function() {}]
+		[_p.cancel(), function() {}]
 	];
 
-	if (photoIDs.length===1) modal.show('Set Tags', "Enter your tags for this photo. You can add multiple tags by separating them with a comma: <input class='text' type='text' maxlength='800' placeholder='Tags' value='" + oldTags + "'>", buttons);
-	else modal.show('Set Tags', "Enter your tags for all " + photoIDs.length + " selected photos. Existing tags will be overwritten. You can add multiple tags by separating them with a comma: <input class='text' type='text' maxlength='800' placeholder='Tags' value='" + oldTags + "'>", buttons);
+	modal.show(_p.setTags(),
+	           _p.setTagsEnter({NUM_PHOTOS: photoIDs.length}) + ": <input class='text' type='text' maxlength='800' placeholder='" + _p.tags() + "' value='" + oldTags + "'>",
+	           buttons);
 
 }
 

@@ -390,3 +390,15 @@ lychee.error = function(errorThrown, params, data) {
 	loadingBar.show('error', errorThrown);
 
 }
+
+lychee.localizeMonth = function(date) {
+
+	return moment(date, 'MMMM YYYY', 'en').locale(window.locale).format('MMMM YYYY');
+
+}
+
+lychee.localizeDate = function(date) {
+
+	return moment(date, 'DD MMM. YYYY', 'en').locale(window.locale).format('ll');
+
+}

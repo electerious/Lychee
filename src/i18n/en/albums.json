@@ -1,0 +1,7 @@
+{
+	"unsorted": "Unsorted",
+	"starred": "Starred",
+	"public": "Public",
+	"recent": "Recent",
+	"photos": "{NUM_PHOTOS, plural, one {one photo} other {# photos}}"
+}

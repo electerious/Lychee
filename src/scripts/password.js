@@ -3,6 +3,8 @@
  * @copyright   2014 by Tobias Reich
  */
 
+var _pw = i18n.password;
+
 password = {
 
 	value: ''
@@ -39,7 +41,7 @@ password.get = function(albumID, callback) {
 				callback();
 			} else {
 				lychee.goto('');
-				loadingBar.show('error', 'Access denied. Wrong password!');
+				loadingBar.show('error', _pw.wrongPassword());
 			}
 
 		});
@@ -53,9 +55,11 @@ password.getDialog = function(albumID, callback) {
 	var buttons;
 
 	buttons = [
-		['Enter', function() { password.get(albumID, callback) }],
-		['Cancel', lychee.goto]
+		[_pw.enter(), function() { password.get(albumID, callback) }],
+		[_pw.cancel(), lychee.goto]
 	];
-	modal.show("<a class='icon-lock'></a> Enter Password", "This album is protected by a password. Enter the password below to view the photos of this album: <input class='text' type='password' placeholder='password' value=''>", buttons, -110, false);
+	modal.show("<a class='icon-lock'></a> " + _pw.enterPassword(),
+	           _pw.protectedInfo() + ": <input class='text' type='password' placeholder='" + _pw.password() + "' value=''>",
+	           buttons, -110, false);
 
 }

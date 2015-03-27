@@ -1,0 +1,7 @@
+{
+	"unsorted": "Без альбома",
+	"starred": "Отмеченные",
+	"public": "Публичные",
+	"recent": "Недавние",
+	"photos": "{NUM_PHOTOS, plural, one {одна фотография} few {# фотографии} other {# фотографий}}"
+}

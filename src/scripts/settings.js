@@ -3,6 +3,8 @@
  * @copyright	2014 by Tobias Reich
  */
 
+var _s = i18n.settings;
+
 settings = {}
 
 settings.createConfig = function() {
@@ -16,7 +18,7 @@ settings.createConfig = function() {
 		params;
 
 	buttons = [
-		['Connect', function() {
+		[_s.connect(), function() {
 
 			dbHost			= $('.message input.text#dbHost').val();
 			dbUser			= $('.message input.text#dbUser').val();
@@ -39,10 +41,10 @@ settings.createConfig = function() {
 						if (data.indexOf('Warning: Connection failed!')!==-1) {
 
 							buttons = [
-								['Retry', function() { setTimeout(settings.createConfig, 400) }],
+								[_s.retry(), function() { setTimeout(settings.createConfig, 400) }],
 								['', function() {}]
 							];
-							modal.show('Connection Failed', 'Unable to connect to host database because access was denied. Double-check your host, username and password and ensure that access from your current location is permitted.', buttons, null, false);
+							modal.show(_s.connFailed(), _s.connFailedInfo(), buttons, null, false);
 							return false;
 
 						}
@@ -51,10 +53,10 @@ settings.createConfig = function() {
 						if (data.indexOf('Warning: Creation failed!')!==-1) {
 
 							buttons = [
-								['Retry', function() { setTimeout(settings.createConfig, 400) }],
+								[_s.retry(), function() { setTimeout(settings.createConfig, 400) }],
 								['', function() {}]
 							];
-							modal.show('Creation Failed', 'Unable to create the database. Double-check your host, username and password and ensure that the specified user has the rights to modify and add content to the database.', buttons, null, false);
+							modal.show(_s.creationFailed(), _s.creationFailedInfo(), buttons, null, false);
 							return false;
 
 						}
@@ -63,21 +65,20 @@ settings.createConfig = function() {
 						if (data.indexOf('Warning: Could not create file!')!==-1) {
 
 							buttons = [
-								['Retry', function() { setTimeout(settings.createConfig, 400) }],
+								[_s.retry(), function() { setTimeout(settings.createConfig, 400) }],
 								['', function() {}]
 							];
-							modal.show('Saving Failed', "Unable to save this configuration. Permission denied in <b>'data/'</b>. Please set the read, write and execute rights for others in <b>'data/'</b> and <b>'uploads/'</b>. Take a look the readme for more information.", buttons, null, false);
+							modal.show(_s.savingFailed(), _s.savingFailedInfo(), buttons, null, false);
 							return false;
 
 						}
 
 						// Something went wrong
 						buttons = [
-							['Retry', function() { setTimeout(settings.createConfig, 400) }],
+							[_s.retry(), function() { setTimeout(settings.createConfig, 400) }],
 							['', function() {}]
 						];
-						modal.show('Configuration Failed', 'Something unexpected happened. Please try again and check your installation and server. Take a look the readme for more information.', buttons, null, false);
-						return false;
+						modal.show(_s.configFailed(), _s.configFailedInfo(), buttons, null, false); return false;
 
 					}, 400);
 
@@ -94,7 +95,14 @@ settings.createConfig = function() {
 		['', function() {}]
 	];
 
-	modal.show('Configuration', "Enter your database connection details below: <input id='dbHost' class='text less' type='text' placeholder='Database Host (optional)' value=''><input id='dbUser' class='text less' type='text' placeholder='Database Username' value=''><input id='dbPassword' class='text more' type='password' placeholder='Database Password' value=''><br>Lychee will create its own database. If required, you can enter the name of an existing database instead:<input id='dbName' class='text less' type='text' placeholder='Database Name (optional)' value=''><input id='dbTablePrefix' class='text more' type='text' placeholder='Table prefix (optional)' value=''>", buttons, -235, false);
+	modal.show(_s.config(), _s.configEnter() + ": " +
+	           "<input id='dbHost' class='text less' type='text' placeholder='" + _s.dbHost() + "' value=''>" +
+	           "<input id='dbUser' class='text less' type='text' placeholder='" + _s.dbUser() + "' value=''>" +
+	           "<input id='dbPassword' class='text more' type='password' placeholder='" + _s.dbPassword() + "' value=''><br>" +
+	           _s.dbWillBeCreated() +
+	           ":<input id='dbName' class='text less' type='text' placeholder='" + _s.dbName() + "' value=''>" +
+	           "<input id='dbTablePrefix' class='text more' type='text' placeholder='" + _s.dbTablePrefix() +"' value=''>",
+	           buttons, -235, false);
 
 }
 
@@ -106,7 +114,7 @@ settings.createLogin = function() {
 		buttons;
 
 	buttons = [
-		['Create Login', function() {
+		[_s.createLogin(), function() {
 
 			username = $('.message input.text#username').val();
 			password = $('.message input.text#password').val();
@@ -116,10 +124,10 @@ settings.createLogin = function() {
 				setTimeout(function() {
 
 					buttons = [
-						['Retry', function() { setTimeout(settings.createLogin, 400) }],
+						[_s.retry(), function() { setTimeout(settings.createLogin, 400) }],
 						['', function() {}]
 					];
-					modal.show('Wrong Input', 'The username or password you entered is not long enough. Please try again with another username and password!', buttons, null, false);
+					modal.show(_s.wrongInput(), _s.wrongInputInfo(), buttons, null, false);
 					return false;
 
 				}, 400);
@@ -134,10 +142,10 @@ settings.createLogin = function() {
 						setTimeout(function() {
 
 							buttons = [
-								['Retry', function() { setTimeout(settings.createLogin, 400) }],
+								[_s.retry(), function() { setTimeout(settings.createLogin, 400) }],
 								['', function() {}]
 							];
-							modal.show('Creation Failed', 'Unable to save login. Please try again with another username and password!', buttons, null, false);
+							modal.show(_s.creationFailed(), _s.loginCreationFailedInfo(), buttons, null, false);
 							return false;
 
 						}, 400);
@@ -152,7 +160,10 @@ settings.createLogin = function() {
 		['', function() {}]
 	];
 
-	modal.show('Create Login', "Enter a username and password for your installation: <input id='username' class='text less' type='text' placeholder='New Username' value=''><input id='password' class='text' type='password' placeholder='New Password' value=''>", buttons, -122, false);
+	modal.show(_s.createLogin(),
+	           _s.loginEnter() + ": <input id='username' class='text less' type='text' placeholder='" + _s.newUsername() + "' value=''>" +
+	           "<input id='password' class='text' type='password' placeholder='" + _s.newPassword() + "' value=''>",
+	           buttons, -122, false);
 
 }
 
@@ -165,24 +176,24 @@ settings.setLogin = function() {
 		buttons;
 
 	buttons = [
-		['Change Login', function() {
+		[_s.changeLogin(), function() {
 
 			old_password	= $('.message input.text#old_password').val();
 			username		= $('.message input.text#username').val();
 			password		= $('.message input.text#password').val();
 
 			if (old_password.length<1) {
-				loadingBar.show('error', 'Your old password was entered incorrectly. Please try again!');
+				loadingBar.show('error', _s.wrongOldPassword());
 				return false;
 			}
 
 			if (username.length<1) {
-				loadingBar.show('error', 'Your new username was entered incorrectly. Please try again!');
+				loadingBar.show('error', _s.wrongNewUsername());
 				return false;
 			}
 
 			if (password.length<1) {
-				loadingBar.show('error', 'Your new password was entered incorrectly. Please try again!');
+				loadingBar.show('error', _s.wrongNewPassword());
 				return false;
 			}
 
@@ -194,10 +205,15 @@ settings.setLogin = function() {
 			});
 
 		}],
-		['Cancel', function() {}]
+		[_s.cancel(), function() {}]
 	];
 
-	modal.show('Change Login', "Enter your current password: <input id='old_password' class='text more' type='password' placeholder='Current Password' value=''><br>Your username and password will be changed to the following: <input id='username' class='text less' type='text' placeholder='New Username' value=''><input id='password' class='text' type='password' placeholder='New Password' value=''>", buttons, -171);
+	modal.show(_s.changeLogin(),
+						 _s.oldPasswordEnter() + ": <input id='old_password' class='text more' type='password' placeholder='" + _s.oldPassword() + "' value=''><br>" +
+						 _s.loginWillBeChangedTo() +
+						 ": <input id='username' class='text less' type='text' placeholder='" + _s.newUsername() + "' value=''>" +
+						 "<input id='password' class='text' type='password' placeholder='" + _s.newPassword() + "' value=''>",
+						 buttons, -171);
 
 }
 
@@ -208,7 +224,7 @@ settings.setSorting = function() {
 		params;
 
 	buttons = [
-		['Change Sorting', function() {
+		[_s.changeSorting(), function() {
 
 			sorting[0] = $('select#settings_type').val();
 			sorting[1] = $('select#settings_order').val();
@@ -226,27 +242,26 @@ settings.setSorting = function() {
 			});
 
 		}],
-		['Cancel', function() {}]
+		[_s.cancel(), function() {}]
 	];
 
-	modal.show('Change Sorting',
-		"Sort photos by \
-			<select id='settings_type'> \
-				<option value='id'>Upload Time</option> \
-				<option value='takestamp'>Take Date</option> \
-				<option value='title'>Title</option> \
-				<option value='description'>Description</option> \
-				<option value='public'>Public</option> \
-				<option value='star'>Star</option> \
-				<option value='type'>Photo Format</option> \
-			</select> \
-			in an \
-			<select id='settings_order'> \
-				<option value='ASC'>Ascending</option> \
-				<option value='DESC'>Descending</option> \
-			</select> \
-			order.\
-		", buttons);
+	modal.show(_s.changeSorting(),
+	           _s.sortBy({
+	           OPTIONS: "<select id='settings_type'> \
+	                       <option value='id'>" + _s.sortId() + "</option> \
+	                       <option value='takestamp'>" + _s.sortTakestamp() + "</option> \
+	                       <option value='title'>" + _s.sortTitle() + "</option> \
+	                       <option value='description'>" + _s.sortDescription() + "</option> \
+	                       <option value='public'>" + _s.sortPublic() + "</option> \
+	                       <option value='star'>" + _s.sortStar() +"</option> \
+	                       <option value='type'>" + _s.sortType() + "</option> \
+	                     </select>",
+	           ORDER: "<select id='settings_order'> \
+	                     <option value='ASC'>" + _s.sortAsc() + "</option> \
+	                     <option value='DESC'>" + _s.sortDesc() + "</option> \
+	                   </select>"
+	           }),
+	           buttons);
 
 	if (lychee.sorting!=='') {
 
@@ -266,7 +281,7 @@ settings.setDropboxKey = function(callback) {
 		key;
 
 	buttons = [
-		['Set Key', function() {
+		[_s.setKey(), function() {
 
 			key = $('.message input.text#key').val();
 
@@ -281,9 +296,12 @@ settings.setDropboxKey = function(callback) {
 			});
 
 		}],
-		['Cancel', function() {}]
+		[_s.cancel(), function() {}]
 	];
 
-	modal.show('Set Dropbox Key', "In order to import photos from your Dropbox, you need a valid drop-ins app key from <a href='https://www.dropbox.com/developers/apps/create'>their website</a>. Generate yourself a personal key and enter it below: <input id='key' class='text' type='text' placeholder='Dropbox API Key' value='" + lychee.dropboxKey + "'>", buttons);
+	modal.show(_s.setDropboxKey(),
+	           _s.setDropboxKeyInfo({WEBSITE: "https://www.dropbox.com/developers/apps/create"}) +
+	           ": <input id='key' class='text' type='text' placeholder='" + _s.dropboxKey() + "' value='" + lychee.dropboxKey + "'>",
+	           buttons);
 
 }

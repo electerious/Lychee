@@ -1,5 +1,6 @@
 var	gulp = require('gulp'),
 	plugins = require("gulp-load-plugins")(),
+	merge = require('merge-stream'),
 	paths = {}
 
 /* Error Handler -------------------------------- */
@@ -79,6 +80,9 @@ paths.main = {
 	coffee: [
 		'../src/scripts/*.coffee'
 	],
+	i18n: [
+		'../src/i18n/*/*.json'
+	],
 	scripts: [
 		'../dist/_main--javascript.js',
 		'../dist/_main--coffee.js'
@@ -116,7 +120,24 @@ gulp.task('main--coffee', function() {
 
 });
 
-gulp.task('main--scripts', ['main--js', 'main--coffee'], function() {
+gulp.task('main--i18n', function() {
+
+	var stream = merge();
+
+	['en', 'ru'].forEach(function(lang) {
+		stream.add(
+			merge(gulp.src('../src/i18n/' + lang + '/*.json').pipe(plugins.messageformat({locale: lang})),
+				gulp.src(['bower_components/moment/min/moment.min.js','bower_components/moment/locale/' + lang + '.js'])
+			).pipe(plugins.concat(lang + '.js', {newLine: "\n"}))
+			 .pipe(plugins.uglify())
+			 .pipe(gulp.dest('../dist/i18n/')));
+	});
+
+	return stream;
+
+});
+
+gulp.task('main--scripts', ['main--js', 'main--coffee', 'main--i18n'], function() {
 
 	var stream =
 		gulp.src(paths.main.scripts)
@@ -172,6 +193,7 @@ gulp.task('watch', ['default'], function() {
 
 	gulp.watch(paths.main.js,		['main--scripts']);
 	gulp.watch(paths.main.coffee,	['main--scripts']);
+	gulp.watch(paths.main.i18n,	['main--i18n']);
 	gulp.watch(paths.main.scss,		['main--styles']);
 
 });
