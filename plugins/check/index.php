@@ -3,7 +3,7 @@
 ###
 # @name			Check Plugin
 # @author		Tobias Reich
-# @copyright	2014 by Tobias Reich
+# @copyright	2015 by Tobias Reich
 # @description	This file takes a look at your Lychee-configuration and displays all errors it can find.
 ###
 

@@ -104,7 +104,7 @@ $config = "<?php
 ###
 # @name			Configuration
 # @author		Tobias Reich
-# @copyright	2014 Tobias Reich
+# @copyright	2015 Tobias Reich
 ###
 
 if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
