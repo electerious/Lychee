@@ -53,8 +53,7 @@ search.find = function(term) {
 
 					$('.no_content').remove();
 
-					lychee.animate('.album, .photo', 'contentZoomOut');
-					lychee.animate('.divider', 'fadeOut');
+					lychee.animate('#content', 'contentZoomOut');
 
 					search.hash = data.hash;
 
@@ -65,7 +64,7 @@ search.find = function(term) {
 							$('body').append(build.no_content('magnifying-glass'));
 						} else {
 							lychee.content.html(html);
-							lychee.animate('.album, .photo', 'contentZoomIn');
+							lychee.animate('#content', 'contentZoomIn');
 							$('img[data-type!="svg"]').retina();
 						}
 

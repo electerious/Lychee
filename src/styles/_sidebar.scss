@@ -12,7 +12,7 @@
 	background-color: rgba(25, 25, 25, .98);
 	border-left: 1px solid black(.2);
 	transform: translateX(0);
-	transition: transform .3s $timingBounce;
+	transition: transform .3s $timing;
 
 	&.active { transform: translateX(-320px); }
 

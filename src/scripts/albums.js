@@ -15,8 +15,7 @@ albums.load = function() {
 		durationTime,
 		waitTime;
 
-	lychee.animate('.album, .photo', 'contentZoomOut');
-	lychee.animate('#content .divider', 'fadeOut');
+	lychee.animate('#content', 'contentZoomOut');
 
 	startTime = new Date().getTime();
 
@@ -41,7 +40,7 @@ albums.load = function() {
 			setTimeout(function() {
 				header.setMode('albums');
 				view.albums.init();
-				lychee.animate('.album', 'contentZoomIn');
+				lychee.animate('#content', 'contentZoomIn');
 			}, waitTime);
 		});
 
@@ -50,7 +49,7 @@ albums.load = function() {
 		setTimeout(function() {
 			header.setMode('albums');
 			view.albums.init();
-			lychee.animate('.album, .photo', 'contentZoomIn');
+			lychee.animate('#content', 'contentZoomIn');
 		}, 300);
 
 	}

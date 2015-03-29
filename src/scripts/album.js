@@ -34,10 +34,7 @@ album.load = function(albumID, refresh) {
 
 	password.get(albumID, function() {
 
-		if (!refresh) {
-			lychee.animate('.album, .photo', 'contentZoomOut');
-			lychee.animate('#content .divider', 'fadeOut');
-		}
+		if (!refresh) lychee.animate('#content', 'contentZoomOut');
 
 		startTime = new Date().getTime();
 
@@ -82,7 +79,7 @@ album.load = function(albumID, refresh) {
 				view.album.init();
 
 				if (!refresh) {
-					lychee.animate('.album, .photo', 'contentZoomIn');
+					lychee.animate('#content', 'contentZoomIn');
 					header.setMode('album');
 				}
 

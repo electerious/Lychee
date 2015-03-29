@@ -20,6 +20,37 @@
 
 	&.sidebar { width: calc(100% - 300px); }
 
+	/* Animations ------------------------------------------------------------------- */
+	&.contentZoomIn .album,
+	&.contentZoomIn .photo {
+		animation-name: zoomIn;
+		animation-duration: .2s;
+		animation-fill-mode: forwards;
+		animation-timing-function: $timing;
+	}
+
+	&.contentZoomIn .divider {
+		animation-name: fadeIn;
+		animation-duration: .2s;
+		animation-fill-mode: forwards;
+		animation-timing-function: $timing;
+	}
+
+	&.contentZoomOut .album,
+	&.contentZoomOut .photo {
+		animation-name: zoomOut;
+		animation-duration: .2s;
+		animation-fill-mode: forwards;
+		animation-timing-function: $timing;
+	}
+
+	&.contentZoomOut .divider {
+		animation-name: fadeOut;
+		animation-duration: .3s;
+		animation-fill-mode: forwards;
+		animation-timing-function: $timing;
+	}
+
 	/* Albums and Photos ------------------------------------------------*/
 	.album,
 	.photo {
