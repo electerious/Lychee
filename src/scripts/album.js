@@ -13,15 +13,20 @@ album.getID = function() {
 
 	var id = null;
 
+	var isID = function(id) {
+		if (id==='0'||id==='f'||id==='s'||id==='r') return true;
+		return $.isNumeric(id);
+	}
+
 	if (photo.json)			id = photo.json.album;
 	else if (album.json)	id = album.json.id;
 
 	// Search
-	if ($.isNumeric(id)===false) id = $('.album:hover, .album.active').attr('data-id');
-	if ($.isNumeric(id)===false) id = $('.photo:hover, .photo.active').attr('data-album-id');
+	if (isID(id)===false) id = $('.album:hover, .album.active').attr('data-id');
+	if (isID(id)===false) id = $('.photo:hover, .photo.active').attr('data-album-id');
 
-	if ($.isNumeric(id)===true)	return id;
-	else						return false;
+	if (isID(id)===true)	return id;
+	else					return false;
 
 }
 
