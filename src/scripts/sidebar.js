@@ -113,7 +113,7 @@ sidebar.createStructure.photo = function(data) {
 	var editable	= false,
 		exifHash	= data.takestamp + data.make + data.model + data.shutter + data.aperture + data.focal + data.iso,
 		structure	= {},
-		public		= '';
+		_public		= '';
 
 	// Enable editable when user logged in
 	if (lychee.publicMode===false) editable = true;
@@ -121,13 +121,13 @@ sidebar.createStructure.photo = function(data) {
 	// Set value for public
 	switch (data.public) {
 
-		case '0':	public = 'No';
+		case '0':	_public = 'No';
 					break;
-		case '1':	public = 'Yes';
+		case '1':	_public = 'Yes';
 					break;
-		case '2':	public = 'Yes (Album)';
+		case '2':	_public = 'Yes (Album)';
 					break;
-		default:	public = '-';
+		default:	_public = '-';
 					break;
 
 	}
@@ -195,7 +195,7 @@ sidebar.createStructure.photo = function(data) {
 		title: 'Sharing',
 		type: sidebar.types.DEFAULT,
 		rows: [
-			{ title: 'Public', value: public },
+			{ title: 'Public', value: _public },
 		]
 	}
 
@@ -218,7 +218,7 @@ sidebar.createStructure.album = function(data) {
 
 	var editable		= false,
 		structure		= {},
-		public			= '',
+		_public			= '',
 		visible			= '',
 		downloadable	= '',
 		password		= '';
@@ -229,11 +229,11 @@ sidebar.createStructure.album = function(data) {
 	// Set value for public
 	switch (data.public) {
 
-		case '0':	public = 'No';
+		case '0':	_public = 'No';
 					break;
-		case '1':	public = 'Yes';
+		case '1':	_public = 'Yes';
 					break;
-		default:	public = '-';
+		default:	_public = '-';
 					break;
 
 	}
@@ -296,7 +296,7 @@ sidebar.createStructure.album = function(data) {
 		title: 'Share',
 		type: sidebar.types.DEFAULT,
 		rows: [
-			{ title: 'Public',			value: public },
+			{ title: 'Public',			value: _public },
 			{ title: 'Visible',			value: visible },
 			{ title: 'Downloadable',	value: downloadable },
 			{ title: 'Password',		value: password }
