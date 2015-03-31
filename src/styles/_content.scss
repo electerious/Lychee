@@ -110,7 +110,7 @@
 	}
 
 	// No overlay for empty albums
-	.album img[data-type^='nonretina'] + .overlay {
+	.album img[data-retina='false'] + .overlay {
 		background: none;
 	}
 
@@ -149,8 +149,8 @@
 		filter: drop-shadow(0 1px 3px black(.4));
 	}
 
-	.album img[data-type^='nonretina'] + .overlay h1,
-	.album img[data-type^='nonretina'] + .overlay a  { text-shadow: none; }
+	.album img[data-retina='false'] + .overlay h1,
+	.album img[data-retina='false'] + .overlay a  { text-shadow: none; }
 
 	/* Badges ------------------------------------------------*/
 	.album .badge,

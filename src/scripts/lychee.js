@@ -323,6 +323,31 @@ lychee.escapeHTML = function(s) {
 
 }
 
+lychee.retinize = function(path = '') {
+
+	var pixelRatio	= window.devicePixelRatio,
+		extention	= path.split('.').pop();
+
+	if ((pixelRatio!==undefined&&pixelRatio>1)&&
+		(extention!=='svg')) {
+
+			path = path.replace(/\.[^/.]+$/, '');
+			path = path + '@2x' + '.' + extention;
+
+			return {
+				path,
+				retina: true
+			};
+
+	}
+
+	return {
+		path,
+		retina: false
+	};
+
+}
+
 lychee.loadDropbox = function(callback) {
 
 	if (!lychee.dropbox&&lychee.dropboxKey) {

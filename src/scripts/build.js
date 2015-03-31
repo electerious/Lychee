@@ -63,8 +63,7 @@ build.album = function(data) {
 
 	var html		= '',
 		title		= data.title,
-		longTitle	= '',
-		typeThumb	= '';
+		longTitle	= '';
 
 	if (title!==null&&title.length>18) {
 
@@ -73,13 +72,13 @@ build.album = function(data) {
 
 	}
 
-	if (data.thumbs[0].split('.').pop()==='svg') typeThumb = 'nonretina';
+	var {path: thumbPath, retina: thumbRetina} = lychee.retinize(data.thumbs[0]);
 
 	html =	`
 			<div class='album' data-id='${ data.id }'>
-				<img src='${ data.thumbs[2] }' width='200' height='200' alt='thumb' data-type='nonretina'>
-				<img src='${ data.thumbs[1] }' width='200' height='200' alt='thumb' data-type='nonretina'>
-				<img src='${ data.thumbs[0] }' width='200' height='200' alt='thumb' data-type='${ typeThumb }'>
+				<img src='${ data.thumbs[2] }' width='200' height='200' alt='thumb' data-retina='false'>
+				<img src='${ data.thumbs[1] }' width='200' height='200' alt='thumb' data-retina='false'>
+				<img src='${ thumbPath }' width='200' height='200' alt='thumb' data-retina='${ thumbRetina }'>
 				<div class='overlay'>
 					<h1 title='${ longTitle }'>${ title }</h1>
 					<a>${ data.sysdate }</a>
@@ -117,9 +116,11 @@ build.photo = function(data) {
 
 	}
 
+	var {path: thumbPath, retina: thumbRetina} = lychee.retinize(data.thumbUrl);
+
 	html =	`
 			<div class='photo' data-album-id='${ data.album }' data-id='${ data.id }'>
-				<img src='${ data.thumbUrl }' width='200' height='200' alt='thumb'>
+				<img src='${ thumbPath }' width='200' height='200' alt='thumb'>
 				<div class='overlay'>
 					<h1 title='${ longTitle }'>${ title }</h1>
 			`

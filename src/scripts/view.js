@@ -63,10 +63,9 @@ view.albums = {
 				lychee.content.html(smartData + albumsData);
 			}
 
-			$('img[data-type!="nonretina"]').retina();
-
 			// Restore scroll position
-			if (view.albums.content.scrollPosition!==null) {
+			if (view.albums.content.scrollPosition!==null&&
+				view.albums.content.scrollPosition!==0) {
 				$(document).scrollTop(view.albums.content.scrollPosition);
 			}
 
@@ -159,9 +158,8 @@ view.album = {
 			$.each(album.json.content, function() {
 				photosData += build.photo(this);
 			});
-			lychee.content.html(photosData);
 
-			$('img[data-type!="svg"]').retina();
+			lychee.content.html(photosData);
 
 		},
 

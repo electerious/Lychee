@@ -65,7 +65,6 @@ search.find = function(term) {
 						} else {
 							lychee.content.html(html);
 							lychee.animate('#content', 'contentZoomIn');
-							$('img[data-type!="svg"]').retina();
 						}
 
 					}, 300);
