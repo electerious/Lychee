@@ -34,10 +34,9 @@ loadingBar.show = function(status, errorText) {
 		// Modify loading
 		loadingBar.dom()
 			.removeClass('loading uploading error')
-			.addClass(status)
 			.html('<h1>Error: <span>' + errorText + '</span></h1>')
-			.show()
-			.css('height', '40px');
+			.addClass(status)
+			.show();
 
 		// Set timeout
 		clearTimeout(loadingBar._timeout);
@@ -66,6 +65,7 @@ loadingBar.show = function(status, errorText) {
 			// Modify loading
 			loadingBar.dom()
 				.removeClass('loading uploading error')
+				.html('')
 				.addClass('loading')
 				.show();
 
@@ -86,11 +86,6 @@ loadingBar.hide = function(force) {
 
 		// Move header up
 		if (visible.header()) header.dom().removeClass('error loading');
-
-		// Modify loading
-		loadingBar.dom()
-			.html('')
-			.css('height', '3px');
 
 		// Set timeout
 		clearTimeout(loadingBar._timeout);

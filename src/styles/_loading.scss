@@ -18,10 +18,12 @@
 
 	/* Modes ------------------------------------------------*/
 	&.loading {
+		height: 3px;
 		background-image: linear-gradient(to right, #153674 0%, #153674 47%, #2651AE 53%, #2651AE 100%);
 		z-index: 2;
 	}
 	&.error {
+		height: 40px;
 		background-color: #2f0d0e;
 		background-image: linear-gradient(to right, #451317 0%, #451317 47%, #AA3039 53%, #AA3039 100%);
 		z-index: 1;
