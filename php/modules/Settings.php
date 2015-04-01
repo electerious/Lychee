@@ -143,7 +143,7 @@ class Settings extends Module {
 			case 'id':			$sorting .= 'id';
 								break;
 
-			case 'title':		$sorting .= 'title';
+			case 'title':		$sorting .= 'LENGTH(title), title';
 								break;
 
 			case 'description':	$sorting .= 'description';
