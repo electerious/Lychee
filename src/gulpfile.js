@@ -54,6 +54,9 @@ gulp.task('view--scripts', ['view--js'], function() {
 /* Main ----------------------------------------- */
 
 paths.main = {
+	html: [
+		'../index.html'
+	],
 	js: [
 		'../src/scripts/*.js'
 	],
@@ -72,6 +75,10 @@ paths.main = {
 		'bower_components/basicContext/src/styles/main.scss',
 		'bower_components/basicModal/src/styles/main.scss',
 		'../src/styles/main.scss'
+	],
+	svg: [
+		'./images/iconic.svg',
+		'./images/ionicons.svg'
 	]
 }
 
@@ -116,6 +123,18 @@ gulp.task('main--styles', function() {
 
 });
 
+gulp.task('main--svg', function() {
+
+	var stream =
+		gulp.src(paths.main.html)
+			.pipe(plugins.inject(gulp.src(paths.main.svg), {
+				starttag: '<!-- inject:svg -->',
+				transform: function(filePath, file) { return file.contents.toString('utf8') }
+			}))
+			.pipe(gulp.dest('../'));
+
+ });
+
 /* Clean ----------------------------------------- */
 
 gulp.task('clean', function() {
@@ -131,7 +150,7 @@ gulp.task('clean', function() {
 
 /* Tasks ----------------------------------------- */
 
-gulp.task('default', ['view--scripts', 'main--scripts', 'main--styles'], function() {
+gulp.task('default', ['view--scripts', 'main--svg', 'main--scripts', 'main--styles'], function() {
 
 	gulp.start('clean');
 
