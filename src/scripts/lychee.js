@@ -326,24 +326,20 @@ lychee.escapeHTML = function(s) {
 lychee.retinize = function(path = '') {
 
 	var pixelRatio	= window.devicePixelRatio,
-		extention	= path.split('.').pop();
+		extention	= path.split('.').pop(),
+		hasRetina	= extention!=='svg';
 
 	if ((pixelRatio!==undefined&&pixelRatio>1)&&
-		(extention!=='svg')) {
+		(hasRetina===true)) {
 
 			path = path.replace(/\.[^/.]+$/, '');
 			path = path + '@2x' + '.' + extention;
-
-			return {
-				path,
-				retina: true
-			};
 
 	}
 
 	return {
 		path,
-		retina: false
+		hasRetina
 	};
 
 }

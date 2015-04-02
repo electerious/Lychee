@@ -72,7 +72,7 @@ build.album = function(data) {
 
 	}
 
-	var {path: thumbPath, retina: thumbRetina} = lychee.retinize(data.thumbs[0]);
+	var {path: thumbPath, hasRetina: thumbRetina} = lychee.retinize(data.thumbs[0]);
 
 	html =	`
 			<div class='album' data-id='${ data.id }'>
@@ -116,7 +116,7 @@ build.photo = function(data) {
 
 	}
 
-	var {path: thumbPath, retina: thumbRetina} = lychee.retinize(data.thumbUrl);
+	var {path: thumbPath, hasRetina: thumbRetina} = lychee.retinize(data.thumbUrl);
 
 	html =	`
 			<div class='photo' data-album-id='${ data.album }' data-id='${ data.id }'>
