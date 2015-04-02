@@ -5,17 +5,15 @@
 
 window.build = {}
 
-build.iconic = function(icon, classes, file) {
+build.iconic = function(icon, classes) {
 
-	var html	= '',
-		path	= 'src/images/';
+	var html = '';
 
-	file	= file		|| 'iconic';
-	classes	= classes	|| '';
+	classes	= classes || '';
 
 	html =	`
 			<svg viewBox='0 0 8 8' class='iconic ${ classes }'>
-				<use xlink:href='${ path }${ file }.svg#${ icon }' />
+				<use xlink:href='#${ icon }' />
 			</svg>
 			`
 

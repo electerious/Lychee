@@ -11,7 +11,7 @@ contextMenu.add = function(e) {
 		{ type: 'item', title: build.iconic('image') + 'Upload Photo', fn: function() { $('#upload_files').click() } },
 		{ type: 'separator' },
 		{ type: 'item', title: build.iconic('link-intact') + 'Import from Link', fn: upload.start.url },
-		{ type: 'item', title: build.iconic('dropbox', 'ionicons', 'ionicons') + 'Import from Dropbox', fn: upload.start.dropbox },
+		{ type: 'item', title: build.iconic('dropbox', 'ionicons') + 'Import from Dropbox', fn: upload.start.dropbox },
 		{ type: 'item', title: build.iconic('terminal') + 'Import from Server', fn: upload.start.server },
 		{ type: 'separator' },
 		{ type: 'item', title: build.iconic('folder') + 'New Album', fn: album.add }
@@ -28,7 +28,7 @@ contextMenu.settings = function(e) {
 	var items = [
 		{ type: 'item', title: build.iconic('person') + 'Change Login', fn: settings.setLogin },
 		{ type: 'item', title: build.iconic('sort-ascending') + 'Change Sorting', fn: settings.setSorting },
-		{ type: 'item', title: build.iconic('dropbox', 'ionicons', 'ionicons') + 'Set Dropbox', fn: settings.setDropboxKey },
+		{ type: 'item', title: build.iconic('dropbox', 'ionicons') + 'Set Dropbox', fn: settings.setDropboxKey },
 		{ type: 'separator' },
 		{ type: 'item', title: build.iconic('info') + 'About Lychee', fn: function() { window.open(lychee.website) } },
 		{ type: 'item', title: build.iconic('wrench') + 'Diagnostics', fn: function() { window.open('plugins/check/') } },
@@ -241,18 +241,18 @@ contextMenu.move = function(photoIDs, e) {
 
 contextMenu.sharePhoto = function(photoID, e) {
 
-	var link	= photo.getViewLink(photoID),
-		file	= 'ionicons';
+	var link		= photo.getViewLink(photoID),
+		iconClass	= 'ionicons';
 
 	if (photo.json.public==='2') link = location.href;
 
 	var items = [
 		{ type: 'item', title: '<input readonly id="link" value="' + link + '">', fn: function() {}, class: 'noHover' },
 		{ type: 'separator' },
-		{ type: 'item', title: build.iconic('twitter', file, file) + 'Twitter', fn: function() { photo.share(photoID, 0) } },
-		{ type: 'item', title: build.iconic('facebook', file, file) + 'Facebook', fn: function() { photo.share(photoID, 1) } },
+		{ type: 'item', title: build.iconic('twitter', iconClass) + 'Twitter', fn: function() { photo.share(photoID, 0) } },
+		{ type: 'item', title: build.iconic('facebook', iconClass) + 'Facebook', fn: function() { photo.share(photoID, 1) } },
 		{ type: 'item', title: build.iconic('envelope-closed') + 'Mail', fn: function() { photo.share(photoID, 2) } },
-		{ type: 'item', title: build.iconic('dropbox', file, file) + 'Dropbox', fn: function() { photo.share(photoID, 3) } },
+		{ type: 'item', title: build.iconic('dropbox', iconClass) + 'Dropbox', fn: function() { photo.share(photoID, 3) } },
 		{ type: 'item', title: build.iconic('link-intact') + 'Direct Link', fn: function() { window.open(photo.getDirectLink()) } },
 		{ type: 'separator' },
 		{ type: 'item', title: build.iconic('ban') + 'Make Private', fn: function() { photo.setPublic(photoID) } }
@@ -265,13 +265,13 @@ contextMenu.sharePhoto = function(photoID, e) {
 
 contextMenu.shareAlbum = function(albumID, e) {
 
-	var file = 'ionicons';
+	var iconClass = 'ionicons';
 
 	var items = [
 		{ type: 'item', title: '<input readonly id="link" value="' + location.href + '">', fn: function() {}, class: 'noHover' },
 		{ type: 'separator' },
-		{ type: 'item', title: build.iconic('twitter', file, file) + 'Twitter', fn: function() { album.share(0) } },
-		{ type: 'item', title: build.iconic('facebook', file, file) + 'Facebook', fn: function() { album.share(1) } },
+		{ type: 'item', title: build.iconic('twitter', iconClass) + 'Twitter', fn: function() { album.share(0) } },
+		{ type: 'item', title: build.iconic('facebook', iconClass) + 'Facebook', fn: function() { album.share(1) } },
 		{ type: 'item', title: build.iconic('envelope-closed') + 'Mail', fn: function() { album.share(2) } },
 		{ type: 'separator' },
 		{ type: 'item', title: build.iconic('pencil') + 'Edit Sharing', fn: function() { album.setPublic(albumID, true, e) } },
