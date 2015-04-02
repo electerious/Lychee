@@ -44,6 +44,7 @@ header {
 			display: none;
 			margin: 0 0 0 5px;
 			width: 10px;
+			height: 10px;
 			fill: white(.5);
 			filter: drop-shadow($shadow);
 			transition: fill .2s ease-out;
@@ -72,14 +73,17 @@ header {
 	/* Button ------------------------------------------------*/
 	.button {
 		display: inline-block;
-		padding: 17px 8px 15px;
+		padding: 17px 8px;
 		width: 15px;
+		height: 15px;
 
 		&--left { float: left; }
 
 		&--right { float: right; }
 
 		.iconic {
+			width: 15px;
+			height: 15px;
 			fill: white(.5);
 			filter: drop-shadow($shadow);
 			transition: fill .2s ease-out;
@@ -133,6 +137,8 @@ header {
 		}
 
 		&:focus ~ #clearSearch { opacity: 1; }
+
+		&::-ms-clear { display: none; }
 	}
 
 	#clearSearch {

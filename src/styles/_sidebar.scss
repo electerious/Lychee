@@ -42,25 +42,6 @@
 		text-shadow: $shadow;
 	}
 
-	.header .close {
-		float: right;
-		padding: 16px 65px 12px 15px;
-		width: 15px;
-
-		.iconic {
-			fill: white(.5);
-			filter: drop-shadow($shadow);
-			transition: fill .2s ease-out;
-		}
-
-		&:hover .iconic { fill: white(1); }
-
-		&:active .iconic {
-			transition: none;
-			fill: white(.8);
-		}
-	}
-
 	/* Wrapper ------------------------------------------------*/
 	.wrapper {
 		float: left;
@@ -98,6 +79,8 @@
 		width: 10px;
 
 		.iconic {
+			width: 10px;
+			height: 10px;
 			fill: white(.5);
 			filter: drop-shadow($shadow);
 			transition: fill .2s ease-out;
@@ -178,6 +161,7 @@
 		.iconic {
 			fill: $colorRed;
 			width: 8px;
+			height: 8px;
 			filter: drop-shadow($shadowLight);
 		}
 
