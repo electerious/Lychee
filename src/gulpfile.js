@@ -14,14 +14,25 @@ var catchError = function(err) {
 /* View ----------------------------------------- */
 
 paths.view = {
+	php: [
+		'../view.php'
+	],
 	js: [
-		'../src/scripts/_gup.js',
-		'../src/scripts/build.js',
-		'../src/scripts/view/main.js'
+		'./scripts/_gup.js',
+		'./scripts/build.js',
+		'./scripts/api.js',
+		'./scripts/header.js',
+		'./scripts/visible.js',
+		'./scripts/sidebar.js',
+		'./scripts/view/main.js'
 	],
 	scripts: [
 		'bower_components/jQuery/dist/jquery.min.js',
 		'../dist/_view--javascript.js'
+	],
+	svg: [
+		'./images/iconic.svg',
+		'./images/ionicons.svg'
 	]
 }
 
@@ -51,6 +62,18 @@ gulp.task('view--scripts', ['view--js'], function() {
 
 });
 
+gulp.task('view--svg', function() {
+
+	var stream =
+		gulp.src(paths.view.php)
+			.pipe(plugins.inject(gulp.src(paths.view.svg), {
+				starttag: '<!-- inject:svg -->',
+				transform: function(filePath, file) { return file.contents.toString('utf8') }
+			}))
+			.pipe(gulp.dest('../'));
+
+ });
+
 /* Main ----------------------------------------- */
 
 paths.main = {
@@ -58,7 +81,7 @@ paths.main = {
 		'../index.html'
 	],
 	js: [
-		'../src/scripts/*.js'
+		'./scripts/*.js'
 	],
 	scripts: [
 		'bower_components/jQuery/dist/jquery.min.js',
@@ -69,12 +92,12 @@ paths.main = {
 		'../dist/_main--javascript.js'
 	],
 	scss: [
-		'../src/styles/*.scss'
+		'./styles/*.scss'
 	],
 	styles: [
 		'bower_components/basicContext/src/styles/main.scss',
 		'bower_components/basicModal/src/styles/main.scss',
-		'../src/styles/main.scss'
+		'./styles/main.scss'
 	],
 	svg: [
 		'./images/iconic.svg',
@@ -150,7 +173,7 @@ gulp.task('clean', function() {
 
 /* Tasks ----------------------------------------- */
 
-gulp.task('default', ['view--scripts', 'main--svg', 'main--scripts', 'main--styles'], function() {
+gulp.task('default', ['view--svg', 'view--scripts', 'main--svg', 'main--scripts', 'main--styles'], function() {
 
 	gulp.start('clean');
 

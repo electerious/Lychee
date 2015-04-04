@@ -8,6 +8,9 @@ $(document).ready(function() {
 	/* Event Name */
 	var eventName = ('ontouchend' in document.documentElement) ? 'touchend' : 'click';
 
+	/* Set API error handler */
+	api.onError = lychee.error;
+
 	/* Multiselect */
 	multiselect.bind();
 

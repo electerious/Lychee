@@ -5,7 +5,8 @@
 
 api = {
 
-	path: 'php/api.php'
+	path:		'php/api.php',
+	onError:	null
 
 }
 
@@ -25,7 +26,7 @@ api.post = function(fn, params, callback) {
 		// Catch errors
 		if (typeof data==='string'&&
 			data.substring(0, 7)==='Error: ') {
-				lychee.error(data.substring(7, data.length), params, data);
+				api.onError(data.substring(7, data.length), params, data);
 				return false;
 		}
 
@@ -47,7 +48,7 @@ api.post = function(fn, params, callback) {
 
 	error = function(jqXHR, textStatus, errorThrown) {
 
-		lychee.error('Server error or API not found.', params, errorThrown);
+		api.onError('Server error or API not found.', params, errorThrown);
 
 	}
 

@@ -3,28 +3,24 @@
  * @copyright	2015 by Tobias Reich
  */
 
-var header		= $('header'),
-	headerTitle	= $('#title'),
-	imageview	= $('#imageview'),
-	api_path	= 'php/api.php',
-	infobox		= $('#infobox');
+var lychee		= { content: $('#content') },
+	loadingBar	= { show() {}, hide() {} }
+	imageview	= $('#imageview');
 
-$(document).ready(function(){
+$(document).ready(function() {
 
 	/* Event Name */
 	if ('ontouchend' in document.documentElement)	eventName = 'touchend';
 	else											eventName = 'click';
 
-	/* Window */
-	$(window).keydown(key);
+	/* Set API error handler */
+	api.onError = error;
 
 	/* Infobox */
-	infobox.find('.header .close').on(eventName, hideInfobox);
-	$(document)			.on(eventName, '#infobox_overlay', hideInfobox);
-	$('#button_info')	.on(eventName, showInfobox);
+	header.dom('#button_info').on(eventName, sidebar.toggle);
 
 	/* Direct Link */
-	$('#button_direct').on(eventName, function() {
+	header.dom('#button_direct').on(eventName, function() {
 
 		var link = $('#imageview #image').css('background-image').replace(/"/g,'').replace(/url\(|\)$/ig, '');
 		window.open(link, '_newtab');
@@ -34,17 +30,6 @@ $(document).ready(function(){
 	loadPhotoInfo(gup('p'));
 
 });
-
-key = function(e) {
-
-	var code = (e.keyCode ? e.keyCode : e.which);
-
-	if (code===27) {
-		hideInfobox();
-		e.preventDefault();
-	}
-
-}
 
 getPhotoSize = function(photo) {
 
@@ -86,55 +71,49 @@ getPhotoSize = function(photo) {
 
 }
 
-showInfobox = function() {
-
-	$('body').append("<div id='infobox_overlay' class='fadeIn'></div>");
-	infobox.addClass('active');
-
-}
-
-hideInfobox = function() {
-
-	$('#infobox_overlay').removeClass('fadeIn').addClass('fadeOut');
-	setTimeout(function() { $('#infobox_overlay').remove() }, 300);
-	infobox.removeClass('active');
-
-}
-
 loadPhotoInfo = function(photoID) {
 
-	var params = 'function=getPhoto&photoID=' + photoID + '&albumID=0&password=""';
-	$.ajax({type: 'POST', url: api_path, data: params, dataType: 'json', success: function(data) {
+	var params = {
+		photoID,
+		albumID: 0,
+		password: ''
+	}
 
-		var size = getPhotoSize(data);
+	api.post('Photo::get', params, function(data) {
+
+		/* Set title */
 
 		if (!data.title) data.title = 'Untitled';
 		document.title = 'Lychee - ' + data.title;
-		headerTitle.html(data.title);
+		header.dom('#title').html(data.title);
 
-		imageview.attr('data-id', photoID);
+		/* Render HTML */
 
-		if (size==='big')			imageview.html("<div id='image' style='background-image: url(" + data.url + ");'></div>");
-		else if (size==='medium')	imageview.html("<div id='image' style='background-image: url(" + data.medium + ");'></div>");
-		else						imageview.html("<div id='image' class='small' style='background-image: url(" + data.url + "); width: " + data.width + "px; height: " + data.height + "px; margin-top: -" + parseInt((data.height/2)-20) + "px; margin-left: -" + data.width/2 + "px;'></div>");
+		var size = getPhotoSize(data);
 
-		imageview
-			.removeClass('fadeOut')
-			.addClass('fadeIn')
-			.show();
+		imageview.html(build.imageview(data, size, true));
+		imageview.addClass('fadeIn').show();
 
-		infobox.find('.wrapper').html(build.infoboxPhoto(data, true));
+		/* Render Sidebar */
 
-	}, error: ajaxError });
+		var structure	= sidebar.createStructure.photo(data),
+			html		= sidebar.render(structure);
+
+		sidebar.dom('.wrapper').html(html);
+		sidebar.bind();
+
+	});
 
 }
 
-ajaxError = function(errorThrown, params, data) {
+error = function(errorThrown, params, data) {
 
 	console.error({
 		description:	errorThrown,
 		params:			params,
 		response:		data
 	});
+
+	loadingBar.show('error', errorThrown);
 
 }
