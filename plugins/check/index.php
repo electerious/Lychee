@@ -81,6 +81,7 @@ if (!$settings['dropboxKey']) echo('Warning: Dropbox import not working. No prop
 
 # Check php.ini Settings
 if (ini_get('max_execution_time')<200&&ini_set('upload_max_filesize', '20M')===false) echo('Warning: You may experience problems when uploading a large amount of photos. Take a look in the FAQ for details.' . PHP_EOL);
+if (!ini_get('allow_url_fopen')) echo('Warning: You may experience problems with the Dropbox- and URL-Import. Edit your php.ini and set allow_url_fopen to 1.' . PHP_EOL);
 
 # Check mysql version
 if ($database->server_version<50500) echo('Warning: Lychee uses the GBK charset to avoid sql injections on your MySQL version. Please update to MySQL 5.5 or higher to enable UTF-8 support.' . PHP_EOL);
