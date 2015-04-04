@@ -12,7 +12,7 @@ build.iconic = function(icon, classes) {
 	classes	= classes || '';
 
 	html =	`
-			<svg viewBox='0 0 8 8' class='iconic ${ classes }'>
+			<svg class='iconic ${ classes }'>
 				<use xlink:href='#${ icon }' />
 			</svg>
 			`

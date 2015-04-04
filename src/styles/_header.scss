@@ -36,7 +36,6 @@ header {
 		font-size: 16px;
 		font-weight: bold;
 		text-align: center;
-		text-shadow: $shadow;
 		z-index: 1;
 		cursor: default;
 
@@ -46,7 +45,6 @@ header {
 			width: 10px;
 			height: 10px;
 			fill: white(.5);
-			filter: drop-shadow($shadow);
 			transition: fill .2s ease-out;
 		}
 
@@ -85,7 +83,6 @@ header {
 			width: 15px;
 			height: 15px;
 			fill: white(.5);
-			filter: drop-shadow($shadow);
 			transition: fill .2s ease-out;
 		}
 
@@ -162,7 +159,6 @@ header {
 		margin: 13px 9px;
 		color: #888;
 		font-size: 13px;
-		text-shadow: $shadow;
 		border-radius: 100px;
 		display: none;
 

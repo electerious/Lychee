@@ -49,10 +49,10 @@
 	<header class="view">
 
 		<a class="button button--right" id="button_info" title="About Photo">
-			<svg viewBox="0 0 8 8" class="iconic"><use xlink:href="src/images/iconic.svg#info"></use></svg>
+			<svg class="iconic"><use xlink:href="src/images/iconic.svg#info"></use></svg>
 		</a>
 		<a class="button button--right" id="button_direct" title="Direct Link">
-			<svg viewBox="0 0 8 8" class="iconic"><use xlink:href="src/images/iconic.svg#link-intact"></use></svg>
+			<svg class="iconic"><use xlink:href="src/images/iconic.svg#link-intact"></use></svg>
 		</a>
 
 		<a id="title" class="view"></a>
@@ -67,7 +67,7 @@
 		<div class='header'>
 			<h1>About</h1>
 			<a class='close' title='Close About'>
-				<svg viewBox="0 0 8 8" class="iconic"><use xlink:href="src/images/iconic.svg#circle-x"></use></svg>
+				<svg class="iconic"><use xlink:href="src/images/iconic.svg#circle-x"></use></svg>
 			</a>
 		</div>
 		<div class='wrapper'>

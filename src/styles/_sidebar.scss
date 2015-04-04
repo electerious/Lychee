@@ -39,7 +39,6 @@
 		font-size: 16px;
 		font-weight: bold;
 		text-align: center;
-		text-shadow: $shadow;
 	}
 
 	/* Wrapper ------------------------------------------------*/
@@ -82,7 +81,6 @@
 			width: 10px;
 			height: 10px;
 			fill: white(.5);
-			filter: drop-shadow($shadow);
 			transition: fill .2s ease-out;
 		}
 
@@ -162,7 +160,6 @@
 			fill: $colorRed;
 			width: 8px;
 			height: 8px;
-			filter: drop-shadow($shadowLight);
 		}
 
 		&:hover .iconic { fill: lighten($colorRed, 10%); }
