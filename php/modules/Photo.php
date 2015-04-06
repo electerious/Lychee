@@ -327,6 +327,16 @@ class Photo extends Module {
 
 	private function createMedium($url, $filename, $width, $height) {
 
+		# Function creates a smaller version of a photo when its size is bigger than a preset size
+		# Excepts the following:
+		# (string) $url = Path to the photo-file
+		# (string) $filename = Name of the photo-file
+		# (int) $width = Width of the photo
+		# (int) $height = Height of the photo
+		# Returns the following
+		# (boolean) true = Success
+		# (boolean) false = Failure
+
 		# Check dependencies
 		self::dependencies(isset($this->database, $this->settings, $url, $filename, $width, $height));
 
@@ -396,6 +406,14 @@ class Photo extends Module {
 	}
 
 	public function adjustFile($path, $info) {
+
+		# Function rotates and flips a photo based on its EXIF orientation
+		# Excepts the following:
+		# (string) $path = Path to the photo-file
+		# (array) $info = ['orientation', 'width', 'height']
+		# Returns the following
+		# (array) $info = ['orientation', 'width', 'height'] = Success
+		# (boolean) false = Failure
 
 		# Check dependencies
 		self::dependencies(isset($path, $info));
@@ -528,9 +546,11 @@ class Photo extends Module {
 
 	public static function prepareData($data) {
 
-		# This function requires the following photo-attributes and turns them
-		# into a front-end friendly format: id, title, tags, public, star, album, thumbUrl, takestamp, url
-		# Note that some attributes remain unchanged
+		# Function turns photo-attributes into a front-end friendly format. Note that some attributes remain unchanged.
+		# Excepts the following:
+		# (array) $data = ['id', 'title', 'tags', 'public', 'star', 'album', 'thumbUrl', 'takestamp', 'url']
+		# Returns the following:
+		# (array) $photo
 
 		# Check dependencies
 		self::dependencies(isset($data));
