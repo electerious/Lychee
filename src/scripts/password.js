@@ -63,7 +63,7 @@ password.getDialog = function(albumID, callback) {
 
 	cancel = function() {
 		basicModal.close();
-		lychee.goto();
+		if (visible.albums()===false) lychee.goto();
 	}
 
 	msg =	`
