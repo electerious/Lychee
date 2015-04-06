@@ -4,7 +4,8 @@
 
 #content {
 
-	position: absolute;
+	display: flex;
+	flex-wrap: wrap;
 	padding: 50px 0 33px;
 	width: 100%;
 	min-height: calc(100% - 83px);
@@ -47,7 +48,7 @@
 
 	&.contentZoomOut .divider {
 		animation-name: fadeOut;
-		animation-duration: .3s;
+		animation-duration: .2s;
 		animation-fill-mode: forwards;
 		animation-timing-function: $timing;
 	}
@@ -55,7 +56,6 @@
 	/* Albums and Photos ------------------------------------------------*/
 	.album,
 	.photo {
-		float: left;
 		position: relative;
 		width: 202px;
 		height: 202px;
@@ -181,7 +181,6 @@
 
 	/* Divider ------------------------------------------------*/
 	.divider {
-		float: left;
 		margin: 50px 0 0;
 		padding: 10px 0 0;
 		width: 100%;
@@ -196,7 +195,6 @@
 		}
 
 		h1 {
-			float: left;
 			margin: 0 0 0 30px;
 			color: white(.6);
 			font-size: 14px;

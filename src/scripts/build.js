@@ -26,7 +26,7 @@ build.divider = function(title) {
 	var html = '';
 
 	html =	`
-			<div class='divider fadeIn'>
+			<div class='divider'>
 				<h1>${ title }</h1>
 			</div>
 			`
