@@ -195,6 +195,8 @@ build.no_content = function(typ) {
 									break;
 		case 'cog':					html += '<p>No configuration</p>';
 									break;
+		case 'question-mark':		html += '<p>Photo not found</p>';
+									break;
 	}
 
 	html += '</div>';
