@@ -77,6 +77,8 @@ function getGraphHeader($database, $photoID) {
 	$result	= $database->query($query);
 	$row	= $result->fetch_object();
 
+	if (!$result||!$row) return false;
+
 	if ($row->medium==='1')	$dir = 'medium';
 	else					$dir = 'big';
 
