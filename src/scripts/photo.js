@@ -35,20 +35,27 @@ photo.load = function(photoID, albumID) {
 
 	api.post('Photo::get', params, function(data) {
 
+		if (data==='Warning: Photo private!') {
+			lychee.content.show();
+			lychee.goto('');
+			return false;
+		}
+
 		if (data==='Warning: Wrong password!') {
 			checkPasswd = function() {
-				if (password.value!=='') photo.load(photoID, albumID);
-				else setTimeout(checkPasswd, 250);
+				if (password.value!=='')	photo.load(photoID, albumID);
+				else						setTimeout(checkPasswd, 250);
 			};
 			checkPasswd();
 			return false;
 		}
 
 		photo.json = data;
+
 		if (!visible.photo()) view.photo.show();
 		view.photo.init();
-
 		lychee.imageview.show();
+
 		setTimeout(function() {
 			lychee.content.show();
 			//photo.preloadNext(photoID, albumID);

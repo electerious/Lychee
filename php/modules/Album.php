@@ -368,11 +368,30 @@ class Album extends Module {
 				$zipTitle	= 'Unsorted';
 		}
 
-		# Set title
+		# Get title from database when album is not a SmartAlbum
 		if ($this->albumIDs!=0&&is_numeric($this->albumIDs)) {
+
 			$query = Database::prepare($this->database, "SELECT title FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
 			$album = $this->database->query($query);
-			$zipTitle = $album->fetch_object()->title;
+
+			# Error in database query
+			if (!$album) {
+				Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+				return false;
+			}
+
+			# Fetch object
+			$album = $album->fetch_object();
+
+			# Photo not found
+			if ($album===null) {
+				Log::error($this->database, __METHOD__, __LINE__, 'Album not found. Cannot start download.');
+				return false;
+			}
+
+			# Set title
+			$zipTitle = $album->title;
+
 		}
 
 		# Escape title

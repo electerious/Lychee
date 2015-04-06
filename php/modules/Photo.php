@@ -571,6 +571,12 @@ class Photo extends Module {
 
 	public function get($albumID) {
 
+		# Functions returns data of a photo
+		# Excepts the following:
+		# (string) $albumID = Album which is currently visible to the user
+		# Returns the following:
+		# (array) $photo
+
 		# Check dependencies
 		self::dependencies(isset($this->database, $this->photoIDs));
 
@@ -596,9 +602,9 @@ class Photo extends Module {
 
 		if ($albumID!='false') {
 
-			# Show photo as public when parent album is public
-			# Check if parent album is available and not photo not unsorted
-			if ($photo['album']!=0) {
+			# Only show photo as public when parent album is public
+			# Check if parent album is not 'Unsorted'
+			if ($photo['album']!=='0') {
 
 				# Get album
 				$query	= Database::prepare($this->database, "SELECT public FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $photo['album']));
@@ -606,7 +612,7 @@ class Photo extends Module {
 				$album	= $albums->fetch_assoc();
 
 				# Parse album
-				$photo['public'] = ($album['public']=='1' ? '2' : $photo['public']);
+				$photo['public'] = ($album['public']==='1' ? '2' : $photo['public']);
 
 			}
 
@@ -623,6 +629,12 @@ class Photo extends Module {
 	}
 
 	public function getInfo($url) {
+
+		# Functions returns information and metadata of a photo
+		# Excepts the following:
+		# (string) $url = Path to photo-file
+		# Returns the following:
+		# (array) $return
 
 		# Check dependencies
 		self::dependencies(isset($this->database, $url));
@@ -726,6 +738,11 @@ class Photo extends Module {
 
 	public function getArchive() {
 
+		# Functions starts a download of a photo
+		# Returns the following:
+		# (boolean + output) true = Success
+		# (boolean) false = Failure
+
 		# Check dependencies
 		self::dependencies(isset($this->database, $this->photoIDs));
 
@@ -736,6 +753,18 @@ class Photo extends Module {
 		$query	= Database::prepare($this->database, "SELECT title, url FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
 		$photos	= $this->database->query($query);
 		$photo	= $photos->fetch_object();
+
+		# Error in database query
+		if (!$photos) {
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			return false;
+		}
+
+		# Photo not found
+		if ($photo===null) {
+			Log::error($this->database, __METHOD__, __LINE__, 'Album not found. Cannot start download.');
+			return false;
+		}
 
 		# Get extension
 		$extension = getExtension($photo->url);
@@ -773,6 +802,13 @@ class Photo extends Module {
 
 	public function setTitle($title) {
 
+		# Functions sets the title of a photo
+		# Excepts the following:
+		# (string) $title = Title with a maximum length of 50 chars
+		# Returns the following:
+		# (boolean) true = Success
+		# (boolean) false = Failure
+
 		# Check dependencies
 		self::dependencies(isset($this->database, $this->photoIDs));
 
@@ -798,6 +834,13 @@ class Photo extends Module {
 	}
 
 	public function setDescription($description) {
+
+		# Functions sets the description of a photo
+		# Excepts the following:
+		# (string) $description = Description with a maximum length of 1000 chars
+		# Returns the following:
+		# (boolean) true = Success
+		# (boolean) false = Failure
 
 		# Check dependencies
 		self::dependencies(isset($this->database, $this->photoIDs));
@@ -825,6 +868,11 @@ class Photo extends Module {
 	}
 
 	public function setStar() {
+
+		# Functions stars a photo
+		# Returns the following:
+		# (boolean) true = Success
+		# (boolean) false = Failure
 
 		# Check dependencies
 		self::dependencies(isset($this->database, $this->photoIDs));
@@ -865,6 +913,12 @@ class Photo extends Module {
 
 	public function getPublic($password) {
 
+		# Functions checks if photo or parent album is public
+		# Returns the following:
+		# (int) 0 = Photo private and parent album private
+		# (int) 1 = Album public, but password incorrect
+		# (int) 2 = Photo public or album public and password correct
+
 		# Check dependencies
 		self::dependencies(isset($this->database, $this->photoIDs));
 
@@ -877,22 +931,40 @@ class Photo extends Module {
 		$photo	= $photos->fetch_object();
 
 		# Check if public
-		if ($photo->public==1) return true;
-		else {
+		if ($photo->public==='1') {
+
+			# Photo public
+			return 2;
+
+		} else {
+
+			# Check if album public
 			$album	= new Album($this->database, null, null, $photo->album);
-			$acP	= $album->checkPassword($password);
 			$agP	= $album->getPublic();
-			if ($acP===true&&$agP===true) return true;
+			$acP	= $album->checkPassword($password);
+
+			# Album public and password correct
+			if ($agP===true&&$acP===true) return 2;
+
+			# Album public, but password incorrect
+			if ($agP===true&&$acP===false) return 1;
+
 		}
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
-		return false;
+		# Photo private
+		return 0;
 
 	}
 
 	public function setPublic() {
+
+		# Functions toggles the public property of a photo
+		# Returns the following:
+		# (boolean) true = Success
+		# (boolean) false = Failure
 
 		# Check dependencies
 		self::dependencies(isset($this->database, $this->photoIDs));
@@ -925,6 +997,11 @@ class Photo extends Module {
 
 	function setAlbum($albumID) {
 
+		# Functions sets the parent album of a photo
+		# Returns the following:
+		# (boolean) true = Success
+		# (boolean) false = Failure
+
 		# Check dependencies
 		self::dependencies(isset($this->database, $this->photoIDs));
 
@@ -947,6 +1024,13 @@ class Photo extends Module {
 	}
 
 	public function setTags($tags) {
+
+		# Functions sets the tags of a photo
+		# Excepts the following:
+		# (string) $tags = Comma separated list of tags with a maximum length of 1000 chars
+		# Returns the following:
+		# (boolean) true = Success
+		# (boolean) false = Failure
 
 		# Check dependencies
 		self::dependencies(isset($this->database, $this->photoIDs));
@@ -978,6 +1062,11 @@ class Photo extends Module {
 	}
 
 	public function duplicate() {
+
+		# Functions duplicates a photo
+		# Returns the following:
+		# (boolean) true = Success
+		# (boolean) false = Failure
 
 		# Check dependencies
 		self::dependencies(isset($this->database, $this->photoIDs));
@@ -1016,6 +1105,11 @@ class Photo extends Module {
 	}
 
 	public function delete() {
+
+		# Functions deletes a photo with all its data and files
+		# Returns the following:
+		# (boolean) true = Success
+		# (boolean) false = Failure
 
 		# Check dependencies
 		self::dependencies(isset($this->database, $this->photoIDs));

@@ -97,8 +97,11 @@ class Guest extends Access {
 		Module::dependencies(isset($_POST['photoID'], $_POST['albumID'], $_POST['password']));
 		$photo = new Photo($this->database, $this->plugins, null, $_POST['photoID']);
 
-		if ($photo->getPublic($_POST['password']))	echo json_encode($photo->get($_POST['albumID']));
-		else										echo 'Warning: Wrong password!';
+		$pgP = $photo->getPublic($_POST['password']);
+
+		if ($pgP===2)		echo json_encode($photo->get($_POST['albumID']));
+		else if ($pgP===1)	echo 'Warning: Wrong password!';
+		else if ($pgP===0)	echo 'Warning: Photo private!';
 
 	}
 
@@ -155,8 +158,10 @@ class Guest extends Access {
 		Module::dependencies(isset($_GET['photoID'], $_GET['password']));
 		$photo = new Photo($this->database, $this->plugins, null, $_GET['photoID']);
 
+		$pgP = $photo->getPublic($_GET['password']);
+
 		# Photo Download
-		if ($photo->getPublic($_GET['password'])) {
+		if ($pgP===2) {
 
 			# Photo Public
 			$photo->getArchive();
@@ -164,7 +169,7 @@ class Guest extends Access {
 		} else {
 
 			# Photo Private
-			exit('Warning: Photo private or not downloadable!');
+			exit('Warning: Photo private or password incorrect!');
 
 		}
 
