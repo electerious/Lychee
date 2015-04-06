@@ -71,15 +71,11 @@ contextMenu.albumMulti = function(albumIDs, e) {
 
 contextMenu.albumTitle = function(albumID, e) {
 
-	var items = [
-		{ type: 'item', title: build.iconic('pencil') + 'Rename', fn: function() { album.setTitle([albumID]) } }
-	];
+	var items = [];
 
 	api.post('Album::getAll', {}, function(data) {
 
 		if (data.num>1) {
-
-			items.push({ type: 'separator' });
 
 			// Generate list of albums
 			$.each(data.albums, function(index) {
@@ -91,11 +87,15 @@ contextMenu.albumTitle = function(albumID, e) {
 
 				title = "<img class='cover' width='16' height='16' src='" + that.thumbs[0] + "'><div class='title'>" + that.title + "</div>";
 
-				if (that.id!=albumID) items.push({ type: 'item', title, fn: function() { lychee.goto(that.id) } });
+				if (that.id!=albumID) items.unshift({ type: 'item', title, fn: function() { lychee.goto(that.id) } });
 
 			});
 
+			items.unshift({ type: 'separator' });
+
 		}
+
+		items.unshift({ type: 'item', title: build.iconic('pencil') + 'Rename', fn: function() { album.setTitle([albumID]) } });
 
 		basicContext.show(items, e, contextMenu.close);
 
@@ -198,16 +198,6 @@ contextMenu.move = function(photoIDs, e) {
 
 	var items = [];
 
-	// Show Unsorted when unsorted is not the current album
-	if (album.getID()!=='0') {
-
-		items = [
-			{ type: 'item', title: 'Unsorted', fn: function() { photo.setAlbum(photoIDs, 0) } },
-			{ type: 'separator' }
-		];
-
-	}
-
 	api.post('Album::getAll', {}, function(data) {
 
 		if (data.num===0) {
@@ -227,9 +217,17 @@ contextMenu.move = function(photoIDs, e) {
 				if (!that.thumbs[0]) that.thumbs[0] = 'src/images/no_cover.svg';
 				that.title = "<img class='cover' width='16' height='16' src='" + that.thumbs[0] + "'><div class='title'>" + that.title + "</div>";
 
-				if (that.id!=album.getID()) items.push({ type: 'item', title: that.title, fn: function() { photo.setAlbum(photoIDs, that.id) } });
+				if (that.id!=album.getID()) items.unshift({ type: 'item', title: that.title, fn: function() { photo.setAlbum(photoIDs, that.id) } });
 
 			});
+
+			// Show Unsorted when unsorted is not the current album
+			if (album.getID()!=='0') {
+
+				items.unshift({ type: 'separator' });
+				items.unshift({ type: 'item', title: 'Unsorted', fn: function() { photo.setAlbum(photoIDs, 0) } });
+
+			}
 
 		}
 
