@@ -1,3 +1,10 @@
+## v2.7.2
+
+Released April 13, 2015
+
+- `Fixed` Prevented remote code execution of photos imported using "Import from URL" (Thanks Segment S.r.l)
+- `Fixed` Stopped view.php from returning data of private photos
+
 ## v2.7.1
 
 Released January 26, 2015
