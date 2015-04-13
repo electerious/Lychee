@@ -13,12 +13,12 @@ class Photo extends Module {
 	private $settings	= null;
 	private $photoIDs	= null;
 
-	private $allowedTypes = array(
+	public static $validTypes = array(
 		IMAGETYPE_JPEG,
 		IMAGETYPE_GIF,
 		IMAGETYPE_PNG
 	);
-	private $validExtensions = array(
+	public static $validExtensions = array(
 		'.jpg',
 		'.jpeg',
 		'.png',
@@ -87,11 +87,17 @@ class Photo extends Module {
 
 			# Verify extension
 			$extension = getExtension($file['name']);
-			if (!in_array(strtolower($extension), $this->validExtensions, true)) continue;
+			if (!in_array(strtolower($extension), Photo::$validExtensions, true)) {
+				Log::error($this->database, __METHOD__, __LINE__, 'Photo format not supported');
+				exit('Error: Photo format not supported!');
+			}
 
 			# Verify image
 			$type = @exif_imagetype($file['tmp_name']);
-			if (!in_array($type, $this->allowedTypes, true)) continue;
+			if (!in_array($type, Photo::$validTypes, true)) {
+				Log::error($this->database, __METHOD__, __LINE__, 'Photo type not supported');
+				exit('Error: Photo type not supported!');
+			}
 
 			# Generate id
 			$id = str_replace('.', '', microtime(true));
