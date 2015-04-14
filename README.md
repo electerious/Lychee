@@ -2,8 +2,8 @@
 
 #### A great looking and easy-to-use Photo-Management-System.
 
-![Lychee](http://l.electerious.com/uploads/big/68375288e048658e253a7c0c964f19b9.jpg)
-![Lychee](http://l.electerious.com/uploads/big/198f237580ea004529ab7b6faad90274.jpg)
+![Lychee](http://l.electerious.com/uploads/big/c4b58cb87d95aeaed78fdca581cc908c.jpg)
+![Lychee](http://l.electerious.com/uploads/big/075ac5de5b5d6c593acbb700f0e1d739.jpg)
 
 Lychee is a free photo-management tool, which runs on your server or web-space. Installing is a matter of seconds. Upload, manage and share photos like from a native application. Lychee comes with everything you need and all your photos are stored securely. Try the [Live Demo](http://electerious.com/lychee_demo/) or read more on our [Website](http://lychee.electerious.com).
 
@@ -68,7 +68,7 @@ Take a look at the [FAQ](docs/FAQ.md) if you have problems. Discovered a bug? Pl
 ## Developer
 | Version | Name |
 |:-----------|:------------|
-| 1.2, 1.3, 2.x | [Tobias Reich](http://electerious.com)|
+| 1.2, 1.3, 2.x, 3.x | [Tobias Reich](http://electerious.com)|
 | 1.0, 1.1 | [Tobias Reich](http://electerious.com)<br>[Philipp Maurer](http://phinal.net) |
 
 ## Donate
