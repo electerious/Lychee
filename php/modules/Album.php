@@ -93,19 +93,19 @@ class Album extends Module {
 		# Get album information
 		switch ($this->albumIDs) {
 
-			case 'f':	$return['public'] = false;
+			case 'f':	$return['public'] = '0';
 						$query = Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE star = 1 " . $this->settings['sorting'], array(LYCHEE_TABLE_PHOTOS));
 						break;
 
-			case 's':	$return['public'] = false;
+			case 's':	$return['public'] = '0';
 						$query = Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE public = 1 " . $this->settings['sorting'], array(LYCHEE_TABLE_PHOTOS));
 						break;
 
-			case 'r':	$return['public'] = false;
+			case 'r':	$return['public'] = '0';
 						$query = Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY)) " . $this->settings['sorting'], array(LYCHEE_TABLE_PHOTOS));
 						break;
 
-			case '0':	$return['public'] = false;
+			case '0':	$return['public'] = '0';
 						$query = Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE album = 0 " . $this->settings['sorting'], array(LYCHEE_TABLE_PHOTOS));
 						break;
 
