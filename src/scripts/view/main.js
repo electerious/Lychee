@@ -102,6 +102,7 @@ loadPhotoInfo = function(photoID) {
 		var size = getPhotoSize(data);
 
 		imageview.html(build.imageview(data, size, true));
+		imageview.find('.arrow_wrapper').remove();
 		imageview.addClass('fadeIn').show();
 
 		/* Render Sidebar */
