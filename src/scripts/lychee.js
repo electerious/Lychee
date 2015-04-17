@@ -18,7 +18,6 @@ lychee = {
 	debugMode:		false,
 
 	checkForUpdates:'1',
-	username:		'',
 	sorting:		'',
 	location:		'',
 
@@ -49,7 +48,6 @@ lychee.init = function() {
 
 			// Logged in
 
-			lychee.username			= data.config.username			|| '';
 			lychee.sorting			= data.config.sorting			|| '';
 			lychee.dropboxKey		= data.config.dropboxKey		|| '';
 			lychee.location			= data.config.location			|| '';

@@ -39,6 +39,9 @@ class Session extends Module {
 
 		# Return settings
 		$return['config'] = $this->settings;
+
+		# Remove username and password from response
+		unset($return['config']['username']);
 		unset($return['config']['password']);
 
 		# Path to Lychee for the server-import dialog
@@ -63,7 +66,6 @@ class Session extends Module {
 			$return['status'] = LYCHEE_STATUS_LOGGEDOUT;
 
 			# Unset unused vars
-			unset($return['config']['username']);
 			unset($return['config']['thumbQuality']);
 			unset($return['config']['sorting']);
 			unset($return['config']['dropboxKey']);
