@@ -73,6 +73,9 @@ function getGraphHeader($database, $photoID) {
 
 	if (!isset($database, $photoID)) return false;
 
+	$photo = new Photo($database, null, null, $photoID);
+	if ($photo->getPublic('')===false) return false;
+
 	$query	= Database::prepare($database, "SELECT title, description, url, medium FROM ? WHERE id = '?'", array(LYCHEE_TABLE_PHOTOS, $photoID));
 	$result	= $database->query($query);
 	$row	= $result->fetch_object();

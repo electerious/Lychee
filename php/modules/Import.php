@@ -11,6 +11,9 @@ class Import extends Module {
 
 	static function photo($database, $plugins, $settings, $path, $albumID = 0, $description = '', $tags = '') {
 
+		# No need to validate photo type and extension in this function.
+		# $photo->add will take care of it.
+
 		$info	= getimagesize($path);
 		$size	= filesize($path);
 		$photo	= new Photo($database, $plugins, $settings, null);
@@ -37,7 +40,16 @@ class Import extends Module {
 
 		foreach ($urls as &$url) {
 
-			if (@exif_imagetype($url)===false) {
+			# Verify extension
+			$extension = getExtension($url);
+			if (!in_array(strtolower($extension), Photo::$validExtensions, true)) {
+				$error = true;
+				continue;
+			}
+
+			# Verify image
+			$type = @exif_imagetype($url);
+			if (!in_array($type, Photo::$validTypes, true)) {
 				$error = true;
 				continue;
 			}
