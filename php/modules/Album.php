@@ -189,8 +189,8 @@ class Album extends Module {
 		if ($public===false) $return['smartalbums'] = $this->getSmartInfo();
 
 		# Albums query
-		$query = Database::prepare($this->database, 'SELECT id, title, public, sysstamp, password FROM ? WHERE public = 1 AND visible <> 0', array(LYCHEE_TABLE_ALBUMS));
-		if ($public===false) $query = Database::prepare($this->database, 'SELECT id, title, public, sysstamp, password FROM ?', array(LYCHEE_TABLE_ALBUMS));
+		$query = Database::prepare($this->database, 'SELECT id, title, public, sysstamp, password FROM ? WHERE public = 1 AND visible <> 0 ' . $this->settings['sorting'], array(LYCHEE_TABLE_ALBUMS));
+		if ($public===false) $query = Database::prepare($this->database, 'SELECT id, title, public, sysstamp, password FROM ? ' . $this->settings['sorting'], array(LYCHEE_TABLE_ALBUMS));
 
 		# Execute query
 		$albums = $this->database->query($query);
@@ -223,7 +223,7 @@ class Album extends Module {
 			}
 
 			# Add to return
-			$return['albums'][$album['id']] = $album;
+			$return['albums'][] = $album;
 
 		}
 
