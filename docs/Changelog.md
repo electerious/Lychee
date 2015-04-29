@@ -8,6 +8,8 @@ Released April ??, 2015
 
 **Warning**: We recommend to backup your database and photos before upgrading to the newest version.
 
+**Deprecated**: Photos uploaded with Lychee v1.1 or older aren't supported anymore. Thumbnails  fail to load on high-res screens.
+
 - `New` Redesigned interface, icons and symbols
 - `New` Rewritten Front-End
 - `New` Dialog system now based on [basicModal](https://github.com/electerious/basicModal)
