@@ -206,6 +206,9 @@ lychee.load = function() {
 		// Trash data
 		photo.json = null;
 
+		// Hide sidebar
+		if (visible.sidebar()) sidebar.toggle();
+
 		// Show Album
 		if (visible.photo()) view.photo.hide();
 		if (album.json&&albumID==album.json.id) view.album.title();
@@ -223,9 +226,11 @@ lychee.load = function() {
 		album.json = null;
 		photo.json = null;
 
+		// Hide sidebar
+		if (visible.sidebar()) sidebar.toggle();
+
 		// Show Albums
 		if (visible.photo()) view.photo.hide();
-		if (visible.sidebar()) sidebar.toggle();
 		albums.load();
 
 	}

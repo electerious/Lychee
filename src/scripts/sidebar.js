@@ -70,7 +70,7 @@ sidebar.toggle = function() {
 	if (visible.sidebar()||
 		visible.sidebarbutton()) {
 
-			header.dom('.button--info').toggleClass('active')
+			header.dom('.button--info').toggleClass('active');
 			lychee.content.toggleClass('sidebar');
 			sidebar.dom().toggleClass('active');
 
