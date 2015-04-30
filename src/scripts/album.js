@@ -257,7 +257,7 @@ album.setTitle = function(albumIDs) {
 		else if (albums.json)	oldTitle = albums.json.albums[albumIDs].title;
 
 		if (!oldTitle) oldTitle = '';
-		oldTitle = oldTitle.replace("'", '&apos;');
+		oldTitle = oldTitle.replace(/'/g, '&apos;');
 
 	}
 
@@ -329,7 +329,7 @@ album.setTitle = function(albumIDs) {
 
 album.setDescription = function(albumID) {
 
-	var oldDescription = album.json.description.replace("'", '&apos;'),
+	var oldDescription = album.json.description.replace(/'/g, '&apos;'),
 		action;
 
 	action = function(data) {

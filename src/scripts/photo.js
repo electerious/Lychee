@@ -294,7 +294,7 @@ photo.setTitle = function(photoIDs) {
 		// Get old title if only one photo is selected
 		if (photo.json)			oldTitle = photo.json.title;
 		else if (album.json)	oldTitle = album.json.content[photoIDs].title;
-		oldTitle = oldTitle.replace("'", '&apos;');
+		oldTitle = oldTitle.replace(/'/g, '&apos;');
 	}
 
 	action = function(data) {
@@ -477,7 +477,7 @@ photo.setPublic = function(photoID, e) {
 
 photo.setDescription = function(photoID) {
 
-	var oldDescription = photo.json.description.replace("'", '&apos;'),
+	var oldDescription = photo.json.description.replace(/'/g, '&apos;'),
 		action;
 
 	action = function(data) {
