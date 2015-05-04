@@ -234,9 +234,10 @@ upload.start = {
 
 	},
 
-	url: function() {
+	url: function(url = '') {
 
-		var albumID = album.getID(),
+		var albumID	= album.getID(),
+			url		= (typeof url === 'string' ? url : ''),
 			action;
 
 		if (albumID===false) albumID = 0;
@@ -293,7 +294,7 @@ upload.start = {
 		}
 
 		basicModal.show({
-			body: "<p>Please enter the direct link to a photo to import it: <input class='text' data-name='link' type='text' placeholder='http://' value=''></p>",
+			body: "<p>Please enter the direct link to a photo to import it: <input class='text' data-name='link' type='text' placeholder='http://' value='" + url + "'></p>",
 			buttons: {
 				action: {
 					title: 'Import',
