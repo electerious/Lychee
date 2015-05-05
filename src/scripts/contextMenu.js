@@ -46,6 +46,7 @@ contextMenu.album = function(albumID, e) {
 	if (albumID==='0'||albumID==='f'||albumID==='s'||albumID==='r') return false;
 
 	var items = [
+        { type: 'item', title: 'Merge', fn: function () { basicContext.close(); contextMenu.moveAlbum(albumID, e) } },
 		{ type: 'item', title: build.iconic('pencil') + 'Rename', fn: function() { album.setTitle([albumID]) } },
 		{ type: 'item', title: build.iconic('trash') + 'Delete', fn: function() { album.delete([albumID]) } }
 	];
@@ -235,6 +236,31 @@ contextMenu.move = function(photoIDs, e) {
 		basicContext.show(items, e, contextMenu.close);
 
 	});
+
+}
+
+contextMenu.moveAlbum = function(albumID, e) {
+
+    var items = [];
+
+    api.post('Album::getAll', {}, function(data) {
+
+        $.each(data.albums, function(){
+
+            var that = this;
+
+            if (!that.thumbs[0]) that.thumbs[0] = 'src/images/no_cover.svg';
+            that.contextTitle = "<img class='cover' width='16' height='16' src='" + that.thumbs[0] + "'><div class='title'>" + that.title + "</div>";
+
+            if (that.id!=album.getID()) {
+                items.unshift({ type: 'item', title: that.contextTitle, fn: function() { album.merge([that.id, albumID], that.title) } });
+            }
+
+        });
+
+        basicContext.show(items, e, contextMenu.close);
+
+    })
 
 }
 
