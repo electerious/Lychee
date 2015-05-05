@@ -723,11 +723,11 @@ class Album extends Module {
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
 
-		$albumID           = reset($this->albumIDs);
-		$mergable_albumIDs = array_slice($this->albumIDs, 1);
+		$albumIDs          = explode(',', $this->albumIDs);
+		$albumID           = array_splice($albumIDs, 0, 1)[0];
 
-		$inQuery = implode(',', array_fill(0, count($this->albumIDs) - 1, '?'));
-		$data    = array(LYCHEE_TABLE_PHOTOS, $albumID) + $mergable_albumIDs;
+		$inQuery = implode(',', array_fill(0, count($albumIDs), '?'));
+		$data    = array_merge(array(LYCHEE_TABLE_PHOTOS, $albumID), $albumIDs);
 
 		$merge_query   = Database::prepare($this->database, "UPDATE ? SET album = ? WHERE album IN ($inQuery)", $data);
 		$merge_result  = $this->database->query($merge_query);
@@ -737,7 +737,7 @@ class Album extends Module {
 			return false;
 		}
 
-		$data          = array(LYCHEE_TABLE_ALBUMS) + $mergable_albumIDs;
+		$data          = array_merge( array(LYCHEE_TABLE_ALBUMS), $albumIDs);
 		$delete_query  = Database::prepare($this->database, "DELETE FROM ? WHERE id IN ($inQuery)", $data);
 		$delete_result = $this->database->query($delete_query);
 
