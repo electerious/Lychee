@@ -22,7 +22,7 @@ class Admin extends Access {
 			case 'Album::setDescription':	$this->setAlbumDescription(); break;
 			case 'Album::setPublic':		$this->setAlbumPublic(); break;
 			case 'Album::delete':			$this->deleteAlbum(); break;
-			case 'Album::merge':            $this->mergeAlbums(); break;
+			case 'Album::merge':			$this->mergeAlbums(); break;
 
 			# Photo functions
 			case 'Photo::get':				$this->getPhoto(); break;
@@ -125,9 +125,11 @@ class Admin extends Access {
 	}
 
 	private function mergeAlbums() {
+
 		Module::dependencies(isset($_POST['albumIDs']));
 		$album = new Album($this->database, $this->plugins, $this->settings, $_POST['albumIDs']);
 		echo $album->merge();
+
 	}
 
 	# Photo functions

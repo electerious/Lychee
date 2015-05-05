@@ -676,6 +676,46 @@ class Album extends Module {
 
 	}
 
+	public function merge() {
+
+		# Check dependencies
+		self::dependencies(isset($this->database, $this->albumIDs));
+
+		# Call plugins
+		$this->plugins(__METHOD__, 0, func_get_args());
+
+		# Convert to array
+		$albumIDs = explode(',', $this->albumIDs);
+
+		# Get first albumID
+		$albumID = array_splice($albumIDs, 0, 1)[0];
+
+		$query	= Database::prepare($this->database, "UPDATE ? SET album = ? WHERE album IN (?)", array(LYCHEE_TABLE_PHOTOS, $albumID, $this->albumIDs));
+		$result	= $this->database->query($query);
+
+		if (!$result) {
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			return false;
+		}
+
+		# $albumIDs contains all IDs without the first albumID
+		# Convert to string
+		$filteredIDs = implode(',', $albumIDs);
+
+		$query	= Database::prepare($this->database, "DELETE FROM ? WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $filteredIDs));
+		$result	= $this->database->query($query);
+
+		# Call plugins
+		$this->plugins(__METHOD__, 1, func_get_args());
+
+		if (!$result) {
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			return false;
+		}
+		return true;
+
+	}
+
 	public function delete() {
 
 		# Check dependencies
@@ -713,40 +753,6 @@ class Album extends Module {
 		}
 		return true;
 
-	}
-
-	public function merge() {
-
-		# Check dependencies
-		self::dependencies(isset($this->database, $this->albumIDs));
-
-		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
-
-		$albumIDs          = explode(',', $this->albumIDs);
-		$albumID           = array_splice($albumIDs, 0, 1)[0];
-
-		$inQuery = implode(',', array_fill(0, count($albumIDs), '?'));
-		$data    = array_merge(array(LYCHEE_TABLE_PHOTOS, $albumID), $albumIDs);
-
-		$merge_query   = Database::prepare($this->database, "UPDATE ? SET album = ? WHERE album IN ($inQuery)", $data);
-		$merge_result  = $this->database->query($merge_query);
-
-		if (!$merge_result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
-			return false;
-		}
-
-		$data          = array_merge( array(LYCHEE_TABLE_ALBUMS), $albumIDs);
-		$delete_query  = Database::prepare($this->database, "DELETE FROM ? WHERE id IN ($inQuery)", $data);
-		$delete_result = $this->database->query($delete_query);
-
-		if (!$delete_result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
-			return false;
-		}
-
-		return true;
 	}
 
 }
