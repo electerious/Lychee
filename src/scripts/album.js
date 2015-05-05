@@ -569,8 +569,8 @@ album.getArchive = function(albumID) {
 
 }
 
-album.merge = function(albumIDs) {
-    var action = {}
+album.merge = function(albumIDs, singleContextTitle) {
+    var action = {}, msg
 
     action.fn = function() {
 
@@ -593,8 +593,13 @@ album.merge = function(albumIDs) {
 
     }
 
+    if ( singleContextTitle )
+        msg = '<p>Are you sure you want to merge the selected album into the album "' + singleContextTitle + '"?</p>'
+    else
+        msg = '<p>Are you sure you want to merge all selected albums?</p>'
+
     basicModal.show({
-        body: '<p>Are you sure you want to merge all selected albums?</p>',
+        body: msg,
         buttons: {
             action: {
                 title: 'Merge Albums',
