@@ -570,41 +570,73 @@ album.getArchive = function(albumID) {
 }
 
 album.merge = function(albumIDs) {
-    var action = {}
 
-    action.fn = function() {
+	var action,
+		title	= '',
+		sTitle	= '',
+		msg		= '';
 
-        var params;
+	if (!albumIDs) return false;
+	if (albumIDs instanceof Array===false) albumIDs = [albumIDs];
 
-        basicModal.close();
+	// Get title of first album
+	if (albums.json) title = albums.json.albums[albumIDs[0]].title;
 
-        params = {
-            albumIDs: albumIDs.join()
-        }
+	if (!title) title = '';
+	title = title.replace(/'/g, '&apos;');
 
-        api.post('Album::merge', params, function(data) {
-            if (data!==true) {
-                lychee.error(null, params, data);
-            } else {
-                albums.json = null
-                albums.load()
-            }
-        })
+	if (albumIDs.length===2) {
 
-    }
+		// Get title of second album
+		if (albums.json) sTitle = albums.json.albums[albumIDs[1]].title;
 
-    basicModal.show({
-        body: '<p>Are you sure you want to merge all selected albums?</p>',
-        buttons: {
-            action: {
-                title: 'Merge Albums',
-                fn: action.fn,
-                class: 'red'
-            },
-            cancel: {
-                title: "Don't merge",
-                fn: basicModal.close
-            }
-        }
-    });
+		if (!sTitle) sTitle = '';
+		sTitle = sTitle.replace(/'/g, '&apos;');
+
+		msg = "<p>Are you sure you want to merge the album '" + sTitle + "' into the album '" + title + "'?</p>";
+
+	} else {
+
+		msg = "<p>Are you sure you want to merge all selected albums into the album '" + title + "'?</p>";
+
+	}
+
+	action = function() {
+
+		var params;
+
+		basicModal.close();
+
+		params = {
+			albumIDs: albumIDs.join()
+		}
+
+		api.post('Album::merge', params, function(data) {
+
+			if (data!==true) {
+				lychee.error(null, params, data);
+			} else {
+				albums.refresh();
+				albums.load();
+			}
+
+		});
+
+	}
+
+	basicModal.show({
+		body: msg,
+		buttons: {
+			action: {
+				title: 'Merge Albums',
+				fn: action,
+				class: 'red'
+			},
+			cancel: {
+				title: "Don't Merge",
+				fn: basicModal.close
+			}
+		}
+	});
+
 }

@@ -43,12 +43,20 @@ contextMenu.settings = function(e) {
 
 contextMenu.album = function(albumID, e) {
 
+	// Notice for 'Merge':
+	// fn must call basicContext.close() first,
+	// in order to keep the selection
+
 	if (albumID==='0'||albumID==='f'||albumID==='s'||albumID==='r') return false;
 
 	var items = [
 		{ type: 'item', title: build.iconic('pencil') + 'Rename', fn: function() { album.setTitle([albumID]) } },
+		{ type: 'item', title: 'Merge', fn: function () { basicContext.close(); contextMenu.mergeAlbum(albumID, e) } },
 		{ type: 'item', title: build.iconic('trash') + 'Delete', fn: function() { album.delete([albumID]) } }
 	];
+
+	// Remove merge when there is only one album
+	if (albums.json&&albums.json.albums&&Object.keys(albums.json.albums).length<=1) items.splice(1, 1);
 
 	$('.album[data-id="' + albumID + '"]').addClass('active');
 
@@ -61,8 +69,8 @@ contextMenu.albumMulti = function(albumIDs, e) {
 	multiselect.stopResize();
 
 	var items = [
-        { type: 'item', title: 'Merge All', fn: function () { album.merge(albumIDs) } },
 		{ type: 'item', title: build.iconic('pencil') + 'Rename All', fn: function() { album.setTitle(albumIDs) } },
+		{ type: 'item', title: 'Merge All', fn: function () { album.merge(albumIDs) } },
 		{ type: 'item', title: build.iconic('trash') + 'Delete All', fn: function() { album.delete(albumIDs) } }
 	];
 
@@ -101,6 +109,33 @@ contextMenu.albumTitle = function(albumID, e) {
 		basicContext.show(items, e, contextMenu.close);
 
 	});
+
+}
+
+contextMenu.mergeAlbum = function(albumID, e) {
+
+    var items = [];
+
+    api.post('Album::getAll', {}, function(data) {
+
+        $.each(data.albums, function(){
+
+            var that = this;
+
+            if (!that.thumbs[0]) that.thumbs[0] = 'src/images/no_cover.svg';
+            that.contextTitle = "<img class='cover' width='16' height='16' src='" + that.thumbs[0] + "'><div class='title'>" + that.title + "</div>";
+
+            if (that.id!=album.getID()) {
+                items.unshift({ type: 'item', title: that.contextTitle, fn: function() { album.merge([albumID, that.id]) } });
+            }
+
+        });
+
+        if (items.length===0) return false;
+
+        basicContext.show(items, e, contextMenu.close);
+
+    })
 
 }
 
