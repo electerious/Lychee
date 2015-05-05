@@ -568,3 +568,13 @@ album.getArchive = function(albumID) {
 	location.href = link;
 
 }
+
+album.merge = function(albumIDs) {
+    var params = {
+        albumIDs: albumIDs.join()
+    }
+
+    api.post('Album::merge', params, function(data) {
+        if (data!==true) lychee.error(null, params, data);
+    })
+}
