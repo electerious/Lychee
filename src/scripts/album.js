@@ -570,11 +570,41 @@ album.getArchive = function(albumID) {
 }
 
 album.merge = function(albumIDs) {
-    var params = {
-        albumIDs: albumIDs.join()
+    var action = {}
+
+    action.fn = function() {
+
+        var params;
+
+        basicModal.close();
+
+        params = {
+            albumIDs: albumIDs.join()
+        }
+
+        api.post('Album::merge', params, function(data) {
+            if (data!==true) {
+                lychee.error(null, params, data);
+            } else {
+                albums.json = null
+                albums.load()
+            }
+        })
+
     }
 
-    api.post('Album::merge', params, function(data) {
-        if (data!==true) lychee.error(null, params, data);
-    })
+    basicModal.show({
+        body: '<p>Are you sure you want to merge all selected albums?</p>',
+        buttons: {
+            action: {
+                title: 'Merge Albums',
+                fn: action.fn,
+                class: 'red'
+            },
+            cancel: {
+                title: "Don't merge",
+                fn: basicModal.close
+            }
+        }
+    });
 }
