@@ -715,6 +715,40 @@ class Album extends Module {
 
 	}
 
+	public function merge() {
+
+		# Check dependencies
+		self::dependencies(isset($this->database, $this->albumIDs));
+
+		# Call plugins
+		$this->plugins(__METHOD__, 0, func_get_args());
+
+		$albumIDs          = explode(',', $this->albumIDs);
+		$albumID           = array_splice($albumIDs, 0, 1)[0];
+
+		$inQuery = implode(',', array_fill(0, count($albumIDs), '?'));
+		$data    = array_merge(array(LYCHEE_TABLE_PHOTOS, $albumID), $albumIDs);
+
+		$merge_query   = Database::prepare($this->database, "UPDATE ? SET album = ? WHERE album IN ($inQuery)", $data);
+		$merge_result  = $this->database->query($merge_query);
+
+		if (!$merge_result) {
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			return false;
+		}
+
+		$data          = array_merge( array(LYCHEE_TABLE_ALBUMS), $albumIDs);
+		$delete_query  = Database::prepare($this->database, "DELETE FROM ? WHERE id IN ($inQuery)", $data);
+		$delete_result = $this->database->query($delete_query);
+
+		if (!$delete_result) {
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			return false;
+		}
+
+		return true;
+	}
+
 }
 
 ?>

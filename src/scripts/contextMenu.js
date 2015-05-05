@@ -61,6 +61,7 @@ contextMenu.albumMulti = function(albumIDs, e) {
 	multiselect.stopResize();
 
 	var items = [
+        { type: 'item', title: 'Merge All', fn: function () { album.merge(albumIDs) } },
 		{ type: 'item', title: build.iconic('pencil') + 'Rename All', fn: function() { album.setTitle(albumIDs) } },
 		{ type: 'item', title: build.iconic('trash') + 'Delete All', fn: function() { album.delete(albumIDs) } }
 	];
