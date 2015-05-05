@@ -104,6 +104,8 @@ These hooks are called from `php/modules/Album.php`.
 | Album::setPassword:after |  |
 | Album::checkPassword:before | Lychee checks if password is correct |
 | Album::checkPassword:after |  |
+| Album::merge:before | User merges albums |
+| Album::merge:after |  |
 | Album::delete:before | User deletes album |
 | Album::delete:after |  |
 
