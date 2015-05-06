@@ -1,6 +1,6 @@
 ## v3.0.0
 
-Released April ??, 2015
+Released April 6, 2015
 
 **Warning**: You need to enter a new username and password when upgrading from a previous version. Your installation is accessible for everyone till you enter a new login by visiting your Lychee. Both fields are now stored in a secure way. Legacy md5 code has been removed.
 
