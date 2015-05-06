@@ -252,14 +252,14 @@ photo.delete = function(photoIDs) {
 		action.title = 'Delete Photo';
 		cancel.title = 'Keep Photo';
 
-		msg = "<p>Are you sure you want to delete the photo '" + photoTitle + "'?<br>This action can't be undone!</p>";
+		msg = "<p>Are you sure you want to delete the photo '" + photoTitle + "'? This action can't be undone!</p>";
 
 	} else {
 
 		action.title = 'Delete Photo';
 		cancel.title = 'Keep Photo';
 
-		msg = "<p>Are you sure you want to delete all " + photoIDs.length + " selected photo?<br>This action can't be undone!</p>";
+		msg = "<p>Are you sure you want to delete all " + photoIDs.length + " selected photo? This action can't be undone!</p>";
 
 	}
 
