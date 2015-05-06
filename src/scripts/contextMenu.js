@@ -51,7 +51,7 @@ contextMenu.album = function(albumID, e) {
 
 	var items = [
 		{ type: 'item', title: build.iconic('pencil') + 'Rename', fn: function() { album.setTitle([albumID]) } },
-		{ type: 'item', title: 'Merge', fn: function () { basicContext.close(); contextMenu.mergeAlbum(albumID, e) } },
+		{ type: 'item', title: build.iconic('collapse-left') + 'Merge', fn: function () { basicContext.close(); contextMenu.mergeAlbum(albumID, e) } },
 		{ type: 'item', title: build.iconic('trash') + 'Delete', fn: function() { album.delete([albumID]) } }
 	];
 
@@ -70,7 +70,7 @@ contextMenu.albumMulti = function(albumIDs, e) {
 
 	var items = [
 		{ type: 'item', title: build.iconic('pencil') + 'Rename All', fn: function() { album.setTitle(albumIDs) } },
-		{ type: 'item', title: 'Merge All', fn: function () { album.merge(albumIDs) } },
+		{ type: 'item', title: build.iconic('collapse-left') + 'Merge All', fn: function () { album.merge(albumIDs) } },
 		{ type: 'item', title: build.iconic('trash') + 'Delete All', fn: function() { album.delete(albumIDs) } }
 	];
 
