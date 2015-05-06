@@ -46,7 +46,35 @@
 			bottom: 0;
 			left: 0;
 		}
+
+        &.video {
+            left: 50%;
+            top: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            max-height: 100%;
+            max-width: 100%;
+        }
 	}
+
+    .mejs-container {
+        position: absolute;
+        top: calc(50% + 30px);
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        max-height: calc(100% - 60px);
+        max-width: 100%;
+
+        transition: top .3s, right .3s, bottom .3s, left .3s, margin-top .3s, opacity .2s, transform .3s $timingBounce;
+        animation-name: zoomIn;
+        animation-duration: .3s;
+        animation-timing-function: $timingBounce;
+    }
+
+    &.full .mejs-container {
+        left: 50%;
+        top: 50%;
+        max-height: 100%;
+    }
 
 	/* Previous/Next Buttons ------------------------------------------------*/
 	.arrow_wrapper {
