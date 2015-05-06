@@ -30,6 +30,23 @@ class Import extends Module {
 
 	}
 
+	static function video($database, $plugins, $settings, $path, $albumID = 0, $description = '', $tags = '') {
+
+		$size	= filesize($path);
+		$video	= new Video($database, $plugins, $settings, null);
+
+		$nameFile					= array(array());
+		$nameFile[0]['name']		= $path;
+		$nameFile[0]['type']		= Video::getMimeType($path);
+		$nameFile[0]['tmp_name']	= $path;
+		$nameFile[0]['error']		= 0;
+		$nameFile[0]['size']		= $size;
+
+		if (!$video->add($nameFile, $albumID, $description, $tags)) return false;
+		return true;
+
+	}
+
 	static function url($urls, $albumID = 0) {
 
 		$error = false;
@@ -116,12 +133,23 @@ class Import extends Module {
 
 				# Photo
 
-				if (!Import::photo($database, $plugins, $settings, $file, $albumID)) {
+				if ( ! Import::photo( $database, $plugins, $settings, $file, $albumID ) ) {
 					$error = true;
-					Log::error($database, __METHOD__, __LINE__, 'Could not import file: ' . $file);
+					Log::error( $database, __METHOD__, __LINE__, 'Could not import file: ' . $file );
 					continue;
 				}
 				$contains['photos'] = true;
+
+			} else if (Video::getMimeType($file)!== false) {
+
+				# Video
+
+				if ( ! Import::video( $database, $plugins, $settings, $file, $albumID ) ) {
+					$error = true;
+					Log::error( $database, __METHOD__, __LINE__, 'Could not import file: ' . $file );
+					continue;
+				}
+				$contains['videos'] = true;
 
 			} else if (is_dir($file)) {
 
@@ -155,7 +183,7 @@ class Import extends Module {
 		# than using func_get_args() which will only return original ones
 		$plugins->activate(__METHOD__ . ":after", array($albumID, $path));
 
-		if ($contains['photos']===false&&$contains['albums']===false)	return 'Warning: Folder empty or no readable files to process!';
+		if ($contains['photos']===false&&$contains['videos']===false&&$contains['albums']===false)	return 'Warning: Folder empty or no readable files to process!';
 		if ($contains['photos']===false&&$contains['albums']===true)	return 'Notice: Import only contains albums!';
 		return true;
 
