@@ -1,9 +1,9 @@
 <?php
 
 ###
-# @name		Display Log Plugin
-# @author	Tobias Reich
-# @copyright	2014 by Tobias Reich
+# @name			Display Log Plugin
+# @author		Tobias Reich
+# @copyright	2015 by Tobias Reich
 # @description	This file queries the database for log messages and displays them if present.
 ###
 

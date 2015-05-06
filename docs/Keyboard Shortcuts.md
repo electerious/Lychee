@@ -1,6 +1,6 @@
 ### About
 
-The following keys and shortcuts can be used in Lychee. Single char-shortcuts are also working, when using them with together the `ctrl`-key.
+The following keys and shortcuts can be used in Lychee.
 
 ### Everywhere
 | Key | Action |

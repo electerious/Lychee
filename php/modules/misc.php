@@ -2,7 +2,7 @@
 
 ###
 # @name			Misc Module
-# @copyright	2014 by Tobias Reich
+# @copyright	2015 by Tobias Reich
 ###
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
@@ -13,40 +13,57 @@ function search($database, $settings, $term) {
 
 	$return['albums'] = '';
 
+	# Initialize return var
+	$return = array(
+		'photos'	=> null,
+		'albums'	=> null,
+		'hash'		=> ''
+	);
+
+	###
 	# Photos
-	$query	= Database::prepare($database, "SELECT id, title, tags, public, star, album, thumbUrl FROM ? WHERE title LIKE '%?%' OR description LIKE '%?%' OR tags LIKE '%?%'", array(LYCHEE_TABLE_PHOTOS, $term, $term, $term));
+	###
+
+	$query	= Database::prepare($database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE title LIKE '%?%' OR description LIKE '%?%' OR tags LIKE '%?%'", array(LYCHEE_TABLE_PHOTOS, $term, $term, $term));
 	$result	= $database->query($query);
-	while($row = $result->fetch_assoc()) {
-		$return['photos'][$row['id']]				= $row;
-		$return['photos'][$row['id']]['thumbUrl']	= LYCHEE_URL_UPLOADS_THUMB . $row['thumbUrl'];
-		$return['photos'][$row['id']]['sysdate']	= date('d M. Y', substr($row['id'], 0, -4));
+
+	while($photo = $result->fetch_assoc()) {
+
+		$photo = Photo::prepareData($photo);
+		$return['photos'][$photo['id']] = $photo;
+
 	}
 
+	###
 	# Albums
+	###
+
 	$query	= Database::prepare($database, "SELECT id, title, public, sysstamp, password FROM ? WHERE title LIKE '%?%' OR description LIKE '%?%'", array(LYCHEE_TABLE_ALBUMS, $term, $term));
 	$result = $database->query($query);
-	$i		= 0;
-	while($row = $result->fetch_object()) {
 
-		# Info
-		$return['albums'][$row->id]['id']		= $row->id;
-		$return['albums'][$row->id]['title']	= $row->title;
-		$return['albums'][$row->id]['public']	= $row->public;
-		$return['albums'][$row->id]['sysdate']	= date('F Y', $row->sysstamp);
-		$return['albums'][$row->id]['password']	= ($row->password=='' ? false : true);
+	while($album = $result->fetch_assoc()) {
+
+		# Turn data from the database into a front-end friendly format
+		$album = Album::prepareData($album);
 
 		# Thumbs
-		$query		= Database::prepare($database, "SELECT thumbUrl FROM ? WHERE album = '?' " . $settings['sorting'] . " LIMIT 0, 3", array(LYCHEE_TABLE_PHOTOS, $row->id));
-		$result2	= $database->query($query);
-		$k			= 0;
-		while($row2 = $result2->fetch_object()){
-			$return['albums'][$row->id]["thumb$k"] = LYCHEE_URL_UPLOADS_THUMB . $row2->thumbUrl;
+		$query	= Database::prepare($database, "SELECT thumbUrl FROM ? WHERE album = '?' " . $settings['sorting'] . " LIMIT 0, 3", array(LYCHEE_TABLE_PHOTOS, $album['id']));
+		$thumbs	= $database->query($query);
+
+		# For each thumb
+		$k = 0;
+		while ($thumb = $thumbs->fetch_object()) {
+			$album['thumbs'][$k] = LYCHEE_URL_UPLOADS_THUMB . $thumb->thumbUrl;
 			$k++;
 		}
 
-		$i++;
+		# Add to return
+		$return['albums'][$album['id']] = $album;
 
 	}
+
+	# Hash
+	$return['hash'] = md5(json_encode($return));
 
 	return $return;
 
@@ -63,16 +80,19 @@ function getGraphHeader($database, $photoID) {
 	$result	= $database->query($query);
 	$row	= $result->fetch_object();
 
+	if (!$result||!$row) return false;
+
 	if ($row->medium==='1')	$dir = 'medium';
 	else					$dir = 'big';
 
 	$parseUrl	= parse_url('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+	$url		= $parseUrl['scheme'] . '://' . $parseUrl['host'] . $parseUrl['path'] . '?' . $parseUrl['query'];
 	$picture	= $parseUrl['scheme'] . '://' . $parseUrl['host'] . $parseUrl['path'] . '/../uploads/' . $dir . '/' . $row->url;
 
 	$return = '<!-- General Meta Data -->';
-	$return .= '<meta name="title" content="'.$row->title.'" />';
-	$return .= '<meta name="description" content="'.$row->description.' - via Lychee" />';
-	$return .= '<link rel="image_src" type="image/jpeg" href="'.$picture.'" />';
+	$return .= '<meta name="title" content="'.$row->title.'">';
+	$return .= '<meta name="description" content="'.$row->description.' - via Lychee">';
+	$return .= '<link rel="image_src" type="image/jpeg" href="'.$picture.'">';
 
 	$return .= '<!-- Twitter Meta Data -->';
 	$return .= '<meta name="twitter:card" content="photo">';
@@ -82,6 +102,8 @@ function getGraphHeader($database, $photoID) {
 	$return .= '<!-- Facebook Meta Data -->';
 	$return .= '<meta property="og:title" content="'.$row->title.'">';
 	$return .= '<meta property="og:image" content="'.$picture.'">';
+	$return .= '<meta property="og:description" content="'.$row->description.' - via Lychee">';
+	$return .= '<meta property="og:url" content="'.$url.'">';
 
 	return $return;
 
@@ -97,7 +119,7 @@ function getExtension($filename) {
 
 }
 
-function get_hashed_password($password) {
+function getHashedString($password) {
 
 	# Inspired by http://alias.io/2010/01/store-passwords-safely-with-php-and-mysql/
 

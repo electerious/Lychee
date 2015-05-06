@@ -2,8 +2,10 @@
 
 ###
 # @name			Update to version 2.2
-# @copyright	2014 by Tobias Reich
+# @copyright	2015 by Tobias Reich
 ###
+
+if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 $query = Database::prepare($database, "SELECT `visible` FROM `?` LIMIT 1", array(LYCHEE_TABLE_ALBUMS));
 if (!$database->query($query)) {

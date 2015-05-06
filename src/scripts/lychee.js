@@ -1,15 +1,14 @@
 /**
  * @description	This module provides the basic functions of Lychee.
- * @copyright	2014 by Tobias Reich
+ * @copyright	2015 by Tobias Reich
  */
 
 lychee = {
 
-	title:			'',
-	version:		'2.7.2',
-	version_code:	'020702',
+	title:			document.title,
+	version:		'3.0.0',
+	version_code:	'030000',
 
-	api_path:		'php/api.php',
 	update_path:	'http://lychee.electerious.com/version/index.php',
 	updateURL:		'https://github.com/electerious/Lychee',
 	website:		'http://lychee.electerious.com',
@@ -18,19 +17,15 @@ lychee = {
 	viewMode:		false,
 	debugMode:		false,
 
-	checkForUpdates:false,
-	username:		'',
+	checkForUpdates:'1',
 	sorting:		'',
 	location:		'',
 
 	dropbox:		false,
 	dropboxKey:		'',
 
-	loadingBar:		$('#loading'),
-	header:			$('header'),
 	content:		$('#content'),
-	imageview:		$('#imageview'),
-	infobox:		$('#infobox')
+	imageview:		$('#imageview')
 
 }
 
@@ -38,33 +33,52 @@ lychee.init = function() {
 
 	var params;
 
-	params = 'init&version=' + lychee.version_code;
-	lychee.api(params, function(data) {
+	params = {
+		version: lychee.version_code
+	}
 
-		if (data.loggedIn!==true) {
+	api.post('Session::init', params, function(data) {
+
+		// Check status
+		// 0 = No configuration
+		// 1 = Logged out
+		// 2 = Logged in
+
+		if (data.status===2) {
+
+			// Logged in
+
+			lychee.sorting			= data.config.sorting			|| '';
+			lychee.dropboxKey		= data.config.dropboxKey		|| '';
+			lychee.location			= data.config.location			|| '';
+			lychee.checkForUpdates	= data.config.checkForUpdates	|| '1';
+
+			// Show dialog when there is no username and password
+			if (data.config.login===false) settings.createLogin();
+
+		} else if (data.status===1) {
+
+			// Logged out
+
+			lychee.checkForUpdates = data.config.checkForUpdates || '1';
+
 			lychee.setMode('public');
-		} else {
-			lychee.username		= data.config.username		|| '';
-			lychee.sorting		= data.config.sorting		|| '';
-			lychee.dropboxKey	= data.config.dropboxKey	|| '';
-			lychee.location		= data.config.location		|| '';
-		}
 
-		// No configuration
-		if (data==='Warning: No configuration!') {
-			lychee.header.hide();
+		} else if (data.status===0) {
+
+			// No configuration
+
+			lychee.setMode('public');
+
+			header.dom().hide();
 			lychee.content.hide();
 			$('body').append(build.no_content('cog'));
 			settings.createConfig();
+
 			return true;
+
 		}
 
-		// No login
-		if (data.config.login===false) {
-			settings.createLogin();
-		}
-
-		lychee.checkForUpdates = data.config.checkForUpdates;
 		$(window).bind('popstate', lychee.load);
 		lychee.load();
 
@@ -72,60 +86,18 @@ lychee.init = function() {
 
 }
 
-lychee.api = function(params, callback) {
+lychee.login = function(data) {
 
-	loadingBar.show();
-
-	$.ajax({
-		type:		'POST',
-		url:		lychee.api_path,
-		data:		'function=' + params,
-		dataType:	'text',
-		success: function(data) {
-
-			setTimeout(function() { loadingBar.hide() }, 100);
-
-			// Catch errors
-			if (typeof data==='string'&&
-				data.substring(0, 7)==='Error: ') {
-					lychee.error(data.substring(7, data.length), params, data);
-					upload.close(true);
-					return false;
-			}
-
-			// Convert 1 to true and an empty string to false
-			if (data==='1')		data = true;
-			else if (data==='')	data = false;
-
-			// Convert to JSON if string start with '{' and ends with '}'
-			if (typeof data==='string'&&
-				data.substring(0, 1)==='{'&&
-				data.substring(data.length-1, data.length)==='}') data = $.parseJSON(data);
-
-			// Output response when debug mode is enabled
-			if (lychee.debugMode) console.log(data);
-
-			callback(data);
-
-		},
-		error: function(jqXHR, textStatus, errorThrown) {
-
-			lychee.error('Server error or API not found.', params, errorThrown);
-			upload.close(true);
-
-		}
-	});
-
-}
-
-lychee.login = function() {
-
-	var user		= $('input#username').val(),
-		password	= md5($('input#password').val()),
+	var user		= data.username,
+		password	= data.password,
 		params;
 
-	params = 'login&user=' + user + '&password=' + password;
-	lychee.api(params, function(data) {
+	params = {
+		user,
+		password
+	}
+
+	api.post('Session::login', params, function(data) {
 
 		if (data===true) {
 
@@ -138,8 +110,7 @@ lychee.login = function() {
 		} else {
 
 			// Show error and reactive button
-			$('#password').val('').addClass('error').focus();
-			$('.message .button.active').removeClass('pressed');
+			basicModal.error('password');
 
 		}
 
@@ -149,16 +120,36 @@ lychee.login = function() {
 
 lychee.loginDialog = function() {
 
-	var local_username;
+	var localUsername,
+		msg = '';
 
-	$('body').append(build.signInModal());
-	$('#username').focus();
+	msg =	`
+			<p class='signIn'>
+				<input class='text' data-name='username' type='text' value='' placeholder='username' autocapitalize='off' autocorrect='off'>
+				<input class='text' data-name='password' type='password' value='' placeholder='password'>
+			</p>
+			<p class='version'>Lychee ${ lychee.version }<span> &#8211; <a target='_blank' href='${ lychee.updateURL }'>Update available!</a><span></p>
+			`
+
+	basicModal.show({
+		body: msg,
+		buttons: {
+			action: {
+				title: 'Sign In',
+				fn: lychee.login
+			},
+			cancel: {
+				title: 'Cancel',
+				fn: basicModal.close
+			}
+		}
+	});
 
 	if (localStorage) {
-		local_username = localStorage.getItem('lychee_username');
-		if (local_username!==null) {
-			if (local_username.length>0) $('#username').val(local_username);
-			$('#password').focus();
+		localUsername = localStorage.getItem('lychee_username');
+		if (localUsername!==null) {
+			if (localUsername.length>0) $('.basicModal input[data-name="username"]').val(localUsername);
+			$('.basicModal input[data-name="password"]').focus();
 		}
 	}
 
@@ -168,7 +159,7 @@ lychee.loginDialog = function() {
 
 lychee.logout = function() {
 
-	lychee.api('logout', function() {
+	api.post('Session::logout', {}, function() {
 		window.location.reload();
 	});
 
@@ -215,6 +206,9 @@ lychee.load = function() {
 		// Trash data
 		photo.json = null;
 
+		// Hide sidebar
+		if (visible.sidebar()) sidebar.toggle();
+
 		// Show Album
 		if (visible.photo()) view.photo.hide();
 		if (album.json&&albumID==album.json.id) view.album.title();
@@ -223,17 +217,19 @@ lychee.load = function() {
 	} else {
 
 		// Trash albums.json when filled with search results
-		if (search.code!=='') {
+		if (search.hash!==null) {
 			albums.json = null;
-			search.code = '';
+			search.hash = null;
 		}
 
 		// Trash data
 		album.json = null;
 		photo.json = null;
 
+		// Hide sidebar
+		if (visible.sidebar()) sidebar.toggle();
+
 		// Show Albums
-		if (visible.album()) view.album.hide();
 		if (visible.photo()) view.photo.hide();
 		albums.load();
 
@@ -245,22 +241,17 @@ lychee.getUpdate = function() {
 
 	$.ajax({
 		url: lychee.update_path,
-		success: function(data) { if (parseInt(data)>parseInt(lychee.version_code)) $('#version span').show(); }
+		success: function(data) { if (parseInt(data)>parseInt(lychee.version_code)) $('.version span').show(); }
 	});
 
 }
 
 lychee.setTitle = function(title, editable) {
 
-	if (lychee.title==='')	lychee.title = document.title;
+	document.title = lychee.title + ' - ' + title;
 
-	if (title==='Albums')	document.title = lychee.title;
-	else					document.title = lychee.title + ' - ' + title;
-
-	if (editable)	$('#title').addClass('editable');
-	else			$('#title').removeClass('editable');
-
-	$('#title').html(title);
+	header.setEditable(editable);
+	header.setTitle(title);
 
 }
 
@@ -270,7 +261,6 @@ lychee.setMode = function(mode) {
 	$('#button_trash, #button_move, #button_share, #button_star').remove();
 
 	$(document)
-		.on('mouseenter',	'#title.editable', function() { $(this).removeClass('editable') })
 		.off('click',		'#title.editable')
 		.off('touchend',	'#title.editable')
 		.off('contextmenu',	'.photo')
@@ -278,23 +268,23 @@ lychee.setMode = function(mode) {
 		.off('drop');
 
 	Mousetrap
-		.unbind(['u', 'ctrl+u'])
-		.unbind(['s', 'ctrl+s'])
-		.unbind(['f', 'ctrl+f'])
-		.unbind(['r', 'ctrl+r'])
-		.unbind(['d', 'ctrl+d'])
-		.unbind(['t', 'ctrl+t'])
+		.unbind('u')
+		.unbind('s')
+		.unbind('f')
+		.unbind('r')
+		.unbind('d')
+		.unbind('t')
 		.unbind(['command+backspace', 'ctrl+backspace'])
 		.unbind(['command+a', 'ctrl+a']);
 
 	if (mode==='public') {
 
-		$('header #button_signin, header #hostedwith').show();
+		header.dom('#button_signin, #hostedwith').show();
 		lychee.publicMode = true;
 
 	} else if (mode==='view') {
 
-		Mousetrap.unbind('esc');
+		Mousetrap.unbind(['esc', 'command+up']);
 		$('#button_back, a#next, a#previous').remove();
 		$('.no_content').remove();
 
@@ -333,6 +323,27 @@ lychee.escapeHTML = function(s) {
 			.replace(/"/g, '&quot;')
 			.replace(/</g, '&lt;')
 			.replace(/>/g, '&gt;');
+
+}
+
+lychee.retinize = function(path = '') {
+
+	var pixelRatio	= window.devicePixelRatio,
+		extention	= path.split('.').pop(),
+		hasRetina	= extention!=='svg';
+
+	if ((pixelRatio!==undefined&&pixelRatio>1)&&
+		(hasRetina===true)) {
+
+			path = path.replace(/\.[^/.]+$/, '');
+			path = path + '@2x' + '.' + extention;
+
+	}
+
+	return {
+		path,
+		hasRetina
+	};
 
 }
 

@@ -1,9 +1,11 @@
 <?php
 
 ###
-# @name			Update to version 2.6.2
-# @copyright	2014 by Tobias Reich
+# @name			Update to version 2.7.0
+# @copyright	2015 by Tobias Reich
 ###
+
+if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 # Add medium to photos
 $query = Database::prepare($database, "SELECT `medium` FROM `?` LIMIT 1", array(LYCHEE_TABLE_PHOTOS));

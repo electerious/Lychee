@@ -1,8 +1,6 @@
 /**
- * @name        Visible Module
  * @description	This module is used to check if elements are visible or not.
- * @author		Tobias Reich
- * @copyright	2014 by Tobias Reich
+ * @copyright	2015 by Tobias Reich
  */
 
 visible = {}
@@ -23,24 +21,24 @@ visible.photo = function() {
 }
 
 visible.search = function() {
-	if (search.code!==null&&search.code!=='') return true;
+	if (search.hash!==null) return true;
 	return false;
 }
 
-visible.infobox = function() {
-	if ($('#infobox.active').length>0) return true;
+visible.sidebar = function() {
+	if (sidebar.dom().hasClass('active')===true) return true;
 	return false;
 }
 
-visible.infoboxbutton = function() {
+visible.sidebarbutton = function() {
 	if (visible.albums()) return false;
 	if (visible.photo()) return true;
 	if (visible.album()&&$('#button_info_album:visible').length>0) return true;
 	return false;
 }
 
-visible.controls = function() {
-	if (lychee.loadingBar.css('opacity')<1) return false;
+visible.header = function() {
+	if (header.dom().hasClass('hidden')===true) return false;
 	return true;
 }
 

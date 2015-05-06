@@ -1,6 +1,6 @@
 /**
  * @description	Takes care of every action albums can handle and execute.
- * @copyright	2014 by Tobias Reich
+ * @copyright	2015 by Tobias Reich
  */
 
 albums = {
@@ -15,55 +15,16 @@ albums.load = function() {
 		durationTime,
 		waitTime;
 
-	lychee.animate('.album, .photo', 'contentZoomOut');
-	lychee.animate('.divider', 'fadeOut');
+	lychee.animate('#content', 'contentZoomOut');
 
 	startTime = new Date().getTime();
 
 	if (albums.json===null) {
 
-		lychee.api('getAlbums', function(data) {
+		api.post('Album::getAll', {}, function(data) {
 
 			/* Smart Albums */
-			data.unsortedAlbum = {
-				id:			0,
-				title:		'Unsorted',
-				sysdate:	data.unsortedNum + ' photos',
-				unsorted: 	'1',
-				thumb0:		data.unsortedThumb0,
-				thumb1:		data.unsortedThumb1,
-				thumb2:		data.unsortedThumb2
-			};
-
-			data.starredAlbum = {
-				id:			'f',
-				title:		'Starred',
-				sysdate:	data.starredNum + ' photos',
-				star:		'1',
-				thumb0:		data.starredThumb0,
-				thumb1:		data.starredThumb1,
-				thumb2:		data.starredThumb2
-			};
-
-			data.publicAlbum = {
-				id:			's',
-				title:		'Public',
-				sysdate:	data.publicNum + ' photos',
-				public:		'1',
-				thumb0:		data.publicThumb0,
-				thumb1:		data.publicThumb1,
-				thumb2:		data.publicThumb2
-			};
-
-			data.recentAlbum = {
-				id:			'r',
-				title:		'Recent',
-				sysdate:	data.recentNum + ' photos',
-				recent:		'1',
-				thumb0:		data.recentThumb0,
-				thumb1:		data.recentThumb1,
-				thumb2:		data.recentThumb2
-			};
+			if (lychee.publicMode===false) albums._createSmartAlbums(data.smartalbums);
 
 			albums.json = data;
 
@@ -77,18 +38,18 @@ albums.load = function() {
 			if (visible.album()&&lychee.content.html()==='')			waitTime = 0;
 
 			setTimeout(function() {
-				view.header.mode('albums');
+				header.setMode('albums');
 				view.albums.init();
-				lychee.animate('.album, .photo', 'contentZoomIn');
+				lychee.animate('#content', 'contentZoomIn');
 			}, waitTime);
 		});
 
 	} else {
 
 		setTimeout(function() {
-			view.header.mode('albums');
+			header.setMode('albums');
 			view.albums.init();
-			lychee.animate('.album, .photo', 'contentZoomIn');
+			lychee.animate('#content', 'contentZoomIn');
 		}, 300);
 
 	}
@@ -96,15 +57,51 @@ albums.load = function() {
 
 albums.parse = function(album) {
 
-	if (album.password&&lychee.publicMode) {
-		album.thumb0 = 'src/images/password.svg';
-		album.thumb1 = 'src/images/password.svg';
-		album.thumb2 = 'src/images/password.svg';
+	if (album.password==='1'&&lychee.publicMode===true) {
+		album.thumbs[0] = 'src/images/password.svg';
+		album.thumbs[1] = 'src/images/password.svg';
+		album.thumbs[2] = 'src/images/password.svg';
 	} else {
-		if (!album.thumb0) album.thumb0 = 'src/images/no_images.svg';
-		if (!album.thumb1) album.thumb1 = 'src/images/no_images.svg';
-		if (!album.thumb2) album.thumb2 = 'src/images/no_images.svg';
+		if (!album.thumbs[0])	album.thumbs[0]	= 'src/images/no_images.svg';
+		if (!album.thumbs[1])	album.thumbs[1]	= 'src/images/no_images.svg';
+		if (!album.thumbs[2])	album.thumbs[2]	= 'src/images/no_images.svg';
 	}
+
+}
+
+albums._createSmartAlbums = function(data) {
+
+	data.unsorted = {
+		id:			0,
+		title:		'Unsorted',
+		sysdate:	data.unsorted.num + ' photos',
+		unsorted: 	'1',
+		thumbs:		data.unsorted.thumbs
+	};
+
+	data.starred = {
+		id:			'f',
+		title:		'Starred',
+		sysdate:	data.starred.num + ' photos',
+		star:		'1',
+		thumbs:		data.starred.thumbs
+	};
+
+	data.public = {
+		id:			's',
+		title:		'Public',
+		sysdate:	data.public.num + ' photos',
+		public:		'1',
+		thumbs:		data.public.thumbs
+	};
+
+	data.recent = {
+		id:			'r',
+		title:		'Recent',
+		sysdate:	data.recent.num + ' photos',
+		recent:		'1',
+		thumbs:		data.recent.thumbs
+	};
 
 }
 

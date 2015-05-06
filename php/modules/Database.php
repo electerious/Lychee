@@ -2,7 +2,7 @@
 
 ###
 # @name			Database Module
-# @copyright	2014 by Tobias Reich
+# @copyright	2015 by Tobias Reich
 ###
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
@@ -54,7 +54,8 @@ class Database extends Module {
 			'020505', #2.5.5
 			'020601', #2.6.1
 			'020602', #2.6.2
-			'020700' #2.7.0
+			'020700', #2.7.0
+			'030000' #3.0.0
 		);
 
 		# For each update
@@ -103,7 +104,7 @@ $config = "<?php
 ###
 # @name			Configuration
 # @author		Tobias Reich
-# @copyright	2014 Tobias Reich
+# @copyright	2015 Tobias Reich
 ###
 
 if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');

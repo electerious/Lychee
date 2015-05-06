@@ -20,7 +20,7 @@ The plugin-system of Lychee allows you to execute scripts, when a certain action
 ###
 # @name			ExamplePlugin
 # @author		Tobias Reich
-# @copyright	2014 by Tobias Reich
+# @copyright	2015 by Tobias Reich
 ###
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
@@ -36,7 +36,7 @@ class ExamplePlugin implements SplObserver {
 		# Save them to access the database and settings of Lychee
 		$this->database = $database;
 		$this->settings = $settings;
-		
+
 		# Add more code here if wanted
 		# __construct() will be called every time Lychee gets called
 		# Make sure this part is performant
@@ -55,9 +55,9 @@ class ExamplePlugin implements SplObserver {
 		# $this->database => The database of Lychee
 		# $this->settings => The settings of Lychee
 		# $subject->args => Params passed to the original function
-		
+
 		return true;
-		
+
 	}
 
 }
@@ -104,6 +104,8 @@ These hooks are called from `php/modules/Album.php`.
 | Album::setPassword:after |  |
 | Album::checkPassword:before | Lychee checks if password is correct |
 | Album::checkPassword:after |  |
+| Album::merge:before | User merges albums |
+| Album::merge:after |  |
 | Album::delete:before | User deletes album |
 | Album::delete:after |  |
 
@@ -152,3 +154,11 @@ These hooks are called from `php/modules/Session.php`.
 | Session::login:after |  |
 | Session::logout:before | User logs out |
 | Session::logout:after |  |
+
+##### Import
+These hooks are called from `php/modules/Import.php`.
+
+| Name | Description |
+|:-----------|:------------|:------------|
+| Import::server:before | User imports photos from the server |
+| Import::server:after |  |

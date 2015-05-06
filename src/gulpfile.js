@@ -1,6 +1,6 @@
 var	gulp = require('gulp'),
-	plugins = require("gulp-load-plugins")(),
-	paths = {}
+	plugins = require('gulp-load-plugins')(),
+	paths = {};
 
 /* Error Handler -------------------------------- */
 
@@ -14,17 +14,25 @@ var catchError = function(err) {
 /* View ----------------------------------------- */
 
 paths.view = {
-	js: [
-		'bower_components/jQuery/dist/jquery.min.js',
-		'../src/scripts/_frameworks.js',
-		'../src/scripts/view/main.js'
+	php: [
+		'../view.php'
 	],
-	coffee: [
-		'../src/scripts/build.coffee'
+	js: [
+		'./scripts/_gup.js',
+		'./scripts/build.js',
+		'./scripts/api.js',
+		'./scripts/header.js',
+		'./scripts/visible.js',
+		'./scripts/sidebar.js',
+		'./scripts/view/main.js'
 	],
 	scripts: [
-		'../dist/_view--javascript.js',
-		'../dist/_view--coffee.js'
+		'bower_components/jQuery/dist/jquery.min.js',
+		'../dist/_view--javascript.js'
+	],
+	svg: [
+		'./images/iconic.svg',
+		'./images/ionicons.svg'
 	]
 }
 
@@ -32,6 +40,8 @@ gulp.task('view--js', function() {
 
 	var stream =
 		gulp.src(paths.view.js)
+			.pipe(plugins.babel())
+			.on('error', catchError)
 			.pipe(plugins.concat('_view--javascript.js', {newLine: "\n"}))
 			.pipe(gulp.dest('../dist/'));
 
@@ -39,20 +49,7 @@ gulp.task('view--js', function() {
 
 });
 
-gulp.task('view--coffee', function() {
-
-	var stream =
-		gulp.src(paths.view.coffee)
-			.pipe(plugins.coffee({bare: true}))
-			.on('error', catchError)
-			.pipe(plugins.concat('_view--coffee.js', {newLine: "\n"}))
-			.pipe(gulp.dest('../dist/'));
-
-	return stream;
-
-});
-
-gulp.task('view--scripts', ['view--js', 'view--coffee'], function() {
+gulp.task('view--scripts', ['view--js'], function() {
 
 	var stream =
 		gulp.src(paths.view.scripts)
@@ -65,30 +62,46 @@ gulp.task('view--scripts', ['view--js', 'view--coffee'], function() {
 
 });
 
+gulp.task('view--svg', function() {
+
+	var stream =
+		gulp.src(paths.view.php)
+			.pipe(plugins.inject(gulp.src(paths.view.svg), {
+				starttag: '<!-- inject:svg -->',
+				transform: function(filePath, file) { return file.contents.toString('utf8') }
+			}))
+			.pipe(gulp.dest('../'));
+
+ });
+
 /* Main ----------------------------------------- */
 
 paths.main = {
+	html: [
+		'../index.html'
+	],
 	js: [
+		'./scripts/*.js'
+	],
+	scripts: [
 		'bower_components/jQuery/dist/jquery.min.js',
-		'bower_components/js-md5/js/md5.min.js',
 		'bower_components/mousetrap/mousetrap.min.js',
 		'bower_components/mousetrap/plugins/global-bind/mousetrap-global-bind.min.js',
 		'bower_components/basicContext/dist/basicContext.min.js',
-		'../src/scripts/*.js'
-	],
-	coffee: [
-		'../src/scripts/*.coffee'
-	],
-	scripts: [
-		'../dist/_main--javascript.js',
-		'../dist/_main--coffee.js'
+		'bower_components/basicModal/dist/basicModal.min.js',
+		'../dist/_main--javascript.js'
 	],
 	scss: [
-		'../src/styles/*.scss'
+		'./styles/*.scss'
 	],
 	styles: [
 		'bower_components/basicContext/src/styles/main.scss',
-		'../src/styles/main.scss'
+		'bower_components/basicModal/src/styles/main.scss',
+		'./styles/main.scss'
+	],
+	svg: [
+		'./images/iconic.svg',
+		'./images/ionicons.svg'
 	]
 }
 
@@ -96,6 +109,8 @@ gulp.task('main--js', function() {
 
 	var stream =
 		gulp.src(paths.main.js)
+			.pipe(plugins.babel())
+			.on('error', catchError)
 			.pipe(plugins.concat('_main--javascript.js', {newLine: "\n"}))
 			.pipe(gulp.dest('../dist/'));
 
@@ -103,20 +118,7 @@ gulp.task('main--js', function() {
 
 });
 
-gulp.task('main--coffee', function() {
-
-	var stream =
-		gulp.src(paths.main.coffee)
-			.pipe(plugins.coffee({bare: true}))
-			.on('error', catchError)
-			.pipe(plugins.concat('_main--coffee.js', {newLine: "\n"}))
-			.pipe(gulp.dest('../dist/'));
-
-	return stream;
-
-});
-
-gulp.task('main--scripts', ['main--js', 'main--coffee'], function() {
+gulp.task('main--scripts', ['main--js'], function() {
 
 	var stream =
 		gulp.src(paths.main.scripts)
@@ -144,6 +146,18 @@ gulp.task('main--styles', function() {
 
 });
 
+gulp.task('main--svg', function() {
+
+	var stream =
+		gulp.src(paths.main.html)
+			.pipe(plugins.inject(gulp.src(paths.main.svg), {
+				starttag: '<!-- inject:svg -->',
+				transform: function(filePath, file) { return file.contents.toString('utf8') }
+			}))
+			.pipe(gulp.dest('../'));
+
+ });
+
 /* Clean ----------------------------------------- */
 
 gulp.task('clean', function() {
@@ -159,7 +173,7 @@ gulp.task('clean', function() {
 
 /* Tasks ----------------------------------------- */
 
-gulp.task('default', ['view--scripts', 'main--scripts', 'main--styles'], function() {
+gulp.task('default', ['view--svg', 'view--scripts', 'main--svg', 'main--scripts', 'main--styles'], function() {
 
 	gulp.start('clean');
 
@@ -168,10 +182,8 @@ gulp.task('default', ['view--scripts', 'main--scripts', 'main--styles'], functio
 gulp.task('watch', ['default'], function() {
 
 	gulp.watch(paths.view.js,		['view--scripts']);
-	gulp.watch(paths.view.coffee,	['view--scripts']);
 
 	gulp.watch(paths.main.js,		['main--scripts']);
-	gulp.watch(paths.main.coffee,	['main--scripts']);
 	gulp.watch(paths.main.scss,		['main--styles']);
 
 });

@@ -1,34 +1,191 @@
 /**
- * @copyright   2014 by Tobias Reich
+ * @copyright   2015 by Tobias Reich
  */
 
-.message_overlay {
-	position: fixed;
-	width: 100%;
-	height: 100%;
-	top: 0;
-	left: 0;
-	background-color: rgba(0, 0, 0, .85);
-	z-index: 1000;
+.basicModalContainer {
+	background-color: black(.85);
 }
 
-.message {
+.basicModal {
 
-	position: absolute;
-	display: inline-block;
-	width: 500px;
-	margin-left: -250px;
-	margin-top: -95px;
-	background-image: linear-gradient(to bottom, rgb(75, 75, 75), rgb(45, 45, 45));
-	border-radius: 5px;
-	box-shadow: 0 0 5px #000, inset 0 1px 0 rgba(255, 255, 255, .08);
+	background: linear-gradient(to bottom, #444, #333);
+	border: 1px solid black(.7);
+	border-bottom: 1px solid black(.8);
+	box-shadow: 0 1px 4px black(.2), inset 0 1px 0 white(.05);
 
-	/* Animation */
-	animation-name: moveUp;
-	animation-duration: .3s;
-	animation-timing-function: cubic-bezier(.51, .92, .24, 1.15);
+	p {
+		display: block;
+		padding: 10px 30px;
+		color: white(.9);
+		font-size: 14px;
+		text-align: left;
+		text-shadow: $shadow;
+		line-height: 20px;
 
-	/* Header ------------------------------------------------*/
+		b {
+			font-weight: bold;
+			color: white(1);
+		}
+
+		a {
+			color: white(.9);
+			text-decoration: none;
+			border-bottom: 1px dashed #888;
+		}
+
+		&:first-of-type { padding-top: 42px; }
+
+		&:last-of-type { padding-bottom: 40px; }
+
+		&.signIn:first-of-type { padding-top: 30px; }
+
+		&.signIn:last-of-type { padding-bottom: 30px; }
+
+		&.less { padding-bottom: 30px; }
+	}
+
+	/* Buttons ------------------------------------------------*/
+	.basicModal__button {
+		padding: 13px 0 15px;
+		background: black(.02);
+		color: white(.5);
+		text-shadow: $shadow;
+		border-top: 1px solid black(.2);
+		box-shadow: inset 0 1px 0 white(.02);
+		cursor: default;
+
+		&:hover { background: white(.02); }
+
+		&:active,
+		&--active {
+			transition: none;
+			background: black(.1);
+		}
+
+		&#basicModal__action {
+			color: $colorBlue;
+			box-shadow: inset 0 1px 0 white(.02), inset 1px 0 0 black(.2);
+		}
+
+		&#basicModal__action.red { color: $colorRed; }
+
+		&.hidden { display: none; }
+
+	}
+
+	/* Inputs ------------------------------------------------*/
+	input.text {
+		width: calc(100% - 4px);
+		padding: 9px 2px;
+		background-color: transparent;
+		color: #fff;
+		text-shadow: $shadow;
+		border: none;
+		// Do not use rgba() for border-bottom
+		// to avoid a blurry line in Safari on non-retina screens
+		border-bottom: 1px solid #222;
+		border-radius: 0;
+		box-shadow: 0 1px 0 white(.05);
+		outline: none;
+
+		&:focus { border-bottom-color: $colorBlue; }
+
+		&.error { border-bottom-color: $colorRed; }
+
+		&:first-child { margin-top: 10px; }
+
+		&:last-child { margin-bottom: 10px; }
+	}
+
+	/* Radio Buttons ------------------------------------------------*/
+	.choice {
+		padding: 0 30px 15px;
+		width: calc(100% - 60px);
+		color: #fff;
+
+		&:last-child { padding-bottom: 40px; }
+
+		label {
+			float: left;
+			color: white(1);
+			font-size: 14px;
+			font-weight: 700;
+			text-shadow: $shadow;
+		}
+
+		label input {
+			position: absolute;
+			margin: 0;
+			opacity: 0;
+		}
+
+		label .checkbox {
+			float: left;
+			display: block;
+			width: 16px;
+			height: 16px;
+			background: black(.5);
+			border-radius: 3px;
+			box-shadow: 0 0 0 1px black(.7);
+
+			.iconic {
+				box-sizing: border-box;
+				fill: $colorBlue;
+				padding: 2px;
+				opacity: 0;
+				transform: scale(0);
+				transition: opacity .2s $timing, transform .2s $timing;
+			}
+		}
+
+		/* Checked */
+		label input:checked ~ .checkbox {
+			background: black(.5);
+			.iconic {
+				opacity: 1;
+				transform: scale(1);
+			}
+		}
+
+		/* Active */
+		label input:active ~ .checkbox {
+			background: black(.3);
+			.iconic { opacity: .8; }
+		}
+
+		label .label { margin: 0 0 0 18px; }
+
+		p {
+			clear: both;
+			padding: 2px 0 0 35px;
+			margin: 0;
+			width: calc(100% - 35px);
+			color: white(.6);
+			font-size: 13px;
+		}
+
+		input.text {
+			display: none;
+			margin-top: 5px;
+			margin-left: 35px;
+			width: calc(100% - 39px);
+		}
+	}
+
+	/* Version ------------------------------------------------*/
+	.version {
+		margin: -5px 0 0;
+		padding: 0 30px 30px !important;
+		color: white(.3);
+		font-size: 12px;
+		text-align: right;
+
+		span { display: none; }
+
+		span a { color: white(.3); }
+	}
+
+	/* Title ------------------------------------------------*/
 	h1 {
 		float: left;
 		width: 100%;
@@ -36,173 +193,72 @@
 		color: #fff;
 		font-size: 16px;
 		font-weight: bold;
-		text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
+		text-shadow: $shadow;
 		text-align: center;
 	}
 
-	.close {
-		position: absolute;
-		top: 0;
-		right: 0;
-		padding: 12px 14px 6px 7px;
-		color: #aaa;
-		font-size: 20px;
-		text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
-		cursor: pointer;
-
-		&:hover { color: #fff; }
+	/* Rows ------------------------------------------------*/
+	.rows {
+		margin: 0 8px 8px;
+		width: calc(100% - 16px);
+		height: 300px;
+		background-color: black(.4);
+		overflow: hidden;
+		overflow-y: auto;
+		border-radius: 3px;
+		box-shadow: inset 0 0 3px black(.4);
 	}
 
-	/* Text ------------------------------------------------*/
-	p {
+	/* Row ------------------------------------------------*/
+	.rows .row {
 		float: left;
-		width: 90%;
-		margin-top: 1px;
-		padding: 12px 5% 15px 5%;
-		color: #eee;
-		font-size: 14px;
-		text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
-		line-height: 20px;
+		padding: 8px 0;
+		width: 100%;
+		background-color: white(.02);
 
-		b {
-			font-weight: bold;
-			color: #fff;
-		}
+		&:nth-child(2n) { background-color: white(0); }
 
-		a {
-			color: #eee;
-			text-decoration: none;
-			border-bottom: 1px dashed #888;
-		}
-	}
-
-	/* Button ------------------------------------------------*/
-	.button {
-		float: right;
-		margin: 15px 15px 15px 0;
-		padding: 7px 10px 8px 10px;
-		color: #ccc;
-		font-size: 14px;
-		font-weight: bold;
-		text-align: center;
-		text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
-		border-radius: 5px;
-		border: 1px solid rgba(0,0,0,.4);
-		box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08), 0 1px 0 rgba(255, 255, 255, .05);
-		cursor: pointer;
-
-		&:first-of-type { margin: 15px 5% 18px 0; }
-
-		&.active {
-			color: #fff;
-			box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08), 0 1px 0 rgba(255, 255, 255, .1), 0 0 4px #005ecc;
-		}
-
-		&:hover { background-image: linear-gradient(to bottom, rgb(60, 60, 60), rgb(57, 57, 57)); }
-
-		&:active,
-		&.pressed { background-image: linear-gradient(to bottom, rgb(57, 57, 57), rgb(60, 60, 60)); }
-	}
-
-	/* Input ------------------------------------------------*/
-	input.text {
-		float: left;
-		width: calc(100% - 10px);
-		padding: 17px 5px 9px 5px;
-		margin-top: 10px;
-		background-color: transparent;
-		color: #fff;
-		text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
-		border: none;
-		box-shadow: 0 1px 0 rgba(255, 255, 255, .1);
-		border-bottom: 1px solid #222;
-		border-radius: 0px;
-		outline: none;
-	}
-
-	input.less { margin-bottom: -10px; }
-
-	input.more { margin-bottom: 30px; }
-
-	.copylink { margin-bottom: 20px; }
-
-	/* Radio Buttons ------------------------------------------------*/
-	.choice {
-		float: left;
-		margin: 12px 5%;
-		width: 90%;
-		color: #fff;
-
-		input { float: left; }
-
-		h2 {
+		a.name {
 			float: left;
-			margin: 1px 0 0 8px;
+			padding: 5px 10px;
+			width: calc(70% - 20px);
 			color: #fff;
 			font-size: 14px;
-			font-weight: 700;
-			text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
+			white-space: nowrap;
+			overflow: hidden;
 		}
 
-		p {
-			margin-top: 2px;
-			padding: 0 5% 0 25px;
-			color: #aaa;
-			font-size: 13px;
+		a.status {
+			float: left;
+			padding: 5px 10px;
+			width: calc(30% - 20px);
+			color: white(.5);
+			font-size: 14px;
+			text-align: right;
+
+			animation-name: pulse;
+			animation-duration: 2s;
+			animation-timing-function: ease-in-out;
+			animation-iteration-count: infinite;
+
+			&.error,
+			&.success { animation: none; }
+
+			&.error { color: rgb(213, 24, 24); }
+
+			&.success { color: rgb(42, 213, 0); }
 		}
 
-		p input {
-			width: 100%;
-			padding: 10px 1px 9px;
-			margin-top: 10px;
+		p.notice {
+			display: none;
+			float: left;
+			padding: 2px 10px 5px;
+			width: calc(100% - 20px);
+			color: white(.5);
+			font-size: 12px;
+			overflow: hidden;
+			line-height: 16px;
 		}
-	}
-
-	/* Version ------------------------------------------------*/
-	#version {
-		display: inline-block;
-		margin-top: 23px;
-		margin-left: 5%;
-		color: #888;
-		text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
-
-		span { display: none; }
-
-		span a { color: #888; }
-	}
-
-}
-
-/* Sign in ------------------------------------------------*/
-.sign_in {
-
-	float: left;
-	width: 100%;
-	margin-top: 1px;
-	padding: 5px 0;
-	color: #eee;
-	font-size: 14px;
-	text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
-	line-height: 20px;
-
-	/* Input ------------------------------------------------*/
-	input {
-		float: left;
-		width: 88%;
-		padding: 7px 1% 9px 1%;
-		margin: 0 5%;
-		background-color: transparent;
-		color: #fff;
-		text-shadow: 0 -1px 0 #222;
-		border: none;
-		border-bottom: 1px solid #222;
-		box-shadow: 0 1px 0 rgba(255,255,255,.1);
-		border-radius: 0;
-		outline: none;
-
-		&:first-of-type { margin-bottom: 10px; }
-
-		&.error:focus { box-shadow: 0 1px 0 rgba(204, 0, 7, .6); }
 	}
 
 }

@@ -17,10 +17,10 @@ All settings are stored in the database. You can change the properties manually,
 
 #### Login
 
-	username = Username for Lychee
-	password = Password for Lychee, saved as an md5 hash
+	username = Username for Lychee (hashed)
+	password = Password for Lychee (hashed)
 
-Your photos and albums are protected by an username and password you need to set. If both rows are empty, Lychee will prompt you to set them. 
+Your photos and albums are protected by an username and password. If both rows are empty, Lychee will prompt you to set them.
 
 #### Thumb Quality
 
@@ -31,7 +31,7 @@ Less means an inferiority quality of your thumbs, but faster loading. More means
 #### Check For Updates
 
 	checkForUpdates = [0|1]
-	
+
 If `1`, Lychee will check if you are using the latest version. The notice will be displayed beside the version-number when you sign in.
 
 #### Sorting
@@ -45,15 +45,15 @@ A typical part of a MySQL statement. This string will be appended to mostly ever
 This key is required to use the Dropbox import feature from your server. Lychee will ask you for this key, the first time you try to use the import. You can get your personal drop-ins app key from [their website](https://www.dropbox.com/developers/apps/create).
 
 	dropboxKey = Your personal App Key
-	
+
 #### Imagick
 
 	imagick = [0|1]
-	
+
 If `1`, Lychee will use Imagick when available. Disable [Imagick](http://www.imagemagick.org) if you have problems or if you are using an outdated version. Lychee will use [GD](http://php.net/manual/en/book.image.php) when Imagick is disabled or not available.
 
 #### Medium
 
 	medium = [0|1]
-	
+
 If `1`, Lychee will create a second, smaller version of your photo. This feature requires [Imagick](http://www.imagemagick.org) on your server and an activated `imagick` option the the settings table.
