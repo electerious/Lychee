@@ -13,10 +13,17 @@ class Video extends Module {
 	private $videoIDs	= null;
 
 	public static $allowedMimeTypes = array(
+		# support Playback via MediaElement.js
 		'video/mp4' => '.mp4',
 		'video/ogg' => '.ogv',
 		'video/webm' => '.webm',
 		'video/x-flv' => '.flv',
+		'video/x-ms-wmv' => '.wmv',
+
+		# support Download
+		'video/x-msvideo' => '.avi',
+		'video/quicktime' => '.mov',
+		'video/x-matroska' => '.mkv',
 	);
 
 	protected static $finfo_mime = false;
