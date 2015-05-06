@@ -17,6 +17,7 @@ Released April ??, 2015
 - `New` Edit the sharing options of a public album
 - `New` Quickly switch between albums and photos by clicking the title in the header
 - `New` Renamed API functions
+- `New` Merge albums (Thanks @rhurling, #340, #341, #166)
 - `New` iPhone 6 Homescreen icon
 - `Improved` Performance of animations
 - `Improved` Prevent download of deleted albums/photos
