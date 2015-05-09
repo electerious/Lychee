@@ -688,7 +688,8 @@ class Album extends Module {
 		$albumIDs = explode(',', $this->albumIDs);
 
 		# Get first albumID
-		$albumID = array_splice($albumIDs, 0, 1)[0];
+		$albumID = array_splice($albumIDs, 0, 1);
+		$albumID = $albumID[0];
 
 		$query	= Database::prepare($this->database, "UPDATE ? SET album = ? WHERE album IN (?)", array(LYCHEE_TABLE_PHOTOS, $albumID, $this->albumIDs));
 		$result	= $this->database->query($query);
