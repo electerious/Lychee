@@ -210,17 +210,17 @@
 	top: 50%;
 	left: 50%;
 	padding-top: 20px;
-	color: black(.9);
-	text-shadow: 0 1px 0 white(.03);
+	color: white(.35);
+	text-shadow: 0 -1px 0 black(.4);
 	text-align: center;
 	transform: translateX(-50%) translateY(-50%);
 
 	.iconic {
-		fill: black(.9);
+		fill: white(.3);
 		margin: 0 0 10px;
 		width: 60px;
 		height: 60px;
-		filter: drop-shadow(0 1px 0 white(.03));
+		filter: drop-shadow(0 -1px 0 black(.4));
 	}
 
 	p {
