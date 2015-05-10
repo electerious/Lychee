@@ -1,17 +1,23 @@
 /**
  * @description	Takes care of every action an album can handle and execute.
- * @copyright	2014 by Tobias Reich
+ * @copyright	2015 by Tobias Reich
  */
 
 upload = {}
 
 upload.show = function(title, files, callback) {
 
-	upload.close(true);
-
-	$('body').append(build.uploadModal(title, files));
-
-	if (callback!==null&&callback!==undefined) callback();
+	basicModal.show({
+		body: build.uploadModal(title, files),
+		buttons: {
+			action: {
+				title: 'Close',
+				class: 'hidden',
+				fn: basicModal.close
+			}
+		},
+		callback
+	});
 
 }
 
@@ -53,13 +59,13 @@ upload.start = {
 						if (error===false) {
 
 							// Success
-							upload.close();
+							basicModal.close();
 							upload.notify('Upload complete');
 
 						} else {
 
 							// Error
-							$('.upload_message a.close').show();
+							$('.basicModal #basicModal__action.hidden').show();
 							upload.notify('Upload complete', 'Failed to upload one or more photos.');
 
 						}
@@ -100,12 +106,12 @@ upload.start = {
 
 				}
 
-				formData.append('function', 'upload');
+				formData.append('function', 'Photo::add');
 				formData.append('albumID', albumID);
 				formData.append('tags', '');
 				formData.append(0, file);
 
-				xhr.open('POST', lychee.api_path);
+				xhr.open('POST', api.path);
 
 				xhr.onload = function() {
 
@@ -118,21 +124,21 @@ upload.start = {
 					if (xhr.status===200&&xhr.responseText==='1') {
 
 						// Success
-						$('.upload_message .rows .row:nth-child(' + (file.num+1) + ') .status')
+						$('.basicModal .rows .row:nth-child(' + (file.num+1) + ') .status')
 							.html('Finished')
 							.addClass('success');
 
 					} else {
 
 						// Error
-						$('.upload_message .rows .row:nth-child(' + (file.num+1) + ') .status')
+						$('.basicModal .rows .row:nth-child(' + (file.num+1) + ') .status')
 							.html('Error')
 							.addClass('error');
 
 						if (xhr.responseText.substr(0, 6)==='Error:') errorText = xhr.responseText.substr(6) + ' Please take a look at the console of your browser for further details.';
 						else errorText = 'Server returned an unknown response. Please take a look at the console of your browser for further details.';
 
-						$('.upload_message .rows .row:nth-child(' + (file.num+1) + ') p.notice')
+						$('.basicModal .rows .row:nth-child(' + (file.num+1) + ') p.notice')
 							.html(errorText)
 							.show();
 
@@ -168,7 +174,7 @@ upload.start = {
 
 						// Set progress when progress has changed
 						if (progress>pre_progress) {
-							$('.upload_message .rows .row:nth-child(' + (file.num+1) + ') .status').html(progress + '%');
+							$('.basicModal .rows .row:nth-child(' + (file.num+1) + ') .status').html(progress + '%');
 							pre_progress = progress;
 						}
 
@@ -177,10 +183,10 @@ upload.start = {
 							// Scroll to the uploading file
 							var scrollPos = 0;
 							if ((file.num+1)>4) scrollPos = (file.num + 1 - 4) * 40
-							$('.upload_message .rows').scrollTop(scrollPos);
+							$('.basicModal .rows').scrollTop(scrollPos);
 
 							// Set status to processing
-							$('.upload_message .rows .row:nth-child(' + (file.num+1) + ') .status').html('Processing');
+							$('.basicModal .rows .row:nth-child(' + (file.num+1) + ') .status').html('Processing');
 
 							// Upload next file
 							if (file.next!==null) process(files, file.next);
@@ -219,50 +225,57 @@ upload.start = {
 
 		window.onbeforeunload = function() { return 'Lychee is currently uploading!'; };
 
-		upload.show('Uploading', files);
+		upload.show('Uploading', files, function() {
 
-		// Upload first file
-		process(files, files[0]);
+			// Upload first file
+			process(files, files[0]);
+
+		});
 
 	},
 
-	url: function() {
+	url: function(url = '') {
 
-		var albumID = album.getID(),
-			params,
-			extension,
-			buttons,
-			link,
-			files = [];
+		var albumID	= album.getID(),
+			url		= (typeof url === 'string' ? url : ''),
+			action;
 
 		if (albumID===false) albumID = 0;
 
-		buttons = [
-			['Import', function() {
+		action = function(data) {
 
-				link = $('.message input.text').val();
+			var extension,
+				files = [];
 
-				if (link&&link.length>3) {
+			if (data.link&&data.link.length>3) {
 
-					extension = link.split('.').pop();
-					if (extension!=='jpeg'&&extension!=='jpg'&&extension!=='png'&&extension!=='gif'&&extension!=='webp') {
-						loadingBar.show('error', 'The file format of this link is not supported.');
-						return false;
+				basicModal.close();
+
+				extension = data.link.split('.').pop();
+				if (extension!=='jpeg'&&extension!=='jpg'&&extension!=='png'&&extension!=='gif'&&extension!=='webp') {
+					loadingBar.show('error', 'The file format of this link is not supported.');
+					return false;
+				}
+
+				files[0] = {
+					name:		data.link,
+					supported:	true
+				}
+
+				upload.show('Importing URL', files, function() {
+
+					var params;
+
+					$('.basicModal .rows .row .status').html('Importing');
+
+					params = {
+						url: data.link,
+						albumID
 					}
 
-					files[0] = {
-						name:		link,
-						supported:	true
-					}
+					api.post('Import::url', params, function(data) {
 
-					upload.show('Importing URL', files, function() {
-						$('.upload_message .rows .row .status').html('Importing');
-					});
-
-					params = 'importUrl&url=' + escape(encodeURI(link)) + '&albumID=' + albumID;
-					lychee.api(params, function(data) {
-
-						upload.close();
+						basicModal.close();
 						upload.notify('Import complete');
 
 						albums.refresh();
@@ -274,44 +287,58 @@ upload.start = {
 
 					});
 
-				} else loadingBar.show('error', 'Link to short or too long. Please try another one!');
+				});
 
-			}],
-			['Cancel', function() {}]
-		];
+			} else basicModal.error('link');
 
-		modal.show('Import from Link', "Please enter the direct link to a photo to import it: <input class='text' type='text' placeholder='http://' value='http://'>", buttons);
+		}
+
+		basicModal.show({
+			body: "<p>Please enter the direct link to a photo to import it: <input class='text' data-name='link' type='text' placeholder='http://' value='" + url + "'></p>",
+			buttons: {
+				action: {
+					title: 'Import',
+					fn: action
+				},
+				cancel: {
+					title: 'Cancel',
+					fn: basicModal.close
+				}
+			}
+		});
 
 	},
 
 	server: function() {
 
 		var albumID = album.getID(),
-			params,
-			buttons,
-			files = [],
-			path;
+			action;
 
 		if (albumID===false) albumID = 0;
 
-		buttons = [
-			['Import', function() {
+		action = function(data) {
 
-				path = $('.message input.text').val();
+			var files = [];
 
-				files[0] = {
-					name:		path,
-					supported:	true
-				};
+			files[0] = {
+				name:		data.path,
+				supported:	true
+			};
 
-				upload.show('Importing from server', files, function() {
-					$('.upload_message .rows .row .status').html('Importing');
-				});
+			upload.show('Importing from server', files, function() {
 
-				params = 'importServer&albumID=' + albumID + '&path=' + escape(encodeURI(path));
-				lychee.api(params, function(data) {
+				var params;
 
-					upload.close();
+				$('.basicModal .rows .row .status').html('Importing');
+
+				params = {
+					albumID,
+					path: data.path
+				}
+
+				api.post('Import::server', params, function(data) {
+
+					basicModal.close();
 					upload.notify('Import complete');
 
 					albums.refresh();
@@ -329,76 +356,87 @@ upload.start = {
 
 				});
 
-			}],
-			['Cancel', function() {}]
-		];
+			});
 
-		modal.show('Import from Server', "This action will import all photos, folders and sub-folders which are located in the following directory. The <b>original files will be deleted</b> after the import when possible. <input class='text' type='text' maxlength='100' placeholder='Absolute path to directory' value='" + lychee.location + "uploads/import/'>", buttons);
+		}
+
+		basicModal.show({
+			body: "<p>This action will import all photos, folders and sub-folders which are located in the following directory. The <b>original files will be deleted</b> after the import when possible. <input class='text' data-name='path' type='text' maxlength='100' placeholder='Absolute path to directory' value='" + lychee.location + "uploads/import/'></p>",
+			buttons: {
+				action: {
+					title: 'Import',
+					fn: action
+				},
+				cancel: {
+					title: 'Cancel',
+					fn: basicModal.close
+				}
+			}
+		});
 
 	},
 
 	dropbox: function() {
 
 		var albumID = album.getID(),
-			params,
-			links = '';
+			links = '',
+			success;
 
 		if (albumID===false) albumID = 0;
+
+		success = function(files) {
+
+			for (var i = 0; i < files.length; i++) {
+
+				links += files[i].link + ',';
+
+				files[i] = {
+					name:		files[i].link,
+					supported:	true
+				};
+
+			}
+
+			// Remove last comma
+			links = links.substr(0, links.length-1);
+
+			upload.show('Importing from Dropbox', files, function() {
+
+				var params;
+
+				$('.basicModal .rows .row .status').html('Importing');
+
+				params = {
+					url: links,
+					albumID
+				}
+
+				api.post('Import::url', params, function(data) {
+
+					basicModal.close();
+					upload.notify('Import complete');
+
+					albums.refresh();
+
+					if (album.getID()===false) lychee.goto('0');
+					else album.load(albumID);
+
+					if (data!==true) lychee.error(null, params, data);
+
+				});
+
+			});
+
+		}
 
 		lychee.loadDropbox(function() {
 			Dropbox.choose({
 				linkType: 'direct',
 				multiselect: true,
-				success: function(files) {
-
-					for (var i = 0; i < files.length; i++) {
-
-						links += files[i].link + ',';
-
-						files[i] = {
-							name:		files[i].link,
-							supported:	true
-						};
-
-					}
-
-					// Remove last comma
-					links = links.substr(0, links.length-1);
-
-					upload.show('Importing from Dropbox', files, function() {
-						$('.upload_message .rows .row .status').html('Importing');
-					});
-
-					params = 'importUrl&url=' + escape(links) + '&albumID=' + albumID;
-					lychee.api(params, function(data) {
-
-						upload.close();
-						upload.notify('Import complete');
-
-						albums.refresh();
-
-						if (album.getID()===false) lychee.goto('0');
-						else album.load(albumID);
-
-						if (data!==true) lychee.error(null, params, data);
-
-					});
-
-				}
+				success
 			});
 		});
 
-	}
-
-}
-
-upload.close = function(force) {
-
-	if (force===true) {
-		$('.upload_overlay').remove();
-	} else {
-		$('.upload_overlay').removeClass('fadeIn').css('opacity', 0);
-		setTimeout(function() { $('.upload_overlay').remove() }, 300);
 	}
 
 }

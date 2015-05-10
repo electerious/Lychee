@@ -1,5 +1,5 @@
 /**
- * @copyright   2014 by Tobias Reich
+ * @copyright   2015 by Tobias Reich
  */
 
 header {
@@ -7,37 +7,23 @@ header {
 	position: fixed;
 	height: 49px;
 	width: 100%;
-	background: linear-gradient(to bottom, #3E3E3E, #282828);
-	border-bottom: 1px solid #161616;
+	background: linear-gradient(to bottom, #222222, #1a1a1a);
+	border-bottom: 1px solid #0f0f0f;
 	z-index: 1;
 	transition: transform .3s ease-out;
 
 	/* Modes ------------------------------------------------*/
-	&.hidden {
-		transform: translateY(-60px);
-	}
+	&.hidden { transform: translateY(-60px); }
 
-	&.loading {
-		transform: translateY(2px);
-	}
+	&.loading { transform: translateY(2px); }
 
-	&.error {
-		transform: translateY(40px);
-	}
+	&.error { transform: translateY(40px); }
 
 	&.view {
 		background: none;
 		border-bottom: none;
 
-		&.error {
-			background-color: rgba(10, 10, 10, .99);
-		}
-
-		.button,
-		#title,
-		.tools {
-			text-shadow: none !important;
-		}
+		&.error { background-color: rgba(10, 10, 10, .99); }
 	}
 
 	/* Title ------------------------------------------------*/
@@ -50,43 +36,71 @@ header {
 		font-size: 16px;
 		font-weight: bold;
 		text-align: center;
-		text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
+		z-index: 1;
+		cursor: default;
 
-		&.editable { cursor: pointer; }
+		.iconic {
+			display: none;
+			margin: 0 0 0 5px;
+			width: 10px;
+			height: 10px;
+			fill: white(.5);
+			transition: fill .2s ease-out;
+		}
+
+		&:hover .iconic { fill: white(1); }
+
+		&:active .iconic {
+			transition: none;
+			fill: white(.8);
+		}
+
+		&.editable .iconic { display: inline-block; }
+	}
+
+	/* Toolbars ------------------------------------------------*/
+	.toolbar {
+		display: none;
+		position: absolute;
+		box-sizing: border-box;
+		width: 100%;
+		height: 100%;
+		padding: 0 10px;
 	}
 
 	/* Button ------------------------------------------------*/
 	.button {
-		color: #888;
-		font-family: 'FontAwesome';
-		font-size: 21px;
-		font-weight: bold;
-		text-decoration: none !important;
-		cursor: pointer;
-		text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
+		display: inline-block;
+		padding: 17px 8px;
+		width: 15px;
+		height: 15px;
 
-		&:hover {
-			color: #fff;
+		&--left { float: left; }
+
+		&--right { float: right; }
+
+		.iconic {
+			width: 15px;
+			height: 15px;
+			fill: white(.5);
+			transition: fill .2s ease-out;
 		}
 
-		&.left {
-			float: left;
-			position: absolute;
-			padding: 16px 10px 8px 18px;
+		&:hover .iconic { fill: white(1); }
+
+		&:active .iconic {
+			transition: none;
+			fill: white(.8);
 		}
 
-		&.right {
-			float: right;
-			position: relative;
-			padding: 16px 19px 13px 11px;
-		}
-	}
+		&--star.active .iconic { fill: #f0ef77; }
 
-	#tools_albums,
-	#tools_album,
-	#tools_photo,
-	#button_signin {
-		display: none;
+		&--eye.active .iconic { fill: #ff9737; }
+
+		&--info.active .iconic { fill: $colorBlue; }
+
+		&#button_signin { display: none; }
+
 	}
 
 	/* Button Divider ------------------------------------------------*/
@@ -103,48 +117,39 @@ header {
 		width: 80px;
 		margin: 12px 12px 0 0;
 		padding: 5px 12px 6px 12px;
-		background-color: #383838;
+		background-color: #1d1d1d;
 		color: #fff;
-		border: 1px solid rgba(0, 0, 0, .6);
-		box-shadow: 0 1px 0 rgba(255, 255, 255, .06);
+		border: 1px solid black(.9);
+		box-shadow: 0 1px 0 white(.04);
 		outline: none;
 		border-radius: 50px;
 		opacity: .6;
-		transition: opacity .3s ease-out, transform .3s ease-out, box-shadow .3s, width .2s ease-out;
+		transition: opacity .3s ease-out, box-shadow .3s ease-out, width .2s ease-out;
 
-		&:focus { width: 140px; }
+		&:focus {
+			width: 140px;
+			border-color: $colorBlue;
+			box-shadow: 0 1px 0 white(0);
+			opacity: 1;
+		}
 
 		&:focus ~ #clearSearch { opacity: 1; }
+
+		&::-ms-clear { display: none; }
 	}
 
 	#clearSearch {
 		position: absolute;
-		top: 15px;
-		right: 81px;
+		top: 13px;
+		right: 78px;
 		padding: 0;
+		color: white(.5);
 		font-size: 20px;
 		opacity: 0;
-		transition: opacity .2s ease-out;
+		transition: color .2s ease-out;
+		cursor: default;
 
-		&:hover { opacity: 1; }
-	}
-
-	/* Tools ------------------------------------------------*/
-	.tools {
-		float: right;
-		padding: 14px 8px;
-		color: #888;
-		font-size: 21px;
-		text-shadow: 0 -1px 0 #222;
-		cursor: pointer;
-
-		&:first-of-type { margin-right: 6px; }
-
-		&:hover a { color: #fff; }
-
-		.icon-star { color: #f0ef77; }
-
-		.icon-share.active { color: #ff9737; }
+		&:hover { color: white(1); }
 	}
 
 	/* Hosted with Lychee ------------------------------------------------*/
@@ -154,14 +159,10 @@ header {
 		margin: 13px 9px;
 		color: #888;
 		font-size: 13px;
-		text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
+		border-radius: 100px;
 		display: none;
-		cursor: pointer;
 
-		&:hover {
-			background-color: rgba(0, 0, 0, .2);
-			border-radius: 100px;
-		}
+		&:hover { background-color: black(.3); }
 	}
 
 }

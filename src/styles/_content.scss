@@ -1,118 +1,121 @@
 /**
- * @copyright   2014 by Tobias Reich
+ * @copyright   2015 by Tobias Reich
  */
 
 #content {
-	position: absolute;
-	padding: 50px 0px 33px 0px;
+
+	display: flex;
+	flex-wrap: wrap;
+	padding: 50px 0 33px;
 	width: 100%;
-	min-height: calc(100% - 90px);
+	min-height: calc(100% - 83px);
 	-webkit-overflow-scrolling: touch;
 
- 	// Adds a gradient to the top
 	&::before {
 		content: '';
 		position: absolute;
-		left: 0px;
+		left: 0;
 		width: 100%;
-		height: 20px;
-		background: linear-gradient(to bottom, #262626, #222);
-		border-top: 1px solid #333;
+		height: 1px;
+		border-top: 1px solid white(.02);
 	}
 
-	// Removes the gradient when using the view
-	&.view::before {
-		display: none;
-	}
-}
+	&.sidebar { width: calc(100% - 300px); }
 
-	/* Photo ------------------------------------------------*/
-	.photo  {
-		float: left;
-		display: inline-block;
-		width: 206px;
-		height: 206px;
+	/* Animations ------------------------------------------------------------------- */
+	&.contentZoomIn .album,
+	&.contentZoomIn .photo {
+		animation-name: zoomIn;
+		animation-duration: .2s;
+		animation-fill-mode: forwards;
+		animation-timing-function: $timing;
+	}
+
+	&.contentZoomIn .divider {
+		animation-name: fadeIn;
+		animation-duration: .2s;
+		animation-fill-mode: forwards;
+		animation-timing-function: $timing;
+	}
+
+	&.contentZoomOut .album,
+	&.contentZoomOut .photo {
+		animation-name: zoomOut;
+		animation-duration: .2s;
+		animation-fill-mode: forwards;
+		animation-timing-function: $timing;
+	}
+
+	&.contentZoomOut .divider {
+		animation-name: fadeOut;
+		animation-duration: .2s;
+		animation-fill-mode: forwards;
+		animation-timing-function: $timing;
+	}
+
+	/* Albums and Photos ------------------------------------------------*/
+	.album,
+	.photo {
+		position: relative;
+		width: 202px;
+		height: 202px;
 		margin: 30px 0 0 30px;
-		cursor: pointer;
+		cursor: default;
 
 		img {
 			position: absolute;
 			width: 200px;
 			height: 200px;
 			background-color: #222;
-			border-radius: 2px;
-			border: 2px solid #ccc;
+			box-shadow: 0 2px 5px black(.5);
+			border: 1px solid white(.5);
+			transition: opacity .3s ease-out, transform .3s ease-out, border-color .3s ease-out;
 		}
 
 		&:hover img,
 		&.active img {
-			box-shadow: 0 0 5px #005ecc;
+			border-color: $colorBlue;
 		}
 
-		&:active {
-			transition-duration: .1s;
-			transform: scale(.98);
+		&:active img {
+			transition: none;
+			border-color: darken($colorBlue, 15%);
 		}
 	}
 
 	/* Album ------------------------------------------------*/
 	.album  {
-		float: left;
-		display: inline-block;
-		width: 204px;
-		height: 204px;
-		margin: 30px 0px 0px 30px;
-		cursor: pointer;
-
-		img {
-			position: absolute;
-			width: 200px;
-			height: 200px;
-			background-color: #222;
-			border-radius: 2px;
-			border: 2px solid #ccc;
-
-			&:first-child,
-			&:nth-child(2) {
-				transform: rotate(0) translateY(0) translateX(0);
-				opacity: 0;
-			}
+		img:first-child,
+		img:nth-child(2) {
+			transform: rotate(0) translateY(0) translateX(0);
+			opacity: 0;
 		}
 
-		&:hover img:first-child {
-			transform: rotate(-2deg) translateY(10px) translateX(-12px);
-			opacity: 1;
-		}
+		&:hover img:nth-child(1),
+		&:hover img:nth-child(2) { opacity: 1; }
 
-		&:hover img:nth-child(2) {
-			transform: rotate(5deg) translateY(-8px) translateX(12px);
-			opacity: 1;
-		}
+		&:hover img:nth-child(1) { transform: rotate(-2deg) translateY(10px) translateX(-12px); }
 
-		&:hover img,
-		&.active img {
-			box-shadow: 0 0 5px #005ecc;
-		}
+		&:hover img:nth-child(2) { transform: rotate(5deg) translateY(-8px) translateX(12px); }
 	}
 
 	/* Album/Photo Overlay ------------------------------------------------*/
 	.album .overlay,
 	.photo .overlay {
 		position: absolute;
+		margin: 0 1px;
 		width: 200px;
-		height: 200px;
-		margin: 2px;
-		background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 60%, rgba(0,0,0,0.5) 80%, rgba(0,0,0,0.9) 100%);
+		background: black(.6);
+		background: linear-gradient(to bottom, black(0), black(.6));
+		bottom: 1px;
 	}
 
 	// No overlay for empty albums
-	.album img[data-type^='nonretina'] + .overlay {
-		background: rgba(0, 0, 0, 0.2);
+	.album img[data-retina='false'] + .overlay {
+		background: none;
 	}
 
-	.photo .overlay {
-		opacity: 0;
-	}
+	.photo .overlay { opacity: 0; }
 
 	.photo:hover .overlay,
 	.photo.active .overlay {
@@ -123,8 +126,9 @@
 	.photo .overlay h1 {
 		min-height: 19px;
 		width: 185px;
-		margin: 152px 0 3px 15px;
+		margin: 12px 0 5px 15px;
 		color: #fff;
+		text-shadow: 0 1px 3px black(.4);
 		font-size: 16px;
 		font-weight: bold;
 		overflow: hidden;
@@ -132,122 +136,95 @@
 
 	.album .overlay a,
 	.photo .overlay a {
+		display: block;
+		margin: 0 0 12px 15px;
 		font-size: 11px;
-		color: #aaa;
+		color: #ccc;
+		text-shadow: 0 1px 3px black(.4);
 	}
 
-	.album .overlay a {
-		margin-left: 15px;
+	.photo .overlay a .iconic {
+		fill: #ccc;
+		margin: 0 5px 0 0;
+		width: 8px;
+		height: 8px;
+		filter: drop-shadow(0 1px 3px black(.4));
 	}
 
-	.photo .overlay a {
-		margin: 155px 0 5px 15px;
-
-		span { margin: 0 5px 0 0; }
-	}
+	.album img[data-retina='false'] + .overlay h1,
+	.album img[data-retina='false'] + .overlay a  { text-shadow: none; }
 
 	/* Badges ------------------------------------------------*/
 	.album .badge,
 	.photo .badge {
 		position: absolute;
-		margin-top: -1px;
-		margin-left: 12px;
-		padding: 12px 7px 3px 7px;
-		background: linear-gradient(to bottom, #d64b4b 0%, #ab2c2c 100%);
-		box-shadow: 0 0 3px rgba(0, 0, 0, .8);
-		border-radius: 0 0 3px 3px;
+		margin: -1px 0 0 12px;
+		padding: 12px 8px 6px;
+		box-shadow: 0 0 2px black(.6);
+		background: $colorRed;
+		border-radius: 0 0 5px 5px;
 		border: 1px solid #fff;
 		border-top: none;
 		color: #fff;
-		font-size: 24px;
-		text-shadow: 0 1px 0 rgba(0, 0, 0, .4);
+		text-shadow: 0 1px 0 black(.4);
 		opacity: .9;
 
-		&::after {
-			content: '';
-			position: absolute;
-			margin-top: -12px;
-			margin-left: -26px;
-			width: 38px;
-			height: 5px;
-			background: linear-gradient(to bottom, rgba(0,0,0,1) 0%,rgba(0,0,0,0) 100%);
-			opacity: .4;
+		&:nth-child(2n) { margin-left: 54px; }
+
+		.iconic {
+			fill: #fff;
+			width: 16px;
+			height: 16px;
+			filter: drop-shadow($shadowLight);
 		}
-
-		&:nth-child(2n) {
-			margin-left: 57px;
-		}
-	}
-
-	.album .badge.icon-star,
-	.photo .badge.icon-star {
-		padding: 12px 8px 3px 8px;
-
-		&::after { margin-left: -29px; }
-	}
-
-	.album .badge.icon-share,
-	.photo .badge.icon-share {
-		padding: 12px 6px 3px 8px;
-
-		&::after { margin-left: -31px; }
-	}
-
-	.album .badge.icon-time,
-	.photo .badge.icon-time {
-		padding: 12px 8px 3px 9px;
-
-		::after { margin-left: -29px; }
-	}
-
-	.album .badge.icon-reorder::after {
-		margin-left: -30px;
 	}
 
 	/* Divider ------------------------------------------------*/
 	.divider {
-		float: left;
+		margin: 50px 0 0;
+		padding: 10px 0 0;
 		width: 100%;
-		margin-top: 50px;
 		opacity: 0;
-		border-top: 1px solid rgba(255, 255, 255, .03);
-		box-shadow: 0 -1px 0 rgba(0, 0, 0, .25);
+		border-top: 1px solid white(.02);
+		box-shadow: $shadow;
 
 		&:first-child {
-			margin-top: 0;
-			border-top: none;
+			margin-top: 10px;
+			border-top: 0;
+			box-shadow: none;
 		}
 
 		h1 {
-			float: left;
-			margin: 20px 0 0 30px;
-			color: #fff;
+			margin: 0 0 0 30px;
+			color: white(.6);
 			font-size: 14px;
 			font-weight: bold;
-			text-shadow: 0 -1px 0 rgba(0, 0, 0, .5);
 		}
 	}
 
-	/* No Content ------------------------------------------------*/
-	.no_content {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		height: 160px;
-		width: 180px;
-		margin-top: -60px;
-		margin-left: -90px;
-		padding-top: 20px;
-		color: rgba(20, 20, 20, 1);
-		text-shadow: 0px 1px 0px rgba(255, 255, 255, .05);
-		text-align: center;
+}
 
-		.icon {
-			font-size: 80px;
-		}
+/* No Content ------------------------------------------------*/
+.no_content {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	padding-top: 20px;
+	color: white(.35);
+	text-shadow: 0 -1px 0 black(.4);
+	text-align: center;
+	transform: translateX(-50%) translateY(-50%);
 
-		p {
-			font-size: 18px;
-			font-weight: bold;
-		}
+	.iconic {
+		fill: white(.3);
+		margin: 0 0 10px;
+		width: 60px;
+		height: 60px;
+		filter: drop-shadow(0 -1px 0 black(.4));
 	}
+
+	p {
+		font-size: 18px;
+		font-weight: bold;
+	}
+}

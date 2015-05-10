@@ -1,3 +1,46 @@
+## v3.0.0
+
+Released April 6, 2015
+
+**Warning**: You need to enter a new username and password when upgrading from a previous version. Your installation is accessible for everyone till you enter a new login by visiting your Lychee. Both fields are now stored in a secure way. Legacy md5 code has been removed.
+
+**Warning**: Upgrading from a previous version will set *all* public albums to private. Passwords  are now stored in a secure way. Legacy md5 code has been removed.
+
+**Warning**: We recommend to backup your database and photos before upgrading to the newest version.
+
+**Deprecated**: Photos uploaded with Lychee v1.1 or older aren't supported anymore. Thumbnails  fail to load on high-res screens.
+
+- `New` Redesigned interface, icons and symbols
+- `New` Rewritten Front-End
+- `New` Dialog system now based on [basicModal](https://github.com/electerious/basicModal)
+- `New` Context-menus now based on [basicContext](https://github.com/electerious/basicContext)
+- `New` Edit the sharing options of a public album
+- `New` Quickly switch between albums and photos by clicking the title in the header
+- `New` Renamed API functions
+- `New` Merge albums (Thanks @rhurling, #340, #341, #166)
+- `New` iPhone 6 Homescreen icon
+- `Improved` Performance of animations
+- `Improved` Prevent download of deleted albums/photos
+- `Improved` Opening a private photo when logged out now shows an error
+- `Improved` Reduced attribute changes to improve performance
+- `Improved` Interact with the content while the sidebar stays open
+- `Improved` Username and password now stored in a safer way
+- `Improved` Album passwords now stored in a safer way
+- `Improved` Don't refresh albums when password-input canceled by user
+- `Improved` Additional Open Graph Metadata (#299)
+- `Improved` Check allow_url_fopen (#302)
+- `Fixed` Prevent ctrl+a from selecting the sidebar (#230)
+- `Fixed` Removed unused scrolling bars in FF (#316, #289)
+
+And much more…
+
+## v2.7.2
+
+Released April 13, 2015
+
+- `Fixed` Prevented remote code execution of photos imported using "Import from URL" (Thanks Segment S.r.l)
+- `Fixed` Stopped view.php from returning data of private photos
+
 ## v2.7.1
 
 Released January 26, 2015

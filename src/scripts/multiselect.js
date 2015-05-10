@@ -1,6 +1,6 @@
 /**
  * @description	Select multiple albums or photos.
- * @copyright	2014 by Tobias Reich
+ * @copyright	2015 by Tobias Reich
  */
 
 multiselect = {}
@@ -14,15 +14,24 @@ multiselect.position = {
 
 }
 
+multiselect.bind = function() {
+
+	$('#content')	.on('mousedown', 	function(e) { if (e.which===1) multiselect.show(e) });
+	$(document)		.on('mouseup',		function(e) { if (e.which===1) multiselect.getSelection(e) });
+
+	return true;
+
+}
+
 multiselect.show = function(e) {
 
-	if (mobileBrowser())	return false;
 	if (lychee.publicMode)	return false;
 	if (visible.search())	return false;
-	if (visible.infobox())	return false;
 	if (!visible.albums()&&!visible.album)			return false;
 	if ($('.album:hover, .photo:hover').length!==0)	return false;
 	if (visible.multiselect())						$('#multiselect').remove();
+
+	sidebar.setSelectable(false);
 
 	multiselect.position.top	= e.pageY;
 	multiselect.position.right	= -1 * (e.pageX - $(document).width());
@@ -40,12 +49,12 @@ multiselect.selectAll = function() {
 		newWidth,
 		newHeight;
 
-	if (mobileBrowser())		return false;
 	if (lychee.publicMode)		return false;
 	if (visible.search())		return false;
-	if (visible.infobox())		return false;
 	if (!visible.albums()&&!visible.album)	return false;
 	if (visible.multiselect())	$('#multiselect').remove();
+
+	sidebar.setSelectable(false);
 
 	multiselect.position.top	= 70;
 	multiselect.position.right	= 40;
@@ -190,6 +199,8 @@ multiselect.getSelection = function(e) {
 }
 
 multiselect.close = function() {
+
+	sidebar.setSelectable(true);
 
 	multiselect.stopResize();
 

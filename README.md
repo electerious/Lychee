@@ -2,8 +2,8 @@
 
 #### A great looking and easy-to-use Photo-Management-System.
 
-![Lychee](http://l.electerious.com/uploads/big/68375288e048658e253a7c0c964f19b9.jpg)
-![Lychee](http://l.electerious.com/uploads/big/198f237580ea004529ab7b6faad90274.jpg)
+![Lychee](http://l.electerious.com/uploads/big/c4b58cb87d95aeaed78fdca581cc908c.jpg)
+![Lychee](http://l.electerious.com/uploads/big/075ac5de5b5d6c593acbb700f0e1d739.jpg)
 
 Lychee is a free photo-management tool, which runs on your server or web-space. Installing is a matter of seconds. Upload, manage and share photos like from a native application. Lychee comes with everything you need and all your photos are stored securely. Try the [Live Demo](http://electerious.com/lychee_demo/) or read more on our [Website](http://lychee.electerious.com).
 
@@ -59,6 +59,7 @@ Here's a list of all available Plugins and Extensions:
 | lychee-redirect | Redirect from an album-name to a Lychee-album | [More &#187;](https://github.com/electerious/lychee-redirect) |
 | lychee-watermark | Adds a second watermarked photo when uploading images | [More &#187;](https://github.com/electerious/lychee-watermark) |
 | lychee-rss | Creates a RSS-Feed out of your photos | [More &#187;](https://github.com/cternes/Lychee-RSS) |
+| lychee-FlashAir | Import from a Toshiba FlashAir WiFi SD card | [More &#187;](https://github.com/mhp/Lychee-FlashAir) |
 
 ## Troubleshooting
 
@@ -67,7 +68,7 @@ Take a look at the [FAQ](docs/FAQ.md) if you have problems. Discovered a bug? Pl
 ## Developer
 | Version | Name |
 |:-----------|:------------|
-| 1.2, 1.3, 2.x | [Tobias Reich](http://electerious.com)|
+| 1.2, 1.3, 2.x, 3.x | [Tobias Reich](http://electerious.com)|
 | 1.0, 1.1 | [Tobias Reich](http://electerious.com)<br>[Philipp Maurer](http://phinal.net) |
 
 ## Donate
@@ -78,7 +79,7 @@ I am working hard on continuously developing and maintaining Lychee. Please cons
 
 (MIT License)
 
-Copyright (C) 2014 [Tobias Reich](http://electerious.com)
+Copyright (C) 2015 [Tobias Reich](http://electerious.com)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

@@ -1,0 +1,179 @@
+/**
+ * @copyright   2015 by Tobias Reich
+ */
+
+#sidebar {
+
+	position: fixed;
+	top: 50px;
+	right: -370px;
+	width: 350px;
+	height: calc(100% - 50px);
+	background-color: rgba(25, 25, 25, .98);
+	border-left: 1px solid black(.2);
+	transform: translateX(0);
+	transition: transform .3s $timing;
+
+	&.active { transform: translateX(-320px); }
+
+	&.notSelectable table tr td:last-child {
+		-webkit-user-select: none !important;
+		-moz-user-select: none !important;
+		user-select: none !important;
+	}
+
+	/* Header ------------------------------------------------*/
+	.header {
+		float: left;
+		height: 49px;
+		width: 100%;
+		background: linear-gradient(to bottom, white(.02), black(0));
+		border-top: 1px solid $colorBlue;
+	}
+
+	.header h1 {
+		position: absolute;
+		margin: 15px 50px 15px 0;
+		width: calc(100% - 50px);
+		color: #fff;
+		font-size: 16px;
+		font-weight: bold;
+		text-align: center;
+	}
+
+	/* Wrapper ------------------------------------------------*/
+	.wrapper {
+		float: left;
+		height: calc(100% - 49px);
+		width: 300px;
+		overflow: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	/* Divider ------------------------------------------------*/
+	.divider {
+		float: left;
+		padding: 12px 0 8px;
+		width: 100%;
+		border-top: 1px solid white(.02);
+		box-shadow: $shadow;
+
+		&:first-child {
+			border-top: 0;
+			box-shaodw: none;
+		}
+
+		h1 {
+			margin: 0 0 0 20px;
+			color: white(.6);
+			font-size: 14px;
+			font-weight: bold;
+		}
+	}
+
+	/* Edit ------------------------------------------------*/
+	.edit {
+		display: inline-block;
+		margin-left: 3px;
+		width: 10px;
+
+		.iconic {
+			width: 10px;
+			height: 10px;
+			fill: white(.5);
+			transition: fill .2s ease-out;
+		}
+
+		&:hover .iconic { fill: white(1); }
+
+		&:active .iconic {
+			transition: none;
+			fill: white(.8);
+		}
+	}
+
+	/* Table ------------------------------------------------*/
+	table {
+		float: left;
+		margin: 10px 0 15px 20px;
+	}
+
+	table tr td {
+		padding: 5px 0px;
+		color: #fff;
+		font-size: 14px;
+		line-height: 19px;
+
+		&:first-child { width: 110px; }
+
+		&:last-child {
+			padding-right: 10px;
+			-webkit-user-select: text;
+			-moz-user-select: text;
+			user-select: text;
+		}
+	}
+
+	/* Tags ------------------------------------------------*/
+	#tags {
+		width: calc(100% - 40px);
+		margin: 16px 20px 12px 20px;
+		color: #fff;
+		display: inline-block;
+	}
+
+	#tags > div {
+		display: inline-block;
+	}
+
+	#tags .empty {
+		font-size: 14px;
+		margin: 0 2px 8px 0;
+	}
+
+	#tags .edit { margin-top: 6px; }
+
+	#tags .empty .edit { margin-top: 0; }
+
+	#tags .tag {
+		display: inline-block;
+		padding: 6px 10px;
+		margin: 0 6px 8px 0;
+		background-color: black(.5);
+		border-radius: 100px;
+		font-size: 12px;
+		transition: background-color .2s;
+
+		&:hover { background-color: black(.3); }
+	}
+
+	#tags .tag span {
+		float: right;
+		padding: 0;
+		margin: 0 0 -2px 0;
+		width: 0;
+		overflow: hidden;
+		transform: scale(0);
+		transition: width .2s, margin .2s, transform .2s, fill .2s ease-out;
+
+		.iconic {
+			fill: $colorRed;
+			width: 8px;
+			height: 8px;
+		}
+
+		&:hover .iconic { fill: lighten($colorRed, 10%); }
+
+		&:active .iconic {
+			transition: none;
+			fill: darken($colorRed, 10%);
+		}
+	}
+
+	#tags .tag:hover span {
+		width: 9px;
+		margin: 0 0 -2px 5px;
+		transform: scale(1);
+	}
+
+}

@@ -1,51 +1,67 @@
 /**
- * @copyright   2014 by Tobias Reich
+ * @copyright   2015 by Tobias Reich
  */
 
 /* Context ------------------------------------------------*/
 .basicContext {
 
 	padding: 5px 0 6px;
-	background: linear-gradient(to bottom, #444 0%, #2f2f2f 100%);
-	border: 1px solid rgba(0, 0, 0, .5);
-	border-bottom: 1px solid rgba(0, 0, 0, .6);
+	background: linear-gradient(to bottom, #333, #252525);
+	border: 1px solid black(.7);
+	border-bottom: 1px solid black(.8);
 	border-radius: 5px;
-	box-shadow: 0 1px 4px rgba(0, 0, 0, .15), inset 0px 1px 0px rgba(255, 255, 255, .08);
+	box-shadow: 0 1px 4px black(.2), inset 0 1px 0 white(.05);
 
 	/* Item ------------------------------------------------*/
 	tr {
 		margin-bottom: 2px;
-		color: #eee;
+		color: white(.9);
 		font-size: 14px;
-		text-shadow: 0 -1px 0px rgba(0, 0, 0, .2);
+		text-shadow: $shadowLight;
 
 		&.separator {
-			background-color: rgba(0, 0, 0, .2);
-			border-bottom: 1px solid rgba(255, 255, 255, .1);
+			background: black(.2);
+			border-bottom: 1px solid white(.06);
 		}
 	}
 
 		tr td {
-			padding: 7px 25px 6px 12px;
+			padding: 6px 25px 7px 12px;
 			min-width: auto;
-			color: #fff;
+			color: white(1);
 			border-radius: 0;
 			transition: none;
+			cursor: default;
 
-			&:hover {
-				background: linear-gradient(to bottom, #6a84f2, #4967F0);
-			}
+			&:hover { background: linear-gradient(to bottom, $colorBlue, darken($colorBlue, 5%)); }
+
+			&:active { background: linear-gradient(to bottom, darken($colorBlue, 10%), darken($colorBlue, 15%)); }
 		}
 
-			tr td .albumCover {
+			tr td .cover {
+				background-color: #222;
 				border-radius: 2px;
-				box-shadow: 0 0 0 1px rgba(0,0,0,.5);
+				box-shadow: 0 0 0 1px black(.5);
 				position: absolute;
 			}
 
-			tr td .albumTitle {
+			tr td .title {
 				display: inline-block;
 				margin: 0 0 3px 26px;
+			}
+
+			tr td .iconic {
+				display: inline-block;
+				margin: 0 10px 0 1px;
+				width: 11px;
+				height: 10px;
+				fill: white(1);
+			}
+
+			tr td .iconic.ionicons {
+				margin: 0 8px -2px 0;
+				width: 14px;
+				height: 14px;
 			}
 
 	/* Link ------------------------------------------------*/
@@ -53,10 +69,10 @@
 		width: 100%;
 		margin: -2px 0 -1px -2px;
 		padding: 5px 7px 6px 7px;
-		background-color: #444;
+		background: #333;
 		color: #fff;
-		border: 1px solid rgba(0, 0, 0, .4);
-		box-shadow: 0px 1px 0px rgba(255, 255, 255, .05);
+		border: 1px solid black(.4);
+		box-shadow: 0px 1px 0px white(.05);
 		outline: none;
 		border-radius: 3px;
 	}
@@ -64,7 +80,6 @@
 	/* No Hover ------------------------------------------------*/
 	tr.noHover td:hover {
 		background: none;
-		cursor: default;
 	}
 
 }

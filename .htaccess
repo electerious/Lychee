@@ -1,4 +1,4 @@
-IndexIgnore *
+Options -Indexes
 
 # ---
 # Uncomment these lines to change PHP parameters if you are using the PHP Apache module

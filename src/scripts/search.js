@@ -1,33 +1,31 @@
 /**
  * @description	Searches through your photos and albums.
- * @copyright	2014 by Tobias Reich
+ * @copyright	2015 by Tobias Reich
  */
 
 search = {
 
-	code: null
+	hash: null
 
 }
 
 search.find = function(term) {
 
-	var params,
-		albumsData = '',
-		photosData = '',
-		code;
+	var albumsData	= '',
+		photosData	= '',
+		html		= '';
 
 	clearTimeout($(window).data('timeout'));
 	$(window).data('timeout', setTimeout(function() {
 
 		if ($('#search').val().length!==0) {
 
-			params = 'search&term=' + term;
-			lychee.api(params, function(data) {
+			api.post('search', { term }, function(data) {
 
 				// Build albums
 				if (data&&data.albums) {
-					albums.json = { content: data.albums };
-					$.each(albums.json.content, function() {
+					albums.json = { albums: data.albums };
+					$.each(albums.json.albums, function() {
 						albums.parse(this);
 						albumsData += build.album(this);
 					});
@@ -45,30 +43,28 @@ search.find = function(term) {
 				// 2. Only photos found
 				// 3. Only albums found
 				// 4. Albums and photos found
-				if (albumsData===''&&photosData==='')	code = 'error';
-				else if (albumsData==='')				code = build.divider('Photos') + photosData;
-				else if (photosData==='')				code = build.divider('Albums') + albumsData;
-				else									code = build.divider('Photos') + photosData + build.divider('Albums') + albumsData;
+				if (albumsData===''&&photosData==='')	html = 'error';
+				else if (albumsData==='')				html = build.divider('Photos') + photosData;
+				else if (photosData==='')				html = build.divider('Albums') + albumsData;
+				else									html = build.divider('Photos') + photosData + build.divider('Albums') + albumsData;
 
 				// Only refresh view when search results are different
-				if (search.code!==md5(code)) {
+				if (search.hash!==data.hash) {
 
 					$('.no_content').remove();
 
-					lychee.animate('.album, .photo', 'contentZoomOut');
-					lychee.animate('.divider', 'fadeOut');
+					lychee.animate('#content', 'contentZoomOut');
 
-					search.code = md5(code);
+					search.hash = data.hash;
 
 					setTimeout(function() {
 
-						if (code==='error') {
+						if (html==='error') {
 							lychee.content.html('');
-							$('body').append(build.no_content('search'));
+							$('body').append(build.no_content('magnifying-glass'));
 						} else {
-							lychee.content.html(code);
-							lychee.animate('.album, .photo', 'contentZoomIn');
-							$('img[data-type!="svg"]').retina();
+							lychee.content.html(html);
+							lychee.animate('#content', 'contentZoomIn');
 						}
 
 					}, 300);
@@ -88,13 +84,13 @@ search.reset = function() {
 	$('#search').val('');
 	$('.no_content').remove();
 
-	if (search.code!=='') {
+	if (search.hash!==null) {
 
 		// Trash data
 		albums.json	= null;
 		album.json	= null;
 		photo.json	= null;
-		search.code	= '';
+		search.hash	= null;
 
 		lychee.animate('.divider', 'fadeOut');
 		albums.load();

@@ -2,7 +2,7 @@
 
 ###
 # @name			Installation Access
-# @copyright	2014 by Tobias Reich
+# @copyright	2015 by Tobias Reich
 ###
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
@@ -14,11 +14,10 @@ class Installation extends Access {
 
 		switch ($fn) {
 
-			case 'dbCreateConfig':	$this->dbCreateConfig(); break;
+			case 'Database::createConfig':	$this->dbCreateConfig(); break;
 
 			# Error
-			default:				exit('Warning: No configuration!');
-									return false; break;
+			default:						$this->init(); break;
 
 		}
 
@@ -30,6 +29,16 @@ class Installation extends Access {
 
 		Module::dependencies(isset($_POST['dbHost'], $_POST['dbUser'], $_POST['dbPassword'], $_POST['dbName'], $_POST['dbTablePrefix']));
 		echo Database::createConfig($_POST['dbHost'], $_POST['dbUser'], $_POST['dbPassword'], $_POST['dbName'], $_POST['dbTablePrefix']);
+
+	}
+
+	private function init() {
+
+		$return = array(
+			'status' => LYCHEE_STATUS_NOCONFIG
+		);
+
+		echo json_encode($return);
 
 	}
 
