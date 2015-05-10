@@ -125,13 +125,15 @@
 	.album .overlay h1,
 	.photo .overlay h1 {
 		min-height: 19px;
-		width: 185px;
+		width: 180px;
 		margin: 12px 0 5px 15px;
 		color: #fff;
 		text-shadow: 0 1px 3px black(.4);
 		font-size: 16px;
 		font-weight: bold;
 		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
 	}
 
 	.album .overlay a,

@@ -138,7 +138,7 @@ album.add = function() {
 	}
 
 	basicModal.show({
-		body: "<p>Enter a title for the new album: <input class='text' data-name='title' type='text' maxlength='30' placeholder='Title' value='Untitled'></p>",
+		body: "<p>Enter a title for the new album: <input class='text' data-name='title' type='text' maxlength='50' placeholder='Title' value='Untitled'></p>",
 		buttons: {
 			action: {
 				title: 'Create Album',
@@ -306,7 +306,7 @@ album.setTitle = function(albumIDs) {
 
 	}
 
-	input = "<input class='text' data-name='title' type='text' maxlength='30' placeholder='Title' value='" + oldTitle + "'>";
+	input = "<input class='text' data-name='title' type='text' maxlength='50' placeholder='Title' value='" + oldTitle + "'>";
 
 	if (albumIDs.length===1)	msg = "<p>Enter a new title for this album: " + input + "</p>";
 	else						msg = "<p>Enter a title for all " + albumIDs.length + " selected albums: " + input +"</p>";

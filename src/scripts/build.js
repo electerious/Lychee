@@ -59,16 +59,7 @@ build.album = function(data) {
 
 	if (data===null||data===undefined) return '';
 
-	var html		= '',
-		title		= data.title,
-		longTitle	= '';
-
-	if (title!==null&&title.length>18) {
-
-		title		= data.title.substr(0, 18) + '...';
-		longTitle	= data.title;
-
-	}
+	var html = '';
 
 	var {path: thumbPath, hasRetina: thumbRetina} = lychee.retinize(data.thumbs[0]);
 
@@ -78,7 +69,7 @@ build.album = function(data) {
 				<img src='${ data.thumbs[1] }' width='200' height='200' alt='thumb' data-retina='false'>
 				<img src='${ thumbPath }' width='200' height='200' alt='thumb' data-retina='${ thumbRetina }'>
 				<div class='overlay'>
-					<h1 title='${ longTitle }'>${ title }</h1>
+					<h1 title='${ data.title }'>${ data.title }</h1>
 					<a>${ data.sysdate }</a>
 				</div>
 			`
@@ -103,16 +94,7 @@ build.photo = function(data) {
 
 	if (data===null||data===undefined) return '';
 
-	var html		= '',
-		title		= data.title,
-		longTitle	= '';
-
-	if (title!==null&&title.length>18) {
-
-		title		= data.title.substr(0, 18) + '...';
-		longTitle	= data.title;
-
-	}
+	var html = '';
 
 	var {path: thumbPath, hasRetina: thumbRetina} = lychee.retinize(data.thumbUrl);
 
@@ -120,7 +102,7 @@ build.photo = function(data) {
 			<div class='photo' data-album-id='${ data.album }' data-id='${ data.id }'>
 				<img src='${ thumbPath }' width='200' height='200' alt='thumb'>
 				<div class='overlay'>
-					<h1 title='${ longTitle }'>${ title }</h1>
+					<h1 title='${ data.title }'>${ data.title }</h1>
 			`
 
 	if (data.cameraDate==='1')	html += `<a><span title='Camera Date'>${ build.iconic('camera-slr') }</span>${ data.sysdate }</a>`;

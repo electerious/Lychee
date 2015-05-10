@@ -330,7 +330,7 @@ photo.setTitle = function(photoIDs) {
 
 	}
 
-	input = "<input class='text' data-name='title' type='text' maxlength='30' placeholder='Title' value='" + oldTitle + "'>";
+	input = "<input class='text' data-name='title' type='text' maxlength='50' placeholder='Title' value='" + oldTitle + "'>";
 
 	if (photoIDs.length===1)	msg = "<p>Enter a new title for this photo: " + input + "</p>";
 	else						msg = "<p>Enter a title for all " + photoIDs.length + " selected photos: " + input + "</p>";

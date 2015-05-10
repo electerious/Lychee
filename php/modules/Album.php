@@ -484,7 +484,7 @@ class Album extends Module {
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Parse
-		if (strlen($title)>50) $title = substr($title, 0, 50);
+		if (strlen($title)>100) $title = substr($title, 0, 100);
 
 		# Execute query
 		$query	= Database::prepare($this->database, "UPDATE ? SET title = '?' WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $title, $this->albumIDs));
