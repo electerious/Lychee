@@ -85,7 +85,7 @@ loadingBar.hide = function(force) {
 		loadingBar.status = null;
 
 		// Move header up
-		if (visible.header()) header.dom().removeClass('error loading');
+		header.dom().removeClass('error loading');
 
 		// Set timeout
 		clearTimeout(loadingBar._timeout);
