@@ -63,7 +63,8 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 	if (isset($_POST['function']))	$fn = $_POST['function'];
 	else							$fn = $_GET['function'];
 
-	if (isset($_SESSION['login'])&&$_SESSION['login']==true) {
+	if ((isset($_SESSION['login'])&&$_SESSION['login']===true)&&
+		(isset($_SESSION['identifier'])&&$_SESSION['identifier']===$settings['identifier'])) {
 
 		###
 		# Admin Access

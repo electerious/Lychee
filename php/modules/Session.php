@@ -44,6 +44,9 @@ class Session extends Module {
 		unset($return['config']['username']);
 		unset($return['config']['password']);
 
+		# Remove identifier from response
+		unset($return['config']['identifier']);
+
 		# Path to Lychee for the server-import dialog
 		$return['config']['location'] = LYCHEE;
 
@@ -99,15 +102,13 @@ class Session extends Module {
 		# Check login with crypted hash
 		if ($this->settings['username']===$username&&
 			$this->settings['password']===$password) {
-				$_SESSION['login'] = true;
+				$_SESSION['login']		= true;
+				$_SESSION['identifier']	= $this->settings['identifier'];
 				return true;
 		}
 
 		# No login
-		if ($this->noLogin()===true) {
-			$_SESSION['login'] = true;
-			return true;
-		}
+		if ($this->noLogin()===true) return true;
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
@@ -124,7 +125,8 @@ class Session extends Module {
 		# Check if login credentials exist and login if they don't
 		if ($this->settings['username']===''&&
 			$this->settings['password']==='') {
-				$_SESSION['login'] = true;
+				$_SESSION['login']		= true;
+				$_SESSION['identifier']	= $this->settings['identifier'];
 				return true;
 		}
 
@@ -136,6 +138,9 @@ class Session extends Module {
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
+
+		$_SESSION['login']		= null;
+		$_SESSION['identifier']	= null;
 
 		session_destroy();
 
