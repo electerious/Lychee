@@ -43,6 +43,19 @@ if (!$result) {
 	return false;
 }
 
+# Add identifier to settings
+$query	= Database::prepare($database, "SELECT `key` FROM `?` WHERE `key` = 'identifier' LIMIT 1", array(LYCHEE_TABLE_SETTINGS));
+$result	= $database->query($query);
+if ($result->num_rows===0) {
+	$identifier	= md5(microtime(true));
+	$query		= Database::prepare($database, "INSERT INTO `?` (`key`, `value`) VALUES ('identifier', '?')", array(LYCHEE_TABLE_SETTINGS, $identifier));
+	$result		= $database->query($query);
+	if (!$result) {
+		Log::error($database, 'update_030001', __LINE__, 'Could not update database (' . $database->error . ')');
+		return false;
+	}
+}
+
 # Set version
 if (Database::setVersion($database, '030001')===false) return false;
 
