@@ -279,9 +279,14 @@ class Admin extends Access {
 
 	private function setSorting() {
 
-		Module::dependencies(isset($_POST['type'], $_POST['order']));
+		Module::dependencies(isset($_POST['typeAlbums'], $_POST['orderAlbums'], $_POST['typePhotos'], $_POST['orderPhotos']));
 		$this->settings = new Settings($this->database);
-		echo $this->settings->setSorting($_POST['type'], $_POST['order']);
+
+		$sA = $this->settings->setSortingAlbums($_POST['typeAlbums'], $_POST['orderAlbums']);
+		$sP = $this->settings->setSortingPhotos($_POST['typePhotos'], $_POST['orderPhotos']);
+
+		if ($sA===true&&$sP===true)	echo true;
+		else						echo false;
 
 	}
 

@@ -46,9 +46,7 @@ view.albums = {
 
 				$.each(albums.json.albums, function() {
 					albums.parse(this);
-
-					// Display albums in reverse order
-					albumsData = build.album(this) + albumsData;
+					albumsData += build.album(this);
 				});
 
 				// Add divider

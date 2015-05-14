@@ -129,7 +129,7 @@ class Settings extends Module {
 
 	}
 
-	public function setSorting($type, $order) {
+	public function setSortingPhotos($type, $order) {
 
 		# Check dependencies
 		self::dependencies(isset($this->database, $type, $order));
@@ -182,7 +182,64 @@ class Settings extends Module {
 		# Execute query
 		# Do not prepare $sorting because it is a true statement
 		# Preparing (escaping) the sorting would destroy it
+		# $sorting is save and can't contain user-input
 		$query	= Database::prepare($this->database, "UPDATE ? SET value = '$sorting' WHERE `key` = 'sorting'", array(LYCHEE_TABLE_SETTINGS));
+		$result	= $this->database->query($query);
+
+		if (!$result) {
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			return false;
+		}
+		return true;
+
+	}
+
+	public function setSortingAlbums($type, $order) {
+
+		# Check dependencies
+		self::dependencies(isset($this->database, $type, $order));
+
+		$sorting = 'ORDER BY ';
+
+		# Set row
+		switch ($type) {
+
+			case 'id':			$sorting .= 'id';
+								break;
+
+			case 'title':		$sorting .= 'title';
+								break;
+
+			case 'description':	$sorting .= 'description';
+								break;
+
+			case 'public':		$sorting .= 'public';
+								break;
+
+			default:			exit('Error: Unknown type for sorting!');
+
+		}
+
+		$sorting .= ' ';
+
+		# Set order
+		switch ($order) {
+
+			case 'ASC':		$sorting .= 'ASC';
+							break;
+
+			case 'DESC':	$sorting .= 'DESC';
+							break;
+
+			default:		exit('Error: Unknown order for sorting!');
+
+		}
+
+		# Execute query
+		# Do not prepare $sorting because it is a true statement
+		# Preparing (escaping) the sorting would destroy it
+		# $sorting is save and can't contain user-input
+		$query	= Database::prepare($this->database, "UPDATE ? SET value = '$sorting' WHERE `key` = 'sortingAlbums'", array(LYCHEE_TABLE_SETTINGS));
 		$result	= $this->database->query($query);
 
 		if (!$result) {

@@ -23,6 +23,18 @@ if (!$result) {
 	return false;
 }
 
+# Add album sorting to settings
+$query	= Database::prepare($database, "SELECT `key` FROM `?` WHERE `key` = 'sortingAlbums' LIMIT 1", array(LYCHEE_TABLE_SETTINGS));
+$result	= $database->query($query);
+if ($result->num_rows===0) {
+	$query	= Database::prepare($database, "INSERT INTO `?` (`key`, `value`) VALUES ('sortingAlbums', 'ORDER BY id DESC')", array(LYCHEE_TABLE_SETTINGS));
+	$result	= $database->query($query);
+	if (!$result) {
+		Log::error($database, 'update_030001', __LINE__, 'Could not update database (' . $database->error . ')');
+		return false;
+	}
+}
+
 # Set version
 if (Database::setVersion($database, '030001')===false) return false;
 
