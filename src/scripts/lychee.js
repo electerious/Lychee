@@ -384,10 +384,13 @@ lychee.loadDropbox = function(callback) {
 
 }
 
-lychee.removeHTML = function(html) {
+lychee.removeHTML = function(html = '') {
+
+	if (html==='') return html;
 
 	var tmp = document.createElement('DIV');
 	tmp.innerHTML = html;
+
 	return tmp.textContent || tmp.innerText;
 
 }
