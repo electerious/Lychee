@@ -18,7 +18,7 @@ lychee = {
 	debugMode:		false,
 
 	checkForUpdates:'1',
-	sorting:		'',
+	sortingPhotos:	'',
 	sortingAlbums:	'',
 	location:		'',
 
@@ -49,7 +49,7 @@ lychee.init = function() {
 
 			// Logged in
 
-			lychee.sorting			= data.config.sorting			|| '';
+			lychee.sortingPhotos	= data.config.sortingPhotos		|| '';
 			lychee.sortingAlbums	= data.config.sortingAlbums		|| '';
 			lychee.dropboxKey		= data.config.dropboxKey		|| '';
 			lychee.location			= data.config.location			|| '';

@@ -183,7 +183,7 @@ class Settings extends Module {
 		# Do not prepare $sorting because it is a true statement
 		# Preparing (escaping) the sorting would destroy it
 		# $sorting is save and can't contain user-input
-		$query	= Database::prepare($this->database, "UPDATE ? SET value = '$sorting' WHERE `key` = 'sorting'", array(LYCHEE_TABLE_SETTINGS));
+		$query	= Database::prepare($this->database, "UPDATE ? SET value = '$sorting' WHERE `key` = 'sortingPhotos'", array(LYCHEE_TABLE_SETTINGS));
 		$result	= $this->database->query($query);
 
 		if (!$result) {

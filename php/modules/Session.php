@@ -67,8 +67,8 @@ class Session extends Module {
 
 			# Unset unused vars
 			unset($return['config']['thumbQuality']);
-			unset($return['config']['sorting']);
 			unset($return['config']['sortingAlbums']);
+			unset($return['config']['sortingPhotos']);
 			unset($return['config']['dropboxKey']);
 			unset($return['config']['login']);
 			unset($return['config']['location']);

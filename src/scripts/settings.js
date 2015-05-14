@@ -310,7 +310,7 @@ settings.setSorting = function() {
 
 			if (data===true) {
 				lychee.sortingAlbums	= 'ORDER BY ' + sortingAlbums[0] + ' ' + sortingAlbums[1];
-				lychee.sorting			= 'ORDER BY ' + sortingPhotos[0] + ' ' + sortingPhotos[1];
+				lychee.sortingPhotos	= 'ORDER BY ' + sortingPhotos[0] + ' ' + sortingPhotos[1];
 				lychee.load();
 			} else lychee.error(null, params, data);
 
@@ -377,9 +377,9 @@ settings.setSorting = function() {
 
 	}
 
-	if (lychee.sorting!=='') {
+	if (lychee.sortingPhotos!=='') {
 
-		sortingPhotos = lychee.sorting.replace('ORDER BY ', '').split(' ');
+		sortingPhotos = lychee.sortingPhotos.replace('ORDER BY ', '').split(' ');
 
 		$('.basicModal select#settings_photos_type').val(sortingPhotos[0]);
 		$('.basicModal select#settings_photos_order').val(sortingPhotos[1]);

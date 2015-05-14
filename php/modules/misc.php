@@ -47,7 +47,7 @@ function search($database, $settings, $term) {
 		$album = Album::prepareData($album);
 
 		# Thumbs
-		$query	= Database::prepare($database, "SELECT thumbUrl FROM ? WHERE album = '?' " . $settings['sorting'] . " LIMIT 0, 3", array(LYCHEE_TABLE_PHOTOS, $album['id']));
+		$query	= Database::prepare($database, "SELECT thumbUrl FROM ? WHERE album = '?' " . $settings['sortingPhotos'] . " LIMIT 0, 3", array(LYCHEE_TABLE_PHOTOS, $album['id']));
 		$thumbs	= $database->query($query);
 
 		# For each thumb
