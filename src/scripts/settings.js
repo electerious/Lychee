@@ -321,35 +321,43 @@ settings.setSorting = function() {
 	msg =	`
 			<p>
 				Sort albums by
-				<select id='settings_albums_type'>
-					<option value='id'>Creation Time</option>
-					<option value='title'>Title</option>
-					<option value='description'>Description</option>
-					<option value='public'>Public</option>
-				</select>
+				<span class="select">
+					<select id='settings_albums_type'>
+						<option value='id'>Creation Time</option>
+						<option value='title'>Title</option>
+						<option value='description'>Description</option>
+						<option value='public'>Public</option>
+					</select>
+				</span>
 				in an
-				<select id='settings_albums_order'>
-					<option value='ASC'>Ascending</option>
-					<option value='DESC'>Descending</option>
-				</select>
+				<span class="select">
+					<select id='settings_albums_order'>
+						<option value='ASC'>Ascending</option>
+						<option value='DESC'>Descending</option>
+					</select>
+				</span>
 				order.
 			</p>
 			<p>
 				Sort photos by
-				<select id='settings_photos_type'>
-					<option value='id'>Upload Time</option>
-					<option value='takestamp'>Take Date</option>
-					<option value='title'>Title</option>
-					<option value='description'>Description</option>
-					<option value='public'>Public</option>
-					<option value='star'>Star</option>
-					<option value='type'>Photo Format</option>
-				</select>
+				<span class="select">
+					<select id='settings_photos_type'>
+						<option value='id'>Upload Time</option>
+						<option value='takestamp'>Take Date</option>
+						<option value='title'>Title</option>
+						<option value='description'>Description</option>
+						<option value='public'>Public</option>
+						<option value='star'>Star</option>
+						<option value='type'>Photo Format</option>
+					</select>
+				</span>
 				in an
-				<select id='settings_photos_order'>
-					<option value='ASC'>Ascending</option>
-					<option value='DESC'>Descending</option>
-				</select>
+				<span class="select">
+					<select id='settings_photos_order'>
+						<option value='ASC'>Ascending</option>
+						<option value='DESC'>Descending</option>
+					</select>
+				</span>
 				order.
 			</p>
 			`

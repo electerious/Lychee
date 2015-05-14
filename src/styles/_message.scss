@@ -172,6 +172,65 @@
 		}
 	}
 
+	/* Select ------------------------------------------------*/
+	.select {
+		display: inline-block;
+		position: relative;
+		margin: 1px 5px;
+		padding: 0;
+		width: 110px;
+		background: black(.3);
+		color: #fff;
+		border-radius: 3px;
+		border: 1px solid black(.2);
+		box-shadow: 0 1px 0 white(.02);
+		font-size: 11px;
+		line-height: 16px;
+		overflow: hidden;
+		outline: 0;
+		vertical-align: middle;
+
+		&::after {
+			position: absolute;
+			content: '≡';
+			right: 8px;
+			top: 4px;
+			color: $colorBlue;
+			font-size: 16px;
+			line-height: 16px;
+			font-weight: bold;
+			pointer-events: none;
+		}
+
+		select {
+			margin: 0;
+			padding: 4px 8px;
+			width: 120%;
+			color: #fff;
+			font-size: 11px;
+			line-height: 16px;
+			border: 0;
+			outline: 0;
+			box-shadow: none;
+			border-radius: 0;
+			background-color: transparent;
+			background-image: none;
+			-moz-appearance: none;
+			-webkit-appearance: none;
+			appearance: none;
+
+			&:focus { outline: none; }
+		}
+
+		select option {
+			margin: 0;
+			padding: 0;
+			background: #fff;
+			color: #333;
+			transition: none;
+		}
+	}
+
 	/* Version ------------------------------------------------*/
 	.version {
 		margin: -5px 0 0;
