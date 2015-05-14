@@ -223,7 +223,7 @@ photo.delete = function(photoIDs) {
 
 			}
 
-			album.json.content[id] = null;
+			delete album.json.content[id];
 			view.album.content.delete(id);
 
 		});

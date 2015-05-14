@@ -105,6 +105,52 @@ albums._createSmartAlbums = function(data) {
 
 }
 
+albums.getByID = function(albumID) {
+
+	// Function returns the JSON of an album
+
+	if (albumID===undefined||albumID===null)	return undefined;
+	if (!albums.json)							return undefined;
+	if (!albums.json.albums)					return undefined;
+
+	var json = undefined;
+
+	$.each(albums.json.albums, function(i) {
+
+		let elem = albums.json.albums[i];
+
+		if (elem.id==albumID) json = elem;
+
+	});
+
+	return json;
+
+}
+
+albums.deleteByID = function(albumID) {
+
+	// Function returns the JSON of an album
+
+	if (albumID===undefined||albumID===null)	return false;
+	if (!albums.json)							return false;
+	if (!albums.json.albums)					return false;
+
+	var deleted = false;
+
+	$.each(albums.json.albums, function(i) {
+
+		if (albums.json.albums[i].id==albumID) {
+			albums.json.albums.splice(i, 1);
+			deleted = true;
+			return false;
+		}
+
+	});
+
+	return deleted;
+
+}
+
 albums.refresh = function() {
 
 	albums.json = null;
