@@ -14,4 +14,5 @@ VALUES
   ('medium','1'),
   ('imagick','1'),
   ('dropboxKey',''),
+  ('identifier',''),
   ('plugins','');
