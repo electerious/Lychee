@@ -89,14 +89,14 @@ class Photo extends Module {
 			$extension = getExtension($file['name']);
 			if (!in_array(strtolower($extension), Photo::$validExtensions, true)) {
 				Log::error($this->database, __METHOD__, __LINE__, 'Photo format not supported');
-				exit('Error: Photo format not supported!');
+				continue;
 			}
 
 			# Verify image
 			$type = @exif_imagetype($file['tmp_name']);
 			if (!in_array($type, Photo::$validTypes, true)) {
 				Log::error($this->database, __METHOD__, __LINE__, 'Photo type not supported');
-				exit('Error: Photo type not supported!');
+				continue;
 			}
 
 			# Generate id
