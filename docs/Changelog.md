@@ -3,7 +3,7 @@
 Released May 24, 2015
 
 - `New` Album Sorting (Thanks @ophian, #98)
-- `New` Identifier to prevent login of multiple instances of lychee (#344)
+- `New` Identifier to prevent login of multiple Lychee-instances (#344)
 - `Improved` Albums and photos now can have a title with up to 50 chars (#332)
 - `Fixed` Removing last Tag from photo not possible in Firefox (#269)
 
