@@ -6,8 +6,8 @@
 lychee = {
 
 	title:			document.title,
-	version:		'3.0.0',
-	version_code:	'030000',
+	version:		'3.0.1',
+	version_code:	'030001',
 
 	update_path:	'http://lychee.electerious.com/version/index.php',
 	updateURL:		'https://github.com/electerious/Lychee',
@@ -18,7 +18,8 @@ lychee = {
 	debugMode:		false,
 
 	checkForUpdates:'1',
-	sorting:		'',
+	sortingPhotos:	'',
+	sortingAlbums:	'',
 	location:		'',
 
 	dropbox:		false,
@@ -48,7 +49,8 @@ lychee.init = function() {
 
 			// Logged in
 
-			lychee.sorting			= data.config.sorting			|| '';
+			lychee.sortingPhotos	= data.config.sortingPhotos		|| '';
+			lychee.sortingAlbums	= data.config.sortingAlbums		|| '';
 			lychee.dropboxKey		= data.config.dropboxKey		|| '';
 			lychee.location			= data.config.location			|| '';
 			lychee.checkForUpdates	= data.config.checkForUpdates	|| '1';
@@ -382,10 +384,13 @@ lychee.loadDropbox = function(callback) {
 
 }
 
-lychee.removeHTML = function(html) {
+lychee.removeHTML = function(html = '') {
+
+	if (html==='') return html;
 
 	var tmp = document.createElement('DIV');
 	tmp.innerHTML = html;
+
 	return tmp.textContent || tmp.innerText;
 
 }

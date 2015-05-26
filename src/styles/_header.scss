@@ -38,6 +38,9 @@ header {
 		text-align: center;
 		z-index: 1;
 		cursor: default;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
 
 		.iconic {
 			display: none;

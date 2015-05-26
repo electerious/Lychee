@@ -46,9 +46,7 @@ view.albums = {
 
 				$.each(albums.json.albums, function() {
 					albums.parse(this);
-
-					// Display albums in reverse order
-					albumsData = build.album(this) + albumsData;
+					albumsData += build.album(this);
 				});
 
 				// Add divider
@@ -73,17 +71,11 @@ view.albums = {
 
 		title: function(albumID) {
 
-			var longTitle	= '',
-				title		= albums.json.albums[albumID].title;
-
-			if (title!==null&&title.length>18) {
-				longTitle	= title;
-				title		= title.substr(0, 18) + '...';
-			}
+			var title = albums.getByID(albumID).title;
 
 			$('.album[data-id="' + albumID + '"] .overlay h1')
 				.html(title)
-				.attr('title', longTitle);
+				.attr('title', title);
 
 		},
 
@@ -94,7 +86,7 @@ view.albums = {
 				marginLeft:	0
 			}, 300, function() {
 				$(this).remove();
-				if (albums.json.num<=0) lychee.animate('#content .divider:last-of-type', 'fadeOut');
+				if (albums.json.num<=0) lychee.content.find('.divider:last-child').remove();
 			});
 
 		}
@@ -155,27 +147,27 @@ view.album = {
 			view.albums.content.scrollPosition = $(document).scrollTop();
 			$('html, body').scrollTop(0);
 
-			$.each(album.json.content, function() {
-				photosData += build.photo(this);
-			});
+			if (album.json.content&&album.json.content!==false) {
 
+				// Build photos
+				$.each(album.json.content, function() {
+					photosData += build.photo(this);
+				});
+
+			}
+
+			// Add photos to view
 			lychee.content.html(photosData);
 
 		},
 
 		title: function(photoID) {
 
-			var longTitle	= '',
-				title		= album.json.content[photoID].title;
-
-			if (title!==null&&title.length>18) {
-				longTitle	= title;
-				title		= title.substr(0, 18) + '...';
-			}
+			var title = album.json.content[photoID].title;
 
 			$('.photo[data-id="' + photoID + '"] .overlay h1')
 				.html(title)
-				.attr('title', longTitle);
+				.attr('title', title);
 
 		},
 

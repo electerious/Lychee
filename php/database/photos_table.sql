@@ -4,7 +4,7 @@
 
 CREATE TABLE IF NOT EXISTS `?` (
   `id` bigint(14) NOT NULL,
-  `title` varchar(50) NOT NULL,
+  `title` varchar(100) NOT NULL,
   `description` varchar(1000) DEFAULT '',
   `url` varchar(100) NOT NULL,
   `tags` varchar(1000) NOT NULL DEFAULT '',

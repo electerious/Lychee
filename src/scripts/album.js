@@ -138,7 +138,7 @@ album.add = function() {
 	}
 
 	basicModal.show({
-		body: "<p>Enter a title for the new album: <input class='text' data-name='title' type='text' maxlength='30' placeholder='Title' value='Untitled'></p>",
+		body: "<p>Enter a title for the new album: <input class='text' data-name='title' type='text' maxlength='50' placeholder='Title' value='Untitled'></p>",
 		buttons: {
 			action: {
 				title: 'Create Album',
@@ -180,7 +180,7 @@ album.delete = function(albumIDs) {
 				albumIDs.forEach(function(id) {
 					albums.json.num--;
 					view.albums.content.delete(id);
-					delete albums.json.albums[id];
+					albums.deleteByID(id);
 				});
 
 			} else {
@@ -210,7 +210,7 @@ album.delete = function(albumIDs) {
 
 		// Get title
 		if (album.json)			albumTitle = album.json.title;
-		else if (albums.json)	albumTitle = albums.json.albums[albumIDs].title;
+		else if (albums.json)	albumTitle = albums.getByID(albumIDs).title;
 
 		msg = "<p>Are you sure you want to delete the album '" + albumTitle + "' and all of the photos it contains? This action can't be undone!</p>";
 
@@ -254,7 +254,7 @@ album.setTitle = function(albumIDs) {
 
 		// Get old title if only one album is selected
 		if (album.json)			oldTitle = album.json.title;
-		else if (albums.json)	oldTitle = albums.json.albums[albumIDs].title;
+		else if (albums.json)	oldTitle = albums.getByID(albumIDs).title;
 
 		if (!oldTitle) oldTitle = '';
 		oldTitle = oldTitle.replace(/'/g, '&apos;');
@@ -281,13 +281,13 @@ album.setTitle = function(albumIDs) {
 
 			if (albums.json) {
 				var id = albumIDs[0];
-				albums.json.albums[id].title = newTitle;
+				albums.getByID(id).title = newTitle;
 			}
 
 		} else if (visible.albums()) {
 
 			albumIDs.forEach(function(id) {
-				albums.json.albums[id].title = newTitle;
+				albums.getByID(id).title = newTitle;
 				view.albums.content.title(id);
 			});
 
@@ -306,7 +306,7 @@ album.setTitle = function(albumIDs) {
 
 	}
 
-	input = "<input class='text' data-name='title' type='text' maxlength='30' placeholder='Title' value='" + oldTitle + "'>";
+	input = "<input class='text' data-name='title' type='text' maxlength='50' placeholder='Title' value='" + oldTitle + "'>";
 
 	if (albumIDs.length===1)	msg = "<p>Enter a new title for this album: " + input + "</p>";
 	else						msg = "<p>Enter a title for all " + albumIDs.length + " selected albums: " + input +"</p>";
@@ -580,7 +580,7 @@ album.merge = function(albumIDs) {
 	if (albumIDs instanceof Array===false) albumIDs = [albumIDs];
 
 	// Get title of first album
-	if (albums.json) title = albums.json.albums[albumIDs[0]].title;
+	if (albums.json) title = albums.getByID(albumIDs[0]).title;
 
 	if (!title) title = '';
 	title = title.replace(/'/g, '&apos;');
@@ -588,7 +588,7 @@ album.merge = function(albumIDs) {
 	if (albumIDs.length===2) {
 
 		// Get title of second album
-		if (albums.json) sTitle = albums.json.albums[albumIDs[1]].title;
+		if (albums.json) sTitle = albums.getByID(albumIDs[1]).title;
 
 		if (!sTitle) sTitle = '';
 		sTitle = sTitle.replace(/'/g, '&apos;');

@@ -1,6 +1,15 @@
+## v3.0.1
+
+Released May 24, 2015
+
+- `New` Album Sorting (Thanks @ophian, #98)
+- `New` Identifier to prevent login of multiple instances of lychee (#344)
+- `Improved` Albums and photos now can have a title with up to 50 chars (#332)
+- `Fixed` Removing last Tag from photo not possible in Firefox (#269)
+
 ## v3.0.0
 
-Released April 6, 2015
+Released May 6, 2015
 
 **Warning**: You need to enter a new username and password when upgrading from a previous version. Your installation is accessible for everyone till you enter a new login by visiting your Lychee. Both fields are now stored in a secure way. Legacy md5 code has been removed.
 

@@ -281,7 +281,8 @@ settings.setLogin = function() {
 
 settings.setSorting = function() {
 
-	var sorting = [],
+	var sortingPhotos = [],
+		sortingAlbums = [],
 		action,
 		msg = '';
 
@@ -289,21 +290,27 @@ settings.setSorting = function() {
 
 		var params;
 
-		sorting[0] = $('.basicModal select#settings_type').val();
-		sorting[1] = $('.basicModal select#settings_order').val();
+		sortingAlbums[0] = $('.basicModal select#settings_albums_type').val();
+		sortingAlbums[1] = $('.basicModal select#settings_albums_order').val();
+
+		sortingPhotos[0] = $('.basicModal select#settings_photos_type').val();
+		sortingPhotos[1] = $('.basicModal select#settings_photos_order').val();
 
 		basicModal.close();
 		albums.refresh();
 
 		params = {
-			type: sorting[0],
-			order: sorting[1]
+			typeAlbums:		sortingAlbums[0],
+			orderAlbums:	sortingAlbums[1],
+			typePhotos:		sortingPhotos[0],
+			orderPhotos:	sortingPhotos[1]
 		}
 
 		api.post('Settings::setSorting', params, function(data) {
 
 			if (data===true) {
-				lychee.sorting = 'ORDER BY ' + sorting[0] + ' ' + sorting[1];
+				lychee.sortingAlbums	= 'ORDER BY ' + sortingAlbums[0] + ' ' + sortingAlbums[1];
+				lychee.sortingPhotos	= 'ORDER BY ' + sortingPhotos[0] + ' ' + sortingPhotos[1];
 				lychee.load();
 			} else lychee.error(null, params, data);
 
@@ -313,21 +320,44 @@ settings.setSorting = function() {
 
 	msg =	`
 			<p>
-				Sort photos by
-				<select id='settings_type'>
-					<option value='id'>Upload Time</option>
-					<option value='takestamp'>Take Date</option>
-					<option value='title'>Title</option>
-					<option value='description'>Description</option>
-					<option value='public'>Public</option>
-					<option value='star'>Star</option>
-					<option value='type'>Photo Format</option>
-				</select>
+				Sort albums by
+				<span class="select">
+					<select id='settings_albums_type'>
+						<option value='id'>Creation Time</option>
+						<option value='title'>Title</option>
+						<option value='description'>Description</option>
+						<option value='public'>Public</option>
+					</select>
+				</span>
 				in an
-				<select id='settings_order'>
-					<option value='ASC'>Ascending</option>
-					<option value='DESC'>Descending</option>
-				</select>
+				<span class="select">
+					<select id='settings_albums_order'>
+						<option value='ASC'>Ascending</option>
+						<option value='DESC'>Descending</option>
+					</select>
+				</span>
+				order.
+			</p>
+			<p>
+				Sort photos by
+				<span class="select">
+					<select id='settings_photos_type'>
+						<option value='id'>Upload Time</option>
+						<option value='takestamp'>Take Date</option>
+						<option value='title'>Title</option>
+						<option value='description'>Description</option>
+						<option value='public'>Public</option>
+						<option value='star'>Star</option>
+						<option value='type'>Photo Format</option>
+					</select>
+				</span>
+				in an
+				<span class="select">
+					<select id='settings_photos_order'>
+						<option value='ASC'>Ascending</option>
+						<option value='DESC'>Descending</option>
+					</select>
+				</span>
 				order.
 			</p>
 			`
@@ -346,12 +376,21 @@ settings.setSorting = function() {
 		}
 	});
 
-	if (lychee.sorting!=='') {
+	if (lychee.sortingAlbums!=='') {
 
-		sorting = lychee.sorting.replace('ORDER BY ', '').split(' ');
+		sortingAlbums = lychee.sortingAlbums.replace('ORDER BY ', '').split(' ');
 
-		$('.basicModal select#settings_type').val(sorting[0]);
-		$('.basicModal select#settings_order').val(sorting[1]);
+		$('.basicModal select#settings_albums_type').val(sortingAlbums[0]);
+		$('.basicModal select#settings_albums_order').val(sortingAlbums[1]);
+
+	}
+
+	if (lychee.sortingPhotos!=='') {
+
+		sortingPhotos = lychee.sortingPhotos.replace('ORDER BY ', '').split(' ');
+
+		$('.basicModal select#settings_photos_type').val(sortingPhotos[0]);
+		$('.basicModal select#settings_photos_order').val(sortingPhotos[1]);
 
 	}
 
