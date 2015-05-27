@@ -623,7 +623,11 @@ class Photo extends Module {
 		else						$photo['medium'] = '';
 
 		# Parse paths
-		$photo['url']		= LYCHEE_URL_UPLOADS_BIG . $photo['url'];
+		if ( $photo['media_type'] == 'video' ) {
+			$photo['url']		= LYCHEE_URL_UPLOADS_VIDEO . $photo['url'];
+		} else {
+			$photo['url']		= LYCHEE_URL_UPLOADS_BIG . $photo['url'];
+		}
 		$photo['thumbUrl']	= LYCHEE_URL_UPLOADS_THUMB . $photo['thumbUrl'];
 
 		if ($albumID!='false') {
@@ -1160,7 +1164,7 @@ class Photo extends Module {
 
 				# Get retina thumb url
 				$thumbUrl2x = explode(".", $photo->thumbUrl);
-				$thumbUrl2x = $thumbUrl2x[0] . '@2x.' . $thumbUrl2x[1];
+				$thumbUrl2x = $thumbUrl2x[0] . '@2x.' . (isset($thumbUrl2x[1]) ? $thumbUrl2x[1] : '');
 
 				# Delete big
 				if (file_exists(LYCHEE_UPLOADS_BIG . $photo->url)&&!unlink(LYCHEE_UPLOADS_BIG . $photo->url)) {
@@ -1175,7 +1179,7 @@ class Photo extends Module {
 				}
 
 				# Delete thumb
-				if (file_exists(LYCHEE_UPLOADS_THUMB . $photo->thumbUrl)&&!unlink(LYCHEE_UPLOADS_THUMB . $photo->thumbUrl)) {
+				if (file_exists(LYCHEE_UPLOADS_THUMB . $photo->thumbUrl)&&!is_dir(LYCHEE_UPLOADS_THUMB . $photo->thumbUrl)&&!unlink(LYCHEE_UPLOADS_THUMB . $photo->thumbUrl)) {
 					Log::error($this->database, __METHOD__, __LINE__, 'Could not delete photo in uploads/thumb/');
 					return false;
 				}

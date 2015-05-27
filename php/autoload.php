@@ -9,7 +9,7 @@ if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 function lycheeAutoloaderModules($class_name) {
 
-	$modules = array('Album', 'Database', 'Import', 'Log', 'Module', 'Photo', 'Plugins', 'Session', 'Settings');
+	$modules = array('Album', 'Database', 'Import', 'Log', 'Module', 'Photo', 'Plugins', 'Session', 'Settings', 'Video');
 	if (!in_array($class_name, $modules)) return false;
 
 	$file = LYCHEE . 'php/modules/' . $class_name . '.php';

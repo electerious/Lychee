@@ -7,12 +7,14 @@ uploads/big/*
 uploads/import/*
 uploads/medium/*
 uploads/thumb/*
+uploads/video/*
 plugins/*
 
 !uploads/big/index.html
 !uploads/import/index.html
 !uploads/medium/index.html
 !uploads/thumb/index.html
+!uploads/video/index.html
 
 !plugins/check/
 !plugins/displaylog/
