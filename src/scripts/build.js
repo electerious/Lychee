@@ -134,7 +134,9 @@ build.imageview = function(data, size, visibleControls) {
 			<div class='arrow_wrapper arrow_wrapper--next'><a id='next'>${ build.iconic('caret-right') }</a></div>
 			`
 
-	if (size==='big') {
+    if (data.media_type==='video') {
+        html += `<video id='image' class='video' controls src='${data.url}'>This video format is not supported by your browser yet. <a href='${data.url}'>Download video</a></video>`
+    } else if (size==='big') {
 
 		if (visibleControls===true)
 			html += `<div id='image' style='background-image: url(${ data.url })'></div>`;
