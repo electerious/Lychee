@@ -135,7 +135,7 @@ build.imageview = function(data, size, visibleControls) {
 			`
 
     if (data.media_type==='video') {
-        html += `<video id='image' class='video' controls src='${data.url}'></video>`
+        html += `<video id='image' class='video' controls src='${data.url}'>This video format is not supported by your browser yet. <a href='${data.url}'>Download video</a></video>`
     } else if (size==='big') {
 
 		if (visibleControls===true)
