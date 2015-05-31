@@ -38,12 +38,12 @@ if (!extension_loaded('json'))		$error .= ('Error: PHP json extension not activa
 if (!extension_loaded('zip'))		$error .= ('Error: PHP zip extension not activated' . PHP_EOL);
 
 # Permissions
-if (hasPermissions(LYCHEE_UPLOADS_BIG)===false)			$error .= ('Error: \'uploads/big\' missing or not readable and writable (777 required)' . PHP_EOL);
-if (hasPermissions(LYCHEE_UPLOADS_MEDIUM)===false)		$error .= ('Error: \'uploads/medium\' missing or not readable and writable (777 required)' . PHP_EOL);
-if (hasPermissions(LYCHEE_UPLOADS_THUMB)===false)		$error .= ('Error: \'uploads/thumb\' missing or not readable and writable (777 required)' . PHP_EOL);
-if (hasPermissions(LYCHEE_UPLOADS_IMPORT)===false)		$error .= ('Error: \'uploads/import\' missing or not readable and writable (777 required)' . PHP_EOL);
-if (hasPermissions(LYCHEE_UPLOADS)===false)				$error .= ('Error: \'uploads/\' missing or not readable and writable (777 required)' . PHP_EOL);
-if (hasPermissions(LYCHEE_DATA)===false)				$error .= ('Error: \'data/\' missing or not readable and writable (777 required)' . PHP_EOL);
+if (hasPermissions(LYCHEE_UPLOADS_BIG)===false)			$error .= ('Error: \'uploads/big\' is missing or has insufficient read/write privileges' . PHP_EOL);
+if (hasPermissions(LYCHEE_UPLOADS_MEDIUM)===false)		$error .= ('Error: \'uploads/medium\' is missing or has insufficient read/write privileges' . PHP_EOL);
+if (hasPermissions(LYCHEE_UPLOADS_THUMB)===false)		$error .= ('Error: \'uploads/thumb\' is missing or has insufficient read/write privileges' . PHP_EOL);
+if (hasPermissions(LYCHEE_UPLOADS_IMPORT)===false)		$error .= ('Error: \'uploads/import\' is missing or has insufficient read/write privileges' . PHP_EOL);
+if (hasPermissions(LYCHEE_UPLOADS)===false)				$error .= ('Error: \'uploads/\' is missing or has insufficient read/write privileges' . PHP_EOL);
+if (hasPermissions(LYCHEE_DATA)===false)				$error .= ('Error: \'data/\' is missing or has insufficient read/write privileges' . PHP_EOL);
 
 # Load config
 if (!file_exists(LYCHEE_CONFIG_FILE))	exit('Error: Configuration not found. Please install Lychee for additional tests.');
