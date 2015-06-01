@@ -5,6 +5,7 @@
     "jQuery": "~2.1.4",
     "mousetrap": "~1.5.2",
     "basicContext": "~2.0.9",
-    "basicModal": "~2.0.8"
+    "basicModal": "~2.0.8",
+    "mediaelement": "~2.16.4"
   }
 }
