@@ -127,8 +127,8 @@ lychee.loginDialog = function() {
 
 	msg =	`
 			<p class='signIn'>
-				<input class='text' data-name='username' type='text' value='' placeholder='username' autocapitalize='off' autocorrect='off'>
-				<input class='text' data-name='password' type='password' value='' placeholder='password'>
+				<input class='text' name='username' autocomplete='username' data-name='username' type='text' value='' placeholder='username' autocapitalize='off' autocorrect='off'>
+				<input class='text' name='password' autocomplete='current-password' data-name='password' type='password' value='' placeholder='password'>
 			</p>
 			<p class='version'>Lychee ${ lychee.version }<span> &#8211; <a target='_blank' href='${ lychee.updateURL }'>Update available!</a><span></p>
 			`
