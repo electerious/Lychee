@@ -1,3 +1,11 @@
+## v3.0.2
+
+Released June 13, 2015
+
+- `Improved` Permission errors are now easier to understand (#351)
+- `Improved` Escape data from database before inserting into `view.php`
+- `Fixed` PHP-version-check now requires PHP >= 5.3 like written in the docs
+
 ## v3.0.1
 
 Released May 24, 2015
