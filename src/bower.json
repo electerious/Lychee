@@ -4,7 +4,7 @@
   "dependencies": {
     "jQuery": "~2.1.4",
     "mousetrap": "~1.5.2",
-    "basicContext": "~2.0.9",
+    "basicContext": "~3.0.3",
     "basicModal": "~2.0.8"
   }
 }
