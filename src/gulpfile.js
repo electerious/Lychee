@@ -27,7 +27,7 @@ paths.view = {
 		'./scripts/view/main.js'
 	],
 	scripts: [
-		'bower_components/jQuery/dist/jquery.min.js',
+		'node_modules/jquery/dist/jquery.min.js',
 		'../dist/_view--javascript.js'
 	],
 	svg: [
@@ -84,10 +84,10 @@ paths.main = {
 		'./scripts/*.js'
 	],
 	scripts: [
-		'bower_components/jQuery/dist/jquery.min.js',
-		'bower_components/mousetrap/mousetrap.min.js',
-		'bower_components/mousetrap/plugins/global-bind/mousetrap-global-bind.min.js',
-		'bower_components/basicContext/dist/basicContext.min.js',
+		'node_modules/jquery/dist/jquery.min.js',
+		'node_modules/mousetrap/mousetrap.min.js',
+		'node_modules/mousetrap/plugins/global-bind/mousetrap-global-bind.min.js',
+		'node_modules/basiccontext/dist/basicContext.min.js',
 		'bower_components/basicModal/dist/basicModal.min.js',
 		'../dist/_main--javascript.js'
 	],
@@ -95,7 +95,7 @@ paths.main = {
 		'./styles/*.scss'
 	],
 	styles: [
-		'bower_components/basicContext/src/styles/main.scss',
+		'node_modules/basiccontext/src/styles/main.scss',
 		'bower_components/basicModal/src/styles/main.scss',
 		'./styles/main.scss'
 	],
