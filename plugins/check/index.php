@@ -26,7 +26,7 @@ echo('Diagnostics' . PHP_EOL);
 echo('-----------' . PHP_EOL);
 
 # PHP Version
-if (floatval(phpversion())<5.2)		$error .= ('Error: Upgrade to PHP 5.2 or higher!' . PHP_EOL);
+if (floatval(phpversion())<5.3)		$error .= ('Error: Upgrade to PHP 5.3 or higher' . PHP_EOL);
 
 # Extensions
 if (!extension_loaded('session'))	$error .= ('Error: PHP session extension not activated' . PHP_EOL);
@@ -38,15 +38,15 @@ if (!extension_loaded('json'))		$error .= ('Error: PHP json extension not activa
 if (!extension_loaded('zip'))		$error .= ('Error: PHP zip extension not activated' . PHP_EOL);
 
 # Permissions
-if (hasPermissions(LYCHEE_UPLOADS_BIG)===false)			$error .= ('Error: \'uploads/big\' missing or not readable and writable (777 required)' . PHP_EOL);
-if (hasPermissions(LYCHEE_UPLOADS_MEDIUM)===false)		$error .= ('Error: \'uploads/medium\' missing or not readable and writable (777 required)' . PHP_EOL);
-if (hasPermissions(LYCHEE_UPLOADS_THUMB)===false)		$error .= ('Error: \'uploads/thumb\' missing or not readable and writable (777 required)' . PHP_EOL);
-if (hasPermissions(LYCHEE_UPLOADS_IMPORT)===false)		$error .= ('Error: \'uploads/import\' missing or not readable and writable (777 required)' . PHP_EOL);
-if (hasPermissions(LYCHEE_UPLOADS)===false)				$error .= ('Error: \'uploads/\' missing or not readable and writable (777 required)' . PHP_EOL);
-if (hasPermissions(LYCHEE_DATA)===false)				$error .= ('Error: \'data/\' missing or not readable and writable (777 required)' . PHP_EOL);
+if (hasPermissions(LYCHEE_UPLOADS_BIG)===false)			$error .= ('Error: \'uploads/big\' is missing or has insufficient read/write privileges' . PHP_EOL);
+if (hasPermissions(LYCHEE_UPLOADS_MEDIUM)===false)		$error .= ('Error: \'uploads/medium\' is missing or has insufficient read/write privileges' . PHP_EOL);
+if (hasPermissions(LYCHEE_UPLOADS_THUMB)===false)		$error .= ('Error: \'uploads/thumb\' is missing or has insufficient read/write privileges' . PHP_EOL);
+if (hasPermissions(LYCHEE_UPLOADS_IMPORT)===false)		$error .= ('Error: \'uploads/import\' is missing or has insufficient read/write privileges' . PHP_EOL);
+if (hasPermissions(LYCHEE_UPLOADS)===false)				$error .= ('Error: \'uploads/\' is missing or has insufficient read/write privileges' . PHP_EOL);
+if (hasPermissions(LYCHEE_DATA)===false)				$error .= ('Error: \'data/\' is missing or has insufficient read/write privileges' . PHP_EOL);
 
 # Load config
-if (!file_exists(LYCHEE_CONFIG_FILE))	exit('Error: Configuration not found. Please install Lychee for additional tests.');
+if (!file_exists(LYCHEE_CONFIG_FILE))	exit('Error: Configuration not found. Please install Lychee for additional tests');
 else									require(LYCHEE_CONFIG_FILE);
 
 # Define the table prefix
@@ -71,13 +71,14 @@ if (!isset($dbHost)||$dbHost==='')	$error .= ('Error: No property for $dbHost in
 if (!isset($settings['username'])||$settings['username']=='')			$error .= ('Error: Username empty or not set in database' . PHP_EOL);
 if (!isset($settings['password'])||$settings['password']=='')			$error .= ('Error: Password empty or not set in database' . PHP_EOL);
 if (!isset($settings['thumbQuality'])||$settings['thumbQuality']=='')	$error .= ('Error: No or wrong property for thumbQuality in database' . PHP_EOL);
-if (!isset($settings['sorting'])||$settings['sorting']=='')				$error .= ('Error: Wrong property for sorting in database' . PHP_EOL);
+if (!isset($settings['sortingPhotos'])||$settings['sortingPhotos']=='')	$error .= ('Error: Wrong property for sortingPhotos in database' . PHP_EOL);
+if (!isset($settings['sortingAlbums'])||$settings['sortingAlbums']=='')	$error .= ('Error: Wrong property for sortingAlbums in database' . PHP_EOL);
 if (!isset($settings['plugins']))										$error .= ('Error: No property for plugins in database' . PHP_EOL);
 if (!isset($settings['imagick'])||$settings['imagick']=='')				$error .= ('Error: No or wrong property for imagick in database' . PHP_EOL);
 if (!isset($settings['checkForUpdates'])||($settings['checkForUpdates']!='0'&&$settings['checkForUpdates']!='1')) $error .= ('Error: No or wrong property for checkForUpdates in database' . PHP_EOL);
 
 # Check dropboxKey
-if (!$settings['dropboxKey']) echo('Warning: Dropbox import not working. No property for dropboxKey.' . PHP_EOL);
+if (!$settings['dropboxKey']) echo('Warning: Dropbox import not working. No property for dropboxKey' . PHP_EOL);
 
 # Check php.ini Settings
 if (ini_get('max_execution_time')<200&&ini_set('upload_max_filesize', '20M')===false) echo('Warning: You may experience problems when uploading a large amount of photos. Take a look in the FAQ for details.' . PHP_EOL);

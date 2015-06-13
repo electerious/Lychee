@@ -1,9 +1,17 @@
+## v3.0.2
+
+Released June 13, 2015
+
+- `Improved` Permission errors are now easier to understand (#351)
+- `Improved` Escape data from database before inserting into `view.php`
+- `Fixed` PHP-version-check now requires PHP >= 5.3 like written in the docs
+
 ## v3.0.1
 
 Released May 24, 2015
 
 - `New` Album Sorting (Thanks @ophian, #98)
-- `New` Identifier to prevent login of multiple instances of lychee (#344)
+- `New` Identifier to prevent login of multiple Lychee-instances (#344)
 - `Improved` Albums and photos now can have a title with up to 50 chars (#332)
 - `Fixed` Removing last Tag from photo not possible in Firefox (#269)
 

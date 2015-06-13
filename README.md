@@ -1,6 +1,6 @@
 # Lychee
 
-#### A great looking and easy-to-use Photo-Management-System.
+#### A great looking and easy-to-use photo-management-system.
 
 ![Lychee](http://l.electerious.com/uploads/big/c4b58cb87d95aeaed78fdca581cc908c.jpg)
 ![Lychee](http://l.electerious.com/uploads/big/075ac5de5b5d6c593acbb700f0e1d739.jpg)
