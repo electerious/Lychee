@@ -246,22 +246,26 @@ class Admin extends Access {
 		global $dbName;
 
 		Module::dependencies(isset($_POST['version']));
-		$session = new Session($this->plugins, $this->settings);
+		$session = new Session($this->database, $dbName, $this->plugins, $this->settings);
 		echo json_encode($session->init($this->database, $dbName, false, $_POST['version']));
 
 	}
 
 	private function login() {
 
+                global $dbName;
+
 		Module::dependencies(isset($_POST['user'], $_POST['password']));
-		$session = new Session($this->plugins, $this->settings);
+		$session = new Session($this->database, $dbName, $this->plugins, $this->settings);
 		echo $session->login($_POST['user'], $_POST['password']);
 
 	}
 
 	private function logout() {
 
-		$session = new Session($this->plugins, $this->settings);
+                global $dbName;
+
+		$session = new Session($this->database, $dbName, $this->plugins, $this->settings);
 		echo $session->logout();
 
 	}
