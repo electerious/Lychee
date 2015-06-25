@@ -16,8 +16,8 @@ class Session extends Module {
 		# Init vars
 		$this->plugins	= $plugins;
 		$this->settings	= $settings;
-                $this->database = $database;
-                $this->dbname   = $dbname;
+		$this->database = $database;
+		$this->dbname	= $dbname;
 
 		return true;
 
@@ -39,9 +39,9 @@ class Session extends Module {
 			}
 		}
 
-                # Clear expired sessions
-                $query = Database::prepare($this->database, "DELETE FROM ? WHERE expires < UNIX_TIMESTAMP(NOW())", array(LYCHEE_TABLE_SESSIONS));
-                $this->database->query($query);
+		# Clear expired sessions
+		$query = Database::prepare($this->database, "DELETE FROM ? WHERE expires < UNIX_TIMESTAMP(NOW())", array(LYCHEE_TABLE_SESSIONS));
+		$this->database->query($query);
 
 		# Return settings
 		$return['config'] = $this->settings;
@@ -65,11 +65,11 @@ class Session extends Module {
 		}
 
 		# Check login with crypted hash
-                if(isset( $_COOKIE['SESSION']) && $this->sessionExists($_COOKIE['SESSION']) ){
-                      	$_SESSION['login']		= true;
+		if(isset( $_COOKIE['SESSION']) && $this->sessionExists($_COOKIE['SESSION']) ){
+			$_SESSION['login']		= true;
 			$_SESSION['identifier']	= $this->settings['identifier'];
-                        $public = false;
-                }
+			$public = false;
+		}
  
 		if ($public===false) {
 
@@ -112,17 +112,17 @@ class Session extends Module {
 		$username = crypt($username, $this->settings['username']);
 		$password = crypt($password, $this->settings['password']);
 
-                if ($this->settings['username']===$username&&
+		if ($this->settings['username']===$username&&
 			$this->settings['password']===$password) {
 				$_SESSION['login']		= true;
 				$_SESSION['identifier']	= $this->settings['identifier'];
 
-                                $expire = time() + 60 * $this->settings['sessionLength'];
-                                $hash = hash("sha1", $expire.$this->settings['identifier'].$this->settings['username'].$this->settings['password']);
-                                $query = Database::prepare($this->database, "INSERT INTO ? (value, expires) VALUES ('?', ?)", array(LYCHEE_TABLE_SESSIONS, $hash, $expire));
-                                $result = $this->database->query($query);
+				$expire = time() + 60 * $this->settings['sessionLength'];
+				$hash = hash("sha1", $expire.$this->settings['identifier'].$this->settings['username'].$this->settings['password']);
+				$query = Database::prepare($this->database, "INSERT INTO ? (value, expires) VALUES ('?', ?)", array(LYCHEE_TABLE_SESSIONS, $hash, $expire));
+				$result = $this->database->query($query);
 
-                                setcookie("SESSION", $hash, $expire, "/","", false, true);
+				setcookie("SESSION", $hash, $expire, "/","", false, true);
 
 				return true;
 		}
@@ -143,7 +143,7 @@ class Session extends Module {
 		self::dependencies(isset($this->settings));
 
 		# Check if login credentials exist and login if they don't
-                if($this->settings['username']==='' && $this->settings['password']==='') {
+		if($this->settings['username']==='' && $this->settings['password']==='') {
 				$_SESSION['login']		= true;
 				$_SESSION['identifier']	= $this->settings['identifier'];
 				return true;
@@ -161,11 +161,11 @@ class Session extends Module {
 		$_SESSION['login']		= null;
 		$_SESSION['identifier']	= null;
 
-                # Delete the session from the database
-                if(isset($_COOKIE['SESSION'])){
-                  $query = Database::prepare($this->database, "DELETE FROM ? WHERE value = '?'", array(LYCHEE_TABLE_SESSIONS, $_COOKIE['SESSION']));
-                  $this->database->query($query);
-                }
+		# Delete the session from the database
+		if(isset($_COOKIE['SESSION'])){
+		  $query = Database::prepare($this->database, "DELETE FROM ? WHERE value = '?'", array(LYCHEE_TABLE_SESSIONS, $_COOKIE['SESSION']));
+		  $this->database->query($query);
+		}
 
 		session_destroy();
 
@@ -174,13 +174,13 @@ class Session extends Module {
 
 		return true;
 
-        }
+	}
 
-        private function sessionExists($sessionId){
-              $query = Database::prepare($this->database, "SELECT * FROM ? WHERE value = '?'", array(LYCHEE_TABLE_SESSIONS, $sessionId));
-              $result = $this->database->query($query);
-              return $result->num_rows === 1;
-        }
+	private function sessionExists($sessionId){
+	      $query = Database::prepare($this->database, "SELECT * FROM ? WHERE value = '?'", array(LYCHEE_TABLE_SESSIONS, $sessionId));
+	      $result = $this->database->query($query);
+	      return $result->num_rows === 1;
+	}
 
 }
 
