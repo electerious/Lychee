@@ -34,11 +34,17 @@ Less means an inferiority quality of your thumbs, but faster loading. More means
 
 If `1`, Lychee will check if you are using the latest version. The notice will be displayed beside the version-number when you sign in.
 
-#### Sorting
+#### Album-Sorting
 
-	sorting = ORDER BY [row] [ASC|DESC]
+	sortingAlbums = ORDER BY [field] [ASC|DESC]
 
-A typical part of a MySQL statement. This string will be appended to mostly every MySQL query.
+Substring of a MySQL query. This string will be appended to all album-related MySQL queries.
+
+#### Photo-Sorting
+
+	sortingPhotos = ORDER BY [field] [ASC|DESC]
+
+Substring of a MySQL query. This string will be appended to all photo-related MySQL queries.
 
 #### Dropbox Key
 
@@ -57,3 +63,9 @@ If `1`, Lychee will use Imagick when available. Disable [Imagick](http://www.ima
 	medium = [0|1]
 
 If `1`, Lychee will create a second, smaller version of your photo. This feature requires [Imagick](http://www.imagemagick.org) on your server and an activated `imagick` option the the settings table.
+
+#### Skip Duplicates on Upload
+
+	skipDuplicates = [0|1]
+
+Lychee will skip the upload of existing photos when actived.
