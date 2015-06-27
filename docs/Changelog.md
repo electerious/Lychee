@@ -1,6 +1,6 @@
 ## v3.0.3
 
-Released June 27, 2015
+Released June 28, 2015
 
 - `New` Skip duplicates on upload (#367, [How to activate](settings.md))
 - `Fixed` Clicks not recognized when using a mouse on a touchscreen-device #345
