@@ -40,7 +40,7 @@ class Photo extends Module {
 	public function add($files, $albumID, $description = '', $tags = '') {
 
 		# Check dependencies
-		self::dependencies(isset($this->database));
+		self::dependencies(isset($this->database, $this->settings, $files));
 
 		# Check permissions
 		if (hasPermissions(LYCHEE_UPLOADS)===false||
@@ -148,6 +148,15 @@ class Photo extends Module {
 						Log::error($this->database, __METHOD__, __LINE__, 'Could not move photo to uploads');
 						exit('Error: Could not move photo to uploads!');
 					}
+				}
+
+			} else {
+
+				# Photo already exists
+				# Check if the user wants to skip duplicates
+				if ($this->settings['skipDuplicates']==='1') {
+					Log::notice($this->database, __METHOD__, __LINE__, 'Skipped upload of existing photo because skipDuplicates is activated');
+					exit('Warning: This photo has been skipped because it\'s already in your library.');
 				}
 
 			}

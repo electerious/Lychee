@@ -301,11 +301,14 @@
 			animation-iteration-count: infinite;
 
 			&.error,
+			&.warning,
 			&.success { animation: none; }
 
-			&.error { color: rgb(213, 24, 24); }
+			&.error { color: rgb(233, 42, 0); }
 
-			&.success { color: rgb(42, 213, 0); }
+			&.warning { color: rgb(228, 233, 0); }
+
+			&.success { color: rgb(126, 233, 0); }
 		}
 
 		p.notice {

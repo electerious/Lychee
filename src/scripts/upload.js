@@ -44,6 +44,7 @@ upload.start = {
 
 		var albumID	= album.getID(),
 			error 	= false,
+			warning	= false,
 			process	= function(files, file) {
 
 				var formData		= new FormData(),
@@ -56,10 +57,16 @@ upload.start = {
 
 						$('#upload_files').val('');
 
-						if (error===false) {
+						if (error===false&&warning===false) {
 
 							// Success
 							basicModal.close();
+							upload.notify('Upload complete');
+
+						} else if (error===false&&warning===true) {
+
+							// Warning
+							$('.basicModal #basicModal__action.hidden').show();
 							upload.notify('Upload complete');
 
 						} else {
@@ -130,23 +137,44 @@ upload.start = {
 
 					} else {
 
-						// Error
-						$('.basicModal .rows .row:nth-child(' + (file.num+1) + ') .status')
-							.html('Error')
-							.addClass('error');
+						if (xhr.responseText.substr(0, 6)==='Error:') {
 
-						if (xhr.responseText.substr(0, 6)==='Error:') errorText = xhr.responseText.substr(6) + ' Please take a look at the console of your browser for further details.';
-						else errorText = 'Server returned an unknown response. Please take a look at the console of your browser for further details.';
+							errorText = xhr.responseText.substr(6) + ' Please take a look at the console of your browser for further details.';
+							error = true;
+
+							// Error Status
+							$('.basicModal .rows .row:nth-child(' + (file.num+1) + ') .status')
+								.html('Failed')
+								.addClass('error');
+
+						} else if (xhr.responseText.substr(0, 8)==='Warning:') {
+
+							errorText = xhr.responseText.substr(8);
+							warning = true;
+
+							// Warning Status
+							$('.basicModal .rows .row:nth-child(' + (file.num+1) + ') .status')
+								.html('Skipped')
+								.addClass('warning');
+
+						} else {
+
+							errorText = 'Server returned an unknown response. Please take a look at the console of your browser for further details.';
+							error = true;
+
+							// Error Status
+							$('.basicModal .rows .row:nth-child(' + (file.num+1) + ') .status')
+								.html('Failed')
+								.addClass('error');
+
+						}
 
 						$('.basicModal .rows .row:nth-child(' + (file.num+1) + ') p.notice')
 							.html(errorText)
 							.show();
 
-						// Set global error
-						error = true;
-
 						// Throw error
-						lychee.error('Upload failed. Server returned the status code ' + xhr.status + '!', xhr, xhr.responseText);
+						if (error===true) lychee.error('Upload failed. Server returned the status code ' + xhr.status + '!', xhr, xhr.responseText);
 
 					}
 
