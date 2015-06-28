@@ -322,7 +322,7 @@ upload.start = {
 		}
 
 		basicModal.show({
-			body: "<p>Please enter the direct link to a photo to import it: <input class='text' data-name='link' type='text' placeholder='http://' value='" + url + "'></p>",
+			body: "<p>Please enter the direct link to a photo to import it: <input class='text' name='link' type='text' placeholder='http://' value='" + url + "'></p>",
 			buttons: {
 				action: {
 					title: 'Import',
@@ -389,7 +389,7 @@ upload.start = {
 		}
 
 		basicModal.show({
-			body: "<p>This action will import all photos, folders and sub-folders which are located in the following directory. The <b>original files will be deleted</b> after the import when possible. <input class='text' data-name='path' type='text' maxlength='100' placeholder='Absolute path to directory' value='" + lychee.location + "uploads/import/'></p>",
+			body: "<p>This action will import all photos, folders and sub-folders which are located in the following directory. The <b>original files will be deleted</b> after the import when possible. <input class='text' name='path' type='text' maxlength='100' placeholder='Absolute path to directory' value='" + lychee.location + "uploads/import/'></p>",
 			buttons: {
 				action: {
 					title: 'Import',

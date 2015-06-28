@@ -138,7 +138,7 @@ album.add = function() {
 	}
 
 	basicModal.show({
-		body: "<p>Enter a title for the new album: <input class='text' data-name='title' type='text' maxlength='50' placeholder='Title' value='Untitled'></p>",
+		body: "<p>Enter a title for the new album: <input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='Untitled'></p>",
 		buttons: {
 			action: {
 				title: 'Create Album',
@@ -306,7 +306,7 @@ album.setTitle = function(albumIDs) {
 
 	}
 
-	input = "<input class='text' data-name='title' type='text' maxlength='50' placeholder='Title' value='" + oldTitle + "'>";
+	input = "<input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='" + oldTitle + "'>";
 
 	if (albumIDs.length===1)	msg = "<p>Enter a new title for this album: " + input + "</p>";
 	else						msg = "<p>Enter a title for all " + albumIDs.length + " selected albums: " + input +"</p>";
@@ -361,7 +361,7 @@ album.setDescription = function(albumID) {
 	}
 
 	basicModal.show({
-		body: "<p>Please enter a description for this album: <input class='text' data-name='description' type='text' maxlength='800' placeholder='Description' value='" + oldDescription + "'></p>",
+		body: "<p>Please enter a description for this album: <input class='text' name='description' type='text' maxlength='800' placeholder='Description' value='" + oldDescription + "'></p>",
 		buttons: {
 			action: {
 				title: 'Set Description',
@@ -431,7 +431,7 @@ album.setPublic = function(albumID, modal, e) {
 							<span class='label'>Password protected</span>
 						</label>
 						<p>Only accessible with a valid password.</p>
-						<input class='text' data-name='password' type='password' placeholder='password' value=''>
+						<input class='text' name='passwordtext' type='password' placeholder='password' value=''>
 					</div>
 				</form>
 				`
@@ -457,8 +457,8 @@ album.setPublic = function(albumID, modal, e) {
 
 		$('.basicModal .choice input[name="password"]').on('change', function() {
 
-			if ($(this).prop('checked')===true)	$('.basicModal .choice input[data-name="password"]').show().focus();
-			else								$('.basicModal .choice input[data-name="password"]').hide();
+			if ($(this).prop('checked')===true)	$('.basicModal .choice input[name="passwordtext"]').show().focus();
+			else								$('.basicModal .choice input[name="passwordtext"]').hide();
 
 		});
 
@@ -482,7 +482,7 @@ album.setPublic = function(albumID, modal, e) {
 
 		// Set password
 		if ($('.basicModal .choice input[name="password"]:checked').length===1) {
-			password			= $('.basicModal .choice input[data-name="password"]').val();
+			password			= $('.basicModal .choice input[name="passwordtext"]').val();
 			album.json.password	= '1';
 		} else {
 			password			= '';

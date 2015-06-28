@@ -127,8 +127,8 @@ lychee.loginDialog = function() {
 
 	msg =	`
 			<p class='signIn'>
-				<input class='text' name='username' autocomplete='username' data-name='username' type='text' value='' placeholder='username' autocapitalize='off' autocorrect='off'>
-				<input class='text' name='password' autocomplete='current-password' data-name='password' type='password' value='' placeholder='password'>
+				<input class='text' name='username' autocomplete='username' type='text' value='' placeholder='username' autocapitalize='off' autocorrect='off'>
+				<input class='text' name='password' autocomplete='current-password' type='password' value='' placeholder='password'>
 			</p>
 			<p class='version'>Lychee ${ lychee.version }<span> &#8211; <a target='_blank' href='${ lychee.updateURL }'>Update available!</a><span></p>
 			`
@@ -150,8 +150,8 @@ lychee.loginDialog = function() {
 	if (localStorage) {
 		localUsername = localStorage.getItem('lychee_username');
 		if (localUsername!==null) {
-			if (localUsername.length>0) $('.basicModal input[data-name="username"]').val(localUsername);
-			$('.basicModal input[data-name="password"]').focus();
+			if (localUsername.length>0) $('.basicModal input[name="username"]').val(localUsername);
+			$('.basicModal input[name="password"]').focus();
 		}
 	}
 

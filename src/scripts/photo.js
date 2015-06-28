@@ -330,7 +330,7 @@ photo.setTitle = function(photoIDs) {
 
 	}
 
-	input = "<input class='text' data-name='title' type='text' maxlength='50' placeholder='Title' value='" + oldTitle + "'>";
+	input = "<input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='" + oldTitle + "'>";
 
 	if (photoIDs.length===1)	msg = "<p>Enter a new title for this photo: " + input + "</p>";
 	else						msg = "<p>Enter a title for all " + photoIDs.length + " selected photos: " + input + "</p>";
@@ -509,7 +509,7 @@ photo.setDescription = function(photoID) {
 	}
 
 	basicModal.show({
-		body: "<p>Enter a description for this photo: <input class='text' data-name='description' type='text' maxlength='800' placeholder='Description' value='" + oldDescription + "'></p>",
+		body: "<p>Enter a description for this photo: <input class='text' name='description' type='text' maxlength='800' placeholder='Description' value='" + oldDescription + "'></p>",
 		buttons: {
 			action: {
 				title: 'Set Description',
@@ -556,7 +556,7 @@ photo.editTags = function(photoIDs) {
 
 	}
 
-	input = "<input class='text' data-name='tags' type='text' maxlength='800' placeholder='Tags' value='" + oldTags + "'>";
+	input = "<input class='text' name='tags' type='text' maxlength='800' placeholder='Tags' value='" + oldTags + "'>";
 
 	if (photoIDs.length===1)	msg = "<p>Enter your tags for this photo. You can add multiple tags by separating them with a comma: " + input + "</p>";
 	else						msg = "<p>Enter your tags for all " + photoIDs.length + " selected photos. Existing tags will be overwritten. You can add multiple tags by separating them with a comma: " + input + "</p>";

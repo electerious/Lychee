@@ -117,14 +117,14 @@ settings.createConfig = function() {
 	msg =	`
 			<p>
 				Enter your database connection details below:
-				<input data-name='dbHost' class='text' type='text' placeholder='Database Host (optional)' value=''>
-				<input data-name='dbUser' class='text' type='text' placeholder='Database Username' value=''>
-				<input data-name='dbPassword' class='text' type='password' placeholder='Database Password' value=''>
+				<input name='dbHost' class='text' type='text' placeholder='Database Host (optional)' value=''>
+				<input name='dbUser' class='text' type='text' placeholder='Database Username' value=''>
+				<input name='dbPassword' class='text' type='password' placeholder='Database Password' value=''>
 			</p>
 			<p>
 				Lychee will create its own database. If required, you can enter the name of an existing database instead:
-				<input data-name='dbName' class='text' type='text' placeholder='Database Name (optional)' value=''>
-				<input data-name='dbTablePrefix' class='text' type='text' placeholder='Table prefix (optional)' value=''>
+				<input name='dbName' class='text' type='text' placeholder='Database Name (optional)' value=''>
+				<input name='dbTablePrefix' class='text' type='text' placeholder='Table prefix (optional)' value=''>
 			</p>
 			`
 
@@ -191,8 +191,8 @@ settings.createLogin = function() {
 	msg =	`
 			<p>
 				Enter a username and password for your installation:
-				<input data-name='username' class='text' type='text' placeholder='New Username' value=''>
-				<input data-name='password' class='text' type='password' placeholder='New Password' value=''>
+				<input name='username' class='text' type='text' placeholder='New Username' value=''>
+				<input name='password' class='text' type='password' placeholder='New Password' value=''>
 			</p>
 			`
 
@@ -254,12 +254,12 @@ settings.setLogin = function() {
 	msg =	`
 			<p>
 				Enter your current password:
-				<input data-name='oldPassword' class='text' type='password' placeholder='Current Password' value=''>
+				<input name='oldPassword' class='text' type='password' placeholder='Current Password' value=''>
 			</p>
 			<p>
 				Your username and password will be changed to the following:
-				<input data-name='username' class='text' type='text' placeholder='New Username' value=''>
-				<input data-name='password' class='text' type='password' placeholder='New Password' value=''>
+				<input name='username' class='text' type='text' placeholder='New Username' value=''>
+				<input name='password' class='text' type='password' placeholder='New Password' value=''>
 			</p>
 			`
 
@@ -426,7 +426,7 @@ settings.setDropboxKey = function(callback) {
 	msg =	`
 			<p>
 				In order to import photos from your Dropbox, you need a valid drop-ins app key from <a href='https://www.dropbox.com/developers/apps/create'>their website</a>. Generate yourself a personal key and enter it below:
-				<input class='text' data-name='key' type='text' placeholder='Dropbox API Key' value='${ lychee.dropboxKey }'>
+				<input class='text' name='key' type='text' placeholder='Dropbox API Key' value='${ lychee.dropboxKey }'>
 			</p>
 			`
 

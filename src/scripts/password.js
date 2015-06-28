@@ -9,10 +9,9 @@ password = {
 
 }
 
-password.get = function(albumID, callback) {
+password.get = function(albumID, callback, passwd) {
 
-	var passwd = $('.basicModal input.text').val(),
-		params;
+	var params;
 
 	if (lychee.publicMode===false)									callback();
 	else if (album.json&&album.json.password==='0')					callback();
@@ -23,7 +22,7 @@ password.get = function(albumID, callback) {
 		album.json = {password: true};
 		callback('');
 
-	} else if (passwd==undefined) {
+	} else if (passwd==null) {
 
 		// Request password
 		password.getDialog(albumID, callback);
@@ -59,7 +58,7 @@ password.getDialog = function(albumID, callback) {
 		cancel,
 		msg = '';
 
-	action = function() { password.get(albumID, callback) }
+	action = function(data) { password.get(albumID, callback, data.password) }
 
 	cancel = function() {
 		basicModal.close();
@@ -69,7 +68,7 @@ password.getDialog = function(albumID, callback) {
 	msg =	`
 			<p>
 				This album is protected by a password. Enter the password below to view the photos of this album:
-				<input data-name='password' class='text' type='password' placeholder='password' value=''>
+				<input name='password' class='text' type='password' placeholder='password' value=''>
 			</p>
 			`
 
