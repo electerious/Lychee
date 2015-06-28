@@ -32,6 +32,8 @@ class Import extends Module {
 
 	static function url($urls, $albumID = 0) {
 
+		global $database, $plugins, $settings;
+
 		$error = false;
 
 		# Parse
@@ -39,6 +41,9 @@ class Import extends Module {
 		$urls = explode(',', $urls);
 
 		foreach ($urls as &$url) {
+
+			# Validate photo type and extension even when Import::photo (=> $photo->add) will do the same.
+			# This prevents us from downloading invalid photos.
 
 			# Verify extension
 			$extension = getExtension($url);
@@ -58,14 +63,23 @@ class Import extends Module {
 			$filename	= $pathinfo['filename'] . '.' . $pathinfo['extension'];
 			$tmp_name	= LYCHEE_DATA . $filename;
 
-			if (@copy($url, $tmp_name)===false) $error = true;
+			if (@copy($url, $tmp_name)===false) {
+				$error = true;
+				Log::error($database, __METHOD__, __LINE__, 'Could not copy file (' . $tmp_name . ') to temp-folder (' . $tmp_name . ')');
+				continue;
+			}
+
+			# Import photo
+			if (!Import::photo($database, $plugins, $settings, $tmp_name, $albumID)) {
+				$error = true;
+				Log::error($database, __METHOD__, __LINE__, 'Could not import file: ' . $tmp_name);
+				continue;
+			}
 
 		}
 
-		$import = Import::server($albumID, LYCHEE_DATA);
-
-		if ($error===false&&$import===true) return true;
-		else return false;
+		if ($error===false) return true;
+		return false;
 
 	}
 
