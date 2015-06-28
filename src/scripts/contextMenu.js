@@ -68,11 +68,19 @@ contextMenu.albumMulti = function(albumIDs, e) {
 
 	multiselect.stopResize();
 
-	var items = [
-		{ type: 'item', title: build.iconic('pencil') + 'Rename All', fn: function() { album.setTitle(albumIDs) } },
-		{ type: 'item', title: build.iconic('collapse-left') + 'Merge All', fn: function () { album.merge(albumIDs) } },
-		{ type: 'item', title: build.iconic('trash') + 'Delete All', fn: function() { album.delete(albumIDs) } }
-	];
+	var items = [];
+
+	items.push({ type: 'item', title: build.iconic('pencil') + 'Rename All', fn: function() { album.setTitle(albumIDs) } });
+
+	// Automatically merge selected albums when albumIDs contains more than one album
+	// Show list of albums otherwise
+	if (albumIDs.length>1)	items.push({ type: 'item', title: build.iconic('collapse-left') + 'Merge All', fn: function () { album.merge(albumIDs) } });
+	else					items.push({ type: 'item', title: build.iconic('collapse-left') + 'Merge', fn: function () { basicContext.close(); contextMenu.mergeAlbum(albumIDs[0], e) } })
+
+	items.push({ type: 'item', title: build.iconic('trash') + 'Delete All', fn: function() { album.delete(albumIDs) } });
+
+	// Remove merge when there is only one album
+	if (albums.json&&albums.json.albums&&Object.keys(albums.json.albums).length<=1) items.splice(1, 1);
 
 	basicContext.show(items, e.originalEvent, contextMenu.close);
 
