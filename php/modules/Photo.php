@@ -37,7 +37,10 @@ class Photo extends Module {
 
 	}
 
-	public function add($files, $albumID, $description = '', $tags = '') {
+	public function add($files, $albumID = 0, $description = '', $tags = '', $returnOnError = false) {
+
+		# Use $returnOnError if you want to handle errors by your own
+		# e.g. when calling this functions inside an if-condition
 
 		# Check dependencies
 		self::dependencies(isset($this->database, $this->settings, $files));
@@ -89,6 +92,7 @@ class Photo extends Module {
 			$extension = getExtension($file['name']);
 			if (!in_array(strtolower($extension), Photo::$validExtensions, true)) {
 				Log::error($this->database, __METHOD__, __LINE__, 'Photo format not supported');
+				if ($returnOnError===true) return false;
 				exit('Error: Photo format not supported!');
 			}
 
@@ -96,6 +100,7 @@ class Photo extends Module {
 			$type = @exif_imagetype($file['tmp_name']);
 			if (!in_array($type, Photo::$validTypes, true)) {
 				Log::error($this->database, __METHOD__, __LINE__, 'Photo type not supported');
+				if ($returnOnError===true) return false;
 				exit('Error: Photo type not supported!');
 			}
 
@@ -112,6 +117,7 @@ class Photo extends Module {
 			$checksum = sha1_file($tmp_name);
 			if ($checksum===false) {
 				Log::error($this->database, __METHOD__, __LINE__, 'Could not calculate checksum for photo');
+				if ($returnOnError===true) return false;
 				exit('Error: Could not calculate checksum for photo!');
 			}
 
@@ -141,11 +147,13 @@ class Photo extends Module {
 				if (!is_uploaded_file($tmp_name)) {
 					if (!@copy($tmp_name, $path)) {
 						Log::error($this->database, __METHOD__, __LINE__, 'Could not copy photo to uploads');
+						if ($returnOnError===true) return false;
 						exit('Error: Could not copy photo to uploads!');
 					} else @unlink($tmp_name);
 				} else {
 					if (!@move_uploaded_file($tmp_name, $path)) {
 						Log::error($this->database, __METHOD__, __LINE__, 'Could not move photo to uploads');
+						if ($returnOnError===true) return false;
 						exit('Error: Could not move photo to uploads!');
 					}
 				}
@@ -156,6 +164,7 @@ class Photo extends Module {
 				# Check if the user wants to skip duplicates
 				if ($this->settings['skipDuplicates']==='1') {
 					Log::notice($this->database, __METHOD__, __LINE__, 'Skipped upload of existing photo because skipDuplicates is activated');
+					if ($returnOnError===true) return false;
 					exit('Warning: This photo has been skipped because it\'s already in your library.');
 				}
 
@@ -185,6 +194,7 @@ class Photo extends Module {
 				# Create Thumb
 				if (!$this->createThumb($path, $photo_name, $info['type'], $info['width'], $info['height'])) {
 					Log::error($this->database, __METHOD__, __LINE__, 'Could not create thumbnail for photo');
+					if ($returnOnError===true) return false;
 					exit('Error: Could not create thumbnail for photo!');
 				}
 
@@ -204,6 +214,7 @@ class Photo extends Module {
 
 			if (!$result) {
 				Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+				if ($returnOnError===true) return false;
 				exit('Error: Could not save photo in database!');
 			}
 
