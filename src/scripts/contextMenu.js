@@ -17,7 +17,7 @@ contextMenu.add = function(e) {
 		{ type: 'item', title: build.iconic('folder') + 'New Album', fn: album.add }
 	];
 
-	basicContext.show(items, e);
+	basicContext.show(items, e.originalEvent);
 
 	upload.notify();
 
@@ -37,7 +37,7 @@ contextMenu.settings = function(e) {
 		{ type: 'item', title: build.iconic('account-logout') + 'Sign Out', fn: lychee.logout }
 	];
 
-	basicContext.show(items, e);
+	basicContext.show(items, e.originalEvent);
 
 }
 
@@ -60,7 +60,7 @@ contextMenu.album = function(albumID, e) {
 
 	$('.album[data-id="' + albumID + '"]').addClass('active');
 
-	basicContext.show(items, e, contextMenu.close);
+	basicContext.show(items, e.originalEvent, contextMenu.close);
 
 }
 
@@ -74,7 +74,7 @@ contextMenu.albumMulti = function(albumIDs, e) {
 		{ type: 'item', title: build.iconic('trash') + 'Delete All', fn: function() { album.delete(albumIDs) } }
 	];
 
-	basicContext.show(items, e, contextMenu.close);
+	basicContext.show(items, e.originalEvent, contextMenu.close);
 
 }
 
@@ -106,7 +106,7 @@ contextMenu.albumTitle = function(albumID, e) {
 
 		items.unshift({ type: 'item', title: build.iconic('pencil') + 'Rename', fn: function() { album.setTitle([albumID]) } });
 
-		basicContext.show(items, e, contextMenu.close);
+		basicContext.show(items, e.originalEvent, contextMenu.close);
 
 	});
 
@@ -135,7 +135,7 @@ contextMenu.mergeAlbum = function(albumID, e) {
 
 		if (items.length===0) return false;
 
-		basicContext.show(items, e, contextMenu.close);
+		basicContext.show(items, e.originalEvent, contextMenu.close);
 
 	});
 
@@ -159,7 +159,7 @@ contextMenu.photo = function(photoID, e) {
 
 	$('.photo[data-id="' + photoID + '"]').addClass('active');
 
-	basicContext.show(items, e, contextMenu.close);
+	basicContext.show(items, e.originalEvent, contextMenu.close);
 
 }
 
@@ -181,7 +181,7 @@ contextMenu.photoMulti = function(photoIDs, e) {
 		{ type: 'item', title: build.iconic('trash') + 'Delete All', fn: function() { photo.delete(photoIDs) } }
 	];
 
-	basicContext.show(items, e, contextMenu.close);
+	basicContext.show(items, e.originalEvent, contextMenu.close);
 
 }
 
@@ -211,7 +211,7 @@ contextMenu.photoTitle = function(albumID, photoID, e) {
 
 	}
 
-	basicContext.show(items, e, contextMenu.close);
+	basicContext.show(items, e.originalEvent, contextMenu.close);
 
 }
 
@@ -228,7 +228,7 @@ contextMenu.photoMore = function(photoID, e) {
 	if (!(album.json&&album.json.downloadable&&album.json.downloadable==='1')&&
 		lychee.publicMode===true) items.splice(1, 1);
 
-	basicContext.show(items, e);
+	basicContext.show(items, e.originalEvent);
 
 }
 
@@ -269,7 +269,7 @@ contextMenu.move = function(photoIDs, e) {
 
 		}
 
-		basicContext.show(items, e, contextMenu.close);
+		basicContext.show(items, e.originalEvent, contextMenu.close);
 
 	});
 
@@ -294,7 +294,7 @@ contextMenu.sharePhoto = function(photoID, e) {
 		{ type: 'item', title: build.iconic('ban') + 'Make Private', fn: function() { photo.setPublic(photoID) } }
 	];
 
-	basicContext.show(items, e);
+	basicContext.show(items, e.originalEvent);
 	$('.basicContext input#link').focus().select();
 
 }
@@ -314,7 +314,7 @@ contextMenu.shareAlbum = function(albumID, e) {
 		{ type: 'item', title: build.iconic('ban') + 'Make Private', fn: function() { album.setPublic(albumID, false) } }
 	];
 
-	basicContext.show(items, e);
+	basicContext.show(items, e.originalEvent);
 	$('.basicContext input#link').focus().select();
 
 }

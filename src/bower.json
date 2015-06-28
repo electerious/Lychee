@@ -2,9 +2,6 @@
   "name": "Lychee",
   "private": true,
   "dependencies": {
-    "jQuery": "~2.1.4",
-    "mousetrap": "~1.5.2",
-    "basicContext": "~2.0.9",
     "basicModal": "~2.0.8"
   }
 }
