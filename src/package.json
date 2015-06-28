@@ -11,6 +11,7 @@
   },
   "devDependencies": {
     "basiccontext": "^3.1.2",
+    "basicmodal": "^3.1.1",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "2.3.1",
     "gulp-babel": "^5.1.0",

@@ -88,7 +88,7 @@ paths.main = {
 		'node_modules/mousetrap/mousetrap.min.js',
 		'node_modules/mousetrap/plugins/global-bind/mousetrap-global-bind.min.js',
 		'node_modules/basiccontext/dist/basicContext.min.js',
-		'bower_components/basicModal/dist/basicModal.min.js',
+		'node_modules/basicmodal/dist/basicModal.min.js',
 		'../dist/_main--javascript.js'
 	],
 	scss: [
@@ -96,7 +96,7 @@ paths.main = {
 	],
 	styles: [
 		'node_modules/basiccontext/src/styles/main.scss',
-		'bower_components/basicModal/src/styles/main.scss',
+		'node_modules/basicmodal/src/styles/main.scss',
 		'./styles/main.scss'
 	],
 	svg: [

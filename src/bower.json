@@ -1,7 +1,0 @@
-{
-  "name": "Lychee",
-  "private": true,
-  "dependencies": {
-    "basicModal": "~2.0.8"
-  }
-}
