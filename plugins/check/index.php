@@ -68,13 +68,15 @@ if (!isset($dbPassword))			$error .= ('Error: No property for $dbPassword in con
 if (!isset($dbHost)||$dbHost==='')	$error .= ('Error: No property for $dbHost in config.php' . PHP_EOL);
 
 # Settings
-if (!isset($settings['username'])||$settings['username']=='')			$error .= ('Error: Username empty or not set in database' . PHP_EOL);
-if (!isset($settings['password'])||$settings['password']=='')			$error .= ('Error: Password empty or not set in database' . PHP_EOL);
-if (!isset($settings['thumbQuality'])||$settings['thumbQuality']=='')	$error .= ('Error: No or wrong property for thumbQuality in database' . PHP_EOL);
-if (!isset($settings['sortingPhotos'])||$settings['sortingPhotos']=='')	$error .= ('Error: Wrong property for sortingPhotos in database' . PHP_EOL);
-if (!isset($settings['sortingAlbums'])||$settings['sortingAlbums']=='')	$error .= ('Error: Wrong property for sortingAlbums in database' . PHP_EOL);
-if (!isset($settings['plugins']))										$error .= ('Error: No property for plugins in database' . PHP_EOL);
-if (!isset($settings['imagick'])||$settings['imagick']=='')				$error .= ('Error: No or wrong property for imagick in database' . PHP_EOL);
+if (!isset($settings['username'])||$settings['username']=='')				$error .= ('Error: Username empty or not set in database' . PHP_EOL);
+if (!isset($settings['password'])||$settings['password']=='')				$error .= ('Error: Password empty or not set in database' . PHP_EOL);
+if (!isset($settings['thumbQuality'])||$settings['thumbQuality']=='')		$error .= ('Error: No or wrong property for thumbQuality in database' . PHP_EOL);
+if (!isset($settings['sortingPhotos'])||$settings['sortingPhotos']=='')		$error .= ('Error: Wrong property for sortingPhotos in database' . PHP_EOL);
+if (!isset($settings['sortingAlbums'])||$settings['sortingAlbums']=='')		$error .= ('Error: Wrong property for sortingAlbums in database' . PHP_EOL);
+if (!isset($settings['plugins']))											$error .= ('Error: No property for plugins in database' . PHP_EOL);
+if (!isset($settings['imagick'])||$settings['imagick']=='')					$error .= ('Error: No or wrong property for imagick in database' . PHP_EOL);
+if (!isset($settings['identifier'])||$settings['identifier']=='')			$error .= ('Error: No or wrong property for identifier in database' . PHP_EOL);
+if (!isset($settings['skipDuplicates'])||$settings['skipDuplicates']=='')	$error .= ('Error: No or wrong property for skipDuplicates in database' . PHP_EOL);
 if (!isset($settings['checkForUpdates'])||($settings['checkForUpdates']!='0'&&$settings['checkForUpdates']!='1')) $error .= ('Error: No or wrong property for checkForUpdates in database' . PHP_EOL);
 
 # Check dropboxKey
