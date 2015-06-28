@@ -42,6 +42,7 @@ albums.load = function() {
 				view.albums.init();
 				lychee.animate('#content', 'contentZoomIn');
 			}, waitTime);
+
 		});
 
 	} else {
