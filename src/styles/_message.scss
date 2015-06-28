@@ -77,8 +77,8 @@
 
 	/* Inputs ------------------------------------------------*/
 	input.text {
-		width: calc(100% - 4px);
 		padding: 9px 2px;
+		width: 100%;
 		background-color: transparent;
 		color: #fff;
 		text-shadow: $shadow;
@@ -102,7 +102,7 @@
 	/* Radio Buttons ------------------------------------------------*/
 	.choice {
 		padding: 0 30px 15px;
-		width: calc(100% - 60px);
+		width: 100%;
 		color: #fff;
 
 		&:last-child { padding-bottom: 40px; }
@@ -161,7 +161,7 @@
 			clear: both;
 			padding: 2px 0 0 35px;
 			margin: 0;
-			width: calc(100% - 35px);
+			width: 100%;
 			color: white(.6);
 			font-size: 13px;
 		}
@@ -170,7 +170,7 @@
 			display: none;
 			margin-top: 5px;
 			margin-left: 35px;
-			width: calc(100% - 39px);
+			width: calc(100% - 35px);
 		}
 	}
 
@@ -317,7 +317,7 @@
 			display: none;
 			float: left;
 			padding: 2px 10px 5px;
-			width: calc(100% - 20px);
+			width: 100%;
 			color: white(.5);
 			font-size: 12px;
 			overflow: hidden;
