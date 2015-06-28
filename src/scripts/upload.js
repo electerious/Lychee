@@ -303,15 +303,36 @@ upload.start = {
 
 					api.post('Import::url', params, function(data) {
 
-						basicModal.close();
+						// Same code as in import.dropbox()
+
+						if (data!==true) {
+
+							$('.basicModal .rows .row p.notice')
+								.html('The import has been finished, but returned warnings or errors. Please take a look at the log (Settings -> Show Log) for further details.')
+								.show();
+
+							$('.basicModal .rows .row .status')
+								.html('Finished')
+								.addClass('warning');
+
+							// Show close button
+							$('.basicModal #basicModal__action.hidden').show();
+
+							// Log error
+							lychee.error(null, params, data);
+
+						} else {
+
+							basicModal.close();
+
+						}
+
 						upload.notify('Import complete');
 
 						albums.refresh();
 
 						if (album.getID()===false) lychee.goto('0');
 						else album.load(albumID);
-
-						if (data!==true) lychee.error(null, params, data);
 
 					});
 
@@ -441,15 +462,36 @@ upload.start = {
 
 				api.post('Import::url', params, function(data) {
 
-					basicModal.close();
+					// Same code as in import.url()
+
+					if (data!==true) {
+
+						$('.basicModal .rows .row p.notice')
+							.html('The import has been finished, but returned warnings or errors. Please take a look at the log (Settings -> Show Log) for further details.')
+							.show();
+
+						$('.basicModal .rows .row .status')
+							.html('Finished')
+							.addClass('warning');
+
+						// Show close button
+						$('.basicModal #basicModal__action.hidden').show();
+
+						// Log error
+						lychee.error(null, params, data);
+
+					} else {
+
+						basicModal.close();
+
+					}
+
 					upload.notify('Import complete');
 
 					albums.refresh();
 
 					if (album.getID()===false) lychee.goto('0');
 					else album.load(albumID);
-
-					if (data!==true) lychee.error(null, params, data);
 
 				});
 
