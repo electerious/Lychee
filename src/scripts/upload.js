@@ -281,7 +281,7 @@ upload.start = {
 
 				extension = data.link.split('.').pop();
 				if (extension!=='jpeg'&&extension!=='jpg'&&extension!=='png'&&extension!=='gif'&&extension!=='webp') {
-					loadingBar.show('error', 'The file format of this link is not supported.');
+					loadingBar.show('error', 'File format of link not supported.');
 					return false;
 				}
 
