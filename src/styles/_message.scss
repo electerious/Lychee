@@ -9,12 +9,15 @@
 .basicModal {
 
 	background: linear-gradient(to bottom, #444, #333);
-	border: 1px solid black(.7);
-	border-bottom: 1px solid black(.8);
 	box-shadow: 0 1px 4px black(.2), inset 0 1px 0 white(.05);
 
+	/* Reset default styles ------------------------------------------------*/
+	.basicModal__content { padding: 0; }
+	.basicModal__content p { margin: 0; }
+	.basicModal__buttons { box-shadow: none; }
+
+	/* Text ------------------------------------------------*/
 	p {
-		display: block;
 		padding: 10px 30px;
 		color: white(.9);
 		font-size: 14px;
@@ -70,7 +73,6 @@
 		&#basicModal__action.red { color: $colorRed; }
 
 		&.hidden { display: none; }
-
 	}
 
 	/* Inputs ------------------------------------------------*/
