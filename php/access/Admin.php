@@ -219,14 +219,16 @@ class Admin extends Access {
 	private function importUrl() {
 
 		Module::dependencies(isset($_POST['url'], $_POST['albumID']));
-		echo Import::url($_POST['url'], $_POST['albumID']);
+		$import = new Import($this->database, $this->plugins, $this->settings);
+		echo $import->url($_POST['url'], $_POST['albumID']);
 
 	}
 
 	private function importServer() {
 
 		Module::dependencies(isset($_POST['albumID'], $_POST['path']));
-		echo Import::server($_POST['albumID'], $_POST['path']);
+		$import = new Import($this->database, $this->plugins, $this->settings);
+		echo $import->server($_POST['path'], $_POST['albumID']);
 
 	}
 
