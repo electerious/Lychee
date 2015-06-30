@@ -170,71 +170,54 @@ class Album extends Module {
 
 	}
 
-	public function getAll($public) {
 
+	public function getAll($public) {
 		# Check dependencies
 		self::dependencies(isset($this->database, $this->settings, $public));
-
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
-
 		# Initialize return var
 		$return = array(
 			'smartalbums'	=> null,
 			'albums'		=> null,
 			'num'			=> 0
 		);
-
 		# Get SmartAlbums
 		if ($public===false) $return['smartalbums'] = $this->getSmartInfo();
-
-		# Albums query
-		if ($public===false)	$query = Database::prepare($this->database, 'SELECT id, title, public, sysstamp, password FROM ? ' . $this->settings['sortingAlbums'], array(LYCHEE_TABLE_ALBUMS));
-		else					$query = Database::prepare($this->database, 'SELECT id, title, public, sysstamp, password FROM ? WHERE public = 1 AND visible <> 0 ' . $this->settings['sortingAlbums'], array(LYCHEE_TABLE_ALBUMS));
-
+        	# Albums query
+        	$query = Database::prepare($this->database, "SELECT a.id, a.title, a.public, a.sysstamp, a.password, p.thumbs FROM (SELECT album, GROUP_CONCAT( thumbUrl SEPARATOR  '|' ) AS thumbs FROM ? GROUP BY album ORDER BY star DESC) AS p JOIN ? a ON p.album = a.id WHERE public = 1 AND visible <> 0 ORDER BY " . substr($this->settings['sortingAlbums'], 9),  array(LYCHEE_TABLE_PHOTOS, LYCHEE_TABLE_ALBUMS));
+        	if ($public===false)
+                	$query = Database::prepare($this->database, "SELECT a.id, a.title, a.public, a.sysstamp, a.password, p.thumbs FROM (SELECT album, GROUP_CONCAT( thumbUrl SEPARATOR  '|' ) AS thumbs FROM ? GROUP BY album ORDER BY star DESC) AS p JOIN ? a ON p.album = a.id ORDER BY " . substr($this->settings['sortingAlbums'], 9),  array(LYCHEE_TABLE_PHOTOS, LYCHEE_TABLE_ALBUMS));
 		# Execute query
 		$albums = $this->database->query($query);
 		if (!$albums) {
 			Log::error($database, __METHOD__, __LINE__, 'Could not get all albums (' . $database->error . ')');
 			exit('Error: ' . $this->database->error);
 		}
-
 		# For each album
 		while ($album = $albums->fetch_assoc()) {
-
 			# Turn data from the database into a front-end friendly format
+                	$thumbs = $album['thumbs'];
 			$album = Album::prepareData($album);
-
-			# Thumbs
-			if (($public===true&&$album['password']==='0')||
-				($public===false)) {
-
-					# Execute query
-					$query	= Database::prepare($this->database, "SELECT thumbUrl FROM ? WHERE album = '?' ORDER BY star DESC, " . substr($this->settings['sortingPhotos'], 9) . " LIMIT 3", array(LYCHEE_TABLE_PHOTOS, $album['id']));
-					$thumbs	= $this->database->query($query);
-
-					# For each thumb
-					$k = 0;
-					while ($thumb = $thumbs->fetch_object()) {
-						$album['thumbs'][$k] = LYCHEE_URL_UPLOADS_THUMB . $thumb->thumbUrl;
-						$k++;
-					}
-
-			}
-
+                	# Process thumbnails
+                	if (($public===true&&$album['password']===false)||($public===false)) {
+                        	$k = 0;
+                        	$thumbs = explode("|", $thumbs, 4);
+                        	if (is_array($thumbs)) {
+                                	foreach ($thumbs as $thumbUrl) {
+                                        	$album['thumbs'][$k] = LYCHEE_URL_UPLOADS_THUMB . $thumbUrl;
+                                        	if (++$k == 3) break;
+                                	}
+                        	}
+                	}
 			# Add to return
 			$return['albums'][] = $album;
-
 		}
-
 		# Num of albums
 		$return['num'] = $albums->num_rows;
-
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
-
 		return $return;
-
 	}
 
 	private function getSmartInfo() {
