@@ -9,9 +9,9 @@ First you have to install the following dependencies:
 
 After [installing Node.js](http://nodejs.org) you can use the included `npm` package manager to install the global requirements and Lychee-dependencies with the following command:
 
-	cd build/;
-	npm install -g bower gulp;
-	npm install && bower install;
+	cd src/
+	npm install -g bower gulp
+	npm install && bower install
 
 ### Build
 
