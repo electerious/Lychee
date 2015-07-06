@@ -387,21 +387,64 @@ upload.start = {
 
 				api.post('Import::server', params, function(data) {
 
-					basicModal.close();
+					albums.refresh();
 					upload.notify('Import complete');
 
-					albums.refresh();
+					if (data==='Notice: Import only contained albums!') {
 
-					if (data==='Notice: Import only contains albums!') {
+						// No error, but the folder only contained albums
+
+						// Go back to the album overview to show the imported albums
 						if (visible.albums()) lychee.load();
 						else lychee.goto('');
+
+						basicModal.close();
+
+						return true;
+
+					} else if (data==='Warning: Folder empty or no readable files to process!') {
+
+						// Error because the import could not start
+
+						$('.basicModal .rows .row p.notice')
+							.html('Folder empty or no readable files to process. Please take a look at the log (Settings -> Show Log) for further details.')
+							.show();
+
+						$('.basicModal .rows .row .status')
+							.html('Failed')
+							.addClass('error');
+
+						// Log error
+						lychee.error('Could not start import because the folder was empty!', params, data);
+
+					} else if (data!==true) {
+
+						// Maybe an error, maybe just some skipped photos
+
+						$('.basicModal .rows .row p.notice')
+							.html('The import has been finished, but returned warnings or errors. Please take a look at the log (Settings -> Show Log) for further details.')
+							.show();
+
+						$('.basicModal .rows .row .status')
+							.html('Finished')
+							.addClass('warning');
+
+						// Log error
+						lychee.error(null, params, data);
+
+					} else {
+
+						// No error, everything worked fine
+
+						basicModal.close();
+
 					}
-					else if (album.getID()===false) lychee.goto('0');
+
+					if (album.getID()===false) lychee.goto('0');
 					else album.load(albumID);
 
-					if (data==='Notice: Import only contains albums!') return true;
-					else if (data==='Warning: Folder empty!') lychee.error('Folder empty. No photos imported!', params, data);
-					else if (data!==true) lychee.error(null, params, data);
+					// Show close button
+					$('.basicModal #basicModal__action.hidden').show();
 
 				});
 
