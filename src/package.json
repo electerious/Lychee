@@ -10,7 +10,7 @@
     "url": "https://github.com/electerious/Lychee.git"
   },
   "devDependencies": {
-    "basiccontext": "^3.1.2",
+    "basiccontext": "^3.2.1",
     "basicmodal": "^3.1.1",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "2.3.1",
@@ -23,6 +23,6 @@
     "gulp-sass": "^2.0.3",
     "gulp-uglify": "^1.2.0",
     "jquery": "^2.1.4",
-    "mousetrap": "^1.5.2"
+    "mousetrap": "^1.5.3"
   }
 }
