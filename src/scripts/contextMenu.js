@@ -49,14 +49,14 @@ contextMenu.album = function(albumID, e) {
 
 	if (albumID==='0'||albumID==='f'||albumID==='s'||albumID==='r') return false;
 
+	// Show merge-item when there's more than one album
+	var showMerge = (albums.json && albums.json.albums && Object.keys(albums.json.albums).length>1);
+
 	var items = [
 		{ type: 'item', title: build.iconic('pencil') + 'Rename', fn: function() { album.setTitle([albumID]) } },
-		{ type: 'item', title: build.iconic('collapse-left') + 'Merge', fn: function () { basicContext.close(); contextMenu.mergeAlbum(albumID, e) } },
+		{ type: 'item', title: build.iconic('collapse-left') + 'Merge', visible: showMerge, fn: function () { basicContext.close(); contextMenu.mergeAlbum(albumID, e) } },
 		{ type: 'item', title: build.iconic('trash') + 'Delete', fn: function() { album.delete([albumID]) } }
 	];
-
-	// Remove merge when there is only one album
-	if (albums.json&&albums.json.albums&&Object.keys(albums.json.albums).length<=1) items.splice(1, 1);
 
 	$('.album[data-id="' + albumID + '"]').addClass('active');
 
@@ -68,19 +68,21 @@ contextMenu.albumMulti = function(albumIDs, e) {
 
 	multiselect.stopResize();
 
-	var items = [];
-
-	items.push({ type: 'item', title: build.iconic('pencil') + 'Rename All', fn: function() { album.setTitle(albumIDs) } });
-
 	// Automatically merge selected albums when albumIDs contains more than one album
 	// Show list of albums otherwise
-	if (albumIDs.length>1)	items.push({ type: 'item', title: build.iconic('collapse-left') + 'Merge All', fn: function () { album.merge(albumIDs) } });
-	else					items.push({ type: 'item', title: build.iconic('collapse-left') + 'Merge', fn: function () { basicContext.close(); contextMenu.mergeAlbum(albumIDs[0], e) } })
+	var autoMerge = (albumIDs.length>1 ? true : false);
 
-	items.push({ type: 'item', title: build.iconic('trash') + 'Delete All', fn: function() { album.delete(albumIDs) } });
+	// Show merge-item when there's more than one album
+	var showMerge = (albums.json && albums.json.albums && Object.keys(albums.json.albums).length>1);
 
-	// Remove merge when there is only one album
-	if (albums.json&&albums.json.albums&&Object.keys(albums.json.albums).length<=1) items.splice(1, 1);
+	var items = [
+		{ type: 'item', title: build.iconic('pencil') + 'Rename All', fn: function() { album.setTitle(albumIDs) } },
+		{ type: 'item', title: build.iconic('collapse-left') + 'Merge All', visible: showMerge && autoMerge, fn: function () { album.merge(albumIDs) } },
+		{ type: 'item', title: build.iconic('collapse-left') + 'Merge', visible: showMerge && !autoMerge, fn: function () { basicContext.close(); contextMenu.mergeAlbum(albumIDs[0], e) } },
+		{ type: 'item', title: build.iconic('trash') + 'Delete All', fn: function() { album.delete(albumIDs) } }
+	];
+
+	items.push();
 
 	basicContext.show(items, e.originalEvent, contextMenu.close);
 
@@ -225,16 +227,15 @@ contextMenu.photoTitle = function(albumID, photoID, e) {
 
 contextMenu.photoMore = function(photoID, e) {
 
+	// Show download-item when
+	// a) Public mode is off
+	// b) Downloadable is 1 and public mode is on
+	var showDownload = lychee.publicMode===false || ((album.json && album.json.downloadable && album.json.downloadable==='1') && lychee.publicMode===true);
+
 	var items = [
 		{ type: 'item', title: build.iconic('fullscreen-enter') + 'Full Photo', fn: function() { window.open(photo.getDirectLink()) } },
-		{ type: 'item', title: build.iconic('cloud-download') + 'Download', fn: function() { photo.getArchive(photoID) } }
+		{ type: 'item', title: build.iconic('cloud-download') + 'Download', visible: showDownload, fn: function() { photo.getArchive(photoID) } }
 	];
-
-	// Remove download-item when
-	// 1) In public mode
-	// 2) Downloadable not 1 or not found
-	if (!(album.json&&album.json.downloadable&&album.json.downloadable==='1')&&
-		lychee.publicMode===true) items.splice(1, 1);
 
 	basicContext.show(items, e.originalEvent);
 
