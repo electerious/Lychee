@@ -16,3 +16,4 @@ VALUES
   ('dropboxKey',''),
   ('identifier',''),
   ('plugins','');
+  ('sessionLength','1440');
