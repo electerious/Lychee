@@ -76,13 +76,13 @@ $(document).ready(function() {
 	});
 
 
-	if ('ontouchend' in document.documentElement) {
+	if (eventName==='touchend') {
 
 		$(document)
 
 			/* Fullscreen on mobile */
 			.on('touchend', '#image', function(e) {
-				if (swipe.obj===null||(swipe.offset>=-5&&swipe.offset<=5)) {
+				if (swipe.obj==null||(swipe.offset>=-5&&swipe.offset<=5)) {
 					if (visible.header())	header.hide(e, 0);
 					else					header.show();
 				}
