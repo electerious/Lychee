@@ -1,0 +1,54 @@
+// Default Theme ----------------------------------------------------- //
+.basicContext {
+
+	padding: 5px 0 6px;
+	background: linear-gradient(to bottom, #333, #252525);
+	box-shadow: 0 1px 4px black(.2), inset 0 1px 0 white(.05);
+	border-radius: 5px;
+	border: 1px solid black(.7);
+	border-bottom: 1px solid black(.8);
+
+	&__item {
+		margin-bottom: 2px;
+		font-size: 14px;
+		text-shadow: $shadowLight;
+
+		&--separator {
+			margin: 4px 0;
+			height: 2px;
+			background: black(.2);
+			border-bottom: 1px solid white(.06);
+		}
+
+		&--disabled {
+			opacity: .5;
+		}
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	&__data {
+		min-width: auto;
+		padding: 6px 25px 7px 12px;
+		color: white(1);
+		transition: none;
+		cursor: default;
+	}
+
+	&__item:not(.basicContext__item--disabled):hover &__data {
+		background: linear-gradient(to bottom, $colorBlue, darken($colorBlue, 5%));
+	}
+
+	&__item:not(.basicContext__item--disabled):active &__data {
+		background: linear-gradient(to bottom, darken($colorBlue, 10%), darken($colorBlue, 15%));
+	}
+
+	&__icon {
+		margin-right: 10px;
+		width: 12px;
+		text-align: center;
+	}
+
+}

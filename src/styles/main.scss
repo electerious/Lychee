@@ -48,7 +48,8 @@ input {
 
 @import 'animations';
 @import 'content';
-@import 'contextmenu';
+@import 'basicContext.custom';
+@import 'basicContext.extended';
 @import 'header';
 @import 'imageview';
 @import 'sidebar';
