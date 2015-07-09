@@ -143,10 +143,6 @@ view.album = {
 
 			var photosData = '';
 
-			// Save and reset scroll position
-			view.albums.content.scrollPosition = $(document).scrollTop();
-			$('html, body').scrollTop(0);
-
 			if (album.json.content&&album.json.content!==false) {
 
 				// Build photos
@@ -155,6 +151,10 @@ view.album = {
 				});
 
 			}
+
+			// Save and reset scroll position
+			view.albums.content.scrollPosition = $(document).scrollTop();
+			requestAnimationFrame(() => $(document).scrollTop(0));
 
 			// Add photos to view
 			lychee.content.html(photosData);
