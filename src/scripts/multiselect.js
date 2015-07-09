@@ -16,8 +16,7 @@ multiselect.position = {
 
 multiselect.bind = function() {
 
-	$('#content') .on('mousedown', (e) => { if (e.which===1) multiselect.show(e) })
-	$(document)   .on('mouseup',   (e) => { if (e.which===1) multiselect.getSelection(e) })
+	$('#content').on('mousedown', (e) => { if (e.which===1) multiselect.show(e) })
 
 	return true
 
@@ -26,9 +25,9 @@ multiselect.bind = function() {
 multiselect.show = function(e) {
 
 	if (lychee.publicMode)                          return false
-	if (visible.search())                           return false
-	if (!visible.albums() && !visible.album)        return false
+	if (!visible.albums() && !visible.album())      return false
 	if ($('.album:hover, .photo:hover').length!==0) return false
+	if (visible.search())                           return false
 	if (visible.multiselect())                      $('#multiselect').remove()
 
 	sidebar.setSelectable(false)
@@ -39,7 +38,10 @@ multiselect.show = function(e) {
 	multiselect.position.left   = e.pageX
 
 	$('body').append(build.multiselect(multiselect.position.top, multiselect.position.left))
-	$(document).on('mousemove', multiselect.resize)
+
+	$(document)
+		.on('mousemove', multiselect.resize)
+		.on('mouseup', (e) => { if (e.which===1) multiselect.getSelection(e) })
 
 }
 
@@ -157,7 +159,7 @@ multiselect.resize = function(e) {
 
 multiselect.stopResize = function() {
 
-	$(document).off('mousemove')
+	$(document).off('mousemove mouseup')
 
 }
 
