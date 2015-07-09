@@ -19,7 +19,7 @@ header.dom = function(selector) {
 header.bind = function() {
 
 	// Event Name
-	var eventName = ('ontouchend' in document.documentElement) ? 'touchend' : 'click';
+	var eventName = lychee.getEventName();
 
 	/* Buttons */
 	header.dom('#title').on(eventName, function(e) {

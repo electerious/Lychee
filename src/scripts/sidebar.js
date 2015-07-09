@@ -30,7 +30,7 @@ sidebar.bind = function() {
 	// event handlers should be removed before binding a new one.
 
 	// Event Name
-	let eventName = ('ontouchend' in document.documentElement) ? 'touchend' : 'click'
+	let eventName = lychee.getEventName();
 
 	sidebar
 		.dom('#edit_title')

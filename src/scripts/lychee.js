@@ -384,6 +384,15 @@ lychee.loadDropbox = function(callback) {
 
 }
 
+lychee.getEventName = function() {
+
+	let touchendSupport	= (/Android|iPhone|iPad|iPod/i).test(navigator.userAgent || navigator.vendor || window.opera) && ('ontouchend' in document.documentElement),
+		eventName		= (touchendSupport===true ? 'touchend' : 'click');
+
+	return eventName;
+
+}
+
 lychee.removeHTML = function(html = '') {
 
 	if (html==='') return html;

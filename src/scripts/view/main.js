@@ -9,17 +9,17 @@ var lychee		= { content: $('#content') },
 
 $(document).ready(function() {
 
-	/* Event Name */
-	if ('ontouchend' in document.documentElement)	eventName = 'touchend';
-	else											eventName = 'click';
+	// Event Name
+	var touchendSupport	= (/Android|iPhone|iPad|iPod/i).test(navigator.userAgent || navigator.vendor || window.opera) && ('ontouchend' in document.documentElement),
+		eventName		= (touchendSupport===true ? 'touchend' : 'click');
 
-	/* Set API error handler */
+	// Set API error handler
 	api.onError = error;
 
-	/* Infobox */
+	// Infobox
 	header.dom('#button_info').on(eventName, sidebar.toggle);
 
-	/* Direct Link */
+	// Direct Link
 	header.dom('#button_direct').on(eventName, function() {
 
 		var link = $('#imageview #image').css('background-image').replace(/"/g,'').replace(/url\(|\)$/ig, '');
