@@ -315,9 +315,9 @@ contextMenu.shareAlbum = function(albumID, e) {
 	var items = [
 		{ type: 'item', title: '<input readonly id="link" value="' + location.href + '">', fn: function() {}, class: 'noHover' },
 		{ type: 'separator' },
-		{ type: 'item', title: build.iconic('twitter', iconClass) + 'Twitter', fn: function() { album.share(0) } },
-		{ type: 'item', title: build.iconic('facebook', iconClass) + 'Facebook', fn: function() { album.share(1) } },
-		{ type: 'item', title: build.iconic('envelope-closed') + 'Mail', fn: function() { album.share(2) } },
+		{ type: 'item', title: build.iconic('twitter', iconClass) + 'Twitter', fn: function() { album.share('twitter') } },
+		{ type: 'item', title: build.iconic('facebook', iconClass) + 'Facebook', fn: function() { album.share('facebook') } },
+		{ type: 'item', title: build.iconic('envelope-closed') + 'Mail', fn: function() { album.share('mail') } },
 		{ type: 'separator' },
 		{ type: 'item', title: build.iconic('pencil') + 'Edit Sharing', fn: function() { album.setPublic(albumID, true, e) } },
 		{ type: 'item', title: build.iconic('ban') + 'Make Private', fn: function() { album.setPublic(albumID, false) } }
