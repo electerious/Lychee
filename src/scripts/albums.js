@@ -1,6 +1,6 @@
 /**
- * @description	Takes care of every action albums can handle and execute.
- * @copyright	2015 by Tobias Reich
+ * @description Takes care of every action albums can handle and execute.
+ * @copyright   2015 by Tobias Reich
  */
 
 albums = {
