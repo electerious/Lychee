@@ -36,8 +36,7 @@ album.load = function(albumID, refresh) {
 
 		if (!refresh) lychee.animate('#content', 'contentZoomOut')
 
-		let startTime = new Date().getTime(),
-		    waitTime  = 0
+		let startTime = new Date().getTime()
 
 		let params = {
 			albumID,
@@ -45,6 +44,8 @@ album.load = function(albumID, refresh) {
 		}
 
 		api.post('Album::get', params, function(data) {
+
+			let waitTime = 0
 
 			if (data==='Warning: Album private!') {
 
@@ -76,7 +77,7 @@ album.load = function(albumID, refresh) {
 			if (refresh===true)                                            waitTime = 0
 			if (!visible.albums() && !visible.photo() && !visible.album()) waitTime = 0
 
-			setTimeout(function() {
+			setTimeout(() => {
 
 				view.album.init()
 
