@@ -286,10 +286,10 @@ contextMenu.sharePhoto = function(photoID, e) {
 	let items = [
 		{ type: 'item', title: `<input readonly id="link" value="${ link }">`, fn: () => {}, class: 'noHover' },
 		{ type: 'separator' },
-		{ type: 'item', title: build.iconic('twitter', iconClass) + 'Twitter', fn: () => photo.share(photoID, 0) },
-		{ type: 'item', title: build.iconic('facebook', iconClass) + 'Facebook', fn: () => photo.share(photoID, 1) },
-		{ type: 'item', title: build.iconic('envelope-closed') + 'Mail', fn: () => photo.share(photoID, 2) },
-		{ type: 'item', title: build.iconic('dropbox', iconClass) + 'Dropbox', fn: () => photo.share(photoID, 3) },
+		{ type: 'item', title: build.iconic('twitter', iconClass) + 'Twitter', fn: () => photo.share(photoID, 'twitter') },
+		{ type: 'item', title: build.iconic('facebook', iconClass) + 'Facebook', fn: () => photo.share(photoID, 'facebook') },
+		{ type: 'item', title: build.iconic('envelope-closed') + 'Mail', fn: () => photo.share(photoID, 'mail') },
+		{ type: 'item', title: build.iconic('dropbox', iconClass) + 'Dropbox', fn: () => photo.share(photoID, 'dropbox') },
 		{ type: 'item', title: build.iconic('link-intact') + 'Direct Link', fn: () => window.open(photo.getDirectLink()) },
 		{ type: 'separator' },
 		{ type: 'item', title: build.iconic('ban') + 'Make Private', fn: () => photo.setPublic(photoID) }
