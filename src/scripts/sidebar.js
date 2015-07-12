@@ -1,6 +1,6 @@
 /**
- * @description	This module takes care of the sidebar.
- * @copyright	2015 by Tobias Reich
+ * @description This module takes care of the sidebar.
+ * @copyright   2015 by Tobias Reich
  */
 
 sidebar = {
