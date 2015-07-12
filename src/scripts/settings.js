@@ -1,33 +1,29 @@
 /**
- * @description	Lets you change settings.
- * @copyright	2015 by Tobias Reich
+ * @description Lets you change settings.
+ * @copyright   2015 by Tobias Reich
  */
 
 settings = {}
 
 settings.createConfig = function() {
 
-	var msg = '',
-		action;
+	const action = function(data) {
 
-	action = function(data) {
-
-		var dbName			= data.dbName			|| '',
-			dbUser			= data.dbUser			|| '',
-			dbPassword		= data.dbPassword		|| '',
-			dbHost			= data.dbHost			|| '',
-			dbTablePrefix	= data.dbTablePrefix	|| '',
-			params;
+		let dbName        = data.dbName        || '',
+		    dbUser        = data.dbUser        || '',
+		    dbPassword    = data.dbPassword    || '',
+		    dbHost        = data.dbHost        || '',
+		    dbTablePrefix = data.dbTablePrefix || ''
 
 		if (dbUser.length<1) {
-			basicModal.error('dbUser');
-			return false;
+			basicModal.error('dbUser')
+			return false
 		}
 
-		if (dbHost.length<1) dbHost = 'localhost';
-		if (dbName.length<1) dbName = 'lychee';
+		if (dbHost.length<1) dbHost = 'localhost'
+		if (dbName.length<1) dbName = 'lychee'
 
-		params = {
+		let params = {
 			dbName,
 			dbUser,
 			dbPassword,
@@ -50,9 +46,9 @@ settings.createConfig = function() {
 								fn: settings.createConfig
 							}
 						}
-					});
+					})
 
-					return false;
+					return false
 
 				}
 
@@ -67,9 +63,9 @@ settings.createConfig = function() {
 								fn: settings.createConfig
 							}
 						}
-					});
+					})
 
-					return false;
+					return false
 
 				}
 
@@ -84,9 +80,9 @@ settings.createConfig = function() {
 								fn: settings.createConfig
 							}
 						}
-					});
+					})
 
-					return false;
+					return false
 
 				}
 
@@ -99,34 +95,34 @@ settings.createConfig = function() {
 							fn: settings.createConfig
 						}
 					}
-				});
+				})
 
-				return false;
+				return false
 
 			} else {
 
 				// Configuration successful
-				window.location.reload();
+				window.location.reload()
 
 			}
 
-		});
+		})
 
 	}
 
-	msg =	`
-			<p>
-				Enter your database connection details below:
-				<input name='dbHost' class='text' type='text' placeholder='Database Host (optional)' value=''>
-				<input name='dbUser' class='text' type='text' placeholder='Database Username' value=''>
-				<input name='dbPassword' class='text' type='password' placeholder='Database Password' value=''>
-			</p>
-			<p>
-				Lychee will create its own database. If required, you can enter the name of an existing database instead:
-				<input name='dbName' class='text' type='text' placeholder='Database Name (optional)' value=''>
-				<input name='dbTablePrefix' class='text' type='text' placeholder='Table prefix (optional)' value=''>
-			</p>
-			`
+	let msg = `
+	          <p>
+	              Enter your database connection details below:
+	              <input name='dbHost' class='text' type='text' placeholder='Database Host (optional)' value=''>
+	              <input name='dbUser' class='text' type='text' placeholder='Database Username' value=''>
+	              <input name='dbPassword' class='text' type='password' placeholder='Database Password' value=''>
+	          </p>
+	          <p>
+	              Lychee will create its own database. If required, you can enter the name of an existing database instead:
+	              <input name='dbName' class='text' type='text' placeholder='Database Name (optional)' value=''>
+	              <input name='dbTablePrefix' class='text' type='text' placeholder='Table prefix (optional)' value=''>
+	          </p>
+	          `
 
 	basicModal.show({
 		body: msg,
@@ -136,34 +132,30 @@ settings.createConfig = function() {
 				fn: action
 			}
 		}
-	});
+	})
 
 }
 
 settings.createLogin = function() {
 
-	var action,
-		msg = '';
+	const action = function(data) {
 
-	action = function(data) {
-
-		var params,
-			username = data.username,
-			password = data.password;
+		let username = data.username,
+		    password = data.password
 
 		if (username.length<1) {
-			basicModal.error('username');
-			return false;
+			basicModal.error('username')
+			return false
 		}
 
 		if (password.length<1) {
-			basicModal.error('password');
-			return false;
+			basicModal.error('password')
+			return false
 		}
 
-		basicModal.close();
+		basicModal.close()
 
-		params = {
+		let params = {
 			username,
 			password
 		}
@@ -180,21 +172,21 @@ settings.createLogin = function() {
 							fn: settings.createLogin
 						}
 					}
-				});
+				})
 
 			}
 
-		});
+		})
 
 	}
 
-	msg =	`
-			<p>
-				Enter a username and password for your installation:
-				<input name='username' class='text' type='text' placeholder='New Username' value=''>
-				<input name='password' class='text' type='password' placeholder='New Password' value=''>
-			</p>
-			`
+	let msg = `
+	          <p>
+	              Enter a username and password for your installation:
+	              <input name='username' class='text' type='text' placeholder='New Username' value=''>
+	              <input name='password' class='text' type='password' placeholder='New Password' value=''>
+	          </p>
+	          `
 
 	basicModal.show({
 		body: msg,
@@ -204,40 +196,36 @@ settings.createLogin = function() {
 				fn: action
 			}
 		}
-	});
+	})
 
 }
 
 settings.setLogin = function() {
 
-	var msg = '',
-		action;
+	const action = function(data) {
 
-	action = function(data) {
-
-		var oldPassword		= data.oldPassword	|| '',
-			username		= data.username		|| '',
-			password		= data.password		|| '',
-			params;
+		let oldPassword = data.oldPassword || '',
+		    username    = data.username    || '',
+		    password    = data.password    || ''
 
 		if (oldPassword.length<1) {
-			basicModal.error('oldPassword');
-			return false;
+			basicModal.error('oldPassword')
+			return false
 		}
 
 		if (username.length<1) {
-			basicModal.error('username');
-			return false;
+			basicModal.error('username')
+			return false
 		}
 
 		if (password.length<1) {
-			basicModal.error('password');
-			return false;
+			basicModal.error('password')
+			return false
 		}
 
-		basicModal.close();
+		basicModal.close()
 
-		params = {
+		let params = {
 			oldPassword,
 			username,
 			password
@@ -245,23 +233,23 @@ settings.setLogin = function() {
 
 		api.post('Settings::setLogin', params, function(data) {
 
-			if (data!==true) lychee.error(null, params, data);
+			if (data!==true) lychee.error(null, params, data)
 
-		});
+		})
 
 	}
 
-	msg =	`
-			<p>
-				Enter your current password:
-				<input name='oldPassword' class='text' type='password' placeholder='Current Password' value=''>
-			</p>
-			<p>
-				Your username and password will be changed to the following:
-				<input name='username' class='text' type='text' placeholder='New Username' value=''>
-				<input name='password' class='text' type='password' placeholder='New Password' value=''>
-			</p>
-			`
+	let msg = `
+	          <p>
+	              Enter your current password:
+	              <input name='oldPassword' class='text' type='password' placeholder='Current Password' value=''>
+	          </p>
+	          <p>
+	              Your username and password will be changed to the following:
+	              <input name='username' class='text' type='text' placeholder='New Username' value=''>
+	              <input name='password' class='text' type='password' placeholder='New Password' value=''>
+	          </p>
+	          `
 
 	basicModal.show({
 		body: msg,
@@ -275,92 +263,88 @@ settings.setLogin = function() {
 				fn: basicModal.close
 			}
 		}
-	});
+	})
 
 }
 
 settings.setSorting = function() {
 
-	var sortingPhotos = [],
-		sortingAlbums = [],
-		action,
-		msg = '';
+	let sortingPhotos = [],
+	    sortingAlbums = []
 
-	action = function() {
+	const action = function() {
 
-		var params;
+		sortingAlbums[0] = $('.basicModal select#settings_albums_type').val()
+		sortingAlbums[1] = $('.basicModal select#settings_albums_order').val()
 
-		sortingAlbums[0] = $('.basicModal select#settings_albums_type').val();
-		sortingAlbums[1] = $('.basicModal select#settings_albums_order').val();
+		sortingPhotos[0] = $('.basicModal select#settings_photos_type').val()
+		sortingPhotos[1] = $('.basicModal select#settings_photos_order').val()
 
-		sortingPhotos[0] = $('.basicModal select#settings_photos_type').val();
-		sortingPhotos[1] = $('.basicModal select#settings_photos_order').val();
+		basicModal.close()
+		albums.refresh()
 
-		basicModal.close();
-		albums.refresh();
-
-		params = {
-			typeAlbums:		sortingAlbums[0],
-			orderAlbums:	sortingAlbums[1],
-			typePhotos:		sortingPhotos[0],
-			orderPhotos:	sortingPhotos[1]
+		let params = {
+			typeAlbums  : sortingAlbums[0],
+			orderAlbums : sortingAlbums[1],
+			typePhotos  : sortingPhotos[0],
+			orderPhotos : sortingPhotos[1]
 		}
 
 		api.post('Settings::setSorting', params, function(data) {
 
 			if (data===true) {
-				lychee.sortingAlbums	= 'ORDER BY ' + sortingAlbums[0] + ' ' + sortingAlbums[1];
-				lychee.sortingPhotos	= 'ORDER BY ' + sortingPhotos[0] + ' ' + sortingPhotos[1];
-				lychee.load();
-			} else lychee.error(null, params, data);
+				lychee.sortingAlbums = 'ORDER BY ' + sortingAlbums[0] + ' ' + sortingAlbums[1]
+				lychee.sortingPhotos = 'ORDER BY ' + sortingPhotos[0] + ' ' + sortingPhotos[1]
+				lychee.load()
+			} else lychee.error(null, params, data)
 
-		});
+		})
 
 	}
 
-	msg =	`
-			<p>
-				Sort albums by
-				<span class="select">
-					<select id='settings_albums_type'>
-						<option value='id'>Creation Time</option>
-						<option value='title'>Title</option>
-						<option value='description'>Description</option>
-						<option value='public'>Public</option>
-					</select>
-				</span>
-				in an
-				<span class="select">
-					<select id='settings_albums_order'>
-						<option value='ASC'>Ascending</option>
-						<option value='DESC'>Descending</option>
-					</select>
-				</span>
-				order.
-			</p>
-			<p>
-				Sort photos by
-				<span class="select">
-					<select id='settings_photos_type'>
-						<option value='id'>Upload Time</option>
-						<option value='takestamp'>Take Date</option>
-						<option value='title'>Title</option>
-						<option value='description'>Description</option>
-						<option value='public'>Public</option>
-						<option value='star'>Star</option>
-						<option value='type'>Photo Format</option>
-					</select>
-				</span>
-				in an
-				<span class="select">
-					<select id='settings_photos_order'>
-						<option value='ASC'>Ascending</option>
-						<option value='DESC'>Descending</option>
-					</select>
-				</span>
-				order.
-			</p>
-			`
+	let msg = `
+	          <p>
+	              Sort albums by
+	              <span class="select">
+	                  <select id='settings_albums_type'>
+	                      <option value='id'>Creation Time</option>
+	                      <option value='title'>Title</option>
+	                      <option value='description'>Description</option>
+	                      <option value='public'>Public</option>
+	                  </select>
+	              </span>
+	              in an
+	              <span class="select">
+	                  <select id='settings_albums_order'>
+	                      <option value='ASC'>Ascending</option>
+	                      <option value='DESC'>Descending</option>
+	                  </select>
+	              </span>
+	              order.
+	          </p>
+	          <p>
+	              Sort photos by
+	              <span class="select">
+	                  <select id='settings_photos_type'>
+	                      <option value='id'>Upload Time</option>
+	                      <option value='takestamp'>Take Date</option>
+	                      <option value='title'>Title</option>
+	                      <option value='description'>Description</option>
+	                      <option value='public'>Public</option>
+	                      <option value='star'>Star</option>
+	                      <option value='type'>Photo Format</option>
+	                  </select>
+	              </span>
+	              in an
+	              <span class="select">
+	                  <select id='settings_photos_order'>
+	                      <option value='ASC'>Ascending</option>
+	                      <option value='DESC'>Descending</option>
+	                  </select>
+	              </span>
+	              order.
+	          </p>
+	          `
 
 	basicModal.show({
 		body: msg,
@@ -374,23 +358,23 @@ settings.setSorting = function() {
 				fn: basicModal.close
 			}
 		}
-	});
+	})
 
 	if (lychee.sortingAlbums!=='') {
 
-		sortingAlbums = lychee.sortingAlbums.replace('ORDER BY ', '').split(' ');
+		sortingAlbums = lychee.sortingAlbums.replace('ORDER BY ', '').split(' ')
 
-		$('.basicModal select#settings_albums_type').val(sortingAlbums[0]);
-		$('.basicModal select#settings_albums_order').val(sortingAlbums[1]);
+		$('.basicModal select#settings_albums_type').val(sortingAlbums[0])
+		$('.basicModal select#settings_albums_order').val(sortingAlbums[1])
 
 	}
 
 	if (lychee.sortingPhotos!=='') {
 
-		sortingPhotos = lychee.sortingPhotos.replace('ORDER BY ', '').split(' ');
+		sortingPhotos = lychee.sortingPhotos.replace('ORDER BY ', '').split(' ')
 
-		$('.basicModal select#settings_photos_type').val(sortingPhotos[0]);
-		$('.basicModal select#settings_photos_order').val(sortingPhotos[1]);
+		$('.basicModal select#settings_photos_type').val(sortingPhotos[0])
+		$('.basicModal select#settings_photos_order').val(sortingPhotos[1])
 
 	}
 
@@ -398,37 +382,34 @@ settings.setSorting = function() {
 
 settings.setDropboxKey = function(callback) {
 
-	var action,
-		msg = "";
+	const action = function(data) {
 
-	action = function(data) {
-
-		var key = data.key;
+		let key = data.key
 
 		if (data.key.length<1) {
-			basicModal.error('key');
-			return false;
+			basicModal.error('key')
+			return false
 		}
 
-		basicModal.close();
+		basicModal.close()
 
 		api.post('Settings::setDropboxKey', { key }, function(data) {
 
 			if (data===true) {
-				lychee.dropboxKey = key;
-				if (callback) lychee.loadDropbox(callback);
-			} else lychee.error(null, params, data);
+				lychee.dropboxKey = key
+				if (callback) lychee.loadDropbox(callback)
+			} else lychee.error(null, params, data)
 
-		});
+		})
 
 	}
 
-	msg =	`
-			<p>
-				In order to import photos from your Dropbox, you need a valid drop-ins app key from <a href='https://www.dropbox.com/developers/apps/create'>their website</a>. Generate yourself a personal key and enter it below:
-				<input class='text' name='key' type='text' placeholder='Dropbox API Key' value='${ lychee.dropboxKey }'>
-			</p>
-			`
+	let msg = `
+	          <p>
+	              In order to import photos from your Dropbox, you need a valid drop-ins app key from <a href='https://www.dropbox.com/developers/apps/create'>their website</a>. Generate yourself a personal key and enter it below:
+	              <input class='text' name='key' type='text' placeholder='Dropbox API Key' value='${ lychee.dropboxKey }'>
+	          </p>
+	          `
 
 	basicModal.show({
 		body: msg,
@@ -442,6 +423,6 @@ settings.setDropboxKey = function(callback) {
 				fn: basicModal.close
 			}
 		}
-	});
+	})
 
 }
