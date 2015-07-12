@@ -660,8 +660,8 @@ photo.getSize = function() {
 
 	// Calculate pixel ratio of screen
 	if (pixelRatio!==undefined && pixelRatio>1) {
-		view.width	= view.width * pixelRatio
-		view.height	= view.height * pixelRatio
+		view.width  = view.width * pixelRatio
+		view.height = view.height * pixelRatio
 	}
 
 	// Medium available and

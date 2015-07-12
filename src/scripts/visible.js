@@ -1,17 +1,17 @@
 /**
- * @description	This module is used to check if elements are visible or not.
- * @copyright	2015 by Tobias Reich
+ * @description This module is used to check if elements are visible or not.
+ * @copyright   2015 by Tobias Reich
  */
 
 visible = {}
 
 visible.albums = function() {
-	if ($('#tools_albums').css('display')==='block') return true
+	if (header.dom('#tools_albums').css('display')==='block') return true
 	return false
 }
 
 visible.album = function() {
-	if ($('#tools_album').css('display')==='block') return true
+	if (header.dom('#tools_album').css('display')==='block') return true
 	return false
 }
 
@@ -31,7 +31,6 @@ visible.sidebar = function() {
 }
 
 visible.sidebarbutton = function() {
-	if (visible.albums()) return false
 	if (visible.photo()) return true
 	if (visible.album() && $('#button_info_album:visible').length>0) return true
 	return false
@@ -43,13 +42,7 @@ visible.header = function() {
 }
 
 visible.message = function() {
-	if ($('.message').length>0) return true
-	return false
-}
-
-visible.signin = function() {
-	if ($('.message .sign_in').length>0) return true
-	return false
+	return basicModal.visible()
 }
 
 visible.contextMenu = function() {
