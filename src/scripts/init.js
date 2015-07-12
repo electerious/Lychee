@@ -52,12 +52,12 @@ $(document).ready(function() {
 			if (!visible.multiselect()) { sidebar.toggle(); return false }
 		})
 		.bind(['command+backspace', 'ctrl+backspace'], function() {
-			if (visible.photo() && !visible.message())      { photo.delete([photo.getID()]); return false }
-			else if (visible.album() && !visible.message()) { album.delete([album.getID()]); return false }
+			if (visible.photo() && basicModal.visible()===false)      { photo.delete([photo.getID()]); return false }
+			else if (visible.album() && basicModal.visible()===false) { album.delete([album.getID()]); return false }
 		})
 		.bind(['command+a', 'ctrl+a'], function() {
-			if (visible.album() && !visible.message())       { multiselect.selectAll(); return false }
-			else if (visible.albums() && !visible.message()) { multiselect.selectAll(); return false }
+			if (visible.album() && basicModal.visible()===false)       { multiselect.selectAll(); return false }
+			else if (visible.albums() && basicModal.visible()===false) { multiselect.selectAll(); return false }
 		})
 
 	Mousetrap.bindGlobal('enter', function() {

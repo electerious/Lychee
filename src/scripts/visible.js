@@ -41,10 +41,6 @@ visible.header = function() {
 	return true
 }
 
-visible.message = function() {
-	return basicModal.visible()
-}
-
 visible.contextMenu = function() {
 	return basicContext.visible()
 }

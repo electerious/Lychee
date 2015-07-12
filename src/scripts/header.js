@@ -80,7 +80,7 @@ header.show = function() {
 
 header.hide = function(e, delay = 500) {
 
-	if (visible.photo() && !visible.sidebar() && !visible.contextMenu() && !visible.message()) {
+	if (visible.photo() && !visible.sidebar() && !visible.contextMenu() && basicModal.visible()===false) {
 
 		clearTimeout($(window).data('timeout'))
 
