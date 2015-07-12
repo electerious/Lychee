@@ -97,10 +97,7 @@ build.imageview = function(data, size, visibleControls) {
 
 	if (data==null) return ''
 
-	let html = `
-	           <div class='arrow_wrapper arrow_wrapper--previous'><a id='previous'>${ build.iconic('caret-left') }</a></div>
-	           <div class='arrow_wrapper arrow_wrapper--next'><a id='next'>${ build.iconic('caret-right') }</a></div>
-	           `
+	let html = ''
 
 	if (size==='big') {
 
@@ -118,6 +115,11 @@ build.imageview = function(data, size, visibleControls) {
 		else                        html += `<div id='image' class='small' style='background-image: url(${ data.url }); width: ${ data.width }px; height: ${ data.height }px; margin-top: -${ parseInt(data.height/2) }px; margin-left: -${ data.width/2 }px;'></div>`
 
 	}
+
+	html += `
+	        <div class='arrow_wrapper arrow_wrapper--previous'><a id='previous'>${ build.iconic('caret-left') }</a></div>
+	        <div class='arrow_wrapper arrow_wrapper--next'><a id='next'>${ build.iconic('caret-right') }</a></div>
+	        `
 
 	return html
 
