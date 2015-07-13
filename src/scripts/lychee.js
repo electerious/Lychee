@@ -143,7 +143,7 @@ lychee.loginDialog = function() {
 
 	if (localStorage) {
 		let localUsername = localStorage.getItem('lychee_username')
-		if (localUsername!==null && localUsername.length>0) {
+		if (localUsername!=null && localUsername.length>0) {
 			$('.basicModal input[name="username"]').val(localUsername)
 			$('.basicModal input[name="password"]').focus()
 		}
@@ -181,8 +181,8 @@ lychee.load = function() {
 	contextMenu.close()
 	multiselect.close()
 
-	if (hash[0]!==undefined) albumID = hash[0]
-	if (hash[1]!==undefined) photoID = hash[1]
+	if (hash[0]!=null) albumID = hash[0]
+	if (hash[1]!=null) photoID = hash[1]
 
 	if (albumID && photoID) {
 
@@ -212,7 +212,7 @@ lychee.load = function() {
 	} else {
 
 		// Trash albums.json when filled with search results
-		if (search.hash!==null) {
+		if (search.hash!=null) {
 			albums.json = null
 			search.hash = null
 		}
@@ -327,7 +327,7 @@ lychee.retinize = function(path = '') {
 	    extention  = path.split('.').pop(),
 	    hasRetina  = extention!=='svg'
 
-	if ((pixelRatio!==undefined && pixelRatio>1) && hasRetina===true) {
+	if ((pixelRatio!=null && pixelRatio>1) && hasRetina===true) {
 
 		path = path.replace(/\.[^/.]+$/, '')
 		path = path + '@2x' + '.' + extention

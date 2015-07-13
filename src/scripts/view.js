@@ -62,7 +62,7 @@ view.albums = {
 			}
 
 			// Restore scroll position
-			if (view.albums.content.scrollPosition!==null && view.albums.content.scrollPosition!==0) {
+			if (view.albums.content.scrollPosition!=null && view.albums.content.scrollPosition!==0) {
 				$(document).scrollTop(view.albums.content.scrollPosition)
 			}
 

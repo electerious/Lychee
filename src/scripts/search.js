@@ -85,7 +85,7 @@ search.reset = function() {
 	$('#search').val('')
 	$('.no_content').remove()
 
-	if (search.hash!==null) {
+	if (search.hash!=null) {
 
 		// Trash data
 		albums.json = null

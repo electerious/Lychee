@@ -50,7 +50,7 @@ const getPhotoSize = function(photo) {
 	if (photo.json.width>view.width || photo.json.height>view.height) scaled = true
 
 	// Calculate pixel ratio of screen
-	if (pixelRatio!==undefined && pixelRatio>1) {
+	if (pixelRatio!=null && pixelRatio>1) {
 		view.width  = view.width * pixelRatio
 		view.height = view.height * pixelRatio
 	}

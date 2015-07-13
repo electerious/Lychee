@@ -75,7 +75,7 @@ loadingBar.show = function(status, errorText) {
 
 loadingBar.hide = function(force) {
 
-	if ((loadingBar.status!=='error' && loadingBar.status!==null) || force) {
+	if ((loadingBar.status!=='error' && loadingBar.status!=null) || force) {
 
 		// Remove status
 		loadingBar.status = null

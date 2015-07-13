@@ -88,7 +88,7 @@ upload.start = {
 			if (file.supported===false) {
 
 				// Skip file
-				if (file.next!==null) process(files, file.next)
+				if (file.next!=null) process(files, file.next)
 				else {
 
 					// Look for supported files
@@ -217,7 +217,7 @@ upload.start = {
 					$('.basicModal .rows .row:nth-child(' + (file.num+1) + ') .status').html('Processing')
 
 					// Upload next file
-					if (file.next!==null) process(files, file.next)
+					if (file.next!=null) process(files, file.next)
 
 				}
 
