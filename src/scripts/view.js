@@ -172,19 +172,19 @@ view.album = {
 
 		star: function(photoID) {
 
-			let $badge = $('.photo[data-id="' + photoID + '"] .iconic-star')
+			let $badge = $('.photo[data-id="' + photoID + '"] .icn-star')
 
-			if (album.json.content[photoID].star==='1') $badge.addClass('.badge--visible')
-			else                                        $badge.removeClass('.badge--visible')
+			if (album.json.content[photoID].star==='1') $badge.addClass('badge--visible')
+			else                                        $badge.removeClass('badge--visible')
 
 		},
 
 		public: function(photoID) {
 
-			let $badge = $('.photo[data-id="' + photoID + '"] .iconic-share')
+			let $badge = $('.photo[data-id="' + photoID + '"] .icn-share')
 
-			if (album.json.content[photoID].public==='1') $badge.addClass('.badge--visible')
-			else                                          $badge.removeClass('.badge--visible')
+			if (album.json.content[photoID].public==='1') $badge.addClass('badge--visible')
+			else                                          $badge.removeClass('badge--visible')
 
 		},
 
