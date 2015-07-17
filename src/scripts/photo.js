@@ -365,7 +365,7 @@ photo.setAlbum = function(photoIDs, albumID) {
 
 		}
 
-		album.json.content[id] = null
+		delete album.json.content[id]
 		view.album.content.delete(id)
 
 	})
