@@ -1,6 +1,6 @@
 ## v3.0.4
 
-Released July ??, 2015
+Released July 17, 2015
 
 - `Improved` Removed bower and updated basicModal & basicContext
 - `Improved` Small interface performance improvements
