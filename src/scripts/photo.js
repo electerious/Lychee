@@ -1,33 +1,30 @@
 /**
- * @description	Takes care of every action a photo can handle and execute.
- * @copyright	2015 by Tobias Reich
+ * @description Takes care of every action a photo can handle and execute.
+ * @copyright   2015 by Tobias Reich
  */
 
 photo = {
 
-	json:	null,
-	cache:	null
+	json  : null,
+	cache : null
 
 }
 
 photo.getID = function() {
 
-	var id = null;
+	let id = null
 
-	if (photo.json)	id = photo.json.id;
-	else			id = $('.photo:hover, .photo.active').attr('data-id');
+	if (photo.json) id = photo.json.id
+	else            id = $('.photo:hover, .photo.active').attr('data-id')
 
-	if ($.isNumeric(id)===true)	return id;
-	else						return false;
+	if ($.isNumeric(id)===true) return id
+	else                        return false
 
 }
 
 photo.load = function(photoID, albumID) {
 
-	var params,
-		checkPasswd;
-
-	params = {
+	let params = {
 		photoID,
 		albumID,
 		password: password.value
@@ -35,41 +32,39 @@ photo.load = function(photoID, albumID) {
 
 	api.post('Photo::get', params, function(data) {
 
+		const checkPasswd = function() {
+			if (password.value!=='') photo.load(photoID, albumID)
+			else                     setTimeout(checkPasswd, 250)
+		}
+
 		if (data==='Warning: Photo private!') {
-			lychee.content.show();
-			lychee.goto('');
-			return false;
+			lychee.content.show()
+			lychee.goto('')
+			return false
 		}
 
 		if (data==='Warning: Wrong password!') {
-			checkPasswd = function() {
-				if (password.value!=='')	photo.load(photoID, albumID);
-				else						setTimeout(checkPasswd, 250);
-			};
-			checkPasswd();
-			return false;
+			checkPasswd()
+			return false
 		}
 
-		photo.json = data;
+		photo.json = data
 
-		if (!visible.photo()) view.photo.show();
-		view.photo.init();
-		lychee.imageview.show();
+		if (!visible.photo()) view.photo.show()
+		view.photo.init()
+		lychee.imageview.show()
 
-		setTimeout(function() {
-			lychee.content.show();
+		setTimeout(() => {
+			lychee.content.show()
 			//photo.preloadNext(photoID, albumID);
-		}, 300);
+		}, 300)
 
-	});
+	})
 
 }
 
 // Preload the next photo for better response time
 photo.preloadNext = function(photoID) {
-
-	var nextPhoto,
-		url;
 
 	// Never preload on mobile devices with bare RAM and
 	// mostly mobile internet
@@ -80,12 +75,12 @@ photo.preloadNext = function(photoID) {
 	   album.json.content[photoID] &&
 	   album.json.content[photoID].nextPhoto!='') {
 
-		nextPhoto	= album.json.content[photoID].nextPhoto;
-		url			= album.json.content[nextPhoto].url;
+		let nextPhoto = album.json.content[photoID].nextPhoto,
+		    url       = album.json.content[nextPhoto].url
 
-		photo.cache			= new Image();
-		photo.cache.src		= url;
-		photo.cache.onload	= function() { photo.cache = null };
+		photo.cache        = new Image()
+		photo.cache.src    = url
+		photo.cache.onload = () => photo.cache = null
 
 	}
 
@@ -93,36 +88,36 @@ photo.preloadNext = function(photoID) {
 
 photo.parse = function() {
 
-	if (!photo.json.title) photo.json.title = 'Untitled';
+	if (!photo.json.title) photo.json.title = 'Untitled'
 
 }
 
 photo.previous = function(animate) {
 
-	var delay = 0;
+	if (photo.getID()!==false &&
+	   album.json &&
+	   album.json.content[photo.getID()] &&
+	   album.json.content[photo.getID()].previousPhoto!=='') {
 
-	if (photo.getID()!==false&&
-		album.json&&
-		album.json.content[photo.getID()]&&
-		album.json.content[photo.getID()].previousPhoto!=='') {
+		let delay = 0
 
-			if (animate===true) {
+		if (animate===true) {
 
-				delay = 200;
+			delay = 200
 
-				$('#image').css({
-					WebkitTransform:	'translateX(100%)',
-					MozTransform:		'translateX(100%)',
-					transform:			'translateX(100%)',
-					opacity:			0
-				});
+			$('#image').css({
+				WebkitTransform : 'translateX(100%)',
+				MozTransform    : 'translateX(100%)',
+				transform       : 'translateX(100%)',
+				opacity         : 0
+			})
 
-			}
+		}
 
-			setTimeout(function() {
-				if (photo.getID()===false) return false;
-				lychee.goto(album.getID() + '/' + album.json.content[photo.getID()].previousPhoto)
-			}, delay);
+		setTimeout(() => {
+			if (photo.getID()===false) return false
+			lychee.goto(album.getID() + '/' + album.json.content[photo.getID()].previousPhoto)
+		}, delay)
 
 	}
 
@@ -130,30 +125,30 @@ photo.previous = function(animate) {
 
 photo.next = function(animate) {
 
-	var delay = 0;
+	if (photo.getID()!==false &&
+	   album.json &&
+	   album.json.content[photo.getID()] &&
+	   album.json.content[photo.getID()].nextPhoto!=='') {
 
-	if (photo.getID()!==false&&
-		album.json&&
-		album.json.content[photo.getID()]&&
-		album.json.content[photo.getID()].nextPhoto!=='') {
+		let delay = 0
 
-			if (animate===true) {
+		if (animate===true) {
 
-				delay = 200;
+			delay = 200
 
-				$('#image').css({
-					WebkitTransform:	'translateX(-100%)',
-					MozTransform:		'translateX(-100%)',
-					transform:			'translateX(-100%)',
-					opacity:			0
-				});
+			$('#image').css({
+				WebkitTransform : 'translateX(-100%)',
+				MozTransform    : 'translateX(-100%)',
+				transform       : 'translateX(-100%)',
+				opacity         : 0
+			})
 
-			}
+		}
 
-			setTimeout(function() {
-				if (photo.getID()===false) return false;
-				lychee.goto(album.getID() + '/' + album.json.content[photo.getID()].nextPhoto);
-			}, delay);
+		setTimeout(() => {
+			if (photo.getID()===false) return false
+			lychee.goto(album.getID() + '/' + album.json.content[photo.getID()].nextPhoto)
+		}, delay)
 
 	}
 
@@ -161,105 +156,102 @@ photo.next = function(animate) {
 
 photo.duplicate = function(photoIDs) {
 
-	var params;
+	if (!photoIDs) return false
+	if (photoIDs instanceof Array===false) photoIDs = [photoIDs]
 
-	if (!photoIDs) return false;
-	if (photoIDs instanceof Array===false) photoIDs = [photoIDs];
+	albums.refresh()
 
-	albums.refresh();
-
-	params = {
+	let params = {
 		photoIDs: photoIDs.join()
 	}
 
 	api.post('Photo::duplicate', params, function(data) {
 
-		if (data!==true) lychee.error(null, params, data);
-		else album.load(album.getID());
+		if (data!==true) lychee.error(null, params, data)
+		else             album.load(album.getID())
 
-	});
+	})
 
 }
 
 photo.delete = function(photoIDs) {
 
-	var action = {},
-		cancel = {},
-		msg = '',
-		photoTitle = '';
+	let action     = {},
+	    cancel     = {},
+	    msg        = '',
+	    photoTitle = ''
 
-	if (!photoIDs) return false;
-	if (photoIDs instanceof Array===false) photoIDs = [photoIDs];
+	if (!photoIDs) return false
+	if (photoIDs instanceof Array===false) photoIDs = [photoIDs]
 
 	if (photoIDs.length===1) {
 
 		// Get title if only one photo is selected
-		if (visible.photo())	photoTitle = photo.json.title;
-		else					photoTitle = album.json.content[photoIDs].title;
+		if (visible.photo()) photoTitle = photo.json.title
+		else                 photoTitle = album.json.content[photoIDs].title
 
 		// Fallback for photos without a title
-		if (photoTitle==='')	photoTitle = 'Untitled';
+		if (photoTitle==='') photoTitle = 'Untitled'
 
 	}
 
 	action.fn = function() {
 
-		var params			= '',
-			nextPhoto		= '',
-			previousPhoto	= '';
+		let nextPhoto,
+			previousPhoto
 
-		basicModal.close();
+		basicModal.close()
 
 		photoIDs.forEach(function(id, index, array) {
 
 			// Change reference for the next and previous photo
-			if (album.json.content[id].nextPhoto!==''||album.json.content[id].previousPhoto!=='') {
+			if (album.json.content[id].nextPhoto!=='' || album.json.content[id].previousPhoto!=='') {
 
-				nextPhoto		= album.json.content[id].nextPhoto;
-				previousPhoto	= album.json.content[id].previousPhoto;
+				nextPhoto     = album.json.content[id].nextPhoto
+				previousPhoto = album.json.content[id].previousPhoto
 
-				album.json.content[previousPhoto].nextPhoto = nextPhoto;
-				album.json.content[nextPhoto].previousPhoto = previousPhoto;
+				album.json.content[previousPhoto].nextPhoto = nextPhoto
+				album.json.content[nextPhoto].previousPhoto = previousPhoto
 
 			}
 
-			delete album.json.content[id];
-			view.album.content.delete(id);
+			delete album.json.content[id]
+			view.album.content.delete(id)
 
-		});
+		})
 
-		albums.refresh();
+		albums.refresh()
 
 		// Go to next photo if there is a next photo and
 		// next photo is not the current one. Show album otherwise.
-		if (visible.photo()&&nextPhoto!==''&&nextPhoto!==photo.getID()) lychee.goto(album.getID() + '/' + nextPhoto);
-		else if (!visible.albums()) lychee.goto(album.getID());
+		if (visible.photo() && nextPhoto!=='' && nextPhoto!==photo.getID()) lychee.goto(album.getID() + '/' + nextPhoto)
+		else if (!visible.albums())                                         lychee.goto(album.getID())
 
-		params = {
+		let params = {
 			photoIDs: photoIDs.join()
 		}
 
 		api.post('Photo::delete', params, function(data) {
 
-			if (data!==true) lychee.error(null, params, data);
+			if (data!==true) lychee.error(null, params, data)
 
-		});
+		})
 
 	}
 
 	if (photoIDs.length===1) {
 
-		action.title = 'Delete Photo';
-		cancel.title = 'Keep Photo';
+		action.title = 'Delete Photo'
+		cancel.title = 'Keep Photo'
 
-		msg = "<p>Are you sure you want to delete the photo '" + photoTitle + "'? This action can't be undone!</p>";
+		msg = `<p>Are you sure you want to delete the photo '${ photoTitle }'? This action can't be undone!</p>`
 
 	} else {
 
-		action.title = 'Delete Photo';
-		cancel.title = 'Keep Photo';
+		action.title = 'Delete Photo'
+		cancel.title = 'Keep Photo'
 
-		msg = "<p>Are you sure you want to delete all " + photoIDs.length + " selected photo? This action can't be undone!</p>";
+		msg = `<p>Are you sure you want to delete all ${ photoIDs.length } selected photo? This action can't be undone!</p>`
 
 	}
 
@@ -276,64 +268,63 @@ photo.delete = function(photoIDs) {
 				fn: basicModal.close
 			}
 		}
-	});
+	})
 
 }
 
 photo.setTitle = function(photoIDs) {
 
-	var oldTitle = '',
-		input = '',
-		msg = '',
-		action;
+	let oldTitle = '',
+	    msg      = ''
 
-	if (!photoIDs) return false;
-	if (photoIDs instanceof Array===false) photoIDs = [photoIDs];
+	if (!photoIDs) return false
+	if (photoIDs instanceof Array===false) photoIDs = [photoIDs]
 
 	if (photoIDs.length===1) {
+
 		// Get old title if only one photo is selected
-		if (photo.json)			oldTitle = photo.json.title;
-		else if (album.json)	oldTitle = album.json.content[photoIDs].title;
-		oldTitle = oldTitle.replace(/'/g, '&apos;');
+		if (photo.json)      oldTitle = photo.json.title
+		else if (album.json) oldTitle = album.json.content[photoIDs].title
+		oldTitle = oldTitle.replace(/'/g, '&apos;')
+
 	}
 
-	action = function(data) {
+	const action = function(data) {
 
-		var params,
-			newTitle = data.title;
+		basicModal.close()
 
-		basicModal.close();
+		let newTitle = data.title
 
 		// Remove html from input
-		newTitle = lychee.removeHTML(newTitle);
+		newTitle = lychee.removeHTML(newTitle)
 
 		if (visible.photo()) {
-			photo.json.title = (newTitle==='') ? 'Untitled' : newTitle;
-			view.photo.title();
+			photo.json.title = (newTitle==='' ? 'Untitled' : newTitle)
+			view.photo.title()
 		}
 
 		photoIDs.forEach(function(id, index, array) {
-			album.json.content[id].title = newTitle;
-			view.album.content.title(id);
-		});
+			album.json.content[id].title = newTitle
+			view.album.content.title(id)
+		})
 
-		params = {
+		let params = {
 			photoIDs: photoIDs.join(),
 			title: newTitle
 		}
 
 		api.post('Photo::setTitle', params, function(data) {
 
-			if (data!==true) lychee.error(null, params, data);
+			if (data!==true) lychee.error(null, params, data)
 
-		});
+		})
 
 	}
 
-	input = "<input class='text' data-name='title' type='text' maxlength='50' placeholder='Title' value='" + oldTitle + "'>";
+	let input = `<input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='${ oldTitle }'>`
 
-	if (photoIDs.length===1)	msg = "<p>Enter a new title for this photo: " + input + "</p>";
-	else						msg = "<p>Enter a title for all " + photoIDs.length + " selected photos: " + input + "</p>";
+	if (photoIDs.length===1) msg = `<p>Enter a new title for this photo: ${ input }</p>`
+	else                     msg = `<p>Enter a title for all ${ photoIDs.length } selected photos: ${ input }</p>`
 
 	basicModal.show({
 		body: msg,
@@ -347,79 +338,78 @@ photo.setTitle = function(photoIDs) {
 				fn: basicModal.close
 			}
 		}
-	});
+	})
 
 }
 
 photo.setAlbum = function(photoIDs, albumID) {
 
-	var params,
-		nextPhoto,
-		previousPhoto;
+	let nextPhoto,
+		previousPhoto
 
-	if (!photoIDs) return false;
-	if (visible.photo) lychee.goto(album.getID());
-	if (photoIDs instanceof Array===false) photoIDs = [photoIDs];
+	if (!photoIDs) return false
+	if (photoIDs instanceof Array===false) photoIDs = [photoIDs]
+
+	if (visible.photo) lychee.goto(album.getID())
 
 	photoIDs.forEach(function(id, index, array) {
 
 		// Change reference for the next and previous photo
 		if (album.json.content[id].nextPhoto!==''||album.json.content[id].previousPhoto!=='') {
 
-			nextPhoto		= album.json.content[id].nextPhoto;
-			previousPhoto	= album.json.content[id].previousPhoto;
+			nextPhoto     = album.json.content[id].nextPhoto
+			previousPhoto = album.json.content[id].previousPhoto
 
-			album.json.content[previousPhoto].nextPhoto = nextPhoto;
-			album.json.content[nextPhoto].previousPhoto = previousPhoto;
+			album.json.content[previousPhoto].nextPhoto = nextPhoto
+			album.json.content[nextPhoto].previousPhoto = previousPhoto
 
 		}
 
-		album.json.content[id] = null;
-		view.album.content.delete(id);
+		delete album.json.content[id]
+		view.album.content.delete(id)
 
-	});
+	})
 
-	albums.refresh();
+	albums.refresh()
 
-	params = {
+	let params = {
 		photoIDs: photoIDs.join(),
 		albumID
 	}
 
 	api.post('Photo::setAlbum', params, function(data) {
 
-		if (data!==true) lychee.error(null, params, data);
+		if (data!==true) lychee.error(null, params, data)
 
-	});
+	})
 
 }
 
 photo.setStar = function(photoIDs) {
 
-	var params;
+	if (!photoIDs) return false
 
-	if (!photoIDs) return false;
 	if (visible.photo()) {
-		photo.json.star = (photo.json.star==='0') ? '1' : '0';
-		view.photo.star();
+		photo.json.star = (photo.json.star==='0' ? '1' : '0')
+		view.photo.star()
 	}
 
 	photoIDs.forEach(function(id, index, array) {
-		album.json.content[id].star = (album.json.content[id].star==='0') ? '1' : '0';
-		view.album.content.star(id);
-	});
+		album.json.content[id].star = (album.json.content[id].star==='0' ? '1' : '0')
+		view.album.content.star(id)
+	})
 
-	albums.refresh();
+	albums.refresh()
 
-	params = {
+	let params = {
 		photoIDs: photoIDs.join()
 	}
 
 	api.post('Photo::setStar', params, function(data) {
 
-		if (data!==true) lychee.error(null, params, data);
+		if (data!==true) lychee.error(null, params, data)
 
-	});
+	})
 
 }
 
@@ -427,12 +417,10 @@ photo.setPublic = function(photoID, e) {
 
 	if (photo.json.public==='2') {
 
-		var action;
+		const action = function() {
 
-		action = function() {
-
-			basicModal.close();
-			lychee.goto(photo.json.original_album);
+			basicModal.close()
+			lychee.goto(photo.json.original_album)
 
 		}
 
@@ -448,68 +436,66 @@ photo.setPublic = function(photoID, e) {
 					fn: basicModal.close
 				}
 			}
-		});
+		})
 
-		return false;
+		return false
 
 	}
 
 	if (visible.photo()) {
 
-		photo.json.public = (photo.json.public==='0') ? '1' : '0';
-		view.photo.public();
-		if (photo.json.public==='1') contextMenu.sharePhoto(photoID, e);
+		photo.json.public = (photo.json.public==='0' ? '1' : '0')
+		view.photo.public()
+		if (photo.json.public==='1') contextMenu.sharePhoto(photoID, e)
 
 	}
 
-	album.json.content[photoID].public = (album.json.content[photoID].public==='0') ? '1' : '0';
-	view.album.content.public(photoID);
+	album.json.content[photoID].public = (album.json.content[photoID].public==='0' ? '1' : '0')
+	view.album.content.public(photoID)
 
-	albums.refresh();
+	albums.refresh()
 
 	api.post('Photo::setPublic', { photoID }, function(data) {
 
-		if (data!==true) lychee.error(null, params, data);
+		if (data!==true) lychee.error(null, params, data)
 
-	});
+	})
 
 }
 
 photo.setDescription = function(photoID) {
 
-	var oldDescription = photo.json.description.replace(/'/g, '&apos;'),
-		action;
+	let oldDescription = photo.json.description.replace(/'/g, '&apos;')
 
-	action = function(data) {
+	const action = function(data) {
 
-		var params,
-			description = data.description;
+		basicModal.close()
 
-		basicModal.close();
+		let description = data.description
 
 		// Remove html from input
-		description = lychee.removeHTML(description);
+		description = lychee.removeHTML(description)
 
 		if (visible.photo()) {
-			photo.json.description = description;
-			view.photo.description();
+			photo.json.description = description
+			view.photo.description()
 		}
 
-		params = {
+		let params = {
 			photoID,
 			description
 		}
 
 		api.post('Photo::setDescription', params, function(data) {
 
-			if (data!==true) lychee.error(null, params, data);
+			if (data!==true) lychee.error(null, params, data)
 
-		});
+		})
 
 	}
 
 	basicModal.show({
-		body: "<p>Enter a description for this photo: <input class='text' data-name='description' type='text' maxlength='800' placeholder='Description' value='" + oldDescription + "'></p>",
+		body: `<p>Enter a description for this photo: <input class='text' name='description' type='text' maxlength='800' placeholder='Description' value='${ oldDescription }'></p>`,
 		buttons: {
 			action: {
 				title: 'Set Description',
@@ -520,46 +506,45 @@ photo.setDescription = function(photoID) {
 				fn: basicModal.close
 			}
 		}
-	});
+	})
 
 }
 
 photo.editTags = function(photoIDs) {
 
-	var oldTags		= '',
-		msg			= '',
-		input		= '';
+	let oldTags = '',
+	    msg     = ''
 
-	if (!photoIDs) return false;
-	if (photoIDs instanceof Array===false) photoIDs = [photoIDs];
+	if (!photoIDs) return false
+	if (photoIDs instanceof Array===false) photoIDs = [photoIDs]
 
 	// Get tags
-	if (visible.photo())						oldTags = photo.json.tags;
-	if (visible.album()&&photoIDs.length===1)	oldTags = album.json.content[photoIDs].tags;
-	if (visible.search()&&photoIDs.length===1)	oldTags = album.json.content[photoIDs].tags;
-	if (visible.album()&&photoIDs.length>1) {
-		let same = true;
+	if (visible.photo())                              oldTags = photo.json.tags
+	else if (visible.album() && photoIDs.length===1)  oldTags = album.json.content[photoIDs].tags
+	else if (visible.search() && photoIDs.length===1) oldTags = album.json.content[photoIDs].tags
+	else if (visible.album() && photoIDs.length>1) {
+		let same = true
 		photoIDs.forEach(function(id, index, array) {
-			if(album.json.content[id].tags===album.json.content[photoIDs[0]].tags&&same===true) same = true;
-			else same = false;
-		});
-		if (same) oldTags = album.json.content[photoIDs[0]].tags;
+			if (album.json.content[id].tags===album.json.content[photoIDs[0]].tags && same===true) same = true
+			else                                                                                   same = false
+		})
+		if (same===true) oldTags = album.json.content[photoIDs[0]].tags
 	}
 
 	// Improve tags
-	oldTags = oldTags.replace(/,/g, ', ');
+	oldTags = oldTags.replace(/,/g, ', ')
 
-	action = function(data) {
+	const action = function(data) {
 
-		basicModal.close();
-		photo.setTags(photoIDs, data.tags);
+		basicModal.close()
+		photo.setTags(photoIDs, data.tags)
 
 	}
 
-	input = "<input class='text' data-name='tags' type='text' maxlength='800' placeholder='Tags' value='" + oldTags + "'>";
+	let input = `<input class='text' name='tags' type='text' maxlength='800' placeholder='Tags' value='${ oldTags }'>`
 
-	if (photoIDs.length===1)	msg = "<p>Enter your tags for this photo. You can add multiple tags by separating them with a comma: " + input + "</p>";
-	else						msg = "<p>Enter your tags for all " + photoIDs.length + " selected photos. Existing tags will be overwritten. You can add multiple tags by separating them with a comma: " + input + "</p>";
+	if (photoIDs.length===1) msg = `<p>Enter your tags for this photo. You can add multiple tags by separating them with a comma: ${ input }</p>`
+	else                     msg = `<p>Enter your tags for all ${ photoIDs.length } selected photos. Existing tags will be overwritten. You can add multiple tags by separating them with a comma: ${ input }</p>`
 
 	basicModal.show({
 		body: msg,
@@ -573,88 +558,85 @@ photo.editTags = function(photoIDs) {
 				fn: basicModal.close
 			}
 		}
-	});
+	})
 
 }
 
 photo.setTags = function(photoIDs, tags) {
 
-	var params;
-
-	if (!photoIDs) return false;
-	if (photoIDs instanceof Array===false) photoIDs = [photoIDs];
+	if (!photoIDs) return false
+	if (photoIDs instanceof Array===false) photoIDs = [photoIDs]
 
 	// Parse tags
-	tags = tags.replace(/(\ ,\ )|(\ ,)|(,\ )|(,{1,}\ {0,})|(,$|^,)/g, ',');
-	tags = tags.replace(/,$|^,|(\ ){0,}$/g, '');
+	tags = tags.replace(/(\ ,\ )|(\ ,)|(,\ )|(,{1,}\ {0,})|(,$|^,)/g, ',')
+	tags = tags.replace(/,$|^,|(\ ){0,}$/g, '')
 
 	// Remove html from input
-	tags = lychee.removeHTML(tags);
+	tags = lychee.removeHTML(tags)
 
 	if (visible.photo()) {
-		photo.json.tags = tags;
-		view.photo.tags();
+		photo.json.tags = tags
+		view.photo.tags()
 	}
 
 	photoIDs.forEach(function(id, index, array) {
-		album.json.content[id].tags = tags;
-	});
+		album.json.content[id].tags = tags
+	})
 
-	params = {
+	let params = {
 		photoIDs: photoIDs.join(),
 		tags
 	}
 
 	api.post('Photo::setTags', params, function(data) {
 
-		if (data!==true) lychee.error(null, params, data);
+		if (data!==true) lychee.error(null, params, data)
 
-	});
+	})
 
 }
 
 photo.deleteTag = function(photoID, index) {
 
-	var tags;
+	let tags
 
 	// Remove
-	tags = photo.json.tags.split(',');
-	tags.splice(index, 1);
+	tags = photo.json.tags.split(',')
+	tags.splice(index, 1)
 
 	// Save
-	photo.json.tags = tags.toString();
-	photo.setTags([photoID], photo.json.tags);
+	photo.json.tags = tags.toString()
+	photo.setTags([photoID], photo.json.tags)
 
 }
 
 photo.share = function(photoID, service) {
 
-	var link		= '',
-		url			= photo.getViewLink(photoID),
-		filename	= 'unknown';
+	let link = '',
+	    url  = photo.getViewLink(photoID)
 
 	switch (service) {
-		case 0:
-			link = 'https://twitter.com/share?url=' + encodeURI(url);
-			break;
-		case 1:
-			link = 'http://www.facebook.com/sharer.php?u=' + encodeURI(url) + '&t=' + encodeURI(photo.json.title);
-			break;
-		case 2:
-			link = 'mailto:?subject=' + encodeURI(photo.json.title) + '&body=' + encodeURI(url);
-			break;
-		case 3:
+		case 'twitter':
+			link = `https://twitter.com/share?url=${ encodeURI(url) }`
+			break
+		case 'facebook':
+			link = `http://www.facebook.com/sharer.php?u=${ encodeURI(url) }&t=${ encodeURI(photo.json.title) }`
+			break
+		case 'mail':
+			link = `mailto:?subject=${ encodeURI(photo.json.title) }&body=${ encodeURI(url) }`
+			break
+		case 'dropbox':
 			lychee.loadDropbox(function() {
-				filename = photo.json.title + '.' + photo.getDirectLink().split('.').pop();
-				Dropbox.save(photo.getDirectLink(), filename);
-			});
-			break;
+				let filename = photo.json.title + '.' + photo.getDirectLink().split('.').pop()
+				Dropbox.save(photo.getDirectLink(), filename)
+			})
+			break
 		default:
-			link = '';
-			break;
+			link = ''
+			break
 	}
 
-	if (link.length>5) location.href = link;
+	if (link.length!=='') location.href = link
 
 }
 
@@ -663,72 +645,66 @@ photo.getSize = function() {
 	// Size can be 'big', 'medium' or 'small'
 	// Default is big
 	// Small is centered in the middle of the screen
-	var size		= 'big',
-		scaled		= false,
-		hasMedium	= photo.json.medium!=='',
-		pixelRatio	= window.devicePixelRatio,
-		view		= {
-			width:	$(window).width()-60,
-			height:	$(window).height()-100
-		};
+	let size       = 'big',
+	    scaled     = false,
+	    hasMedium  = photo.json.medium!=='',
+	    pixelRatio = window.devicePixelRatio,
+	    view       = {
+	    	width  : $(window).width() - 60,
+	    	height : $(window).height() - 100
+	    }
 
 	// Detect if the photo will be shown scaled,
 	// because the screen size is smaller than the photo
-	if (photo.json.width>view.width||
-		photo.json.height>view.height) scaled = true;
+	if (photo.json.width>view.width || photo.json.height>view.height) scaled = true
 
 	// Calculate pixel ratio of screen
-	if (pixelRatio!==undefined&&pixelRatio>1) {
-		view.width	= view.width * pixelRatio;
-		view.height	= view.height * pixelRatio;
+	if (pixelRatio!=null && pixelRatio>1) {
+		view.width  = view.width * pixelRatio
+		view.height = view.height * pixelRatio
 	}
 
 	// Medium available and
 	// Medium still bigger than screen
-	if (hasMedium===true&&
-		(1920>view.width&&1080>view.height)) size = 'medium';
+	if (hasMedium===true && (1920>view.width && 1080>view.height)) size = 'medium'
 
 	// Photo not scaled
 	// Photo smaller then screen
-	if (scaled===false&&
-		(photo.json.width<view.width&&
-		photo.json.width<view.height)) size = 'small';
+	if (scaled===false && (photo.json.width<view.width&& photo.json.width<view.height)) size = 'small'
 
-	return size;
+	return size
 
 }
 
 photo.getArchive = function(photoID) {
 
-	var link,
-		url = api.path + '?function=Photo::getArchive&photoID=' + photoID;
+	let link,
+	    url = `${ api.path }?function=Photo::getArchive&photoID=${ photoID }`
 
-	if (location.href.indexOf('index.html')>0)	link = location.href.replace(location.hash, '').replace('index.html', url);
-	else										link = location.href.replace(location.hash, '') + url;
+	if (location.href.indexOf('index.html')>0) link = location.href.replace(location.hash, '').replace('index.html', url)
+	else                                       link = location.href.replace(location.hash, '') + url
 
-	if (lychee.publicMode===true) link += '&password=' + password.value;
+	if (lychee.publicMode===true) link += '&password=' + password.value
 
-	location.href = link;
+	location.href = link
 
 }
 
 photo.getDirectLink = function() {
 
-	var url = '';
+	let url = ''
 
-	if (photo.json&&
-		photo.json.url&&
-		photo.json.url!=='') url = photo.json.url;
+	if (photo.json && photo.json.url && photo.json.url!=='') url = photo.json.url
 
-	return url;
+	return url
 
 }
 
 photo.getViewLink = function(photoID) {
 
-	var url = 'view.php?p=' + photoID;
+	let url = 'view.php?p=' + photoID
 
-	if (location.href.indexOf('index.html')>0)	return location.href.replace('index.html' + location.hash, url);
-	else										return location.href.replace(location.hash, url);
+	if (location.href.indexOf('index.html')>0) return location.href.replace('index.html' + location.hash, url)
+	else                                       return location.href.replace(location.hash, url)
 
 }

@@ -54,14 +54,6 @@ if ($result->num_rows===0) {
 		Log::error($database, 'update_030001', __LINE__, 'Could not update database (' . $database->error . ')');
 		return false;
 	}
-} else {
-	$identifier		= md5(microtime(true));
-	$query			= Database::prepare($database, "UPDATE `?` SET `value` = '?' WHERE `key` = 'identifier' LIMIT 1", array(LYCHEE_TABLE_SETTINGS, $identifier));
-	$result	= $database->query($query);
-	if (!$result) {
-		Log::error($database, 'update_030001', __LINE__, 'Could not reset public albums (' . $database->error . ')');
-		return false;
-	}
 }
 
 # Set version

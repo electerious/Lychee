@@ -70,6 +70,7 @@
 			box-shadow: 0 2px 5px black(.5);
 			border: 1px solid white(.5);
 			transition: opacity .3s ease-out, transform .3s ease-out, border-color .3s ease-out;
+			will-change: transform;
 		}
 
 		&:hover img,
@@ -157,21 +158,29 @@
 	.album img[data-retina='false'] + .overlay a  { text-shadow: none; }
 
 	/* Badges ------------------------------------------------*/
+	.album .badges,
+	.photo .badges {
+		position: relative;
+		margin: -1px 0 0 6px;
+	}
+
 	.album .badge,
 	.photo .badge {
-		position: absolute;
-		margin: -1px 0 0 12px;
+		display: none;
+		margin: 0 0 0 6px;
 		padding: 12px 8px 6px;
-		box-shadow: 0 0 2px black(.6);
+		width: 18px;
 		background: $colorRed;
+		box-shadow: 0 0 2px black(.6);
 		border-radius: 0 0 5px 5px;
 		border: 1px solid #fff;
 		border-top: none;
 		color: #fff;
+		text-align: center;
 		text-shadow: 0 1px 0 black(.4);
 		opacity: .9;
 
-		&:nth-child(2n) { margin-left: 54px; }
+		&--visible { display: inline-block; }
 
 		.iconic {
 			fill: #fff;

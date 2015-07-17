@@ -198,6 +198,14 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 				return false;
 			}
 
+			# Generate identifier
+			$identifier	= md5(microtime(true));
+			$query		= Database::prepare($database, "UPDATE `?` SET `value` = '?' WHERE `key` = 'identifier' LIMIT 1", array(LYCHEE_TABLE_SETTINGS, $identifier));
+			if (!$database->query($query)) {
+				Log::error($database, __METHOD__, __LINE__, $database->error);
+				return false;
+			}
+
 		}
 
 		# Create albums

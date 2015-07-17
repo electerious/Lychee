@@ -1,79 +1,75 @@
 /**
- * @description	Used to view single photos with view.php
- * @copyright	2015 by Tobias Reich
+ * @description Used to view single photos with view.php
+ * @copyright   2015 by Tobias Reich
  */
 
-var lychee		= { content: $('#content') },
-	loadingBar	= { show() {}, hide() {} }
-	imageview	= $('#imageview');
+let lychee     = { content: $('#content') },
+    loadingBar = { show() {}, hide() {} }
+    imageview  = $('#imageview')
 
 $(document).ready(function() {
 
-	/* Event Name */
-	if ('ontouchend' in document.documentElement)	eventName = 'touchend';
-	else											eventName = 'click';
+	// Event Name
+	let touchendSupport = (/Android|iPhone|iPad|iPod/i).test(navigator.userAgent || navigator.vendor || window.opera) && ('ontouchend' in document.documentElement),
+	    eventName       = (touchendSupport===true ? 'touchend' : 'click')
 
-	/* Set API error handler */
-	api.onError = error;
+	// Set API error handler
+	api.onError = error
 
-	/* Infobox */
-	header.dom('#button_info').on(eventName, sidebar.toggle);
+	// Infobox
+	header.dom('#button_info').on(eventName, sidebar.toggle)
 
-	/* Direct Link */
+	// Direct Link
 	header.dom('#button_direct').on(eventName, function() {
 
-		var link = $('#imageview #image').css('background-image').replace(/"/g,'').replace(/url\(|\)$/ig, '');
-		window.open(link, '_newtab');
+		let link = $('#imageview #image').css('background-image').replace(/"/g,'').replace(/url\(|\)$/ig, '')
+		window.open(link, '_newtab')
 
-	});
+	})
 
-	loadPhotoInfo(gup('p'));
+	loadPhotoInfo(gup('p'))
 
-});
+})
 
-getPhotoSize = function(photo) {
+const getPhotoSize = function(photo) {
 
 	// Size can be 'big', 'medium' or 'small'
 	// Default is big
 	// Small is centered in the middle of the screen
-	var size		= 'big',
-		scaled		= false,
-		hasMedium	= photo.medium!=='',
-		pixelRatio	= window.devicePixelRatio,
-		view		= {
-			width:	$(window).width()-60,
-			height:	$(window).height()-100
-		};
+	let size       = 'big',
+	    scaled     = false,
+	    hasMedium  = photo.medium!=='',
+	    pixelRatio = window.devicePixelRatio,
+	    view       = {
+	    	width:	$(window).width() - 60,
+	    	height:	$(window).height() - 100
+	    }
 
 	// Detect if the photo will be shown scaled,
 	// because the screen size is smaller than the photo
-	if (photo.width>view.width||
-		photo.width>view.height) scaled = true;
+	if (photo.json.width>view.width || photo.json.height>view.height) scaled = true
 
 	// Calculate pixel ratio of screen
-	if (pixelRatio!==undefined&&pixelRatio>1) {
-		view.width	= view.width * pixelRatio;
-		view.height	= view.height * pixelRatio;
+	if (pixelRatio!=null && pixelRatio>1) {
+		view.width  = view.width * pixelRatio
+		view.height = view.height * pixelRatio
 	}
 
 	// Medium available and
 	// Medium still bigger than screen
-	if (hasMedium===true&&
-		(1920>view.width&&1080>view.height)) size = 'medium';
+	if (hasMedium===true && (1920>view.width && 1080>view.height)) size = 'medium'
 
 	// Photo not scaled
 	// Photo smaller then screen
-	if (scaled===false&&
-		(photo.width<view.width&&
-		photo.width<view.height)) size = 'small';
+	if (scaled===false && (photo.json.width<view.width&& photo.json.width<view.height)) size = 'small'
 
-	return size;
+	return size
 
 }
 
-loadPhotoInfo = function(photoID) {
+const loadPhotoInfo = function(photoID) {
 
-	var params = {
+	let params = {
 		photoID,
 		albumID: 0,
 		password: ''
@@ -81,50 +77,46 @@ loadPhotoInfo = function(photoID) {
 
 	api.post('Photo::get', params, function(data) {
 
-		if (data==='Warning: Photo private!'||
-			data==='Warning: Wrong password!') {
+		if (data==='Warning: Photo private!' || data==='Warning: Wrong password!') {
 
-				$('body').append(build.no_content('question-mark'));
-				$('body').removeClass('view');
-				header.dom().remove();
-				return false;
+			$('body').append(build.no_content('question-mark'))
+			$('body').removeClass('view')
+			header.dom().remove()
+			return false
 
 		}
 
-		/* Set title */
+		// Set title
+		if (!data.title) data.title = 'Untitled'
+		document.title = 'Lychee - ' + data.title
+		header.dom('#title').html(data.title)
 
-		if (!data.title) data.title = 'Untitled';
-		document.title = 'Lychee - ' + data.title;
-		header.dom('#title').html(data.title);
+		let size = getPhotoSize(data)
 
-		/* Render HTML */
+		// Render HTML
+		imageview.html(build.imageview(data, size, true))
+		imageview.find('.arrow_wrapper').remove()
+		imageview.addClass('fadeIn').show()
 
-		var size = getPhotoSize(data);
+		// Render Sidebar
+		let structure = sidebar.createStructure.photo(data),
+		    html      = sidebar.render(structure)
 
-		imageview.html(build.imageview(data, size, true));
-		imageview.find('.arrow_wrapper').remove();
-		imageview.addClass('fadeIn').show();
+		sidebar.dom('.wrapper').html(html)
+		sidebar.bind()
 
-		/* Render Sidebar */
-
-		var structure	= sidebar.createStructure.photo(data),
-			html		= sidebar.render(structure);
-
-		sidebar.dom('.wrapper').html(html);
-		sidebar.bind();
-
-	});
+	})
 
 }
 
-error = function(errorThrown, params, data) {
+const error = function(errorThrown, params, data) {
 
 	console.error({
-		description:	errorThrown,
-		params:			params,
-		response:		data
-	});
+		description : errorThrown,
+		params      : params,
+		response    : data
+	})
 
-	loadingBar.show('error', errorThrown);
+	loadingBar.show('error', errorThrown)
 
 }

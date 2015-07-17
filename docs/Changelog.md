@@ -1,9 +1,21 @@
+## v3.0.4
+
+Released July 17, 2015
+
+- `Improved` Removed bower and updated basicModal & basicContext
+- `Improved` Small interface performance improvements
+- `Improved` Updated all JS-files to take advantage of ES2015
+- `Improved` Better error-handling for the Dropbox-, URL- and Server-Import
+- `Improved` Added skipDuplicates- and identifier-check to the diagnostics
+- `Fixed` error when using "Merge All" with one selected album
+- `Fixed` error when saving username and password after the initial setup
+- `Fixed` Clicks not recognized when using a mouse on a touchscreen-device (#345)
+
 ## v3.0.3
 
 Released June 28, 2015
 
 - `New` Skip duplicates on upload (#367, [How to activate](settings.md))
-- `Fixed` Clicks not recognized when using a mouse on a touchscreen-device (#345)
 
 ## v3.0.2
 
