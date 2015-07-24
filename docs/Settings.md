@@ -20,7 +20,7 @@ All settings are stored in the database. You can change the properties manually,
 	username = Username for Lychee (hashed)
 	password = Password for Lychee (hashed)
 
-Your photos and albums are protected by an username and password. If both rows are empty, Lychee will prompt you to set them.
+Your photos and albums are protected by a username and password. If both rows are empty, Lychee will prompt you to set them.
 
 #### Thumb Quality
 
