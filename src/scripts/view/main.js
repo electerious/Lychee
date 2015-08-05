@@ -3,15 +3,25 @@
  * @copyright   2015 by Tobias Reich
  */
 
-let lychee     = { content: $('#content') },
-    loadingBar = { show() {}, hide() {} }
+let lychee = {
+	content: $('#content'),
+	getEventName() {
+
+		let touchendSupport = (/Android|iPhone|iPad|iPod/i).test(navigator.userAgent || navigator.vendor || window.opera) && ('ontouchend' in document.documentElement),
+		    eventName       = (touchendSupport===true ? 'touchend' : 'click')
+
+		return eventName
+
+	}
+}
+
+let loadingBar = { show() {}, hide() {} },
     imageview  = $('#imageview')
 
 $(document).ready(function() {
 
 	// Event Name
-	let touchendSupport = (/Android|iPhone|iPad|iPod/i).test(navigator.userAgent || navigator.vendor || window.opera) && ('ontouchend' in document.documentElement),
-	    eventName       = (touchendSupport===true ? 'touchend' : 'click')
+	let eventName = lychee.getEventName()
 
 	// Set API error handler
 	api.onError = error
@@ -41,13 +51,13 @@ const getPhotoSize = function(photo) {
 	    hasMedium  = photo.medium!=='',
 	    pixelRatio = window.devicePixelRatio,
 	    view       = {
-	    	width:	$(window).width() - 60,
-	    	height:	$(window).height() - 100
+	    	width  : $(window).width() - 60,
+	    	height : $(window).height() - 100
 	    }
 
 	// Detect if the photo will be shown scaled,
 	// because the screen size is smaller than the photo
-	if (photo.json.width>view.width || photo.json.height>view.height) scaled = true
+	if (photo.width>view.width || photo.height>view.height) scaled = true
 
 	// Calculate pixel ratio of screen
 	if (pixelRatio!=null && pixelRatio>1) {
@@ -61,7 +71,7 @@ const getPhotoSize = function(photo) {
 
 	// Photo not scaled
 	// Photo smaller then screen
-	if (scaled===false && (photo.json.width<view.width&& photo.json.width<view.height)) size = 'small'
+	if (scaled===false && (photo.width<view.width&& photo.width<view.height)) size = 'small'
 
 	return size
 
@@ -71,8 +81,8 @@ const loadPhotoInfo = function(photoID) {
 
 	let params = {
 		photoID,
-		albumID: 0,
-		password: ''
+		albumID  : 0,
+		password : ''
 	}
 
 	api.post('Photo::get', params, function(data) {
