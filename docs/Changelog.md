@@ -1,3 +1,9 @@
+## v3.0.5
+
+Released August 9, 2015
+
+- `Fixed` view.php not displaying photos
+
 ## v3.0.4
 
 Released July 17, 2015
