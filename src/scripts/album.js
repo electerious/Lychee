@@ -552,7 +552,7 @@ album.getArchive = function(albumID) {
 	if (location.href.indexOf('index.html')>0) link = location.href.replace(location.hash, '').replace('index.html', url)
 	else                                       link = location.href.replace(location.hash, '') + url
 
-	if (lychee.publicMode===true) link += `&password=${ password.value }`
+	if (lychee.publicMode===true) link += `&password=${ encodeURIComponent(password.value) }`
 
 	location.href = link
 
