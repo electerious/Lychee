@@ -281,8 +281,6 @@ contextMenu.sharePhoto = function(photoID, e) {
 	let link      = photo.getViewLink(photoID),
 		iconClass = 'ionicons'
 
-	if (photo.json.public==='2') link = location.href
-
 	let items = [
 		{ type: 'item', title: `<input readonly id="link" value="${ link }">`, fn: () => {}, class: 'noHover' },
 		{ type: 'separator' },
