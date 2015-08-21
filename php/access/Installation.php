@@ -14,7 +14,7 @@ class Installation extends Access {
 
 		switch ($fn) {
 
-			case 'createConfig':	$this->dbCreateConfig(); break;
+			case 'Database::createConfig':	$this->dbCreateConfig(); break;
 
 			# Error
 			default:						$this->init(); break;

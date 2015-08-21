@@ -31,8 +31,6 @@ define('LYCHEE_URL_UPLOADS_BIG', 'uploads/big/');
 define('LYCHEE_URL_UPLOADS_MEDIUM', 'uploads/medium/');
 define('LYCHEE_URL_UPLOADS_THUMB', 'uploads/thumb/');
 
-define('LYCHEE_VERSION', '020800');
-
 function defineTablePrefix($dbTablePrefix) {
 
 	# This part is wrapped into a function, because it needs to be called
