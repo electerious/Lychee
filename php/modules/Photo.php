@@ -208,13 +208,37 @@ class Photo extends Module {
 			}
 
 			# Save to DB
-			$values	= array(LYCHEE_TABLE_PHOTOS, $id, $info['title'], $photo_name, $description, $tags, $info['type'], $info['width'], $info['height'], $info['size'], $info['iso'], $info['aperture'], $info['make'], $info['model'], $info['shutter'], $info['focal'], $info['takestamp'], $path_thumb, $albumID, $public, $star, $checksum, $medium);
-			$query	= Database::prepare($this->database, "INSERT INTO ? (id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, checksum, medium) VALUES ('?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?')", $values);
-			$result = $this->database->query($query);
+			$stmt = $this->database->prepare("INSERT INTO ".LYCHEE_TABLE_PHOTOS."
+					 (id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, checksum, medium)
+					 VALUES (:id, :title, :url, :desc, :tags, :type, :width, :height, :size, :iso, :ap, :make, :model, :shutter, :focal, :takestamp, :thumburl, :album, :public, :star, :checksum, :medium)");
+
+			$stmt->bindValue('id', $id, PDO::PARAM_INT);
+			$stmt->bindValue('title', $info['title'], PDO::PARAM_STR);
+			$stmt->bindValue('url', $photo_name, PDO::PARAM_STR);
+			$stmt->bindValue('desc', $description, PDO::PARAM_STR);
+			$stmt->bindValue('tags', $tags, PDO::PARAM_STR);
+			$stmt->bindValue('type', $info['type'], PDO::PARAM_STR);
+			$stmt->bindValue('width', $info['width'], PDO::PARAM_INT);
+			$stmt->bindValue('height', $info['height'], PDO::PARAM_INT);
+			$stmt->bindValue('size', $info['size'], PDO::PARAM_STR);
+			$stmt->bindValue('iso', $info['iso'], PDO::PARAM_STR);
+			$stmt->bindValue('ap', $info['aperture'], PDO::PARAM_STR);
+			$stmt->bindValue('make', $info['make'], PDO::PARAM_STR);
+			$stmt->bindValue('model', $info['model'], PDO::PARAM_STR);
+			$stmt->bindValue('shutter', $info['shutter'], PDO::PARAM_STR);
+			$stmt->bindValue('focal', $info['focal'], PDO::PARAM_STR);
+			$stmt->bindValue('takestamp', $info['takestamp'], PDO::PARAM_INT);
+			$stmt->bindValue('thumburl', $path_thumb, PDO::PARAM_STR);
+			$stmt->bindValue('album', $albumID, PDO::PARAM_STR);
+			$stmt->bindValue('public', $public, PDO::PARAM_BOOL);
+			$stmt->bindValue('star', $star, PDO::PARAM_BOOL);
+			$stmt->bindValue('checksum', $checksum, PDO::PARAM_STR);
+			$stmt->bindValue('medium', $medium, PDO::PARAM_BOOL);
+			
+			$result = $stmt->execute();
 
 			if (!$result) {
-				Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
-				if ($returnOnError===true) return false;
+				Log::error($this->database, __METHOD__, __LINE__, $this->database->errorInfo());
 				exit('Error: Could not save photo in database!');
 			}
 
@@ -233,25 +257,33 @@ class Photo extends Module {
 		self::dependencies(isset($this->database, $checksum));
 
 		# Exclude $photoID from select when $photoID is set
-		if (isset($photoID)) $query = Database::prepare($this->database, "SELECT id, url, thumbUrl, medium FROM ? WHERE checksum = '?' AND id <> '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $checksum, $photoID));
-		else $query = Database::prepare($this->database, "SELECT id, url, thumbUrl, medium FROM ? WHERE checksum = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $checksum));
+		if (isset($photoID)) {
+			$sql = "SELECT id, url, thumbUrl, medium FROM ".LYCHEE_TABLE_PHOTOS." WHERE checksum = :checksum AND id <> :photoid LIMIT 1";
+		}
+		else {
+			$sql = "SELECT id, url, thumbUrl, medium FROM ".LYCHEE_TABLE_PHOTOS." WHERE checksum = :checksum LIMIT 1";
+		}
 
-		$result	= $this->database->query($query);
+
+		$stmt = $this->database->prepare($sql);
+		$stmt->bindValue('checksum', $checksum, PDO::PARAM_STR);
+		$stmt->bindValue('photoid', $photoID, PDO::PARAM_STR);
+		$result = $stmt->execute();
 
 		if (!$result) {
 			Log::error($this->database, __METHOD__, __LINE__, 'Could not check for existing photos with the same checksum');
 			return false;
 		}
 
-		if ($result->num_rows===1) {
+		if ($stmt->rowCount()===1) {
 
-			$result = $result->fetch_object();
+			$result = $stmt->fetch();
 
 			$return = array(
-				'photo_name'	=> $result->url,
-				'path'			=> LYCHEE_UPLOADS_BIG . $result->url,
-				'path_thumb'	=> $result->thumbUrl,
-				'medium'		=> $result->medium
+				'photo_name'	=> $result['url'],
+				'path'			=> LYCHEE_UPLOADS_BIG . $result['url'],
+				'path_thumb'	=> $result['thumbUrl'],
+				'medium'		=> $result['medium']
 			);
 
 			return $return;
@@ -630,17 +662,18 @@ class Photo extends Module {
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Get photo
-		$query	= Database::prepare($this->database, "SELECT * FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
-		$photos	= $this->database->query($query);
-		$photo	= $photos->fetch_assoc();
-
+		$stmt = $this->database->prepare("SELECT * FROM ".LYCHEE_TABLE_PHOTOS." WHERE id = :photoids LIMIT 1");
+		$stmt->bindValue('photoids', $this->photoIDs, PDO::PARAM_STR);
+		$result = $stmt->execute();
+		$photo = $stmt->fetch();
+		
 		# Parse photo
 		$photo['sysdate'] = date('d M. Y', substr($photo['id'], 0, -4));
 		if (strlen($photo['takestamp'])>1) $photo['takedate'] = date('d M. Y', $photo['takestamp']);
 
 		# Parse medium
-		if ($photo['medium']==='1')	$photo['medium'] = LYCHEE_URL_UPLOADS_MEDIUM . $photo['url'];
-		else						$photo['medium'] = '';
+		if ($photo['medium']==='1') $photo['medium'] = LYCHEE_URL_UPLOADS_MEDIUM . $photo['url'];
+		else $photo['medium'] = '';
 
 		# Parse paths
 		$photo['url']		= LYCHEE_URL_UPLOADS_BIG . $photo['url'];
@@ -653,12 +686,13 @@ class Photo extends Module {
 			if ($photo['album']!=='0') {
 
 				# Get album
-				$query	= Database::prepare($this->database, "SELECT public FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $photo['album']));
-				$albums	= $this->database->query($query);
-				$album	= $albums->fetch_assoc();
+				$photoStmt = $this->database->prepare("SELECT public FROM ".LYCHEE_TABLE_ALBUMS." WHERE id = :photoalbum LIMIT 1");
+				$photoStmt->bindValue('photoalbum', $photo['album'], PDO::PARAM_INT);
+				$photoStmt->execute();
+				$album = $photoStmt->fetch();
 
 				# Parse album
-				$photo['public'] = ($album['public']==='1' ? '2' : $photo['public']);
+				$photo['public'] = ($album['public']=='1' ? '2' : $photo['public']);
 
 			}
 
@@ -796,13 +830,14 @@ class Photo extends Module {
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Get photo
-		$query	= Database::prepare($this->database, "SELECT title, url FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
-		$photos	= $this->database->query($query);
-		$photo	= $photos->fetch_object();
+		$stmt = $this->database->prepare("SELECT title, url FROM ".LYCHEE_TABLE_PHOTOS." WHERE id = :photoids LIMIT 1");
+		$stmt->bindValue('photoids', $this->photoIDs, PDO::PARAM_STR);
+		$result = $stmt->execute();
+		$photo = $stmt->fetch();
 
 		# Error in database query
 		if (!$photos) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->errorInfo());
 			return false;
 		}
 
@@ -813,7 +848,7 @@ class Photo extends Module {
 		}
 
 		# Get extension
-		$extension = getExtension($photo->url);
+		$extension = getExtension($photo['url']);
 		if ($extension===false) {
 			Log::error($this->database, __METHOD__, __LINE__, 'Invalid photo extension');
 			return false;
@@ -826,18 +861,18 @@ class Photo extends Module {
 					);
 
 		# Parse title
-		if ($photo->title=='') $photo->title = 'Untitled';
+		if ($photo['title']=='') $photo['title'] = 'Untitled';
 
 		# Escape title
-		$photo->title = str_replace($badChars, '', $photo->title);
+		$photo['title'] = str_replace($badChars, '', $photo['title']);
 
 		# Set headers
 		header("Content-Type: application/octet-stream");
-		header("Content-Disposition: attachment; filename=\"" . $photo->title . $extension . "\"");
-		header("Content-Length: " . filesize(LYCHEE_UPLOADS_BIG . $photo->url));
+		header("Content-Disposition: attachment; filename=\"" . $photo['title'] . $extension . "\"");
+		header("Content-Length: " . filesize(LYCHEE_UPLOADS_BIG . $photo['url']));
 
 		# Send file
-		readfile(LYCHEE_UPLOADS_BIG . $photo->url);
+		readfile(LYCHEE_UPLOADS_BIG . $photo['url']);
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
@@ -865,14 +900,22 @@ class Photo extends Module {
 		if (strlen($title)>100) $title = substr($title, 0, 100);
 
 		# Set title
-		$query	= Database::prepare($this->database, "UPDATE ? SET title = '?' WHERE id IN (?)", array(LYCHEE_TABLE_PHOTOS, $title, $this->photoIDs));
-		$result	= $this->database->query($query);
-
+		$inPhotoIds = implode(',', array_fill(0, count($this->photoIDs), '?'));
+		$stmt = $this->database->prepare("UPDATE".LYCHEE_TABLE_PHOTOS." SET title = ? WHERE id IN (".$inPhotoIds.")");
+		$stmt->bindValue(1, $title, PDO::PARAM_STR);
+		if (count($this->photoIDs)===1) {
+			$stmt->bindValue(2, $this->photoIDs, PDO::PARAM_STR);
+		} else {
+			foreach ($this->photoIDs as $k => $photoId)
+				$stmt->bindValue(($k+2), $photoId, PDO::PARAM_STR);
+		}
+		$result = $stmt->execute();
+		
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->errorInfo());
 			return false;
 		}
 		return true;
@@ -899,14 +942,22 @@ class Photo extends Module {
 		if (strlen($description)>1000) $description = substr($description, 0, 1000);
 
 		# Set description
-		$query	= Database::prepare($this->database, "UPDATE ? SET description = '?' WHERE id IN ('?')", array(LYCHEE_TABLE_PHOTOS, $description, $this->photoIDs));
-		$result	= $this->database->query($query);
+		$inPhotoIds = implode(',', array_fill(0, count($this->photoIDs), '?'));
+		$stmt = $this->database->prepare("UPDATE".LYCHEE_TABLE_PHOTOS." SET description = ? WHERE id IN (".$inPhotoIds.")");
+		$stmt->bindValue(1, $description, PDO::PARAM_STR);
+		if (count($this->photoIDs)===1) {
+			$stmt->bindValue(2, $this->photoIDs, PDO::PARAM_STR);
+		} else {
+			foreach ($this->photoIDs as $k => $photoId)
+				$stmt->bindValue(($k+2), $photoId, PDO::PARAM_STR);
+		}
+		$result = $stmt->execute();
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->errorInfo());
 			return false;
 		}
 		return true;
@@ -930,18 +981,28 @@ class Photo extends Module {
 		$error	= false;
 
 		# Get photos
-		$query	= Database::prepare($this->database, "SELECT id, star FROM ? WHERE id IN (?)", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
-		$photos	= $this->database->query($query);
-
+		$inPhotoIds = implode(',', array_fill(0, count($this->photoIDs), '?'));
+		$stmt = $this->database->prepare("SELECT id, star FROM ".LYCHEE_TABLE_PHOTOS." WHERE id IN (".$inPhotoIds.")");
+		if (count($this->photoIDs)===1) {
+			$stmt->bindValue(1, $this->photoIDs, PDO::PARAM_STR);
+		} else {
+			foreach ($this->photoIDs as $k => $photoId)
+				$stmt->bindValue(($k+1), $photoId, PDO::PARAM_STR);
+		}
+		$result = $stmt->execute();
+		
 		# For each photo
-		while ($photo = $photos->fetch_object()) {
+		while ($photo = $stmt->fetch()) {
 
 			# Invert star
-			$star = ($photo->star==0 ? 1 : 0);
+			$star = ($photo['star']==0 ? 1 : 0);
 
 			# Set star
-			$query	= Database::prepare($this->database, "UPDATE ? SET star = '?' WHERE id = '?'", array(LYCHEE_TABLE_PHOTOS, $star, $photo->id));
-			$star	= $this->database->query($query);
+			$photoStmt = $this->database->prepare("UPDATE ".LYCHEE_TABLE_PHOTOS." SET star = :star WHERE id = :photoids");
+			$photoStmt->bindValue('photoids', $this->photoIDs, PDO::PARAM_STR);
+			$photoStmt->bindValue('star', $star, PDO::PARAM_BOOL);
+			$star = $photoStmt->execute();
+			
 			if (!$star) $error = true;
 
 		}
@@ -950,7 +1011,7 @@ class Photo extends Module {
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if ($error===true) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->errorInfo());
 			return false;
 		}
 		return true;
@@ -972,12 +1033,13 @@ class Photo extends Module {
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Get photo
-		$query	= Database::prepare($this->database, "SELECT public, album FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
-		$photos	= $this->database->query($query);
-		$photo	= $photos->fetch_object();
-
+		$stmt = $this->database->prepare("SELECT public, album FROM ".LYCHEE_TABLE_PHOTOS." WHERE id = :photoids LIMIT 1");
+		$stmt->bindValue('photoids', $this->photoIDs, PDO::PARAM_STR);
+		$result = $stmt->execute();
+		$photo = $stmt->fetch();
+		
 		# Check if public
-		if ($photo->public==='1') {
+		if ($photo['public']==1) {
 
 			# Photo public
 			return 2;
@@ -1019,22 +1081,25 @@ class Photo extends Module {
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Get public
-		$query	= Database::prepare($this->database, "SELECT public FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
-		$photos	= $this->database->query($query);
-		$photo	= $photos->fetch_object();
+		$stmt = $this->database->prepare("SELECT public FROM ".LYCHEE_TABLE_PHOTOS." WHERE id = :photoids LIMIT 1");
+		$stmt->bindValue('photoids', $this->photoIDs, PDO::PARAM_STR);
+		$result = $stmt->execute();
+		$photo = $stmt->fetch();
 
 		# Invert public
-		$public = ($photo->public==0 ? 1 : 0);
+		$public = ($photo['public']==0 ? 1 : 0);
 
 		# Set public
-		$query	= Database::prepare($this->database, "UPDATE ? SET public = '?' WHERE id = '?'", array(LYCHEE_TABLE_PHOTOS, $public, $this->photoIDs));
-		$result	= $this->database->query($query);
+		$stmt = $this->database->prepare("UPDATE ".LYCHEE_TABLE_PHOTOS." SET public = :public WHERE id = :photoids");
+		$stmt->bindValue('public', $public, PDO::PARAM_BOOL);
+		$stmt->bindValue('photoids', $this->photoIDs, PDO::PARAM_STR);
+		$result = $stmt->execute();
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->errorInfo());
 			return false;
 		}
 		return true;
@@ -1055,14 +1120,22 @@ class Photo extends Module {
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Set album
-		$query	= Database::prepare($this->database, "UPDATE ? SET album = '?' WHERE id IN (?)", array(LYCHEE_TABLE_PHOTOS, $albumID, $this->photoIDs));
-		$result	= $this->database->query($query);
-
+		$inPhotoIds = implode(',', array_fill(0, count($this->photoIDs), '?'));
+		$stmt = $this->database->prepare("UPDATE ".LYCHEE_TABLE_PHOTOS." SET album = ? WHERE id IN (".$inPhotoIds.")");
+		$stmt->bindValue(1, $albumID, PDO::PARAM_STR);
+		if (count($this->photoIDs)===1) {
+			$stmt->bindValue(2, $this->photoIDs, PDO::PARAM_STR);
+		} else {
+			foreach ($this->photoIDs as $k => $photoId)
+				$stmt->bindValue(($k+2), $photoId, PDO::PARAM_STR);
+		}
+		$result = $stmt->execute();
+		
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->errorInfo());
 			return false;
 		}
 		return true;
@@ -1093,14 +1166,21 @@ class Photo extends Module {
 		}
 
 		# Set tags
-		$query	= Database::prepare($this->database, "UPDATE ? SET tags = '?' WHERE id IN (?)", array(LYCHEE_TABLE_PHOTOS, $tags, $this->photoIDs));
-		$result	= $this->database->query($query);
-
+		$inPhotoIds = implode(',', array_fill(0, count($this->photoIDs), '?'));
+		$stmt = $this->database->prepare("UPDATE ".LYCHEE_TABLE_PHOTOS." SET tags = ? WHERE id IN (".$inPhotoIds.")");
+		$stmt->bindValue(1, $tags, PDO::PARAM_STR);
+		if (count($this->photoIDs)===1) {
+			$stmt->bindValue(2, $this->photoIDs, PDO::PARAM_STR);
+		} else {
+			foreach ($this->photoIDs as $k => $photoId)
+				$stmt->bindValue(($k+2), $photoId, PDO::PARAM_STR);
+		}
+		$result = $stmt->execute();
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->errorInfo());
 			return false;
 		}
 		return true;
@@ -1121,26 +1201,38 @@ class Photo extends Module {
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Get photos
-		$query	= Database::prepare($this->database, "SELECT id, checksum FROM ? WHERE id IN (?)", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
-		$photos	= $this->database->query($query);
-		if (!$photos) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+		$inPhotoIds = implode(',', array_fill(0, count($this->photoIDs), '?'));
+		$stmt = $this->database->prepare("SELECT id, checksum FROM ".LYCHEE_TABLE_PHOTOS." WHERE id IN (".$inPhotoIds.")");
+		if (count($this->photoIDs)===1) {
+			$stmt->bindValue(1, $this->photoIDs, PDO::PARAM_STR);
+		} else {
+			foreach ($this->photoIDs as $k => $photoId)
+				$stmt->bindValue(($k+1), $photoId, PDO::PARAM_STR);
+		}
+		$result = $stmt->execute();
+		if (!$result) {
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->errorInfo());
 			return false;
 		}
 
 		# For each photo
-		while ($photo = $photos->fetch_object()) {
+		while ($photo = $stmt->fetch()) {
 
 			# Generate id
 			$id = str_replace('.', '', microtime(true));
 			while(strlen($id)<14) $id .= 0;
 
 			# Duplicate entry
-			$values		= array(LYCHEE_TABLE_PHOTOS, $id, LYCHEE_TABLE_PHOTOS, $photo->id);
-			$query		= Database::prepare($this->database, "INSERT INTO ? (id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, checksum) SELECT '?' AS id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, checksum FROM ? WHERE id = '?'", $values);
-			$duplicate	= $this->database->query($query);
-			if (!$duplicate) {
-				Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			$stmt = $this->database->prepare("INSERT INTO ".LYCHEE_TABLE_PHOTOS.
+					" (id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, checksum) 
+					SELECT :id AS id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, checksum 
+					FROM ".LYCHEE_TABLE_PHOTOS." WHERE id = :photoid");
+			$stmt->bindValue('id', $id, PDO::PARAM_INT);
+			$stmt->bindValue('photoid', $photo[0], PDO::PARAM_STR);
+			$result = $stmt->execute();
+			
+			if (!$result) {
+				Log::error($this->database, __METHOD__, __LINE__, $this->database->errorInfo());
 				return false;
 			}
 
@@ -1164,38 +1256,46 @@ class Photo extends Module {
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Get photos
-		$query	= Database::prepare($this->database, "SELECT id, url, thumbUrl, checksum FROM ? WHERE id IN (?)", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
-		$photos	= $this->database->query($query);
-		if (!$photos) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+		$inPhotoIds = implode(',', array_fill(0, count($this->photoIDs), '?'));
+		$stmt = $this->database->prepare("SELECT id, url, thumbUrl, checksum FROM ".LYCHEE_TABLE_PHOTOS." WHERE id IN (".$inPhotoIds.")");
+		if (count($this->photoIDs)===1) {
+			$stmt->bindValue(1, $this->photoIDs, PDO::PARAM_STR);
+		} else {
+			foreach ($this->photoIDs as $k => $photoId)
+				$stmt->bindValue($k, $photoId, PDO::PARAM_STR);
+		}
+		$result = $stmt->execute();
+		
+		if (!$result) {
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->errorInfo());
 			return false;
 		}
 
 		# For each photo
-		while ($photo = $photos->fetch_object()) {
+		while ($photo = $stmt->fetch()) {
 
 			# Check if other photos are referring to this images
 			# If so, only delete the db entry
-			if ($this->exists($photo->checksum, $photo->id)===false) {
+			if ($this->exists($photo['checksum'], $photo['id'])===false) {
 
 				# Get retina thumb url
-				$thumbUrl2x = explode(".", $photo->thumbUrl);
+				$thumbUrl2x = explode(".", $photo['thumbUrl']);
 				$thumbUrl2x = $thumbUrl2x[0] . '@2x.' . $thumbUrl2x[1];
 
 				# Delete big
-				if (file_exists(LYCHEE_UPLOADS_BIG . $photo->url)&&!unlink(LYCHEE_UPLOADS_BIG . $photo->url)) {
+				if (file_exists(LYCHEE_UPLOADS_BIG . $photo['url'])&&!unlink(LYCHEE_UPLOADS_BIG . $photo['url'])) {
 					Log::error($this->database, __METHOD__, __LINE__, 'Could not delete photo in uploads/big/');
 					return false;
 				}
 
 				# Delete medium
-				if (file_exists(LYCHEE_UPLOADS_MEDIUM . $photo->url)&&!unlink(LYCHEE_UPLOADS_MEDIUM . $photo->url)) {
+				if (file_exists(LYCHEE_UPLOADS_MEDIUM . $photo['url'])&&!unlink(LYCHEE_UPLOADS_MEDIUM . $photo['url'])) {
 					Log::error($this->database, __METHOD__, __LINE__, 'Could not delete photo in uploads/medium/');
 					return false;
 				}
 
 				# Delete thumb
-				if (file_exists(LYCHEE_UPLOADS_THUMB . $photo->thumbUrl)&&!unlink(LYCHEE_UPLOADS_THUMB . $photo->thumbUrl)) {
+				if (file_exists(LYCHEE_UPLOADS_THUMB . $photo['thumbUrl'])&&!unlink(LYCHEE_UPLOADS_THUMB . $photo['thumbUrl'])) {
 					Log::error($this->database, __METHOD__, __LINE__, 'Could not delete photo in uploads/thumb/');
 					return false;
 				}
@@ -1209,10 +1309,12 @@ class Photo extends Module {
 			}
 
 			# Delete db entry
-			$query	= Database::prepare($this->database, "DELETE FROM ? WHERE id = '?'", array(LYCHEE_TABLE_PHOTOS, $photo->id));
-			$delete	= $this->database->query($query);
-			if (!$delete) {
-				Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			$stmt = $this->database->prepare("DELETE FROM ".LYCHEE_TABLE_PHOTOS." WHERE id = :id");
+			$stmt->bindValue('id', $photo[0], PDO::PARAM_STR);
+			$result = $stmt->execute();
+			
+			if (!$result) {
+				Log::error($this->database, __METHOD__, __LINE__, $this->database->errorInfo());
 				return false;
 			}
 

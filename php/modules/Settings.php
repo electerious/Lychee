@@ -26,11 +26,11 @@ class Settings extends Module {
 		self::dependencies(isset($this->database));
 
 		# Execute query
-		$query		= Database::prepare($this->database, "SELECT * FROM ?", array(LYCHEE_TABLE_SETTINGS));
-		$settings	= $this->database->query($query);
+		$stmt = $this->database->prepare("SELECT * FROM ".LYCHEE_TABLE_SETTINGS);
+		$result	= $stmt->execute();
 
 		# Add each to return
-		while ($setting = $settings->fetch_object()) $return[$setting->key] = $setting->value;
+		while ($setting = $stmt->fetch()) $return[$setting['key']] = $setting['value'];
 
 		# Fallback for versions below v2.5
 		if (!isset($return['plugins'])) $return['plugins'] = '';
@@ -74,8 +74,8 @@ class Settings extends Module {
 		# Execute query
 		# Do not prepare $username because it is hashed and save
 		# Preparing (escaping) the username would destroy the hash
-		$query	= Database::prepare($this->database, "UPDATE ? SET value = '$username' WHERE `key` = 'username'", array(LYCHEE_TABLE_SETTINGS));
-		$result	= $this->database->query($query);
+		$stmt = $this->database->prepare("UPDATE ".LYCHEE_TABLE_SETTINGS." SET value = '$username' WHERE key = 'username'");
+		$result	= $stmt->execute();
 
 		if (!$result) {
 			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
@@ -96,8 +96,8 @@ class Settings extends Module {
 		# Execute query
 		# Do not prepare $password because it is hashed and save
 		# Preparing (escaping) the password would destroy the hash
-		$query	= Database::prepare($this->database, "UPDATE ? SET value = '$password' WHERE `key` = 'password'", array(LYCHEE_TABLE_SETTINGS));
-		$result	= $this->database->query($query);
+		$stmt = $this->database->prepare("UPDATE ".LYCHEE_TABLE_SETTINGS." SET value = '$password' WHERE key = 'password'");
+		$result	= $stmt->execute();
 
 		if (!$result) {
 			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
@@ -118,9 +118,9 @@ class Settings extends Module {
 		}
 
 		# Execute query
-		$query	= Database::prepare($this->database, "UPDATE ? SET value = '?' WHERE `key` = 'dropboxKey'", array(LYCHEE_TABLE_SETTINGS, $key));
-		$result = $this->database->query($query);
-
+		$stmt = $this->database->prepare("UPDATE ".LYCHEE_TABLE_SETTINGS." SET value = :key WHERE key = 'dropboxKey'");
+		$stmt->bindValue('key', $key, PDO::PARAM_STR);
+		$result	= $stmt->execute();
 		if (!$result) {
 			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
 			return false;
@@ -183,11 +183,11 @@ class Settings extends Module {
 		# Do not prepare $sorting because it is a true statement
 		# Preparing (escaping) the sorting would destroy it
 		# $sorting is save and can't contain user-input
-		$query	= Database::prepare($this->database, "UPDATE ? SET value = '$sorting' WHERE `key` = 'sortingPhotos'", array(LYCHEE_TABLE_SETTINGS));
-		$result	= $this->database->query($query);
+		$stmt = $this->database->prepare("UPDATE ".LYCHEE_TABLE_SETTINGS." SET value = '$sorting' WHERE key = 'sortingPhotos'");
+		$result	= $stmt->execute();
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->errorInfo());
 			return false;
 		}
 		return true;
@@ -239,17 +239,16 @@ class Settings extends Module {
 		# Do not prepare $sorting because it is a true statement
 		# Preparing (escaping) the sorting would destroy it
 		# $sorting is save and can't contain user-input
-		$query	= Database::prepare($this->database, "UPDATE ? SET value = '$sorting' WHERE `key` = 'sortingAlbums'", array(LYCHEE_TABLE_SETTINGS));
-		$result	= $this->database->query($query);
+		$stmt = $this->database->prepare("UPDATE ".LYCHEE_TABLE_SETTINGS." SET value = '$sorting' WHERE key = 'sortingAlbums'");
+		$result	= $stmt->execute();
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->errorInfo());
 			return false;
 		}
 		return true;
 
 	}
-
 }
 
 ?>

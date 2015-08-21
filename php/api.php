@@ -32,7 +32,7 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 		define('LYCHEE_ACCESS_INSTALLATION', true);
 
 		$installation = new Installation(null, null, null);
-		$installation->check($_POST['function']);
+		$res = $installation->check($_POST['function']);
 
 		exit();
 

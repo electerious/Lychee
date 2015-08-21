@@ -32,12 +32,20 @@ class Log extends Module {
 		# Check dependencies
 		Module::dependencies(isset($database, $type, $function, $line, $text));
 
-		# Get time
-		$sysstamp = time();
+		# Check that text is not an array
+		if (count($text)>1) {
+			$text = implode("\n", $text);
+		}
 
 		# Save in database
-		$query	= Database::prepare($database, "INSERT INTO ? (time, type, function, line, text) VALUES ('?', '?', '?', '?', '?')", array(LYCHEE_TABLE_LOG, $sysstamp, $type, $function, $line, $text));
-		$result	= $database->query($query);
+		$stmt = $database->prepare("INSERT INTO ".LYCHEE_TABLE_LOG."
+				 (type, function, line, text) 
+				VALUES (:type, :function, :line, :text)");
+		$stmt->bindValue('type', $type, PDO::PARAM_STR);
+		$stmt->bindValue('function', $function, PDO::PARAM_STR);
+		$stmt->bindValue('line', $line, PDO::PARAM_INT);
+		$stmt->bindValue('text', $text, PDO::PARAM_STR);
+		$result = $stmt->execute();
 
 		if (!$result) return false;
 		return true;

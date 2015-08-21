@@ -38,17 +38,22 @@ class Album extends Module {
 
 		# Database
 		$sysstamp	= time();
-		$query		= Database::prepare($this->database, "INSERT INTO ? (title, sysstamp, public, visible) VALUES ('?', '?', '?', '?')", array(LYCHEE_TABLE_ALBUMS, $title, $sysstamp, $public, $visible));
-		$result		= $this->database->query($query);
+		$stmt = $this->database->prepare("INSERT INTO ".LYCHEE_TABLE_ALBUMS.
+				" (title, sysstamp, public, visible) 
+				VALUES (:title, :sysstamp, :public, :visible)");
+		$stmt->bindValue('title', $title, PDO::PARAM_STR);
+		$stmt->bindValue('sysstamp', $sysstamp, PDO::PARAM_INT);
+		$stmt->bindValue('public', $public, PDO::PARAM_BOOL);
+		$stmt->bindValue('visible', $visible, PDO::PARAM_BOOL);
+		$result = $stmt->execute();
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->errorInfo());
 			return false;
 		}
-		return $this->database->insert_id;
 
 	}
 
@@ -93,36 +98,47 @@ class Album extends Module {
 		# Get album information
 		switch ($this->albumIDs) {
 
-			case 'f':	$return['public'] = '0';
-						$query = Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE star = 1 " . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
+			case 'f':	$return['public'] = false;
+						$sql = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ".LYCHEE_TABLE_PHOTOS." WHERE star = true " . $this->settings['sortingPhotos'];
 						break;
 
-			case 's':	$return['public'] = '0';
-						$query = Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE public = 1 " . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
+			case 's':	$return['public'] = false;
+						$sql = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ".LYCHEE_TABLE_PHOTOS." WHERE public = true " . $this->settings['sortingPhotos'];
 						break;
 
-			case 'r':	$return['public'] = '0';
-						$query = Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY)) " . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
+			case 'r':	$return['public'] = false;
+						switch ($this->database->getAttribute(PDO::ATTR_DRIVER_NAME)) {
+							case 'mysql':
+								$sql = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ".LYCHEE_TABLE_PHOTOS." WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY)) " . $this->settings['sortingPhotos'];
+								break;
+							case 'pgsql':
+								$sql = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ".LYCHEE_TABLE_PHOTOS." WHERE sysstamp >= NOW()-INTERVAL '1 DAY' " . $this->settings['sortingPhotos'];
+								break;
+							}
 						break;
 
-			case '0':	$return['public'] = '0';
-						$query = Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE album = 0 " . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
+			case '0':	$return['public'] = false;
+						$sql = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ".LYCHEE_TABLE_PHOTOS." WHERE album = '0' " . $this->settings['sortingPhotos'];
 						break;
 
-			default:	$query	= Database::prepare($this->database, "SELECT * FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
-						$albums = $this->database->query($query);
-						$return = $albums->fetch_assoc();
+			default:	
+						$stmt = $this->database->prepare("SELECT * FROM ".LYCHEE_TABLE_ALBUMS." WHERE id = :albumids LIMIT 1");
+						$stmt->bindValue('albumids', $this->albumIDs, PDO::PARAM_INT);
+						$result = $stmt->execute();
+						$return = $stmt->fetch();
 						$return['sysdate']	= date('d M. Y', $return['sysstamp']);
-						$return['password']	= ($return['password']=='' ? '0' : '1');
-						$query	= Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE album = '?' " . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS, $this->albumIDs));
+						$return['password']	= ($return['password']=='' ? false : true);
+						$sql = "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ".LYCHEE_TABLE_PHOTOS." WHERE album = :albumids " . $this->settings['sortingPhotos'];
 						break;
 
 		}
 
 		# Get photos
-		$photos				= $this->database->query($query);
+		$stmt = $this->database->prepare($sql);
+		$stmt->bindValue('albumids', $this->albumIDs, PDO::PARAM_INT);
+		$result = $stmt->execute();
 		$previousPhotoID	= '';
-		while ($photo = $photos->fetch_assoc()) {
+		while ($photo = $stmt->fetch()) {
 
 			# Turn data from the database into a front-end friendly format
 			$photo = Photo::prepareData($photo);
@@ -140,7 +156,7 @@ class Album extends Module {
 
 		}
 
-		if ($photos->num_rows===0) {
+		if ($stmt->rowCount()===0) {
 
 			# Album empty
 			$return['content'] = false;
@@ -161,7 +177,7 @@ class Album extends Module {
 		}
 
 		$return['id']	= $this->albumIDs;
-		$return['num']	= $photos->num_rows;
+		$return['num']	= $stmt->rowCount();
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
@@ -189,36 +205,38 @@ class Album extends Module {
 		if ($public===false) $return['smartalbums'] = $this->getSmartInfo();
 
 		# Albums query
-		if ($public===false)	$query = Database::prepare($this->database, 'SELECT id, title, public, sysstamp, password FROM ? ' . $this->settings['sortingAlbums'], array(LYCHEE_TABLE_ALBUMS));
-		else					$query = Database::prepare($this->database, 'SELECT id, title, public, sysstamp, password FROM ? WHERE public = 1 AND visible <> 0 ' . $this->settings['sortingAlbums'], array(LYCHEE_TABLE_ALBUMS));
+		$sql = 'SELECT id, title, public, sysstamp, password FROM '.LYCHEE_TABLE_ALBUMS.' WHERE public = true AND visible <> false' . $this->settings['sortingAlbums'];
+		if ($public===false) {
+			$sql = 'SELECT id, title, public, sysstamp, password FROM '.LYCHEE_TABLE_ALBUMS.' '.$this->settings['sortingAlbums'];
+		}
 
 		# Execute query
-		$albums = $this->database->query($query);
+		$albums = $this->database->query($sql);
 		if (!$albums) {
-			Log::error($database, __METHOD__, __LINE__, 'Could not get all albums (' . $database->error . ')');
-			exit('Error: ' . $this->database->error);
+			Log::error($database, __METHOD__, __LINE__, 'Could not get all albums (' . $database->errorInfo() . ')');
+			exit('Error: ' . $this->database->errorInfo());
 		}
 
 		# For each album
-		while ($album = $albums->fetch_assoc()) {
+		while ($album = $albums->fetch()) {
 
 			# Turn data from the database into a front-end friendly format
 			$album = Album::prepareData($album);
 
 			# Thumbs
-			if (($public===true&&$album['password']==='0')||
-				($public===false)) {
+			if (($public===true&&$album['password']===false)||($public===false)) {
 
-					# Execute query
-					$query	= Database::prepare($this->database, "SELECT thumbUrl FROM ? WHERE album = '?' ORDER BY star DESC, " . substr($this->settings['sortingPhotos'], 9) . " LIMIT 3", array(LYCHEE_TABLE_PHOTOS, $album['id']));
-					$thumbs	= $this->database->query($query);
+				# Execute query
+				$stmt = $this->database->prepare("SELECT thumbUrl FROM ".LYCHEE_TABLE_PHOTOS." WHERE album = :albumid ORDER BY star DESC, " . substr($this->settings['sortingPhotos'], 9) . " LIMIT 3");
+				$stmt->bindValue('albumid', $album['id'], PDO::PARAM_STR);
+				$stmt->execute();
 
-					# For each thumb
-					$k = 0;
-					while ($thumb = $thumbs->fetch_object()) {
-						$album['thumbs'][$k] = LYCHEE_URL_UPLOADS_THUMB . $thumb->thumbUrl;
-						$k++;
-					}
+				# For each thumb
+				$k = 0;
+				while ($thumb = $stmt->fetch()) {
+					$album["thumb"][$k] = LYCHEE_URL_UPLOADS_THUMB . $thumb['thumbUrl'];
+					$k++;
+				}
 
 			}
 
@@ -228,7 +246,7 @@ class Album extends Module {
 		}
 
 		# Num of albums
-		$return['num'] = $albums->num_rows;
+		$return['num'] = $albums->rowCount();
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
@@ -254,18 +272,18 @@ class Album extends Module {
 		# Unsorted
 		###
 
-		$query		= Database::prepare($this->database, 'SELECT thumbUrl FROM ? WHERE album = 0 ' . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
-		$unsorted	= $this->database->query($query);
+		$sql = "SELECT thumbUrl FROM ".LYCHEE_TABLE_PHOTOS." WHERE album = '0' " . $this->settings['sortingPhotos'];
+		$unsorted	= $this->database->query($sql);
 		$i			= 0;
 
 		$return['unsorted'] = array(
 			'thumbs'	=> array(),
-			'num'		=> $unsorted->num_rows
+			'num'		=> $unsorted->rowCount()
 		);
 
-		while($row = $unsorted->fetch_object()) {
+		while($row = $unsorted->fetch()) {
 			if ($i<3) {
-				$return['unsorted']['thumbs'][$i] = LYCHEE_URL_UPLOADS_THUMB . $row->thumbUrl;
+				$return['unsorted']['thumbs'][$i] = LYCHEE_URL_UPLOADS_THUMB . $row['thumbUrl'];
 				$i++;
 			} else break;
 		}
@@ -274,18 +292,18 @@ class Album extends Module {
 		# Starred
 		###
 
-		$query		= Database::prepare($this->database, 'SELECT thumbUrl FROM ? WHERE star = 1 ' . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
-		$starred	= $this->database->query($query);
+		$sql = 'SELECT thumbUrl FROM '.LYCHEE_TABLE_PHOTOS.' WHERE star = true ' . $this->settings['sortingPhotos'];
+		$starred	= $this->database->query($sql);
 		$i			= 0;
 
 		$return['starred'] = array(
 			'thumbs'	=> array(),
-			'num'		=> $starred->num_rows
+			'num'		=> $starred->rowCount()
 		);
 
-		while($row3 = $starred->fetch_object()) {
+		while($row3 = $starred->fetch()) {
 			if ($i<3) {
-				$return['starred']['thumbs'][$i] = LYCHEE_URL_UPLOADS_THUMB . $row3->thumbUrl;
+				$return['starred']['thumbs'][$i] = LYCHEE_URL_UPLOADS_THUMB . $row3['thumbUrl'];
 				$i++;
 			} else break;
 		}
@@ -294,18 +312,18 @@ class Album extends Module {
 		# Public
 		###
 
-		$query		= Database::prepare($this->database, 'SELECT thumbUrl FROM ? WHERE public = 1 ' . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
-		$public		= $this->database->query($query);
+		$sql = 'SELECT thumbUrl FROM '.LYCHEE_TABLE_PHOTOS.' WHERE public = true ' . $this->settings['sortingPhotos'];
+		$public	= $this->database->query($sql);
 		$i			= 0;
 
 		$return['public'] = array(
 			'thumbs'	=> array(),
-			'num'		=> $public->num_rows
+			'num'		=> $public->rowCount()
 		);
 
-		while($row2 = $public->fetch_object()) {
+		while($row2 = $public->fetch()) {
 			if ($i<3) {
-				$return['public']['thumbs'][$i] = LYCHEE_URL_UPLOADS_THUMB . $row2->thumbUrl;
+				$return['public']['thumbs'][$i] = LYCHEE_URL_UPLOADS_THUMB . $row2['thumbUrl'];
 				$i++;
 			} else break;
 		}
@@ -314,18 +332,25 @@ class Album extends Module {
 		# Recent
 		###
 
-		$query		= Database::prepare($this->database, 'SELECT thumbUrl FROM ? WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY)) ' . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
-		$recent		= $this->database->query($query);
+		switch ($this->database->getAttribute(PDO::ATTR_DRIVER_NAME)) {
+			case 'mysql':
+				$sql = 'SELECT thumbUrl FROM '.LYCHEE_TABLE_PHOTOS.' WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY)) ' . $this->settings['sortingPhotos'];
+				break;
+			case 'pgsql':
+				$sql = "SELECT thumbUrl FROM ".LYCHEE_TABLE_PHOTOS." WHERE sysstamp >= NOW()-INTERVAL '1 DAY' " . $this->settings['sortingPhotos'];
+				break;
+		}
+		$recent	= $this->database->query($sql);
 		$i			= 0;
 
 		$return['recent'] = array(
 			'thumbs'	=> array(),
-			'num'		=> $recent->num_rows
+			'num'		=> $recent->rowCount()
 		);
 
-		while($row3 = $recent->fetch_object()) {
+		while($row3 = $recent->fetch()) {
 			if ($i<3) {
-				$return['recent']['thumbs'][$i] = LYCHEE_URL_UPLOADS_THUMB . $row3->thumbUrl;
+				$return['recent']['thumbs'][$i] = LYCHEE_URL_UPLOADS_THUMB . $row3['thumbUrl'];
 				$i++;
 			} else break;
 		}
@@ -352,36 +377,44 @@ class Album extends Module {
 		# Photos query
 		switch($this->albumIDs) {
 			case 's':
-				$photos		= Database::prepare($this->database, 'SELECT title, url FROM ? WHERE public = 1', array(LYCHEE_TABLE_PHOTOS));
+				$sql = 'SELECT title, url FROM '.LYCHEE_TABLE_PHOTOS.' WHERE public = true';
 				$zipTitle	= 'Public';
 				break;
 			case 'f':
-				$photos		= Database::prepare($this->database, 'SELECT title, url FROM ? WHERE star = 1', array(LYCHEE_TABLE_PHOTOS));
+				$sql ='SELECT title, url FROM '.LYCHEE_TABLE_PHOTOS.' WHERE star = true';
 				$zipTitle	= 'Starred';
 				break;
 			case 'r':
-				$photos		= Database::prepare($this->database, 'SELECT title, url FROM ? WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY)) GROUP BY checksum', array(LYCHEE_TABLE_PHOTOS));
+				switch ($this->database->getAttribute(PDO::ATTR_DRIVER_NAME)) {
+					case 'mysql':
+						$sql ='SELECT title, url FROM '.LYCHEE_TABLE_PHOTOS.' WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY)) GROUP BY checksum';
+						break;
+					case 'pgsql':
+						$sql ="SELECT title, url FROM '.LYCHEE_TABLE_PHOTOS.' WHERE sysstamp >= NOW() - INTERVAL '1 DAY' GROUP BY checksum";
+						break;
+				}
 				$zipTitle	= 'Recent';
 				break;
 			default:
-				$photos		= Database::prepare($this->database, "SELECT title, url FROM ? WHERE album = '?'", array(LYCHEE_TABLE_PHOTOS, $this->albumIDs));
+				$sql = "SELECT title, url FROM ".LYCHEE_TABLE_PHOTOS." WHERE album = :albumids";
 				$zipTitle	= 'Unsorted';
 		}
 
 		# Get title from database when album is not a SmartAlbum
 		if ($this->albumIDs!=0&&is_numeric($this->albumIDs)) {
 
-			$query = Database::prepare($this->database, "SELECT title FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
-			$album = $this->database->query($query);
+			$stmt = $this->database->prepare("SELECT title FROM ".LYCHEE_TABLE_ALBUMS." WHERE id = :albumids LIMIT 1");
+			$stmt->bindValue('albumids', $this->albumIDs, PDO::PARAM_INT);
+			$stmt->execute();
 
 			# Error in database query
 			if (!$album) {
-				Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+				Log::error($this->database, __METHOD__, __LINE__, $this->database->errorInfo());
 				return false;
 			}
 
 			# Fetch object
-			$album = $album->fetch_object();
+			$album = $stmt->fetch();
 
 			# Photo not found
 			if ($album===null) {
@@ -390,7 +423,7 @@ class Album extends Module {
 			}
 
 			# Set title
-			$zipTitle = $album->title;
+			$zipTitle = $album['title'];
 
 		}
 
@@ -407,33 +440,35 @@ class Album extends Module {
 		}
 
 		# Execute query
-		$photos = $this->database->query($photos);
+		$photosStmt = $this->database->prepare($sql);
+		$photosStmt->bindValue('albumids', $this->albumIDs, PDO::PARAM_STR);
+		$photos = $photosStmt->execute();
 
 		# Check if album empty
-		if ($photos->num_rows==0) {
+		if ($photosStmt->rowCount()==0) {
 			Log::error($this->database, __METHOD__, __LINE__, 'Could not create ZipArchive without images');
 			return false;
 		}
 
 		# Parse each path
 		$files = array();
-		while ($photo = $photos->fetch_object()) {
+		while ($photo = $photosStmt->fetch()) {
 
 			# Parse url
-			$photo->url = LYCHEE_UPLOADS_BIG . $photo->url;
+			$photo['url'] = LYCHEE_UPLOADS_BIG . $photo['url'];
 
 			# Parse title
-			$photo->title = str_replace($badChars, '', $photo->title);
-			if (!isset($photo->title)||$photo->title==='') $photo->title = 'Untitled';
+			$photo['title'] = str_replace($badChars, '', $photo['title']);
+			if (!isset($photo['title'])||$photo['title']==='') $photo['title'] = 'Untitled';
 
 			# Check if readable
-			if (!@is_readable($photo->url)) continue;
+			if (!@is_readable($photo['url'])) continue;
 
 			# Get extension of image
-			$extension = getExtension($photo->url);
+			$extension = getExtension($photo['url']);
 
 			# Set title for photo
-			$zipFileName = $zipTitle . '/' . $photo->title . $extension;
+			$zipFileName = $zipTitle . '/' . $photo['title'] . $extension;
 
 			# Check for duplicates
 			if (!empty($files)) {
@@ -441,7 +476,7 @@ class Album extends Module {
 				while (in_array($zipFileName, $files)) {
 
 					# Set new title for photo
-					$zipFileName = $zipTitle . '/' . $photo->title . '-' . $i . $extension;
+					$zipFileName = $zipTitle . '/' . $photo['title'] . '-' . $i . $extension;
 
 					$i++;
 
@@ -452,7 +487,7 @@ class Album extends Module {
 			$files[] = $zipFileName;
 
 			# Add photo to zip
-			$zip->addFile($photo->url, $zipFileName);
+			$zip->addFile($photo['url'], $zipFileName);
 
 		}
 
@@ -487,14 +522,22 @@ class Album extends Module {
 		if (strlen($title)>100) $title = substr($title, 0, 100);
 
 		# Execute query
-		$query	= Database::prepare($this->database, "UPDATE ? SET title = '?' WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $title, $this->albumIDs));
-		$result = $this->database->query($query);
+		$inAlbums = implode(',', array_fill(0, count($this->albumIDs), '?'));
+		$stmt =  $this->database->prepare("UPDATE ".LYCHEE_TABLE_ALBUMS." SET title = ? WHERE id IN (".$inAlbums.")");
+		$stmt->bindValue(1, $title, PDO::PARAM_STR);
+		if (count($this->albumIDs)===1) {
+			$stmt->bindValue(2, $albumId, PDO::PARAM_INT);
+		} else {
+			foreach ($this->albumIDs as $k => $albumId)
+				$stmt->bindValue(($k+2), $albumId, PDO::PARAM_INT);
+		}
+		$result = $stmt->execute();
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->errorInfo());
 			return false;
 		}
 		return true;
@@ -514,14 +557,22 @@ class Album extends Module {
 		if (strlen($description)>1000) $description = substr($description, 0, 1000);
 
 		# Execute query
-		$query	= Database::prepare($this->database, "UPDATE ? SET description = '?' WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $description, $this->albumIDs));
-		$result	= $this->database->query($query);
-
+                $inAlbums = implode(',', array_fill(0, count($this->albumIDs), '?'));
+		$stmt =  $this->database->prepare("UPDATE ".LYCHEE_TABLE_ALBUMS." SET description = :description WHERE id IN (".$inAlbums.")");
+		$stmt->bindValue('description', $description, PDO::PARAM_STR);
+		if (count($this->albumIDs)===1) {
+			$stmt->bindValue(2, $albumId, PDO::PARAM_INT);
+		} else {
+	                foreach ($this->albumIDs as $k => $albumId)
+        	                $stmt->bindValue(($k+2), $albumId, PDO::PARAM_INT);
+		}
+		$result = $stmt->execute();
+		
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->errorInfo());
 			return false;
 		}
 		return true;
@@ -539,14 +590,14 @@ class Album extends Module {
 		if ($this->albumIDs==='0'||$this->albumIDs==='s'||$this->albumIDs==='f') return false;
 
 		# Execute query
-		$query	= Database::prepare($this->database, "SELECT public FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
-		$albums	= $this->database->query($query);
-		$album	= $albums->fetch_object();
-
+		$stmt =  $this->database->prepare("SELECT public FROM ".LYCHEE_TABLE_ALBUMS." WHERE id = :albumids LIMIT 1");
+		$stmt->bindValue('albumids', $this->albumIDs, PDO::PARAM_INT);
+		$result = $stmt->execute();
+		$album = $stmt->fetch();
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
-		if ($album->public==1) return true;
+		if ($album['public']==1) return true;
 		return false;
 
 	}
@@ -562,14 +613,15 @@ class Album extends Module {
 		if ($this->albumIDs==='0'||$this->albumIDs==='s'||$this->albumIDs==='f'||$this->albumIDs==='r') return false;
 
 		# Execute query
-		$query	= Database::prepare($this->database, "SELECT downloadable FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
-		$albums	= $this->database->query($query);
-		$album	= $albums->fetch_object();
+		$stmt =  $this->database->prepare("SELECT downloadable FROM ".LYCHEE_TABLE_ALBUMS." WHERE id = :albumids LIMIT 1");
+		$stmt->bindValue('albumids', $this->albumIDs, PDO::PARAM_INT);
+		$result = $stmt->execute();
+		$album = $stmt->fetch();
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
-		if ($album->downloadable==1) return true;
+		if ($album['downloadable']==1) return true;
 		return false;
 
 	}
@@ -588,19 +640,37 @@ class Album extends Module {
 		$downloadable	= ($downloadable==='1' ? 1 : 0);
 
 		# Set public
-		$query	= Database::prepare($this->database, "UPDATE ? SET public = '?', visible = '?', downloadable = '?', password = NULL WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $public, $visible, $downloadable, $this->albumIDs));
-		$result	= $this->database->query($query);
+                $inAlbums = implode(',', array_fill(0, count($this->albumIDs), '?'));
+		$stmt =  $this->database->prepare("UPDATE ".LYCHEE_TABLE_ALBUMS." SET public = ?, visible = ?, downloadable = ?, password = NULL WHERE id IN (".$inAlbums.")");
+		$stmt->bindValue(1, $public, PDO::PARAM_BOOL);
+		$stmt->bindValue(2, $visible, PDO::PARAM_BOOL);
+		$stmt->bindValue(3, $downloadable, PDO::PARAM_BOOL);
+		if (count($this->albumIDs)===1) {
+			$stmt->bindValue(4, $albumId, PDO::PARAM_INT);
+		} else {
+	                foreach ($this->albumIDs as $k => $albumId)
+        	                $stmt->bindValue(($k+4), $albumId, PDO::PARAM_INT);
+		}
+		$result = $stmt->execute();
+
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->errorInfo());
 			return false;
 		}
 
 		# Reset permissions for photos
 		if ($public===1) {
-			$query	= Database::prepare($this->database, "UPDATE ? SET public = 0 WHERE album IN (?)", array(LYCHEE_TABLE_PHOTOS, $this->albumIDs));
-			$result	= $this->database->query($query);
+			$inAlbums = implode(',', array_fill(0, count($this->albumIDs), '?'));
+			$stmt =  $this->database->prepare("UPDATE ".LYCHEE_TABLE_PHOTOS." SET public = false WHERE album IN (".$inAlbums.")");
+			if (count($this->albumIDs)===1) {
+				$stmt->bindValue(1, $albumId, PDO::PARAM_INT);
+			} else {
+				foreach ($this->albumIDs as $k => $albumId)
+					$stmt->bindValue(($k+1), $albumId, PDO::PARAM_INT);
+			}
+			$result = $stmt->execute();
 			if (!$result) {
-				Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+				Log::error($this->database, __METHOD__, __LINE__, $this->database->errorInfo());
 				return false;
 			}
 		}
@@ -631,23 +701,37 @@ class Album extends Module {
 			# Set hashed password
 			# Do not prepare $password because it is hashed and save
 			# Preparing (escaping) the password would destroy the hash
-			$query	= Database::prepare($this->database, "UPDATE ? SET password = '$password' WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
+	                $inAlbums = implode(',', array_fill(0, count($this->albumIDs), '?'));
+			$stmt = $this->database->prepare("UPDATE ".LYCHEE_TABLE_ALBUMS." SET password = '$password' WHERE id IN (".$inAlbums.")");
+			if (count($this->albumIDs)===1) {
+				$stmt->bindValue(1, $albumId, PDO::PARAM_INT);
+			} else {
+	        	        foreach ($this->albumIDs as $k => $albumId)
+        	        	        $stmt->bindValue(($k+1), $albumId, PDO::PARAM_INT);
+			}
 
 		} else {
 
 			# Unset password
-			$query	= Database::prepare($this->database, "UPDATE ? SET password = NULL WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
+                        $inAlbums = implode(',', array_fill(0, count($this->albumIDs), '?'));			
+			$stmt = $this->database->prepare("UPDATE ".LYCHEE_TABLE_ALBUMS." SET password = NULL WHERE id IN (".$inAlbums.")");
+			if (count($this->albumIDs)===1) {
+				$stmt->bindValue(1, $albumId, PDO::PARAM_INT);
+			} else {
+                        	foreach ($this->albumIDs as $k => $albumId)
+					$stmt->bindValue(($k+1), $albumId, PDO::PARAM_INT);
+			}
 
 		}
 
 		# Execute query
-		$result	= $this->database->query($query);
+		$result = $stmt->execute();
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->errorInfo());
 			return false;
 		}
 		return true;
@@ -663,15 +747,16 @@ class Album extends Module {
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Execute query
-		$query	= Database::prepare($this->database, "SELECT password FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
-		$albums	= $this->database->query($query);
-		$album	= $albums->fetch_object();
+		$stmt = $this->database->prepare("SELECT password FROM ".LYCHEE_TABLE_ALBUMS." WHERE id = :albumids LIMIT 1");
+		$stmt->bindValue('albumids', $this->albumIDs, PDO::PARAM_INT);
+		$result = $stmt->execute();
+		$album	= $stmt->fetch();
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
-		if ($album->password=='') return true;
-		else if ($album->password===crypt($password, $album->password)) return true;
+		if ($album['password']=='') return true;
+		else if ($album['password']===crypt($password, $album['password'])) return true;
 		return false;
 
 	}
@@ -691,11 +776,19 @@ class Album extends Module {
 		$albumID = array_splice($albumIDs, 0, 1);
 		$albumID = $albumID[0];
 
-		$query	= Database::prepare($this->database, "UPDATE ? SET album = ? WHERE album IN (?)", array(LYCHEE_TABLE_PHOTOS, $albumID, $this->albumIDs));
-		$result	= $this->database->query($query);
+		$inAlbums = implode(',', array_fill(0, count($this->albumIDs), '?'));			
+		$stmt = $this->database->prepare("UPDATE ".LYCHEE_TABLE_ALBUMS." SET album = ? WHERE album IN (".$inAlbums.")");
+		$stmt->bindValue(1, $albumID, PDO::PARAM_INT);
+		if (count($this->albumIDs)===1) {
+			$stmt->bindValue(2, $albumId, PDO::PARAM_INT);
+		} else {
+                        foreach ($this->albumIDs as $k => $albumId)
+				$stmt->bindValue(($k+2), $albumId, PDO::PARAM_INT);
+		}
+		$result = $stmt->execute();
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->errorInfo());
 			return false;
 		}
 
@@ -703,14 +796,21 @@ class Album extends Module {
 		# Convert to string
 		$filteredIDs = implode(',', $albumIDs);
 
-		$query	= Database::prepare($this->database, "DELETE FROM ? WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $filteredIDs));
-		$result	= $this->database->query($query);
+		$inAlbums = implode(',', array_fill(0, count($this->albumIDs), '?'));			
+		$stmt = $this->database->prepare("DELETE FROM ".LYCHEE_TABLE_ALBUMS." WHERE id IN (".$inAlbums.")");
+		if (count($this->albumIDs)===1) {
+			$stmt->bindValue(1, $albumId, PDO::PARAM_INT);
+		} else {
+                        foreach ($this->albumIDs as $k => $albumId)
+				$stmt->bindValue(($k+1), $albumId, PDO::PARAM_INT);
+		}
+		$result = $stmt->execute();
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->errorInfo());
 			return false;
 		}
 		return true;
@@ -729,27 +829,41 @@ class Album extends Module {
 		$error = false;
 
 		# Execute query
-		$query	= Database::prepare($this->database, "SELECT id FROM ? WHERE album IN (?)", array(LYCHEE_TABLE_PHOTOS, $this->albumIDs));
-		$photos = $this->database->query($query);
-
+		$inAlbums = implode(',', array_fill(0, count($this->albumIDs), '?'));
+		$stmt = $this->database->prepare("SELECT id FROM ".LYCHEE_TABLE_PHOTOS." WHERE album IN (".$inAlbums.")");
+		if (count($this->albumIDs)===1) {
+			$stmt->bindValue(1, $albumId, PDO::PARAM_INT);
+		} else {
+			foreach ($this->albumIDs as $k => $albumId)
+				$stmt->bindValue(($k+1), $albumId, PDO::PARAM_INT);
+		}
+		$result = $stmt->execute();
+		
 		# For each album delete photo
-		while ($row = $photos->fetch_object()) {
+		while ($row = $stmt->fetch()) {
 
-			$photo = new Photo($this->database, $this->plugins, null, $row->id);
-			if (!$photo->delete($row->id)) $error = true;
+			$photo = new Photo($this->database, $this->plugins, null, $row['id']);
+			if (!$photo->delete($row['id'])) $error = true;
 
 		}
 
 		# Delete albums
-		$query	= Database::prepare($this->database, "DELETE FROM ? WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
-		$result	= $this->database->query($query);
-
+		$inAlbums = implode(',', array_fill(0, count($this->albumIDs), '?'));
+		$stmt = $this->database->prepare("DELETE FROM ".LYCHEE_TABLE_PHOTOS." WHERE id IN (".$inAlbums.")");
+		if (count($this->albumIDs)===1) {
+			$stmt->bindValue(1, $albumId, PDO::PARAM_INT);
+		} else {
+			foreach ($this->albumIDs as $k => $albumId)
+				$stmt->bindValue(($k+1), $albumId, PDO::PARAM_INT);
+		}
+		$result = $stmt->execute();
+		
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if ($error) return false;
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->errorInfo());
 			return false;
 		}
 		return true;

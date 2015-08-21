@@ -9,30 +9,47 @@ if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 class Database extends Module {
 
-	static function connect($host = 'localhost', $user, $password, $name = 'lychee') {
+	static function connect($host = 'localhost', $user, $password, $name = 'lychee', $dbtype = 'pgsql') {
 
 		# Check dependencies
 		Module::dependencies(isset($host, $user, $password, $name));
 
-		$database = new mysqli($host, $user, $password);
+		# Create PDO object, this will also connect to the db.
+		$database = new PDO(
+			"$dbtype:host=$host;dbname=$name",
+			$user,
+			$password,
+			array(
+	PDO::ATTR_PERSISTENT => true));
 
-		# Check connection
-		if ($database->connect_errno) exit('Error: ' . $database->connect_error);
+#	PDO::ATTR_PERSISTENT => true,
+#	PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 
-		# Avoid sql injection on older MySQL versions by using GBK
-		if ($database->server_version<50500) @$database->set_charset('GBK');
-		else @$database->set_charset('utf8');
+		# Creating the PDO is not always sufficient, some polishing may be
+		# required. This may differ between RDBMS, hence:
+		switch ($dbtype) {
+			case 'mysql':
+				if (version_compare(PHP_VERSION, '5.3.6') >=0 ) {
+					if ( $database->getAttribute(PDO::ATTR_SERVER_VERSION) >= 50500 ) {
+						$database->exec('SET NAMES UTF8');
+					} else {
+						$database->exec('SET NAMES GBK');
+					}
+				}
+				break;
+		}
 
-		# Set unicode
-		$database->query('SET NAMES utf8;');
-
-		# Check database
-		if (!$database->select_db($name))
-			if (!Database::createDatabase($database, $name)) exit('Error: Could not create database!');
+		# Check and create database
+		Database::createDatabase($database, $name);
 
 		# Check tables
-		$query = Database::prepare($database, 'SELECT * FROM ?, ?, ?, ? LIMIT 0', array(LYCHEE_TABLE_PHOTOS, LYCHEE_TABLE_ALBUMS, LYCHEE_TABLE_SETTINGS, LYCHEE_TABLE_LOG));
-		if (!$database->query($query))
+		$pdostatement = $database->prepare('SELECT * FROM ' .
+			LYCHEE_TABLE_PHOTOS   .','.
+			LYCHEE_TABLE_ALBUMS   .','.
+			LYCHEE_TABLE_SETTINGS .','.
+			LYCHEE_TABLE_LOG .
+			' LIMIT 0');
+		if (!$pdostatement->execute())
 			if (!Database::createTables($database)) exit('Error: Could not create tables!');
 
 		return $database;
@@ -66,7 +83,7 @@ class Database extends Module {
 			if ($update<=$version) continue;
 
 			# Load update
-			include(__DIR__ . '/../database/update_' . $update . '.php');
+//			include(__DIR__ . '/../database/update_' . $update . '.php');
 
 		}
 
@@ -74,31 +91,10 @@ class Database extends Module {
 
 	}
 
-	static function createConfig($host = 'localhost', $user, $password, $name = 'lychee', $prefix = '') {
+	static function createConfig($host = 'localhost', $user, $password, $name = 'lychee', $prefix = '', $type = 'pgsql') {
 
 		# Check dependencies
 		Module::dependencies(isset($host, $user, $password, $name));
-
-		$database = new mysqli($host, $user, $password);
-
-		if ($database->connect_errno) return 'Warning: Connection failed!';
-
-		# Check if database exists
-		if (!$database->select_db($name)) {
-
-			# Database doesn't exist
-			# Check if user can create the database
-			$result = Database::createDatabase($database, $name);
-			if ($result===false) return 'Warning: Creation failed!';
-
-		}
-
-		# Escape data
-		$host		= mysqli_real_escape_string($database, $host);
-		$user		= mysqli_real_escape_string($database, $user);
-		$password	= mysqli_real_escape_string($database, $password);
-		$name		= mysqli_real_escape_string($database, $name);
-		$prefix		= mysqli_real_escape_string($database, $prefix);
 
 		# Save config.php
 $config = "<?php
@@ -112,6 +108,7 @@ $config = "<?php
 if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 # Database configuration
+\$dbtype = '$type'; # type of the database
 \$dbHost = '$host'; # Host of the database
 \$dbUser = '$user'; # Username of the database
 \$dbPassword = '$password'; # Password of the database
@@ -131,14 +128,13 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 		# Check dependencies
 		Module::dependencies(isset($database, $name));
-
-		# Create database
-		$query	= Database::prepare($database, 'CREATE DATABASE IF NOT EXISTS ?', array($name));
-		$result = $database->query($query);
-
-		if (!$database->select_db($name)||!$result) return false;
-		return true;
-
+		switch($database->getAttribute(PDO::ATTR_DRIVER_NAME)) {
+		case 'mysql':
+			$pdostatement	= $database->prepare("CREATE DATABASE IF NOT EXISTS $name");
+			$pdostatement->execute();
+			return true;
+		}
+		return false;
 	}
 
 	static function createTables($database) {
@@ -147,106 +143,207 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 		Module::dependencies(isset($database));
 
 		# Create log
-		$exist = Database::prepare($database, 'SELECT * FROM ? LIMIT 0', array(LYCHEE_TABLE_LOG));
-		if (!$database->query($exist)) {
+		$sql = 'SELECT * FROM '.LYCHEE_TABLE_LOG.' LIMIT 0';
+		if (!$database->query($sql)) {
 
-			# Read file
-			$file	= __DIR__ . '/../database/log_table.sql';
-			$query	= @file_get_contents($file);
-
-			if (!isset($query)||$query===false) return false;
+			switch ($database->getAttribute(PDO::ATTR_DRIVER_NAME)) {
+			case 'mysql':
+				$query = "CREATE TABLE IF NOT EXISTS ".LYCHEE_TABLE_LOG." (
+				  `id` int(11) NOT NULL AUTO_INCREMENT,
+				  `time` int(11) NOT NULL,
+				  `type` varchar(11) NOT NULL,
+				  `function` varchar(100) NOT NULL,
+				  `line` int(11) NOT NULL,
+				  `text` TEXT,
+				  PRIMARY KEY (`id`)
+				) ENGINE=MyISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+				)";
+				break;
+			case 'pgsql':
+				$query = "CREATE TABLE IF NOT EXISTS ".LYCHEE_TABLE_LOG." (
+				id SERIAL PRIMARY KEY,
+				time timestamp NOT NULL DEFAULT clock_timestamp(),
+				type varchar(11) NOT NULL,
+				function varchar(100) NOT NULL,
+				line bigint NOT NULL,
+				text TEXT
+				)";
+				break;
+			}
 
 			# Create table
-			$query = Database::prepare($database, $query, array(LYCHEE_TABLE_LOG));
-			if (!$database->query($query)) return false;
+			$stmt = $database->prepare($query);
+			if (!$stmt->execute()) return false;
 
 		}
 
 		# Create settings
-		$exist = Database::prepare($database, 'SELECT * FROM ? LIMIT 0', array(LYCHEE_TABLE_SETTINGS));
-		if (!$database->query($exist)) {
+		$sql = 'SELECT * FROM '.LYCHEE_TABLE_SETTINGS.' LIMIT 0';
+		if (!$database->query($sql)) {
 
-			# Read file
-			$file	= __DIR__ . '/../database/settings_table.sql';
-			$query	= @file_get_contents($file);
-
-			if (!isset($query)||$query===false) {
-				Log::error($database, __METHOD__, __LINE__, 'Could not load query for lychee_settings');
-				return false;
+			switch ($database->getAttribute(PDO::ATTR_DRIVER_NAME)) {
+			case 'mysql':
+				$query = "CREATE TABLE IF NOT EXISTS ".LYCHEE_TABLE_LOG." (
+				  `key` varchar(50) NOT NULL DEFAULT '',
+				  `value` varchar(200) DEFAULT ''
+				) ENGINE=MyISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+				)";
+				break;
+			case 'pgsql':
+				$query	= "CREATE TABLE IF NOT EXISTS ".LYCHEE_TABLE_SETTINGS." (
+				key varchar(50) NOT NULL DEFAULT '',
+				value varchar(200) DEFAULT ''
+				)";
+				break;
 			}
 
 			# Create table
-			$query = Database::prepare($database, $query, array(LYCHEE_TABLE_SETTINGS));
-			if (!$database->query($query)) {
-				Log::error($database, __METHOD__, __LINE__, $database->error);
+			$stmt = $database->prepare($query);
+
+			if (!$stmt->execute()) {
+				Log::error($database, __METHOD__, __LINE__, $database->errorInfo());
 				return false;
 			}
 
-			# Read file
-			$file	= __DIR__ . '/../database/settings_content.sql';
-			$query	= @file_get_contents($file);
-
-			if (!isset($query)||$query===false) {
-				Log::error($database, __METHOD__, __LINE__, 'Could not load content-query for lychee_settings');
-				return false;
-			}
+			$query	= "INSERT INTO ".LYCHEE_TABLE_SETTINGS." (key, value)
+			VALUES
+			('version',''),
+			('username',''),
+			('password',''),
+			('thumbQuality','90'),
+			('checkForUpdates','0'),
+			('sortingPhotos','ORDER BY id DESC'),
+			('sortingAlbums','ORDER BY id DESC'),
+			('medium','1'),
+			('imagick','1'),
+			('dropboxKey',''),
+			('identifier',''),
+			('skipDuplicates','0'),
+			('plugins','')";
 
 			# Add content
-			$query = Database::prepare($database, $query, array(LYCHEE_TABLE_SETTINGS));
-			if (!$database->query($query)) {
-				Log::error($database, __METHOD__, __LINE__, $database->error);
+			$stmt = $database->prepare($query);
+			if (!$stmt->execute()) {
+				Log::error($database, __METHOD__, __LINE__, $database->errorInfo());
 				return false;
 			}
 
 			# Generate identifier
 			$identifier	= md5(microtime(true));
-			$query		= Database::prepare($database, "UPDATE `?` SET `value` = '?' WHERE `key` = 'identifier' LIMIT 1", array(LYCHEE_TABLE_SETTINGS, $identifier));
-			if (!$database->query($query)) {
-				Log::error($database, __METHOD__, __LINE__, $database->error);
+			$stmt = $database->prepare("UPDATE ".LYCHEE_TABLE_SETTINGS." SET value = :identifier WHERE key = 'identifier'");
+			$stmt->bindValue('identifier', $identifier, PDO::PARAM_STR);
+			if (!$stmt->execute()) {
+				Log::error($database, __METHOD__, __LINE__, $database->errorInfo());
 				return false;
 			}
-
 		}
 
 		# Create albums
-		$exist = Database::prepare($database, 'SELECT * FROM ? LIMIT 0', array(LYCHEE_TABLE_ALBUMS));
-		if (!$database->query($exist)) {
+		$sql = 'SELECT * FROM '.LYCHEE_TABLE_ALBUMS.' LIMIT 0';
+		if (!$database->query($sql)) {
 
-			# Read file
-			$file	= __DIR__ . '/../database/albums_table.sql';
-			$query	= @file_get_contents($file);
-
-			if (!isset($query)||$query===false) {
-				Log::error($database, __METHOD__, __LINE__, 'Could not load query for lychee_albums');
-				return false;
+			switch ($database->getAttribute(PDO::ATTR_DRIVER_NAME)) {
+			case 'mysql':
+				$query = "CREATE TABLE IF NOT EXISTS ".LYCHEE_TABLE_LOG." (
+				  `id` int(11) NOT NULL AUTO_INCREMENT,
+				  `title` varchar(100) NOT NULL DEFAULT '',
+				  `description` varchar(1000) DEFAULT '',
+				  `sysstamp` int(11) NOT NULL,
+				  `public` tinyint(1) NOT NULL DEFAULT '0',
+				  `visible` tinyint(1) NOT NULL DEFAULT '1',
+				  `downloadable` tinyint(1) NOT NULL DEFAULT '0',
+				  `password` varchar(100) DEFAULT NULL,
+				  PRIMARY KEY (`id`)
+				) ENGINE=MyISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;)";
+				break;
+			case 'pgsql':
+				$query	= "CREATE TABLE IF NOT EXISTS ".LYCHEE_TABLE_ALBUMS." (
+				id SERIAL PRIMARY KEY,
+				title varchar(100) NOT NULL DEFAULT '',
+				description varchar(1000) DEFAULT '',
+				sysstamp bigint NOT NULL,
+				public boolean NOT NULL DEFAULT false,
+				visible boolean NOT NULL DEFAULT true,
+				downloadable boolean NOT NULL DEFAULT false,
+				password varchar(100) DEFAULT NULL
+				)";
+				break;
 			}
 
 			# Create table
-			$query = Database::prepare($database, $query, array(LYCHEE_TABLE_ALBUMS));
-			if (!$database->query($query)) {
-				Log::error($database, __METHOD__, __LINE__, $database->error);
+			$stmt = $database->prepare($query);
+			if (!$stmt->execute()) {
+				Log::error($database, __METHOD__, __LINE__, $database->errorInfo());
 				return false;
 			}
 
 		}
 
 		# Create photos
-		$exist = Database::prepare($database, 'SELECT * FROM ? LIMIT 0', array(LYCHEE_TABLE_PHOTOS));
-		if (!$database->query($exist)) {
+		$sql = 'SELECT * FROM '.LYCHEE_TABLE_PHOTOS.' LIMIT 0';
+		if (!$database->query($sql)) {
 
-			# Read file
-			$file	= __DIR__ . '/../database/photos_table.sql';
-			$query	= @file_get_contents($file);
-
-			if (!isset($query)||$query===false) {
-				Log::error($database, __METHOD__, __LINE__, 'Could not load query for lychee_photos');
-				return false;
+			switch ($database->getAttribute(PDO::ATTR_DRIVER_NAME)) {
+			case 'mysql':
+				$query = "CREATE TABLE IF NOT EXISTS ".LYCHEE_TABLE_LOG." (
+ 				 `id` bigint(14) NOT NULL,
+				  `title` varchar(100) NOT NULL,
+				  `description` varchar(1000) DEFAULT '',
+				  `url` varchar(100) NOT NULL,
+				  `tags` varchar(1000) NOT NULL DEFAULT '',
+				  `public` tinyint(1) NOT NULL,
+				  `type` varchar(10) NOT NULL,
+				  `width` int(11) NOT NULL,
+				  `height` int(11) NOT NULL,
+				  `size` varchar(20) NOT NULL,
+				  `iso` varchar(15) NOT NULL,
+				  `aperture` varchar(20) NOT NULL,
+				  `make` varchar(50) NOT NULL,
+				  `model` varchar(50) NOT NULL,
+				  `shutter` varchar(30) NOT NULL,
+				  `focal` varchar(20) NOT NULL,
+				  `takestamp` int(11) DEFAULT NULL,
+				  `star` tinyint(1) NOT NULL,
+				  `thumbUrl` varchar(50) NOT NULL,
+				  `album` varchar(30) NOT NULL DEFAULT '0',
+				  `checksum` VARCHAR(100) DEFAULT NULL,
+				  `medium` tinyint(1) NOT NULL DEFAULT '0',
+				  PRIMARY KEY (`id`)
+				) ENGINE=MyISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;			)";
+				break;
+			case 'pgsql':
+				$query	= "CREATE TABLE IF NOT EXISTS ".LYCHEE_TABLE_PHOTOS." (
+				id bigint NOT NULL,
+				sysstamp timestamp NOT NULL DEFAULT clock_timestamp(),
+				title varchar(100) NOT NULL,
+				description varchar(1000) DEFAULT '',
+				url varchar(100) NOT NULL,
+				tags varchar(1000) NOT NULL DEFAULT '',
+				public boolean NOT NULL,
+				type varchar(10) NOT NULL,
+				width bigint NOT NULL,
+				height bigint NOT NULL,
+				size varchar(20) NOT NULL,
+				iso varchar(15) NOT NULL,
+				aperture varchar(20) NOT NULL,
+				make varchar(50) NOT NULL,
+				model varchar(50) NOT NULL,
+				shutter varchar(30) NOT NULL,
+				focal varchar(20) NOT NULL,
+				takestamp bigint DEFAULT NULL,
+				star boolean NOT NULL,
+				thumbUrl varchar(50) NOT NULL,
+				album varchar(30) NOT NULL DEFAULT '0',
+				checksum VARCHAR(100) DEFAULT NULL,
+				medium boolean NOT NULL DEFAULT false
+				)";
+				break;
 			}
 
 			# Create table
-			$query = Database::prepare($database, $query, array(LYCHEE_TABLE_PHOTOS));
-			if (!$database->query($query)) {
-				Log::error($database, __METHOD__, __LINE__, $database->error);
+			$stmt = $database->prepare($query);
+			if (!$stmt->execute()) {
+				Log::error($database, __METHOD__, __LINE__, $database->errorInfo());
 				return false;
 			}
 
@@ -258,80 +355,15 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 	static function setVersion($database, $version) {
 
-		$query	= Database::prepare($database, "UPDATE ? SET value = '?' WHERE `key` = 'version'", array(LYCHEE_TABLE_SETTINGS, $version));
-		$result = $database->query($query);
+		$stmt = $database->prepare("UPDATE ".LYCHEE_TABLE_SETTINGS." SET value = :version WHERE `key` = 'version'");
+		$stmt.bindParam('version', $version, PDO::PARAM_INT);
+		$result = $stmt->execute();
 		if (!$result) {
-			Log::error($database, __METHOD__, __LINE__, 'Could not update database (' . $database->error . ')');
+			Log::error($database, __METHOD__, __LINE__, 'Could not update database (' . $database->errorInfo() . ')');
 			return false;
 		}
 
 	}
-
-	static function prepare($database, $query, $data) {
-
-		# Check dependencies
-		Module::dependencies(isset($database, $query, $data));
-
-		# Count the number of placeholders and compare it with the number of arguments
-		# If it doesn't match, calculate the difference and skip this number of placeholders before starting the replacement
-		# This avoids problems with placeholders in user-input
-		# $skip = Number of placeholders which need to be skipped
-		$skip	= 0;
-		$num	= array(
-			'placeholder'	=> substr_count($query, '?'),
-			'data'			=> count($data)
-		);
-
-		if (($num['data']-$num['placeholder'])<0) Log::notice($database, __METHOD__, __LINE__, 'Could not completely prepare query. Query has more placeholders than values.');
-
-		foreach ($data as $value) {
-
-			# Escape
-			$value = mysqli_real_escape_string($database, $value);
-
-			# Recalculate number of placeholders
-			$num['placeholder'] = substr_count($query, '?');
-
-			# Calculate number of skips
-			if ($num['placeholder']>$num['data']) $skip = $num['placeholder'] - $num['data'];
-
-			if ($skip>0) {
-
-				# Need to skip $skip placeholders, because the user input contained placeholders
-				# Calculate a substring which does not contain the user placeholders
-				# 1 or -1 is the length of the placeholder (placeholder = ?)
-
-				$pos = -1;
-				for ($i=$skip; $i>0; $i--) $pos = strpos($query, '?', $pos + 1);
-				$pos++;
-
-				$temp	= substr($query, 0, $pos); # First part of $query
-				$query	= substr($query, $pos); # Last part of $query
-
-			}
-
-			# Replace
-			$query = preg_replace('/\?/', $value, $query, 1);
-
-			if ($skip>0) {
-
-				# Reassemble the parts of $query
-				$query = $temp . $query;
-
-			}
-
-			# Reset skip
-			$skip = 0;
-
-			# Decrease number of data elements
-			$num['data']--;
-
-		}
-
-		return $query;
-
-	}
-
 }
 
 ?>
