@@ -205,7 +205,7 @@ class Album extends Module {
 		if ($public===false) $return['smartalbums'] = $this->getSmartInfo();
 
 		# Albums query
-		$sql = 'SELECT id, title, public, sysstamp, password FROM '.LYCHEE_TABLE_ALBUMS.' WHERE public = true AND visible <> false' . $this->settings['sortingAlbums'];
+		$sql = 'SELECT id, title, public, sysstamp, password FROM '.LYCHEE_TABLE_ALBUMS.' WHERE public = true AND visible <> false ' . $this->settings['sortingAlbums'];
 		if ($public===false) {
 			$sql = 'SELECT id, title, public, sysstamp, password FROM '.LYCHEE_TABLE_ALBUMS.' '.$this->settings['sortingAlbums'];
 		}
