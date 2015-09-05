@@ -312,15 +312,6 @@ lychee.animate = function(obj, animation) {
 
 }
 
-lychee.escapeHTML = function(s) {
-
-	return s.replace(/&/g, '&amp;')
-	        .replace(/"/g, '&quot;')
-	        .replace(/</g, '&lt;')
-	        .replace(/>/g, '&gt;')
-
-}
-
 lychee.retinize = function(path = '') {
 
 	let pixelRatio = window.devicePixelRatio,
@@ -385,14 +376,19 @@ lychee.getEventName = function() {
 
 }
 
-lychee.removeHTML = function(html = '') {
+lychee.escapeHTML = function(html = '') {
 
-	if (html==='') return html
+	// Ensure that html is a string
+	html += ''
 
-	let tmp = document.createElement('DIV')
-	tmp.innerHTML = html
+	// Escape all critical characters
+	html = html.replace(/&/g, '&amp;')
+	           .replace(/</g, '&lt;')
+	           .replace(/>/g, '&gt;')
+	           .replace(/"/g, '&quot;')
+	           .replace(/'/g, '&#039;')
 
-	return (tmp.textContent || tmp.innerText)
+	return html
 
 }
 

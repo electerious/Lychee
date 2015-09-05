@@ -247,7 +247,6 @@ album.setTitle = function(albumIDs) {
 		else if (albums.json) oldTitle = albums.getByID(albumIDs).title
 
 		if (!oldTitle) oldTitle = ''
-		oldTitle = oldTitle.replace(/'/g, '&apos;')
 
 	}
 
@@ -256,9 +255,6 @@ album.setTitle = function(albumIDs) {
 		let newTitle = data.title
 
 		basicModal.close()
-
-		// Remove html from input
-		newTitle = lychee.removeHTML(newTitle)
 
 		// Set title to Untitled when empty
 		newTitle = (newTitle==='') ? 'Untitled' : newTitle
@@ -296,7 +292,7 @@ album.setTitle = function(albumIDs) {
 
 	}
 
-	let input = `<input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='${ oldTitle }'>`
+	let input = `<input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='${ lychee.escapeHTML(oldTitle) }'>`
 
 	if (albumIDs.length===1) msg = `<p>Enter a new title for this album: ${ input }</p>`
 	else                     msg = `<p>Enter a title for all ${ albumIDs.length } selected albums: ${ input }</p>`
@@ -327,9 +323,6 @@ album.setDescription = function(albumID) {
 
 		basicModal.close()
 
-		// Remove html from input
-		description = lychee.removeHTML(description)
-
 		if (visible.album()) {
 			album.json.description = description
 			view.album.description()
@@ -349,7 +342,7 @@ album.setDescription = function(albumID) {
 	}
 
 	basicModal.show({
-		body: `<p>Please enter a description for this album: <input class='text' name='description' type='text' maxlength='800' placeholder='Description' value='${ oldDescription }'></p>`,
+		body: `<p>Please enter a description for this album: <input class='text' name='description' type='text' maxlength='800' placeholder='Description' value='${ lychee.escapeHTML(oldDescription) }'></p>`,
 		buttons: {
 			action: {
 				title: 'Set Description',

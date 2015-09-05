@@ -285,7 +285,6 @@ photo.setTitle = function(photoIDs) {
 		// Get old title if only one photo is selected
 		if (photo.json)      oldTitle = photo.json.title
 		else if (album.json) oldTitle = album.json.content[photoIDs].title
-		oldTitle = oldTitle.replace(/'/g, '&apos;')
 
 	}
 
@@ -294,9 +293,6 @@ photo.setTitle = function(photoIDs) {
 		basicModal.close()
 
 		let newTitle = data.title
-
-		// Remove html from input
-		newTitle = lychee.removeHTML(newTitle)
 
 		if (visible.photo()) {
 			photo.json.title = (newTitle==='' ? 'Untitled' : newTitle)
@@ -321,7 +317,7 @@ photo.setTitle = function(photoIDs) {
 
 	}
 
-	let input = `<input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='${ oldTitle }'>`
+	let input = `<input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='${ lychee.escapeHTML(oldTitle) }'>`
 
 	if (photoIDs.length===1) msg = `<p>Enter a new title for this photo: ${ input }</p>`
 	else                     msg = `<p>Enter a title for all ${ photoIDs.length } selected photos: ${ input }</p>`
@@ -465,16 +461,13 @@ photo.setPublic = function(photoID, e) {
 
 photo.setDescription = function(photoID) {
 
-	let oldDescription = photo.json.description.replace(/'/g, '&apos;')
+	let oldDescription = photo.json.description
 
 	const action = function(data) {
 
 		basicModal.close()
 
 		let description = data.description
-
-		// Remove html from input
-		description = lychee.removeHTML(description)
 
 		if (visible.photo()) {
 			photo.json.description = description
@@ -495,7 +488,7 @@ photo.setDescription = function(photoID) {
 	}
 
 	basicModal.show({
-		body: `<p>Enter a description for this photo: <input class='text' name='description' type='text' maxlength='800' placeholder='Description' value='${ oldDescription }'></p>`,
+		body: `<p>Enter a description for this photo: <input class='text' name='description' type='text' maxlength='800' placeholder='Description' value='${ lychee.escapeHTML(oldDescription) }'></p>`,
 		buttons: {
 			action: {
 				title: 'Set Description',
@@ -570,9 +563,6 @@ photo.setTags = function(photoIDs, tags) {
 	// Parse tags
 	tags = tags.replace(/(\ ,\ )|(\ ,)|(,\ )|(,{1,}\ {0,})|(,$|^,)/g, ',')
 	tags = tags.replace(/,$|^,|(\ ){0,}$/g, '')
-
-	// Remove html from input
-	tags = lychee.removeHTML(tags)
 
 	if (visible.photo()) {
 		photo.json.tags = tags
