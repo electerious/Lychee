@@ -55,8 +55,10 @@ password.getDialog = function(albumID, callback) {
 	const action = (data) => password.get(albumID, callback, data.password)
 
 	const cancel = () => {
+
 		basicModal.close()
 		if (visible.albums()===false) lychee.goto()
+
 	}
 
 	let msg = `

@@ -107,9 +107,10 @@ header.hide = function(e, delay = 500) {
 
 header.setTitle = function(title = 'Untitled') {
 
-	let $title = header.dom('#title')
+	let $title = header.dom('#title'),
+	    html   = lychee.html`$${ title }${ build.iconic('caret-bottom') }`
 
-	$title.html(title + build.iconic('caret-bottom'))
+	$title.html(html)
 
 	return true
 

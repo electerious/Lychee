@@ -40,9 +40,9 @@ gulp.task('view--js', function() {
 
 	var stream =
 		gulp.src(paths.view.js)
-			.pipe(plugins.babel())
-			.on('error', catchError)
 			.pipe(plugins.concat('_view--javascript.js', {newLine: "\n"}))
+			.pipe(plugins.babel({ compact: true }))
+			.on('error', catchError)
 			.pipe(gulp.dest('../dist/'));
 
 	return stream;
@@ -109,9 +109,9 @@ gulp.task('main--js', function() {
 
 	var stream =
 		gulp.src(paths.main.js)
-			.pipe(plugins.babel())
-			.on('error', catchError)
 			.pipe(plugins.concat('_main--javascript.js', {newLine: "\n"}))
+			.pipe(plugins.babel({ compact: true }))
+			.on('error', catchError)
 			.pipe(gulp.dest('../dist/'));
 
 	return stream;
