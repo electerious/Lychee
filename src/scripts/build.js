@@ -37,9 +37,9 @@ build.album = function(data) {
 
 	let html = `
 	           <div class='album' data-id='${ data.id }'>
-	               <img src='${ data.thumbs[2] }' width='200' height='200' alt='thumb' data-retina='false'>
-	               <img src='${ data.thumbs[1] }' width='200' height='200' alt='thumb' data-retina='false'>
-	               <img src='${ thumbPath }' width='200' height='200' alt='thumb' data-retina='${ thumbRetina }'>
+	               <img src='${ data.thumbs[2] }' width='200' height='200' alt='thumb' data-overlay='false'>
+	               <img src='${ data.thumbs[1] }' width='200' height='200' alt='thumb' data-overlay='false'>
+	               <img src='${ thumbPath }' width='200' height='200' alt='thumb' data-overlay='${ thumbRetina }'>
 	               <div class='overlay'>
 	                   <h1 title='${ data.title }'>${ data.title }</h1>
 	                   <a>${ data.sysdate }</a>
