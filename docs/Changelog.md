@@ -1,3 +1,12 @@
+## v3.0.6
+
+Released September 13, 2015
+
+- `Improved` Share photo now shares view.php link (#392)
+- `Fixed` Incorrect error messages for failed uploads (#393)
+- `Fixed` XSS issues and escaping problems
+- `Fixed` Broken "Download album" when album has an ampersand in the password (#356)
+
 ## v3.0.5
 
 Released August 9, 2015
