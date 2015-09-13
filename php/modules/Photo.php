@@ -88,6 +88,41 @@ class Photo extends Module {
 
 		foreach ($files as $file) {
 
+			# Check if file exceeds the upload_max_filesize directive
+			if ($file['error']===UPLOAD_ERR_INI_SIZE) {
+				Log::error($this->database, __METHOD__, __LINE__, 'The uploaded file exceeds the upload_max_filesize directive in php.ini');
+				if ($returnOnError===true) return false;
+				exit('Error: The uploaded file exceeds the upload_max_filesize directive in php.ini!');
+			}
+
+			# Check if file was only partially uploaded
+			if ($file['error']===UPLOAD_ERR_PARTIAL) {
+				Log::error($this->database, __METHOD__, __LINE__, 'The uploaded file was only partially uploaded');
+				if ($returnOnError===true) return false;
+				exit('Error: The uploaded file was only partially uploaded!');
+			}
+
+			# Check if writing file to disk failed
+			if ($file['error']===UPLOAD_ERR_CANT_WRITE) {
+				Log::error($this->database, __METHOD__, __LINE__, 'Failed to write photo to disk');
+				if ($returnOnError===true) return false;
+				exit('Error: Failed to write photo to disk!');
+			}
+
+			# Check if a extension stopped the file upload
+			if ($file['error']===UPLOAD_ERR_EXTENSION) {
+				Log::error($this->database, __METHOD__, __LINE__, 'A PHP extension stopped the file upload');
+				if ($returnOnError===true) return false;
+				exit('Error: A PHP extension stopped the file upload!');
+			}
+
+			# Check if the upload was successful
+			if ($file['error']!==UPLOAD_ERR_OK) {
+				Log::error($this->database, __METHOD__, __LINE__, 'Upload contains an error (' . $file['error'] . ')');
+				if ($returnOnError===true) return false;
+				exit('Error: Upload failed!');
+			}
+
 			# Verify extension
 			$extension = getExtension($file['name']);
 			if (!in_array(strtolower($extension), Photo::$validExtensions, true)) {
@@ -861,9 +896,6 @@ class Photo extends Module {
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
 
-		# Parse
-		if (strlen($title)>100) $title = substr($title, 0, 100);
-
 		# Set title
 		$query	= Database::prepare($this->database, "UPDATE ? SET title = '?' WHERE id IN (?)", array(LYCHEE_TABLE_PHOTOS, $title, $this->photoIDs));
 		$result	= $this->database->query($query);
@@ -893,10 +925,6 @@ class Photo extends Module {
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
-
-		# Parse
-		$description = htmlentities($description, ENT_COMPAT | ENT_HTML401, 'UTF-8');
-		if (strlen($description)>1000) $description = substr($description, 0, 1000);
 
 		# Set description
 		$query	= Database::prepare($this->database, "UPDATE ? SET description = '?' WHERE id IN ('?')", array(LYCHEE_TABLE_PHOTOS, $description, $this->photoIDs));
@@ -1087,10 +1115,6 @@ class Photo extends Module {
 		# Parse tags
 		$tags = preg_replace('/(\ ,\ )|(\ ,)|(,\ )|(,{1,}\ {0,})|(,$|^,)/', ',', $tags);
 		$tags = preg_replace('/,$|^,|(\ ){0,}$/', '', $tags);
-		if (strlen($tags)>1000) {
-			Log::notice($this->database, __METHOD__, __LINE__, 'Length of tags higher than 1000');
-			return false;
-		}
 
 		# Set tags
 		$query	= Database::prepare($this->database, "UPDATE ? SET tags = '?' WHERE id IN (?)", array(LYCHEE_TABLE_PHOTOS, $tags, $this->photoIDs));

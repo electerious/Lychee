@@ -101,7 +101,7 @@ contextMenu.albumTitle = function(albumID, e) {
 
 				if (!this.thumbs[0]) this.thumbs[0] = 'src/images/no_cover.svg'
 
-				let title = `<img class='cover' width='16' height='16' src='${ this.thumbs[0] }'><div class='title'>${ this.title }</div>`
+				let title = lychee.html`<img class='cover' width='16' height='16' src='$${ this.thumbs[0] }'><div class='title'>$${ this.title }</div>`
 
 				if (this.id!=albumID) items.push({ type: 'item', title, fn: () => lychee.goto(this.id) })
 
@@ -131,7 +131,7 @@ contextMenu.mergeAlbum = function(albumID, e) {
 
 				if (!this.thumbs[0]) this.thumbs[0] = 'src/images/no_cover.svg'
 
-				let title = `<img class='cover' width='16' height='16' src='${ this.thumbs[0] }'><div class='title'>${ this.title }</div>`
+				let title = lychee.html`<img class='cover' width='16' height='16' src='$${ this.thumbs[0] }'><div class='title'>$${ this.title }</div>`
 
 				if (this.id!=albumID) items.push({ type: 'item', title, fn: () => album.merge([albumID, this.id]) })
 
@@ -206,7 +206,7 @@ contextMenu.photoTitle = function(albumID, photoID, e) {
 		// Generate list of albums
 		$.each(data.content, function(index) {
 
-			let title = `<img class='cover' width='16' height='16' src='${ this.thumbUrl }'><div class='title'>${ this.title }</div>`
+			let title = lychee.html`<img class='cover' width='16' height='16' src='$${ this.thumbUrl }'><div class='title'>$${ this.title }</div>`
 
 			if (this.id!=photoID) items.push({ type: 'item', title, fn: () => lychee.goto(albumID + '/' + this.id) })
 
@@ -254,7 +254,7 @@ contextMenu.move = function(photoIDs, e) {
 
 				if (!this.thumbs[0]) this.thumbs[0] = 'src/images/no_cover.svg'
 
-				let title = `<img class='cover' width='16' height='16' src='${ this.thumbs[0] }'><div class='title'>${ this.title }</div>`
+				let title = lychee.html`<img class='cover' width='16' height='16' src='$${ this.thumbs[0] }'><div class='title'>$${ this.title }</div>`
 
 				if (this.id!=album.getID()) items.push({ type: 'item', title, fn: () => photo.setAlbum(photoIDs, this.id) })
 
@@ -280,8 +280,6 @@ contextMenu.sharePhoto = function(photoID, e) {
 
 	let link      = photo.getViewLink(photoID),
 		iconClass = 'ionicons'
-
-	if (photo.json.public==='2') link = location.href
 
 	let items = [
 		{ type: 'item', title: `<input readonly id="link" value="${ link }">`, fn: () => {}, class: 'noHover' },

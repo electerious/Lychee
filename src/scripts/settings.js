@@ -404,10 +404,10 @@ settings.setDropboxKey = function(callback) {
 
 	}
 
-	let msg = `
+	let msg = lychee.html`
 	          <p>
 	              In order to import photos from your Dropbox, you need a valid drop-ins app key from <a href='https://www.dropbox.com/developers/apps/create'>their website</a>. Generate yourself a personal key and enter it below:
-	              <input class='text' name='key' type='text' placeholder='Dropbox API Key' value='${ lychee.dropboxKey }'>
+	              <input class='text' name='key' type='text' placeholder='Dropbox API Key' value='$${ lychee.dropboxKey }'>
 	          </p>
 	          `
 

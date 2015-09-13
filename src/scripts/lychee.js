@@ -6,8 +6,8 @@
 lychee = {
 
 	title           : document.title,
-	version         : '3.0.5',
-	version_code    : '030005',
+	version         : '3.0.6',
+	version_code    : '030006',
 
 	update_path     : 'http://lychee.electerious.com/version/index.php',
 	updateURL       : 'https://github.com/electerious/Lychee',
@@ -119,12 +119,12 @@ lychee.login = function(data) {
 
 lychee.loginDialog = function() {
 
-	let msg = `
+	let msg = lychee.html`
 	          <p class='signIn'>
 	              <input class='text' name='username' autocomplete='username' type='text' value='' placeholder='username' autocapitalize='off' autocorrect='off'>
 	              <input class='text' name='password' autocomplete='current-password' type='password' value='' placeholder='password'>
 	          </p>
-	          <p class='version'>Lychee ${ lychee.version }<span> &#8211; <a target='_blank' href='${ lychee.updateURL }'>Update available!</a><span></p>
+	          <p class='version'>Lychee $${ lychee.version }<span> &#8211; <a target='_blank' href='$${ lychee.updateURL }'>Update available!</a><span></p>
 	          `
 
 	basicModal.show({
@@ -312,15 +312,6 @@ lychee.animate = function(obj, animation) {
 
 }
 
-lychee.escapeHTML = function(s) {
-
-	return s.replace(/&/g, '&amp;')
-	        .replace(/"/g, '&quot;')
-	        .replace(/</g, '&lt;')
-	        .replace(/>/g, '&gt;')
-
-}
-
 lychee.retinize = function(path = '') {
 
 	let pixelRatio = window.devicePixelRatio,
@@ -385,14 +376,54 @@ lychee.getEventName = function() {
 
 }
 
-lychee.removeHTML = function(html = '') {
+lychee.escapeHTML = function(html = '') {
 
-	if (html==='') return html
+	// Ensure that html is a string
+	html += ''
 
-	let tmp = document.createElement('DIV')
-	tmp.innerHTML = html
+	// Escape all critical characters
+	html = html.replace(/&/g, '&amp;')
+	           .replace(/</g, '&lt;')
+	           .replace(/>/g, '&gt;')
+	           .replace(/"/g, '&quot;')
+	           .replace(/'/g, '&#039;')
+	           .replace(/`/g, '&#96;')
 
-	return (tmp.textContent || tmp.innerText)
+	return html
+
+}
+
+lychee.html = function(literalSections, ...substs) {
+
+	// Use raw literal sections: we don’t want
+	// backslashes (\n etc.) to be interpreted
+	let raw    = literalSections.raw,
+	    result = ''
+
+	substs.forEach((subst, i) => {
+
+		// Retrieve the literal section preceding
+		// the current substitution
+		let lit = raw[i]
+
+		// If the substitution is preceded by a dollar sign,
+		// we escape special characters in it
+		if (lit.slice(-1)==='$') {
+			subst = lychee.escapeHTML(subst)
+			lit   = lit.slice(0, -1)
+		}
+
+		result += lit
+		result += subst
+
+	})
+
+	// Take care of last literal section
+	// (Never fails, because an empty template string
+	// produces one literal section, an empty string)
+	result += raw[raw.length-1]
+
+	return result
 
 }
 

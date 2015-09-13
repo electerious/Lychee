@@ -204,14 +204,14 @@ album.delete = function(albumIDs) {
 		if (album.json)       albumTitle = album.json.title
 		else if (albums.json) albumTitle = albums.getByID(albumIDs).title
 
-		msg = `<p>Are you sure you want to delete the album ${ albumTitle } and all of the photos it contains? This action can't be undone!</p>`
+		msg = lychee.html`<p>Are you sure you want to delete the album '$${ albumTitle }' and all of the photos it contains? This action can't be undone!</p>`
 
 	} else {
 
 		action.title = 'Delete Albums and Photos'
 		cancel.title = 'Keep Albums'
 
-		msg = `<p>Are you sure you want to delete all ${ albumIDs.length } selected albums and all of the photos they contain? This action can't be undone!</p>`
+		msg = lychee.html`<p>Are you sure you want to delete all $${ albumIDs.length } selected albums and all of the photos they contain? This action can't be undone!</p>`
 
 	}
 
@@ -247,7 +247,6 @@ album.setTitle = function(albumIDs) {
 		else if (albums.json) oldTitle = albums.getByID(albumIDs).title
 
 		if (!oldTitle) oldTitle = ''
-		oldTitle = oldTitle.replace(/'/g, '&apos;')
 
 	}
 
@@ -256,9 +255,6 @@ album.setTitle = function(albumIDs) {
 		let newTitle = data.title
 
 		basicModal.close()
-
-		// Remove html from input
-		newTitle = lychee.removeHTML(newTitle)
 
 		// Set title to Untitled when empty
 		newTitle = (newTitle==='') ? 'Untitled' : newTitle
@@ -296,10 +292,10 @@ album.setTitle = function(albumIDs) {
 
 	}
 
-	let input = `<input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='${ oldTitle }'>`
+	let input = lychee.html`<input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='$${ oldTitle }'>`
 
-	if (albumIDs.length===1) msg = `<p>Enter a new title for this album: ${ input }</p>`
-	else                     msg = `<p>Enter a title for all ${ albumIDs.length } selected albums: ${ input }</p>`
+	if (albumIDs.length===1) msg = lychee.html`<p>Enter a new title for this album: ${ input }</p>`
+	else                     msg = lychee.html`<p>Enter a title for all $${ albumIDs.length } selected albums: ${ input }</p>`
 
 	basicModal.show({
 		body: msg,
@@ -327,9 +323,6 @@ album.setDescription = function(albumID) {
 
 		basicModal.close()
 
-		// Remove html from input
-		description = lychee.removeHTML(description)
-
 		if (visible.album()) {
 			album.json.description = description
 			view.album.description()
@@ -349,7 +342,7 @@ album.setDescription = function(albumID) {
 	}
 
 	basicModal.show({
-		body: `<p>Please enter a description for this album: <input class='text' name='description' type='text' maxlength='800' placeholder='Description' value='${ oldDescription }'></p>`,
+		body: lychee.html`<p>Please enter a description for this album: <input class='text' name='description' type='text' maxlength='800' placeholder='Description' value='$${ oldDescription }'></p>`,
 		buttons: {
 			action: {
 				title: 'Set Description',
@@ -552,7 +545,7 @@ album.getArchive = function(albumID) {
 	if (location.href.indexOf('index.html')>0) link = location.href.replace(location.hash, '').replace('index.html', url)
 	else                                       link = location.href.replace(location.hash, '') + url
 
-	if (lychee.publicMode===true) link += `&password=${ password.value }`
+	if (lychee.publicMode===true) link += `&password=${ encodeURIComponent(password.value) }`
 
 	location.href = link
 
@@ -581,11 +574,11 @@ album.merge = function(albumIDs) {
 		if (!sTitle) sTitle = ''
 		sTitle = sTitle.replace(/'/g, '&apos;')
 
-		msg = `<p>Are you sure you want to merge the album '${ sTitle }' into the album '${ title }'?</p>`
+		msg = lychee.html`<p>Are you sure you want to merge the album '$${ sTitle }' into the album '$${ title }'?</p>`
 
 	} else {
 
-		msg = `<p>Are you sure you want to merge all selected albums into the album '${ title }'?</p>`
+		msg = lychee.html`<p>Are you sure you want to merge all selected albums into the album '$${ title }'?</p>`
 
 	}
 

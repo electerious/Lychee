@@ -483,9 +483,6 @@ class Album extends Module {
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
 
-		# Parse
-		if (strlen($title)>100) $title = substr($title, 0, 100);
-
 		# Execute query
 		$query	= Database::prepare($this->database, "UPDATE ? SET title = '?' WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $title, $this->albumIDs));
 		$result = $this->database->query($query);
@@ -508,10 +505,6 @@ class Album extends Module {
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
-
-		# Parse
-		$description = htmlentities($description, ENT_COMPAT | ENT_HTML401, 'UTF-8');
-		if (strlen($description)>1000) $description = substr($description, 0, 1000);
 
 		# Execute query
 		$query	= Database::prepare($this->database, "UPDATE ? SET description = '?' WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $description, $this->albumIDs));

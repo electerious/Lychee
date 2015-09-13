@@ -7,54 +7,66 @@ build = {}
 
 build.iconic = function(icon, classes = '') {
 
-	return `<svg class='iconic ${ classes }'><use xlink:href='#${ icon }' /></svg>`
+	let html = ''
+
+	html += lychee.html`<svg class='iconic $${ classes }'><use xlink:href='#$${ icon }' /></svg>`
+
+	return html
 
 }
 
 build.divider = function(title) {
 
-	return `<div class='divider'><h1>${ title }</h1></div>`
+	let html = ''
+
+	html += lychee.html`<div class='divider'><h1>$${ title }</h1></div>`
+
+	return html
 
 }
 
 build.editIcon = function(id) {
 
-	return `<div id='${ id }' class='edit'>${ build.iconic('pencil') }</div>`
+	let html = ''
+
+	html += lychee.html`<div id='$${ id }' class='edit'>${ build.iconic('pencil') }</div>`
+
+	return html
 
 }
 
 build.multiselect = function(top, left) {
 
-	return `<div id='multiselect' style='top: ${ top }px; left: ${ left }px;'></div>`
+	return lychee.html`<div id='multiselect' style='top: $${ top }px; left: $${ left }px;'></div>`
 
 }
 
 build.album = function(data) {
 
-	if (data==null) return ''
+	let html = ''
 
 	let { path: thumbPath, hasRetina: thumbRetina } = lychee.retinize(data.thumbs[0])
 
-	let html = `
-	           <div class='album' data-id='${ data.id }'>
-	               <img src='${ data.thumbs[2] }' width='200' height='200' alt='thumb' data-retina='false'>
-	               <img src='${ data.thumbs[1] }' width='200' height='200' alt='thumb' data-retina='false'>
-	               <img src='${ thumbPath }' width='200' height='200' alt='thumb' data-retina='${ thumbRetina }'>
-	               <div class='overlay'>
-	                   <h1 title='${ data.title }'>${ data.title }</h1>
-	                   <a>${ data.sysdate }</a>
-	               </div>
-	           `
+	html += lychee.html`
+	        <div class='album' data-id='$${ data.id }'>
+	            <img src='$${ data.thumbs[2] }' width='200' height='200' alt='thumb' data-overlay='false'>
+	            <img src='$${ data.thumbs[1] }' width='200' height='200' alt='thumb' data-overlay='false'>
+	            <img src='$${ thumbPath }' width='200' height='200' alt='thumb' data-overlay='$${ thumbRetina }'>
+	            <div class='overlay'>
+	                <h1 title='$${ data.title }'>$${ data.title }</h1>
+	                <a>$${ data.sysdate }</a>
+	            </div>
+	        `
 
 	if (lychee.publicMode===false) {
 
-		html += `
+		html += lychee.html`
 		        <div class='badges'>
-		            <a class='badge ${ (data.star==='1'     ? 'badge--visible' : '') } icn-star'>${ build.iconic('star') }</a>
-		            <a class='badge ${ (data.public==='1'   ? 'badge--visible' : '') } icn-share'>${ build.iconic('eye') }</a>
-		            <a class='badge ${ (data.unsorted==='1' ? 'badge--visible' : '') }'>${ build.iconic('list') }</a>
-		            <a class='badge ${ (data.recent==='1'   ? 'badge--visible' : '') }'>${ build.iconic('clock') }</a>
-		            <a class='badge ${ (data.password==='1' ? 'badge--visible' : '') }'>${ build.iconic('lock-locked') }</a>
+		            <a class='badge $${ (data.star==='1'     ? 'badge--visible' : '') } icn-star'>${ build.iconic('star') }</a>
+		            <a class='badge $${ (data.public==='1'   ? 'badge--visible' : '') } icn-share'>${ build.iconic('eye') }</a>
+		            <a class='badge $${ (data.unsorted==='1' ? 'badge--visible' : '') }'>${ build.iconic('list') }</a>
+		            <a class='badge $${ (data.recent==='1'   ? 'badge--visible' : '') }'>${ build.iconic('clock') }</a>
+		            <a class='badge $${ (data.password==='1' ? 'badge--visible' : '') }'>${ build.iconic('lock-locked') }</a>
 		        </div>
 		        `
 
@@ -68,34 +80,34 @@ build.album = function(data) {
 
 build.photo = function(data) {
 
-	if (data==null) return ''
+	let html = ''
 
 	let { path: thumbPath, hasRetina: thumbRetina } = lychee.retinize(data.thumbUrl)
 
-	let html = `
-	           <div class='photo' data-album-id='${ data.album }' data-id='${ data.id }'>
-	               <img src='${ thumbPath }' width='200' height='200' alt='thumb'>
-	               <div class='overlay'>
-	                   <h1 title='${ data.title }'>${ data.title }</h1>
-	           `
+	html += lychee.html`
+	        <div class='photo' data-album-id='$${ data.album }' data-id='$${ data.id }'>
+	            <img src='$${ thumbPath }' width='200' height='200' alt='thumb'>
+	            <div class='overlay'>
+	                <h1 title='$${ data.title }'>$${ data.title }</h1>
+	        `
 
-	if (data.cameraDate==='1') html += `<a><span title='Camera Date'>${ build.iconic('camera-slr') }</span>${ data.sysdate }</a>`
-	else                       html += `<a>${ data.sysdate }</a>`
+	if (data.cameraDate==='1') html += lychee.html`<a><span title='Camera Date'>${ build.iconic('camera-slr') }</span>$${ data.sysdate }</a>`
+	else                       html += lychee.html`<a>$${ data.sysdate }</a>`
 
-	html += '</div>'
+	html += `</div>`
 
 	if (lychee.publicMode===false) {
 
-		html += `
+		html += lychee.html`
 		        <div class='badges'>
-		            <a class='badge ${ (data.star==='1'                                ? 'badge--visible' : '') } icn-star'>${ build.iconic('star') }</a>
-		            <a class='badge ${ ((data.public==='1' && album.json.public!=='1') ? 'badge--visible' : '') } icn-share'>${ build.iconic('eye') }</a>
+		            <a class='badge $${ (data.star==='1'                                ? 'badge--visible' : '') } icn-star'>${ build.iconic('star') }</a>
+		            <a class='badge $${ ((data.public==='1' && album.json.public!=='1') ? 'badge--visible' : '') } icn-share'>${ build.iconic('eye') }</a>
 		        </div>
 		        `
 
 	}
 
-	html += '</div>'
+	html += `</div>`
 
 	return html
 
@@ -103,24 +115,22 @@ build.photo = function(data) {
 
 build.imageview = function(data, size, visibleControls) {
 
-	if (data==null) return ''
-
 	let html = ''
 
 	if (size==='big') {
 
-		if (visibleControls===true) html += `<div id='image' style='background-image: url(${ data.url })'></div>`
-		else                        html += `<div id='image' style='background-image: url(${ data.url });' class='full'></div>`
+		if (visibleControls===true) html += lychee.html`<div id='image' style='background-image: url($${ data.url })'></div>`
+		else                        html += lychee.html`<div id='image' style='background-image: url($${ data.url });' class='full'></div>`
 
 	} else if (size==='medium') {
 
-		if (visibleControls===true) html += `<div id='image' style='background-image: url(${ data.medium })'></div>`
-		else                        html += `<div id='image' style='background-image: url(${ data.medium });' class='full'></div>`
+		if (visibleControls===true) html += lychee.html`<div id='image' style='background-image: url($${ data.medium })'></div>`
+		else                        html += lychee.html`<div id='image' style='background-image: url($${ data.medium });' class='full'></div>`
 
 	} else if (size==='small') {
 
-		if (visibleControls===true) html += `<div id='image' class='small' style='background-image: url(${ data.url }); width: ${ data.width }px; height: ${ data.height }px; margin-top: -${ parseInt(data.height/2-20) }px; margin-left: -${ data.width/2 }px;'></div>`
-		else                        html += `<div id='image' class='small' style='background-image: url(${ data.url }); width: ${ data.width }px; height: ${ data.height }px; margin-top: -${ parseInt(data.height/2) }px; margin-left: -${ data.width/2 }px;'></div>`
+		if (visibleControls===true) html += lychee.html`<div id='image' class='small' style='background-image: url($${ data.url }); width: $${ data.width }px; height: $${ data.height }px; margin-top: -$${ parseInt(data.height/2-20) }px; margin-left: -$${ data.width/2 }px;'></div>`
+		else                        html += lychee.html`<div id='image' class='small' style='background-image: url($${ data.url }); width: $${ data.width }px; height: $${ data.height }px; margin-top: -$${ parseInt(data.height/2) }px; margin-left: -$${ data.width/2 }px;'></div>`
 
 	}
 
@@ -135,27 +145,29 @@ build.imageview = function(data, size, visibleControls) {
 
 build.no_content = function(typ) {
 
-	let html = `
-	           <div class='no_content fadeIn'>
-	               ${ build.iconic(typ) }
-	           `
+	let html = ''
+
+	html += `
+	        <div class='no_content fadeIn'>
+	            ${ build.iconic(typ) }
+	        `
 
 	switch (typ) {
 		case 'magnifying-glass':
-			html += '<p>No results</p>'
+			html += `<p>No results</p>`
 			break
 		case 'eye':
-			html += '<p>No public albums</p>'
+			html += `<p>No public albums</p>`
 			break
 		case 'cog':
-			html += '<p>No configuration</p>'
+			html += `<p>No configuration</p>`
 			break
 		case 'question-mark':
-			html += '<p>Photo not found</p>'
+			html += `<p>Photo not found</p>`
 			break
 	}
 
-	html += '</div>'
+	html += `</div>`
 
 	return html
 
@@ -163,10 +175,12 @@ build.no_content = function(typ) {
 
 build.uploadModal = function(title, files) {
 
-	let html = `
-	           <h1>${ title }</h1>
-	           <div class='rows'>
-	           `
+	let html = ''
+
+	html += lychee.html`
+	        <h1>$${ title }</h1>
+	        <div class='rows'>
+	        `
 
 	let i = 0
 
@@ -176,9 +190,9 @@ build.uploadModal = function(title, files) {
 
 		if (file.name.length>40) file.name = file.name.substr(0, 17) + '...' + file.name.substr(file.name.length-20, 20)
 
-		html += `
+		html += lychee.html`
 		        <div class='row'>
-		            <a class='name'>${ lychee.escapeHTML(file.name) }</a>
+		            <a class='name'>$${ file.name }</a>
 		        `
 
 		if (file.supported===true) html += `<a class='status'></a>`
@@ -193,7 +207,7 @@ build.uploadModal = function(title, files) {
 
 	}
 
-	html +=	'</div>'
+	html +=	`</div>`
 
 	return html
 
@@ -208,7 +222,7 @@ build.tags = function(tags) {
 		tags = tags.split(',')
 
 		tags.forEach(function(tag, index, array) {
-			html += `<a class='tag'>${ tag }<span data-index='${ index }'>${ build.iconic('x') }</span></a>`
+			html += lychee.html`<a class='tag'>$${ tag }<span data-index='$${ index }'>${ build.iconic('x') }</span></a>`
 		})
 
 	} else {

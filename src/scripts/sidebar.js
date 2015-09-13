@@ -93,13 +93,17 @@ sidebar.setSelectable = function(selectable = true) {
 
 }
 
-sidebar.changeAttr = function(attr, value = '-') {
+sidebar.changeAttr = function(attr, value = '-', dangerouslySetInnerHTML = false) {
 
 	if (attr==null || attr==='') return false
 
 	// Set a default for the value
 	if (value==null || value==='') value = '-'
 
+	// Escape value
+	if (dangerouslySetInnerHTML===false) value = lychee.escapeHTML(value)
+
+	// Set new value
 	sidebar.dom('.attr_' + attr).html(value)
 
 	return true
@@ -339,14 +343,14 @@ sidebar.render = function(structure) {
 			if (value==='' || value==null) value = '-'
 
 			// Wrap span-element around value for easier selecting on change
-			value = `<span class='attr_${ row.title.toLowerCase() }'>${ value }</span>`
+			value = lychee.html`<span class='attr_$${ row.title.toLowerCase() }'>$${ value }</span>`
 
 			// Add edit-icon to the value when editable
 			if (row.editable===true) value += ' ' + build.editIcon('edit_' + row.title.toLowerCase())
 
-			_html += `
+			_html += lychee.html`
 			         <tr>
-			             <td>${ row.title }</td>
+			             <td>$${ row.title }</td>
 			             <td>${ value }</td>
 			         </tr>
 			         `
@@ -363,20 +367,19 @@ sidebar.render = function(structure) {
 
 	let renderTags = function(section) {
 
-		let _html = ''
-
-		_html += `
-		         <div class='divider'>
-		             <h1>${ section.title }</h1>
-		         </div>
-		         <div id='tags'>
-		             <div class='attr_${ section.title.toLowerCase() }'>${ section.value }</div>
-		         `
+		let _html    = '',
+		    editable = ''
 
 		// Add edit-icon to the value when editable
-		if (section.editable===true) _html += build.editIcon('edit_tags')
+		if (section.editable===true) editable = build.editIcon('edit_tags')
 
-		_html += `
+		_html += lychee.html`
+		         <div class='divider'>
+		             <h1>$${ section.title }</h1>
+		         </div>
+		         <div id='tags'>
+		             <div class='attr_$${ section.title.toLowerCase() }'>${ section.value }</div>
+		             ${ editable }
 		         </div>
 		         `
 

@@ -72,6 +72,8 @@ view.albums = {
 
 			let title = albums.getByID(albumID).title
 
+			title = lychee.escapeHTML(title)
+
 			$('.album[data-id="' + albumID + '"] .overlay h1')
 				.html(title)
 				.attr('title', title)
@@ -164,6 +166,8 @@ view.album = {
 
 			let title = album.json.content[photoID].title
 
+			title = lychee.escapeHTML(title)
+
 			$('.photo[data-id="' + photoID + '"] .overlay h1')
 				.html(title)
 				.attr('title', title)
@@ -199,7 +203,6 @@ view.album = {
 				if (!visible.albums()) {
 					album.json.num--
 					view.album.num()
-					view.album.title()
 				}
 			})
 
@@ -396,7 +399,7 @@ view.photo = {
 
 	tags: function() {
 
-		sidebar.changeAttr('tags', build.tags(photo.json.tags))
+		sidebar.changeAttr('tags', build.tags(photo.json.tags), true)
 		sidebar.bind()
 
 	},
@@ -416,7 +419,7 @@ view.photo = {
 			let nextPhotoID = album.json.content[photo.getID()].nextPhoto,
 			    nextPhoto   = album.json.content[nextPhotoID]
 
-			$nextArrow.css('background-image', `linear-gradient(to bottom, rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)), url("${ nextPhoto.thumbUrl }")`)
+			$nextArrow.css('background-image', lychee.html`linear-gradient(to bottom, rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)), url("$${ nextPhoto.thumbUrl }")`)
 
 		}
 
@@ -426,7 +429,7 @@ view.photo = {
 			let previousPhotoID = album.json.content[photo.getID()].previousPhoto,
 			    previousPhoto   = album.json.content[previousPhotoID]
 
-			$previousArrow.css('background-image', `linear-gradient(to bottom, rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)), url("${ previousPhoto.thumbUrl }")`)
+			$previousArrow.css('background-image', lychee.html`linear-gradient(to bottom, rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)), url("$${ previousPhoto.thumbUrl }")`)
 
 		}
 
