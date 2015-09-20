@@ -56,7 +56,7 @@ photo.load = function(photoID, albumID) {
 
 		setTimeout(() => {
 			lychee.content.show()
-			photo.preloadNext(photoID);
+			photo.preloadNext(photoID)
 		}, 300)
 
 	})
@@ -90,9 +90,9 @@ photo.parse = function() {
 photo.previous = function(animate) {
 
 	if (photo.getID()!==false &&
-	   album.json &&
-	   album.json.content[photo.getID()] &&
-	   album.json.content[photo.getID()].previousPhoto!=='') {
+	    album.json &&
+	    album.json.content[photo.getID()] &&
+	    album.json.content[photo.getID()].previousPhoto!=='') {
 
 		let delay = 0
 
@@ -121,9 +121,9 @@ photo.previous = function(animate) {
 photo.next = function(animate) {
 
 	if (photo.getID()!==false &&
-	   album.json &&
-	   album.json.content[photo.getID()] &&
-	   album.json.content[photo.getID()].nextPhoto!=='') {
+	    album.json &&
+	    album.json.content[photo.getID()] &&
+	    album.json.content[photo.getID()].nextPhoto!=='') {
 
 		let delay = 0
 
