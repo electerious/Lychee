@@ -16,9 +16,11 @@
 		background: white(.02);
 	}
 
-	&--sidebar { width: calc(100% - 300px); }
+	&--sidebar {
+		width: calc(100% - 300px);
+	}
 
-	/* Animations ------------------------------------------------------------------- */
+	// Animations -------------------------------------------------------------- //
 	&.contentZoomIn .album,
 	&.contentZoomIn .photo {
 		animation-name: zoomIn;
@@ -37,7 +39,7 @@
 		animation-name: fadeOut;
 	}
 
-	/* Albums and Photos ------------------------------------------------*/
+	// Albums and Photos ------------------------------------------------------ //
 	.album,
 	.photo {
 		position: relative;
@@ -54,7 +56,7 @@
 			position: absolute;
 			width: 200px;
 			height: 200px;
-			background-color: #222;
+			background: #222;
 			box-shadow: 0 2px 5px black(.5);
 			border: 1px solid white(.5);
 			transition: opacity .3s ease-out, transform .3s ease-out, border-color .3s ease-out;
@@ -72,7 +74,7 @@
 		}
 	}
 
-	/* Album ------------------------------------------------*/
+	// Album -------------------------------------------------------------- //
 	.album  {
 		img:first-child,
 		img:nth-child(2) {
@@ -81,20 +83,25 @@
 		}
 
 		&:hover img:nth-child(1),
-		&:hover img:nth-child(2) { opacity: 1; }
+		&:hover img:nth-child(2) {
+			opacity: 1;
+		}
 
-		&:hover img:nth-child(1) { transform: rotate(-2deg) translateY(10px) translateX(-12px); }
+		&:hover img:nth-child(1) {
+			transform: rotate(-2deg) translateY(10px) translateX(-12px);
+		}
 
-		&:hover img:nth-child(2) { transform: rotate(5deg) translateY(-8px) translateX(12px); }
+		&:hover img:nth-child(2) {
+			transform: rotate(5deg) translateY(-8px) translateX(12px);
+		}
 	}
 
-	/* Album/Photo Overlay ------------------------------------------------*/
+	// Overlay -------------------------------------------------------------- //
 	.album .overlay,
 	.photo .overlay {
 		position: absolute;
 		margin: 0 1px;
 		width: 200px;
-		background: black(.6);
 		background: linear-gradient(to bottom, black(0), black(.6));
 		bottom: 1px;
 	}
@@ -143,9 +150,11 @@
 	}
 
 	.album img[data-overlay='false'] + .overlay h1,
-	.album img[data-overlay='false'] + .overlay a  { text-shadow: none; }
+	.album img[data-overlay='false'] + .overlay a {
+		text-shadow: none;
+	}
 
-	/* Badges ------------------------------------------------*/
+	// Badge -------------------------------------------------------------- //
 	.album .badges,
 	.photo .badges {
 		position: relative;
@@ -168,7 +177,9 @@
 		text-shadow: 0 1px 0 black(.4);
 		opacity: .9;
 
-		&--visible { display: inline-block; }
+		&--visible {
+			display: inline-block;
+		}
 
 		.iconic {
 			fill: #fff;
@@ -178,7 +189,7 @@
 		}
 	}
 
-	/* Divider ------------------------------------------------*/
+	// Divider -------------------------------------------------------------- //
 	.divider {
 		margin: 50px 0 0;
 		padding: 10px 0 0;
@@ -207,7 +218,7 @@
 
 }
 
-/* No Content ------------------------------------------------*/
+// No content -------------------------------------------------------------- //
 .no_content {
 	position: absolute;
 	top: 50%;

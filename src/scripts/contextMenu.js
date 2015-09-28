@@ -282,7 +282,7 @@ contextMenu.sharePhoto = function(photoID, e) {
 		iconClass = 'ionicons'
 
 	let items = [
-		{ title: `<input readonly id="link" value="${ link }">`, fn: () => {}, class: 'noHover' },
+		{ title: `<input readonly id="link" value="${ link }">`, fn: () => {}, class: 'basicContext__item--noHover' },
 		{ },
 		{ title: build.iconic('twitter', iconClass) + 'Twitter', fn: () => photo.share(photoID, 'twitter') },
 		{ title: build.iconic('facebook', iconClass) + 'Facebook', fn: () => photo.share(photoID, 'facebook') },
@@ -303,7 +303,7 @@ contextMenu.shareAlbum = function(albumID, e) {
 	let iconClass = 'ionicons'
 
 	let items = [
-		{ title: `<input readonly id="link" value="${ location.href }">`, fn: () => {}, class: 'noHover' },
+		{ title: `<input readonly id="link" value="${ location.href }">`, fn: () => {}, class: 'basicContext__item--noHover' },
 		{ },
 		{ title: build.iconic('twitter', iconClass) + 'Twitter', fn: () => album.share('twitter') },
 		{ title: build.iconic('facebook', iconClass) + 'Facebook', fn: () => album.share('facebook') },
