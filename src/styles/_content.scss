@@ -1,8 +1,4 @@
-/**
- * @copyright   2015 by Tobias Reich
- */
-
-#content {
+.content {
 
 	display: flex;
 	flex-wrap: wrap;
@@ -17,40 +13,28 @@
 		left: 0;
 		width: 100%;
 		height: 1px;
-		border-top: 1px solid white(.02);
+		background: white(.02);
 	}
 
-	&.sidebar { width: calc(100% - 300px); }
+	&--sidebar { width: calc(100% - 300px); }
 
 	/* Animations ------------------------------------------------------------------- */
 	&.contentZoomIn .album,
 	&.contentZoomIn .photo {
 		animation-name: zoomIn;
-		animation-duration: .2s;
-		animation-fill-mode: forwards;
-		animation-timing-function: $timing;
 	}
 
 	&.contentZoomIn .divider {
 		animation-name: fadeIn;
-		animation-duration: .2s;
-		animation-fill-mode: forwards;
-		animation-timing-function: $timing;
 	}
 
 	&.contentZoomOut .album,
 	&.contentZoomOut .photo {
 		animation-name: zoomOut;
-		animation-duration: .2s;
-		animation-fill-mode: forwards;
-		animation-timing-function: $timing;
 	}
 
 	&.contentZoomOut .divider {
 		animation-name: fadeOut;
-		animation-duration: .2s;
-		animation-fill-mode: forwards;
-		animation-timing-function: $timing;
 	}
 
 	/* Albums and Photos ------------------------------------------------*/
@@ -61,6 +45,10 @@
 		height: 202px;
 		margin: 30px 0 0 30px;
 		cursor: default;
+
+		animation-duration: .2s;
+		animation-fill-mode: forwards;
+		animation-timing-function: $timing;
 
 		img {
 			position: absolute;
@@ -198,6 +186,10 @@
 		opacity: 0;
 		border-top: 1px solid white(.02);
 		box-shadow: $shadow;
+
+		animation-duration: .2s;
+		animation-fill-mode: forwards;
+		animation-timing-function: $timing;
 
 		&:first-child {
 			margin-top: 10px;

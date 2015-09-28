@@ -15,7 +15,7 @@ search.find = function(term) {
 
 	$(window).data('timeout', setTimeout(function() {
 
-		if ($('#search').val().length!==0) {
+		if (header.dom('.header__search').val().length!==0) {
 
 			api.post('search', { term }, function(data) {
 
@@ -54,7 +54,7 @@ search.find = function(term) {
 
 					$('.no_content').remove()
 
-					lychee.animate('#content', 'contentZoomOut')
+					lychee.animate('.content', 'contentZoomOut')
 
 					search.hash = data.hash
 
@@ -65,7 +65,7 @@ search.find = function(term) {
 							$('body').append(build.no_content('magnifying-glass'))
 						} else {
 							lychee.content.html(html)
-							lychee.animate('#content', 'contentZoomIn')
+							lychee.animate(lychee.content, 'contentZoomIn')
 						}
 
 					}, 300)
@@ -82,7 +82,7 @@ search.find = function(term) {
 
 search.reset = function() {
 
-	$('#search').val('')
+	header.dom('.header__search').val('')
 	$('.no_content').remove()
 
 	if (search.hash!=null) {

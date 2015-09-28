@@ -13,7 +13,7 @@ albums.load = function() {
 
 	let startTime = new Date().getTime()
 
-	lychee.animate('#content', 'contentZoomOut')
+	lychee.animate('.content', 'contentZoomOut')
 
 	if (albums.json===null) {
 
@@ -38,7 +38,7 @@ albums.load = function() {
 			setTimeout(() => {
 				header.setMode('albums')
 				view.albums.init()
-				lychee.animate('#content', 'contentZoomIn')
+				lychee.animate(lychee.content, 'contentZoomIn')
 			}, waitTime)
 
 		})
@@ -48,7 +48,7 @@ albums.load = function() {
 		setTimeout(() => {
 			header.setMode('albums')
 			view.albums.init()
-			lychee.animate('#content', 'contentZoomIn')
+			lychee.animate(lychee.content, 'contentZoomIn')
 		}, 300)
 
 	}

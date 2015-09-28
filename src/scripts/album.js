@@ -30,11 +30,11 @@ album.getID = function() {
 
 }
 
-album.load = function(albumID, refresh) {
+album.load = function(albumID, refresh = false) {
 
 	password.get(albumID, function() {
 
-		if (!refresh) lychee.animate('#content', 'contentZoomOut')
+		if (refresh===false) lychee.animate('.content', 'contentZoomOut')
 
 		let startTime = new Date().getTime()
 
@@ -81,8 +81,8 @@ album.load = function(albumID, refresh) {
 
 				view.album.init()
 
-				if (!refresh) {
-					lychee.animate('#content', 'contentZoomIn')
+				if (refresh===false) {
+					lychee.animate(lychee.content, 'contentZoomIn')
 					header.setMode('album')
 				}
 

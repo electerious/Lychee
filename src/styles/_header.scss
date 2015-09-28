@@ -1,8 +1,4 @@
-/**
- * @copyright   2015 by Tobias Reich
- */
-
-header {
+.header {
 
 	position: fixed;
 	height: 49px;
@@ -12,31 +8,41 @@ header {
 	z-index: 1;
 	transition: transform .3s ease-out;
 
-	/* Modes ------------------------------------------------*/
-	&.hidden { transform: translateY(-60px); }
+	// Modes -------------------------------------------------------------- //
+	&--hidden { transform: translateY(-60px); }
 
-	&.loading { transform: translateY(2px); }
+	&--loading { transform: translateY(2px); }
 
-	&.error { transform: translateY(40px); }
+	&--error { transform: translateY(40px); }
 
-	&.view {
+	&--view {
 		background: none;
 		border-bottom: none;
 
-		&.error { background-color: rgba(10, 10, 10, .99); }
+		.header__error { background-color: rgba(10, 10, 10, .99); }
 	}
 
-	/* Title ------------------------------------------------*/
-	#title {
-		position: absolute;
-		margin: 0 30%;
-		width: 40%;
-		padding: 15px 0;
+	// Toolbars -------------------------------------------------------------- //
+	&__toolbar {
+		display: none;
+		align-items: center;
+		position: relative;
+		box-sizing: border-box;
+		width: 100%;
+		height: 100%;
+		padding: 0 10px;
+
+		&--visible { display: flex; }
+	}
+
+	// Title -------------------------------------------------------------- //
+	&__title {
+		width: 100%;
+		padding: 16px 0;
 		color: #fff;
 		font-size: 16px;
 		font-weight: bold;
 		text-align: center;
-		z-index: 1;
 		cursor: default;
 		overflow: hidden;
 		white-space: nowrap;
@@ -51,36 +57,23 @@ header {
 			transition: fill .2s ease-out;
 		}
 
-		&:hover .iconic { fill: white(1); }
+		&:hover .iconic {
+			fill: white(1);
+		}
 
 		&:active .iconic {
 			transition: none;
 			fill: white(.8);
 		}
 
-		&.editable .iconic { display: inline-block; }
+		&--editable .iconic { display: inline-block; }
 	}
 
-	/* Toolbars ------------------------------------------------*/
-	.toolbar {
-		display: none;
-		position: absolute;
-		box-sizing: border-box;
-		width: 100%;
-		height: 100%;
-		padding: 0 10px;
-	}
-
-	/* Button ------------------------------------------------*/
+	// Buttons -------------------------------------------------------------- //
 	.button {
-		display: inline-block;
-		padding: 17px 8px;
-		width: 15px;
+		flex-shrink: 0;
+		padding: 16px 8px;
 		height: 15px;
-
-		&--left { float: left; }
-
-		&--right { float: right; }
 
 		.iconic {
 			width: 15px;
@@ -89,7 +82,9 @@ header {
 			transition: fill .2s ease-out;
 		}
 
-		&:hover .iconic { fill: white(1); }
+		&:hover .iconic {
+			fill: white(1);
+		}
 
 		&:active .iconic {
 			transition: none;
@@ -101,24 +96,19 @@ header {
 		&--eye.active .iconic { fill: #ff9737; }
 
 		&--info.active .iconic { fill: $colorBlue; }
-
-		&#button_signin { display: none; }
-
 	}
 
-	/* Button Divider ------------------------------------------------*/
-	.button_divider {
-		float: right;
-		position: relative;
+	// Divider -------------------------------------------------------------- //
+	&__divider {
+		flex-shrink: 0;
 		width: 14px;
-		height: 50px;
 	}
 
-	/* Search ------------------------------------------------*/
-	#search {
-		float: right;
+	// Search -------------------------------------------------------------- //
+	&__search {
+		flex-shrink: 0;
 		width: 80px;
-		margin: 12px 12px 0 0;
+		margin: 0;
 		padding: 5px 12px 6px 12px;
 		background-color: #1d1d1d;
 		color: #fff;
@@ -141,10 +131,10 @@ header {
 		&::-ms-clear { display: none; }
 	}
 
-	#clearSearch {
+	&__clear {
 		position: absolute;
 		top: 13px;
-		right: 78px;
+		right: 60px;
 		padding: 0;
 		color: white(.5);
 		font-size: 20px;
@@ -155,15 +145,15 @@ header {
 		&:hover { color: white(1); }
 	}
 
-	/* Hosted with Lychee ------------------------------------------------*/
-	#hostedwith {
-		float: right;
+	// Hosted with -------------------------------------------------------------- //
+	&__hostedwith {
+		flex-shrink: 0;
 		padding: 5px 10px;
-		margin: 13px 9px;
+		margin: 11px 0;
 		color: #888;
 		font-size: 13px;
 		border-radius: 100px;
-		display: none;
+		cursor: default;
 
 		&:hover { background-color: black(.3); }
 	}

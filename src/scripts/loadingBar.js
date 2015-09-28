@@ -29,7 +29,7 @@ loadingBar.show = function(status, errorText) {
 		if (!errorText) errorText = 'Whoops, it looks like something went wrong. Please reload the site and try again!'
 
 		// Move header down
-		if (visible.header()) header.dom().addClass('error')
+		if (visible.header()) header.dom().addClass('header__error')
 
 		// Modify loading
 		loadingBar.dom()
@@ -56,7 +56,7 @@ loadingBar.show = function(status, errorText) {
 		loadingBar._timeout = setTimeout(() => {
 
 			// Move header down
-			if (visible.header()) header.dom().addClass('loading')
+			if (visible.header()) header.dom().addClass('header__loading')
 
 			// Modify loading
 			loadingBar.dom()
@@ -81,7 +81,7 @@ loadingBar.hide = function(force) {
 		loadingBar.status = null
 
 		// Move header up
-		header.dom().removeClass('error loading')
+		header.dom().removeClass('header__error header__loading')
 
 		// Set timeout
 		clearTimeout(loadingBar._timeout)

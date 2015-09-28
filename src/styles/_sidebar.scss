@@ -1,8 +1,4 @@
-/**
- * @copyright   2015 by Tobias Reich
- */
-
-#sidebar {
+.sidebar {
 
 	position: fixed;
 	top: 50px;
@@ -23,7 +19,7 @@
 	}
 
 	/* Header ------------------------------------------------*/
-	.header {
+	&__header {
 		float: left;
 		height: 49px;
 		width: 100%;
@@ -31,7 +27,7 @@
 		border-top: 1px solid $colorBlue;
 	}
 
-	.header h1 {
+	&__header h1 {
 		position: absolute;
 		margin: 15px 50px 15px 0;
 		width: calc(100% - 50px);
@@ -42,7 +38,7 @@
 	}
 
 	/* Wrapper ------------------------------------------------*/
-	.wrapper {
+	&__wrapper {
 		float: left;
 		height: calc(100% - 49px);
 		width: 300px;
@@ -51,7 +47,7 @@
 	}
 
 	/* Divider ------------------------------------------------*/
-	.divider {
+	&__divider {
 		float: left;
 		padding: 12px 0 8px;
 		width: 100%;

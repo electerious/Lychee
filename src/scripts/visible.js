@@ -6,12 +6,13 @@
 visible = {}
 
 visible.albums = function() {
-	if (header.dom('#tools_albums').css('display')==='block') return true
+	if (header.dom('.header__toolbar--public').hasClass('header__toolbar--visible')) return true
+	if (header.dom('.header__toolbar--albums').hasClass('header__toolbar--visible')) return true
 	return false
 }
 
 visible.album = function() {
-	if (header.dom('#tools_album').css('display')==='block') return true
+	if (header.dom('.header__toolbar--album').hasClass('header__toolbar--visible')) return true
 	return false
 }
 
@@ -37,7 +38,7 @@ visible.sidebarbutton = function() {
 }
 
 visible.header = function() {
-	if (header.dom().hasClass('hidden')===true) return false
+	if (header.dom().hasClass('header--hidden')===true) return false
 	return true
 }
 

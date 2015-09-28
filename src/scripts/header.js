@@ -5,7 +5,7 @@
 
 header = {
 
-	_dom: $('header')
+	_dom: $('.header')
 
 }
 
@@ -21,20 +21,25 @@ header.bind = function() {
 	// Event Name
 	let eventName = lychee.getEventName()
 
-	/* Buttons */
-	header.dom('#title').on(eventName, function(e) {
-		if (!$(this).hasClass('editable')) return false
-		if (visible.photo())               contextMenu.photoTitle(album.getID(), photo.getID(), e)
-		else                               contextMenu.albumTitle(album.getID(), e)
+	header.dom('.header__title').on(eventName, function(e) {
+
+		if ($(this).hasClass('header__title--editable')===false) return false
+
+		if (visible.photo()) contextMenu.photoTitle(album.getID(), photo.getID(), e)
+		else                 contextMenu.albumTitle(album.getID(), e)
+
 	})
+
 	header.dom('#button_share').on(eventName, function(e) {
 		if (photo.json.public==='1' || photo.json.public==='2') contextMenu.sharePhoto(photo.getID(), e)
 		else                                                    photo.setPublic(photo.getID(), e)
 	})
+
 	header.dom('#button_share_album').on(eventName, function(e) {
 		if (album.json.public==='1') contextMenu.shareAlbum(album.getID(), e)
 		else                         album.setPublic(album.getID(), true, e)
 	})
+
 	header.dom('#button_signin')      .on(eventName, lychee.loginDialog)
 	header.dom('#button_settings')    .on(eventName, contextMenu.settings)
 	header.dom('#button_info_album')  .on(eventName, sidebar.toggle)
@@ -42,7 +47,7 @@ header.bind = function() {
 	header.dom('.button_add')         .on(eventName, contextMenu.add)
 	header.dom('#button_more')        .on(eventName, function(e) { contextMenu.photoMore(photo.getID(), e) })
 	header.dom('#button_move')        .on(eventName, function(e) { contextMenu.move([photo.getID()], e) })
-	header.dom('#hostedwith')         .on(eventName, function() { window.open(lychee.website) })
+	header.dom('.header__hostedwith') .on(eventName, function() { window.open(lychee.website) })
 	header.dom('#button_trash_album') .on(eventName, function() { album.delete([album.getID()]) })
 	header.dom('#button_trash')       .on(eventName, function() { photo.delete([photo.getID()]) })
 	header.dom('#button_archive')     .on(eventName, function() { album.getArchive(album.getID()) })
@@ -50,10 +55,9 @@ header.bind = function() {
 	header.dom('#button_back_home')   .on(eventName, function() { lychee.goto('') })
 	header.dom('#button_back')        .on(eventName, function() { lychee.goto(album.getID()) })
 
-	/* Search */
-	header.dom('#search').on('keyup click', function() { search.find($(this).val()) })
-	header.dom('#clearSearch').on(eventName, function () {
-		header.dom('#search').focus()
+	header.dom('.header__search').on('keyup click', function() { search.find($(this).val()) })
+	header.dom('.header__clear').on(eventName, function () {
+		header.dom('.header__search').focus()
 		search.reset()
 	})
 
@@ -68,7 +72,7 @@ header.show = function() {
 	clearTimeout($(window).data('timeout'))
 
 	lychee.imageview.removeClass('full')
-	header.dom().removeClass('hidden')
+	header.dom().removeClass('header--hidden')
 
 	// Adjust position or size of photo
 	if ($('#imageview #image.small').length>0) $('#imageview #image').css('margin-top', newMargin)
@@ -89,7 +93,7 @@ header.hide = function(e, delay = 500) {
 			let newMargin = (-1 * ($('#imageview #image').height()/2))
 
 			lychee.imageview.addClass('full')
-			header.dom().addClass('hidden')
+			header.dom().addClass('header--hidden')
 
 			// Adjust position or size of photo
 			if ($('#imageview #image.small').length>0) $('#imageview #image').css('margin-top', newMargin)
@@ -107,7 +111,7 @@ header.hide = function(e, delay = 500) {
 
 header.setTitle = function(title = 'Untitled') {
 
-	let $title = header.dom('#title'),
+	let $title = header.dom('.header__title'),
 	    html   = lychee.html`$${ title }${ build.iconic('caret-bottom') }`
 
 	$title.html(html)
@@ -118,27 +122,39 @@ header.setTitle = function(title = 'Untitled') {
 
 header.setMode = function(mode) {
 
-	let albumID = album.getID()
+	if (mode==='albums' && lychee.publicMode===true) mode = 'public'
 
 	switch (mode) {
 
+		case 'public':
+
+			header.dom().removeClass('header--view')
+			header.dom('.header__toolbar--albums, .header__toolbar--album, .header__toolbar--photo').removeClass('header__toolbar--visible')
+			header.dom('.header__toolbar--public').addClass('header__toolbar--visible')
+
+			return true
+			break
+
 		case 'albums':
 
-			header.dom().removeClass('view')
-			$('#tools_album, #tools_photo').hide()
-			$('#tools_albums').show()
+			header.dom().removeClass('header--view')
+			header.dom('.header__toolbar--public, .header__toolbar--album, .header__toolbar--photo').removeClass('header__toolbar--visible')
+			header.dom('.header__toolbar--albums').addClass('header__toolbar--visible')
 
 			return true
 			break
 
 		case 'album':
 
-			header.dom().removeClass('view')
-			$('#tools_albums, #tools_photo').hide()
-			$('#tools_album').show()
+			let albumID = album.getID()
+
+			header.dom().removeClass('header--view')
+			header.dom('.header__toolbar--public, .header__toolbar--albums, .header__toolbar--photo').removeClass('header__toolbar--visible')
+			header.dom('.header__toolbar--album').addClass('header__toolbar--visible')
 
 			// Hide download button when album empty
-			album.json.content === false ? $('#button_archive').hide() : $('#button_archive').show()
+			if (album.json.content===false) $('#button_archive').hide()
+			else                            $('#button_archive').show()
 
 			// Hide download button when not logged in and album not downloadable
 			if (lychee.publicMode===true && album.json.downloadable==='0') $('#button_archive').hide()
@@ -157,9 +173,9 @@ header.setMode = function(mode) {
 
 		case 'photo':
 
-			header.dom().addClass('view')
-			$('#tools_albums, #tools_album').hide()
-			$('#tools_photo').show()
+			header.dom().addClass('header--view')
+			header.dom('.header__toolbar--public, .header__toolbar--albums, .header__toolbar--album').removeClass('header__toolbar--visible')
+			header.dom('.header__toolbar--photo').addClass('header__toolbar--visible')
 
 			return true
 			break
@@ -172,13 +188,13 @@ header.setMode = function(mode) {
 
 header.setEditable = function(editable) {
 
-	let $title = header.dom('#title')
+	let $title = header.dom('.header__title')
 
 	// Hide editable icon when not logged in
 	if (lychee.publicMode===true) editable = false
 
-	if (editable) $title.addClass('editable')
-	else          $title.removeClass('editable')
+	if (editable) $title.addClass('header__title--editable')
+	else          $title.removeClass('header__title--editable')
 
 	return true
 

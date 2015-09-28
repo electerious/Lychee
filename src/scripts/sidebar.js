@@ -5,7 +5,7 @@
 
 sidebar = {
 
-	_dom: $('#sidebar'),
+	_dom: $('.sidebar'),
 	types: {
 		DEFAULT : 0,
 		TAGS    : 1
@@ -71,7 +71,7 @@ sidebar.toggle = function() {
 	if (visible.sidebar() || visible.sidebarbutton()) {
 
 		header.dom('.button--info').toggleClass('active')
-		lychee.content.toggleClass('sidebar')
+		lychee.content.toggleClass('content--sidebar')
 		sidebar.dom().toggleClass('active')
 
 		return true
@@ -329,7 +329,7 @@ sidebar.render = function(structure) {
 		let _html = ''
 
 		_html += `
-		         <div class='divider'>
+		         <div class='sidebar__divider'>
 		             <h1>${ section.title }</h1>
 		         </div>
 		         <table>
@@ -374,7 +374,7 @@ sidebar.render = function(structure) {
 		if (section.editable===true) editable = build.editIcon('edit_tags')
 
 		_html += lychee.html`
-		         <div class='divider'>
+		         <div class='sidebar__divider'>
 		             <h1>$${ section.title }</h1>
 		         </div>
 		         <div id='tags'>

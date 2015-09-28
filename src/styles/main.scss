@@ -2,7 +2,28 @@
  * @copyright   2015 by Tobias Reich
  */
 
-@import 'etc';
+// Functions --------------------------------------------------------------- //
+@function black($opacity) {
+	@return rgba(0, 0, 0, $opacity);
+}
+
+@function white($opacity) {
+	@return rgba(255, 255, 255, $opacity);
+}
+
+// Properties -------------------------------------------------------------- //
+$shadowLight : 0 -1px 0 black(.1);
+$shadow      : 0 -1px 0 black(.2);
+
+// Colors ------------------------------------------------------------------ //
+$colorBlue : #2293EC;
+$colorRed  : #d92c34;
+
+// Animations -------------------------------------------------------------- //
+$timing       : cubic-bezier(.51, .92, .24, 1);
+$timingBounce : cubic-bezier(.51, .92, .24, 1.15);
+
+// Rest -------------------------------------------------------------------- //
 @import 'reset';
 
 * {
@@ -46,6 +67,7 @@ input {
 
 #upload { display: none; }
 
+// Files ------------------------------------------------------------------- //
 @import 'animations';
 @import 'content';
 @import 'basicContext.custom';
