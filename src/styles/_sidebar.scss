@@ -2,7 +2,7 @@
 
 	position: fixed;
 	top: 50px;
-	right: -370px;
+	right: -360px;
 	width: 350px;
 	height: calc(100% - 50px);
 	background-color: rgba(25, 25, 25, .98);
@@ -10,7 +10,7 @@
 	transform: translateX(0);
 	transition: transform .3s $timing;
 
-	&.active { transform: translateX(-320px); }
+	&.active { transform: translateX(-360px); }
 
 	&.notSelectable table tr td:last-child {
 		-webkit-user-select: none !important;
@@ -29,8 +29,8 @@
 
 	&__header h1 {
 		position: absolute;
-		margin: 15px 50px 15px 0;
-		width: calc(100% - 50px);
+		margin: 15px 0 15px 0;
+		width: 100%;
 		color: #fff;
 		font-size: 16px;
 		font-weight: bold;
@@ -41,7 +41,7 @@
 	&__wrapper {
 		float: left;
 		height: calc(100% - 49px);
-		width: 300px;
+		width: 350px;
 		overflow: auto;
 		-webkit-overflow-scrolling: touch;
 	}
