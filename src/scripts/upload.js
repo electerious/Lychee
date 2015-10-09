@@ -240,9 +240,10 @@ upload.start = {
 			else                    files[i].next = null
 
 			// Check if file is supported
-			if (files[i].type!=='image/jpeg' && files[i].type!=='image/jpg' && files[i].type!=='image/png' && files[i].type!=='image/gif') {
-
-				files[i].ready     = true
+            var types = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'application/pdf', 'application/ai', 'application/postscript', 'video/mp4'];
+			//if (files[i].type!=='image/jpeg' && files[i].type!=='image/jpg' && files[i].type!=='image/png' && files[i].type!=='image/gif' && files[i].type!==) {
+            if(jQuery.inArray(files[i].type, types)<0 && files[i].name.substr(-3)!='psd'){
+                files[i].ready     = true
 				files[i].supported = false
 
 			}

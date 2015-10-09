@@ -114,23 +114,37 @@ build.photo = function(data) {
 }
 
 build.imageview = function(data, size, visibleControls) {
-
 	let html = ''
-
+    let is_video = data.type == 'video/mp4' || data.type == 'video/avi';
 	if (size==='big') {
-
-		if (visibleControls===true) html += lychee.html`<div id='image' style='background-image: url($${ data.url })'></div>`
-		else                        html += lychee.html`<div id='image' style='background-image: url($${ data.url });' class='full'></div>`
+        if(is_video){
+            if (visibleControls === true) html += lychee.html`<div id='image' style=''><div style='margin-left:15%; margin-right:15%;'><video controls><source src='$${ data.url }' type='$${ data.type }'></video></div></div>`
+            else                        html += lychee.html`<div id='image' style='' class='full'><video  controls><source src='$${ data.url }' type='$${ data.type }'></video></div>`
+        }
+        else {
+            if (visibleControls === true) html += lychee.html`<div id='image' style='background-image: url($${ data.url })'></div>`
+            else                        html += lychee.html`<div id='image' style='background-image: url($${ data.url });' class='full'></div>`
+        }
 
 	} else if (size==='medium') {
-
-		if (visibleControls===true) html += lychee.html`<div id='image' style='background-image: url($${ data.medium })'></div>`
-		else                        html += lychee.html`<div id='image' style='background-image: url($${ data.medium });' class='full'></div>`
+        if(is_video)
+        {
+            if (visibleControls === true) html += lychee.html`<div id='image' style=''><div style='margin-left:15%; margin-right:15%;'><video controls><source src='$${ data.url }' type='$${ data.type }'></video></div></div>`
+            else                        html += lychee.html`<div id='image' style='' class='full'><video controls><source src='$${ data.url }' type='$${ data.type }'></video></div>`
+        }
+        else {
+            if (visibleControls === true) html += lychee.html`<div id='image' style='background-image: url($${ data.medium })'></div>`
+            else                        html += lychee.html`<div id='image' style='background-image: url($${ data.medium });' class='full'></div>`
+        }
 
 	} else if (size==='small') {
-
-		if (visibleControls===true) html += lychee.html`<div id='image' class='small' style='background-image: url($${ data.url }); width: $${ data.width }px; height: $${ data.height }px; margin-top: -$${ parseInt(data.height/2-20) }px; margin-left: -$${ data.width/2 }px;'></div>`
-		else                        html += lychee.html`<div id='image' class='small' style='background-image: url($${ data.url }); width: $${ data.width }px; height: $${ data.height }px; margin-top: -$${ parseInt(data.height/2) }px; margin-left: -$${ data.width/2 }px;'></div>`
+        if(is_video) {
+            if (visibleControls === true) html += lychee.html`<div id='image' class='small' style='width: $${ data.width }px; height: $${ data.height }px; margin-top: -$${ parseInt(data.height / 2 - 20) }px; margin-left: -$${ data.width / 2 }px;'><video width='$${ data.width }' height='$${ data.height }' controls><source src='$${ data.url }' type='$${ data.type }'></video></div>`
+            else                          html += lychee.html`<div id='image' class='small' style='width: $${ data.width }px; height: $${ data.height }px; margin-top: -$${ parseInt(data.height / 2) }px; margin-left: -$${ data.width / 2 }px;'><video width='$${ data.width }' height='$${ data.height }' controls><source src='$${ data.url }' type='$${ data.type }'></video></div>`
+        } else {
+            if (visibleControls === true) html += lychee.html`<div id='image' class='small' style='background-image: url($${ data.url }); width: $${ data.width }px; height: $${ data.height }px; margin-top: -$${ parseInt(data.height / 2 - 20) }px; margin-left: -$${ data.width / 2 }px;'></div>`
+            else                        html += lychee.html`<div id='image' class='small' style='background-image: url($${ data.url }); width: $${ data.width }px; height: $${ data.height }px; margin-top: -$${ parseInt(data.height / 2) }px; margin-left: -$${ data.width / 2 }px;'></div>`
+        }
 
 	}
 
