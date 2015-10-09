@@ -22,8 +22,24 @@ class Photo extends Module {
 		'.jpg',
 		'.jpeg',
 		'.png',
-		'.gif'
+		'.gif',
+        '.pdf',
+        '.ai',
+        '.eps',
+        '.psd',
+        '.mp4'
 	);
+    public static $extendedExtensions = array(
+        '.pdf',
+        'pdf',
+        '.ai',
+        '.eps',
+        'eps',
+        '.psd',
+        'psd',
+        '.mp4',
+        'mp4'
+    );
 
 	public function __construct($database, $plugins, $settings, $photoIDs) {
 
@@ -132,12 +148,16 @@ class Photo extends Module {
 			}
 
 			# Verify image
-			$type = @exif_imagetype($file['tmp_name']);
-			if (!in_array($type, Photo::$validTypes, true)) {
-				Log::error($this->database, __METHOD__, __LINE__, 'Photo type not supported');
-				if ($returnOnError===true) return false;
-				exit('Error: Photo type not supported!');
-			}
+            if(!in_array($extension, self::$extendedExtensions))
+            {
+                $type = @exif_imagetype($file['tmp_name']);
+                if (!in_array($type, Photo::$validTypes, true))
+                {
+                    Log::error($this->database, __METHOD__, __LINE__, 'Photo type not supported');
+                    if ($returnOnError === true) return false;
+                    exit('Error: Photo type not supported!');
+                }
+            }
 
 			# Generate id
 			$id = str_replace('.', '', microtime(true));
@@ -243,7 +263,30 @@ class Photo extends Module {
 			}
 
 			# Save to DB
-			$values	= array(LYCHEE_TABLE_PHOTOS, $id, $info['title'], $photo_name, $description, $tags, $info['type'], $info['width'], $info['height'], $info['size'], $info['iso'], $info['aperture'], $info['make'], $info['model'], $info['shutter'], $info['focal'], $info['takestamp'], $path_thumb, $albumID, $public, $star, $checksum, $medium);
+			$values	= array
+            (LYCHEE_TABLE_PHOTOS,
+                $id,
+                $info['title'],
+                $photo_name,
+                $description,
+                $tags,
+                $this->remapType($info['type'], $photo_name),
+                $info['width'],
+                $info['height'],
+                $info['size'],
+                $info['iso'],
+                $info['aperture'],
+                $info['make'],
+                $info['model'],
+                $info['shutter'],
+                $info['focal'],
+                $info['takestamp'],
+                $path_thumb,
+                $albumID,
+                $public,
+                $star,
+                $checksum,
+                $medium);
 			$query	= Database::prepare($this->database, "INSERT INTO ? (id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, checksum, medium) VALUES ('?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?')", $values);
 			$result = $this->database->query($query);
 
@@ -296,12 +339,45 @@ class Photo extends Module {
 		return false;
 
 	}
+    protected function remapFilename($filename, $for_output = false)
+    {
+        $ext = substr($filename, -3);
+        if(in_array($ext, self::$extendedExtensions))
+        {
+            if($ext == 'mp4' && $for_output)
+            {
+                return $filename;
+            }
+            return $filename . '.png';
+        }
 
+        return $filename;
+    }
+    protected function remapType($type, $filename)
+    {
+        $ext = substr($filename, -3);
+        switch($ext)
+        {
+            case 'pdf':
+                return 'application/pdf';
+            case '.ai':
+            case 'eps':
+                return 'application/postscript';
+            case 'mp4':
+                return 'video/mp4';
+        }
+        return $type;
+    }
+    protected function forceMedium($filename)
+    {
+        return in_array(substr($filename, -3), self::$extendedExtensions);
+    }
 	private function createThumb($url, $filename, $type, $width, $height) {
 
 		# Check dependencies
 		self::dependencies(isset($this->database, $this->settings, $url, $filename, $type, $width, $height));
-
+        $filename = $this->remapFilename($filename);
+        $url = $this->remapFilename($url);
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
 
@@ -401,6 +477,9 @@ class Photo extends Module {
 		# Check dependencies
 		self::dependencies(isset($this->database, $this->settings, $url, $filename, $width, $height));
 
+        $force_medium = $this->forceMedium($filename);
+        $url = $this->remapFilename($url);
+        $filename = $this->remapFilename($filename);
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
 
@@ -426,7 +505,7 @@ class Photo extends Module {
 		# Is medium activated?
 		# Is Imagick installed and activated?
 		if (($error===false)&&
-			($width>$newWidth||$height>$newHeight)&&
+			($width>$newWidth||$height>$newHeight || $force_medium)&&
 			($this->settings['medium']==='1')&&
 			(extension_loaded('imagick')&&$this->settings['imagick']==='1')) {
 
@@ -674,11 +753,11 @@ class Photo extends Module {
 		if (strlen($photo['takestamp'])>1) $photo['takedate'] = date('d M. Y', $photo['takestamp']);
 
 		# Parse medium
-		if ($photo['medium']==='1')	$photo['medium'] = LYCHEE_URL_UPLOADS_MEDIUM . $photo['url'];
+		if ($photo['medium']==='1')	$photo['medium'] = LYCHEE_URL_UPLOADS_MEDIUM . $this->remapFilename($photo['url']);
 		else						$photo['medium'] = '';
 
 		# Parse paths
-		$photo['url']		= LYCHEE_URL_UPLOADS_BIG . $photo['url'];
+		$photo['url']		= LYCHEE_URL_UPLOADS_BIG . $this->remapFilename($photo['url'], true);
 		$photo['thumbUrl']	= LYCHEE_URL_UPLOADS_THUMB . $photo['thumbUrl'];
 
 		if ($albumID!='false') {
@@ -709,6 +788,30 @@ class Photo extends Module {
 
 	}
 
+    /**
+     * This function uses ImageMagick on the command line to convert non-standard formats into image files.
+     * @param $url string
+     * @return mixed
+     */
+    public function getNonImageInfo($url) {
+        $pngfile = $url . '.png';
+        $ext = substr($url, -3);
+        if($ext == 'pdf' || $ext == 'psd')
+        {
+            exec("convert " . escapeshellarg($url). "[0] " . escapeshellarg($pngfile));
+        }
+        else if($ext == 'mp4')
+        {
+            exec("convert " . escapeshellarg($url) . "[10] " . escapeshellarg($pngfile));
+        }
+        else
+        {
+            exec("convert " . escapeshellarg($url) . " " . escapeshellarg($pngfile));
+        }
+        return $this->getInfo($pngfile);
+    }
+
+
 	public function getInfo($url) {
 
 		# Functions returns information and metadata of a photo
@@ -719,6 +822,10 @@ class Photo extends Module {
 
 		# Check dependencies
 		self::dependencies(isset($this->database, $url));
+        if(in_array(substr($url, -3), self::$extendedExtensions))
+        {
+            return $this->getNonImageInfo($url);
+        }
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
