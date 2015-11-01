@@ -2,7 +2,7 @@
 
 Released November --, 2015
 
-- Internal changes an updated dependencies.
+- Internal changes and updated dependencies.
 - `New` Preloading of big photos (#185)
 
 ## v3.0.6
