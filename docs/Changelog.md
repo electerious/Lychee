@@ -1,3 +1,10 @@
+## v3.0.7
+
+Released November --, 2015
+
+- Internal changes an updated dependencies.
+- `New` Preloading of big photos (#185)
+
 ## v3.0.6
 
 Released September 13, 2015
