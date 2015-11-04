@@ -93,6 +93,18 @@ if ($database->server_version<50500) echo('Warning: Lychee uses the GBK charset 
 if ($error==='')	echo('No critical problems found. Lychee should work without problems!' . PHP_EOL);
 else				echo $error;
 
+# Don't go further if the user is not connected
+session_start();
+$isAdmin = ((isset($_SESSION['login'])&&$_SESSION['login']===true)&&
+        (isset($_SESSION['identifier'])&&$_SESSION['identifier']===$settings['identifier']));
+
+if(!$isAdmin)
+{
+        echo(PHP_EOL . PHP_EOL . 'You have to be logged in to see more information.');
+	exit();
+}
+
+
 # Show separator
 echo(PHP_EOL . PHP_EOL . 'System Information' . PHP_EOL);
 echo('------------------' . PHP_EOL);
