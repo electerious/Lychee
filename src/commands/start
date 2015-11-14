@@ -1,9 +1,0 @@
-#!/bin/bash
-# Run this script to start Apache and MySQL
-
-# Start MySQL
-mysqld &
-
-# Start Apache
-source /etc/apache2/envvars
-exec apache2 -D FOREGROUND
