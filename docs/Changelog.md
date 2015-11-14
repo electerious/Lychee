@@ -2,7 +2,8 @@
 
 Released November --, 2015
 
-- Internal changes and updated dependencies.
+- Internal changes and updated dependencies
+- `New` PHP-version-check now requires PHP >= 5.5
 - `New` Preloading of big photos (#185)
 
 ## v3.0.6
