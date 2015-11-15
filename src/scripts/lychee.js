@@ -6,8 +6,8 @@
 lychee = {
 
 	title           : document.title,
-	version         : '3.0.6',
-	version_code    : '030006',
+	version         : '3.0.7',
+	version_code    : '030007',
 
 	update_path     : 'http://lychee.electerious.com/version/index.php',
 	updateURL       : 'https://github.com/electerious/Lychee',
@@ -25,7 +25,7 @@ lychee = {
 	dropbox         : false,
 	dropboxKey      : '',
 
-	content         : $('#content'),
+	content         : $('.content'),
 	imageview       : $('#imageview')
 
 }
@@ -190,7 +190,7 @@ lychee.load = function() {
 		photo.json = null
 
 		// Show Photo
-		if (lychee.content.html()==='' || ($('#search').length && $('#search').val().length!==0)) {
+		if (lychee.content.html()==='' || (header.dom('.header__search').length && header.dom('.header__search').val().length!==0)) {
 			lychee.content.hide()
 			album.load(albumID, true)
 		}
@@ -200,9 +200,6 @@ lychee.load = function() {
 
 		// Trash data
 		photo.json = null
-
-		// Hide sidebar
-		if (visible.sidebar()) sidebar.toggle()
 
 		// Show Album
 		if (visible.photo()) view.photo.hide()
@@ -252,12 +249,12 @@ lychee.setTitle = function(title, editable) {
 
 lychee.setMode = function(mode) {
 
-	$('#button_settings, #button_settings, #button_search, #search, #button_trash_album, #button_share_album, .button_add, .button_divider').remove()
+	$('#button_settings, #button_trash_album, #button_share_album, .button_add, .header__divider').remove()
 	$('#button_trash, #button_move, #button_share, #button_star').remove()
 
 	$(document)
-		.off('click',       '#title.editable')
-		.off('touchend',    '#title.editable')
+		.off('click',       '.header__title--editable')
+		.off('touchend',    '.header__title--editable')
 		.off('contextmenu', '.photo')
 		.off('contextmenu', '.album')
 		.off('drop')
@@ -274,7 +271,6 @@ lychee.setMode = function(mode) {
 
 	if (mode==='public') {
 
-		header.dom('#button_signin, #hostedwith').show()
 		lychee.publicMode = true
 
 	} else if (mode==='view') {

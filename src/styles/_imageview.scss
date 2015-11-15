@@ -1,7 +1,3 @@
-/**
- * @copyright   2015 by Tobias Reich
- */
-
 #imageview {
 
 	position: fixed;
@@ -13,26 +9,28 @@
 	background-color: rgba(10, 10, 10, .98);
 	transition: background-color .3s;
 
-	/* Modes ------------------------------------------------*/
+	// Modes -------------------------------------------------------------- //
 	&.view { background-color: inherit; }
 
 	&.full { background-color: black(1); }
 
-	/* ImageView ------------------------------------------------*/
+	// ImageView -------------------------------------------------------------- //
 	#image {
 		position: absolute;
 		top: 60px;
 		right: 30px;
 		bottom: 30px;
 		left: 30px;
+		transition: top .3s, right .3s, bottom .3s, left .3s, margin-top .3s, opacity .2s, transform .3s $timingBounce;
+		will-change: transform;
+
 		background-repeat: no-repeat;
 		background-position: 50% 50%;
 		background-size: contain;
-		transition: top .3s, right .3s, bottom .3s, left .3s, margin-top .3s, opacity .2s, transform .3s $timingBounce;
+
 		animation-name: zoomIn;
 		animation-duration: .3s;
 		animation-timing-function: $timingBounce;
-		will-change: transform;
 
 		&.small {
 			top: 50%;
@@ -49,7 +47,7 @@
 		}
 	}
 
-	/* Previous/Next Buttons ------------------------------------------------*/
+	// Previous/Next Buttons -------------------------------------------------------------- //
 	.arrow_wrapper {
 		position: fixed;
 		width: 15%;
@@ -88,9 +86,13 @@
 		}
 
 		&:hover a#previous,
-		&:hover a#next { transform: translateX(0); }
+		&:hover a#next {
+			transform: translateX(0);
+		}
 
-		a:hover { opacity: 1; }
+		a:hover {
+			opacity: 1;
+		}
 
 		.iconic {
 			fill: white(.8);

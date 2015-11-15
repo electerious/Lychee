@@ -1,27 +1,25 @@
-/**
- * @copyright   2015 by Tobias Reich
- */
-
 #loading {
 
+	display: none;
 	position: fixed;
 	width: 100%;
 	height: 3px;
 	background-size: 100px 3px;
 	background-repeat: repeat-x;
 	border-bottom: 1px solid black(.3);
-	display: none;
+
 	animation-name: moveBackground;
 	animation-duration: .3s;
 	animation-iteration-count: infinite;
 	animation-timing-function: linear;
 
-	/* Modes ------------------------------------------------*/
+	// Modes -------------------------------------------------------------- //
 	&.loading {
 		height: 3px;
 		background-image: linear-gradient(to right, #153674 0%, #153674 47%, #2651AE 53%, #2651AE 100%);
 		z-index: 2;
 	}
+
 	&.error {
 		height: 40px;
 		background-color: #2f0d0e;
@@ -29,7 +27,7 @@
 		z-index: 1;
 	}
 
-	/* Content ------------------------------------------------*/
+	// Content -------------------------------------------------------------- //
 	h1 {
 		margin: 13px 13px 0 13px;
 		color: #ddd;

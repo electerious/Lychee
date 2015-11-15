@@ -51,16 +51,20 @@
 	<!-- endinject -->
 
 	<!-- Header -->
-	<header class="view">
+	<header class="header header--view">
 
-		<a class="button button--right button--info" id="button_info" title="About Photo">
-			<svg class="iconic"><use xlink:href="#info"></use></svg>
-		</a>
-		<a class="button button--right" id="button_direct" title="Direct Link">
-			<svg class="iconic"><use xlink:href="#link-intact"></use></svg>
-		</a>
+		<div class="header__toolbar header__toolbar--public header__toolbar--visible">
 
-		<a id="title" class="view"></a>
+			<a class="header__title"></a>
+
+			<a class="button button--info" id="button_info" title="About Photo">
+				<svg class="iconic"><use xlink:href="#info"></use></svg>
+			</a>
+			<a class="button" id="button_direct" title="Direct Link">
+				<svg class="iconic"><use xlink:href="#link-intact"></use></svg>
+			</a>
+
+		</div>
 
 	</header>
 
@@ -68,11 +72,11 @@
 	<div id="imageview" class="view"></div>
 
 	<!-- Infobox -->
-	<div id="sidebar">
-		<div class='header'>
+	<div class="sidebar">
+		<div class="sidebar__header">
 			<h1>About</h1>
 		</div>
-		<div class='wrapper'></div>
+		<div class="sidebar__wrapper"></div>
 	</div>
 
 	<!-- JS -->

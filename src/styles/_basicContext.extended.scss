@@ -1,8 +1,4 @@
-/**
- * @copyright   2015 by Tobias Reich
- */
-
-/* Context ------------------------------------------------*/
+// Extended Theme -------------------------------------------------------------- //
 .basicContext {
 
 	&__data .cover {
@@ -31,7 +27,7 @@
 		height: 14px;
 	}
 
-	/* Link ------------------------------------------------*/
+	// Link -------------------------------------------------------------- //
 	&__data input#link {
 		margin: -2px 0;
 		padding: 5px 7px 6px;
@@ -44,13 +40,13 @@
 		outline: none;
 	}
 
-	/* No Hover ------------------------------------------------*/
-	&__item.noHover &__data {
+	// No hover -------------------------------------------------------------- //
+	&__item--noHover &__data {
 		padding-right: 12px;
 	}
 
-	&__item.noHover:hover &__data {
-		background: none;
+	&__item--noHover:hover &__data {
+		background: none !important;
 	}
 
 }

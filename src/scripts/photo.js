@@ -56,7 +56,7 @@ photo.load = function(photoID, albumID) {
 
 		setTimeout(() => {
 			lychee.content.show()
-			//photo.preloadNext(photoID, albumID);
+			photo.preloadNext(photoID)
 		}, 300)
 
 	})
@@ -66,21 +66,16 @@ photo.load = function(photoID, albumID) {
 // Preload the next photo for better response time
 photo.preloadNext = function(photoID) {
 
-	// Never preload on mobile devices with bare RAM and
-	// mostly mobile internet
-	// {{ code }}
-
 	if (album.json &&
-	   album.json.content &&
-	   album.json.content[photoID] &&
-	   album.json.content[photoID].nextPhoto!='') {
+	    album.json.content &&
+	    album.json.content[photoID] &&
+	    album.json.content[photoID].nextPhoto!='') {
 
 		let nextPhoto = album.json.content[photoID].nextPhoto,
 		    url       = album.json.content[nextPhoto].url
 
-		photo.cache        = new Image()
-		photo.cache.src    = url
-		photo.cache.onload = () => photo.cache = null
+		$('head [data-prefetch]').remove()
+		$('head').append(`<link data-prefetch rel="prefetch" href="${ url }">`)
 
 	}
 
@@ -95,9 +90,9 @@ photo.parse = function() {
 photo.previous = function(animate) {
 
 	if (photo.getID()!==false &&
-	   album.json &&
-	   album.json.content[photo.getID()] &&
-	   album.json.content[photo.getID()].previousPhoto!=='') {
+	    album.json &&
+	    album.json.content[photo.getID()] &&
+	    album.json.content[photo.getID()].previousPhoto!=='') {
 
 		let delay = 0
 
@@ -126,9 +121,9 @@ photo.previous = function(animate) {
 photo.next = function(animate) {
 
 	if (photo.getID()!==false &&
-	   album.json &&
-	   album.json.content[photo.getID()] &&
-	   album.json.content[photo.getID()].nextPhoto!=='') {
+	    album.json &&
+	    album.json.content[photo.getID()] &&
+	    album.json.content[photo.getID()].nextPhoto!=='') {
 
 		let delay = 0
 

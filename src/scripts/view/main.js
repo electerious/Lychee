@@ -7,7 +7,7 @@
 
 let lychee = {}
 
-lychee.content = $('#content')
+lychee.content = $('.content')
 
 lychee.getEventName = function() {
 
@@ -155,7 +155,7 @@ const loadPhotoInfo = function(photoID) {
 		// Set title
 		if (!data.title) data.title = 'Untitled'
 		document.title = 'Lychee - ' + data.title
-		header.dom('#title').html(lychee.escapeHTML(data.title))
+		header.dom('.header__title').html(lychee.escapeHTML(data.title))
 
 		let size = getPhotoSize(data)
 
@@ -168,7 +168,7 @@ const loadPhotoInfo = function(photoID) {
 		let structure = sidebar.createStructure.photo(data),
 		    html      = sidebar.render(structure)
 
-		sidebar.dom('.wrapper').html(html)
+		sidebar.dom('.sidebar__wrapper').html(html)
 		sidebar.bind()
 
 	})

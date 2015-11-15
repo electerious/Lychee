@@ -274,7 +274,7 @@ view.album = {
 			let structure = sidebar.createStructure.album(album.json),
 			    html      = sidebar.render(structure)
 
-			sidebar.dom('.wrapper').html(html)
+			sidebar.dom('.sidebar__wrapper').html(html)
 			sidebar.bind()
 
 		}
@@ -440,7 +440,7 @@ view.photo = {
 		let structure = sidebar.createStructure.photo(photo.json),
 		    html      = sidebar.render(structure)
 
-		sidebar.dom('.wrapper').html(html)
+		sidebar.dom('.sidebar__wrapper').html(html)
 		sidebar.bind()
 
 	}

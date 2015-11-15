@@ -1,5 +1,5 @@
 ### 1. Requirements
-Everything you need is a web-server with PHP 5.3 or later and a MySQL-Database.
+Everything you need is a web-server with PHP 5.5 or later and a MySQL-Database.
 
 The following PHP extensions must be activated:
 

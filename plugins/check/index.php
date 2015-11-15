@@ -26,7 +26,7 @@ echo('Diagnostics' . PHP_EOL);
 echo('-----------' . PHP_EOL);
 
 # PHP Version
-if (floatval(phpversion())<5.3)		$error .= ('Error: Upgrade to PHP 5.3 or higher' . PHP_EOL);
+if (floatval(phpversion())<5.5)		$error .= ('Error: Upgrade to PHP 5.5 or higher' . PHP_EOL);
 
 # Extensions
 if (!extension_loaded('session'))	$error .= ('Error: PHP session extension not activated' . PHP_EOL);
@@ -89,6 +89,12 @@ if (!ini_get('allow_url_fopen')) echo('Warning: You may experience problems with
 # Check mysql version
 if ($database->server_version<50500) echo('Warning: Lychee uses the GBK charset to avoid sql injections on your MySQL version. Please update to MySQL 5.5 or higher to enable UTF-8 support.' . PHP_EOL);
 
+# About GD
+$gdVersion = gd_info();
+if (!$gdVersion['JPEG Support'])											$error .= ('Error: PHP gd extension without jpeg support' . PHP_EOL);
+if (!$gdVersion['PNG Support'])												$error .= ('Error: PHP gd extension without png support' . PHP_EOL);
+if (!$gdVersion['GIF Read Support'] || !$gdVersion['GIF Create Support'])	$error .= ('Error: PHP gd extension without full gif support' . PHP_EOL);
+
 # Output
 if ($error==='')	echo('No critical problems found. Lychee should work without problems!' . PHP_EOL);
 else				echo $error;
@@ -107,9 +113,6 @@ if ($imagick===true)	$imagickVersion = @Imagick::getVersion();
 else					$imagick = '-';
 if (!isset($imagickVersion, $imagickVersion['versionNumber'])||$imagickVersion==='')	$imagickVersion = '-';
 else																					$imagickVersion = $imagickVersion['versionNumber'];
-
-# About GD
-$gdVersion = gd_info();
 
 # Output system information
 echo('Lychee Version:  ' . $json['version'] . PHP_EOL);

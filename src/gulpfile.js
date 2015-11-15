@@ -96,6 +96,7 @@ paths.main = {
 	],
 	styles: [
 		'node_modules/basiccontext/src/styles/main.scss',
+		'node_modules/basiccontext/src/styles/addons/popin.scss',
 		'node_modules/basicmodal/src/styles/main.scss',
 		'./styles/main.scss'
 	],

@@ -1,32 +1,4 @@
-/**
- * @copyright   2015 by Tobias Reich
- */
-
-@media only screen and (max-width: 900px) {
-
-	#title {
-		margin: 0 20% !important;
-		width: 40% !important;
-	}
-
-	#title.view {
-		margin: 0 20% !important;
-		width: 60% !important;
-	}
-
-}
-
 @media only screen and (max-width: 640px) {
-
-	#title {
-		display: none !important;
-	}
-
-	#title.view {
-		display: block !important;
-		width: 70% !important;
-		margin: 0 20% 0 10% !important;
-	}
 
 	#imageview .arrow_wrapper {
 		display: none !important;

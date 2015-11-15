@@ -1,12 +1,8 @@
-/**
- * @copyright   2015 by Tobias Reich
- */
-
-#sidebar {
+.sidebar {
 
 	position: fixed;
 	top: 50px;
-	right: -370px;
+	right: -360px;
 	width: 350px;
 	height: calc(100% - 50px);
 	background-color: rgba(25, 25, 25, .98);
@@ -14,7 +10,7 @@
 	transform: translateX(0);
 	transition: transform .3s $timing;
 
-	&.active { transform: translateX(-320px); }
+	&.active { transform: translateX(-360px); }
 
 	&.notSelectable table tr td:last-child {
 		-webkit-user-select: none !important;
@@ -22,8 +18,8 @@
 		user-select: none !important;
 	}
 
-	/* Header ------------------------------------------------*/
-	.header {
+	// Header -------------------------------------------------------------- //
+	&__header {
 		float: left;
 		height: 49px;
 		width: 100%;
@@ -31,27 +27,27 @@
 		border-top: 1px solid $colorBlue;
 	}
 
-	.header h1 {
+	&__header h1 {
 		position: absolute;
-		margin: 15px 50px 15px 0;
-		width: calc(100% - 50px);
+		margin: 15px 0 15px 0;
+		width: 100%;
 		color: #fff;
 		font-size: 16px;
 		font-weight: bold;
 		text-align: center;
 	}
 
-	/* Wrapper ------------------------------------------------*/
-	.wrapper {
+	// Wrapper -------------------------------------------------------------- //
+	&__wrapper {
 		float: left;
 		height: calc(100% - 49px);
-		width: 300px;
+		width: 350px;
 		overflow: auto;
 		-webkit-overflow-scrolling: touch;
 	}
 
-	/* Divider ------------------------------------------------*/
-	.divider {
+	// Divider -------------------------------------------------------------- //
+	&__divider {
 		float: left;
 		padding: 12px 0 8px;
 		width: 100%;
@@ -71,7 +67,7 @@
 		}
 	}
 
-	/* Edit ------------------------------------------------*/
+	// Edit -------------------------------------------------------------- //
 	.edit {
 		display: inline-block;
 		margin-left: 3px;
@@ -92,7 +88,7 @@
 		}
 	}
 
-	/* Table ------------------------------------------------*/
+	// Table -------------------------------------------------------------- //
 	table {
 		float: left;
 		margin: 10px 0 15px 20px;
@@ -114,7 +110,7 @@
 		}
 	}
 
-	/* Tags ------------------------------------------------*/
+	// Tags -------------------------------------------------------------- //
 	#tags {
 		width: calc(100% - 40px);
 		margin: 16px 20px 12px 20px;

@@ -16,7 +16,7 @@ multiselect.position = {
 
 multiselect.bind = function() {
 
-	$('#content').on('mousedown', (e) => { if (e.which===1) multiselect.show(e) })
+	$('.content').on('mousedown', (e) => { if (e.which===1) multiselect.show(e) })
 
 	return true
 
