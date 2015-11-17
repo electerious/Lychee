@@ -24,11 +24,12 @@ function search($database, $settings, $term) {
 	# Photos
 	###
 
-	$query	= Database::prepare($database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE title LIKE '%?%' OR description LIKE '%?%' OR tags LIKE '%?%'", array(LYCHEE_TABLE_PHOTOS, $term, $term, $term));
-	$result	= $database->query($query);
-
-	while($photo = $result->fetch_assoc()) {
-
+	$stmt = $database->prepare("SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ".LYCHEE_TABLE_PHOTOS." WHERE title LIKE :term OR description LIKE :term OR tags LIKE :term");
+	$stmt->bindValue('term', "%".$term."%", PDO::PARAM_STR);
+	$stmt->execute();
+	
+	while($photo = $stmt->fetch()) {
+		
 		$photo = Photo::prepareData($photo);
 		$return['photos'][$photo['id']] = $photo;
 
@@ -38,22 +39,24 @@ function search($database, $settings, $term) {
 	# Albums
 	###
 
-	$query	= Database::prepare($database, "SELECT id, title, public, sysstamp, password FROM ? WHERE title LIKE '%?%' OR description LIKE '%?%'", array(LYCHEE_TABLE_ALBUMS, $term, $term));
-	$result = $database->query($query);
+	$stmt = $database->prepare("SELECT id, title, public, sysstamp, password FROM ".LYCHEE_TABLE_ALBUMS." WHERE title LIKE :term OR description LIKE :term");
+	$stmt->bindValue('term', "%".$term."%", PDO::PARAM_STR);
+	$stmt->execute();
 
-	while($album = $result->fetch_assoc()) {
+	while($album = $stmt->fetch()) {
 
 		# Turn data from the database into a front-end friendly format
 		$album = Album::prepareData($album);
 
 		# Thumbs
-		$query	= Database::prepare($database, "SELECT thumbUrl FROM ? WHERE album = '?' " . $settings['sortingPhotos'] . " LIMIT 0, 3", array(LYCHEE_TABLE_PHOTOS, $album['id']));
-		$thumbs	= $database->query($query);
+		$stmt2 = $database->prepare("SELECT thumbUrl FROM ".LYCHEE_TABLE_PHOTOS." WHERE album = :rowid " . $settings['sortingPhotos'] . " LIMIT 0, 3");
+		$stmt2->bindValue('rowid', $row['id'], PDO::PARAM_INT);
+		$stmt2->execute();
 
 		# For each thumb
 		$k = 0;
-		while ($thumb = $thumbs->fetch_object()) {
-			$album['thumbs'][$k] = LYCHEE_URL_UPLOADS_THUMB . $thumb->thumbUrl;
+		while($thumb = $stmt2->fetch()){
+			$album['thumbs'][$k] = LYCHEE_URL_UPLOADS_THUMB . $thumb['thumbUrl'];
 			$k++;
 		}
 
@@ -76,38 +79,39 @@ function getGraphHeader($database, $photoID) {
 	$photo = new Photo($database, null, null, $photoID);
 	if ($photo->getPublic('')===false) return false;
 
-	$query	= Database::prepare($database, "SELECT title, description, url, medium FROM ? WHERE id = '?'", array(LYCHEE_TABLE_PHOTOS, $photoID));
-	$result	= $database->query($query);
-	$row	= $result->fetch_object();
+	$stmt = $database->prepare("SELECT title, description, url, medium FROM ".LYCHEE_TABLE_PHOTOS." WHERE id = :photoID");
+	$stmt->bindValue('photoID', $photoID, PDO::PARAM_STR);
+	$stmt->execute();
+	$row = $stmt->fetch();
 
 	if (!$result||!$row) return false;
 
-	if ($row->medium==='1')	$dir = 'medium';
+	if ($row['medium']==='1') $dir = 'medium';
 	else					$dir = 'big';
 
 	$parseUrl	= parse_url('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
 	$url		= $parseUrl['scheme'] . '://' . $parseUrl['host'] . $parseUrl['path'] . '?' . $parseUrl['query'];
-	$picture	= $parseUrl['scheme'] . '://' . $parseUrl['host'] . $parseUrl['path'] . '/../uploads/' . $dir . '/' . $row->url;
+	$picture	= $parseUrl['scheme'] . '://' . $parseUrl['host'] . $parseUrl['path'] . '/../uploads/' . $dir . '/' . $row['url'];
 
 	$url		= htmlentities($url);
 	$picture	= htmlentities($picture);
 
-	$row->title			= htmlentities($row->title);
-	$row->description	= htmlentities($row->description);
+	$row['title']			= htmlentities($row['title']);
+	$row['description']	= htmlentities($row['description']);
 
 	$return = '<!-- General Meta Data -->';
-	$return .= '<meta name="title" content="' . $row->title . '">';
-	$return .= '<meta name="description" content="' . $row->description . ' - via Lychee">';
+	$return .= '<meta name="title" content="'.$row['title'].'">';
+	$return .= '<meta name="description" content="'.$row['description'].' - via Lychee">';
 	$return .= '<link rel="image_src" type="image/jpeg" href="' . $picture . '">';
 
 	$return .= '<!-- Twitter Meta Data -->';
 	$return .= '<meta name="twitter:card" content="photo">';
-	$return .= '<meta name="twitter:title" content="' . $row->title . '">';
+	$return .= '<meta name="twitter:title" content="' . $row['title'] . '">';
 	$return .= '<meta name="twitter:image:src" content="' . $picture . '">';
 
 	$return .= '<!-- Facebook Meta Data -->';
-	$return .= '<meta property="og:title" content="' . $row->title . '">';
-	$return .= '<meta property="og:description" content="' . $row->description . ' - via Lychee">';
+	$return .= '<meta property="og:title" content="' . $row['title'] . '">';
+	$return .= '<meta property="og:description" content="' . $row['description'] . ' - via Lychee">';
 	$return .= '<meta property="og:image" content="' . $picture . '">';
 	$return .= '<meta property="og:url" content="' . $url . '">';
 
