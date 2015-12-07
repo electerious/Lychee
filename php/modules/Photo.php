@@ -486,8 +486,6 @@ class Photo extends Module {
 
 		if (extension_loaded('imagick')&&$this->settings['imagick']==='1') {
 
-			$rotateImage = 0;
-
 			switch ($info['orientation']) {
 
 				case 3:
@@ -535,7 +533,6 @@ class Photo extends Module {
 					break;
 
 				case 3:
-					$process	= true;
 					$sourceImg	= imagerotate($sourceImg, -180, 0);
 					break;
 
@@ -552,7 +549,6 @@ class Photo extends Module {
 					break;
 
 				case 6:
-					$process	= true;
 					$sourceImg	= imagerotate($sourceImg, -90, 0);
 					$newWidth	= $info['height'];
 					$newHeight	= $info['width'];
@@ -566,7 +562,6 @@ class Photo extends Module {
 					break;
 
 				case 8:
-					$process	= true;
 					$sourceImg	= imagerotate($sourceImg, 90, 0);
 					$newWidth	= $info['height'];
 					$newHeight	= $info['width'];
