@@ -11,7 +11,6 @@ class Import extends Module {
 
 	private $database	= null;
 	private $settings	= null;
-	private $albumIDs	= null;
 
 	public function __construct($database, $plugins, $settings) {
 
