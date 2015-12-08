@@ -33,7 +33,7 @@ class Guest extends Access {
 
 			# Error
 			default:					exit('Error: Function not found! Please check the spelling of the called function.');
-										return false; break;
+										break;
 
 		}
 
