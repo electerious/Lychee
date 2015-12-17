@@ -9,7 +9,7 @@ lychee = {
 	version         : '3.0.7',
 	version_code    : '030007',
 
-	update_path     : 'http://lychee.electerious.com/version/index.php',
+	update_path     : '//update.electerious.com/index.json',
 	updateURL       : 'https://github.com/electerious/Lychee',
 	website         : 'http://lychee.electerious.com',
 
@@ -233,7 +233,7 @@ lychee.getUpdate = function() {
 
 	$.ajax({
 		url     : lychee.update_path,
-		success : function(data) { if (parseInt(data)>parseInt(lychee.version_code)) $('.version span').show() }
+		success : function(data) { if (data.lychee.version>parseInt(lychee.version_code)) $('.version span').show() },
 	})
 
 }
