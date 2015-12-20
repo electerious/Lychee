@@ -6,8 +6,6 @@
 		<title>Lychee</title>
 
 		<meta name="author" content="Tobias Reich">
-		<meta name="keywords" content="">
-		<meta name="description" content="">
 
 		<!-- CSS -->
 		<link type="text/css" rel="stylesheet" href="dist/main.css">

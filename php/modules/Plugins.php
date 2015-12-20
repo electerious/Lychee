@@ -20,7 +20,6 @@ class Plugins implements \SplSubject {
 		if (!isset($files)) return false;
 
 		# Init vars
-		$plugins		= $this;
 		$this->files	= $files;
 
 		# Load plugins

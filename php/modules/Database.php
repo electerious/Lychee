@@ -277,6 +277,7 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 		# This avoids problems with placeholders in user-input
 		# $skip = Number of placeholders which need to be skipped
 		$skip	= 0;
+		$temp   = '';
 		$num	= array(
 			'placeholder'	=> substr_count($query, '?'),
 			'data'			=> count($data)
