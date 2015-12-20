@@ -1,3 +1,9 @@
+## v3.0.8
+
+Released December 20, 2015
+
+- `Improved` Lychee update site now with SSL (#317)
+
 ## v3.0.7
 
 Released November 15, 2015
