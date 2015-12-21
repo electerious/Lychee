@@ -69,14 +69,20 @@ class Album extends Module {
 		$album['title']		= $data['title'];
 		$album['public']	= $data['public'];
 
+		# Additional attributes
+		# Only part of $album when available
+		if (isset($data['description']))	$album['description'] = $data['description'];
+		if (isset($data['visible']))		$album['visible'] = $data['visible'];
+		if (isset($data['downloadable']))	$album['downloadable'] = $data['downloadable'];
+
 		# Parse date
 		$album['sysdate'] = date('F Y', $data['sysstamp']);
 
 		# Parse password
 		$album['password'] = ($data['password']=='' ? '0' : '1');
 
-		# Set placeholder for thumbs
-		$album['thumbs'] = array();
+		# Parse thumbs or set default value
+		$album['thumbs'] = (isset($data['thumbs']) ? explode(',', $data['thumbs']) : array());
 
 		return $album;
 
@@ -112,8 +118,7 @@ class Album extends Module {
 			default:	$query	= Database::prepare($this->database, "SELECT * FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
 						$albums = $this->database->query($query);
 						$return = $albums->fetch_assoc();
-						$return['sysdate']	= date('d M. Y', $return['sysstamp']);
-						$return['password']	= ($return['password']=='' ? '0' : '1');
+						$return = Album::prepareData($return);
 						$query	= Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE album = '?' " . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS, $this->albumIDs));
 						break;
 
