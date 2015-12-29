@@ -179,12 +179,6 @@ class Settings extends Module {
 
 		}
 
-		$sorting .= ' ';
-
-		# Append fallback sorting
-		# Necessary to get a consistent sorting when multiple photos have same values
-		$sorting .= ', id DESC';
-
 		# Execute query
 		# Do not prepare $sorting because it is a true statement
 		# Preparing (escaping) the sorting would destroy it
@@ -240,12 +234,6 @@ class Settings extends Module {
 			default:		exit('Error: Unknown order for sorting!');
 
 		}
-
-		$sorting .= ' ';
-
-		# Append fallback sorting
-		# Necessary to get a consistent sorting when multiple albums have same values
-		$sorting .= ', id DESC';
 
 		# Execute query
 		# Do not prepare $sorting because it is a true statement

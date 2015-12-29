@@ -194,8 +194,8 @@ class Album extends Module {
 		if ($public===false) $return['smartalbums'] = $this->getSmartInfo();
 
 		# Albums query
-		if ($public===false)	$query = Database::prepare($this->database, 'SELECT a.id, a.title, a.public, a.sysstamp, a.password, p.thumbs FROM (SELECT album, substring_index(GROUP_CONCAT(thumbUrl ORDER BY star DESC, ' . substr($this->settings['sortingPhotos'], 9) . '), ",", 3) AS thumbs FROM ? GROUP BY album) AS p RIGHT JOIN ? a ON p.album = a.id ' . $this->settings['sortingAlbums'], array(LYCHEE_TABLE_PHOTOS, LYCHEE_TABLE_ALBUMS));
-		else					$query = Database::prepare($this->database, 'SELECT a.id, a.title, a.public, a.sysstamp, a.password, p.thumbs FROM (SELECT album, substring_index(GROUP_CONCAT(thumbUrl ORDER BY star DESC, ' . substr($this->settings['sortingPhotos'], 9) . '), ",", 3) AS thumbs FROM ? GROUP BY album) AS p RIGHT JOIN ? a ON p.album = a.id WHERE public = 1 AND visible <> 0 ' . $this->settings['sortingAlbums'], array(LYCHEE_TABLE_PHOTOS, LYCHEE_TABLE_ALBUMS));
+		if ($public===false)	$query = Database::prepare($this->database, 'SELECT id, title, public, sysstamp, password FROM ? ' . $this->settings['sortingAlbums'], array(LYCHEE_TABLE_ALBUMS));
+		else					$query = Database::prepare($this->database, 'SELECT id, title, public, sysstamp, password FROM ? WHERE public = 1 AND visible <> 0 ' . $this->settings['sortingAlbums'], array(LYCHEE_TABLE_ALBUMS));
 
 		# Execute query
 		$albums = $this->database->query($query);
@@ -214,10 +214,14 @@ class Album extends Module {
 			if (($public===true&&$album['password']==='0')||
 				($public===false)) {
 
-					$k = 0;
+					# Execute query
+					$query	= Database::prepare($this->database, "SELECT thumbUrl FROM ? WHERE album = '?' ORDER BY star DESC, " . substr($this->settings['sortingPhotos'], 9) . " LIMIT 3", array(LYCHEE_TABLE_PHOTOS, $album['id']));
+					$thumbs	= $this->database->query($query);
 
-					foreach ($album['thumbs'] as $thumb) {
-						$album['thumbs'][$k] = LYCHEE_URL_UPLOADS_THUMB . $thumb;
+					# For each thumb
+					$k = 0;
+					while ($thumb = $thumbs->fetch_object()) {
+						$album['thumbs'][$k] = LYCHEE_URL_UPLOADS_THUMB . $thumb->thumbUrl;
 						$k++;
 					}
 
