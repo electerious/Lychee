@@ -45,13 +45,13 @@ build.album = function(data) {
 
 	let html = ''
 
-	let { path: thumbPath, hasRetina: thumbRetina } = lychee.retinize(data.thumbs[0])
+	let { path: retinaThumbUrl, isPhoto } = lychee.retinize(data.thumbs[0])
 
 	html += lychee.html`
 	        <div class='album' data-id='$${ data.id }'>
 	            <img src='$${ data.thumbs[2] }' width='200' height='200' alt='thumb' data-overlay='false'>
 	            <img src='$${ data.thumbs[1] }' width='200' height='200' alt='thumb' data-overlay='false'>
-	            <img src='$${ thumbPath }' width='200' height='200' alt='thumb' data-overlay='$${ thumbRetina }'>
+	            <img src='$${ data.thumbs[0] }' srcset='$${ retinaThumbUrl } 1.5x' width='200' height='200' alt='thumb' data-overlay='$${ isPhoto }'>
 	            <div class='overlay'>
 	                <h1 title='$${ data.title }'>$${ data.title }</h1>
 	                <a>$${ data.sysdate }</a>
@@ -82,11 +82,11 @@ build.photo = function(data) {
 
 	let html = ''
 
-	let { path: thumbPath, hasRetina: thumbRetina } = lychee.retinize(data.thumbUrl)
+	let { path: retinaThumbUrl } = lychee.retinize(data.thumbUrl)
 
 	html += lychee.html`
 	        <div class='photo' data-album-id='$${ data.album }' data-id='$${ data.id }'>
-	            <img src='$${ thumbPath }' width='200' height='200' alt='thumb'>
+	            <img src='$${ data.thumbUrl }' srcset='$${ retinaThumbUrl } 1.5x' width='200' height='200' alt='thumb'>
 	            <div class='overlay'>
 	                <h1 title='$${ data.title }'>$${ data.title }</h1>
 	        `

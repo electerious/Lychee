@@ -310,11 +310,10 @@ lychee.animate = function(obj, animation) {
 
 lychee.retinize = function(path = '') {
 
-	let pixelRatio = window.devicePixelRatio,
-	    extention  = path.split('.').pop(),
-	    hasRetina  = extention!=='svg'
+	let extention = path.split('.').pop(),
+	    isPhoto   = extention!=='svg'
 
-	if ((pixelRatio!=null && pixelRatio>1) && hasRetina===true) {
+	if (isPhoto===true) {
 
 		path = path.replace(/\.[^/.]+$/, '')
 		path = path + '@2x' + '.' + extention
@@ -323,7 +322,7 @@ lychee.retinize = function(path = '') {
 
 	return {
 		path,
-		hasRetina
+		isPhoto
 	}
 
 }
