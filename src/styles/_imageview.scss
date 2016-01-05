@@ -17,34 +17,43 @@
 	// ImageView -------------------------------------------------------------- //
 	#image {
 		position: absolute;
-		top: 60px;
-		right: 30px;
-		bottom: 30px;
-		left: 30px;
-		transition: top .3s, right .3s, bottom .3s, left .3s, margin-top .3s, opacity .2s, transform .3s $timingBounce;
+		top: 30px;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		transition: top .3s;
 		will-change: transform;
 
-		background-repeat: no-repeat;
-		background-position: 50% 50%;
-		background-size: contain;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 
 		animation-name: zoomIn;
 		animation-duration: .3s;
 		animation-timing-function: $timingBounce;
+	}
 
-		&.small {
-			top: 50%;
-			right: auto;
-			bottom: auto;
-			left: 50%;
-		}
+	&.full #image {
+		top: 0;
+	}
 
-		&.full {
-			top: 0;
-			right: 0;
-			bottom: 0;
-			left: 0;
-		}
+	#image > div {
+		width: 0;
+		height: 0;
+	}
+
+	#image img {
+		max-width: calc(100vw - 60px);
+		max-height: calc(100vh - 90px);
+		width: auto;
+		height: auto;
+		transform: translate(-50%, -50%);
+		transition: max-width .3s, max-height .3s;
+	}
+
+	&.full #image img {
+		max-width: 100vw;
+		max-height: 100vh;
 	}
 
 	// Previous/Next Buttons -------------------------------------------------------------- //

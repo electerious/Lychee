@@ -97,42 +97,6 @@ $(document).ready(function() {
 
 })
 
-const getPhotoSize = function(photo) {
-
-	// Size can be 'big', 'medium' or 'small'
-	// Default is big
-	// Small is centered in the middle of the screen
-	let size       = 'big',
-	    scaled     = false,
-	    hasMedium  = photo.medium!=='',
-	    pixelRatio = window.devicePixelRatio,
-	    view       = {
-	    	width  : $(window).width() - 60,
-	    	height : $(window).height() - 100
-	    }
-
-	// Detect if the photo will be shown scaled,
-	// because the screen size is smaller than the photo
-	if (photo.width>view.width || photo.height>view.height) scaled = true
-
-	// Calculate pixel ratio of screen
-	if (pixelRatio!=null && pixelRatio>1) {
-		view.width  = view.width * pixelRatio
-		view.height = view.height * pixelRatio
-	}
-
-	// Medium available and
-	// Medium still bigger than screen
-	if (hasMedium===true && (1920>view.width && 1080>view.height)) size = 'medium'
-
-	// Photo not scaled
-	// Photo smaller then screen
-	if (scaled===false && (photo.width<view.width&& photo.width<view.height)) size = 'small'
-
-	return size
-
-}
-
 const loadPhotoInfo = function(photoID) {
 
 	let params = {
@@ -157,10 +121,8 @@ const loadPhotoInfo = function(photoID) {
 		document.title = 'Lychee - ' + data.title
 		header.dom('.header__title').html(lychee.escapeHTML(data.title))
 
-		let size = getPhotoSize(data)
-
 		// Render HTML
-		imageview.html(build.imageview(data, size, true))
+		imageview.html(build.imageview(data, true))
 		imageview.find('.arrow_wrapper').remove()
 		imageview.addClass('fadeIn').show()
 

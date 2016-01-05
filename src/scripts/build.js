@@ -113,24 +113,18 @@ build.photo = function(data) {
 
 }
 
-build.imageview = function(data, size, visibleControls) {
+build.imageview = function(data, visibleControls) {
 
-	let html = ''
+	let html      = '',
+	    hasMedium = data.medium!==''
 
-	if (size==='big') {
+	if (hasMedium===false) {
 
-		if (visibleControls===true) html += lychee.html`<div id='image' style='background-image: url($${ data.url })'></div>`
-		else                        html += lychee.html`<div id='image' style='background-image: url($${ data.url });' class='full'></div>`
+		html += lychee.html`<div id='image' class='$${ visibleControls===true ? '' : 'full' }'><div><img src='$${ data.url }'></div></div>`
 
-	} else if (size==='medium') {
+	} else {
 
-		if (visibleControls===true) html += lychee.html`<div id='image' style='background-image: url($${ data.medium })'></div>`
-		else                        html += lychee.html`<div id='image' style='background-image: url($${ data.medium });' class='full'></div>`
-
-	} else if (size==='small') {
-
-		if (visibleControls===true) html += lychee.html`<div id='image' class='small' style='background-image: url($${ data.url }); width: $${ data.width }px; height: $${ data.height }px; margin-top: -$${ parseInt(data.height/2-20) }px; margin-left: -$${ data.width/2 }px;'></div>`
-		else                        html += lychee.html`<div id='image' class='small' style='background-image: url($${ data.url }); width: $${ data.width }px; height: $${ data.height }px; margin-top: -$${ parseInt(data.height/2) }px; margin-left: -$${ data.width/2 }px;'></div>`
+		html += lychee.html`<div id='image' class='$${ visibleControls===true ? '' : 'full' }'><div><img src='$${ data.url }' srcset='$${ data.medium } 1920w, $${ data.url } $${ data.width }w'></div></div>`
 
 	}
 
