@@ -49,9 +49,9 @@ build.album = function(data) {
 
 	html += lychee.html`
 	        <div class='album' data-id='$${ data.id }'>
-	            <img src='$${ data.thumbs[2] }' width='200' height='200' alt='thumb' data-overlay='false'>
-	            <img src='$${ data.thumbs[1] }' width='200' height='200' alt='thumb' data-overlay='false'>
-	            <img src='$${ data.thumbs[0] }' srcset='$${ retinaThumbUrl } 1.5x' width='200' height='200' alt='thumb' data-overlay='$${ isPhoto }'>
+	            <img src='$${ data.thumbs[2] }' width='200' height='200' alt='Photo thumbnail' data-overlay='false' draggable='false'>
+	            <img src='$${ data.thumbs[1] }' width='200' height='200' alt='Photo thumbnail' data-overlay='false' draggable='false'>
+	            <img src='$${ data.thumbs[0] }' srcset='$${ retinaThumbUrl } 1.5x' width='200' height='200' alt='Photo thumbnail' data-overlay='$${ isPhoto }' draggable='false'>
 	            <div class='overlay'>
 	                <h1 title='$${ data.title }'>$${ data.title }</h1>
 	                <a>$${ data.sysdate }</a>
@@ -86,7 +86,7 @@ build.photo = function(data) {
 
 	html += lychee.html`
 	        <div class='photo' data-album-id='$${ data.album }' data-id='$${ data.id }'>
-	            <img src='$${ data.thumbUrl }' srcset='$${ retinaThumbUrl } 1.5x' width='200' height='200' alt='thumb'>
+	            <img src='$${ data.thumbUrl }' srcset='$${ retinaThumbUrl } 1.5x' width='200' height='200' alt='Photo thumbnail' draggable='false'>
 	            <div class='overlay'>
 	                <h1 title='$${ data.title }'>$${ data.title }</h1>
 	        `
@@ -120,11 +120,11 @@ build.imageview = function(data, visibleControls) {
 
 	if (hasMedium===false) {
 
-		html += lychee.html`<div id='image' class='$${ visibleControls===true ? '' : 'full' }'><div><img src='$${ data.url }'></div></div>`
+		html += lychee.html`<div id='image' class='$${ visibleControls===true ? '' : 'full' }'><div><img src='$${ data.url }' draggable='false'></div></div>`
 
 	} else {
 
-		html += lychee.html`<div id='image' class='$${ visibleControls===true ? '' : 'full' }'><div><img src='$${ data.url }' srcset='$${ data.medium } 1920w, $${ data.url } $${ data.width }w'></div></div>`
+		html += lychee.html`<div id='image' class='$${ visibleControls===true ? '' : 'full' }'><div><img src='$${ data.url }' srcset='$${ data.medium } 1920w, $${ data.url } $${ data.width }w' draggable='false'></div></div>`
 
 	}
 
