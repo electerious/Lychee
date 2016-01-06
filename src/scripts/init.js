@@ -78,7 +78,7 @@ $(document).ready(function() {
 		$(document)
 
 			// Fullscreen on mobile
-			.on('touchend', '#image', function(e) {
+			.on('touchend', '#imageview #image', function(e) {
 				if (swipe.obj==null || (swipe.offset>=-5&&swipe.offset<=5)) {
 					if (visible.header()) header.hide(e, 0)
 					else                  header.show()
@@ -86,7 +86,7 @@ $(document).ready(function() {
 			})
 
 			// Swipe on mobile
-			.swipe().on('swipeStart', function() { if (visible.photo()) swipe.start($('#image')) })
+			.swipe().on('swipeStart', function() { if (visible.photo()) swipe.start($('#imageview #image')) })
 			.swipe().on('swipeMove',  function(e) { if (visible.photo()) swipe.move(e.swipe) })
 			.swipe().on('swipeEnd',   function(e) { if (visible.photo()) swipe.stop(e.swipe, photo.previous, photo.next) })
 

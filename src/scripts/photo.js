@@ -100,7 +100,7 @@ photo.previous = function(animate) {
 
 			delay = 200
 
-			$('#image').css({
+			$('#imageview #image').css({
 				WebkitTransform : 'translateX(100%)',
 				MozTransform    : 'translateX(100%)',
 				transform       : 'translateX(100%)',
@@ -131,7 +131,7 @@ photo.next = function(animate) {
 
 			delay = 200
 
-			$('#image').css({
+			$('#imageview #image').css({
 				WebkitTransform : 'translateX(-100%)',
 				MozTransform    : 'translateX(-100%)',
 				transform       : 'translateX(-100%)',
