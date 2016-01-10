@@ -103,27 +103,41 @@ else				echo $error;
 echo(PHP_EOL . PHP_EOL . 'System Information' . PHP_EOL);
 echo('------------------' . PHP_EOL);
 
-# Load json
-$json = file_get_contents(LYCHEE_SRC . 'package.json');
-$json = json_decode($json, true);
+# Ensure that user is logged in
+session_start();
 
-# About imagick
-$imagick = extension_loaded('imagick');
-if ($imagick===true)	$imagickVersion = @Imagick::getVersion();
-else					$imagick = '-';
-if (!isset($imagickVersion, $imagickVersion['versionNumber'])||$imagickVersion==='')	$imagickVersion = '-';
-else																					$imagickVersion = $imagickVersion['versionNumber'];
+if ((isset($_SESSION['login'])&&$_SESSION['login']===true)&&
+	(isset($_SESSION['identifier'])&&$_SESSION['identifier']===$settings['identifier'])) {
 
-# Output system information
-echo('Lychee Version:  ' . $json['version'] . PHP_EOL);
-echo('DB Version:      ' . $settings['version'] . PHP_EOL);
-echo('System:          ' . PHP_OS . PHP_EOL);
-echo('PHP Version:     ' . floatval(phpversion()) . PHP_EOL);
-echo('MySQL Version:   ' . $database->server_version . PHP_EOL);
-echo('Imagick:         ' . $imagick . PHP_EOL);
-echo('Imagick Active:  ' . $settings['imagick'] . PHP_EOL);
-echo('Imagick Version: ' . $imagickVersion . PHP_EOL);
-echo('GD Version:      ' . $gdVersion['GD Version'] . PHP_EOL);
-echo('Plugins:         ' . $settings['plugins'] . PHP_EOL);
+	# Load json
+	$json = file_get_contents(LYCHEE_SRC . 'package.json');
+	$json = json_decode($json, true);
+
+	# About imagick
+	$imagick = extension_loaded('imagick');
+	if ($imagick===true)	$imagickVersion = @Imagick::getVersion();
+	else					$imagick = '-';
+	if (!isset($imagickVersion, $imagickVersion['versionNumber'])||$imagickVersion==='')	$imagickVersion = '-';
+	else																					$imagickVersion = $imagickVersion['versionNumber'];
+
+	# Output system information
+	echo('Lychee Version:  ' . $json['version'] . PHP_EOL);
+	echo('DB Version:      ' . $settings['version'] . PHP_EOL);
+	echo('System:          ' . PHP_OS . PHP_EOL);
+	echo('PHP Version:     ' . floatval(phpversion()) . PHP_EOL);
+	echo('MySQL Version:   ' . $database->server_version . PHP_EOL);
+	echo('Imagick:         ' . $imagick . PHP_EOL);
+	echo('Imagick Active:  ' . $settings['imagick'] . PHP_EOL);
+	echo('Imagick Version: ' . $imagickVersion . PHP_EOL);
+	echo('GD Version:      ' . $gdVersion['GD Version'] . PHP_EOL);
+	echo('Plugins:         ' . $settings['plugins'] . PHP_EOL);
+
+} else {
+
+	# Don't go further if the user is not logged in
+	echo('You have to be logged in to see more information.');
+	exit();
+
+}
 
 ?>
