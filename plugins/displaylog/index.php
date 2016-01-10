@@ -41,37 +41,40 @@ if (mysqli_connect_errno()!=0) {
 $settings = new Settings($database);
 $settings = $settings->get();
 
-# Check if the user is connected
+# Ensure that user is logged in
 session_start();
-$isAdmin = ((isset($_SESSION['login'])&&$_SESSION['login']===true)&&
-        (isset($_SESSION['identifier'])&&$_SESSION['identifier']===$settings['identifier']));
 
-if(!$isAdmin)
-{
-        exit('You have to be logged in to see the log.');
-}
+if ((isset($_SESSION['login'])&&$_SESSION['login']===true)&&
+	(isset($_SESSION['identifier'])&&$_SESSION['identifier']===$settings['identifier'])) {
 
+	# Result
+	$query	= Database::prepare($database, "SELECT FROM_UNIXTIME(time), type, function, line, text FROM ?", array(LYCHEE_TABLE_LOG));
+	$result	= $database->query($query);
 
-# Result
-$query	= Database::prepare($database, "SELECT FROM_UNIXTIME(time), type, function, line, text FROM ?", array(LYCHEE_TABLE_LOG));
-$result	= $database->query($query);
+	# Output
+	if ($result->num_rows===0) {
 
-# Output
-if ($result->num_rows===0) {
+		echo('Everything looks fine, Lychee has not reported any problems!');
 
-	echo('Everything looks fine, Lychee has not reported any problems!' . PHP_EOL . PHP_EOL);
+	} else {
+
+		while($row = $result->fetch_row()) {
+
+			# Encode result before printing
+			$row = array_map('htmlentities', $row);
+
+			# Format: time TZ - type - function(line) - text
+			printf ("%s - %s - %s (%s) \t- %s\n", $row[0], $row[1], $row[2], $row[3], $row[4]);
+
+		}
+
+	}
 
 } else {
 
-	while($row = $result->fetch_row()) {
-
-		# Encode result before printing
-		$row = array_map("htmlentities", $row);
-
-		# Format: time TZ - type - function(line) - text
-		printf ("%s %s - %s - %s (%s) \t- %s\n", $row[0], date_default_timezone_get(), $row[1], $row[2], $row[3], $row[4]);
-
-	}
+	# Don't go further if the user is not logged in
+	echo('You have to be logged in to see the log.');
+	exit();
 
 }
 
