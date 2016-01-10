@@ -1,6 +1,6 @@
 ## v3.0.9
 
-Released January ?, 2016
+Released January 10, 2016
 
 - `Improved` Disabled dragging for thumbnails
 - `Improved` Avoided unnecessary devicePixelRatio checks by using srcset for all thumbnails
