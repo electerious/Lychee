@@ -37,6 +37,21 @@ if (mysqli_connect_errno()!=0) {
 	exit();
 }
 
+# Load settings
+$settings = new Settings($database);
+$settings = $settings->get();
+
+# Check if the user is connected
+session_start();
+$isAdmin = ((isset($_SESSION['login'])&&$_SESSION['login']===true)&&
+        (isset($_SESSION['identifier'])&&$_SESSION['identifier']===$settings['identifier']));
+
+if(!$isAdmin)
+{
+        exit('You have to be logged in to see the log.');
+}
+
+
 # Result
 $query	= Database::prepare($database, "SELECT FROM_UNIXTIME(time), type, function, line, text FROM ?", array(LYCHEE_TABLE_LOG));
 $result	= $database->query($query);
