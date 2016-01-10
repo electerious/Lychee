@@ -45,6 +45,12 @@ if (hasPermissions(LYCHEE_UPLOADS_IMPORT)===false)		$error .= ('Error: \'uploads
 if (hasPermissions(LYCHEE_UPLOADS)===false)				$error .= ('Error: \'uploads/\' is missing or has insufficient read/write privileges' . PHP_EOL);
 if (hasPermissions(LYCHEE_DATA)===false)				$error .= ('Error: \'data/\' is missing or has insufficient read/write privileges' . PHP_EOL);
 
+# About GD
+$gdVersion = gd_info();
+if (!$gdVersion['JPEG Support'])											$error .= ('Error: PHP gd extension without jpeg support' . PHP_EOL);
+if (!$gdVersion['PNG Support'])												$error .= ('Error: PHP gd extension without png support' . PHP_EOL);
+if (!$gdVersion['GIF Read Support'] || !$gdVersion['GIF Create Support'])	$error .= ('Error: PHP gd extension without full gif support' . PHP_EOL);
+
 # Load config
 if (!file_exists(LYCHEE_CONFIG_FILE))	exit('Error: Configuration not found. Please install Lychee for additional tests');
 else									require(LYCHEE_CONFIG_FILE);
@@ -88,12 +94,6 @@ if (!ini_get('allow_url_fopen')) echo('Warning: You may experience problems with
 
 # Check mysql version
 if ($database->server_version<50500) echo('Warning: Lychee uses the GBK charset to avoid sql injections on your MySQL version. Please update to MySQL 5.5 or higher to enable UTF-8 support.' . PHP_EOL);
-
-# About GD
-$gdVersion = gd_info();
-if (!$gdVersion['JPEG Support'])											$error .= ('Error: PHP gd extension without jpeg support' . PHP_EOL);
-if (!$gdVersion['PNG Support'])												$error .= ('Error: PHP gd extension without png support' . PHP_EOL);
-if (!$gdVersion['GIF Read Support'] || !$gdVersion['GIF Create Support'])	$error .= ('Error: PHP gd extension without full gif support' . PHP_EOL);
 
 # Output
 if ($error==='')	echo('No critical problems found. Lychee should work without problems!' . PHP_EOL);
