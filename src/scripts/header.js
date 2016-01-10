@@ -67,16 +67,10 @@ header.bind = function() {
 
 header.show = function() {
 
-	let newMargin = (-1 * ($('#imageview #image').height()/2) + 20)
-
 	clearTimeout($(window).data('timeout'))
 
 	lychee.imageview.removeClass('full')
 	header.dom().removeClass('header--hidden')
-
-	// Adjust position or size of photo
-	if ($('#imageview #image.small').length>0) $('#imageview #image').css('margin-top', newMargin)
-	else                                       $('#imageview #image').removeClass('full')
 
 	return true
 
@@ -90,14 +84,8 @@ header.hide = function(e, delay = 500) {
 
 		$(window).data('timeout', setTimeout(function() {
 
-			let newMargin = (-1 * ($('#imageview #image').height()/2))
-
 			lychee.imageview.addClass('full')
 			header.dom().addClass('header--hidden')
-
-			// Adjust position or size of photo
-			if ($('#imageview #image.small').length>0) $('#imageview #image').css('margin-top', newMargin)
-			else                                       $('#imageview #image').addClass('full')
 
 		}, delay))
 

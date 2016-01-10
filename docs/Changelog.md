@@ -1,3 +1,13 @@
+## v3.0.9
+
+Released January 10, 2016
+
+- `Improved` Disabled dragging for thumbnails
+- `Improved` Avoided unnecessary devicePixelRatio checks by using srcset for all thumbnails
+- `Improved` Avoided devicePixelRatio check by using srcset for the imageview image
+- `Improved` Don't show log and system information when logged out (Thanks @Bramas, #421)
+- `Fixed` Swipe-gestures on mobile devices
+
 ## v3.0.8
 
 Released December 20, 2015

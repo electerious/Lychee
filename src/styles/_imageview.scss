@@ -21,30 +21,43 @@
 		right: 30px;
 		bottom: 30px;
 		left: 30px;
-		transition: top .3s, right .3s, bottom .3s, left .3s, margin-top .3s, opacity .2s, transform .3s $timingBounce;
+		transition: top .3s, right .3s, bottom .3s, left .3s, opacity .2s, transform .2s;
 		will-change: transform;
 
-		background-repeat: no-repeat;
-		background-position: 50% 50%;
-		background-size: contain;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 
 		animation-name: zoomIn;
 		animation-duration: .3s;
 		animation-timing-function: $timingBounce;
 
-		&.small {
-			top: 50%;
-			right: auto;
-			bottom: auto;
-			left: 50%;
+		@media (max-width: 640px) {
+			right: 20px;
+			bottom: 20px;
+			left: 20px;
 		}
+	}
 
-		&.full {
-			top: 0;
-			right: 0;
-			bottom: 0;
-			left: 0;
-		}
+	&.full #image {
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+	}
+
+	#image > div {
+		width: 0;
+		height: 0;
+	}
+
+	#image img {
+		position: absolute;
+		max-width: 100%;
+		max-height: 100%;
+		width: auto;
+		height: auto;
+		transform: translate(-50%, -50%);
 	}
 
 	// Previous/Next Buttons -------------------------------------------------------------- //
@@ -57,6 +70,10 @@
 		&--previous { left: 0; }
 
 		&--next { right: 0; }
+
+		@media (max-width: 640px) {
+			display: none;
+		}
 
 		a {
 			position: fixed;

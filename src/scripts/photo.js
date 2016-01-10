@@ -100,7 +100,7 @@ photo.previous = function(animate) {
 
 			delay = 200
 
-			$('#image').css({
+			$('#imageview #image').css({
 				WebkitTransform : 'translateX(100%)',
 				MozTransform    : 'translateX(100%)',
 				transform       : 'translateX(100%)',
@@ -131,7 +131,7 @@ photo.next = function(animate) {
 
 			delay = 200
 
-			$('#image').css({
+			$('#imageview #image').css({
 				WebkitTransform : 'translateX(-100%)',
 				MozTransform    : 'translateX(-100%)',
 				transform       : 'translateX(-100%)',
@@ -622,42 +622,6 @@ photo.share = function(photoID, service) {
 	}
 
 	if (link.length!=='') location.href = link
-
-}
-
-photo.getSize = function() {
-
-	// Size can be 'big', 'medium' or 'small'
-	// Default is big
-	// Small is centered in the middle of the screen
-	let size       = 'big',
-	    scaled     = false,
-	    hasMedium  = photo.json.medium!=='',
-	    pixelRatio = window.devicePixelRatio,
-	    view       = {
-	    	width  : $(window).width() - 60,
-	    	height : $(window).height() - 100
-	    }
-
-	// Detect if the photo will be shown scaled,
-	// because the screen size is smaller than the photo
-	if (photo.json.width>view.width || photo.json.height>view.height) scaled = true
-
-	// Calculate pixel ratio of screen
-	if (pixelRatio!=null && pixelRatio>1) {
-		view.width  = view.width * pixelRatio
-		view.height = view.height * pixelRatio
-	}
-
-	// Medium available and
-	// Medium still bigger than screen
-	if (hasMedium===true && (1920>view.width && 1080>view.height)) size = 'medium'
-
-	// Photo not scaled
-	// Photo smaller then screen
-	if (scaled===false && (photo.json.width<view.width&& photo.json.width<view.height)) size = 'small'
-
-	return size
 
 }
 

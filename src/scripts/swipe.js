@@ -36,14 +36,25 @@ swipe.move = function(e) {
 
 swipe.stop = function(e, left, right) {
 
-	if (e.x<=-swipe.tolerance)     left(true)
-	else if (e.x>=swipe.tolerance) right(true)
-	else if (swipe.obj!==null) {
+	// Only execute once
+	if (swipe.obj==null) return false
+
+	if (e.x<=-swipe.tolerance) {
+
+		left(true)
+
+	} else if (e.x>=swipe.tolerance) {
+
+		right(true)
+
+	} else {
+
 		swipe.obj.css({
 			WebkitTransform : 'translateX(0px)',
 			MozTransform    : 'translateX(0px)',
 			transform       : 'translateX(0px)'
 		})
+
 	}
 
 	swipe.obj    = null
