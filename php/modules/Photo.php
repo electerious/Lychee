@@ -622,6 +622,9 @@ class Photo extends Module {
 		$photo['star']		= $data['star'];
 		$photo['album']		= $data['album'];
 
+		# Parse medium url
+		if ($data['medium']==='1')	$photo['mediumUrl'] = LYCHEE_URL_UPLOADS_MEDIUM . $data['url'];
+
 		# Parse urls
 		$photo['thumbUrl']	= LYCHEE_URL_UPLOADS_THUMB . $data['thumbUrl'];
 		$photo['url']		= LYCHEE_URL_UPLOADS_BIG . $data['url'];
