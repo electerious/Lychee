@@ -20,7 +20,7 @@ final class Plugins implements \SplSubject {
 		if (!isset($files)) return false;
 
 		# Init vars
-		$this->files	= $files;
+		$this->files = $files;
 
 		# Load plugins
 		foreach ($this->files as $file) {
