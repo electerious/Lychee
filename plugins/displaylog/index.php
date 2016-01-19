@@ -23,8 +23,7 @@ if (!file_exists(LYCHEE_CONFIG_FILE)) exit('Error 001: Configuration not found. 
 require(LYCHEE_CONFIG_FILE);
 
 # Define the table prefix
-if (!isset($dbTablePrefix)) $dbTablePrefix = '';
-defineTablePrefix($dbTablePrefix);
+defineTablePrefix(@$dbTablePrefix);
 
 # Declare
 $result = '';

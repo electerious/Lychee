@@ -33,8 +33,7 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 	}
 
 	# Define the table prefix
-	if (!isset($dbTablePrefix)) $dbTablePrefix = '';
-	defineTablePrefix($dbTablePrefix);
+	defineTablePrefix(@$dbTablePrefix);
 
 	# Connect to database
 	$database = Database::connect($dbHost, $dbUser, $dbPassword, $dbName);

@@ -34,7 +34,7 @@ define('LYCHEE_URL_UPLOADS_THUMB', 'uploads/thumb/');
 function defineTablePrefix($dbTablePrefix) {
 
 	# This part is wrapped into a function, because it needs to be called
-	# after the config-file has been loaded. Other defines are also available
+	# after the config-file has been loaded. Other defines are available
 	# before the config-file has been loaded.
 
 	# Parse table prefix

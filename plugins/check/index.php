@@ -56,8 +56,7 @@ if (!file_exists(LYCHEE_CONFIG_FILE))	exit('Error: Configuration not found. Plea
 else									require(LYCHEE_CONFIG_FILE);
 
 # Define the table prefix
-if (!isset($dbTablePrefix)) $dbTablePrefix = '';
-defineTablePrefix($dbTablePrefix);
+defineTablePrefix(@$dbTablePrefix);
 
 # Database
 $database = new mysqli($dbHost, $dbUser, $dbPassword, $dbName);
