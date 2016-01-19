@@ -23,7 +23,7 @@ final class Database extends Module {
 		'030003' #3.0.3
 	);
 
-	static function connect($host = 'localhost', $user, $password, $name = 'lychee') {
+	public static function connect($host = 'localhost', $user, $password, $name = 'lychee') {
 
 		# Check dependencies
 		Module::dependencies(isset($host, $user, $password, $name));
