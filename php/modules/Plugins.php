@@ -15,7 +15,7 @@ final class Plugins implements \SplSubject {
 	public $action	= null;
 	public $args	= null;
 
-	public function __construct($files, $database, $settings) {
+	public function __construct(array $files, $database, array $settings) {
 
 		if (!isset($files)) return false;
 
