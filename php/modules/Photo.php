@@ -18,6 +18,7 @@ class Photo extends Module {
 		IMAGETYPE_GIF,
 		IMAGETYPE_PNG
 	);
+
 	public static $validExtensions = array(
 		'.jpg',
 		'.jpeg',
@@ -125,7 +126,7 @@ class Photo extends Module {
 
 			# Verify extension
 			$extension = getExtension($file['name']);
-			if (!in_array(strtolower($extension), Photo::$validExtensions, true)) {
+			if (!in_array(strtolower($extension), self::$validExtensions, true)) {
 				Log::error($this->database, __METHOD__, __LINE__, 'Photo format not supported');
 				if ($returnOnError===true) return false;
 				exit('Error: Photo format not supported!');
@@ -133,7 +134,7 @@ class Photo extends Module {
 
 			# Verify image
 			$type = @exif_imagetype($file['tmp_name']);
-			if (!in_array($type, Photo::$validTypes, true)) {
+			if (!in_array($type, self::$validTypes, true)) {
 				Log::error($this->database, __METHOD__, __LINE__, 'Photo type not supported');
 				if ($returnOnError===true) return false;
 				exit('Error: Photo type not supported!');

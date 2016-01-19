@@ -40,15 +40,15 @@ class Session extends Module {
 		# Return settings
 		$return['config'] = $this->settings;
 
+		# Path to Lychee for the server-import dialog
+		$return['config']['location'] = LYCHEE;
+
 		# Remove username and password from response
 		unset($return['config']['username']);
 		unset($return['config']['password']);
 
 		# Remove identifier from response
 		unset($return['config']['identifier']);
-
-		# Path to Lychee for the server-import dialog
-		$return['config']['location'] = LYCHEE;
 
 		# Check if login credentials exist and login if they don't
 		if ($this->noLogin()===true) {
