@@ -7,7 +7,7 @@
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
-class Settings extends Module {
+final class Settings extends Module {
 
 	private $database = null;
 

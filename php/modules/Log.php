@@ -7,7 +7,7 @@
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
-class Log extends Module {
+final class Log extends Module {
 
 	public static function notice($database, $function, $line, $text = '') {
 

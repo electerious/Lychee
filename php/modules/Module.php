@@ -7,7 +7,7 @@
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
-class Module {
+abstract class Module {
 
 	protected $plugins = null;
 
@@ -25,7 +25,7 @@ class Module {
 
 	}
 
-	public static function dependencies($available = false) {
+	final public static function dependencies($available = false) {
 
 		if ($available===false) exit('Error: Can not execute function. Missing parameters or variables.');
 

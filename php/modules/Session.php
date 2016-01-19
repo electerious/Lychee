@@ -7,7 +7,7 @@
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
-class Session extends Module {
+final class Session extends Module {
 
 	private $settings = null;
 

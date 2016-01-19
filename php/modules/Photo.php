@@ -7,7 +7,7 @@
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
-class Photo extends Module {
+final class Photo extends Module {
 
 	private $database	= null;
 	private $settings	= null;

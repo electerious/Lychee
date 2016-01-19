@@ -7,7 +7,7 @@
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
-class Plugins implements \SplSubject {
+final class Plugins implements \SplSubject {
 
 	private $files		= array();
 	private $observers	= array();

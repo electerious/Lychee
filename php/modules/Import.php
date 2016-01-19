@@ -7,7 +7,7 @@
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
-class Import extends Module {
+final class Import extends Module {
 
 	private $database	= null;
 	private $settings	= null;
