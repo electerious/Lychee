@@ -247,9 +247,8 @@ class Admin extends Access {
 
 		global $dbName;
 
-		Module::dependencies(isset($_POST['version']));
 		$session = new Session($this->plugins, $this->settings);
-		echo json_encode($session->init($this->database, $dbName, false, $_POST['version']));
+		echo json_encode($session->init($this->database, $dbName, false));
 
 	}
 

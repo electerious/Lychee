@@ -9,6 +9,20 @@ if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 class Database extends Module {
 
+	private static $versions = array(
+		'020100', #2.1
+		'020101', #2.1.1
+		'020200', #2.2
+		'020500', #2.5
+		'020505', #2.5.5
+		'020601', #2.6.1
+		'020602', #2.6.2
+		'020700', #2.7.0
+		'030000', #3.0.0
+		'030001', #3.0.1
+		'030003' #3.0.3
+	);
+
 	static function connect($host = 'localhost', $user, $password, $name = 'lychee') {
 
 		# Check dependencies
@@ -26,44 +40,34 @@ class Database extends Module {
 		# Set unicode
 		$database->query('SET NAMES utf8;');
 
-		# Check database
-		if (!$database->select_db($name))
-			if (!Database::createDatabase($database, $name)) exit('Error: Could not create database!');
+		# Create database
+		if (!self::createDatabase($database, $name)) exit('Error: Could not create database!');
 
-		# Check tables
-		$query = Database::prepare($database, 'SELECT * FROM ?, ?, ?, ? LIMIT 0', array(LYCHEE_TABLE_PHOTOS, LYCHEE_TABLE_ALBUMS, LYCHEE_TABLE_SETTINGS, LYCHEE_TABLE_LOG));
-		if (!$database->query($query))
-			if (!Database::createTables($database)) exit('Error: Could not create tables!');
+		# Create tables
+		if (!self::createTables($database)) exit('Error: Could not create tables!');
+
+		# Update database
+		if (!self::update($database, $name)) exit('Error: Could not update database and tables!');
 
 		return $database;
 
 	}
 
-	static function update($database, $dbName, $version = 0) {
+	private static function update($database, $dbName) {
 
 		# Check dependencies
 		Module::dependencies(isset($database, $dbName));
-		if (!isset($version)) return true;
 
-		# List of updates
-		$updates = array(
-			'020100', #2.1
-			'020101', #2.1.1
-			'020200', #2.2
-			'020500', #2.5
-			'020505', #2.5.5
-			'020601', #2.6.1
-			'020602', #2.6.2
-			'020700', #2.7.0
-			'030000', #3.0.0
-			'030001', #3.0.1
-			'030003' #3.0.3
-		);
+		# Get current version
+		$query		= self::prepare($database, "SELECT * FROM ? WHERE `key` = 'version'", array(LYCHEE_TABLE_SETTINGS));
+		$results	= $database->query($query);
+		$current	= $results->fetch_object()->value;
 
 		# For each update
-		foreach ($updates as $update) {
+		foreach (self::$versions as $version) {
 
-			if ($update<=$version) continue;
+			# Only update when newer version available
+			if ($version<=$current) continue;
 
 			# Load update
 			include(__DIR__ . '/../database/update_' . $update . '.php');
@@ -74,7 +78,7 @@ class Database extends Module {
 
 	}
 
-	static function createConfig($host = 'localhost', $user, $password, $name = 'lychee', $prefix = '') {
+	public static function createConfig($host = 'localhost', $user, $password, $name = 'lychee', $prefix = '') {
 
 		# Check dependencies
 		Module::dependencies(isset($host, $user, $password, $name));
@@ -83,15 +87,8 @@ class Database extends Module {
 
 		if ($database->connect_errno) return 'Warning: Connection failed!';
 
-		# Check if database exists
-		if (!$database->select_db($name)) {
-
-			# Database doesn't exist
-			# Check if user can create the database
-			$result = Database::createDatabase($database, $name);
-			if ($result===false) return 'Warning: Creation failed!';
-
-		}
+		# Check if user can create the database before saving the configuration
+		if (!self::createDatabase($database, $name)) return 'Warning: Creation failed!';
 
 		# Escape data
 		$host		= mysqli_real_escape_string($database, $host);
@@ -127,13 +124,16 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 	}
 
-	static function createDatabase($database, $name = 'lychee') {
+	private static function createDatabase($database, $name = 'lychee') {
 
 		# Check dependencies
 		Module::dependencies(isset($database, $name));
 
+		# Check if database exists
+		if ($database->select_db($name)) return true;
+
 		# Create database
-		$query	= Database::prepare($database, 'CREATE DATABASE IF NOT EXISTS ?', array($name));
+		$query	= self::prepare($database, 'CREATE DATABASE IF NOT EXISTS ?', array($name));
 		$result = $database->query($query);
 
 		if (!$database->select_db($name)||!$result) return false;
@@ -141,13 +141,17 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 	}
 
-	static function createTables($database) {
+	private static function createTables($database) {
 
 		# Check dependencies
 		Module::dependencies(isset($database));
 
+		# Check if tables exist
+		$query = self::prepare($database, 'SELECT * FROM ?, ?, ?, ? LIMIT 0', array(LYCHEE_TABLE_PHOTOS, LYCHEE_TABLE_ALBUMS, LYCHEE_TABLE_SETTINGS, LYCHEE_TABLE_LOG));
+		if ($database->query($query)) return true;
+
 		# Create log
-		$exist = Database::prepare($database, 'SELECT * FROM ? LIMIT 0', array(LYCHEE_TABLE_LOG));
+		$exist = self::prepare($database, 'SELECT * FROM ? LIMIT 0', array(LYCHEE_TABLE_LOG));
 		if (!$database->query($exist)) {
 
 			# Read file
@@ -157,13 +161,13 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 			if (!isset($query)||$query===false) return false;
 
 			# Create table
-			$query = Database::prepare($database, $query, array(LYCHEE_TABLE_LOG));
+			$query = self::prepare($database, $query, array(LYCHEE_TABLE_LOG));
 			if (!$database->query($query)) return false;
 
 		}
 
 		# Create settings
-		$exist = Database::prepare($database, 'SELECT * FROM ? LIMIT 0', array(LYCHEE_TABLE_SETTINGS));
+		$exist = self::prepare($database, 'SELECT * FROM ? LIMIT 0', array(LYCHEE_TABLE_SETTINGS));
 		if (!$database->query($exist)) {
 
 			# Read file
@@ -176,7 +180,7 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 			}
 
 			# Create table
-			$query = Database::prepare($database, $query, array(LYCHEE_TABLE_SETTINGS));
+			$query = self::prepare($database, $query, array(LYCHEE_TABLE_SETTINGS));
 			if (!$database->query($query)) {
 				Log::error($database, __METHOD__, __LINE__, $database->error);
 				return false;
@@ -192,7 +196,7 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 			}
 
 			# Add content
-			$query = Database::prepare($database, $query, array(LYCHEE_TABLE_SETTINGS));
+			$query = self::prepare($database, $query, array(LYCHEE_TABLE_SETTINGS));
 			if (!$database->query($query)) {
 				Log::error($database, __METHOD__, __LINE__, $database->error);
 				return false;
@@ -200,7 +204,7 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 			# Generate identifier
 			$identifier	= md5(microtime(true));
-			$query		= Database::prepare($database, "UPDATE `?` SET `value` = '?' WHERE `key` = 'identifier' LIMIT 1", array(LYCHEE_TABLE_SETTINGS, $identifier));
+			$query		= self::prepare($database, "UPDATE `?` SET `value` = '?' WHERE `key` = 'identifier' LIMIT 1", array(LYCHEE_TABLE_SETTINGS, $identifier));
 			if (!$database->query($query)) {
 				Log::error($database, __METHOD__, __LINE__, $database->error);
 				return false;
@@ -209,7 +213,7 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 		}
 
 		# Create albums
-		$exist = Database::prepare($database, 'SELECT * FROM ? LIMIT 0', array(LYCHEE_TABLE_ALBUMS));
+		$exist = self::prepare($database, 'SELECT * FROM ? LIMIT 0', array(LYCHEE_TABLE_ALBUMS));
 		if (!$database->query($exist)) {
 
 			# Read file
@@ -222,7 +226,7 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 			}
 
 			# Create table
-			$query = Database::prepare($database, $query, array(LYCHEE_TABLE_ALBUMS));
+			$query = self::prepare($database, $query, array(LYCHEE_TABLE_ALBUMS));
 			if (!$database->query($query)) {
 				Log::error($database, __METHOD__, __LINE__, $database->error);
 				return false;
@@ -231,7 +235,7 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 		}
 
 		# Create photos
-		$exist = Database::prepare($database, 'SELECT * FROM ? LIMIT 0', array(LYCHEE_TABLE_PHOTOS));
+		$exist = self::prepare($database, 'SELECT * FROM ? LIMIT 0', array(LYCHEE_TABLE_PHOTOS));
 		if (!$database->query($exist)) {
 
 			# Read file
@@ -244,7 +248,7 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 			}
 
 			# Create table
-			$query = Database::prepare($database, $query, array(LYCHEE_TABLE_PHOTOS));
+			$query = self::prepare($database, $query, array(LYCHEE_TABLE_PHOTOS));
 			if (!$database->query($query)) {
 				Log::error($database, __METHOD__, __LINE__, $database->error);
 				return false;
@@ -256,9 +260,9 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 	}
 
-	static function setVersion($database, $version) {
+	public static function setVersion($database, $version) {
 
-		$query	= Database::prepare($database, "UPDATE ? SET value = '?' WHERE `key` = 'version'", array(LYCHEE_TABLE_SETTINGS, $version));
+		$query	= self::prepare($database, "UPDATE ? SET value = '?' WHERE `key` = 'version'", array(LYCHEE_TABLE_SETTINGS, $version));
 		$result = $database->query($query);
 		if (!$result) {
 			Log::error($database, __METHOD__, __LINE__, 'Could not update database (' . $database->error . ')');
@@ -267,7 +271,7 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 	}
 
-	static function prepare($database, $query, $data) {
+	public static function prepare($database, $query, $data) {
 
 		# Check dependencies
 		Module::dependencies(isset($database, $query, $data));

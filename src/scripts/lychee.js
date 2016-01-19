@@ -32,11 +32,7 @@ lychee = {
 
 lychee.init = function() {
 
-	let params = {
-		version: lychee.version_code
-	}
-
-	api.post('Session::init', params, function(data) {
+	api.post('Session::init', {}, function(data) {
 
 		// Check status
 		// 0 = No configuration

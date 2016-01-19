@@ -112,7 +112,7 @@ class Guest extends Access {
 		global $dbName;
 
 		$session = new Session($this->plugins, $this->settings);
-		echo json_encode($session->init($this->database, $dbName, true, $_POST['version']));
+		echo json_encode($session->init($this->database, $dbName, true));
 
 	}
 
