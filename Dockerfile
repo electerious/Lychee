@@ -22,6 +22,5 @@ RUN curl -fsSL -o lychee.tar.gz \
 
 # COPY php.ini /usr/local/etc/php/php.ini
 
-
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["apache2-foreground"]
