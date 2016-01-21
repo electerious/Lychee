@@ -12,6 +12,8 @@ web:
   links:
     - db
   volumes:
-    - /volume/web:/var/www/html/
+    - /volume/web:/var/www/html/uploads
+    - /volume/data:/var/www/html/data
+
   ports:
     - 80:80

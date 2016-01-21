@@ -11,8 +11,6 @@ RUN gpg --keyserver ha.pool.sks-keyservers.net --recv-keys 0xb5dbd5925590a237
 RUN docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
  && docker-php-ext-install gd mbstring mysqli zip exif json
 
-# RUN pecl install APCu
-
 ENV LYCHEE_VERSION v3.0.9
 
 VOLUME /var/www/html/
@@ -24,7 +22,6 @@ RUN curl -fsSL -o lychee.tar.gz \
 
 # COPY php.ini /usr/local/etc/php/php.ini
 
-COPY docker-entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["apache2-foreground"]
