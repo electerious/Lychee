@@ -1,0 +1,17 @@
+db:
+  image: mysql
+  volumes:
+    - /volume/mysql/:/var/lib/mysql
+  environment:
+    - MYSQL_ROOT_PASSWORD=rootpassword
+    - MYSQL_USER=mysqluser
+    - MYSQL_PASSWORD=password
+    - MYSQL_DATABASE=lychee
+web:
+  image: mikemichel/lychee
+  links:
+    - db
+  volumes:
+    - /volume/web:/var/www/html/
+  ports:
+    - 80:80
