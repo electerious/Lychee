@@ -10,6 +10,9 @@
 # Location
 $lychee = __DIR__ . '/../../';
 
+# Start the session
+session_start();
+
 # Load requirements
 require($lychee . 'php/define.php');
 require($lychee . 'php/autoload.php');
@@ -41,8 +44,6 @@ $settings = new Settings($database);
 $settings = $settings->get();
 
 # Ensure that user is logged in
-session_start();
-
 if ((isset($_SESSION['login'])&&$_SESSION['login']===true)&&
 	(isset($_SESSION['identifier'])&&$_SESSION['identifier']===$settings['identifier'])) {
 

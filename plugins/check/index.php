@@ -15,6 +15,9 @@ require($lychee . 'php/define.php');
 require($lychee . 'php/autoload.php');
 require($lychee . 'php/modules/misc.php');
 
+# Start the session
+session_start();
+
 # Set content
 header('content-type: text/plain');
 
@@ -103,8 +106,6 @@ echo(PHP_EOL . PHP_EOL . 'System Information' . PHP_EOL);
 echo('------------------' . PHP_EOL);
 
 # Ensure that user is logged in
-session_start();
-
 if ((isset($_SESSION['login'])&&$_SESSION['login']===true)&&
 	(isset($_SESSION['identifier'])&&$_SESSION['identifier']===$settings['identifier'])) {
 
