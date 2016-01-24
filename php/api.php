@@ -55,17 +55,17 @@ if (!empty($fn)) {
 		$admin = new Admin();
 		$admin->check($fn);
 
-	} else {
-
-		###
-		# Guest Access
-		# Access to view all public folders and photos in Lychee.
-		###
-
-		$guest = new Guest();
-		$guest->check($fn);
+		exit();
 
 	}
+
+	###
+	# Guest Access
+	# Access to view all public folders and photos in Lychee.
+	###
+
+	$guest = new Guest();
+	$guest->check($fn);
 
 } else {
 
