@@ -20,7 +20,7 @@ if (!empty($fn)) {
 	# Load required files
 	require(__DIR__ . '/define.php');
 	require(__DIR__ . '/autoload.php');
-	require(__DIR__ . '/modules/misc.php');
+	require(__DIR__ . '/misc.php');
 
 	# Validate parameters
 	if (isset($_POST['albumIDs'])&&preg_match('/^[0-9\,]{1,}$/', $_POST['albumIDs'])!==1)	exit('Error: Wrong parameter type for albumIDs!');

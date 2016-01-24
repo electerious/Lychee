@@ -13,7 +13,7 @@ $lychee = __DIR__ . '/../../';
 # Load requirements
 require($lychee . 'php/define.php');
 require($lychee . 'php/autoload.php');
-require($lychee . 'php/modules/misc.php');
+require($lychee . 'php/misc.php');
 
 # Start the session
 session_start();

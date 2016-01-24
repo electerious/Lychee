@@ -16,7 +16,7 @@ session_start();
 # Load requirements
 require($lychee . 'php/define.php');
 require($lychee . 'php/autoload.php');
-require($lychee . 'php/modules/misc.php');
+require($lychee . 'php/misc.php');
 
 # Set content
 header('content-type: text/plain');
