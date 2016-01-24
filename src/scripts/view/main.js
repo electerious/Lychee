@@ -88,7 +88,7 @@ $(document).ready(function() {
 	// Direct Link
 	header.dom('#button_direct').on(eventName, function() {
 
-		let link = $('#imageview #image').css('background-image').replace(/"/g,'').replace(/url\(|\)$/ig, '')
+		let link = $('#imageview img').attr('src').replace(/"/g,'').replace(/url\(|\)$/ig, '')
 		window.open(link, '_newtab')
 
 	})
