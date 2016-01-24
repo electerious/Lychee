@@ -115,8 +115,8 @@ build.photo = function(data) {
 
 build.imageview = function(data, visibleControls) {
 
-	let html      = '',
-	    hasMedium = data.medium!==''
+	let html      = ''
+	let hasMedium = data.medium!==''
 
 	if (hasMedium===false) {
 
@@ -182,7 +182,7 @@ build.uploadModal = function(title, files) {
 
 		let file = files[i]
 
-		if (file.name.length>40) file.name = file.name.substr(0, 17) + '...' + file.name.substr(file.name.length-20, 20)
+		if (file.name.length>40) file.name = file.name.substr(0, 17) + '...' + file.name.substr(file.name.length - 20, 20)
 
 		html += lychee.html`
 		        <div class='row'>

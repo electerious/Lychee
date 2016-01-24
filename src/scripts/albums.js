@@ -134,7 +134,7 @@ albums.deleteByID = function(albumID) {
 	if (!albums.json)        return false
 	if (!albums.json.albums) return false
 
-	var deleted = false
+	let deleted = false
 
 	$.each(albums.json.albums, function(i) {
 

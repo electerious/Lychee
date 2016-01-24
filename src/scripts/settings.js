@@ -9,11 +9,11 @@ settings.createConfig = function() {
 
 	const action = function(data) {
 
-		let dbName        = data.dbName        || '',
-		    dbUser        = data.dbUser        || '',
-		    dbPassword    = data.dbPassword    || '',
-		    dbHost        = data.dbHost        || '',
-		    dbTablePrefix = data.dbTablePrefix || ''
+		let dbName        = data.dbName        || ''
+		let dbUser        = data.dbUser        || ''
+		let dbPassword    = data.dbPassword    || ''
+		let dbHost        = data.dbHost        || ''
+		let dbTablePrefix = data.dbTablePrefix || ''
 
 		if (dbUser.length<1) {
 			basicModal.error('dbUser')
@@ -140,8 +140,8 @@ settings.createLogin = function() {
 
 	const action = function(data) {
 
-		let username = data.username,
-		    password = data.password
+		let username = data.username
+		let password = data.password
 
 		if (username.length<1) {
 			basicModal.error('username')
@@ -204,9 +204,9 @@ settings.setLogin = function() {
 
 	const action = function(data) {
 
-		let oldPassword = data.oldPassword || '',
-		    username    = data.username    || '',
-		    password    = data.password    || ''
+		let oldPassword = data.oldPassword || ''
+		let username    = data.username    || ''
+		let password    = data.password    || ''
 
 		if (oldPassword.length<1) {
 			basicModal.error('oldPassword')
@@ -269,8 +269,8 @@ settings.setLogin = function() {
 
 settings.setSorting = function() {
 
-	let sortingPhotos = [],
-	    sortingAlbums = []
+	let sortingPhotos = []
+	let sortingAlbums = []
 
 	const action = function() {
 

@@ -71,8 +71,8 @@ photo.preloadNext = function(photoID) {
 	    album.json.content[photoID] &&
 	    album.json.content[photoID].nextPhoto!='') {
 
-		let nextPhoto = album.json.content[photoID].nextPhoto,
-		    url       = album.json.content[nextPhoto].url
+		let nextPhoto = album.json.content[photoID].nextPhoto
+		let url       = album.json.content[nextPhoto].url
 
 		$('head [data-prefetch]').remove()
 		$('head').append(`<link data-prefetch rel="prefetch" href="${ url }">`)
@@ -152,7 +152,7 @@ photo.next = function(animate) {
 photo.duplicate = function(photoIDs) {
 
 	if (!photoIDs) return false
-	if (photoIDs instanceof Array===false) photoIDs = [photoIDs]
+	if (photoIDs instanceof Array===false) photoIDs = [ photoIDs ]
 
 	albums.refresh()
 
@@ -171,13 +171,13 @@ photo.duplicate = function(photoIDs) {
 
 photo.delete = function(photoIDs) {
 
-	let action     = {},
-	    cancel     = {},
-	    msg        = '',
-	    photoTitle = ''
+	let action     = {}
+	let cancel     = {}
+	let msg        = ''
+	let photoTitle = ''
 
 	if (!photoIDs) return false
-	if (photoIDs instanceof Array===false) photoIDs = [photoIDs]
+	if (photoIDs instanceof Array===false) photoIDs = [ photoIDs ]
 
 	if (photoIDs.length===1) {
 
@@ -192,8 +192,8 @@ photo.delete = function(photoIDs) {
 
 	action.fn = function() {
 
-		let nextPhoto,
-			previousPhoto
+		let nextPhoto
+		let previousPhoto
 
 		basicModal.close()
 
@@ -269,11 +269,11 @@ photo.delete = function(photoIDs) {
 
 photo.setTitle = function(photoIDs) {
 
-	let oldTitle = '',
-	    msg      = ''
+	let oldTitle = ''
+	let msg      = ''
 
 	if (!photoIDs) return false
-	if (photoIDs instanceof Array===false) photoIDs = [photoIDs]
+	if (photoIDs instanceof Array===false) photoIDs = [ photoIDs ]
 
 	if (photoIDs.length===1) {
 
@@ -300,8 +300,8 @@ photo.setTitle = function(photoIDs) {
 		})
 
 		let params = {
-			photoIDs: photoIDs.join(),
-			title: newTitle
+			photoIDs : photoIDs.join(),
+			title    : newTitle
 		}
 
 		api.post('Photo::setTitle', params, function(data) {
@@ -335,11 +335,11 @@ photo.setTitle = function(photoIDs) {
 
 photo.setAlbum = function(photoIDs, albumID) {
 
-	let nextPhoto,
-		previousPhoto
+	let nextPhoto
+	let previousPhoto
 
 	if (!photoIDs) return false
-	if (photoIDs instanceof Array===false) photoIDs = [photoIDs]
+	if (photoIDs instanceof Array===false) photoIDs = [ photoIDs ]
 
 	if (visible.photo) lychee.goto(album.getID())
 
@@ -416,7 +416,7 @@ photo.setPublic = function(photoID, e) {
 		}
 
 		basicModal.show({
-			body: "<p>This photo is located in a public album. To make this photo private or public, edit the visibility of the associated album.</p>",
+			body: '<p>This photo is located in a public album. To make this photo private or public, edit the visibility of the associated album.</p>',
 			buttons: {
 				action: {
 					title: 'Show Album',
@@ -500,11 +500,11 @@ photo.setDescription = function(photoID) {
 
 photo.editTags = function(photoIDs) {
 
-	let oldTags = '',
-	    msg     = ''
+	let oldTags = ''
+	let msg     = ''
 
 	if (!photoIDs) return false
-	if (photoIDs instanceof Array===false) photoIDs = [photoIDs]
+	if (photoIDs instanceof Array===false) photoIDs = [ photoIDs ]
 
 	// Get tags
 	if (visible.photo())                              oldTags = photo.json.tags
@@ -591,14 +591,14 @@ photo.deleteTag = function(photoID, index) {
 
 	// Save
 	photo.json.tags = tags.toString()
-	photo.setTags([photoID], photo.json.tags)
+	photo.setTags([ photoID ], photo.json.tags)
 
 }
 
 photo.share = function(photoID, service) {
 
-	let link = '',
-	    url  = photo.getViewLink(photoID)
+	let link = ''
+	let url  = photo.getViewLink(photoID)
 
 	switch (service) {
 		case 'twitter':
@@ -627,8 +627,8 @@ photo.share = function(photoID, service) {
 
 photo.getArchive = function(photoID) {
 
-	let link,
-	    url = `${ api.path }?function=Photo::getArchive&photoID=${ photoID }`
+	let link
+	let url = `${ api.path }?function=Photo::getArchive&photoID=${ photoID }`
 
 	if (location.href.indexOf('index.html')>0) link = location.href.replace(location.hash, '').replace('index.html', url)
 	else                                       link = location.href.replace(location.hash, '') + url

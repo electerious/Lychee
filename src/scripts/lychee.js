@@ -84,8 +84,8 @@ lychee.init = function() {
 
 lychee.login = function(data) {
 
-	let user     = data.username,
-	    password = data.password
+	let user     = data.username
+	let password = data.password
 
 	let params = {
 		user,
@@ -169,9 +169,9 @@ lychee.goto = function(url) {
 
 lychee.load = function() {
 
-	let albumID = '',
-	    photoID = '',
-	    hash    = document.location.hash.replace('#', '').split('/')
+	let albumID = ''
+	let photoID = ''
+	let hash    = document.location.hash.replace('#', '').split('/')
 
 	$('.no_content').remove()
 	contextMenu.close()
@@ -227,9 +227,13 @@ lychee.load = function() {
 
 lychee.getUpdate = function() {
 
+	const success = function(data) {
+		if (data.lychee.version>parseInt(lychee.versionCode)) $('.version span').show()
+	}
+
 	$.ajax({
 		url     : lychee.updatePath,
-		success : function(data) { if (data.lychee.version>parseInt(lychee.versionCode)) $('.version span').show() },
+		success : success
 	})
 
 }
@@ -256,14 +260,14 @@ lychee.setMode = function(mode) {
 		.off('drop')
 
 	Mousetrap
-		.unbind('u')
-		.unbind('s')
-		.unbind('f')
-		.unbind('r')
-		.unbind('d')
-		.unbind('t')
-		.unbind(['command+backspace', 'ctrl+backspace'])
-		.unbind(['command+a', 'ctrl+a'])
+		.unbind([ 'u' ])
+		.unbind([ 's' ])
+		.unbind([ 'f' ])
+		.unbind([ 'r' ])
+		.unbind([ 'd' ])
+		.unbind([ 't' ])
+		.unbind([ 'command+backspace', 'ctrl+backspace' ])
+		.unbind([ 'command+a', 'ctrl+a' ])
 
 	if (mode==='public') {
 
@@ -271,7 +275,8 @@ lychee.setMode = function(mode) {
 
 	} else if (mode==='view') {
 
-		Mousetrap.unbind(['esc', 'command+up'])
+		Mousetrap.unbind([ 'esc', 'command+up' ])
+
 		$('#button_back, a#next, a#previous').remove()
 		$('.no_content').remove()
 
@@ -285,8 +290,8 @@ lychee.setMode = function(mode) {
 lychee.animate = function(obj, animation) {
 
 	let animations = [
-		['fadeIn', 'fadeOut'],
-		['contentZoomIn', 'contentZoomOut']
+		[ 'fadeIn', 'fadeOut' ],
+		[ 'contentZoomIn', 'contentZoomOut' ]
 	]
 
 	if (!obj.jQuery) obj = $(obj)
@@ -306,8 +311,8 @@ lychee.animate = function(obj, animation) {
 
 lychee.retinize = function(path = '') {
 
-	let extention = path.split('.').pop(),
-	    isPhoto   = extention!=='svg'
+	let extention = path.split('.').pop()
+	let isPhoto   = extention!=='svg'
 
 	if (isPhoto===true) {
 
@@ -329,8 +334,8 @@ lychee.loadDropbox = function(callback) {
 
 		loadingBar.show()
 
-		let g = document.createElement('script'),
-		    s = document.getElementsByTagName('script')[0]
+		let g = document.createElement('script')
+		let s = document.getElementsByTagName('script')[0]
 
 		g.src   = 'https://www.dropbox.com/static/api/1/dropins.js'
 		g.id    = 'dropboxjs'
@@ -360,8 +365,8 @@ lychee.loadDropbox = function(callback) {
 
 lychee.getEventName = function() {
 
-	let touchendSupport = (/Android|iPhone|iPad|iPod/i).test(navigator.userAgent || navigator.vendor || window.opera) && ('ontouchend' in document.documentElement),
-	    eventName       = (touchendSupport===true ? 'touchend' : 'click')
+	let touchendSupport = (/Android|iPhone|iPad|iPod/i).test(navigator.userAgent || navigator.vendor || window.opera) && ('ontouchend' in document.documentElement)
+	let eventName       = (touchendSupport===true ? 'touchend' : 'click')
 
 	return eventName
 
@@ -388,8 +393,8 @@ lychee.html = function(literalSections, ...substs) {
 
 	// Use raw literal sections: we don’t want
 	// backslashes (\n etc.) to be interpreted
-	let raw    = literalSections.raw,
-	    result = ''
+	let raw    = literalSections.raw
+	let result = ''
 
 	substs.forEach((subst, i) => {
 
@@ -412,7 +417,7 @@ lychee.html = function(literalSections, ...substs) {
 	// Take care of last literal section
 	// (Never fails, because an empty template string
 	// produces one literal section, an empty string)
-	result += raw[raw.length-1]
+	result += raw[raw.length - 1]
 
 	return result
 

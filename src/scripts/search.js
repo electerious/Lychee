@@ -19,9 +19,9 @@ search.find = function(term) {
 
 			api.post('search', { term }, function(data) {
 
-				let html       = '',
-				    albumsData = '',
-				    photosData = ''
+				let html       = ''
+				let albumsData = ''
+				let photosData = ''
 
 				// Build albums
 				if (data && data.albums) {

@@ -14,7 +14,7 @@ api.post = function(fn, params, callback) {
 
 	loadingBar.show()
 
-	params = $.extend({function: fn}, params)
+	params = $.extend({ function: fn }, params)
 
 	const success = (data) => {
 
@@ -31,9 +31,9 @@ api.post = function(fn, params, callback) {
 		else if (data==='') data = false
 
 		// Convert to JSON if string start with '{' and ends with '}'
-		if (typeof data==='string' &&
-			data.substring(0, 1)==='{' &&
-			data.substring(data.length-1, data.length)==='}') data = $.parseJSON(data)
+		if (typeof data==='string' && data.substring(0, 1)==='{' && data.substring(data.length - 1, data.length)==='}') {
+			data = $.parseJSON(data)
+		}
 
 		// Output response when debug mode is enabled
 		if (lychee.debugMode) console.log(data)

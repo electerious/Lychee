@@ -146,12 +146,12 @@ album.add = function() {
 
 album.delete = function(albumIDs) {
 
-	let action     = {},
-	    cancel     = {},
-	    msg        = ''
+	let action = {}
+	let cancel = {}
+	let msg    = ''
 
 	if (!albumIDs) return false
-	if (albumIDs instanceof Array===false) albumIDs = [albumIDs]
+	if (albumIDs instanceof Array===false) albumIDs = [ albumIDs ]
 
 	action.fn = function() {
 
@@ -234,11 +234,11 @@ album.delete = function(albumIDs) {
 
 album.setTitle = function(albumIDs) {
 
-	let oldTitle = '',
-	    msg      = ''
+	let oldTitle = ''
+	let msg      = ''
 
 	if (!albumIDs) return false
-	if (albumIDs instanceof Array===false) albumIDs = [albumIDs]
+	if (albumIDs instanceof Array===false) albumIDs = [ albumIDs ]
 
 	if (albumIDs.length===1) {
 
@@ -365,12 +365,12 @@ album.setPublic = function(albumID, modal, e) {
 
 	if (modal===true) {
 
-		let text   = '',
-		    action = {}
+		let text   = ''
+		let action = {}
 
 		action.fn = () => {
 
-			// setPublic function without showing the modal
+			// Call setPublic function without showing the modal
 			album.setPublic(album.getID(), false, e)
 
 		}
@@ -515,8 +515,8 @@ album.setPublic = function(albumID, modal, e) {
 
 album.share = function(service) {
 
-	let link = '',
-	    url  = location.href
+	let link = ''
+	let url  = location.href
 
 	switch (service) {
 		case 'twitter':
@@ -539,8 +539,8 @@ album.share = function(service) {
 
 album.getArchive = function(albumID) {
 
-	let link,
-	    url = `${ api.path }?function=Album::getArchive&albumID=${ albumID }`
+	let link = ''
+	let url  = `${ api.path }?function=Album::getArchive&albumID=${ albumID }`
 
 	if (location.href.indexOf('index.html')>0) link = location.href.replace(location.hash, '').replace('index.html', url)
 	else                                       link = location.href.replace(location.hash, '') + url
@@ -553,12 +553,12 @@ album.getArchive = function(albumID) {
 
 album.merge = function(albumIDs) {
 
-	let title  = '',
-	    sTitle = '',
-	    msg    = ''
+	let title  = ''
+	let sTitle = ''
+	let msg    = ''
 
 	if (!albumIDs) return false
-	if (albumIDs instanceof Array===false) albumIDs = [albumIDs]
+	if (albumIDs instanceof Array===false) albumIDs = [ albumIDs ]
 
 	// Get title of first album
 	if (albums.json) title = albums.getByID(albumIDs[0]).title

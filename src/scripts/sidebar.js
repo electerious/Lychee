@@ -30,14 +30,14 @@ sidebar.bind = function() {
 	// event handlers should be removed before binding a new one.
 
 	// Event Name
-	let eventName = lychee.getEventName();
+	let eventName = lychee.getEventName()
 
 	sidebar
 		.dom('#edit_title')
 		.off(eventName)
 		.on(eventName, function() {
-			if (visible.photo())      photo.setTitle([photo.getID()])
-			else if (visible.album()) album.setTitle([album.getID()])
+			if (visible.photo())      photo.setTitle([ photo.getID() ])
+			else if (visible.album()) album.setTitle([ album.getID() ])
 		})
 
 	sidebar
@@ -52,7 +52,7 @@ sidebar.bind = function() {
 		.dom('#edit_tags')
 		.off(eventName)
 		.on(eventName, function() {
-			photo.editTags([photo.getID()])
+			photo.editTags([ photo.getID() ])
 		})
 
 	sidebar
@@ -114,10 +114,10 @@ sidebar.createStructure.photo = function(data) {
 
 	if (data==null || data==='') return false
 
-	let editable  = false,
-	    exifHash  = data.takestamp + data.make + data.model + data.shutter + data.aperture + data.focal + data.iso,
-	    structure = {},
-	    _public   = ''
+	let editable  = false
+	let exifHash  = data.takestamp + data.make + data.model + data.shutter + data.aperture + data.focal + data.iso
+	let structure = {}
+	let _public   = ''
 
 	// Enable editable when user logged in
 	if (lychee.publicMode===false) editable = true
@@ -220,12 +220,12 @@ sidebar.createStructure.album = function(data) {
 
 	if (data==null || data==='') return false
 
-	let editable     = false,
-	    structure    = {},
-	    _public      = '',
-	    visible      = '',
-	    downloadable = '',
-	    password     = ''
+	let editable     = false
+	let structure    = {}
+	let _public      = ''
+	let visible      = ''
+	let downloadable = ''
+	let password     = ''
 
 	// Enable editable when user logged in
 	if (lychee.publicMode===false) editable = true
@@ -367,8 +367,8 @@ sidebar.render = function(structure) {
 
 	let renderTags = function(section) {
 
-		let _html    = '',
-		    editable = ''
+		let _html    = ''
+		let editable = ''
 
 		// Add edit-icon to the value when editable
 		if (section.editable===true) editable = build.editIcon('edit_tags')
