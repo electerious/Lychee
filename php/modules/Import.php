@@ -1,7 +1,7 @@
 <?php
 
 ###
-# @name			Upload Module
+# @name			Import Module
 # @copyright	2015 by Tobias Reich
 ###
 
