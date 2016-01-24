@@ -8,7 +8,7 @@
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 if (!defined('LYCHEE_ACCESS_INSTALLATION')) exit('Error: You are not allowed to access this area!');
 
-class Installation extends Access {
+final class Installation extends Access {
 
 	public function check($fn) {
 

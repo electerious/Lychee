@@ -8,7 +8,7 @@
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 if (!defined('LYCHEE_ACCESS_GUEST')) exit('Error: You are not allowed to access this area!');
 
-class Guest extends Access {
+final class Guest extends Access {
 
 	public function check($fn) {
 
