@@ -31,7 +31,7 @@ define('LYCHEE_URL_UPLOADS_BIG', 'uploads/big/');
 define('LYCHEE_URL_UPLOADS_MEDIUM', 'uploads/medium/');
 define('LYCHEE_URL_UPLOADS_THUMB', 'uploads/thumb/');
 
-function defineTablePrefix($dbTablePrefix) {
+function defineTablePrefix($dbTablePrefix = '') {
 
 	# This part is wrapped into a function, because it needs to be called
 	# after the config-file has been loaded. Other defines are available
@@ -39,8 +39,7 @@ function defineTablePrefix($dbTablePrefix) {
 
 	# Parse table prefix
 	# Old users do not have the table prefix stored in their config-file
-	if (!isset($dbTablePrefix)||$dbTablePrefix==='') $dbTablePrefix = '';
-	else $dbTablePrefix .= '_';
+	if ($dbTablePrefix!=='') $dbTablePrefix .= '_';
 
 	# Define tables
 	define('LYCHEE_TABLE_ALBUMS', $dbTablePrefix . 'lychee_albums');
