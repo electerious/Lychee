@@ -1,5 +1,4 @@
 # Content of table lychee_settings
-# Version 2.5
 # ------------------------------------------------------------
 
 INSERT INTO `?` (`key`, `value`)
