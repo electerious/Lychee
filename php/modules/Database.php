@@ -68,12 +68,6 @@ final class Database extends Module {
 
 	}
 
-	private function __clone() {
-
-		# Magic method clone is empty to prevent duplication of connection
-
-	}
-
 	public static function connect($host = 'localhost', $user, $password) {
 
 		# Open a new connection to the MySQL server

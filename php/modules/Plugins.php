@@ -45,12 +45,6 @@ final class Plugins implements \SplSubject {
 
 	}
 
-	private function __clone() {
-
-		# Magic method clone is empty to prevent duplication of plugins
-
-	}
-
 	public function attach(\SplObserver $observer) {
 
 		if (!isset($observer)) return false;
