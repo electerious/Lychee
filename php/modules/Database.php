@@ -10,10 +10,6 @@ if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 final class Database extends Module {
 
 	private static $versions = array(
-		'020500', #2.5
-		'020505', #2.5.5
-		'020601', #2.6.1
-		'020602', #2.6.2
 		'020700', #2.7.0
 		'030000', #3.0.0
 		'030001', #3.0.1

@@ -1,12 +1,17 @@
+### Update requirements
+
+- Your system must comply with the latest [system requirements](https://github.com/electerious/Lychee/blob/master/docs/Installation.md) of Lychee.
+- Ensure that your current version is greater than 2.7.0. Updates from older Lychee versions aren't supported.
+
 ### Update with `git`
 
-The easiest way to update Lychee is with `git`:
+Updating Lychee with `git` is the easiest way:
 
 	git pull
-	
+
 ### Update manually
 
-1. Download the [newest Version](https://github.com/electerious/Lychee/archive/master.zip)
+1. Download the [newest Version](https://github.com/electerious/Lychee/release)
 2. Replace all existing files, excluding `uploads/` and `data/`
 3. Open Lychee (and enter your database details)
 
