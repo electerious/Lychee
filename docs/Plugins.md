@@ -11,33 +11,19 @@ The plugin-system of Lychee allows you to execute scripts, when a certain action
 
 ### How to create a plugin
 
-1. Create a folder in `plugins/`
-2. Create an `index.php` within the new folder and with the following content:
+1. Create a folder in `plugins/` (e.g. `plugins/ExamplePlugin/`)
+2. Create an `ExamplePlugin.php` file within the new folder and add the following content:
 
 ```php
 <?php
-
-###
-# @name			ExamplePlugin
-# @author		Tobias Reich
-# @copyright	2015 by Tobias Reich
-###
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 class ExamplePlugin implements SplObserver {
 
-	private $database = null;
-	private $settings = null;
+	public function __construct() {
 
-	public function __construct($database, $settings) {
-
-		# These params are passed to your plugin from Lychee
-		# Save them to access the database and settings of Lychee
-		$this->database = $database;
-		$this->settings = $settings;
-
-		# Add more code here if wanted
+		# Add code here if wanted
 		# __construct() will be called every time Lychee gets called
 		# Make sure this part is performant
 
@@ -52,8 +38,9 @@ class ExamplePlugin implements SplObserver {
 		if ($subject->action!=='Photo::add:before') return false;
 
 		# Do something when Photo::add:before gets called
-		# $this->database => The database of Lychee
-		# $this->settings => The settings of Lychee
+		# Database::get() => Database connection of Lychee
+		# Settings::get() => Settings of Lychee
+		# $subject->action => Called hook
 		# $subject->args => Params passed to the original function
 
 		return true;
@@ -62,15 +49,14 @@ class ExamplePlugin implements SplObserver {
 
 }
 
-# Register your plugin
-$plugins->attach(new ExamplePlugin($database, $settings));
+?>
 ```
 
-3. Add the plugin-path to the database of Lychee
+3. Add the class name to the database of Lychee
 
-Select the table `lychee_settings` and edit the value of `plugins` to the path of your plugin. The path must be relative from the `plugins/`-folder: `ExamplePlugin/index.php`.
+Select the table `lychee_settings` and add the name of the class to the value of `plugins` (e.g. `ExamplePlugin`). Please ensure that the folder has the same name as the class and as the file.
 
-Divide multiple plugins with semicolons: `Plugin01/index.php;Plugin02/index.php`.
+Divide multiple plugins with semicolons: `ExamplePlugin;ExampleTwoPlugin`.
 
 ### Available hooks
 

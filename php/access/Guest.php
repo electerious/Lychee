@@ -6,7 +6,6 @@
 ###
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
-if (!defined('LYCHEE_ACCESS_GUEST')) exit('Error: You are not allowed to access this area!');
 
 final class Guest extends Access {
 
@@ -45,7 +44,7 @@ final class Guest extends Access {
 
 	private function getAlbums() {
 
-		$album = new Album($this->database, $this->plugins, $this->settings, null);
+		$album = new Album(null);
 		echo json_encode($album->getAll(true));
 
 	}
@@ -53,7 +52,7 @@ final class Guest extends Access {
 	private function getAlbum() {
 
 		Module::dependencies(isset($_POST['albumID'], $_POST['password']));
-		$album = new Album($this->database, $this->plugins, $this->settings, $_POST['albumID']);
+		$album = new Album($_POST['albumID']);
 
 		if ($album->getPublic()) {
 
@@ -73,7 +72,7 @@ final class Guest extends Access {
 	private function checkAlbumAccess() {
 
 		Module::dependencies(isset($_POST['albumID'], $_POST['password']));
-		$album = new Album($this->database, $this->plugins, $this->settings, $_POST['albumID']);
+		$album = new Album($_POST['albumID']);
 
 		if ($album->getPublic()) {
 
@@ -95,7 +94,7 @@ final class Guest extends Access {
 	private function getPhoto() {
 
 		Module::dependencies(isset($_POST['photoID'], $_POST['albumID'], $_POST['password']));
-		$photo = new Photo($this->database, $this->plugins, null, $_POST['photoID']);
+		$photo = new Photo($_POST['photoID']);
 
 		$pgP = $photo->getPublic($_POST['password']);
 
@@ -111,22 +110,22 @@ final class Guest extends Access {
 
 		global $dbName;
 
-		$session = new Session($this->plugins, $this->settings);
-		echo json_encode($session->init($this->database, $dbName, true));
+		$session = new Session();
+		echo json_encode($session->init(true));
 
 	}
 
 	private function login() {
 
 		Module::dependencies(isset($_POST['user'], $_POST['password']));
-		$session = new Session($this->plugins, $this->settings);
+		$session = new Session();
 		echo $session->login($_POST['user'], $_POST['password']);
 
 	}
 
 	private function logout() {
 
-		$session = new Session($this->plugins, $this->settings);
+		$session = new Session();
 		echo $session->logout();
 
 	}
@@ -136,7 +135,7 @@ final class Guest extends Access {
 	private function getAlbumArchive() {
 
 		Module::dependencies(isset($_GET['albumID'], $_GET['password']));
-		$album = new Album($this->database, $this->plugins, $this->settings, $_GET['albumID']);
+		$album = new Album($_GET['albumID']);
 
 		if ($album->getPublic()&&$album->getDownloadable()) {
 
@@ -156,7 +155,7 @@ final class Guest extends Access {
 	private function getPhotoArchive() {
 
 		Module::dependencies(isset($_GET['photoID'], $_GET['password']));
-		$photo = new Photo($this->database, $this->plugins, null, $_GET['photoID']);
+		$photo = new Photo($_GET['photoID']);
 
 		$pgP = $photo->getPublic($_GET['password']);
 

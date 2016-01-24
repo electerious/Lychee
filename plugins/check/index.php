@@ -58,16 +58,12 @@ if (!$gdVersion['GIF Read Support'] || !$gdVersion['GIF Create Support'])	$error
 if (!file_exists(LYCHEE_CONFIG_FILE))	exit('Error: Configuration not found. Please install Lychee for additional tests');
 else									require(LYCHEE_CONFIG_FILE);
 
-# Define the table prefix
-defineTablePrefix(@$dbTablePrefix);
-
 # Database
 $database = new mysqli($dbHost, $dbUser, $dbPassword, $dbName);
 if (mysqli_connect_errno()!=0) $error .= ('Error: ' . mysqli_connect_errno() . ': ' . mysqli_connect_error() . '' . PHP_EOL);
 
 # Load settings
-$settings = new Settings($database);
-$settings = $settings->get();
+$settings = Settings::get();
 
 # Config
 if (!isset($dbName)||$dbName==='')	$error .= ('Error: No property for $dbName in config.php' . PHP_EOL);
@@ -130,7 +126,7 @@ if ((isset($_SESSION['login'])&&$_SESSION['login']===true)&&
 	echo('Imagick Active:  ' . $settings['imagick'] . PHP_EOL);
 	echo('Imagick Version: ' . $imagickVersion . PHP_EOL);
 	echo('GD Version:      ' . $gdVersion['GD Version'] . PHP_EOL);
-	echo('Plugins:         ' . $settings['plugins'] . PHP_EOL);
+	echo('Plugins:         ' . implode($settings['plugins'], ', ') . PHP_EOL);
 
 } else {
 

@@ -9,36 +9,45 @@ if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 final class Plugins implements \SplSubject {
 
-	private $files		= array();
-	private $observers	= array();
+	private static $instance = null;
 
-	public $action	= null;
-	public $args	= null;
+	private $observers = array();
 
-	public function __construct(array $files, $database, array $settings) {
+	public $action = null;
+	public $args = null;
 
-		if (!isset($files)) return false;
+	public static function get() {
 
-		# Init vars
-		$this->files = $files;
+		if (!self::$instance) {
+
+			$files = Settings::get()['plugins'];
+
+			self::$instance = new self($files);
+
+		}
+
+		return self::$instance;
+
+	}
+
+	private function __construct(array $plugins) {
 
 		# Load plugins
-		foreach ($this->files as $file) {
+		foreach ($plugins as $plugin) {
 
-			if ($file==='') continue;
+			if ($plugin==='') continue;
 
-			$file = LYCHEE_PLUGINS . $file;
-
-			if (file_exists($file)===false) {
-				Log::warning($database, __METHOD__, __LINE__, 'Could not include plugin. File does not exist (' . $file . ').');
-				continue;
-			}
-
-			include($file);
+			$this->attach(new $plugin);
 
 		}
 
 		return true;
+
+	}
+
+	private function __clone() {
+
+		# Magic method clone is empty to prevent duplication of plugins
 
 	}
 

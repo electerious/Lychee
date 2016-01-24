@@ -29,49 +29,30 @@ if (!empty($fn)) {
 	if (isset($_POST['photoID'])&&preg_match('/^[0-9]{14}$/', $_POST['photoID'])!==1)		exit('Error: Wrong parameter type for photoID!');
 
 	# Check if a configuration exists
-	if (file_exists(LYCHEE_CONFIG_FILE)) require(LYCHEE_CONFIG_FILE);
-	else {
+	if (Config::exists()===false) {
 
 		###
 		# Installation Access
 		# Limited access to configure Lychee. Only available when the config.php file is missing.
 		###
 
-		define('LYCHEE_ACCESS_INSTALLATION', true);
-
-		$installation = new Installation(null, null, null);
-		$installation->check($_POST['function']);
+		$installation = new Installation();
+		$installation->check($fn);
 
 		exit();
 
 	}
 
-	# Define the table prefix
-	defineTablePrefix(@$dbTablePrefix);
-
-	# Connect to database
-	$database = Database::connect($dbHost, $dbUser, $dbPassword, $dbName);
-
-	# Load settings
-	$settings = new Settings($database);
-	$settings = $settings->get();
-
-	# Init plugins
-	$plugins = explode(';', $settings['plugins']);
-	$plugins = new Plugins($plugins, $database, $settings);
-
 	# Check if user is logged
 	if ((isset($_SESSION['login'])&&$_SESSION['login']===true)&&
-		(isset($_SESSION['identifier'])&&$_SESSION['identifier']===$settings['identifier'])) {
+		(isset($_SESSION['identifier'])&&$_SESSION['identifier']===Settings::get()['identifier'])) {
 
 		###
 		# Admin Access
 		# Full access to Lychee. Only with correct password/session.
 		###
 
-		define('LYCHEE_ACCESS_ADMIN', true);
-
-		$admin = new Admin($database, $plugins, $settings);
+		$admin = new Admin();
 		$admin->check($fn);
 
 	} else {
@@ -81,9 +62,7 @@ if (!empty($fn)) {
 		# Access to view all public folders and photos in Lychee.
 		###
 
-		define('LYCHEE_ACCESS_GUEST', true);
-
-		$guest = new Guest($database, $plugins, $settings);
+		$guest = new Guest();
 		$guest->check($fn);
 
 	}

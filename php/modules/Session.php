@@ -9,28 +9,16 @@ if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 final class Session extends Module {
 
-	private $settings = null;
-
-	public function __construct($plugins, $settings) {
-
-		# Init vars
-		$this->plugins	= $plugins;
-		$this->settings	= $settings;
-
-		return true;
-
-	}
-
-	public function init($database, $dbName, $public) {
+	public function init($public) {
 
 		# Check dependencies
-		self::dependencies(isset($this->settings, $public));
+		self::dependencies(isset($public));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Return settings
-		$return['config'] = $this->settings;
+		$return['config'] = Settings::get();
 
 		# Path to Lychee for the server-import dialog
 		$return['config']['location'] = LYCHEE;
@@ -83,19 +71,19 @@ final class Session extends Module {
 	public function login($username, $password) {
 
 		# Check dependencies
-		self::dependencies(isset($this->settings, $username, $password));
+		self::dependencies(isset($username, $password));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
 
-		$username = crypt($username, $this->settings['username']);
-		$password = crypt($password, $this->settings['password']);
+		$username = crypt($username, Settings::get()['username']);
+		$password = crypt($password, Settings::get()['password']);
 
 		# Check login with crypted hash
-		if ($this->settings['username']===$username&&
-			$this->settings['password']===$password) {
+		if (Settings::get()['username']===$username&&
+			Settings::get()['password']===$password) {
 				$_SESSION['login']		= true;
-				$_SESSION['identifier']	= $this->settings['identifier'];
+				$_SESSION['identifier']	= Settings::get()['identifier'];
 				return true;
 		}
 
@@ -111,14 +99,11 @@ final class Session extends Module {
 
 	private function noLogin() {
 
-		# Check dependencies
-		self::dependencies(isset($this->settings));
-
 		# Check if login credentials exist and login if they don't
-		if ($this->settings['username']===''&&
-			$this->settings['password']==='') {
+		if (Settings::get()['username']===''&&
+			Settings::get()['password']==='') {
 				$_SESSION['login']		= true;
-				$_SESSION['identifier']	= $this->settings['identifier'];
+				$_SESSION['identifier']	= Settings::get()['identifier'];
 				return true;
 		}
 

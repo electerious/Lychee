@@ -6,7 +6,6 @@
 ###
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
-if (!defined('LYCHEE_ACCESS_INSTALLATION')) exit('Error: You are not allowed to access this area!');
 
 final class Installation extends Access {
 
@@ -14,10 +13,10 @@ final class Installation extends Access {
 
 		switch ($fn) {
 
-			case 'Database::createConfig':	$this->dbCreateConfig(); break;
+			case 'Config::create':	$this->configCreate(); break;
 
 			# Error
-			default:						$this->init(); break;
+			default:				$this->init(); break;
 
 		}
 
@@ -25,10 +24,10 @@ final class Installation extends Access {
 
 	}
 
-	private function dbCreateConfig() {
+	private function configCreate() {
 
 		Module::dependencies(isset($_POST['dbHost'], $_POST['dbUser'], $_POST['dbPassword'], $_POST['dbName'], $_POST['dbTablePrefix']));
-		echo Database::createConfig($_POST['dbHost'], $_POST['dbUser'], $_POST['dbPassword'], $_POST['dbName'], $_POST['dbTablePrefix']);
+		echo Config::create($_POST['dbHost'], $_POST['dbUser'], $_POST['dbPassword'], $_POST['dbName'], $_POST['dbTablePrefix']);
 
 	}
 

@@ -9,17 +9,15 @@ if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 abstract class Module {
 
-	protected $plugins = null;
-
 	protected function plugins($name, $location, $args) {
 
-		if (!isset($this->plugins, $name, $location, $args)) return false;
+		self::dependencies(isset($name, $location, $args));
 
 		# Parse
 		$location = ($location===0 ? 'before' : 'after');
 
 		# Call plugins
-		$this->plugins->activate($name . ":" . $location, $args);
+		Plugins::get()->activate($name . ":" . $location, $args);
 
 		return true;
 

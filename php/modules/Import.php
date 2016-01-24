@@ -9,31 +9,17 @@ if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 final class Import extends Module {
 
-	private $database	= null;
-	private $settings	= null;
-
-	public function __construct($database, $plugins, $settings) {
-
-		# Init vars
-		$this->database	= $database;
-		$this->plugins	= $plugins;
-		$this->settings	= $settings;
-
-		return true;
-
-	}
-
 	private function photo($path, $albumID = 0, $description = '', $tags = '') {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->plugins, $this->settings, $path));
+		self::dependencies(isset($path));
 
 		# No need to validate photo type and extension in this function.
 		# $photo->add will take care of it.
 
 		$info	= getimagesize($path);
 		$size	= filesize($path);
-		$photo	= new Photo($this->database, $this->plugins, $this->settings, null);
+		$photo	= new Photo(null);
 
 		$nameFile					= array(array());
 		$nameFile[0]['name']		= $path;
@@ -51,7 +37,7 @@ final class Import extends Module {
 	public function url($urls, $albumID = 0) {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $urls));
+		self::dependencies(isset($urls));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -71,7 +57,7 @@ final class Import extends Module {
 			$extension = getExtension($url);
 			if (!in_array(strtolower($extension), Photo::$validExtensions, true)) {
 				$error = true;
-				Log::error($this->database, __METHOD__, __LINE__, 'Photo format not supported (' . $url . ')');
+				Log::error(__METHOD__, __LINE__, 'Photo format not supported (' . $url . ')');
 				continue;
 			}
 
@@ -79,7 +65,7 @@ final class Import extends Module {
 			$type = @exif_imagetype($url);
 			if (!in_array($type, Photo::$validTypes, true)) {
 				$error = true;
-				Log::error($this->database, __METHOD__, __LINE__, 'Photo type not supported (' . $url . ')');
+				Log::error(__METHOD__, __LINE__, 'Photo type not supported (' . $url . ')');
 				continue;
 			}
 
@@ -89,14 +75,14 @@ final class Import extends Module {
 
 			if (@copy($url, $tmp_name)===false) {
 				$error = true;
-				Log::error($this->database, __METHOD__, __LINE__, 'Could not copy file (' . $tmp_name . ') to temp-folder (' . $tmp_name . ')');
+				Log::error(__METHOD__, __LINE__, 'Could not copy file (' . $tmp_name . ') to temp-folder (' . $tmp_name . ')');
 				continue;
 			}
 
 			# Import photo
 			if (!$this->photo($tmp_name, $albumID)) {
 				$error = true;
-				Log::error($this->database, __METHOD__, __LINE__, 'Could not import file: ' . $tmp_name);
+				Log::error(__METHOD__, __LINE__, 'Could not import file: ' . $tmp_name);
 				continue;
 			}
 
@@ -112,15 +98,12 @@ final class Import extends Module {
 
 	public function server($path, $albumID = 0) {
 
-		# Check dependencies
-		self::dependencies(isset($this->database, $this->plugins, $this->settings));
-
 		# Parse path
 		if (!isset($path))				$path = LYCHEE_UPLOADS_IMPORT;
 		if (substr($path, -1)==='/')	$path = substr($path, 0, -1);
 
 		if (is_dir($path)===false) {
-			Log::error($this->database, __METHOD__, __LINE__, 'Given path is not a directory (' . $path . ')');
+			Log::error(__METHOD__, __LINE__, 'Given path is not a directory (' . $path . ')');
 			return 'Error: Given path is not a directory!';
 		}
 
@@ -128,7 +111,7 @@ final class Import extends Module {
 		if ($path===LYCHEE_UPLOADS_BIG||($path . '/')===LYCHEE_UPLOADS_BIG||
 			$path===LYCHEE_UPLOADS_MEDIUM||($path . '/')===LYCHEE_UPLOADS_MEDIUM||
 			$path===LYCHEE_UPLOADS_THUMB||($path . '/')===LYCHEE_UPLOADS_THUMB) {
-				Log::error($this->database, __METHOD__, __LINE__, 'The given path is a reserved path of Lychee (' . $path . ')');
+				Log::error(__METHOD__, __LINE__, 'The given path is a reserved path of Lychee (' . $path . ')');
 				return 'Error: Given path is a reserved path of Lychee!';
 		}
 
@@ -150,7 +133,7 @@ final class Import extends Module {
 			# the file may still be unreadable by the user
 			if (!is_readable($file)) {
 				$error = true;
-				Log::error($this->database, __METHOD__, __LINE__, 'Could not read file or directory: ' . $file);
+				Log::error(__METHOD__, __LINE__, 'Could not read file or directory: ' . $file);
 				continue;
 			}
 
@@ -162,7 +145,7 @@ final class Import extends Module {
 
 				if (!$this->photo($file, $albumID)) {
 					$error = true;
-					Log::error($this->database, __METHOD__, __LINE__, 'Could not import file: ' . $file);
+					Log::error(__METHOD__, __LINE__, 'Could not import file: ' . $file);
 					continue;
 				}
 
@@ -170,13 +153,13 @@ final class Import extends Module {
 
 				# Folder
 
-				$album				= new Album($this->database, $this->plugins, $this->settings, null);
+				$album				= new Album(null);
 				$newAlbumID			= $album->add('[Import] ' . basename($file));
 				$contains['albums']	= true;
 
 				if ($newAlbumID===false) {
 					$error = true;
-					Log::error($this->database, __METHOD__, __LINE__, 'Could not create album in Lychee (' . $newAlbumID . ')');
+					Log::error(__METHOD__, __LINE__, 'Could not create album in Lychee (' . $newAlbumID . ')');
 					continue;
 				}
 
@@ -184,7 +167,7 @@ final class Import extends Module {
 
 				if ($import!==true&&$import!=='Notice: Import only contains albums!') {
 					$error = true;
-					Log::error($this->database, __METHOD__, __LINE__, 'Could not import folder. Function returned warning.');
+					Log::error(__METHOD__, __LINE__, 'Could not import folder. Function returned warning.');
 					continue;
 				}
 

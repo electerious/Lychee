@@ -9,26 +9,18 @@ if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 final class Album extends Module {
 
-	private $database	= null;
-	private $settings	= null;
 	private $albumIDs	= null;
 
-	public function __construct($database, $plugins, $settings, $albumIDs) {
+	public function __construct($albumIDs) {
 
 		# Init vars
-		$this->database	= $database;
-		$this->plugins	= $plugins;
-		$this->settings	= $settings;
 		$this->albumIDs	= $albumIDs;
 
 		return true;
 
 	}
 
-	public function add($title = 'Untitled', $public = 0, $visible = 1) {
-
-		# Check dependencies
-		self::dependencies(isset($this->database));
+	public function add($title = 'Untitled') {
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -36,19 +28,23 @@ final class Album extends Module {
 		# Parse
 		if (strlen($title)>50) $title = substr($title, 0, 50);
 
+		# Properties
+		$public		= 0;
+		$visible	= 1;
+
 		# Database
 		$sysstamp	= time();
-		$query		= Database::prepare($this->database, "INSERT INTO ? (title, sysstamp, public, visible) VALUES ('?', '?', '?', '?')", array(LYCHEE_TABLE_ALBUMS, $title, $sysstamp, $public, $visible));
-		$result		= $this->database->query($query);
+		$query		= Database::prepare(Database::get(), "INSERT INTO ? (title, sysstamp, public, visible) VALUES ('?', '?', '?', '?')", array(LYCHEE_TABLE_ALBUMS, $title, $sysstamp, $public, $visible));
+		$result		= Database::get()->query($query);
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
-		return $this->database->insert_id;
+		return Database::get()->insert_id;
 
 	}
 
@@ -91,7 +87,7 @@ final class Album extends Module {
 	public function get() {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->settings, $this->albumIDs));
+		self::dependencies(isset($this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -100,32 +96,32 @@ final class Album extends Module {
 		switch ($this->albumIDs) {
 
 			case 'f':	$return['public'] = '0';
-						$query = Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE star = 1 " . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
+						$query = Database::prepare(Database::get(), "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE star = 1 " . Settings::get()['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
 						break;
 
 			case 's':	$return['public'] = '0';
-						$query = Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE public = 1 " . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
+						$query = Database::prepare(Database::get(), "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE public = 1 " . Settings::get()['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
 						break;
 
 			case 'r':	$return['public'] = '0';
-						$query = Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY)) " . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
+						$query = Database::prepare(Database::get(), "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY)) " . Settings::get()['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
 						break;
 
 			case '0':	$return['public'] = '0';
-						$query = Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE album = 0 " . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
+						$query = Database::prepare(Database::get(), "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE album = 0 " . Settings::get()['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
 						break;
 
-			default:	$query	= Database::prepare($this->database, "SELECT * FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
-						$albums = $this->database->query($query);
+			default:	$query	= Database::prepare(Database::get(), "SELECT * FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
+						$albums = Database::get()->query($query);
 						$return = $albums->fetch_assoc();
 						$return = Album::prepareData($return);
-						$query	= Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE album = '?' " . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS, $this->albumIDs));
+						$query	= Database::prepare(Database::get(), "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE album = '?' " . Settings::get()['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS, $this->albumIDs));
 						break;
 
 		}
 
 		# Get photos
-		$photos				= $this->database->query($query);
+		$photos				= Database::get()->query($query);
 		$previousPhotoID	= '';
 		while ($photo = $photos->fetch_assoc()) {
 
@@ -178,7 +174,7 @@ final class Album extends Module {
 	public function getAll($public) {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->settings, $public));
+		self::dependencies(isset($public));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -194,14 +190,14 @@ final class Album extends Module {
 		if ($public===false) $return['smartalbums'] = $this->getSmartInfo();
 
 		# Albums query
-		if ($public===false)	$query = Database::prepare($this->database, 'SELECT id, title, public, sysstamp, password FROM ? ' . $this->settings['sortingAlbums'], array(LYCHEE_TABLE_ALBUMS));
-		else					$query = Database::prepare($this->database, 'SELECT id, title, public, sysstamp, password FROM ? WHERE public = 1 AND visible <> 0 ' . $this->settings['sortingAlbums'], array(LYCHEE_TABLE_ALBUMS));
+		if ($public===false)	$query = Database::prepare(Database::get(), 'SELECT id, title, public, sysstamp, password FROM ? ' . Settings::get()['sortingAlbums'], array(LYCHEE_TABLE_ALBUMS));
+		else					$query = Database::prepare(Database::get(), 'SELECT id, title, public, sysstamp, password FROM ? WHERE public = 1 AND visible <> 0 ' . Settings::get()['sortingAlbums'], array(LYCHEE_TABLE_ALBUMS));
 
 		# Execute query
-		$albums = $this->database->query($query);
+		$albums = Database::get()->query($query);
 		if (!$albums) {
-			Log::error($this->database, __METHOD__, __LINE__, 'Could not get all albums (' . $this->database->error . ')');
-			exit('Error: ' . $this->database->error);
+			Log::error(__METHOD__, __LINE__, 'Could not get all albums (' . Database::get()->error . ')');
+			exit('Error: ' . Database::get()->error);
 		}
 
 		# For each album
@@ -215,8 +211,8 @@ final class Album extends Module {
 				($public===false)) {
 
 					# Execute query
-					$query	= Database::prepare($this->database, "SELECT thumbUrl FROM ? WHERE album = '?' ORDER BY star DESC, " . substr($this->settings['sortingPhotos'], 9) . " LIMIT 3", array(LYCHEE_TABLE_PHOTOS, $album['id']));
-					$thumbs	= $this->database->query($query);
+					$query	= Database::prepare(Database::get(), "SELECT thumbUrl FROM ? WHERE album = '?' ORDER BY star DESC, " . substr(Settings::get()['sortingPhotos'], 9) . " LIMIT 3", array(LYCHEE_TABLE_PHOTOS, $album['id']));
+					$thumbs	= Database::get()->query($query);
 
 					# For each thumb
 					$k = 0;
@@ -244,9 +240,6 @@ final class Album extends Module {
 
 	private function getSmartInfo() {
 
-		# Check dependencies
-		self::dependencies(isset($this->database, $this->settings));
-
 		# Initialize return var
 		$return = array(
 			'unsorted'	=> null,
@@ -259,8 +252,8 @@ final class Album extends Module {
 		# Unsorted
 		###
 
-		$query		= Database::prepare($this->database, 'SELECT thumbUrl FROM ? WHERE album = 0 ' . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
-		$unsorted	= $this->database->query($query);
+		$query		= Database::prepare(Database::get(), 'SELECT thumbUrl FROM ? WHERE album = 0 ' . Settings::get()['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
+		$unsorted	= Database::get()->query($query);
 		$i			= 0;
 
 		$return['unsorted'] = array(
@@ -279,8 +272,8 @@ final class Album extends Module {
 		# Starred
 		###
 
-		$query		= Database::prepare($this->database, 'SELECT thumbUrl FROM ? WHERE star = 1 ' . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
-		$starred	= $this->database->query($query);
+		$query		= Database::prepare(Database::get(), 'SELECT thumbUrl FROM ? WHERE star = 1 ' . Settings::get()['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
+		$starred	= Database::get()->query($query);
 		$i			= 0;
 
 		$return['starred'] = array(
@@ -299,8 +292,8 @@ final class Album extends Module {
 		# Public
 		###
 
-		$query		= Database::prepare($this->database, 'SELECT thumbUrl FROM ? WHERE public = 1 ' . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
-		$public		= $this->database->query($query);
+		$query		= Database::prepare(Database::get(), 'SELECT thumbUrl FROM ? WHERE public = 1 ' . Settings::get()['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
+		$public		= Database::get()->query($query);
 		$i			= 0;
 
 		$return['public'] = array(
@@ -319,8 +312,8 @@ final class Album extends Module {
 		# Recent
 		###
 
-		$query		= Database::prepare($this->database, 'SELECT thumbUrl FROM ? WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY)) ' . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
-		$recent		= $this->database->query($query);
+		$query		= Database::prepare(Database::get(), 'SELECT thumbUrl FROM ? WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY)) ' . Settings::get()['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
+		$recent		= Database::get()->query($query);
 		$i			= 0;
 
 		$return['recent'] = array(
@@ -343,7 +336,7 @@ final class Album extends Module {
 	public function getArchive() {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -357,31 +350,31 @@ final class Album extends Module {
 		# Photos query
 		switch($this->albumIDs) {
 			case 's':
-				$photos		= Database::prepare($this->database, 'SELECT title, url FROM ? WHERE public = 1', array(LYCHEE_TABLE_PHOTOS));
+				$photos		= Database::prepare(Database::get(), 'SELECT title, url FROM ? WHERE public = 1', array(LYCHEE_TABLE_PHOTOS));
 				$zipTitle	= 'Public';
 				break;
 			case 'f':
-				$photos		= Database::prepare($this->database, 'SELECT title, url FROM ? WHERE star = 1', array(LYCHEE_TABLE_PHOTOS));
+				$photos		= Database::prepare(Database::get(), 'SELECT title, url FROM ? WHERE star = 1', array(LYCHEE_TABLE_PHOTOS));
 				$zipTitle	= 'Starred';
 				break;
 			case 'r':
-				$photos		= Database::prepare($this->database, 'SELECT title, url FROM ? WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY)) GROUP BY checksum', array(LYCHEE_TABLE_PHOTOS));
+				$photos		= Database::prepare(Database::get(), 'SELECT title, url FROM ? WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY)) GROUP BY checksum', array(LYCHEE_TABLE_PHOTOS));
 				$zipTitle	= 'Recent';
 				break;
 			default:
-				$photos		= Database::prepare($this->database, "SELECT title, url FROM ? WHERE album = '?'", array(LYCHEE_TABLE_PHOTOS, $this->albumIDs));
+				$photos		= Database::prepare(Database::get(), "SELECT title, url FROM ? WHERE album = '?'", array(LYCHEE_TABLE_PHOTOS, $this->albumIDs));
 				$zipTitle	= 'Unsorted';
 		}
 
 		# Get title from database when album is not a SmartAlbum
 		if ($this->albumIDs!=0&&is_numeric($this->albumIDs)) {
 
-			$query = Database::prepare($this->database, "SELECT title FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
-			$album = $this->database->query($query);
+			$query = Database::prepare(Database::get(), "SELECT title FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
+			$album = Database::get()->query($query);
 
 			# Error in database query
 			if (!$album) {
-				Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+				Log::error(__METHOD__, __LINE__, Database::get()->error);
 				return false;
 			}
 
@@ -390,7 +383,7 @@ final class Album extends Module {
 
 			# Photo not found
 			if ($album===null) {
-				Log::error($this->database, __METHOD__, __LINE__, 'Album not found. Cannot start download.');
+				Log::error(__METHOD__, __LINE__, 'Album not found. Cannot start download.');
 				return false;
 			}
 
@@ -407,16 +400,16 @@ final class Album extends Module {
 		# Create zip
 		$zip = new ZipArchive();
 		if ($zip->open($filename, ZIPARCHIVE::CREATE)!==TRUE) {
-			Log::error($this->database, __METHOD__, __LINE__, 'Could not create ZipArchive');
+			Log::error(__METHOD__, __LINE__, 'Could not create ZipArchive');
 			return false;
 		}
 
 		# Execute query
-		$photos = $this->database->query($photos);
+		$photos = Database::get()->query($photos);
 
 		# Check if album empty
 		if ($photos->num_rows==0) {
-			Log::error($this->database, __METHOD__, __LINE__, 'Could not create ZipArchive without images');
+			Log::error(__METHOD__, __LINE__, 'Could not create ZipArchive without images');
 			return false;
 		}
 
@@ -483,20 +476,20 @@ final class Album extends Module {
 	public function setTitle($title = 'Untitled') {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Execute query
-		$query	= Database::prepare($this->database, "UPDATE ? SET title = '?' WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $title, $this->albumIDs));
-		$result = $this->database->query($query);
+		$query	= Database::prepare(Database::get(), "UPDATE ? SET title = '?' WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $title, $this->albumIDs));
+		$result = Database::get()->query($query);
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
 		return true;
@@ -506,20 +499,20 @@ final class Album extends Module {
 	public function setDescription($description = '') {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Execute query
-		$query	= Database::prepare($this->database, "UPDATE ? SET description = '?' WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $description, $this->albumIDs));
-		$result	= $this->database->query($query);
+		$query	= Database::prepare(Database::get(), "UPDATE ? SET description = '?' WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $description, $this->albumIDs));
+		$result	= Database::get()->query($query);
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
 		return true;
@@ -529,7 +522,7 @@ final class Album extends Module {
 	public function getPublic() {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -537,8 +530,8 @@ final class Album extends Module {
 		if ($this->albumIDs==='0'||$this->albumIDs==='s'||$this->albumIDs==='f') return false;
 
 		# Execute query
-		$query	= Database::prepare($this->database, "SELECT public FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
-		$albums	= $this->database->query($query);
+		$query	= Database::prepare(Database::get(), "SELECT public FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
+		$albums	= Database::get()->query($query);
 		$album	= $albums->fetch_object();
 
 		# Call plugins
@@ -552,7 +545,7 @@ final class Album extends Module {
 	public function getDownloadable() {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -560,8 +553,8 @@ final class Album extends Module {
 		if ($this->albumIDs==='0'||$this->albumIDs==='s'||$this->albumIDs==='f'||$this->albumIDs==='r') return false;
 
 		# Execute query
-		$query	= Database::prepare($this->database, "SELECT downloadable FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
-		$albums	= $this->database->query($query);
+		$query	= Database::prepare(Database::get(), "SELECT downloadable FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
+		$albums	= Database::get()->query($query);
 		$album	= $albums->fetch_object();
 
 		# Call plugins
@@ -575,7 +568,7 @@ final class Album extends Module {
 	public function setPublic($public, $password, $visible, $downloadable) {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -586,19 +579,19 @@ final class Album extends Module {
 		$downloadable	= ($downloadable==='1' ? 1 : 0);
 
 		# Set public
-		$query	= Database::prepare($this->database, "UPDATE ? SET public = '?', visible = '?', downloadable = '?', password = NULL WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $public, $visible, $downloadable, $this->albumIDs));
-		$result	= $this->database->query($query);
+		$query	= Database::prepare(Database::get(), "UPDATE ? SET public = '?', visible = '?', downloadable = '?', password = NULL WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $public, $visible, $downloadable, $this->albumIDs));
+		$result	= Database::get()->query($query);
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
 
 		# Reset permissions for photos
 		if ($public===1) {
-			$query	= Database::prepare($this->database, "UPDATE ? SET public = 0 WHERE album IN (?)", array(LYCHEE_TABLE_PHOTOS, $this->albumIDs));
-			$result	= $this->database->query($query);
+			$query	= Database::prepare(Database::get(), "UPDATE ? SET public = 0 WHERE album IN (?)", array(LYCHEE_TABLE_PHOTOS, $this->albumIDs));
+			$result	= Database::get()->query($query);
 			if (!$result) {
-				Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+				Log::error(__METHOD__, __LINE__, Database::get()->error);
 				return false;
 			}
 		}
@@ -616,7 +609,7 @@ final class Album extends Module {
 	private function setPassword($password) {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -629,23 +622,23 @@ final class Album extends Module {
 			# Set hashed password
 			# Do not prepare $password because it is hashed and save
 			# Preparing (escaping) the password would destroy the hash
-			$query	= Database::prepare($this->database, "UPDATE ? SET password = '$password' WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
+			$query	= Database::prepare(Database::get(), "UPDATE ? SET password = '$password' WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
 
 		} else {
 
 			# Unset password
-			$query	= Database::prepare($this->database, "UPDATE ? SET password = NULL WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
+			$query	= Database::prepare(Database::get(), "UPDATE ? SET password = NULL WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
 
 		}
 
 		# Execute query
-		$result	= $this->database->query($query);
+		$result	= Database::get()->query($query);
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
 		return true;
@@ -655,14 +648,14 @@ final class Album extends Module {
 	public function checkPassword($password) {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
 
 		# Execute query
-		$query	= Database::prepare($this->database, "SELECT password FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
-		$albums	= $this->database->query($query);
+		$query	= Database::prepare(Database::get(), "SELECT password FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
+		$albums	= Database::get()->query($query);
 		$album	= $albums->fetch_object();
 
 		# Call plugins
@@ -677,7 +670,7 @@ final class Album extends Module {
 	public function merge() {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -689,11 +682,11 @@ final class Album extends Module {
 		$albumID = array_splice($albumIDs, 0, 1);
 		$albumID = $albumID[0];
 
-		$query	= Database::prepare($this->database, "UPDATE ? SET album = ? WHERE album IN (?)", array(LYCHEE_TABLE_PHOTOS, $albumID, $this->albumIDs));
-		$result	= $this->database->query($query);
+		$query	= Database::prepare(Database::get(), "UPDATE ? SET album = ? WHERE album IN (?)", array(LYCHEE_TABLE_PHOTOS, $albumID, $this->albumIDs));
+		$result	= Database::get()->query($query);
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
 
@@ -701,14 +694,14 @@ final class Album extends Module {
 		# Convert to string
 		$filteredIDs = implode(',', $albumIDs);
 
-		$query	= Database::prepare($this->database, "DELETE FROM ? WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $filteredIDs));
-		$result	= $this->database->query($query);
+		$query	= Database::prepare(Database::get(), "DELETE FROM ? WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $filteredIDs));
+		$result	= Database::get()->query($query);
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
 		return true;
@@ -718,7 +711,7 @@ final class Album extends Module {
 	public function delete() {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->albumIDs));
+		self::dependencies(isset($this->albumIDs));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -727,27 +720,27 @@ final class Album extends Module {
 		$error = false;
 
 		# Execute query
-		$query	= Database::prepare($this->database, "SELECT id FROM ? WHERE album IN (?)", array(LYCHEE_TABLE_PHOTOS, $this->albumIDs));
-		$photos = $this->database->query($query);
+		$query	= Database::prepare(Database::get(), "SELECT id FROM ? WHERE album IN (?)", array(LYCHEE_TABLE_PHOTOS, $this->albumIDs));
+		$photos = Database::get()->query($query);
 
 		# For each album delete photo
 		while ($row = $photos->fetch_object()) {
 
-			$photo = new Photo($this->database, $this->plugins, null, $row->id);
+			$photo = new Photo($row->id);
 			if (!$photo->delete($row->id)) $error = true;
 
 		}
 
 		# Delete albums
-		$query	= Database::prepare($this->database, "DELETE FROM ? WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
-		$result	= $this->database->query($query);
+		$query	= Database::prepare(Database::get(), "DELETE FROM ? WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
+		$result	= Database::get()->query($query);
 
 		# Call plugins
 		$this->plugins(__METHOD__, 1, func_get_args());
 
 		if ($error) return false;
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
 		return true;

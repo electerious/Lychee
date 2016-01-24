@@ -31,7 +31,7 @@ settings.createConfig = function() {
 			dbTablePrefix
 		}
 
-		api.post('Database::createConfig', params, function(data) {
+		api.post('Config::create', params, function(data) {
 
 			if (data!==true) {
 

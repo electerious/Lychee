@@ -7,9 +7,7 @@
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
-function search($database, $settings, $term) {
-
-	if (!isset($database, $settings, $term)) return false;
+function search($term) {
 
 	$return['albums'] = '';
 
@@ -24,8 +22,8 @@ function search($database, $settings, $term) {
 	# Photos
 	###
 
-	$query	= Database::prepare($database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE title LIKE '%?%' OR description LIKE '%?%' OR tags LIKE '%?%'", array(LYCHEE_TABLE_PHOTOS, $term, $term, $term));
-	$result	= $database->query($query);
+	$query	= Database::prepare(Database::get(), "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE title LIKE '%?%' OR description LIKE '%?%' OR tags LIKE '%?%'", array(LYCHEE_TABLE_PHOTOS, $term, $term, $term));
+	$result	= Database::get()->query($query);
 
 	while($photo = $result->fetch_assoc()) {
 
@@ -38,8 +36,8 @@ function search($database, $settings, $term) {
 	# Albums
 	###
 
-	$query	= Database::prepare($database, "SELECT id, title, public, sysstamp, password FROM ? WHERE title LIKE '%?%' OR description LIKE '%?%'", array(LYCHEE_TABLE_ALBUMS, $term, $term));
-	$result = $database->query($query);
+	$query	= Database::prepare(Database::get(), "SELECT id, title, public, sysstamp, password FROM ? WHERE title LIKE '%?%' OR description LIKE '%?%'", array(LYCHEE_TABLE_ALBUMS, $term, $term));
+	$result = Database::get()->query($query);
 
 	while($album = $result->fetch_assoc()) {
 
@@ -47,8 +45,8 @@ function search($database, $settings, $term) {
 		$album = Album::prepareData($album);
 
 		# Thumbs
-		$query	= Database::prepare($database, "SELECT thumbUrl FROM ? WHERE album = '?' " . $settings['sortingPhotos'] . " LIMIT 0, 3", array(LYCHEE_TABLE_PHOTOS, $album['id']));
-		$thumbs	= $database->query($query);
+		$query	= Database::prepare(Database::get(), "SELECT thumbUrl FROM ? WHERE album = '?' " . Settings::get()['sortingPhotos'] . " LIMIT 0, 3", array(LYCHEE_TABLE_PHOTOS, $album['id']));
+		$thumbs	= Database::get()->query($query);
 
 		# For each thumb
 		$k = 0;
@@ -69,15 +67,13 @@ function search($database, $settings, $term) {
 
 }
 
-function getGraphHeader($database, $photoID) {
+function getGraphHeader($photoID) {
 
-	if (!isset($database, $photoID)) return false;
-
-	$photo = new Photo($database, null, null, $photoID);
+	$photo = new Photo($photoID);
 	if ($photo->getPublic('')===false) return false;
 
-	$query	= Database::prepare($database, "SELECT title, description, url, medium FROM ? WHERE id = '?'", array(LYCHEE_TABLE_PHOTOS, $photoID));
-	$result	= $database->query($query);
+	$query	= Database::prepare(Database::get(), "SELECT title, description, url, medium FROM ? WHERE id = '?'", array(LYCHEE_TABLE_PHOTOS, $photoID));
+	$result	= Database::get()->query($query);
 	$row	= $result->fetch_object();
 
 	if (!$result||!$row) return false;

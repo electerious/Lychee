@@ -9,51 +9,40 @@ if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 final class Settings extends Module {
 
-	private $database = null;
+	private static $cache = null;
 
-	public function __construct($database) {
+	public static function get() {
 
-		# Init vars
-		$this->database = $database;
-
-		return true;
-
-	}
-
-	public function get() {
-
-		# Check dependencies
-		self::dependencies(isset($this->database));
+		if (self::$cache) return self::$cache;
 
 		# Execute query
-		$query		= Database::prepare($this->database, "SELECT * FROM ?", array(LYCHEE_TABLE_SETTINGS));
-		$settings	= $this->database->query($query);
+		$query		= Database::prepare(Database::get(), "SELECT * FROM ?", array(LYCHEE_TABLE_SETTINGS));
+		$settings	= Database::get()->query($query);
 
 		# Add each to return
 		while ($setting = $settings->fetch_object()) $return[$setting->key] = $setting->value;
 
-		# Fallback for versions below v2.5
-		if (!isset($return['plugins'])) $return['plugins'] = '';
+		# Convert plugins to array
+		$return['plugins'] = explode(';', $return['plugins']);
+
+		self::$cache = $return;
 
 		return $return;
 
 	}
 
-	public function setLogin($oldPassword = '', $username, $password) {
+	public static function setLogin($oldPassword = '', $username, $password) {
 
 		# Check dependencies
-		self::dependencies(isset($this->database));
+		self::dependencies(isset($oldPassword, $username, $password));
 
-		# Load settings
-		$settings = $this->get();
-
-		if ($oldPassword===$settings['password']||$settings['password']===crypt($oldPassword, $settings['password'])) {
+		if ($oldPassword===self::get()['password']||self::get()['password']===crypt($oldPassword, self::get()['password'])) {
 
 			# Save username
-			if ($this->setUsername($username)!==true) exit('Error: Updating username failed!');
+			if (self::setUsername($username)!==true) exit('Error: Updating username failed!');
 
 			# Save password
-			if ($this->setPassword($password)!==true) exit('Error: Updating password failed!');
+			if (self::setPassword($password)!==true) exit('Error: Updating password failed!');
 
 			return true;
 
@@ -63,10 +52,10 @@ final class Settings extends Module {
 
 	}
 
-	private function setUsername($username) {
+	private static function setUsername($username) {
 
 		# Check dependencies
-		self::dependencies(isset($this->database));
+		self::dependencies(isset($username));
 
 		# Hash username
 		$username = getHashedString($username);
@@ -74,21 +63,21 @@ final class Settings extends Module {
 		# Execute query
 		# Do not prepare $username because it is hashed and save
 		# Preparing (escaping) the username would destroy the hash
-		$query	= Database::prepare($this->database, "UPDATE ? SET value = '$username' WHERE `key` = 'username'", array(LYCHEE_TABLE_SETTINGS));
-		$result	= $this->database->query($query);
+		$query	= Database::prepare(Database::get(), "UPDATE ? SET value = '$username' WHERE `key` = 'username'", array(LYCHEE_TABLE_SETTINGS));
+		$result	= Database::get()->query($query);
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
 		return true;
 
 	}
 
-	private function setPassword($password) {
+	private static function setPassword($password) {
 
 		# Check dependencies
-		self::dependencies(isset($this->database));
+		self::dependencies(isset($password));
 
 		# Hash password
 		$password = getHashedString($password);
@@ -96,43 +85,43 @@ final class Settings extends Module {
 		# Execute query
 		# Do not prepare $password because it is hashed and save
 		# Preparing (escaping) the password would destroy the hash
-		$query	= Database::prepare($this->database, "UPDATE ? SET value = '$password' WHERE `key` = 'password'", array(LYCHEE_TABLE_SETTINGS));
-		$result	= $this->database->query($query);
+		$query	= Database::prepare(Database::get(), "UPDATE ? SET value = '$password' WHERE `key` = 'password'", array(LYCHEE_TABLE_SETTINGS));
+		$result	= Database::get()->query($query);
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
 		return true;
 
 	}
 
-	public function setDropboxKey($key) {
+	public static function setDropboxKey($key) {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $key));
+		self::dependencies(isset($key));
 
 		if (strlen($key)<1||strlen($key)>50) {
-			Log::notice($this->database, __METHOD__, __LINE__, 'Dropbox key is either too short or too long');
+			Log::notice(__METHOD__, __LINE__, 'Dropbox key is either too short or too long');
 			return false;
 		}
 
 		# Execute query
-		$query	= Database::prepare($this->database, "UPDATE ? SET value = '?' WHERE `key` = 'dropboxKey'", array(LYCHEE_TABLE_SETTINGS, $key));
-		$result = $this->database->query($query);
+		$query	= Database::prepare(Database::get(), "UPDATE ? SET value = '?' WHERE `key` = 'dropboxKey'", array(LYCHEE_TABLE_SETTINGS, $key));
+		$result = Database::get()->query($query);
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
 		return true;
 
 	}
 
-	public function setSortingPhotos($type, $order) {
+	public static function setSortingPhotos($type, $order) {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $type, $order));
+		self::dependencies(isset($type, $order));
 
 		$sorting = 'ORDER BY ';
 
@@ -183,21 +172,21 @@ final class Settings extends Module {
 		# Do not prepare $sorting because it is a true statement
 		# Preparing (escaping) the sorting would destroy it
 		# $sorting is save and can't contain user-input
-		$query	= Database::prepare($this->database, "UPDATE ? SET value = '$sorting' WHERE `key` = 'sortingPhotos'", array(LYCHEE_TABLE_SETTINGS));
-		$result	= $this->database->query($query);
+		$query	= Database::prepare(Database::get(), "UPDATE ? SET value = '$sorting' WHERE `key` = 'sortingPhotos'", array(LYCHEE_TABLE_SETTINGS));
+		$result	= Database::get()->query($query);
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
 		return true;
 
 	}
 
-	public function setSortingAlbums($type, $order) {
+	public static function setSortingAlbums($type, $order) {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $type, $order));
+		self::dependencies(isset($type, $order));
 
 		$sorting = 'ORDER BY ';
 
@@ -239,11 +228,11 @@ final class Settings extends Module {
 		# Do not prepare $sorting because it is a true statement
 		# Preparing (escaping) the sorting would destroy it
 		# $sorting is save and can't contain user-input
-		$query	= Database::prepare($this->database, "UPDATE ? SET value = '$sorting' WHERE `key` = 'sortingAlbums'", array(LYCHEE_TABLE_SETTINGS));
-		$result	= $this->database->query($query);
+		$query	= Database::prepare(Database::get(), "UPDATE ? SET value = '$sorting' WHERE `key` = 'sortingAlbums'", array(LYCHEE_TABLE_SETTINGS));
+		$result	= Database::get()->query($query);
 
 		if (!$result) {
-			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
 		return true;

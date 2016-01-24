@@ -25,12 +25,6 @@ header('content-type: text/plain');
 if (!file_exists(LYCHEE_CONFIG_FILE)) exit('Error 001: Configuration not found. Please install Lychee first.');
 require(LYCHEE_CONFIG_FILE);
 
-# Define the table prefix
-defineTablePrefix(@$dbTablePrefix);
-
-# Declare
-$result = '';
-
 # Database
 $database = new mysqli($dbHost, $dbUser, $dbPassword, $dbName);
 
@@ -40,8 +34,7 @@ if (mysqli_connect_errno()!=0) {
 }
 
 # Load settings
-$settings = new Settings($database);
-$settings = $settings->get();
+$settings = Settings::get();
 
 # Ensure that user is logged in
 if ((isset($_SESSION['login'])&&$_SESSION['login']===true)&&

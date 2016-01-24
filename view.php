@@ -26,14 +26,8 @@
 				require(__DIR__ . '/php/define.php');
 				require(__DIR__ . '/php/autoload.php');
 				require(__DIR__ . '/php/modules/misc.php');
-				require(LYCHEE_CONFIG_FILE);
 
-				# Define the table prefix
-				defineTablePrefix(@$dbTablePrefix);
-
-				$database = Database::connect($dbHost, $dbUser, $dbPassword, $dbName);
-
-				echo getGraphHeader($database, $_GET['p']);
+				echo getGraphHeader($_GET['p']);
 
 			}
 

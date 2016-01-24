@@ -8,18 +8,18 @@
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 # Add skipDuplicates to settings
-$query	= Database::prepare($database, "SELECT `key` FROM `?` WHERE `key` = 'skipDuplicates' LIMIT 1", array(LYCHEE_TABLE_SETTINGS));
-$result	= $database->query($query);
+$query	= Database::prepare($connection, "SELECT `key` FROM `?` WHERE `key` = 'skipDuplicates' LIMIT 1", array(LYCHEE_TABLE_SETTINGS));
+$result	= $connection->query($query);
 if ($result->num_rows===0) {
-	$query	= Database::prepare($database, "INSERT INTO `?` (`key`, `value`) VALUES ('skipDuplicates', '0')", array(LYCHEE_TABLE_SETTINGS));
-	$result	= $database->query($query);
+	$query	= Database::prepare($connection, "INSERT INTO `?` (`key`, `value`) VALUES ('skipDuplicates', '0')", array(LYCHEE_TABLE_SETTINGS));
+	$result	= $connection->query($query);
 	if (!$result) {
-		Log::error($database, 'update_030003', __LINE__, 'Could not update database (' . $database->error . ')');
+		Log::error('update_030003', __LINE__, 'Could not update database (' . $connection->error . ')');
 		return false;
 	}
 }
 
 # Set version
-if (Database::setVersion($database, '030003')===false) return false;
+if (Database::setVersion($connection, '030003')===false) return false;
 
 ?>
