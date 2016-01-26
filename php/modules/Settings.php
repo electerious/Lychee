@@ -1,11 +1,6 @@
 <?php
 
-###
-# @name			Settings Module
-# @copyright	2015 by Tobias Reich
-###
-
-if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
+namespace Lychee\Modules;
 
 final class Settings extends Module {
 
@@ -28,6 +23,30 @@ final class Settings extends Module {
 		self::$cache = $return;
 
 		return $return;
+
+	}
+
+	private static function set($key, $value, $row = false) {
+
+		if ($row===false) {
+
+			$query	= Database::prepare(Database::get(), "UPDATE ? SET value = '?' WHERE `key` = '?'", array(LYCHEE_TABLE_SETTINGS, $value, $key));
+
+		} elseif ($row===true) {
+
+			# Do not prepare $value because it has already been escaped or is a true statement
+			$query	= Database::prepare(Database::get(), "UPDATE ? SET value = '$value' WHERE `key` = '?'", array(LYCHEE_TABLE_SETTINGS, $key));
+
+		} else {
+
+			return false;
+
+		}
+
+		$result = Database::get()->query($query);
+
+		if (!$result) return false;
+		return true;
 
 	}
 
@@ -63,10 +82,7 @@ final class Settings extends Module {
 		# Execute query
 		# Do not prepare $username because it is hashed and save
 		# Preparing (escaping) the username would destroy the hash
-		$query	= Database::prepare(Database::get(), "UPDATE ? SET value = '$username' WHERE `key` = 'username'", array(LYCHEE_TABLE_SETTINGS));
-		$result	= Database::get()->query($query);
-
-		if (!$result) {
+		if (self::set('username', $username, true)===false) {
 			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
@@ -82,13 +98,9 @@ final class Settings extends Module {
 		# Hash password
 		$password = getHashedString($password);
 
-		# Execute query
 		# Do not prepare $password because it is hashed and save
 		# Preparing (escaping) the password would destroy the hash
-		$query	= Database::prepare(Database::get(), "UPDATE ? SET value = '$password' WHERE `key` = 'password'", array(LYCHEE_TABLE_SETTINGS));
-		$result	= Database::get()->query($query);
-
-		if (!$result) {
+		if (self::set('password', $password, true)===false) {
 			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
@@ -96,21 +108,17 @@ final class Settings extends Module {
 
 	}
 
-	public static function setDropboxKey($key) {
+	public static function setDropboxKey($dropboxKey) {
 
 		# Check dependencies
-		self::dependencies(isset($key));
+		self::dependencies(isset($dropboxKey));
 
-		if (strlen($key)<1||strlen($key)>50) {
+		if (strlen($dropboxKey)<1||strlen($dropboxKey)>50) {
 			Log::notice(__METHOD__, __LINE__, 'Dropbox key is either too short or too long');
 			return false;
 		}
 
-		# Execute query
-		$query	= Database::prepare(Database::get(), "UPDATE ? SET value = '?' WHERE `key` = 'dropboxKey'", array(LYCHEE_TABLE_SETTINGS, $key));
-		$result = Database::get()->query($query);
-
-		if (!$result) {
+		if (self::set('dropboxKey', $dropboxKey)===false) {
 			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
@@ -168,14 +176,10 @@ final class Settings extends Module {
 
 		}
 
-		# Execute query
 		# Do not prepare $sorting because it is a true statement
 		# Preparing (escaping) the sorting would destroy it
 		# $sorting is save and can't contain user-input
-		$query	= Database::prepare(Database::get(), "UPDATE ? SET value = '$sorting' WHERE `key` = 'sortingPhotos'", array(LYCHEE_TABLE_SETTINGS));
-		$result	= Database::get()->query($query);
-
-		if (!$result) {
+		if (self::set('sortingPhotos', $sorting, true)===false) {
 			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
@@ -224,14 +228,10 @@ final class Settings extends Module {
 
 		}
 
-		# Execute query
 		# Do not prepare $sorting because it is a true statement
 		# Preparing (escaping) the sorting would destroy it
 		# $sorting is save and can't contain user-input
-		$query	= Database::prepare(Database::get(), "UPDATE ? SET value = '$sorting' WHERE `key` = 'sortingAlbums'", array(LYCHEE_TABLE_SETTINGS));
-		$result	= Database::get()->query($query);
-
-		if (!$result) {
+		if (self::set('sortingAlbums', $sorting, true)===false) {
 			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}

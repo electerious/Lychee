@@ -1,13 +1,10 @@
 <?php
 
-###
-# @name			Plugins Module
-# @copyright	2015 by Tobias Reich
-###
+namespace Lychee\Modules;
 
-if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
+use SplSubject;
 
-final class Plugins implements \SplSubject {
+final class Plugins implements SplSubject {
 
 	private static $instance = null;
 

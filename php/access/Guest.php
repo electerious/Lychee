@@ -1,13 +1,13 @@
 <?php
 
-###
-# @name			Guest Access (Public Mode)
-# @copyright	2015 by Tobias Reich
-###
+namespace Lychee\Access;
 
-if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
+use Lychee\Modules\Album;
+use Lychee\Modules\Module;
+use Lychee\Modules\Photo;
+use Lychee\Modules\Session;
 
-final class Guest extends Access {
+final class Guest implements Access {
 
 	public function check($fn) {
 

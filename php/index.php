@@ -2,8 +2,28 @@
 
 ###
 # @name			API
+# @author		Tobias Reich
 # @copyright	2015 by Tobias Reich
 ###
+
+namespace Lychee;
+
+use Lychee\Modules\Config;
+use Lychee\Modules\Settings;
+
+use Lychee\Access\Installation;
+use Lychee\Access\Admin;
+use Lychee\Access\Guest;
+
+require(__DIR__ . '/define.php');
+require(__DIR__ . '/autoload.php');
+
+require(__DIR__ . '/helpers/fastImageCopyResampled.php');
+require(__DIR__ . '/helpers/getExtension.php');
+require(__DIR__ . '/helpers/getGraphHeader.php');
+require(__DIR__ . '/helpers/getHashedString.php');
+require(__DIR__ . '/helpers/hasPermissions.php');
+require(__DIR__ . '/helpers/search.php');
 
 # Define the called function
 if (isset($_POST['function']))		$fn = $_POST['function'];
@@ -16,11 +36,6 @@ if (!empty($fn)) {
 	# Start the session and set the default timezone
 	session_start();
 	date_default_timezone_set('UTC');
-
-	# Load required files
-	require(__DIR__ . '/define.php');
-	require(__DIR__ . '/autoload.php');
-	require(__DIR__ . '/misc.php');
 
 	# Validate parameters
 	if (isset($_POST['albumIDs'])&&preg_match('/^[0-9\,]{1,}$/', $_POST['albumIDs'])!==1)	exit('Error: Wrong parameter type for albumIDs!');

@@ -1,13 +1,15 @@
 <?php
 
-###
-# @name			Admin Access
-# @copyright	2015 by Tobias Reich
-###
+namespace Lychee\Access;
 
-if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
+use Lychee\Modules\Album;
+use Lychee\Modules\Import;
+use Lychee\Modules\Module;
+use Lychee\Modules\Photo;
+use Lychee\Modules\Session;
+use Lychee\Modules\Settings;
 
-final class Admin extends Access {
+final class Admin implements Access {
 
 	public function check($fn) {
 

@@ -1,11 +1,6 @@
 <?php
 
-###
-# @name			Photo Module
-# @copyright	2015 by Tobias Reich
-###
-
-if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
+namespace Lychee\Modules;
 
 final class Photo extends Module {
 
@@ -361,12 +356,12 @@ final class Photo extends Module {
 			}
 
 			# Create thumb
-			fastimagecopyresampled($thumb, $sourceImg, 0, 0, $startWidth, $startHeight, $newWidth, $newHeight, $newSize, $newSize);
+			fastImageCopyResampled($thumb, $sourceImg, 0, 0, $startWidth, $startHeight, $newWidth, $newHeight, $newSize, $newSize);
 			imagejpeg($thumb, $newUrl, Settings::get()['thumbQuality']);
 			imagedestroy($thumb);
 
 			# Create retina thumb
-			fastimagecopyresampled($thumb2x, $sourceImg, 0, 0, $startWidth, $startHeight, $newWidth*2, $newHeight*2, $newSize, $newSize);
+			fastImageCopyResampled($thumb2x, $sourceImg, 0, 0, $startWidth, $startHeight, $newWidth*2, $newHeight*2, $newSize, $newSize);
 			imagejpeg($thumb2x, $newUrl2x, Settings::get()['thumbQuality']);
 			imagedestroy($thumb2x);
 

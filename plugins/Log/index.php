@@ -1,22 +1,25 @@
 <?php
 
 ###
-# @name			Display Log Plugin
+# @name			Log
 # @author		Tobias Reich
 # @copyright	2015 by Tobias Reich
 # @description	This file queries the database for log messages and displays them if present.
 ###
 
-# Location
+namespace Log;
+
+use Mysqli;
+use Lychee\Modules\Database;
+use Lychee\Modules\Settings;
+
 $lychee = __DIR__ . '/../../';
+
+require($lychee . 'php/define.php');
+require($lychee . 'php/autoload.php');
 
 # Start the session
 session_start();
-
-# Load requirements
-require($lychee . 'php/define.php');
-require($lychee . 'php/autoload.php');
-require($lychee . 'php/misc.php');
 
 # Set content
 header('content-type: text/plain');
@@ -25,24 +28,13 @@ header('content-type: text/plain');
 if (!file_exists(LYCHEE_CONFIG_FILE)) exit('Error 001: Configuration not found. Please install Lychee first.');
 require(LYCHEE_CONFIG_FILE);
 
-# Database
-$database = new mysqli($dbHost, $dbUser, $dbPassword, $dbName);
-
-if (mysqli_connect_errno()!=0) {
-	echo 'Error 100: ' . mysqli_connect_errno() . ': ' . mysqli_connect_error() . '' . PHP_EOL;
-	exit();
-}
-
-# Load settings
-$settings = Settings::get();
-
 # Ensure that user is logged in
 if ((isset($_SESSION['login'])&&$_SESSION['login']===true)&&
-	(isset($_SESSION['identifier'])&&$_SESSION['identifier']===$settings['identifier'])) {
+	(isset($_SESSION['identifier'])&&$_SESSION['identifier']===Settings::get()['identifier'])) {
 
 	# Result
-	$query	= Database::prepare($database, "SELECT FROM_UNIXTIME(time), type, function, line, text FROM ?", array(LYCHEE_TABLE_LOG));
-	$result	= $database->query($query);
+	$query	= Database::prepare(Database::get(), "SELECT FROM_UNIXTIME(time), type, function, line, text FROM ?", array(LYCHEE_TABLE_LOG));
+	$result	= Database::get()->query($query);
 
 	# Output
 	if ($result->num_rows===0) {

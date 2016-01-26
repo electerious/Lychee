@@ -1,13 +1,11 @@
 <?php
 
-###
-# @name			Installation Access
-# @copyright	2015 by Tobias Reich
-###
+namespace Lychee\Access;
 
-if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
+use Lychee\Modules\Config;
+use Lychee\Modules\Module;
 
-final class Installation extends Access {
+final class Installation implements Access {
 
 	public function check($fn) {
 

@@ -1,10 +1,5 @@
 <?php
 
-###
-# @name			Define
-# @copyright	2015 by Tobias Reich
-###
-
 # Define root
 define('LYCHEE', substr(__DIR__, 0, -3));
 

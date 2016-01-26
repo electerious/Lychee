@@ -1,11 +1,6 @@
 <?php
 
-###
-# @name			Module
-# @copyright	2015 by Tobias Reich
-###
-
-if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
+namespace Lychee\Modules;
 
 abstract class Module {
 

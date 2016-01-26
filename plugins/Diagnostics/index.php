@@ -7,13 +7,17 @@
 # @description	This file takes a look at your Lychee-configuration and displays all errors it can find.
 ###
 
-# Location
+namespace Diagnostics;
+
+use Mysqli;
+use Lychee\Modules\Settings;
+
 $lychee = __DIR__ . '/../../';
 
-# Load requirements
 require($lychee . 'php/define.php');
 require($lychee . 'php/autoload.php');
-require($lychee . 'php/misc.php');
+
+require($lychee . 'php/helpers/hasPermissions.php');
 
 # Start the session
 session_start();
@@ -59,17 +63,17 @@ if (!file_exists(LYCHEE_CONFIG_FILE))	exit('Error: Configuration not found. Plea
 else									require(LYCHEE_CONFIG_FILE);
 
 # Database
-$database = new mysqli($dbHost, $dbUser, $dbPassword, $dbName);
+$database = new Mysqli($dbHost, $dbUser, $dbPassword, $dbName);
 if (mysqli_connect_errno()!=0) $error .= ('Error: ' . mysqli_connect_errno() . ': ' . mysqli_connect_error() . '' . PHP_EOL);
-
-# Load settings
-$settings = Settings::get();
 
 # Config
 if (!isset($dbName)||$dbName==='')	$error .= ('Error: No property for $dbName in config.php' . PHP_EOL);
 if (!isset($dbUser)||$dbUser==='')	$error .= ('Error: No property for $dbUser in config.php' . PHP_EOL);
 if (!isset($dbPassword))			$error .= ('Error: No property for $dbPassword in config.php' . PHP_EOL);
 if (!isset($dbHost)||$dbHost==='')	$error .= ('Error: No property for $dbHost in config.php' . PHP_EOL);
+
+# Load settings
+$settings = Settings::get();
 
 # Settings
 if (!isset($settings['username'])||$settings['username']=='')				$error .= ('Error: Username empty or not set in database' . PHP_EOL);

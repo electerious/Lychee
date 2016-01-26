@@ -5,7 +5,7 @@
 
 api = {
 
-	path    : 'php/api.php',
+	path    : 'php/index.php',
 	onError : null
 
 }

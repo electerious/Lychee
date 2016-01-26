@@ -1,11 +1,8 @@
 <?php
 
-###
-# @name			Database Module
-# @copyright	2015 by Tobias Reich
-###
+namespace Lychee\Modules;
 
-if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
+use Mysqli;
 
 final class Database extends Module {
 
@@ -71,7 +68,7 @@ final class Database extends Module {
 	public static function connect($host = 'localhost', $user, $password) {
 
 		# Open a new connection to the MySQL server
-		$connection = new mysqli($host, $user, $password);
+		$connection = new Mysqli($host, $user, $password);
 
 		# Check if the connection was successful
 		if ($connection->connect_errno) return false;
