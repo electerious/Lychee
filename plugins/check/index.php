@@ -18,6 +18,9 @@ require($lychee . 'php/modules/misc.php');
 # Set content
 header('content-type: text/plain');
 
+# Start Session (to check later if the user is logged in)
+session_start();
+
 # Declare
 $error = '';
 
@@ -104,7 +107,6 @@ echo(PHP_EOL . PHP_EOL . 'System Information' . PHP_EOL);
 echo('------------------' . PHP_EOL);
 
 # Ensure that user is logged in
-session_start();
 
 if ((isset($_SESSION['login'])&&$_SESSION['login']===true)&&
 	(isset($_SESSION['identifier'])&&$_SESSION['identifier']===$settings['identifier'])) {
