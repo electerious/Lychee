@@ -3,6 +3,7 @@
 namespace Lychee\Modules;
 
 use SplSubject;
+use SplObserver;
 
 final class Plugins implements SplSubject {
 
@@ -42,7 +43,7 @@ final class Plugins implements SplSubject {
 
 	}
 
-	public function attach(\SplObserver $observer) {
+	public function attach(SplObserver $observer) {
 
 		if (!isset($observer)) return false;
 
@@ -53,7 +54,7 @@ final class Plugins implements SplSubject {
 
 	}
 
-	public function detach(\SplObserver $observer) {
+	public function detach(SplObserver $observer) {
 
 		if (!isset($observer)) return false;
 
