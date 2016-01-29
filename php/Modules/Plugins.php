@@ -75,9 +75,13 @@ final class Plugins implements SplSubject {
 
 	}
 
-	public function activate($action, $args) {
+	public function activate($name, $location, array $args) {
 
-		if (!isset($action, $args)) return false;
+		if (!isset($name, $location, $args)) return false;
+
+		# Parse
+		$location	= ($location===0 ? 'before' : 'after');
+		$action		= $name . ":" . $location;
 
 		# Save vars
 		$this->action	= $action;

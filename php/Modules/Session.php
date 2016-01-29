@@ -10,7 +10,7 @@ final class Session extends Module {
 		self::dependencies(isset($public));
 
 		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		# Return settings
 		$return['config'] = Settings::get();
@@ -57,7 +57,7 @@ final class Session extends Module {
 		}
 
 		# Call plugins
-		$this->plugins(__METHOD__, 1, func_get_args());
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		return $return;
 
@@ -69,7 +69,7 @@ final class Session extends Module {
 		self::dependencies(isset($username, $password));
 
 		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		$username = crypt($username, Settings::get()['username']);
 		$password = crypt($password, Settings::get()['password']);
@@ -86,7 +86,7 @@ final class Session extends Module {
 		if ($this->noLogin()===true) return true;
 
 		# Call plugins
-		$this->plugins(__METHOD__, 1, func_get_args());
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		return false;
 
@@ -109,7 +109,7 @@ final class Session extends Module {
 	public function logout() {
 
 		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		$_SESSION['login']		= null;
 		$_SESSION['identifier']	= null;
@@ -117,7 +117,7 @@ final class Session extends Module {
 		session_destroy();
 
 		# Call plugins
-		$this->plugins(__METHOD__, 1, func_get_args());
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		return true;
 

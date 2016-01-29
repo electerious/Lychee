@@ -18,7 +18,7 @@ final class Album extends Module {
 	public function add($title = 'Untitled') {
 
 		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		# Parse
 		if (strlen($title)>50) $title = substr($title, 0, 50);
@@ -33,7 +33,7 @@ final class Album extends Module {
 		$result		= Database::get()->query($query);
 
 		# Call plugins
-		$this->plugins(__METHOD__, 1, func_get_args());
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
 			Log::error(__METHOD__, __LINE__, Database::get()->error);
@@ -85,7 +85,7 @@ final class Album extends Module {
 		self::dependencies(isset($this->albumIDs));
 
 		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		# Get album information
 		switch ($this->albumIDs) {
@@ -160,7 +160,7 @@ final class Album extends Module {
 		$return['num']	= $photos->num_rows;
 
 		# Call plugins
-		$this->plugins(__METHOD__, 1, func_get_args());
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		return $return;
 
@@ -172,7 +172,7 @@ final class Album extends Module {
 		self::dependencies(isset($public));
 
 		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		# Initialize return var
 		$return = array(
@@ -227,7 +227,7 @@ final class Album extends Module {
 		$return['num'] = $albums->num_rows;
 
 		# Call plugins
-		$this->plugins(__METHOD__, 1, func_get_args());
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		return $return;
 
@@ -334,7 +334,7 @@ final class Album extends Module {
 		self::dependencies(isset($this->albumIDs));
 
 		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		# Illicit chars
 		$badChars =	array_merge(
@@ -462,7 +462,7 @@ final class Album extends Module {
 		unlink($filename);
 
 		# Call plugins
-		$this->plugins(__METHOD__, 1, func_get_args());
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		return true;
 
@@ -474,14 +474,14 @@ final class Album extends Module {
 		self::dependencies(isset($this->albumIDs));
 
 		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		# Execute query
 		$query	= Database::prepare(Database::get(), "UPDATE ? SET title = '?' WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $title, $this->albumIDs));
 		$result = Database::get()->query($query);
 
 		# Call plugins
-		$this->plugins(__METHOD__, 1, func_get_args());
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
 			Log::error(__METHOD__, __LINE__, Database::get()->error);
@@ -497,14 +497,14 @@ final class Album extends Module {
 		self::dependencies(isset($this->albumIDs));
 
 		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		# Execute query
 		$query	= Database::prepare(Database::get(), "UPDATE ? SET description = '?' WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $description, $this->albumIDs));
 		$result	= Database::get()->query($query);
 
 		# Call plugins
-		$this->plugins(__METHOD__, 1, func_get_args());
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
 			Log::error(__METHOD__, __LINE__, Database::get()->error);
@@ -520,7 +520,7 @@ final class Album extends Module {
 		self::dependencies(isset($this->albumIDs));
 
 		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		if ($this->albumIDs==='0'||$this->albumIDs==='s'||$this->albumIDs==='f') return false;
 
@@ -530,7 +530,7 @@ final class Album extends Module {
 		$album	= $albums->fetch_object();
 
 		# Call plugins
-		$this->plugins(__METHOD__, 1, func_get_args());
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		if ($album->public==1) return true;
 		return false;
@@ -543,7 +543,7 @@ final class Album extends Module {
 		self::dependencies(isset($this->albumIDs));
 
 		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		if ($this->albumIDs==='0'||$this->albumIDs==='s'||$this->albumIDs==='f'||$this->albumIDs==='r') return false;
 
@@ -553,7 +553,7 @@ final class Album extends Module {
 		$album	= $albums->fetch_object();
 
 		# Call plugins
-		$this->plugins(__METHOD__, 1, func_get_args());
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		if ($album->downloadable==1) return true;
 		return false;
@@ -566,7 +566,7 @@ final class Album extends Module {
 		self::dependencies(isset($this->albumIDs));
 
 		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		# Convert values
 		$public			= ($public==='1' ? 1 : 0);
@@ -592,7 +592,7 @@ final class Album extends Module {
 		}
 
 		# Call plugins
-		$this->plugins(__METHOD__, 1, func_get_args());
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		# Set password
 		if (isset($password)&&strlen($password)>0) return $this->setPassword($password);
@@ -607,7 +607,7 @@ final class Album extends Module {
 		self::dependencies(isset($this->albumIDs));
 
 		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		if (strlen($password)>0) {
 
@@ -630,7 +630,7 @@ final class Album extends Module {
 		$result	= Database::get()->query($query);
 
 		# Call plugins
-		$this->plugins(__METHOD__, 1, func_get_args());
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
 			Log::error(__METHOD__, __LINE__, Database::get()->error);
@@ -646,7 +646,7 @@ final class Album extends Module {
 		self::dependencies(isset($this->albumIDs));
 
 		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		# Execute query
 		$query	= Database::prepare(Database::get(), "SELECT password FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
@@ -654,7 +654,7 @@ final class Album extends Module {
 		$album	= $albums->fetch_object();
 
 		# Call plugins
-		$this->plugins(__METHOD__, 1, func_get_args());
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		if ($album->password=='') return true;
 		else if ($album->password===crypt($password, $album->password)) return true;
@@ -668,7 +668,7 @@ final class Album extends Module {
 		self::dependencies(isset($this->albumIDs));
 
 		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		# Convert to array
 		$albumIDs = explode(',', $this->albumIDs);
@@ -693,7 +693,7 @@ final class Album extends Module {
 		$result	= Database::get()->query($query);
 
 		# Call plugins
-		$this->plugins(__METHOD__, 1, func_get_args());
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
 			Log::error(__METHOD__, __LINE__, Database::get()->error);
@@ -709,7 +709,7 @@ final class Album extends Module {
 		self::dependencies(isset($this->albumIDs));
 
 		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		# Init vars
 		$error = false;
@@ -731,7 +731,7 @@ final class Album extends Module {
 		$result	= Database::get()->query($query);
 
 		# Call plugins
-		$this->plugins(__METHOD__, 1, func_get_args());
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		if ($error) return false;
 		if (!$result) {

@@ -45,7 +45,7 @@ final class Photo extends Module {
 		}
 
 		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		switch($albumID) {
 
@@ -247,7 +247,7 @@ final class Photo extends Module {
 		}
 
 		# Call plugins
-		$this->plugins(__METHOD__, 1, func_get_args());
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		return true;
 
@@ -294,7 +294,7 @@ final class Photo extends Module {
 		self::dependencies(isset($url, $filename, $type, $width, $height));
 
 		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		# Size of the thumbnail
 		$newWidth	= 200;
@@ -371,7 +371,7 @@ final class Photo extends Module {
 		}
 
 		# Call plugins
-		$this->plugins(__METHOD__, 1, func_get_args());
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		return true;
 
@@ -393,7 +393,7 @@ final class Photo extends Module {
 		self::dependencies(isset($url, $filename, $width, $height));
 
 		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		# Set to true when creation of medium-photo failed
 		$error = false;
@@ -450,7 +450,7 @@ final class Photo extends Module {
 		}
 
 		# Call plugins
-		$this->plugins(__METHOD__, 1, func_get_args());
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		if ($error===true) return false;
 		return true;
@@ -471,7 +471,7 @@ final class Photo extends Module {
 		self::dependencies(isset($path, $info));
 
 		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		$swapSize = false;
 
@@ -577,7 +577,7 @@ final class Photo extends Module {
 		}
 
 		# Call plugins
-		$this->plugins(__METHOD__, 1, func_get_args());
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		# SwapSize should be true when the image has been rotated
 		# Return new dimensions in this case
@@ -648,7 +648,7 @@ final class Photo extends Module {
 		self::dependencies(isset($this->photoIDs));
 
 		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		# Get photo
 		$query	= Database::prepare(Database::get(), "SELECT * FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
@@ -689,7 +689,7 @@ final class Photo extends Module {
 		}
 
 		# Call plugins
-		$this->plugins(__METHOD__, 1, func_get_args());
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		return $photo;
 
@@ -707,7 +707,7 @@ final class Photo extends Module {
 		self::dependencies(isset($url));
 
 		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		$iptcArray	= array();
 		$info		= getimagesize($url, $iptcArray);
@@ -797,7 +797,7 @@ final class Photo extends Module {
 		}
 
 		# Call plugins
-		$this->plugins(__METHOD__, 1, func_get_args());
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		return $return;
 
@@ -814,7 +814,7 @@ final class Photo extends Module {
 		self::dependencies(isset($this->photoIDs));
 
 		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		# Get photo
 		$query	= Database::prepare(Database::get(), "SELECT title, url FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
@@ -861,7 +861,7 @@ final class Photo extends Module {
 		readfile(LYCHEE_UPLOADS_BIG . $photo->url);
 
 		# Call plugins
-		$this->plugins(__METHOD__, 1, func_get_args());
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		return true;
 
@@ -880,14 +880,14 @@ final class Photo extends Module {
 		self::dependencies(isset($this->photoIDs));
 
 		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		# Set title
 		$query	= Database::prepare(Database::get(), "UPDATE ? SET title = '?' WHERE id IN (?)", array(LYCHEE_TABLE_PHOTOS, $title, $this->photoIDs));
 		$result	= Database::get()->query($query);
 
 		# Call plugins
-		$this->plugins(__METHOD__, 1, func_get_args());
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
 			Log::error(__METHOD__, __LINE__, Database::get()->error);
@@ -910,14 +910,14 @@ final class Photo extends Module {
 		self::dependencies(isset($this->photoIDs));
 
 		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		# Set description
 		$query	= Database::prepare(Database::get(), "UPDATE ? SET description = '?' WHERE id IN ('?')", array(LYCHEE_TABLE_PHOTOS, $description, $this->photoIDs));
 		$result	= Database::get()->query($query);
 
 		# Call plugins
-		$this->plugins(__METHOD__, 1, func_get_args());
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
 			Log::error(__METHOD__, __LINE__, Database::get()->error);
@@ -938,7 +938,7 @@ final class Photo extends Module {
 		self::dependencies(isset($this->photoIDs));
 
 		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		# Init vars
 		$error	= false;
@@ -961,7 +961,7 @@ final class Photo extends Module {
 		}
 
 		# Call plugins
-		$this->plugins(__METHOD__, 1, func_get_args());
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		if ($error===true) {
 			Log::error(__METHOD__, __LINE__, Database::get()->error);
@@ -983,7 +983,7 @@ final class Photo extends Module {
 		self::dependencies(isset($this->photoIDs));
 
 		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		# Get photo
 		$query	= Database::prepare(Database::get(), "SELECT public, album FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
@@ -1012,7 +1012,7 @@ final class Photo extends Module {
 		}
 
 		# Call plugins
-		$this->plugins(__METHOD__, 1, func_get_args());
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		# Photo private
 		return 0;
@@ -1030,7 +1030,7 @@ final class Photo extends Module {
 		self::dependencies(isset($this->photoIDs));
 
 		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		# Get public
 		$query	= Database::prepare(Database::get(), "SELECT public FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
@@ -1045,7 +1045,7 @@ final class Photo extends Module {
 		$result	= Database::get()->query($query);
 
 		# Call plugins
-		$this->plugins(__METHOD__, 1, func_get_args());
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
 			Log::error(__METHOD__, __LINE__, Database::get()->error);
@@ -1066,14 +1066,14 @@ final class Photo extends Module {
 		self::dependencies(isset($this->photoIDs));
 
 		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		# Set album
 		$query	= Database::prepare(Database::get(), "UPDATE ? SET album = '?' WHERE id IN (?)", array(LYCHEE_TABLE_PHOTOS, $albumID, $this->photoIDs));
 		$result	= Database::get()->query($query);
 
 		# Call plugins
-		$this->plugins(__METHOD__, 1, func_get_args());
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
 			Log::error(__METHOD__, __LINE__, Database::get()->error);
@@ -1096,7 +1096,7 @@ final class Photo extends Module {
 		self::dependencies(isset($this->photoIDs));
 
 		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		# Parse tags
 		$tags = preg_replace('/(\ ,\ )|(\ ,)|(,\ )|(,{1,}\ {0,})|(,$|^,)/', ',', $tags);
@@ -1107,7 +1107,7 @@ final class Photo extends Module {
 		$result	= Database::get()->query($query);
 
 		# Call plugins
-		$this->plugins(__METHOD__, 1, func_get_args());
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		if (!$result) {
 			Log::error(__METHOD__, __LINE__, Database::get()->error);
@@ -1128,7 +1128,7 @@ final class Photo extends Module {
 		self::dependencies(isset($this->photoIDs));
 
 		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		# Get photos
 		$query	= Database::prepare(Database::get(), "SELECT id, checksum FROM ? WHERE id IN (?)", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
@@ -1171,7 +1171,7 @@ final class Photo extends Module {
 		self::dependencies(isset($this->photoIDs));
 
 		# Call plugins
-		$this->plugins(__METHOD__, 0, func_get_args());
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		# Get photos
 		$query	= Database::prepare(Database::get(), "SELECT id, url, thumbUrl, checksum FROM ? WHERE id IN (?)", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
@@ -1229,7 +1229,7 @@ final class Photo extends Module {
 		}
 
 		# Call plugins
-		$this->plugins(__METHOD__, 1, func_get_args());
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		return true;
 
