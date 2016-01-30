@@ -4,7 +4,7 @@ namespace Lychee\Modules;
 
 final class Session extends Module {
 
-	public function init($public) {
+	public function init($public = true) {
 
 		# Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
