@@ -1,6 +1,8 @@
 <?php
 
+use Lychee\Modules\Album;
 use Lychee\Modules\Database;
+use Lychee\Modules\Photo;
 
 function search($term) {
 
