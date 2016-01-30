@@ -43,14 +43,11 @@ final class Album extends Module {
 
 	}
 
-	public static function prepareData($data) {
+	public static function prepareData(array $data) {
 
 		# This function requires the following album-attributes and turns them
 		# into a front-end friendly format: id, title, public, sysstamp, password
 		# Note that some attributes remain unchanged
-
-		# Check dependencies
-		self::dependencies(isset($data));
 
 		# Init
 		$album = null;

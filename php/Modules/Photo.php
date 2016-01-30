@@ -28,13 +28,10 @@ final class Photo extends Module {
 
 	}
 
-	public function add($files, $albumID = 0, $description = '', $tags = '', $returnOnError = false) {
+	public function add(array $files, $albumID = 0, $description = '', $tags = '', $returnOnError = false) {
 
 		# Use $returnOnError if you want to handle errors by your own
 		# e.g. when calling this functions inside an if-condition
-
-		# Check dependencies
-		self::dependencies(isset($files));
 
 		# Check permissions
 		if (hasPermissions(LYCHEE_UPLOADS)===false||
@@ -255,9 +252,6 @@ final class Photo extends Module {
 
 	private function exists($checksum, $photoID = null) {
 
-		# Check dependencies
-		self::dependencies(isset($checksum));
-
 		# Exclude $photoID from select when $photoID is set
 		if (isset($photoID)) $query = Database::prepare(Database::get(), "SELECT id, url, thumbUrl, medium FROM ? WHERE checksum = '?' AND id <> '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $checksum, $photoID));
 		else $query = Database::prepare(Database::get(), "SELECT id, url, thumbUrl, medium FROM ? WHERE checksum = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $checksum));
@@ -289,9 +283,6 @@ final class Photo extends Module {
 	}
 
 	private function createThumb($url, $filename, $type, $width, $height) {
-
-		# Check dependencies
-		self::dependencies(isset($url, $filename, $type, $width, $height));
 
 		# Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
@@ -389,9 +380,6 @@ final class Photo extends Module {
 		# (boolean) true = Success
 		# (boolean) false = Failure
 
-		# Check dependencies
-		self::dependencies(isset($url, $filename, $width, $height));
-
 		# Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
@@ -457,7 +445,7 @@ final class Photo extends Module {
 
 	}
 
-	public function adjustFile($path, $info) {
+	public function adjustFile($path, array $info) {
 
 		# Function rotates and flips a photo based on its EXIF orientation
 		# Excepts the following:
@@ -466,9 +454,6 @@ final class Photo extends Module {
 		# Returns the following
 		# (array) $info = ['orientation', 'width', 'height'] = Success
 		# (boolean) false = Failure
-
-		# Check dependencies
-		self::dependencies(isset($path, $info));
 
 		# Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
@@ -591,16 +576,13 @@ final class Photo extends Module {
 
 	}
 
-	public static function prepareData($data) {
+	public static function prepareData(array $data) {
 
 		# Function turns photo-attributes into a front-end friendly format. Note that some attributes remain unchanged.
 		# Excepts the following:
 		# (array) $data = ['id', 'title', 'tags', 'public', 'star', 'album', 'thumbUrl', 'takestamp', 'url']
 		# Returns the following:
 		# (array) $photo
-
-		# Check dependencies
-		self::dependencies(isset($data));
 
 		# Init
 		$photo = null;
@@ -702,9 +684,6 @@ final class Photo extends Module {
 		# (string) $url = Path to photo-file
 		# Returns the following:
 		# (array) $return
-
-		# Check dependencies
-		self::dependencies(isset($url));
 
 		# Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());

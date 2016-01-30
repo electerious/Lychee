@@ -6,9 +6,6 @@ final class Session extends Module {
 
 	public function init($public) {
 
-		# Check dependencies
-		self::dependencies(isset($public));
-
 		# Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
@@ -64,9 +61,6 @@ final class Session extends Module {
 	}
 
 	public function login($username, $password) {
-
-		# Check dependencies
-		self::dependencies(isset($username, $password));
 
 		# Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
