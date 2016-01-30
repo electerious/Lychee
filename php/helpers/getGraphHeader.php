@@ -1,5 +1,8 @@
 <?php
 
+use Lychee\Modules\Database;
+use Lychee\Modules\Photo;
+
 function getGraphHeader($photoID) {
 
 	$photo = new Photo($photoID);
