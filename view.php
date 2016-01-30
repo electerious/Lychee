@@ -25,7 +25,7 @@
 				# Load required files
 				require(__DIR__ . '/php/define.php');
 				require(__DIR__ . '/php/autoload.php');
-				require(__DIR__ . '/php/misc.php');
+				require(__DIR__ . '/php/helpers/getGraphHeader.php');
 
 				echo getGraphHeader($_GET['p']);
 
