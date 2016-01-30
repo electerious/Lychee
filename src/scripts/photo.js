@@ -621,7 +621,7 @@ photo.share = function(photoID, service) {
 			break
 	}
 
-	if (link.length!=='') location.href = link
+	if (link!=='') location.href = link
 
 }
 
