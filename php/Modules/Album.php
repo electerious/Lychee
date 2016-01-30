@@ -2,7 +2,7 @@
 
 namespace Lychee\Modules;
 
-final class Album extends Module {
+final class Album {
 
 	private $albumIDs = null;
 
@@ -79,7 +79,7 @@ final class Album extends Module {
 	public function get() {
 
 		# Check dependencies
-		self::dependencies(isset($this->albumIDs));
+		Validator::required(isset($this->albumIDs), __METHOD__);
 
 		# Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
@@ -163,10 +163,7 @@ final class Album extends Module {
 
 	}
 
-	public function getAll($public) {
-
-		# Check dependencies
-		self::dependencies(isset($public));
+	public function getAll($public = true) {
 
 		# Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
@@ -328,7 +325,7 @@ final class Album extends Module {
 	public function getArchive() {
 
 		# Check dependencies
-		self::dependencies(isset($this->albumIDs));
+		Validator::required(isset($this->albumIDs), __METHOD__);
 
 		# Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
@@ -468,7 +465,7 @@ final class Album extends Module {
 	public function setTitle($title = 'Untitled') {
 
 		# Check dependencies
-		self::dependencies(isset($this->albumIDs));
+		Validator::required(isset($this->albumIDs), __METHOD__);
 
 		# Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
@@ -491,7 +488,7 @@ final class Album extends Module {
 	public function setDescription($description = '') {
 
 		# Check dependencies
-		self::dependencies(isset($this->albumIDs));
+		Validator::required(isset($this->albumIDs), __METHOD__);
 
 		# Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
@@ -514,7 +511,7 @@ final class Album extends Module {
 	public function getPublic() {
 
 		# Check dependencies
-		self::dependencies(isset($this->albumIDs));
+		Validator::required(isset($this->albumIDs), __METHOD__);
 
 		# Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
@@ -537,7 +534,7 @@ final class Album extends Module {
 	public function getDownloadable() {
 
 		# Check dependencies
-		self::dependencies(isset($this->albumIDs));
+		Validator::required(isset($this->albumIDs), __METHOD__);
 
 		# Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
@@ -560,7 +557,7 @@ final class Album extends Module {
 	public function setPublic($public, $password, $visible, $downloadable) {
 
 		# Check dependencies
-		self::dependencies(isset($this->albumIDs));
+		Validator::required(isset($this->albumIDs), __METHOD__);
 
 		# Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
@@ -601,7 +598,7 @@ final class Album extends Module {
 	private function setPassword($password) {
 
 		# Check dependencies
-		self::dependencies(isset($this->albumIDs));
+		Validator::required(isset($this->albumIDs), __METHOD__);
 
 		# Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
@@ -640,7 +637,7 @@ final class Album extends Module {
 	public function checkPassword($password) {
 
 		# Check dependencies
-		self::dependencies(isset($this->albumIDs));
+		Validator::required(isset($this->albumIDs), __METHOD__);
 
 		# Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
@@ -662,7 +659,7 @@ final class Album extends Module {
 	public function merge() {
 
 		# Check dependencies
-		self::dependencies(isset($this->albumIDs));
+		Validator::required(isset($this->albumIDs), __METHOD__);
 
 		# Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
@@ -703,7 +700,7 @@ final class Album extends Module {
 	public function delete() {
 
 		# Check dependencies
-		self::dependencies(isset($this->albumIDs));
+		Validator::required(isset($this->albumIDs), __METHOD__);
 
 		# Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());

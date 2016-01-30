@@ -2,7 +2,7 @@
 
 namespace Lychee\Modules;
 
-final class Photo extends Module {
+final class Photo {
 
 	private $photoIDs = null;
 
@@ -627,7 +627,7 @@ final class Photo extends Module {
 		# (array) $photo
 
 		# Check dependencies
-		self::dependencies(isset($this->photoIDs));
+		Validator::required(isset($this->photoIDs), __METHOD__);
 
 		# Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
@@ -790,7 +790,7 @@ final class Photo extends Module {
 		# (boolean) false = Failure
 
 		# Check dependencies
-		self::dependencies(isset($this->photoIDs));
+		Validator::required(isset($this->photoIDs), __METHOD__);
 
 		# Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
@@ -856,7 +856,7 @@ final class Photo extends Module {
 		# (boolean) false = Failure
 
 		# Check dependencies
-		self::dependencies(isset($this->photoIDs));
+		Validator::required(isset($this->photoIDs), __METHOD__);
 
 		# Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
@@ -886,7 +886,7 @@ final class Photo extends Module {
 		# (boolean) false = Failure
 
 		# Check dependencies
-		self::dependencies(isset($this->photoIDs));
+		Validator::required(isset($this->photoIDs), __METHOD__);
 
 		# Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
@@ -914,7 +914,7 @@ final class Photo extends Module {
 		# (boolean) false = Failure
 
 		# Check dependencies
-		self::dependencies(isset($this->photoIDs));
+		Validator::required(isset($this->photoIDs), __METHOD__);
 
 		# Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
@@ -959,7 +959,7 @@ final class Photo extends Module {
 		# (int) 2 = Photo public or album public and password correct
 
 		# Check dependencies
-		self::dependencies(isset($this->photoIDs));
+		Validator::required(isset($this->photoIDs), __METHOD__);
 
 		# Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
@@ -1006,7 +1006,7 @@ final class Photo extends Module {
 		# (boolean) false = Failure
 
 		# Check dependencies
-		self::dependencies(isset($this->photoIDs));
+		Validator::required(isset($this->photoIDs), __METHOD__);
 
 		# Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
@@ -1042,7 +1042,7 @@ final class Photo extends Module {
 		# (boolean) false = Failure
 
 		# Check dependencies
-		self::dependencies(isset($this->photoIDs));
+		Validator::required(isset($this->photoIDs), __METHOD__);
 
 		# Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
@@ -1072,7 +1072,7 @@ final class Photo extends Module {
 		# (boolean) false = Failure
 
 		# Check dependencies
-		self::dependencies(isset($this->photoIDs));
+		Validator::required(isset($this->photoIDs), __METHOD__);
 
 		# Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
@@ -1104,7 +1104,7 @@ final class Photo extends Module {
 		# (boolean) false = Failure
 
 		# Check dependencies
-		self::dependencies(isset($this->photoIDs));
+		Validator::required(isset($this->photoIDs), __METHOD__);
 
 		# Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
@@ -1147,7 +1147,7 @@ final class Photo extends Module {
 		# (boolean) false = Failure
 
 		# Check dependencies
-		self::dependencies(isset($this->photoIDs));
+		Validator::required(isset($this->photoIDs), __METHOD__);
 
 		# Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());

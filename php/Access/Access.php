@@ -2,9 +2,13 @@
 
 namespace Lychee\Access;
 
-interface Access {
+abstract class Access {
 
-	public function check($fn);
+	final private static function fnNotFound() {
+
+		exit('Error: Function not found! Please check the spelling of the called function.');
+
+	}
 
 }
 

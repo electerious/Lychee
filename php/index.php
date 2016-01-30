@@ -10,6 +10,7 @@ namespace Lychee;
 
 use Lychee\Modules\Config;
 use Lychee\Modules\Settings;
+use Lychee\Modules\Validator;
 
 use Lychee\Access\Installation;
 use Lychee\Access\Admin;
@@ -38,10 +39,10 @@ if (!empty($fn)) {
 	date_default_timezone_set('UTC');
 
 	# Validate parameters
-	if (isset($_POST['albumIDs'])&&preg_match('/^[0-9\,]{1,}$/', $_POST['albumIDs'])!==1)	exit('Error: Wrong parameter type for albumIDs!');
-	if (isset($_POST['photoIDs'])&&preg_match('/^[0-9\,]{1,}$/', $_POST['photoIDs'])!==1)	exit('Error: Wrong parameter type for photoIDs!');
-	if (isset($_POST['albumID'])&&preg_match('/^[0-9sfr]{1,}$/', $_POST['albumID'])!==1)	exit('Error: Wrong parameter type for albumID!');
-	if (isset($_POST['photoID'])&&preg_match('/^[0-9]{14}$/', $_POST['photoID'])!==1)		exit('Error: Wrong parameter type for photoID!');
+	if (isset($_POST['albumIDs'])&&Validator::isAlbumIDs($_POST['albumIDs'])===false)	exit('Error: Wrong parameter type for albumIDs!');
+	if (isset($_POST['photoIDs'])&&Validator::isPhotoIDs($_POST['photoIDs'])===false)	exit('Error: Wrong parameter type for photoIDs!');
+	if (isset($_POST['albumID'])&&Validator::isAlbumID($_POST['albumID'])==false)		exit('Error: Wrong parameter type for albumID!');
+	if (isset($_POST['photoID'])&&Validator::isPhotoID($_POST['photoID'])==false)		exit('Error: Wrong parameter type for photoID!');
 
 	# Check if a configuration exists
 	if (Config::exists()===false) {
@@ -51,9 +52,7 @@ if (!empty($fn)) {
 		# Limited access to configure Lychee. Only available when the config.php file is missing.
 		###
 
-		$installation = new Installation();
-		$installation->check($fn);
-
+		Installation::init($fn);
 		exit();
 
 	}
@@ -67,20 +66,20 @@ if (!empty($fn)) {
 		# Full access to Lychee. Only with correct password/session.
 		###
 
-		$admin = new Admin();
-		$admin->check($fn);
+		Admin::init($fn);
+		exit();
 
+	} else {
+
+		###
+		# Guest Access
+		# Access to view all public folders and photos in Lychee.
+		###
+
+		Guest::init($fn);
 		exit();
 
 	}
-
-	###
-	# Guest Access
-	# Access to view all public folders and photos in Lychee.
-	###
-
-	$guest = new Guest();
-	$guest->check($fn);
 
 } else {
 

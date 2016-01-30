@@ -2,7 +2,7 @@
 
 namespace Lychee\Modules;
 
-final class Log extends Module {
+final class Log {
 
 	public static function notice($function, $line, $text = '') {
 
@@ -25,7 +25,7 @@ final class Log extends Module {
 	private static function text($type, $function, $line, $text = '') {
 
 		# Check dependencies
-		Module::dependencies(isset($type, $function, $line, $text));
+		Validator::required(isset($type, $function, $line, $text), __METHOD__);
 
 		# Get time
 		$sysstamp = time();

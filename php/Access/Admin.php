@@ -4,63 +4,62 @@ namespace Lychee\Access;
 
 use Lychee\Modules\Album;
 use Lychee\Modules\Import;
-use Lychee\Modules\Module;
 use Lychee\Modules\Photo;
 use Lychee\Modules\Session;
 use Lychee\Modules\Settings;
+use Lychee\Modules\Validator;
 
-final class Admin implements Access {
+final class Admin extends Access {
 
-	public function check($fn) {
+	public static function init($fn) {
 
 		switch ($fn) {
 
 			# Album functions
-			case 'Album::getAll':			$this->getAlbums(); break;
-			case 'Album::get':				$this->getAlbum(); break;
-			case 'Album::add':				$this->addAlbum(); break;
-			case 'Album::setTitle':			$this->setAlbumTitle(); break;
-			case 'Album::setDescription':	$this->setAlbumDescription(); break;
-			case 'Album::setPublic':		$this->setAlbumPublic(); break;
-			case 'Album::delete':			$this->deleteAlbum(); break;
-			case 'Album::merge':			$this->mergeAlbums(); break;
+			case 'Album::getAll':			self::getAlbumsAction(); break;
+			case 'Album::get':				self::getAlbumAction(); break;
+			case 'Album::add':				self::addAlbumAction(); break;
+			case 'Album::setTitle':			self::setAlbumTitleAction(); break;
+			case 'Album::setDescription':	self::setAlbumDescriptionAction(); break;
+			case 'Album::setPublic':		self::setAlbumPublicAction(); break;
+			case 'Album::delete':			self::deleteAlbumAction(); break;
+			case 'Album::merge':			self::mergeAlbumsAction(); break;
 
 			# Photo functions
-			case 'Photo::get':				$this->getPhoto(); break;
-			case 'Photo::setTitle':			$this->setPhotoTitle(); break;
-			case 'Photo::setDescription':	$this->setPhotoDescription(); break;
-			case 'Photo::setStar':			$this->setPhotoStar(); break;
-			case 'Photo::setPublic':		$this->setPhotoPublic(); break;
-			case 'Photo::setAlbum':			$this->setPhotoAlbum(); break;
-			case 'Photo::setTags':			$this->setPhotoTags(); break;
-			case 'Photo::duplicate':		$this->duplicatePhoto(); break;
-			case 'Photo::delete':			$this->deletePhoto(); break;
+			case 'Photo::get':				self::getPhotoAction(); break;
+			case 'Photo::setTitle':			self::setPhotoTitleAction(); break;
+			case 'Photo::setDescription':	self::setPhotoDescriptionAction(); break;
+			case 'Photo::setStar':			self::setPhotoStarAction(); break;
+			case 'Photo::setPublic':		self::setPhotoPublicAction(); break;
+			case 'Photo::setAlbum':			self::setPhotoAlbumAction(); break;
+			case 'Photo::setTags':			self::setPhotoTagsAction(); break;
+			case 'Photo::duplicate':		self::duplicatePhotoAction(); break;
+			case 'Photo::delete':			self::deletePhotoAction(); break;
 
 			# Add functions
-			case 'Photo::add':				$this->upload(); break;
-			case 'Import::url':				$this->importUrl(); break;
-			case 'Import::server':			$this->importServer(); break;
+			case 'Photo::add':				self::uploadAction(); break;
+			case 'Import::url':				self::importUrlAction(); break;
+			case 'Import::server':			self::importServerAction(); break;
 
 			# Search functions
-			case 'search':					$this->search(); break;
+			case 'search':					self::searchAction(); break;
 
 			# Session functions
-			case 'Session::init':			$this->init(); break;
-			case 'Session::login':			$this->login(); break;
-			case 'Session::logout':			$this->logout(); break;
+			case 'Session::init':			self::initAction(); break;
+			case 'Session::login':			self::loginAction(); break;
+			case 'Session::logout':			self::logoutAction(); break;
 
 			# Settings functions
-			case 'Settings::setLogin':		$this->setLogin(); break;
-			case 'Settings::setSorting':	$this->setSorting(); break;
-			case 'Settings::setDropboxKey':	$this->setDropboxKey(); break;
+			case 'Settings::setLogin':		self::setLoginAction(); break;
+			case 'Settings::setSorting':	self::setSortingAction(); break;
+			case 'Settings::setDropboxKey':	self::setDropboxKeyAction(); break;
 
 			# $_GET functions
-			case 'Album::getArchive':		$this->getAlbumArchive(); break;
-			case 'Photo::getArchive':		$this->getPhotoArchive(); break;
+			case 'Album::getArchive':		self::getAlbumArchiveAction(); break;
+			case 'Photo::getArchive':		self::getPhotoArchiveAction(); break;
 
 			# Error
-			default:						exit('Error: Function not found! Please check the spelling of the called function.');
-											return false; break;
+			default:						self::fnNotFound(); break;
 
 		}
 
@@ -70,64 +69,70 @@ final class Admin implements Access {
 
 	# Album functions
 
-	private function getAlbums() {
+	private static function getAlbumsAction() {
 
 		$album = new Album(null);
 		echo json_encode($album->getAll(false));
 
 	}
 
-	private function getAlbum() {
+	private static function getAlbumAction() {
 
-		Module::dependencies(isset($_POST['albumID']));
+		Validator::required(isset($_POST['albumID']), __METHOD__);
+
 		$album = new Album($_POST['albumID']);
 		echo json_encode($album->get());
 
 	}
 
-	private function addAlbum() {
+	private static function addAlbumAction() {
 
-		Module::dependencies(isset($_POST['title']));
+		Validator::required(isset($_POST['title']), __METHOD__);
+
 		$album = new Album(null);
 		echo $album->add($_POST['title']);
 
 	}
 
-	private function setAlbumTitle() {
+	private static function setAlbumTitleAction() {
 
-		Module::dependencies(isset($_POST['albumIDs'], $_POST['title']));
+		Validator::required(isset($_POST['albumIDs'], $_POST['title']), __METHOD__);
+
 		$album = new Album($_POST['albumIDs']);
 		echo $album->setTitle($_POST['title']);
 
 	}
 
-	private function setAlbumDescription() {
+	private static function setAlbumDescriptionAction() {
 
-		Module::dependencies(isset($_POST['albumID'], $_POST['description']));
+		Validator::required(isset($_POST['albumID'], $_POST['description']), __METHOD__);
+
 		$album = new Album($_POST['albumID']);
 		echo $album->setDescription($_POST['description']);
 
 	}
 
-	private function setAlbumPublic() {
+	private static function setAlbumPublicAction() {
 
-		Module::dependencies(isset($_POST['albumID'], $_POST['password'], $_POST['visible'], $_POST['downloadable']));
+		Validator::required(isset($_POST['albumID'], $_POST['password'], $_POST['visible'], $_POST['downloadable']), __METHOD__);
+
 		$album = new Album($_POST['albumID']);
 		echo $album->setPublic($_POST['public'], $_POST['password'], $_POST['visible'], $_POST['downloadable']);
 
 	}
 
-	private function deleteAlbum() {
+	private static function deleteAlbumAction() {
 
-		Module::dependencies(isset($_POST['albumIDs']));
+		Validator::required(isset($_POST['albumIDs']), __METHOD__);
+
 		$album = new Album($_POST['albumIDs']);
 		echo $album->delete();
 
 	}
 
-	private function mergeAlbums() {
+	private static function mergeAlbumsAction() {
 
-		Module::dependencies(isset($_POST['albumIDs']));
+		Validator::required(isset($_POST['albumIDs']));
 		$album = new Album($_POST['albumIDs']);
 		echo $album->merge();
 
@@ -135,73 +140,82 @@ final class Admin implements Access {
 
 	# Photo functions
 
-	private function getPhoto() {
+	private static function getPhotoAction() {
 
-		Module::dependencies(isset($_POST['photoID'], $_POST['albumID']));
+		Validator::required(isset($_POST['photoID'], $_POST['albumID']), __METHOD__);
+
 		$photo = new Photo($_POST['photoID']);
 		echo json_encode($photo->get($_POST['albumID']));
 
 	}
 
-	private function setPhotoTitle() {
+	private static function setPhotoTitleAction() {
 
-		Module::dependencies(isset($_POST['photoIDs'], $_POST['title']));
+		Validator::required(isset($_POST['photoIDs'], $_POST['title']), __METHOD__);
+
 		$photo = new Photo($_POST['photoIDs']);
 		echo $photo->setTitle($_POST['title']);
 
 	}
 
-	private function setPhotoDescription() {
+	private static function setPhotoDescriptionAction() {
 
-		Module::dependencies(isset($_POST['photoID'], $_POST['description']));
+		Validator::required(isset($_POST['photoID'], $_POST['description']), __METHOD__);
+
 		$photo = new Photo($_POST['photoID']);
 		echo $photo->setDescription($_POST['description']);
 
 	}
 
-	private function setPhotoStar() {
+	private static function setPhotoStarAction() {
 
-		Module::dependencies(isset($_POST['photoIDs']));
+		Validator::required(isset($_POST['photoIDs']), __METHOD__);
+
 		$photo = new Photo($_POST['photoIDs']);
 		echo $photo->setStar();
 
 	}
 
-	private function setPhotoPublic() {
+	private static function setPhotoPublicAction() {
 
-		Module::dependencies(isset($_POST['photoID']));
+		Validator::required(isset($_POST['photoID']), __METHOD__);
+
 		$photo = new Photo($_POST['photoID']);
 		echo $photo->setPublic();
 
 	}
 
-	private function setPhotoAlbum() {
+	private static function setPhotoAlbumAction() {
 
-		Module::dependencies(isset($_POST['photoIDs'], $_POST['albumID']));
+		Validator::required(isset($_POST['photoIDs'], $_POST['albumID']), __METHOD__);
+
 		$photo = new Photo($_POST['photoIDs']);
 		echo $photo->setAlbum($_POST['albumID']);
 
 	}
 
-	private function setPhotoTags() {
+	private static function setPhotoTagsAction() {
 
-		Module::dependencies(isset($_POST['photoIDs'], $_POST['tags']));
+		Validator::required(isset($_POST['photoIDs'], $_POST['tags']), __METHOD__);
+
 		$photo = new Photo($_POST['photoIDs']);
 		echo $photo->setTags($_POST['tags']);
 
 	}
 
-	private function duplicatePhoto() {
+	private static function duplicatePhotoAction() {
 
-		Module::dependencies(isset($_POST['photoIDs']));
+		Validator::required(isset($_POST['photoIDs']), __METHOD__);
+
 		$photo = new Photo($_POST['photoIDs']);
 		echo $photo->duplicate();
 
 	}
 
-	private function deletePhoto() {
+	private static function deletePhotoAction() {
 
-		Module::dependencies(isset($_POST['photoIDs']));
+		Validator::required(isset($_POST['photoIDs']), __METHOD__);
+
 		$photo = new Photo($_POST['photoIDs']);
 		echo $photo->delete();
 
@@ -209,59 +223,62 @@ final class Admin implements Access {
 
 	# Add functions
 
-	private function upload() {
+	private static function uploadAction() {
 
-		Module::dependencies(isset($_FILES, $_POST['albumID'], $_POST['tags']));
+		Validator::required(isset($_FILES, $_POST['albumID'], $_POST['tags']), __METHOD__);
+
 		$photo = new Photo(null);
 		echo $photo->add($_FILES, $_POST['albumID'], '', $_POST['tags']);
 
 	}
 
-	private function importUrl() {
+	private static function importUrlAction() {
 
-		Module::dependencies(isset($_POST['url'], $_POST['albumID']));
+		Validator::required(isset($_POST['url'], $_POST['albumID']), __METHOD__);
+
 		$import = new Import();
 		echo $import->url($_POST['url'], $_POST['albumID']);
 
 	}
 
-	private function importServer() {
+	private static function importServerAction() {
 
-		Module::dependencies(isset($_POST['albumID'], $_POST['path']));
+		Validator::required(isset($_POST['albumID'], $_POST['path']), __METHOD__);
+
 		$import = new Import();
 		echo $import->server($_POST['path'], $_POST['albumID']);
 
 	}
 
-	# Search function
+	# Search functions
 
-	private function search() {
+	private static function searchAction() {
 
-		Module::dependencies(isset($_POST['term']));
+		Validator::required(isset($_POST['term']), __METHOD__);
+
 		echo json_encode(search($_POST['term']));
 
 	}
 
 	# Session functions
 
-	private function init() {
-
-		global $dbName;
+	private static function initAction() {
 
 		$session = new Session();
 		echo json_encode($session->init(false));
 
 	}
 
-	private function login() {
+	private static function loginAction() {
 
-		Module::dependencies(isset($_POST['user'], $_POST['password']));
+		Validator::required(isset($_POST['user'], $_POST['password']), __METHOD__);
+
 		$session = new Session();
 		echo $session->login($_POST['user'], $_POST['password']);
 
 	}
 
-	private function logout() {
+	private static function logoutAction() {
 
 		$session = new Session();
 		echo $session->logout();
@@ -270,17 +287,17 @@ final class Admin implements Access {
 
 	# Settings functions
 
-	private function setLogin() {
+	private static function setLoginAction() {
 
-		Module::dependencies(isset($_POST['username'], $_POST['password']));
-		if (!isset($_POST['oldPassword'])) $_POST['oldPassword'] = '';
-		echo Settings::setLogin($_POST['oldPassword'], $_POST['username'], $_POST['password']);
+		Validator::required(isset($_POST['username'], $_POST['password']), __METHOD__);
+
+		echo Settings::setLogin(@$_POST['oldPassword'], $_POST['username'], $_POST['password']);
 
 	}
 
-	private function setSorting() {
+	private static function setSortingAction() {
 
-		Module::dependencies(isset($_POST['typeAlbums'], $_POST['orderAlbums'], $_POST['typePhotos'], $_POST['orderPhotos']));
+		Validator::required(isset($_POST['typeAlbums'], $_POST['orderAlbums'], $_POST['typePhotos'], $_POST['orderPhotos']), __METHOD__);
 
 		$sA = Settings::setSortingAlbums($_POST['typeAlbums'], $_POST['orderAlbums']);
 		$sP = Settings::setSortingPhotos($_POST['typePhotos'], $_POST['orderPhotos']);
@@ -290,26 +307,29 @@ final class Admin implements Access {
 
 	}
 
-	private function setDropboxKey() {
+	private static function setDropboxKeyAction() {
 
-		Module::dependencies(isset($_POST['key']));
+		Validator::required(isset($_POST['key']), __METHOD__);
+
 		echo Settings::setDropboxKey($_POST['key']);
 
 	}
 
 	# Get functions
 
-	private function getAlbumArchive() {
+	private static function getAlbumArchiveAction() {
 
-		Module::dependencies(isset($_GET['albumID']));
+		Validator::required(isset($_GET['albumID']), __METHOD__);
+
 		$album = new Album($_GET['albumID']);
 		$album->getArchive();
 
 	}
 
-	private function getPhotoArchive() {
+	private static function getPhotoArchiveAction() {
 
-		Module::dependencies(isset($_GET['photoID']));
+		Validator::required(isset($_GET['photoID']), __METHOD__);
+
 		$photo = new Photo($_GET['photoID']);
 		$photo->getArchive();
 

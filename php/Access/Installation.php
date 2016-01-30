@@ -3,18 +3,18 @@
 namespace Lychee\Access;
 
 use Lychee\Modules\Config;
-use Lychee\Modules\Module;
+use Lychee\Modules\Validator;
 
-final class Installation implements Access {
+final class Installation extends Access {
 
-	public function check($fn) {
+	public static function init($fn) {
 
 		switch ($fn) {
 
-			case 'Config::create':	$this->configCreate(); break;
+			case 'Config::create':	self::configCreateAction(); break;
 
 			# Error
-			default:				$this->init(); break;
+			default:				self::initAction(); break;
 
 		}
 
@@ -22,14 +22,15 @@ final class Installation implements Access {
 
 	}
 
-	private function configCreate() {
+	private static function configCreateAction() {
 
-		Module::dependencies(isset($_POST['dbHost'], $_POST['dbUser'], $_POST['dbPassword'], $_POST['dbName'], $_POST['dbTablePrefix']));
+		Validator::required(isset($_POST['dbHost'], $_POST['dbUser'], $_POST['dbPassword'], $_POST['dbName'], $_POST['dbTablePrefix']));
+
 		echo Config::create($_POST['dbHost'], $_POST['dbUser'], $_POST['dbPassword'], $_POST['dbName'], $_POST['dbTablePrefix']);
 
 	}
 
-	private function init() {
+	private static function initAction() {
 
 		$return = array(
 			'status' => LYCHEE_STATUS_NOCONFIG

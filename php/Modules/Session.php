@@ -2,7 +2,7 @@
 
 namespace Lychee\Modules;
 
-final class Session extends Module {
+final class Session {
 
 	public function init($public = true) {
 

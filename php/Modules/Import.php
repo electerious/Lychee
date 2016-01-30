@@ -2,12 +2,9 @@
 
 namespace Lychee\Modules;
 
-final class Import extends Module {
+final class Import {
 
 	private function photo($path, $albumID = 0, $description = '', $tags = '') {
-
-		# Check dependencies
-		self::dependencies(isset($path));
 
 		# No need to validate photo type and extension in this function.
 		# $photo->add will take care of it.
@@ -30,9 +27,6 @@ final class Import extends Module {
 	}
 
 	public function url($urls, $albumID = 0) {
-
-		# Check dependencies
-		self::dependencies(isset($urls));
 
 		# Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());

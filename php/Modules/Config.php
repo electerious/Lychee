@@ -2,7 +2,7 @@
 
 namespace Lychee\Modules;
 
-final class Config extends Module {
+final class Config {
 
 	public static function create($host, $user, $password, $name = 'lychee', $prefix = '') {
 

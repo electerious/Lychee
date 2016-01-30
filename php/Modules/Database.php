@@ -4,7 +4,7 @@ namespace Lychee\Modules;
 
 use Mysqli;
 
-final class Database extends Module {
+final class Database {
 
 	private $connection = null;
 	private static $instance = null;
@@ -39,7 +39,7 @@ final class Database extends Module {
 	private function __construct($host, $user, $password, $name = 'lychee', $dbTablePrefix) {
 
 		# Check dependencies
-		Module::dependencies(isset($host, $user, $password, $name));
+		Validator::required(isset($host, $user, $password, $name), __METHOD__);
 
 		# Define the table prefix
 		defineTablePrefix($dbTablePrefix);
@@ -79,6 +79,9 @@ final class Database extends Module {
 
 	private static function setCharset($connection) {
 
+		# Check dependencies
+		Validator::required(isset($connection), __METHOD__);
+
 		# Avoid sql injection on older MySQL versions by using GBK
 		if ($connection->server_version<50500) @$connection->set_charset('GBK');
 		else @$connection->set_charset('utf8');
@@ -93,7 +96,7 @@ final class Database extends Module {
 	public static function createDatabase($connection, $name = 'lychee') {
 
 		# Check dependencies
-		Module::dependencies(isset($connection, $name));
+		Validator::required(isset($connection), __METHOD__);
 
 		# Check if database exists
 		if ($connection->select_db($name)) return true;
@@ -110,7 +113,7 @@ final class Database extends Module {
 	private static function createTables($connection) {
 
 		# Check dependencies
-		Module::dependencies(isset($connection));
+		Validator::required(isset($connection), __METHOD__);
 
 		# Check if tables exist
 		$query = self::prepare($connection, 'SELECT * FROM ?, ?, ?, ? LIMIT 0', array(LYCHEE_TABLE_PHOTOS, LYCHEE_TABLE_ALBUMS, LYCHEE_TABLE_SETTINGS, LYCHEE_TABLE_LOG));
@@ -229,7 +232,7 @@ final class Database extends Module {
 	private static function update($connection, $dbName) {
 
 		# Check dependencies
-		Module::dependencies(isset($connection));
+		Validator::required(isset($connection, $dbName), __METHOD__);
 
 		# Get current version
 		$query		= self::prepare($connection, "SELECT * FROM ? WHERE `key` = 'version'", array(LYCHEE_TABLE_SETTINGS));
@@ -253,6 +256,9 @@ final class Database extends Module {
 
 	public static function setVersion($connection, $version) {
 
+		# Check dependencies
+		Validator::required(isset($connection), __METHOD__);
+
 		$query	= self::prepare($connection, "UPDATE ? SET value = '?' WHERE `key` = 'version'", array(LYCHEE_TABLE_SETTINGS, $version));
 		$result = $connection->query($query);
 		if (!$result) {
@@ -262,10 +268,10 @@ final class Database extends Module {
 
 	}
 
-	public static function prepare($connection, $query, $data) {
+	public static function prepare($connection, $query, array $data) {
 
 		# Check dependencies
-		Module::dependencies(isset($connection, $query, $data));
+		Validator::required(isset($connection, $query), __METHOD__);
 
 		# Count the number of placeholders and compare it with the number of arguments
 		# If it doesn't match, calculate the difference and skip this number of placeholders before starting the replacement

@@ -2,7 +2,7 @@
 
 namespace Lychee\Modules;
 
-final class Settings extends Module {
+final class Settings {
 
 	private static $cache = null;
 
@@ -52,9 +52,6 @@ final class Settings extends Module {
 
 	public static function setLogin($oldPassword = '', $username, $password) {
 
-		# Check dependencies
-		self::dependencies(isset($oldPassword, $username, $password));
-
 		if ($oldPassword===self::get()['password']||self::get()['password']===crypt($oldPassword, self::get()['password'])) {
 
 			# Save username
@@ -74,7 +71,7 @@ final class Settings extends Module {
 	private static function setUsername($username) {
 
 		# Check dependencies
-		self::dependencies(isset($username));
+		Validator::required(isset($username), __METHOD__);
 
 		# Hash username
 		$username = getHashedString($username);
@@ -93,7 +90,7 @@ final class Settings extends Module {
 	private static function setPassword($password) {
 
 		# Check dependencies
-		self::dependencies(isset($password));
+		Validator::required(isset($password), __METHOD__);
 
 		# Hash password
 		$password = getHashedString($password);
@@ -110,9 +107,6 @@ final class Settings extends Module {
 
 	public static function setDropboxKey($dropboxKey) {
 
-		# Check dependencies
-		self::dependencies(isset($dropboxKey));
-
 		if (strlen($dropboxKey)<1||strlen($dropboxKey)>50) {
 			Log::notice(__METHOD__, __LINE__, 'Dropbox key is either too short or too long');
 			return false;
@@ -127,9 +121,6 @@ final class Settings extends Module {
 	}
 
 	public static function setSortingPhotos($type, $order) {
-
-		# Check dependencies
-		self::dependencies(isset($type, $order));
 
 		$sorting = 'ORDER BY ';
 
@@ -188,9 +179,6 @@ final class Settings extends Module {
 	}
 
 	public static function setSortingAlbums($type, $order) {
-
-		# Check dependencies
-		self::dependencies(isset($type, $order));
 
 		$sorting = 'ORDER BY ';
 

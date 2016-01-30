@@ -3,36 +3,35 @@
 namespace Lychee\Access;
 
 use Lychee\Modules\Album;
-use Lychee\Modules\Module;
 use Lychee\Modules\Photo;
 use Lychee\Modules\Session;
+use Lychee\Modules\Validator;
 
-final class Guest implements Access {
+final class Guest extends Access {
 
-	public function check($fn) {
+	public static function init($fn) {
 
 		switch ($fn) {
 
 			# Album functions
-			case 'Album::getAll':		$this->getAlbums(); break;
-			case 'Album::get':			$this->getAlbum(); break;
-			case 'Album::getPublic':	$this->checkAlbumAccess(); break;
+			case 'Album::getAll':		self::getAlbumsAction(); break;
+			case 'Album::get':			self::getAlbumAction(); break;
+			case 'Album::getPublic':	self::checkAlbumAccessAction(); break;
 
 			# Photo functions
-			case 'Photo::get':			$this->getPhoto(); break;
+			case 'Photo::get':			self::getPhotoAction(); break;
 
 			# Session functions
-			case 'Session::init':		$this->init(); break;
-			case 'Session::login':		$this->login(); break;
-			case 'Session::logout':		$this->logout(); break;
+			case 'Session::init':		self::initAction(); break;
+			case 'Session::login':		self::loginAction(); break;
+			case 'Session::logout':		self::logoutAction(); break;
 
 			# $_GET functions
-			case 'Album::getArchive':	$this->getAlbumArchive(); break;
-			case 'Photo::getArchive':	$this->getPhotoArchive(); break;
+			case 'Album::getArchive':	self::getAlbumArchiveAction(); break;
+			case 'Photo::getArchive':	self::getPhotoArchiveAction(); break;
 
 			# Error
-			default:					exit('Error: Function not found! Please check the spelling of the called function.');
-										break;
+			default:					self::fnNotFound(); break;
 
 		}
 
@@ -42,16 +41,17 @@ final class Guest implements Access {
 
 	# Album functions
 
-	private function getAlbums() {
+	private static function getAlbumsAction() {
 
 		$album = new Album(null);
 		echo json_encode($album->getAll(true));
 
 	}
 
-	private function getAlbum() {
+	private static function getAlbumAction() {
 
-		Module::dependencies(isset($_POST['albumID'], $_POST['password']));
+		Validator::required(isset($_POST['albumID'], $_POST['password']), __METHOD__);
+
 		$album = new Album($_POST['albumID']);
 
 		if ($album->getPublic()) {
@@ -69,9 +69,10 @@ final class Guest implements Access {
 
 	}
 
-	private function checkAlbumAccess() {
+	private static function checkAlbumAccessAction() {
 
-		Module::dependencies(isset($_POST['albumID'], $_POST['password']));
+		Validator::required(isset($_POST['albumID'], $_POST['password']), __METHOD__);
+
 		$album = new Album($_POST['albumID']);
 
 		if ($album->getPublic()) {
@@ -91,9 +92,10 @@ final class Guest implements Access {
 
 	# Photo functions
 
-	private function getPhoto() {
+	private static function getPhotoAction() {
 
-		Module::dependencies(isset($_POST['photoID'], $_POST['albumID'], $_POST['password']));
+		Validator::required(isset($_POST['photoID'], $_POST['albumID'], $_POST['password']), __METHOD__);
+
 		$photo = new Photo($_POST['photoID']);
 
 		$pgP = $photo->getPublic($_POST['password']);
@@ -106,24 +108,23 @@ final class Guest implements Access {
 
 	# Session functions
 
-	private function init() {
-
-		global $dbName;
+	private static function initAction() {
 
 		$session = new Session();
 		echo json_encode($session->init(true));
 
 	}
 
-	private function login() {
+	private static function loginAction() {
 
-		Module::dependencies(isset($_POST['user'], $_POST['password']));
+		Validator::required(isset($_POST['user'], $_POST['password']), __METHOD__);
+
 		$session = new Session();
 		echo $session->login($_POST['user'], $_POST['password']);
 
 	}
 
-	private function logout() {
+	private static function logoutAction() {
 
 		$session = new Session();
 		echo $session->logout();
@@ -132,9 +133,10 @@ final class Guest implements Access {
 
 	# $_GET functions
 
-	private function getAlbumArchive() {
+	private static function getAlbumArchiveAction() {
 
-		Module::dependencies(isset($_GET['albumID'], $_GET['password']));
+		Validator::required(isset($_GET['albumID'], $_GET['password']), __METHOD__);
+
 		$album = new Album($_GET['albumID']);
 
 		if ($album->getPublic()&&$album->getDownloadable()) {
@@ -152,9 +154,10 @@ final class Guest implements Access {
 
 	}
 
-	private function getPhotoArchive() {
+	private static function getPhotoArchiveAction() {
 
-		Module::dependencies(isset($_GET['photoID'], $_GET['password']));
+		Validator::required(isset($_GET['photoID'], $_GET['password']), __METHOD__);
+
 		$photo = new Photo($_GET['photoID']);
 
 		$pgP = $photo->getPublic($_GET['password']);
