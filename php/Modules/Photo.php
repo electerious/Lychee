@@ -2,6 +2,8 @@
 
 namespace Lychee\Modules;
 
+use ZipArchive;
+
 final class Photo {
 
 	private $photoIDs = null;

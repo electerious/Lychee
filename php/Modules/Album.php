@@ -2,6 +2,8 @@
 
 namespace Lychee\Modules;
 
+use ZipArchive;
+
 final class Album {
 
 	private $albumIDs = null;
