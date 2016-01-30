@@ -1,5 +1,7 @@
 <?php
 
+use Lychee\Modules\Database;
+
 function search($term) {
 
 	// Initialize return var
