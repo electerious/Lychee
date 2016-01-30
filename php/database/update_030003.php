@@ -4,8 +4,6 @@
  * Update to version 3.0.3
  */
 
-namespace Lychee\Database;
-
 use Lychee\Modules\Database;
 
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
