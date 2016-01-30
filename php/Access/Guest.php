@@ -13,25 +13,25 @@ final class Guest extends Access {
 
 		switch ($fn) {
 
-			# Album functions
-			case 'Album::getAll':		self::getAlbumsAction(); break;
-			case 'Album::get':			self::getAlbumAction(); break;
-			case 'Album::getPublic':	self::checkAlbumAccessAction(); break;
+			// Album functions
+			case 'Album::getAll':     self::getAlbumsAction(); break;
+			case 'Album::get':        self::getAlbumAction(); break;
+			case 'Album::getPublic':  self::checkAlbumAccessAction(); break;
 
-			# Photo functions
-			case 'Photo::get':			self::getPhotoAction(); break;
+			// Photo functions
+			case 'Photo::get':        self::getPhotoAction(); break;
 
-			# Session functions
-			case 'Session::init':		self::initAction(); break;
-			case 'Session::login':		self::loginAction(); break;
-			case 'Session::logout':		self::logoutAction(); break;
+			// Session functions
+			case 'Session::init':     self::initAction(); break;
+			case 'Session::login':    self::loginAction(); break;
+			case 'Session::logout':   self::logoutAction(); break;
 
-			# $_GET functions
-			case 'Album::getArchive':	self::getAlbumArchiveAction(); break;
-			case 'Photo::getArchive':	self::getPhotoArchiveAction(); break;
+			// $_GET functions
+			case 'Album::getArchive': self::getAlbumArchiveAction(); break;
+			case 'Photo::getArchive': self::getPhotoArchiveAction(); break;
 
-			# Error
-			default:					self::fnNotFound(); break;
+			// Error
+			default:                  self::fnNotFound(); break;
 
 		}
 
@@ -39,7 +39,7 @@ final class Guest extends Access {
 
 	}
 
-	# Album functions
+	// Album functions
 
 	private static function getAlbumsAction() {
 
@@ -56,13 +56,13 @@ final class Guest extends Access {
 
 		if ($album->getPublic()) {
 
-			# Album public
-			if ($album->checkPassword($_POST['password']))	echo json_encode($album->get());
-			else											echo 'Warning: Wrong password!';
+			// Album public
+			if ($album->checkPassword($_POST['password'])) echo json_encode($album->get());
+			else                                           echo 'Warning: Wrong password!';
 
 		} else {
 
-			# Album private
+			// Album private
 			echo 'Warning: Album private!';
 
 		}
@@ -77,20 +77,20 @@ final class Guest extends Access {
 
 		if ($album->getPublic()) {
 
-			# Album public
-			if ($album->checkPassword($_POST['password']))	echo true;
-			else											echo false;
+			// Album public
+			if ($album->checkPassword($_POST['password'])) echo true;
+			else                                           echo false;
 
 		} else {
 
-			# Album private
+			// Album private
 			echo false;
 
 		}
 
 	}
 
-	# Photo functions
+	// Photo functions
 
 	private static function getPhotoAction() {
 
@@ -100,13 +100,13 @@ final class Guest extends Access {
 
 		$pgP = $photo->getPublic($_POST['password']);
 
-		if ($pgP===2)		echo json_encode($photo->get($_POST['albumID']));
-		else if ($pgP===1)	echo 'Warning: Wrong password!';
-		else if ($pgP===0)	echo 'Warning: Photo private!';
+		if ($pgP===2)      echo json_encode($photo->get($_POST['albumID']));
+		else if ($pgP===1) echo 'Warning: Wrong password!';
+		else if ($pgP===0) echo 'Warning: Photo private!';
 
 	}
 
-	# Session functions
+	// Session functions
 
 	private static function initAction() {
 
@@ -131,7 +131,7 @@ final class Guest extends Access {
 
 	}
 
-	# $_GET functions
+	// $_GET functions
 
 	private static function getAlbumArchiveAction() {
 
@@ -141,13 +141,13 @@ final class Guest extends Access {
 
 		if ($album->getPublic()&&$album->getDownloadable()) {
 
-			# Album Public
-			if ($album->checkPassword($_GET['password']))	$album->getArchive();
-			else											exit('Warning: Wrong password!');
+			// Album Public
+			if ($album->checkPassword($_GET['password'])) $album->getArchive();
+			else                                          exit('Warning: Wrong password!');
 
 		} else {
 
-			# Album Private
+			// Album Private
 			exit('Warning: Album private or not downloadable!');
 
 		}
@@ -162,15 +162,15 @@ final class Guest extends Access {
 
 		$pgP = $photo->getPublic($_GET['password']);
 
-		# Photo Download
+		// Photo Download
 		if ($pgP===2) {
 
-			# Photo Public
+			// Photo Public
 			$photo->getArchive();
 
 		} else {
 
-			# Photo Private
+			// Photo Private
 			exit('Warning: Photo private or password incorrect!');
 
 		}

@@ -24,15 +24,15 @@ final class Log {
 
 	private static function text($type, $function, $line, $text = '') {
 
-		# Check dependencies
+		// Check dependencies
 		Validator::required(isset($type, $function, $line, $text), __METHOD__);
 
-		# Get time
+		// Get time
 		$sysstamp = time();
 
-		# Save in database
-		$query	= Database::prepare(Database::get(), "INSERT INTO ? (time, type, function, line, text) VALUES ('?', '?', '?', '?', '?')", array(LYCHEE_TABLE_LOG, $sysstamp, $type, $function, $line, $text));
-		$result	= Database::get()->query($query);
+		// Save in database
+		$query  = Database::prepare(Database::get(), "INSERT INTO ? (time, type, function, line, text) VALUES ('?', '?', '?', '?', '?')", array(LYCHEE_TABLE_LOG, $sysstamp, $type, $function, $line, $text));
+		$result = Database::get()->query($query);
 
 		if (!$result) return false;
 		return true;

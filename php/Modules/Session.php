@@ -6,23 +6,23 @@ final class Session {
 
 	public function init($public = true) {
 
-		# Call plugins
+		// Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
-		# Return settings
+		// Return settings
 		$return['config'] = Settings::get();
 
-		# Path to Lychee for the server-import dialog
+		// Path to Lychee for the server-import dialog
 		$return['config']['location'] = LYCHEE;
 
-		# Remove username and password from response
+		// Remove username and password from response
 		unset($return['config']['username']);
 		unset($return['config']['password']);
 
-		# Remove identifier from response
+		// Remove identifier from response
 		unset($return['config']['identifier']);
 
-		# Check if login credentials exist and login if they don't
+		// Check if login credentials exist and login if they don't
 		if ($this->noLogin()===true) {
 			$public = false;
 			$return['config']['login'] = false;
@@ -32,15 +32,15 @@ final class Session {
 
 		if ($public===false) {
 
-			# Logged in
+			// Logged in
 			$return['status'] = LYCHEE_STATUS_LOGGEDIN;
 
 		} else {
 
-			# Logged out
+			// Logged out
 			$return['status'] = LYCHEE_STATUS_LOGGEDOUT;
 
-			# Unset unused vars
+			// Unset unused vars
 			unset($return['config']['skipDuplicates']);
 			unset($return['config']['thumbQuality']);
 			unset($return['config']['sortingAlbums']);
@@ -54,7 +54,7 @@ final class Session {
 
 		}
 
-		# Call plugins
+		// Call plugins
 		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		return $return;
@@ -63,24 +63,24 @@ final class Session {
 
 	public function login($username, $password) {
 
-		# Call plugins
+		// Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		$username = crypt($username, Settings::get()['username']);
 		$password = crypt($password, Settings::get()['password']);
 
-		# Check login with crypted hash
+		// Check login with crypted hash
 		if (Settings::get()['username']===$username&&
 			Settings::get()['password']===$password) {
-				$_SESSION['login']		= true;
-				$_SESSION['identifier']	= Settings::get()['identifier'];
+				$_SESSION['login']      = true;
+				$_SESSION['identifier'] = Settings::get()['identifier'];
 				return true;
 		}
 
-		# No login
+		// No login
 		if ($this->noLogin()===true) return true;
 
-		# Call plugins
+		// Call plugins
 		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		return false;
@@ -89,11 +89,11 @@ final class Session {
 
 	private function noLogin() {
 
-		# Check if login credentials exist and login if they don't
+		// Check if login credentials exist and login if they don't
 		if (Settings::get()['username']===''&&
 			Settings::get()['password']==='') {
-				$_SESSION['login']		= true;
-				$_SESSION['identifier']	= Settings::get()['identifier'];
+				$_SESSION['login']      = true;
+				$_SESSION['identifier'] = Settings::get()['identifier'];
 				return true;
 		}
 
@@ -103,15 +103,15 @@ final class Session {
 
 	public function logout() {
 
-		# Call plugins
+		// Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
-		$_SESSION['login']		= null;
-		$_SESSION['identifier']	= null;
+		$_SESSION['login']      = null;
+		$_SESSION['identifier'] = null;
 
 		session_destroy();
 
-		# Call plugins
+		// Call plugins
 		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		return true;

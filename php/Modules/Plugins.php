@@ -30,7 +30,7 @@ final class Plugins implements SplSubject {
 
 	private function __construct(array $plugins) {
 
-		# Load plugins
+		// Load plugins
 		foreach ($plugins as $plugin) {
 
 			if ($plugin==='') continue;
@@ -47,7 +47,7 @@ final class Plugins implements SplSubject {
 
 		if (!isset($observer)) return false;
 
-		# Add observer
+		// Add observer
 		$this->observers[] = $observer;
 
 		return true;
@@ -58,7 +58,7 @@ final class Plugins implements SplSubject {
 
 		if (!isset($observer)) return false;
 
-		# Remove observer
+		// Remove observer
 		$key = array_search($observer, $this->observers, true);
 		if ($key) unset($this->observers[$key]);
 
@@ -68,7 +68,7 @@ final class Plugins implements SplSubject {
 
 	public function notify() {
 
-		# Notify each observer
+		// Notify each observer
 		foreach ($this->observers as $value) $value->update($this);
 
 		return true;
@@ -79,15 +79,15 @@ final class Plugins implements SplSubject {
 
 		if (!isset($name, $location, $args)) return false;
 
-		# Parse
-		$location	= ($location===0 ? 'before' : 'after');
-		$action		= $name . ":" . $location;
+		// Parse
+		$location = ($location===0 ? 'before' : 'after');
+		$action   = $name . ":" . $location;
 
-		# Save vars
-		$this->action	= $action;
-		$this->args		= $args;
+		// Save vars
+		$this->action = $action;
+		$this->args   = $args;
 
-		# Notify observers
+		// Notify observers
 		$this->notify();
 
 		return true;

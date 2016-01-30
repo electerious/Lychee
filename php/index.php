@@ -1,10 +1,9 @@
 <?php
 
-###
-# @name			API
-# @author		Tobias Reich
-# @copyright	2015 by Tobias Reich
-###
+/**
+ * @author    Tobias Reich
+ * @copyright 2016 by Tobias Reich
+ */
 
 namespace Lychee;
 
@@ -26,55 +25,55 @@ require(__DIR__ . '/helpers/getHashedString.php');
 require(__DIR__ . '/helpers/hasPermissions.php');
 require(__DIR__ . '/helpers/search.php');
 
-# Define the called function
-if (isset($_POST['function']))		$fn = $_POST['function'];
-else if (isset($_GET['function']))	$fn = $_GET['function'];
-else								$fn = null;
+// Define the called function
+if (isset($_POST['function']))     $fn = $_POST['function'];
+else if (isset($_GET['function'])) $fn = $_GET['function'];
+else                               $fn = null;
 
-# Check if a function has been specified
+// Check if a function has been specified
 if (!empty($fn)) {
 
-	# Start the session and set the default timezone
+	// Start the session and set the default timezone
 	session_start();
 	date_default_timezone_set('UTC');
 
-	# Validate parameters
-	if (isset($_POST['albumIDs'])&&Validator::isAlbumIDs($_POST['albumIDs'])===false)	exit('Error: Wrong parameter type for albumIDs!');
-	if (isset($_POST['photoIDs'])&&Validator::isPhotoIDs($_POST['photoIDs'])===false)	exit('Error: Wrong parameter type for photoIDs!');
-	if (isset($_POST['albumID'])&&Validator::isAlbumID($_POST['albumID'])==false)		exit('Error: Wrong parameter type for albumID!');
-	if (isset($_POST['photoID'])&&Validator::isPhotoID($_POST['photoID'])==false)		exit('Error: Wrong parameter type for photoID!');
+	// Validate parameters
+	if (isset($_POST['albumIDs'])&&Validator::isAlbumIDs($_POST['albumIDs'])===false) exit('Error: Wrong parameter type for albumIDs!');
+	if (isset($_POST['photoIDs'])&&Validator::isPhotoIDs($_POST['photoIDs'])===false) exit('Error: Wrong parameter type for photoIDs!');
+	if (isset($_POST['albumID'])&&Validator::isAlbumID($_POST['albumID'])==false)     exit('Error: Wrong parameter type for albumID!');
+	if (isset($_POST['photoID'])&&Validator::isPhotoID($_POST['photoID'])==false)     exit('Error: Wrong parameter type for photoID!');
 
-	# Check if a configuration exists
+	// Check if a configuration exists
 	if (Config::exists()===false) {
 
-		###
-		# Installation Access
-		# Limited access to configure Lychee. Only available when the config.php file is missing.
-		###
+		/**
+		 * Installation Access
+		 * Limited access to configure Lychee. Only available when the config.php file is missing.
+		 */
 
 		Installation::init($fn);
 		exit();
 
 	}
 
-	# Check if user is logged
+	// Check if user is logged
 	if ((isset($_SESSION['login'])&&$_SESSION['login']===true)&&
 		(isset($_SESSION['identifier'])&&$_SESSION['identifier']===Settings::get()['identifier'])) {
 
-		###
-		# Admin Access
-		# Full access to Lychee. Only with correct password/session.
-		###
+		/**
+		 * Admin Access
+		 * Full access to Lychee. Only with correct password/session.
+		 */
 
 		Admin::init($fn);
 		exit();
 
 	} else {
 
-		###
-		# Guest Access
-		# Access to view all public folders and photos in Lychee.
-		###
+		/**
+		 * Guest Access
+		 * Access to view all public folders and photos in Lychee.
+		 */
 
 		Guest::init($fn);
 		exit();

@@ -11,10 +11,10 @@ final class Installation extends Access {
 
 		switch ($fn) {
 
-			case 'Config::create':	self::configCreateAction(); break;
+			case 'Config::create': self::configCreateAction(); break;
 
-			# Error
-			default:				self::initAction(); break;
+			// Error
+			default:               self::initAction(); break;
 
 		}
 

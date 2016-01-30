@@ -15,51 +15,51 @@ final class Admin extends Access {
 
 		switch ($fn) {
 
-			# Album functions
-			case 'Album::getAll':			self::getAlbumsAction(); break;
-			case 'Album::get':				self::getAlbumAction(); break;
-			case 'Album::add':				self::addAlbumAction(); break;
-			case 'Album::setTitle':			self::setAlbumTitleAction(); break;
-			case 'Album::setDescription':	self::setAlbumDescriptionAction(); break;
-			case 'Album::setPublic':		self::setAlbumPublicAction(); break;
-			case 'Album::delete':			self::deleteAlbumAction(); break;
-			case 'Album::merge':			self::mergeAlbumsAction(); break;
+			// Album functions
+			case 'Album::getAll':           self::getAlbumsAction(); break;
+			case 'Album::get':              self::getAlbumAction(); break;
+			case 'Album::add':              self::addAlbumAction(); break;
+			case 'Album::setTitle':         self::setAlbumTitleAction(); break;
+			case 'Album::setDescription':   self::setAlbumDescriptionAction(); break;
+			case 'Album::setPublic':        self::setAlbumPublicAction(); break;
+			case 'Album::delete':           self::deleteAlbumAction(); break;
+			case 'Album::merge':            self::mergeAlbumsAction(); break;
 
-			# Photo functions
-			case 'Photo::get':				self::getPhotoAction(); break;
-			case 'Photo::setTitle':			self::setPhotoTitleAction(); break;
-			case 'Photo::setDescription':	self::setPhotoDescriptionAction(); break;
-			case 'Photo::setStar':			self::setPhotoStarAction(); break;
-			case 'Photo::setPublic':		self::setPhotoPublicAction(); break;
-			case 'Photo::setAlbum':			self::setPhotoAlbumAction(); break;
-			case 'Photo::setTags':			self::setPhotoTagsAction(); break;
-			case 'Photo::duplicate':		self::duplicatePhotoAction(); break;
-			case 'Photo::delete':			self::deletePhotoAction(); break;
+			// Photo functions
+			case 'Photo::get':              self::getPhotoAction(); break;
+			case 'Photo::setTitle':         self::setPhotoTitleAction(); break;
+			case 'Photo::setDescription':   self::setPhotoDescriptionAction(); break;
+			case 'Photo::setStar':          self::setPhotoStarAction(); break;
+			case 'Photo::setPublic':        self::setPhotoPublicAction(); break;
+			case 'Photo::setAlbum':         self::setPhotoAlbumAction(); break;
+			case 'Photo::setTags':          self::setPhotoTagsAction(); break;
+			case 'Photo::duplicate':        self::duplicatePhotoAction(); break;
+			case 'Photo::delete':           self::deletePhotoAction(); break;
 
-			# Add functions
-			case 'Photo::add':				self::uploadAction(); break;
-			case 'Import::url':				self::importUrlAction(); break;
-			case 'Import::server':			self::importServerAction(); break;
+			// Add functions
+			case 'Photo::add':              self::uploadAction(); break;
+			case 'Import::url':             self::importUrlAction(); break;
+			case 'Import::server':          self::importServerAction(); break;
 
-			# Search functions
-			case 'search':					self::searchAction(); break;
+			// Search functions
+			case 'search':                  self::searchAction(); break;
 
-			# Session functions
-			case 'Session::init':			self::initAction(); break;
-			case 'Session::login':			self::loginAction(); break;
-			case 'Session::logout':			self::logoutAction(); break;
+			// Session functions
+			case 'Session::init':           self::initAction(); break;
+			case 'Session::login':          self::loginAction(); break;
+			case 'Session::logout':         self::logoutAction(); break;
 
-			# Settings functions
-			case 'Settings::setLogin':		self::setLoginAction(); break;
-			case 'Settings::setSorting':	self::setSortingAction(); break;
-			case 'Settings::setDropboxKey':	self::setDropboxKeyAction(); break;
+			// Settings functions
+			case 'Settings::setLogin':      self::setLoginAction(); break;
+			case 'Settings::setSorting':    self::setSortingAction(); break;
+			case 'Settings::setDropboxKey': self::setDropboxKeyAction(); break;
 
-			# $_GET functions
-			case 'Album::getArchive':		self::getAlbumArchiveAction(); break;
-			case 'Photo::getArchive':		self::getPhotoArchiveAction(); break;
+			// $_GET functions
+			case 'Album::getArchive':       self::getAlbumArchiveAction(); break;
+			case 'Photo::getArchive':       self::getPhotoArchiveAction(); break;
 
-			# Error
-			default:						self::fnNotFound(); break;
+			// Error
+			default:                        self::fnNotFound(); break;
 
 		}
 
@@ -67,7 +67,7 @@ final class Admin extends Access {
 
 	}
 
-	# Album functions
+	// Album functions
 
 	private static function getAlbumsAction() {
 
@@ -138,7 +138,7 @@ final class Admin extends Access {
 
 	}
 
-	# Photo functions
+	// Photo functions
 
 	private static function getPhotoAction() {
 
@@ -221,7 +221,7 @@ final class Admin extends Access {
 
 	}
 
-	# Add functions
+	// Add functions
 
 	private static function uploadAction() {
 
@@ -250,7 +250,7 @@ final class Admin extends Access {
 
 	}
 
-	# Search functions
+	// Search functions
 
 	private static function searchAction() {
 
@@ -260,7 +260,7 @@ final class Admin extends Access {
 
 	}
 
-	# Session functions
+	// Session functions
 
 	private static function initAction() {
 
@@ -285,7 +285,7 @@ final class Admin extends Access {
 
 	}
 
-	# Settings functions
+	// Settings functions
 
 	private static function setLoginAction() {
 
@@ -302,8 +302,8 @@ final class Admin extends Access {
 		$sA = Settings::setSortingAlbums($_POST['typeAlbums'], $_POST['orderAlbums']);
 		$sP = Settings::setSortingPhotos($_POST['typePhotos'], $_POST['orderPhotos']);
 
-		if ($sA===true&&$sP===true)	echo true;
-		else						echo false;
+		if ($sA===true&&$sP===true) echo true;
+		else                        echo false;
 
 	}
 
@@ -315,7 +315,7 @@ final class Admin extends Access {
 
 	}
 
-	# Get functions
+	// Get functions
 
 	private static function getAlbumArchiveAction() {
 
