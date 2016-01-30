@@ -132,7 +132,7 @@ final class Admin extends Access {
 
 	private static function mergeAlbumsAction() {
 
-		Validator::required(isset($_POST['albumIDs']));
+		Validator::required(isset($_POST['albumIDs']), __METHOD__);
 		$album = new Album($_POST['albumIDs']);
 		echo $album->merge();
 
