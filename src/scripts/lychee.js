@@ -330,7 +330,7 @@ lychee.retinize = function(path = '') {
 
 lychee.loadDropbox = function(callback) {
 
-	if (!lychee.dropbox && lychee.dropboxKey) {
+	if (lychee.dropbox===false && lychee.dropboxKey!=null && lychee.dropboxKey!=='') {
 
 		loadingBar.show()
 
@@ -351,7 +351,7 @@ lychee.loadDropbox = function(callback) {
 		}
 		s.parentNode.insertBefore(g, s)
 
-	} else if (lychee.dropbox&&lychee.dropboxKey) {
+	} else if (lychee.dropbox===true && lychee.dropboxKey!=null && lychee.dropboxKey!=='') {
 
 		callback()
 
