@@ -291,7 +291,8 @@ final class Admin extends Access {
 
 		Validator::required(isset($_POST['username'], $_POST['password']), __METHOD__);
 
-		echo Settings::setLogin(@$_POST['oldPassword'], $_POST['username'], $_POST['password']);
+		if (isset($_POST['oldPassword'])===false) $_POST['oldPassword'] = '';
+		echo Settings::setLogin($_POST['oldPassword'], $_POST['username'], $_POST['password']);
 
 	}
 
