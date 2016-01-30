@@ -41,6 +41,7 @@ final class Session extends Module {
 			$return['status'] = LYCHEE_STATUS_LOGGEDOUT;
 
 			# Unset unused vars
+			unset($return['config']['skipDuplicates']);
 			unset($return['config']['thumbQuality']);
 			unset($return['config']['sortingAlbums']);
 			unset($return['config']['sortingPhotos']);
