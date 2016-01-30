@@ -4,7 +4,7 @@ namespace Lychee\Modules;
 
 final class Album extends Module {
 
-	private $albumIDs	= null;
+	private $albumIDs = null;
 
 	public function __construct($albumIDs) {
 
