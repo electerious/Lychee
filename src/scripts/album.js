@@ -112,7 +112,11 @@ album.add = function() {
 
 		if (title.length===0) title = 'Untitled'
 
-		api.post('Album::add', { title }, function(data) {
+		let params = {
+			title
+		}
+
+		api.post('Album::add', params, function(data) {
 
 			// Avoid first album to be true
 			if (data===true) data = 1
