@@ -9,11 +9,12 @@ use Lychee\Modules\Database;
 if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 
 // Add medium to photos
-$query = Database::prepare($connection, "SELECT `medium` FROM `?` LIMIT 1", array(LYCHEE_TABLE_PHOTOS));
-if (!$connection->query($query)) {
+$query  = Database::prepare($connection, "SELECT `medium` FROM `?` LIMIT 1", array(LYCHEE_TABLE_PHOTOS));
+$result = $connection->query($query);
+if ($result===false) {
 	$query  = Database::prepare($connection, "ALTER TABLE `?` ADD `medium` TINYINT(1) NOT NULL DEFAULT 0", array(LYCHEE_TABLE_PHOTOS));
 	$result = $connection->query($query);
-	if (!$result) {
+	if ($result===false) {
 		Log::error('update_020700', __LINE__, 'Could not update database (' . $connection->error . ')');
 		return false;
 	}
@@ -33,7 +34,7 @@ $result = $connection->query($query);
 if ($result->num_rows===0) {
 	$query  = Database::prepare($connection, "INSERT INTO `?` (`key`, `value`) VALUES ('medium', '1')", array(LYCHEE_TABLE_SETTINGS));
 	$result = $connection->query($query);
-	if (!$result) {
+	if ($result===false) {
 		Log::error('update_020700', __LINE__, 'Could not update database (' . $connection->error . ')');
 		return false;
 	}

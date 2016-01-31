@@ -45,7 +45,7 @@ final class Settings {
 
 		$result = Database::get()->query($query);
 
-		if (!$result) return false;
+		if ($result===false) return false;
 		return true;
 
 	}

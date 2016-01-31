@@ -14,7 +14,7 @@ $result = $connection->query($query);
 if ($result->num_rows===0) {
 	$query  = Database::prepare($connection, "INSERT INTO `?` (`key`, `value`) VALUES ('skipDuplicates', '0')", array(LYCHEE_TABLE_SETTINGS));
 	$result = $connection->query($query);
-	if (!$result) {
+	if ($result===false) {
 		Log::error('update_030003', __LINE__, 'Could not update database (' . $connection->error . ')');
 		return false;
 	}

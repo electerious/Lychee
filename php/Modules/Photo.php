@@ -237,7 +237,7 @@ final class Photo {
 			$query  = Database::prepare(Database::get(), "INSERT INTO ? (id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, checksum, medium) VALUES ('?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?')", $values);
 			$result = Database::get()->query($query);
 
-			if (!$result) {
+			if ($result===false) {
 				Log::error(__METHOD__, __LINE__, Database::get()->error);
 				if ($returnOnError===true) return false;
 				exit('Error: Could not save photo in database!');
@@ -260,8 +260,8 @@ final class Photo {
 
 		$result = Database::get()->query($query);
 
-		if (!$result) {
-			Log::error(__METHOD__, __LINE__, 'Could not check for existing photos with the same checksum');
+		if ($result===false) {
+			Log::error(__METHOD__, __LINE__, 'Could not check for existing photos with the same checksum (' . Database::get()->error . ')');
 			return false;
 		}
 
@@ -800,13 +800,14 @@ final class Photo {
 		// Get photo
 		$query  = Database::prepare(Database::get(), "SELECT title, url FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
 		$photos = Database::get()->query($query);
-		$photo  = $photos->fetch_object();
 
-		// Error in database query
-		if (!$photos) {
+		if ($photos===false) {
 			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
+
+		// Get photo object
+		$photo = $photos->fetch_object();
 
 		// Photo not found
 		if ($photo===null) {
@@ -870,7 +871,7 @@ final class Photo {
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
-		if (!$result) {
+		if ($result===false) {
 			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
@@ -900,7 +901,7 @@ final class Photo {
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
-		if (!$result) {
+		if ($result===false) {
 			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
@@ -935,9 +936,10 @@ final class Photo {
 			$star = ($photo->star==0 ? 1 : 0);
 
 			// Set star
-			$query = Database::prepare(Database::get(), "UPDATE ? SET star = '?' WHERE id = '?'", array(LYCHEE_TABLE_PHOTOS, $star, $photo->id));
-			$star  = Database::get()->query($query);
-			if (!$star) $error = true;
+			$query  = Database::prepare(Database::get(), "UPDATE ? SET star = '?' WHERE id = '?'", array(LYCHEE_TABLE_PHOTOS, $star, $photo->id));
+			$result = Database::get()->query($query);
+
+			if ($result===false) $error = true;
 
 		}
 
@@ -1028,7 +1030,7 @@ final class Photo {
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
-		if (!$result) {
+		if ($result===false) {
 			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
@@ -1056,7 +1058,7 @@ final class Photo {
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
-		if (!$result) {
+		if ($result===false) {
 			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
@@ -1090,7 +1092,7 @@ final class Photo {
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
-		if (!$result) {
+		if ($result===false) {
 			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
@@ -1114,7 +1116,8 @@ final class Photo {
 		// Get photos
 		$query  = Database::prepare(Database::get(), "SELECT id, checksum FROM ? WHERE id IN (?)", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
 		$photos = Database::get()->query($query);
-		if (!$photos) {
+
+		if ($photos===false) {
 			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
@@ -1127,10 +1130,11 @@ final class Photo {
 			while(strlen($id)<14) $id .= 0;
 
 			// Duplicate entry
-			$values    = array(LYCHEE_TABLE_PHOTOS, $id, LYCHEE_TABLE_PHOTOS, $photo->id);
-			$query     = Database::prepare(Database::get(), "INSERT INTO ? (id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, checksum) SELECT '?' AS id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, checksum FROM ? WHERE id = '?'", $values);
-			$duplicate = Database::get()->query($query);
-			if (!$duplicate) {
+			$values = array(LYCHEE_TABLE_PHOTOS, $id, LYCHEE_TABLE_PHOTOS, $photo->id);
+			$query  = Database::prepare(Database::get(), "INSERT INTO ? (id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, checksum) SELECT '?' AS id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, checksum FROM ? WHERE id = '?'", $values);
+			$result = Database::get()->query($query);
+
+			if ($result===false) {
 				Log::error(__METHOD__, __LINE__, Database::get()->error);
 				return false;
 			}
@@ -1157,7 +1161,8 @@ final class Photo {
 		// Get photos
 		$query  = Database::prepare(Database::get(), "SELECT id, url, thumbUrl, checksum FROM ? WHERE id IN (?)", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
 		$photos = Database::get()->query($query);
-		if (!$photos) {
+
+		if ($photos===false) {
 			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
@@ -1201,8 +1206,9 @@ final class Photo {
 
 			// Delete db entry
 			$query  = Database::prepare(Database::get(), "DELETE FROM ? WHERE id = '?'", array(LYCHEE_TABLE_PHOTOS, $photo->id));
-			$delete = Database::get()->query($query);
-			if (!$delete) {
+			$result = Database::get()->query($query);
+
+			if ($result===false) {
 				Log::error(__METHOD__, __LINE__, Database::get()->error);
 				return false;
 			}

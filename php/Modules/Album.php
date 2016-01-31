@@ -37,7 +37,7 @@ final class Album {
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
-		if (!$result) {
+		if ($result===false) {
 			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
@@ -191,9 +191,10 @@ final class Album {
 
 		// Execute query
 		$albums = Database::get()->query($query);
-		if (!$albums) {
-			Log::error(__METHOD__, __LINE__, 'Could not get all albums (' . Database::get()->error . ')');
-			exit('Error: ' . Database::get()->error);
+
+		if ($albums===false) {
+			Log::error(__METHOD__, __LINE__, 'Could not get albums from database (' . Database::get()->error . ')');
+			exit('Error: Could not get albums from database!');
 		}
 
 		// For each album
@@ -209,6 +210,11 @@ final class Album {
 					// Execute query
 					$query  = Database::prepare(Database::get(), "SELECT thumbUrl FROM ? WHERE album = '?' ORDER BY star DESC, " . substr(Settings::get()['sortingPhotos'], 9) . " LIMIT 3", array(LYCHEE_TABLE_PHOTOS, $album['id']));
 					$thumbs = Database::get()->query($query);
+
+					if ($thumbs===false) {
+						Log::error(__METHOD__, __LINE__, 'Could not get thumbs of album from database (' . Database::get()->error . ')');
+						exit('Error: Could not get thumbs of album from database!');
+					}
 
 					// For each thumb
 					$k = 0;
@@ -368,8 +374,7 @@ final class Album {
 			$query = Database::prepare(Database::get(), "SELECT title FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
 			$album = Database::get()->query($query);
 
-			// Error in database query
-			if (!$album) {
+			if ($album===false) {
 				Log::error(__METHOD__, __LINE__, Database::get()->error);
 				return false;
 			}
@@ -484,7 +489,7 @@ final class Album {
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
-		if (!$result) {
+		if ($result===false) {
 			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
@@ -507,7 +512,7 @@ final class Album {
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
-		if (!$result) {
+		if ($result===false) {
 			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
@@ -577,7 +582,7 @@ final class Album {
 		// Set public
 		$query  = Database::prepare(Database::get(), "UPDATE ? SET public = '?', visible = '?', downloadable = '?', password = NULL WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $public, $visible, $downloadable, $this->albumIDs));
 		$result = Database::get()->query($query);
-		if (!$result) {
+		if ($result===false) {
 			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
@@ -586,7 +591,7 @@ final class Album {
 		if ($public===1) {
 			$query  = Database::prepare(Database::get(), "UPDATE ? SET public = 0 WHERE album IN (?)", array(LYCHEE_TABLE_PHOTOS, $this->albumIDs));
 			$result = Database::get()->query($query);
-			if (!$result) {
+			if ($result===false) {
 				Log::error(__METHOD__, __LINE__, Database::get()->error);
 				return false;
 			}
@@ -633,7 +638,7 @@ final class Album {
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
-		if (!$result) {
+		if ($result===false) {
 			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
@@ -681,7 +686,7 @@ final class Album {
 		$query  = Database::prepare(Database::get(), "UPDATE ? SET album = ? WHERE album IN (?)", array(LYCHEE_TABLE_PHOTOS, $albumID, $this->albumIDs));
 		$result = Database::get()->query($query);
 
-		if (!$result) {
+		if ($result===false) {
 			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
@@ -696,7 +701,7 @@ final class Album {
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
-		if (!$result) {
+		if ($result===false) {
 			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
@@ -735,7 +740,7 @@ final class Album {
 		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		if ($error) return false;
-		if (!$result) {
+		if ($result===false) {
 			Log::error(__METHOD__, __LINE__, Database::get()->error);
 			return false;
 		}
