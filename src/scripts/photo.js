@@ -553,7 +553,7 @@ photo.editTags = function(photoIDs) {
 photo.setTags = function(photoIDs, tags) {
 
 	if (!photoIDs) return false
-	if (photoIDs instanceof Array===false) photoIDs = [photoIDs]
+	if (photoIDs instanceof Array===false) photoIDs = [ photoIDs ]
 
 	// Parse tags
 	tags = tags.replace(/(\ ,\ )|(\ ,)|(,\ )|(,{1,}\ {0,})|(,$|^,)/g, ',')
