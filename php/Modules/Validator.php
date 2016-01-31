@@ -12,20 +12,6 @@ final class Validator {
 
 	}
 
-	public static function isNull() {
-
-		$args = func_get_args();
-
-		for ($i = 0; $i < count($args); $i++) {
-
-			if (is_null($args[$i])===true) return true;
-
-		}
-
-		return false;
-
-	}
-
 	public static function isAlbumIDs($albumIDs) {
 
 		return (preg_match('/^[0-9\,]{1,}$/', $albumIDs)===1 ? true : false);
