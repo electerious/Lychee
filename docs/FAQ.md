@@ -1,5 +1,5 @@
 #### Lychee is not working
-If Lychee is not working properly, try to open `plugins/check/index.php`. This script will display all errors it can find.
+If Lychee is not working properly, try to open `plugins/Diagnostics/index.php`. This script will display all errors it can find.
 
 #### What do I need to run Lychee on my server?
 To run Lychee, everything you need is a web-server with PHP 5.3 or later and a MySQL-Database.
@@ -38,7 +38,7 @@ To backup your Lychee installation you need to do the following steps:
 	- INSERT INTO lychee_photos_backup SELECT * FROM lychee_photos;
 	- CREATE TABLE lychee_settings_backup LIKE lychee_settings;
 	- INSERT INTO lychee_settings_backup SELECT * FROM lychee_settings;
-	
+
 #### Can I use my existing folder-structure?
 No. Lychee has it's own folder-structure and database. Please upload or import all your photos to use them.
 
