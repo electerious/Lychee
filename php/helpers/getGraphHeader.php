@@ -10,9 +10,18 @@ function getGraphHeader($photoID) {
 
 	$query  = Database::prepare(Database::get(), "SELECT title, description, url, medium FROM ? WHERE id = '?'", array(LYCHEE_TABLE_PHOTOS, $photoID));
 	$result = Database::get()->query($query);
-	$row    = $result->fetch_object();
 
-	if (!$result||!$row) return false;
+	if ($result===false) {
+		Log::error(__METHOD__, __LINE__, Database::get()->error);
+		return false;
+	}
+
+	$row = $result->fetch_object();
+
+	if ($row===null) {
+		Log::error(__METHOD__, __LINE__, 'Could not find photo in database');
+		return false;
+	}
 
 	if ($row->medium==='1') $dir = 'medium';
 	else                    $dir = 'big';
