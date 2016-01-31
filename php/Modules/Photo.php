@@ -39,7 +39,7 @@ final class Photo {
 		if (hasPermissions(LYCHEE_UPLOADS)===false||
 			hasPermissions(LYCHEE_UPLOADS_BIG)===false||
 			hasPermissions(LYCHEE_UPLOADS_THUMB)===false) {
-				Log::error(__METHOD__, __LINE__, 'An upload-folder is missing or not readable and writable');
+				Log::error(Database::get(), __METHOD__, __LINE__, 'An upload-folder is missing or not readable and writable');
 				exit('Error: An upload-folder is missing or not readable and writable!');
 		}
 
@@ -80,35 +80,35 @@ final class Photo {
 
 			// Check if file exceeds the upload_max_filesize directive
 			if ($file['error']===UPLOAD_ERR_INI_SIZE) {
-				Log::error(__METHOD__, __LINE__, 'The uploaded file exceeds the upload_max_filesize directive in php.ini');
+				Log::error(Database::get(), __METHOD__, __LINE__, 'The uploaded file exceeds the upload_max_filesize directive in php.ini');
 				if ($returnOnError===true) return false;
 				exit('Error: The uploaded file exceeds the upload_max_filesize directive in php.ini!');
 			}
 
 			// Check if file was only partially uploaded
 			if ($file['error']===UPLOAD_ERR_PARTIAL) {
-				Log::error(__METHOD__, __LINE__, 'The uploaded file was only partially uploaded');
+				Log::error(Database::get(), __METHOD__, __LINE__, 'The uploaded file was only partially uploaded');
 				if ($returnOnError===true) return false;
 				exit('Error: The uploaded file was only partially uploaded!');
 			}
 
 			// Check if writing file to disk failed
 			if ($file['error']===UPLOAD_ERR_CANT_WRITE) {
-				Log::error(__METHOD__, __LINE__, 'Failed to write photo to disk');
+				Log::error(Database::get(), __METHOD__, __LINE__, 'Failed to write photo to disk');
 				if ($returnOnError===true) return false;
 				exit('Error: Failed to write photo to disk!');
 			}
 
 			// Check if a extension stopped the file upload
 			if ($file['error']===UPLOAD_ERR_EXTENSION) {
-				Log::error(__METHOD__, __LINE__, 'A PHP extension stopped the file upload');
+				Log::error(Database::get(), __METHOD__, __LINE__, 'A PHP extension stopped the file upload');
 				if ($returnOnError===true) return false;
 				exit('Error: A PHP extension stopped the file upload!');
 			}
 
 			// Check if the upload was successful
 			if ($file['error']!==UPLOAD_ERR_OK) {
-				Log::error(__METHOD__, __LINE__, 'Upload contains an error (' . $file['error'] . ')');
+				Log::error(Database::get(), __METHOD__, __LINE__, 'Upload contains an error (' . $file['error'] . ')');
 				if ($returnOnError===true) return false;
 				exit('Error: Upload failed!');
 			}
@@ -116,7 +116,7 @@ final class Photo {
 			// Verify extension
 			$extension = getExtension($file['name']);
 			if (!in_array(strtolower($extension), self::$validExtensions, true)) {
-				Log::error(__METHOD__, __LINE__, 'Photo format not supported');
+				Log::error(Database::get(), __METHOD__, __LINE__, 'Photo format not supported');
 				if ($returnOnError===true) return false;
 				exit('Error: Photo format not supported!');
 			}
@@ -124,7 +124,7 @@ final class Photo {
 			// Verify image
 			$type = @exif_imagetype($file['tmp_name']);
 			if (!in_array($type, self::$validTypes, true)) {
-				Log::error(__METHOD__, __LINE__, 'Photo type not supported');
+				Log::error(Database::get(), __METHOD__, __LINE__, 'Photo type not supported');
 				if ($returnOnError===true) return false;
 				exit('Error: Photo type not supported!');
 			}
@@ -141,7 +141,7 @@ final class Photo {
 			// Calculate checksum
 			$checksum = sha1_file($tmp_name);
 			if ($checksum===false) {
-				Log::error(__METHOD__, __LINE__, 'Could not calculate checksum for photo');
+				Log::error(Database::get(), __METHOD__, __LINE__, 'Could not calculate checksum for photo');
 				if ($returnOnError===true) return false;
 				exit('Error: Could not calculate checksum for photo!');
 			}
@@ -171,13 +171,13 @@ final class Photo {
 				// Import if not uploaded via web
 				if (!is_uploaded_file($tmp_name)) {
 					if (!@copy($tmp_name, $path)) {
-						Log::error(__METHOD__, __LINE__, 'Could not copy photo to uploads');
+						Log::error(Database::get(), __METHOD__, __LINE__, 'Could not copy photo to uploads');
 						if ($returnOnError===true) return false;
 						exit('Error: Could not copy photo to uploads!');
 					} else @unlink($tmp_name);
 				} else {
 					if (!@move_uploaded_file($tmp_name, $path)) {
-						Log::error(__METHOD__, __LINE__, 'Could not move photo to uploads');
+						Log::error(Database::get(), __METHOD__, __LINE__, 'Could not move photo to uploads');
 						if ($returnOnError===true) return false;
 						exit('Error: Could not move photo to uploads!');
 					}
@@ -188,7 +188,7 @@ final class Photo {
 				// Photo already exists
 				// Check if the user wants to skip duplicates
 				if (Settings::get()['skipDuplicates']==='1') {
-					Log::notice(__METHOD__, __LINE__, 'Skipped upload of existing photo because skipDuplicates is activated');
+					Log::notice(Database::get(), __METHOD__, __LINE__, 'Skipped upload of existing photo because skipDuplicates is activated');
 					if ($returnOnError===true) return false;
 					exit('Warning: This photo has been skipped because it\'s already in your library.');
 				}
@@ -210,7 +210,7 @@ final class Photo {
 				if ($file['type']==='image/jpeg'&&isset($info['orientation'])&&$info['orientation']!=='') {
 					$adjustFile = $this->adjustFile($path, $info);
 					if ($adjustFile!==false) $info = $adjustFile;
-					else Log::notice(__METHOD__, __LINE__, 'Skipped adjustment of photo (' . $info['title'] . ')');
+					else Log::notice(Database::get(), __METHOD__, __LINE__, 'Skipped adjustment of photo (' . $info['title'] . ')');
 				}
 
 				// Set original date
@@ -218,7 +218,7 @@ final class Photo {
 
 				// Create Thumb
 				if (!$this->createThumb($path, $photo_name, $info['type'], $info['width'], $info['height'])) {
-					Log::error(__METHOD__, __LINE__, 'Could not create thumbnail for photo');
+					Log::error(Database::get(), __METHOD__, __LINE__, 'Could not create thumbnail for photo');
 					if ($returnOnError===true) return false;
 					exit('Error: Could not create thumbnail for photo!');
 				}
@@ -235,10 +235,9 @@ final class Photo {
 			// Save to DB
 			$values = array(LYCHEE_TABLE_PHOTOS, $id, $info['title'], $photo_name, $description, $tags, $info['type'], $info['width'], $info['height'], $info['size'], $info['iso'], $info['aperture'], $info['make'], $info['model'], $info['shutter'], $info['focal'], $info['takestamp'], $path_thumb, $albumID, $public, $star, $checksum, $medium);
 			$query  = Database::prepare(Database::get(), "INSERT INTO ? (id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, checksum, medium) VALUES ('?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?')", $values);
-			$result = Database::get()->query($query);
+			$result = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
 			if ($result===false) {
-				Log::error(__METHOD__, __LINE__, Database::get()->error);
 				if ($returnOnError===true) return false;
 				exit('Error: Could not save photo in database!');
 			}
@@ -258,12 +257,9 @@ final class Photo {
 		if (isset($photoID)) $query = Database::prepare(Database::get(), "SELECT id, url, thumbUrl, medium FROM ? WHERE checksum = '?' AND id <> '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $checksum, $photoID));
 		else $query = Database::prepare(Database::get(), "SELECT id, url, thumbUrl, medium FROM ? WHERE checksum = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $checksum));
 
-		$result = Database::get()->query($query);
+		$result = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
-		if ($result===false) {
-			Log::error(__METHOD__, __LINE__, 'Could not check for existing photos with the same checksum (' . Database::get()->error . ')');
-			return false;
-		}
+		if ($result===false) return false;
 
 		if ($result->num_rows===1) {
 
@@ -343,7 +339,7 @@ final class Photo {
 				case 'image/jpeg': $sourceImg = imagecreatefromjpeg($url); break;
 				case 'image/png':  $sourceImg = imagecreatefrompng($url); break;
 				case 'image/gif':  $sourceImg = imagecreatefromgif($url); break;
-				default:           Log::error(__METHOD__, __LINE__, 'Type of photo is not supported');
+				default:           Log::error(Database::get(), __METHOD__, __LINE__, 'Type of photo is not supported');
 				                   return false;
 				                   break;
 			}
@@ -398,7 +394,7 @@ final class Photo {
 		if (hasPermissions(LYCHEE_UPLOADS_MEDIUM)===false) {
 
 			// Permissions are missing
-			Log::notice(__METHOD__, __LINE__, 'Skipped creation of medium-photo, because uploads/medium/ is missing or not readable and writable.');
+			Log::notice(Database::get(), __METHOD__, __LINE__, 'Skipped creation of medium-photo, because uploads/medium/ is missing or not readable and writable.');
 			$error = true;
 
 		}
@@ -423,7 +419,7 @@ final class Photo {
 			// Save image
 			try { $medium->writeImage($newUrl); }
 			catch (ImagickException $err) {
-				Log::notice(__METHOD__, __LINE__, 'Could not save medium-photo: ' . $err->getMessage());
+				Log::notice(Database::get(), __METHOD__, __LINE__, 'Could not save medium-photo: ' . $err->getMessage());
 				$error = true;
 			}
 
@@ -636,8 +632,12 @@ final class Photo {
 
 		// Get photo
 		$query  = Database::prepare(Database::get(), "SELECT * FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
-		$photos = Database::get()->query($query);
-		$photo  = $photos->fetch_assoc();
+		$photos = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
+
+		if ($photos===false) exit('Error: Could not get photo from database!');
+
+		// Get photo object
+		$photo = $photos->fetch_assoc();
 
 		// Parse photo
 		$photo['sysdate'] = date('d M. Y', substr($photo['id'], 0, -4));
@@ -659,8 +659,12 @@ final class Photo {
 
 				// Get album
 				$query  = Database::prepare(Database::get(), "SELECT public FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $photo['album']));
-				$albums = Database::get()->query($query);
-				$album  = $albums->fetch_assoc();
+				$albums = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
+
+				if ($albums===false) exit('Error: Could not get album of photo from database!');
+
+				// Get album object
+				$album = $albums->fetch_assoc();
 
 				// Parse album
 				$photo['public'] = ($album['public']==='1' ? '2' : $photo['public']);
@@ -799,26 +803,23 @@ final class Photo {
 
 		// Get photo
 		$query  = Database::prepare(Database::get(), "SELECT title, url FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
-		$photos = Database::get()->query($query);
+		$photos = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
-		if ($photos===false) {
-			Log::error(__METHOD__, __LINE__, Database::get()->error);
-			return false;
-		}
+		if ($photos===false) exit('Error: Could not get photo from database!');
 
 		// Get photo object
 		$photo = $photos->fetch_object();
 
 		// Photo not found
 		if ($photo===null) {
-			Log::error(__METHOD__, __LINE__, 'Album not found. Cannot start download.');
-			return false;
+			Log::error(Database::get(), __METHOD__, __LINE__, 'Could not find specified photo');
+			exit('Error: Could not find specified photo!');
 		}
 
 		// Get extension
 		$extension = getExtension($photo->url);
 		if ($extension===false) {
-			Log::error(__METHOD__, __LINE__, 'Invalid photo extension');
+			Log::error(Database::get(), __METHOD__, __LINE__, 'Invalid photo extension');
 			return false;
 		}
 
@@ -866,15 +867,12 @@ final class Photo {
 
 		// Set title
 		$query  = Database::prepare(Database::get(), "UPDATE ? SET title = '?' WHERE id IN (?)", array(LYCHEE_TABLE_PHOTOS, $title, $this->photoIDs));
-		$result = Database::get()->query($query);
+		$result = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
-		if ($result===false) {
-			Log::error(__METHOD__, __LINE__, Database::get()->error);
-			return false;
-		}
+		if ($result===false) return false;
 		return true;
 
 	}
@@ -896,15 +894,12 @@ final class Photo {
 
 		// Set description
 		$query  = Database::prepare(Database::get(), "UPDATE ? SET description = '?' WHERE id IN ('?')", array(LYCHEE_TABLE_PHOTOS, $description, $this->photoIDs));
-		$result = Database::get()->query($query);
+		$result = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
-		if ($result===false) {
-			Log::error(__METHOD__, __LINE__, Database::get()->error);
-			return false;
-		}
+		if ($result===false) return false;
 		return true;
 
 	}
@@ -927,7 +922,9 @@ final class Photo {
 
 		// Get photos
 		$query  = Database::prepare(Database::get(), "SELECT id, star FROM ? WHERE id IN (?)", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
-		$photos = Database::get()->query($query);
+		$photos = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
+
+		if ($photos===false) return false;
 
 		// For each photo
 		while ($photo = $photos->fetch_object()) {
@@ -937,7 +934,7 @@ final class Photo {
 
 			// Set star
 			$query  = Database::prepare(Database::get(), "UPDATE ? SET star = '?' WHERE id = '?'", array(LYCHEE_TABLE_PHOTOS, $star, $photo->id));
-			$result = Database::get()->query($query);
+			$result = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
 			if ($result===false) $error = true;
 
@@ -946,10 +943,7 @@ final class Photo {
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
-		if ($error===true) {
-			Log::error(__METHOD__, __LINE__, Database::get()->error);
-			return false;
-		}
+		if ($error===true) return false;
 		return true;
 
 	}
@@ -970,8 +964,12 @@ final class Photo {
 
 		// Get photo
 		$query  = Database::prepare(Database::get(), "SELECT public, album FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
-		$photos = Database::get()->query($query);
-		$photo  = $photos->fetch_object();
+		$photos = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
+
+		if ($photos===false) return 0;
+
+		// Get photo object
+		$photo = $photos->fetch_object();
 
 		// Check if public
 		if ($photo->public==='1') {
@@ -1017,23 +1015,24 @@ final class Photo {
 
 		// Get public
 		$query  = Database::prepare(Database::get(), "SELECT public FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
-		$photos = Database::get()->query($query);
-		$photo  = $photos->fetch_object();
+		$photos = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
+
+		if ($photos===false) return false;
+
+		// Get photo object
+		$photo = $photos->fetch_object();
 
 		// Invert public
 		$public = ($photo->public==0 ? 1 : 0);
 
 		// Set public
 		$query  = Database::prepare(Database::get(), "UPDATE ? SET public = '?' WHERE id = '?'", array(LYCHEE_TABLE_PHOTOS, $public, $this->photoIDs));
-		$result = Database::get()->query($query);
+		$result = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
-		if ($result===false) {
-			Log::error(__METHOD__, __LINE__, Database::get()->error);
-			return false;
-		}
+		if ($result===false) return false;
 		return true;
 
 	}
@@ -1053,15 +1052,12 @@ final class Photo {
 
 		// Set album
 		$query  = Database::prepare(Database::get(), "UPDATE ? SET album = '?' WHERE id IN (?)", array(LYCHEE_TABLE_PHOTOS, $albumID, $this->photoIDs));
-		$result = Database::get()->query($query);
+		$result = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
-		if ($result===false) {
-			Log::error(__METHOD__, __LINE__, Database::get()->error);
-			return false;
-		}
+		if ($result===false) return false;
 		return true;
 
 	}
@@ -1087,15 +1083,12 @@ final class Photo {
 
 		// Set tags
 		$query  = Database::prepare(Database::get(), "UPDATE ? SET tags = '?' WHERE id IN (?)", array(LYCHEE_TABLE_PHOTOS, $tags, $this->photoIDs));
-		$result = Database::get()->query($query);
+		$result = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
-		if ($result===false) {
-			Log::error(__METHOD__, __LINE__, Database::get()->error);
-			return false;
-		}
+		if ($result===false) return false;
 		return true;
 
 	}
@@ -1113,14 +1106,14 @@ final class Photo {
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
+		// Init vars
+		$error = false;
+
 		// Get photos
 		$query  = Database::prepare(Database::get(), "SELECT id, checksum FROM ? WHERE id IN (?)", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
-		$photos = Database::get()->query($query);
+		$photos = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
-		if ($photos===false) {
-			Log::error(__METHOD__, __LINE__, Database::get()->error);
-			return false;
-		}
+		if ($photos===false) return false;
 
 		// For each photo
 		while ($photo = $photos->fetch_object()) {
@@ -1132,15 +1125,13 @@ final class Photo {
 			// Duplicate entry
 			$values = array(LYCHEE_TABLE_PHOTOS, $id, LYCHEE_TABLE_PHOTOS, $photo->id);
 			$query  = Database::prepare(Database::get(), "INSERT INTO ? (id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, checksum) SELECT '?' AS id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, checksum FROM ? WHERE id = '?'", $values);
-			$result = Database::get()->query($query);
+			$result = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
-			if ($result===false) {
-				Log::error(__METHOD__, __LINE__, Database::get()->error);
-				return false;
-			}
+			if ($result===false) $error = true;
 
 		}
 
+		if ($error===true) return false;
 		return true;
 
 	}
@@ -1158,14 +1149,14 @@ final class Photo {
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
+		// Init vars
+		$error = false;
+
 		// Get photos
 		$query  = Database::prepare(Database::get(), "SELECT id, url, thumbUrl, checksum FROM ? WHERE id IN (?)", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
-		$photos = Database::get()->query($query);
+		$photos = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
-		if ($photos===false) {
-			Log::error(__METHOD__, __LINE__, Database::get()->error);
-			return false;
-		}
+		if ($photos===false) return false;
 
 		// For each photo
 		while ($photo = $photos->fetch_object()) {
@@ -1180,44 +1171,42 @@ final class Photo {
 
 				// Delete big
 				if (file_exists(LYCHEE_UPLOADS_BIG . $photo->url)&&!unlink(LYCHEE_UPLOADS_BIG . $photo->url)) {
-					Log::error(__METHOD__, __LINE__, 'Could not delete photo in uploads/big/');
-					return false;
+					Log::error(Database::get(), __METHOD__, __LINE__, 'Could not delete photo in uploads/big/');
+					$error = true;
 				}
 
 				// Delete medium
 				if (file_exists(LYCHEE_UPLOADS_MEDIUM . $photo->url)&&!unlink(LYCHEE_UPLOADS_MEDIUM . $photo->url)) {
-					Log::error(__METHOD__, __LINE__, 'Could not delete photo in uploads/medium/');
-					return false;
+					Log::error(Database::get(), __METHOD__, __LINE__, 'Could not delete photo in uploads/medium/');
+					$error = true;
 				}
 
 				// Delete thumb
 				if (file_exists(LYCHEE_UPLOADS_THUMB . $photo->thumbUrl)&&!unlink(LYCHEE_UPLOADS_THUMB . $photo->thumbUrl)) {
-					Log::error(__METHOD__, __LINE__, 'Could not delete photo in uploads/thumb/');
-					return false;
+					Log::error(Database::get(), __METHOD__, __LINE__, 'Could not delete photo in uploads/thumb/');
+					$error = true;
 				}
 
 				// Delete thumb@2x
 				if (file_exists(LYCHEE_UPLOADS_THUMB . $thumbUrl2x)&&!unlink(LYCHEE_UPLOADS_THUMB . $thumbUrl2x)) {
-					Log::error(__METHOD__, __LINE__, 'Could not delete high-res photo in uploads/thumb/');
-					return false;
+					Log::error(Database::get(), __METHOD__, __LINE__, 'Could not delete high-res photo in uploads/thumb/');
+					$error = true;
 				}
 
 			}
 
 			// Delete db entry
 			$query  = Database::prepare(Database::get(), "DELETE FROM ? WHERE id = '?'", array(LYCHEE_TABLE_PHOTOS, $photo->id));
-			$result = Database::get()->query($query);
+			$result = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
-			if ($result===false) {
-				Log::error(__METHOD__, __LINE__, Database::get()->error);
-				return false;
-			}
+			if ($result===false) $error = true;
 
 		}
 
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
+		if ($error===true) return false;
 		return true;
 
 	}

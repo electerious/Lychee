@@ -9,17 +9,14 @@ function getGraphHeader($photoID) {
 	if ($photo->getPublic('')===false) return false;
 
 	$query  = Database::prepare(Database::get(), "SELECT title, description, url, medium FROM ? WHERE id = '?'", array(LYCHEE_TABLE_PHOTOS, $photoID));
-	$result = Database::get()->query($query);
+	$result = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
-	if ($result===false) {
-		Log::error(__METHOD__, __LINE__, Database::get()->error);
-		return false;
-	}
+	if ($result===false) return false;
 
 	$row = $result->fetch_object();
 
 	if ($row===null) {
-		Log::error(__METHOD__, __LINE__, 'Could not find photo in database');
+		Log::error(Database::get(), __METHOD__, __LINE__, 'Could not find photo in database');
 		return false;
 	}
 

@@ -12,7 +12,7 @@ final class Settings {
 
 		// Execute query
 		$query    = Database::prepare(Database::get(), "SELECT * FROM ?", array(LYCHEE_TABLE_SETTINGS));
-		$settings = Database::get()->query($query);
+		$settings = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
 		// Add each to return
 		while ($setting = $settings->fetch_object()) $return[$setting->key] = $setting->value;
@@ -43,7 +43,7 @@ final class Settings {
 
 		}
 
-		$result = Database::get()->query($query);
+		$result = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
 		if ($result===false) return false;
 		return true;
@@ -79,10 +79,7 @@ final class Settings {
 		// Execute query
 		// Do not prepare $username because it is hashed and save
 		// Preparing (escaping) the username would destroy the hash
-		if (self::set('username', $username, true)===false) {
-			Log::error(__METHOD__, __LINE__, Database::get()->error);
-			return false;
-		}
+		if (self::set('username', $username, true)===false) return false;
 		return true;
 
 	}
@@ -97,10 +94,7 @@ final class Settings {
 
 		// Do not prepare $password because it is hashed and save
 		// Preparing (escaping) the password would destroy the hash
-		if (self::set('password', $password, true)===false) {
-			Log::error(__METHOD__, __LINE__, Database::get()->error);
-			return false;
-		}
+		if (self::set('password', $password, true)===false) return false;
 		return true;
 
 	}
@@ -108,14 +102,11 @@ final class Settings {
 	public static function setDropboxKey($dropboxKey) {
 
 		if (strlen($dropboxKey)<1||strlen($dropboxKey)>50) {
-			Log::notice(__METHOD__, __LINE__, 'Dropbox key is either too short or too long');
+			Log::notice(Database::get(), __METHOD__, __LINE__, 'Dropbox key is either too short or too long');
 			return false;
 		}
 
-		if (self::set('dropboxKey', $dropboxKey)===false) {
-			Log::error(__METHOD__, __LINE__, Database::get()->error);
-			return false;
-		}
+		if (self::set('dropboxKey', $dropboxKey)===false) return false;
 		return true;
 
 	}
@@ -152,10 +143,7 @@ final class Settings {
 		// Do not prepare $sorting because it is a true statement
 		// Preparing (escaping) the sorting would destroy it
 		// $sorting is save and can't contain user-input
-		if (self::set('sortingPhotos', $sorting, true)===false) {
-			Log::error(__METHOD__, __LINE__, Database::get()->error);
-			return false;
-		}
+		if (self::set('sortingPhotos', $sorting, true)===false) return false;
 		return true;
 
 	}
@@ -189,10 +177,7 @@ final class Settings {
 		// Do not prepare $sorting because it is a true statement
 		// Preparing (escaping) the sorting would destroy it
 		// $sorting is save and can't contain user-input
-		if (self::set('sortingAlbums', $sorting, true)===false) {
-			Log::error(__METHOD__, __LINE__, Database::get()->error);
-			return false;
-		}
+		if (self::set('sortingAlbums', $sorting, true)===false) return false;
 		return true;
 
 	}

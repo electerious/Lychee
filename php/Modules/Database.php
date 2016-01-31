@@ -87,8 +87,10 @@ final class Database {
 		else @$connection->set_charset('utf8');
 
 		// Set unicode
-		$connection->query('SET NAMES utf8;');
+		$query  = 'SET NAMES utf8';
+		$result = self::execute($connection, $query, null, null);
 
+		if ($result===false) return false;
 		return true;
 
 	}
@@ -103,8 +105,9 @@ final class Database {
 
 		// Create database
 		$query  = self::prepare($connection, 'CREATE DATABASE IF NOT EXISTS ?', array($name));
-		$result = $connection->query($query);
+		$result = self::execute($connection, $query, null, null);
 
+		if ($result===false) return false;
 		if ($connection->select_db($name)===false) return false;
 		return true;
 
@@ -116,12 +119,14 @@ final class Database {
 		Validator::required(isset($connection), __METHOD__);
 
 		// Check if tables exist
-		$query = self::prepare($connection, 'SELECT * FROM ?, ?, ?, ? LIMIT 0', array(LYCHEE_TABLE_PHOTOS, LYCHEE_TABLE_ALBUMS, LYCHEE_TABLE_SETTINGS, LYCHEE_TABLE_LOG));
-		if ($connection->query($query)) return true;
+		$query  = self::prepare($connection, 'SELECT * FROM ?, ?, ?, ? LIMIT 0', array(LYCHEE_TABLE_PHOTOS, LYCHEE_TABLE_ALBUMS, LYCHEE_TABLE_SETTINGS, LYCHEE_TABLE_LOG));
+		$result = self::execute($connection, $query, null, null);
+		if ($result!==false) return true;
 
-		// Create log
+		// Check if log table exists
 		$exist  = self::prepare($connection, 'SELECT * FROM ? LIMIT 0', array(LYCHEE_TABLE_LOG));
-		$result = $connection->query($exist);
+		$result = self::execute($connection, $exist, null, null);
+
 		if ($result===false) {
 
 			// Read file
@@ -132,14 +137,16 @@ final class Database {
 
 			// Create table
 			$query  = self::prepare($connection, $query, array(LYCHEE_TABLE_LOG));
-			$result = $connection->query($exist);
+			$result = self::execute($connection, $query, null, null);
+
 			if ($result===false) return false;
 
 		}
 
-		// Create settings
+		// Check if settings table exists
 		$exist  = self::prepare($connection, 'SELECT * FROM ? LIMIT 0', array(LYCHEE_TABLE_SETTINGS));
-		$result = $connection->query($exist);
+		$result = self::execute($connection, $exist, __METHOD__, __LINE__);
+
 		if ($result===false) {
 
 			// Read file
@@ -147,49 +154,44 @@ final class Database {
 			$query = @file_get_contents($file);
 
 			if ($query===false) {
-				Log::error(__METHOD__, __LINE__, 'Could not load query for lychee_settings');
+				Log::error($connection, __METHOD__, __LINE__, 'Could not load query for lychee_settings');
 				return false;
 			}
 
 			// Create table
 			$query  = self::prepare($connection, $query, array(LYCHEE_TABLE_SETTINGS));
-			$result = $connection->query($exist);
-			if ($result===false) {
-				Log::error(__METHOD__, __LINE__, $connection->error);
-				return false;
-			}
+			$result = self::execute($connection, $query, __METHOD__, __LINE__);
+
+			if ($result===false) return false;
 
 			// Read file
 			$file  = __DIR__ . '/../database/settings_content.sql';
 			$query = @file_get_contents($file);
 
 			if ($query===false) {
-				Log::error(__METHOD__, __LINE__, 'Could not load content-query for lychee_settings');
+				Log::error($connection, __METHOD__, __LINE__, 'Could not load content-query for lychee_settings');
 				return false;
 			}
 
 			// Add content
 			$query  = self::prepare($connection, $query, array(LYCHEE_TABLE_SETTINGS));
-			$result = $connection->query($exist);
-			if ($result===false) {
-				Log::error(__METHOD__, __LINE__, $connection->error);
-				return false;
-			}
+			$result = self::execute($connection, $query, __METHOD__, __LINE__);
+
+			if ($result===false) return false;
 
 			// Generate identifier
 			$identifier = md5(microtime(true));
 			$query      = self::prepare($connection, "UPDATE `?` SET `value` = '?' WHERE `key` = 'identifier' LIMIT 1", array(LYCHEE_TABLE_SETTINGS, $identifier));
-			$result     = $connection->query($exist);
-			if ($result===false) {
-				Log::error(__METHOD__, __LINE__, $connection->error);
-				return false;
-			}
+			$result     = self::execute($connection, $query, __METHOD__, __LINE__);
+
+			if ($result===false) return false;
 
 		}
 
-		// Create albums
+		// Check if albums table exists
 		$exist  = self::prepare($connection, 'SELECT * FROM ? LIMIT 0', array(LYCHEE_TABLE_ALBUMS));
-		$result = $connection->query($exist);
+		$result = self::execute($connection, $exist, __METHOD__, __LINE__);
+
 		if ($result===false) {
 
 			// Read file
@@ -197,23 +199,22 @@ final class Database {
 			$query = @file_get_contents($file);
 
 			if ($query===false) {
-				Log::error(__METHOD__, __LINE__, 'Could not load query for lychee_albums');
+				Log::error($connection, __METHOD__, __LINE__, 'Could not load query for lychee_albums');
 				return false;
 			}
 
 			// Create table
 			$query  = self::prepare($connection, $query, array(LYCHEE_TABLE_ALBUMS));
-			$result = $connection->query($exist);
-			if ($result===false) {
-				Log::error(__METHOD__, __LINE__, $connection->error);
-				return false;
-			}
+			$result = self::execute($connection, $query, __METHOD__, __LINE__);
+
+			if ($result===false) return false;
 
 		}
 
-		// Create photos
+		// Check if photos table exists
 		$exist  = self::prepare($connection, 'SELECT * FROM ? LIMIT 0', array(LYCHEE_TABLE_PHOTOS));
-		$result = $connection->query($exist);
+		$result = self::execute($connection, $exist, __METHOD__, __LINE__);
+
 		if ($result===false) {
 
 			// Read file
@@ -221,17 +222,15 @@ final class Database {
 			$query = @file_get_contents($file);
 
 			if ($query===false) {
-				Log::error(__METHOD__, __LINE__, 'Could not load query for lychee_photos');
+				Log::error($connection, __METHOD__, __LINE__, 'Could not load query for lychee_photos');
 				return false;
 			}
 
 			// Create table
 			$query  = self::prepare($connection, $query, array(LYCHEE_TABLE_PHOTOS));
-			$result = $connection->query($exist);
-			if ($result===false) {
-				Log::error(__METHOD__, __LINE__, $connection->error);
-				return false;
-			}
+			$result = self::execute($connection, $query, __METHOD__, __LINE__);
+
+			if ($result===false) return false;
 
 		}
 
@@ -245,9 +244,13 @@ final class Database {
 		Validator::required(isset($connection, $dbName), __METHOD__);
 
 		// Get current version
-		$query   = self::prepare($connection, "SELECT * FROM ? WHERE `key` = 'version'", array(LYCHEE_TABLE_SETTINGS));
-		$results = $connection->query($query);
-		$current = $results->fetch_object()->value;
+		$query  = self::prepare($connection, "SELECT * FROM ? WHERE `key` = 'version'", array(LYCHEE_TABLE_SETTINGS));
+		$result = self::execute($connection, $query, __METHOD__, __LINE__);
+
+		if ($result===false) return false;
+
+		// Extract current version
+		$current = $result->fetch_object()->value;
 
 		// For each update
 		foreach (self::$versions as $version) {
@@ -270,11 +273,9 @@ final class Database {
 		Validator::required(isset($connection), __METHOD__);
 
 		$query  = self::prepare($connection, "UPDATE ? SET value = '?' WHERE `key` = 'version'", array(LYCHEE_TABLE_SETTINGS, $version));
-		$result = $connection->query($query);
-		if ($result===false) {
-			Log::error(__METHOD__, __LINE__, 'Could not update database (' . $connection->error . ')');
-			return false;
-		}
+		$result = self::execute($connection, $query, __METHOD__, __LINE__);
+
+		if ($result===false) return false;
 
 	}
 
@@ -294,7 +295,7 @@ final class Database {
 			'data'        => count($data)
 		);
 
-		if (($num['data']-$num['placeholder'])<0) Log::notice(__METHOD__, __LINE__, 'Could not completely prepare query. Query has more placeholders than values.');
+		if (($num['data']-$num['placeholder'])<0) Log::notice($connection, __METHOD__, __LINE__, 'Could not completely prepare query. Query has more placeholders than values.');
 
 		foreach ($data as $value) {
 
@@ -341,6 +342,27 @@ final class Database {
 		}
 
 		return $query;
+
+	}
+
+	public static function execute($connection, $query, $function, $line) {
+
+		// Check dependencies
+		Validator::required(isset($connection, $query), __METHOD__);
+
+		// Only activate logging when $function and $line is set
+		$logging = ($function===null||$line===null ? false : true);
+
+		// Execute query
+		$result = $connection->query($query);
+
+		// Check if execution failed
+		if ($result===false) {
+			if ($logging===true) Log::error($connection, $function, $line, $connection->error);
+			return false;
+		}
+
+		return $result;
 
 	}
 

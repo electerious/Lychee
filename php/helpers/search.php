@@ -18,7 +18,9 @@ function search($term) {
 	 */
 
 	$query  = Database::prepare(Database::get(), "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE title LIKE '%?%' OR description LIKE '%?%' OR tags LIKE '%?%'", array(LYCHEE_TABLE_PHOTOS, $term, $term, $term));
-	$result = Database::get()->query($query);
+	$result = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
+
+	if ($result===false) return false;
 
 	while($photo = $result->fetch_assoc()) {
 
@@ -32,7 +34,9 @@ function search($term) {
 	 */
 
 	$query  = Database::prepare(Database::get(), "SELECT id, title, public, sysstamp, password FROM ? WHERE title LIKE '%?%' OR description LIKE '%?%'", array(LYCHEE_TABLE_ALBUMS, $term, $term));
-	$result = Database::get()->query($query);
+	$result = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
+
+	if ($result===false) return false;
 
 	while($album = $result->fetch_assoc()) {
 
@@ -41,7 +45,9 @@ function search($term) {
 
 		// Thumbs
 		$query  = Database::prepare(Database::get(), "SELECT thumbUrl FROM ? WHERE album = '?' " . Settings::get()['sortingPhotos'] . " LIMIT 0, 3", array(LYCHEE_TABLE_PHOTOS, $album['id']));
-		$thumbs = Database::get()->query($query);
+		$thumbs = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
+
+		if ($thumbs===false) return false;
 
 		// For each thumb
 		$k = 0;

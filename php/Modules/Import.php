@@ -46,7 +46,7 @@ final class Import {
 			$extension = getExtension($url);
 			if (!in_array(strtolower($extension), Photo::$validExtensions, true)) {
 				$error = true;
-				Log::error(__METHOD__, __LINE__, 'Photo format not supported (' . $url . ')');
+				Log::error(Database::get(), __METHOD__, __LINE__, 'Photo format not supported (' . $url . ')');
 				continue;
 			}
 
@@ -54,7 +54,7 @@ final class Import {
 			$type = @exif_imagetype($url);
 			if (!in_array($type, Photo::$validTypes, true)) {
 				$error = true;
-				Log::error(__METHOD__, __LINE__, 'Photo type not supported (' . $url . ')');
+				Log::error(Database::get(), __METHOD__, __LINE__, 'Photo type not supported (' . $url . ')');
 				continue;
 			}
 
@@ -64,14 +64,14 @@ final class Import {
 
 			if (@copy($url, $tmp_name)===false) {
 				$error = true;
-				Log::error(__METHOD__, __LINE__, 'Could not copy file (' . $tmp_name . ') to temp-folder (' . $tmp_name . ')');
+				Log::error(Database::get(), __METHOD__, __LINE__, 'Could not copy file (' . $tmp_name . ') to temp-folder (' . $tmp_name . ')');
 				continue;
 			}
 
 			// Import photo
 			if (!$this->photo($tmp_name, $albumID)) {
 				$error = true;
-				Log::error(__METHOD__, __LINE__, 'Could not import file: ' . $tmp_name);
+				Log::error(Database::get(), __METHOD__, __LINE__, 'Could not import file (' . $tmp_name . ')');
 				continue;
 			}
 
@@ -92,7 +92,7 @@ final class Import {
 		if (substr($path, -1)==='/') $path = substr($path, 0, -1);
 
 		if (is_dir($path)===false) {
-			Log::error(__METHOD__, __LINE__, 'Given path is not a directory (' . $path . ')');
+			Log::error(Database::get(), __METHOD__, __LINE__, 'Given path is not a directory (' . $path . ')');
 			return 'Error: Given path is not a directory!';
 		}
 
@@ -100,7 +100,7 @@ final class Import {
 		if ($path===LYCHEE_UPLOADS_BIG||($path . '/')===LYCHEE_UPLOADS_BIG||
 			$path===LYCHEE_UPLOADS_MEDIUM||($path . '/')===LYCHEE_UPLOADS_MEDIUM||
 			$path===LYCHEE_UPLOADS_THUMB||($path . '/')===LYCHEE_UPLOADS_THUMB) {
-				Log::error(__METHOD__, __LINE__, 'The given path is a reserved path of Lychee (' . $path . ')');
+				Log::error(Database::get(), __METHOD__, __LINE__, 'The given path is a reserved path of Lychee (' . $path . ')');
 				return 'Error: Given path is a reserved path of Lychee!';
 		}
 
@@ -122,7 +122,7 @@ final class Import {
 			// the file may still be unreadable by the user
 			if (!is_readable($file)) {
 				$error = true;
-				Log::error(__METHOD__, __LINE__, 'Could not read file or directory: ' . $file);
+				Log::error(Database::get(), __METHOD__, __LINE__, 'Could not read file or directory (' . $file . ')');
 				continue;
 			}
 
@@ -134,7 +134,7 @@ final class Import {
 
 				if (!$this->photo($file, $albumID)) {
 					$error = true;
-					Log::error(__METHOD__, __LINE__, 'Could not import file: ' . $file);
+					Log::error(Database::get(), __METHOD__, __LINE__, 'Could not import file (' . $file . ')');
 					continue;
 				}
 
@@ -148,7 +148,7 @@ final class Import {
 
 				if ($newAlbumID===false) {
 					$error = true;
-					Log::error(__METHOD__, __LINE__, 'Could not create album in Lychee (' . $newAlbumID . ')');
+					Log::error(Database::get(), __METHOD__, __LINE__, 'Could not create album in Lychee (' . $newAlbumID . ')');
 					continue;
 				}
 
@@ -156,7 +156,7 @@ final class Import {
 
 				if ($import!==true&&$import!=='Notice: Import only contains albums!') {
 					$error = true;
-					Log::error(__METHOD__, __LINE__, 'Could not import folder. Function returned warning.');
+					Log::error(Database::get(), __METHOD__, __LINE__, 'Could not import folder. Function returned warning.');
 					continue;
 				}
 
