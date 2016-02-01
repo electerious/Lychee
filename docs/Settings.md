@@ -22,12 +22,6 @@ All settings are stored in the database. You can change the properties manually,
 
 Your photos and albums are protected by a username and password. If both rows are empty, Lychee will prompt you to set them.
 
-#### Thumb Quality
-
-	thumbQuality = [0-100]
-
-Less means an inferiority quality of your thumbs, but faster loading. More means a better quality of your thumbs, but slower loading. The default value is 90. The allowed values are between 0 and 100.
-
 #### Check For Updates
 
 	checkForUpdates = [0|1]

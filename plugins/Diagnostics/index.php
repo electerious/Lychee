@@ -78,7 +78,6 @@ $settings = Settings::get();
 # Settings
 if (!isset($settings['username'])||$settings['username']=='')				$error .= ('Error: Username empty or not set in database' . PHP_EOL);
 if (!isset($settings['password'])||$settings['password']=='')				$error .= ('Error: Password empty or not set in database' . PHP_EOL);
-if (!isset($settings['thumbQuality'])||$settings['thumbQuality']=='')		$error .= ('Error: No or wrong property for thumbQuality in database' . PHP_EOL);
 if (!isset($settings['sortingPhotos'])||$settings['sortingPhotos']=='')		$error .= ('Error: Wrong property for sortingPhotos in database' . PHP_EOL);
 if (!isset($settings['sortingAlbums'])||$settings['sortingAlbums']=='')		$error .= ('Error: Wrong property for sortingAlbums in database' . PHP_EOL);
 if (!isset($settings['plugins']))											$error .= ('Error: No property for plugins in database' . PHP_EOL);

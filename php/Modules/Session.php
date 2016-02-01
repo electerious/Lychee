@@ -42,7 +42,6 @@ final class Session {
 
 			// Unset unused vars
 			unset($return['config']['skipDuplicates']);
-			unset($return['config']['thumbQuality']);
 			unset($return['config']['sortingAlbums']);
 			unset($return['config']['sortingPhotos']);
 			unset($return['config']['dropboxKey']);

@@ -285,6 +285,9 @@ final class Photo {
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
+		// Quality of thumbnails
+		$thumbQuality = 90;
+
 		// Size of the thumbnail
 		$newWidth  = 200;
 		$newHeight = 200;
@@ -299,7 +302,7 @@ final class Photo {
 			// Read image
 			$thumb = new Imagick();
 			$thumb->readImage($url);
-			$thumb->setImageCompressionQuality(Settings::get()['thumbQuality']);
+			$thumb->setImageCompressionQuality($thumbQuality);
 			$thumb->setImageFormat('jpeg');
 
 			// Copy image for 2nd thumb version
@@ -346,12 +349,12 @@ final class Photo {
 
 			// Create thumb
 			fastImageCopyResampled($thumb, $sourceImg, 0, 0, $startWidth, $startHeight, $newWidth, $newHeight, $newSize, $newSize);
-			imagejpeg($thumb, $newUrl, Settings::get()['thumbQuality']);
+			imagejpeg($thumb, $newUrl, $thumbQuality);
 			imagedestroy($thumb);
 
 			// Create retina thumb
 			fastImageCopyResampled($thumb2x, $sourceImg, 0, 0, $startWidth, $startHeight, $newWidth*2, $newHeight*2, $newSize, $newSize);
-			imagejpeg($thumb2x, $newUrl2x, Settings::get()['thumbQuality']);
+			imagejpeg($thumb2x, $newUrl2x, $thumbQuality);
 			imagedestroy($thumb2x);
 
 			// Free memory
