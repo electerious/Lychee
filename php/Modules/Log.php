@@ -10,12 +10,6 @@ final class Log {
 
 	}
 
-	public static function warning($connection, $function, $line, $text = '') {
-
-		return Log::text($connection, 'warning', $function, $line, $text);
-
-	}
-
 	public static function error($connection, $function, $line, $text = '') {
 
 		return Log::text($connection, 'error', $function, $line, $text);
