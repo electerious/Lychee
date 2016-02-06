@@ -57,8 +57,7 @@ if ((isset($_SESSION['login'])&&$_SESSION['login']===true)&&
 } else {
 
 	// Don't go further if the user is not logged in
-	echo('You have to be logged in to see the log.');
-	exit();
+	exit('You have to be logged in to see the log.');
 
 }
 
