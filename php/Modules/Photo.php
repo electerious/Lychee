@@ -422,7 +422,7 @@ final class Photo {
 			// Save image
 			try { $medium->writeImage($newUrl); }
 			catch (ImagickException $err) {
-				Log::notice(Database::get(), __METHOD__, __LINE__, 'Could not save medium-photo: ' . $err->getMessage());
+				Log::notice(Database::get(), __METHOD__, __LINE__, 'Could not save medium-photo (' . $err->getMessage() . ')');
 				$error = true;
 			}
 
