@@ -55,16 +55,16 @@ final class Settings {
 		if ($oldPassword===self::get()['password']||self::get()['password']===crypt($oldPassword, self::get()['password'])) {
 
 			// Save username
-			if (self::setUsername($username)!==true) exit('Error: Updating username failed!');
+			if (self::setUsername($username)!==true) Response::error('Updating username failed!');
 
 			// Save password
-			if (self::setPassword($password)!==true) exit('Error: Updating password failed!');
+			if (self::setPassword($password)!==true) Response::error('Updating password failed!');
 
 			return true;
 
 		}
 
-		exit('Error: Current password entered incorrectly!');
+		Response::error('Current password entered incorrectly!');
 
 	}
 
@@ -125,7 +125,7 @@ final class Settings {
 			case 'type':        $sorting .= 'type'; break;
 			case 'star':        $sorting .= 'star'; break;
 			case 'takestamp':   $sorting .= 'takestamp'; break;
-			default:            exit('Error: Unknown type for sorting!');
+			default:            Response::error('Unknown type for sorting!');
 
 		}
 
@@ -136,7 +136,7 @@ final class Settings {
 
 			case 'ASC':  $sorting .= 'ASC'; break;
 			case 'DESC': $sorting .= 'DESC'; break;
-			default:     exit('Error: Unknown order for sorting!');
+			default:     Response::error('Unknown order for sorting!');
 
 		}
 
@@ -159,7 +159,7 @@ final class Settings {
 			case 'title':       $sorting .= 'title'; break;
 			case 'description': $sorting .= 'description'; break;
 			case 'public':      $sorting .= 'public'; break;
-			default:            exit('Error: Unknown type for sorting!');
+			default:            Response::error('Unknown type for sorting!');
 
 		}
 
@@ -170,7 +170,7 @@ final class Settings {
 
 			case 'ASC':  $sorting .= 'ASC'; break;
 			case 'DESC': $sorting .= 'DESC'; break;
-			default:     exit('Error: Unknown order for sorting!');
+			default:     Response::error('Unknown order for sorting!');
 
 		}
 

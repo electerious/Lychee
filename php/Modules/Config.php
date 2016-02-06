@@ -25,7 +25,7 @@ final class Config {
 		// Save config.php
 $config = "<?php
 
-if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
+if(!defined('LYCHEE')) Response::error('Direct access is not allowed!');
 
 // Database configuration
 \$dbHost = '$host'; // Host of the database

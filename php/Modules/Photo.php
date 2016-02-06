@@ -40,7 +40,7 @@ final class Photo {
 			hasPermissions(LYCHEE_UPLOADS_BIG)===false||
 			hasPermissions(LYCHEE_UPLOADS_THUMB)===false) {
 				Log::error(Database::get(), __METHOD__, __LINE__, 'An upload-folder is missing or not readable and writable');
-				exit('Error: An upload-folder is missing or not readable and writable!');
+				Response::error('An upload-folder is missing or not readable and writable!');
 		}
 
 		// Call plugins
@@ -82,35 +82,35 @@ final class Photo {
 			if ($file['error']===UPLOAD_ERR_INI_SIZE) {
 				Log::error(Database::get(), __METHOD__, __LINE__, 'The uploaded file exceeds the upload_max_filesize directive in php.ini');
 				if ($returnOnError===true) return false;
-				exit('Error: The uploaded file exceeds the upload_max_filesize directive in php.ini!');
+				Response::error('The uploaded file exceeds the upload_max_filesize directive in php.ini!');
 			}
 
 			// Check if file was only partially uploaded
 			if ($file['error']===UPLOAD_ERR_PARTIAL) {
 				Log::error(Database::get(), __METHOD__, __LINE__, 'The uploaded file was only partially uploaded');
 				if ($returnOnError===true) return false;
-				exit('Error: The uploaded file was only partially uploaded!');
+				Response::error('The uploaded file was only partially uploaded!');
 			}
 
 			// Check if writing file to disk failed
 			if ($file['error']===UPLOAD_ERR_CANT_WRITE) {
 				Log::error(Database::get(), __METHOD__, __LINE__, 'Failed to write photo to disk');
 				if ($returnOnError===true) return false;
-				exit('Error: Failed to write photo to disk!');
+				Response::error('Failed to write photo to disk!');
 			}
 
 			// Check if a extension stopped the file upload
 			if ($file['error']===UPLOAD_ERR_EXTENSION) {
 				Log::error(Database::get(), __METHOD__, __LINE__, 'A PHP extension stopped the file upload');
 				if ($returnOnError===true) return false;
-				exit('Error: A PHP extension stopped the file upload!');
+				Response::error('A PHP extension stopped the file upload!');
 			}
 
 			// Check if the upload was successful
 			if ($file['error']!==UPLOAD_ERR_OK) {
 				Log::error(Database::get(), __METHOD__, __LINE__, 'Upload contains an error (' . $file['error'] . ')');
 				if ($returnOnError===true) return false;
-				exit('Error: Upload failed!');
+				Response::error('Upload failed!');
 			}
 
 			// Verify extension
@@ -118,7 +118,7 @@ final class Photo {
 			if (!in_array(strtolower($extension), self::$validExtensions, true)) {
 				Log::error(Database::get(), __METHOD__, __LINE__, 'Photo format not supported');
 				if ($returnOnError===true) return false;
-				exit('Error: Photo format not supported!');
+				Response::error('Photo format not supported!');
 			}
 
 			// Verify image
@@ -126,7 +126,7 @@ final class Photo {
 			if (!in_array($type, self::$validTypes, true)) {
 				Log::error(Database::get(), __METHOD__, __LINE__, 'Photo type not supported');
 				if ($returnOnError===true) return false;
-				exit('Error: Photo type not supported!');
+				Response::error('Photo type not supported!');
 			}
 
 			// Generate id
@@ -143,7 +143,7 @@ final class Photo {
 			if ($checksum===false) {
 				Log::error(Database::get(), __METHOD__, __LINE__, 'Could not calculate checksum for photo');
 				if ($returnOnError===true) return false;
-				exit('Error: Could not calculate checksum for photo!');
+				Response::error('Could not calculate checksum for photo!');
 			}
 
 			// Check if image exists based on checksum
@@ -173,13 +173,13 @@ final class Photo {
 					if (!@copy($tmp_name, $path)) {
 						Log::error(Database::get(), __METHOD__, __LINE__, 'Could not copy photo to uploads');
 						if ($returnOnError===true) return false;
-						exit('Error: Could not copy photo to uploads!');
+						Response::error('Could not copy photo to uploads!');
 					} else @unlink($tmp_name);
 				} else {
 					if (!@move_uploaded_file($tmp_name, $path)) {
 						Log::error(Database::get(), __METHOD__, __LINE__, 'Could not move photo to uploads');
 						if ($returnOnError===true) return false;
-						exit('Error: Could not move photo to uploads!');
+						Response::error('Could not move photo to uploads!');
 					}
 				}
 
@@ -190,7 +190,7 @@ final class Photo {
 				if (Settings::get()['skipDuplicates']==='1') {
 					Log::notice(Database::get(), __METHOD__, __LINE__, 'Skipped upload of existing photo because skipDuplicates is activated');
 					if ($returnOnError===true) return false;
-					exit('Warning: This photo has been skipped because it\'s already in your library.');
+					Response::warning('This photo has been skipped because it\'s already in your library.');
 				}
 
 			}
@@ -220,7 +220,7 @@ final class Photo {
 				if (!$this->createThumb($path, $photo_name, $info['type'], $info['width'], $info['height'])) {
 					Log::error(Database::get(), __METHOD__, __LINE__, 'Could not create thumbnail for photo');
 					if ($returnOnError===true) return false;
-					exit('Error: Could not create thumbnail for photo!');
+					Response::error('Could not create thumbnail for photo!');
 				}
 
 				// Create Medium
@@ -239,7 +239,7 @@ final class Photo {
 
 			if ($result===false) {
 				if ($returnOnError===true) return false;
-				exit('Error: Could not save photo in database!');
+				Response::error('Could not save photo in database!');
 			}
 
 		}
@@ -637,7 +637,7 @@ final class Photo {
 		$query  = Database::prepare(Database::get(), "SELECT * FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
 		$photos = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
-		if ($photos===false) exit('Error: Could not get photo from database!');
+		if ($photos===false) Response::error('Could not get photo from database!');
 
 		// Get photo object
 		$photo = $photos->fetch_assoc();
@@ -664,7 +664,7 @@ final class Photo {
 				$query  = Database::prepare(Database::get(), "SELECT public FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $photo['album']));
 				$albums = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
-				if ($albums===false) exit('Error: Could not get album of photo from database!');
+				if ($albums===false) Response::error('Could not get album of photo from database!');
 
 				// Get album object
 				$album = $albums->fetch_assoc();
@@ -808,7 +808,7 @@ final class Photo {
 		$query  = Database::prepare(Database::get(), "SELECT title, url FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
 		$photos = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
-		if ($photos===false) exit('Error: Could not get photo from database!');
+		if ($photos===false) Response::error('Could not get photo from database!');
 
 		// Get photo object
 		$photo = $photos->fetch_object();
@@ -816,7 +816,7 @@ final class Photo {
 		// Photo not found
 		if ($photo===null) {
 			Log::error(Database::get(), __METHOD__, __LINE__, 'Could not find specified photo');
-			exit('Error: Could not find specified photo!');
+			Response::error('Could not find specified photo!');
 		}
 
 		// Get extension

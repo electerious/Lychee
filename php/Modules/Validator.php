@@ -6,7 +6,7 @@ final class Validator {
 
 	public static function required($available = false, $function) {
 
-		if ($available===false) exit("Error: Missing parameters. Can not execute function $function.");
+		if ($available===false) Response::error('Missing parameters. Can not execute function ' . $function);
 
 		return true;
 

@@ -120,7 +120,7 @@ final class Album {
 		$photos          = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 		$previousPhotoID = '';
 
-		if ($photos===false) exit('Error: Could not get photos of album from database!');
+		if ($photos===false) Response::error('Could not get photos of album from database!');
 
 		while ($photo = $photos->fetch_assoc()) {
 
@@ -192,7 +192,7 @@ final class Album {
 		// Execute query
 		$albums = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
-		if ($albums===false) exit('Error: Could not get albums from database!');
+		if ($albums===false) Response::error('Could not get albums from database!');
 
 		// For each album
 		while ($album = $albums->fetch_assoc()) {
@@ -208,7 +208,7 @@ final class Album {
 					$query  = Database::prepare(Database::get(), "SELECT thumbUrl FROM ? WHERE album = '?' ORDER BY star DESC, " . substr(Settings::get()['sortingPhotos'], 9) . " LIMIT 3", array(LYCHEE_TABLE_PHOTOS, $album['id']));
 					$thumbs = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
-					if ($thumbs===false) exit('Error: Could not get thumbs of album from database!');
+					if ($thumbs===false) Response::error('Could not get thumbs of album from database!');
 
 					// For each thumb
 					$k = 0;
@@ -252,7 +252,7 @@ final class Album {
 		$unsorted = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 		$i        = 0;
 
-		if ($unsorted===false) exit('Error: Could not get unsorted photos from database!');
+		if ($unsorted===false) Response::error('Could not get unsorted photos from database!');
 
 		$return['unsorted'] = array(
 			'thumbs' => array(),
@@ -274,7 +274,7 @@ final class Album {
 		$starred = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 		$i       = 0;
 
-		if ($starred===false) exit('Error: Could not get starred photos from database!');
+		if ($starred===false) Response::error('Could not get starred photos from database!');
 
 		$return['starred'] = array(
 			'thumbs' => array(),
@@ -296,7 +296,7 @@ final class Album {
 		$public = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 		$i      = 0;
 
-		if ($public===false) exit('Error: Could not get public photos from database!');
+		if ($public===false) Response::error('Could not get public photos from database!');
 
 		$return['public'] = array(
 			'thumbs' => array(),
@@ -318,7 +318,7 @@ final class Album {
 		$recent = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 		$i      = 0;
 
-		if ($recent===false) exit('Error: Could not get recent photos from database!');
+		if ($recent===false) Response::error('Could not get recent photos from database!');
 
 		$return['recent'] = array(
 			'thumbs' => array(),
@@ -376,7 +376,7 @@ final class Album {
 			$query = Database::prepare(Database::get(), "SELECT title FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
 			$album = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
-			if ($album===false) exit('Error: Could not get album from database!');
+			if ($album===false) Response::error('Could not get album from database!');
 
 			// Get album object
 			$album = $album->fetch_object();
@@ -384,7 +384,7 @@ final class Album {
 			// Photo not found
 			if ($album===null) {
 				Log::error(Database::get(), __METHOD__, __LINE__, 'Could not find specified album');
-				exit('Error: Could not find specified album!');
+				Response::error('Could not find specified album!');
 			}
 
 			// Set title
@@ -407,12 +407,12 @@ final class Album {
 		// Execute query
 		$photos = Database::execute(Database::get(), $photos, __METHOD__, __LINE__);
 
-		if ($album===null) exit('Error: Could not get photos from database!');
+		if ($album===null) Response::error('Could not get photos from database!');
 
 		// Check if album empty
 		if ($photos->num_rows==0) {
 			Log::error(Database::get(), __METHOD__, __LINE__, 'Could not create ZipArchive without images');
-			exit('Error: Could not create ZipArchive without images!');
+			Response::error('Could not create ZipArchive without images!');
 		}
 
 		// Parse each path
