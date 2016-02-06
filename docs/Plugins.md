@@ -17,31 +17,41 @@ The plugin-system of Lychee allows you to execute scripts, when a certain action
 ```php
 <?php
 
-if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
+namespace ExamplePlugin;
+
+use SplObserver;
+use SplSubject;
 
 class ExamplePlugin implements SplObserver {
 
 	public function __construct() {
 
-		# Add code here if wanted
-		# __construct() will be called every time Lychee gets called
-		# Make sure this part is performant
+		/**
+		 * Add code here if wanted
+		 * __construct() will be called every time Lychee gets called
+		 * Make sure this part is performant
+		 */
 
 		return true;
 
 	}
 
-	public function update(\SplSubject $subject) {
+	public function update(SplSubject $subject) {
 
-		# Check if the called hook is the hook you are waiting for
-		# A list of all hooks is available online
+		/**
+		 * Check if the called hook is the hook you are waiting for
+		 * A list of all hooks is available online
+		 */
+
 		if ($subject->action!=='Photo::add:before') return false;
 
-		# Do something when Photo::add:before gets called
-		# Database::get() => Database connection of Lychee
-		# Settings::get() => Settings of Lychee
-		# $subject->action => Called hook
-		# $subject->args => Params passed to the original function
+		/**
+		 * Do something when Photo::add:before gets called
+		 * Database::get() => Database connection of Lychee
+		 * Settings::get() => Settings of Lychee
+		 * $subject->action => Called hook
+		 * $subject->args => Params passed to the original function
+		 */
 
 		return true;
 
@@ -54,9 +64,9 @@ class ExamplePlugin implements SplObserver {
 
 3. Add the class name to the database of Lychee
 
-Select the table `lychee_settings` and add the name of the class to the value of `plugins` (e.g. `ExamplePlugin`). Please ensure that the folder has the same name as the class and as the file.
+Select the table `lychee_settings` and add the [external fully qualified name](http://php.net/manual/en/language.namespaces.importing.php) to the value of `plugins` (e.g. `ExamplePlugin\ExamplePlugin`). Please ensure that the folder has the same name as the namespace and the file the same name as the class.
 
-Divide multiple plugins with semicolons: `ExamplePlugin;ExampleTwoPlugin`.
+Divide multiple plugins with semicolons: `ExamplePlugin\ExamplePlugin;ExampleTwoPlugin\ExampleTwoPlugin`.
 
 ### Available hooks
 
