@@ -1,11 +1,10 @@
 <?php
 
-###
-# @name			Log
-# @author		Tobias Reich
-# @copyright	2015 by Tobias Reich
-# @description	This file queries the database for log messages and displays them if present.
-###
+/**
+ * @author      Tobias Reich
+ * @copyright   2015 by Tobias Reich
+ * @description This file queries the database for log messages and displays them if present.
+ */
 
 namespace Log;
 
@@ -18,25 +17,25 @@ $lychee = __DIR__ . '/../../';
 require($lychee . 'php/define.php');
 require($lychee . 'php/autoload.php');
 
-# Start the session
+// Start the session
 session_start();
 
-# Set content
+// Set content
 header('content-type: text/plain');
 
-# Load config
+// Load config
 if (!file_exists(LYCHEE_CONFIG_FILE)) exit('Error 001: Configuration not found. Please install Lychee first.');
 require(LYCHEE_CONFIG_FILE);
 
-# Ensure that user is logged in
+// Ensure that user is logged in
 if ((isset($_SESSION['login'])&&$_SESSION['login']===true)&&
 	(isset($_SESSION['identifier'])&&$_SESSION['identifier']===Settings::get()['identifier'])) {
 
-	# Result
-	$query	= Database::prepare(Database::get(), "SELECT FROM_UNIXTIME(time), type, function, line, text FROM ?", array(LYCHEE_TABLE_LOG));
-	$result	= Database::get()->query($query);
+	// Result
+	$query  = Database::prepare(Database::get(), "SELECT FROM_UNIXTIME(time), type, function, line, text FROM ?", array(LYCHEE_TABLE_LOG));
+	$result = Database::get()->query($query);
 
-	# Output
+	// Output
 	if ($result->num_rows===0) {
 
 		echo('Everything looks fine, Lychee has not reported any problems!');
@@ -45,11 +44,11 @@ if ((isset($_SESSION['login'])&&$_SESSION['login']===true)&&
 
 		while($row = $result->fetch_row()) {
 
-			# Encode result before printing
+			// Encode result before printing
 			$row = array_map('htmlentities', $row);
 
-			# Format: time TZ - type - function(line) - text
-			printf ("%s - %s - %s (%s) \t- %s\n", $row[0], $row[1], $row[2], $row[3], $row[4]);
+			// Format: time TZ - type - function(line) - text
+			printf("%s - %s - %s (%s) \t- %s\n", $row[0], $row[1], $row[2], $row[3], $row[4]);
 
 		}
 
@@ -57,7 +56,7 @@ if ((isset($_SESSION['login'])&&$_SESSION['login']===true)&&
 
 } else {
 
-	# Don't go further if the user is not logged in
+	// Don't go further if the user is not logged in
 	echo('You have to be logged in to see the log.');
 	exit();
 
