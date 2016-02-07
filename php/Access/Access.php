@@ -2,11 +2,13 @@
 
 namespace Lychee\Access;
 
+use Lychee\Modules\Response;
+
 abstract class Access {
 
 	final protected static function fnNotFound() {
 
-		exit('Error: Function not found! Please check the spelling of the called function.');
+		Response::error('Function not found! Please check the spelling of the called function.');
 
 	}
 

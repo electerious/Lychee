@@ -3,6 +3,7 @@
 namespace Lychee\Access;
 
 use Lychee\Modules\Config;
+use Lychee\Modules\Response;
 use Lychee\Modules\Validator;
 
 final class Installation extends Access {
@@ -36,7 +37,7 @@ final class Installation extends Access {
 			'status' => LYCHEE_STATUS_NOCONFIG
 		);
 
-		echo json_encode($return);
+		Response::json($return);
 
 	}
 

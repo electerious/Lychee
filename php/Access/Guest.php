@@ -4,6 +4,7 @@ namespace Lychee\Access;
 
 use Lychee\Modules\Album;
 use Lychee\Modules\Photo;
+use Lychee\Modules\Response;
 use Lychee\Modules\Session;
 use Lychee\Modules\Validator;
 
@@ -44,7 +45,7 @@ final class Guest extends Access {
 	private static function getAlbumsAction() {
 
 		$album = new Album(null);
-		echo json_encode($album->getAll(true));
+		Response::json($album->getAll(true));
 
 	}
 
@@ -57,13 +58,13 @@ final class Guest extends Access {
 		if ($album->getPublic()) {
 
 			// Album public
-			if ($album->checkPassword($_POST['password'])) echo json_encode($album->get());
-			else                                           echo 'Warning: Wrong password!';
+			if ($album->checkPassword($_POST['password'])) Response::json($album->get());
+			else                                           Response::warning('Wrong password!');
 
 		} else {
 
 			// Album private
-			echo 'Warning: Album private!';
+			Response::warning('Album private!');
 
 		}
 
@@ -100,9 +101,9 @@ final class Guest extends Access {
 
 		$pgP = $photo->getPublic($_POST['password']);
 
-		if ($pgP===2)      echo json_encode($photo->get($_POST['albumID']));
-		else if ($pgP===1) echo 'Warning: Wrong password!';
-		else if ($pgP===0) echo 'Warning: Photo private!';
+		if ($pgP===2)      Response::json($photo->get($_POST['albumID']));
+		else if ($pgP===1) Response::warning('Wrong password!');
+		else if ($pgP===0) Response::warning('Photo private!');
 
 	}
 
@@ -111,7 +112,7 @@ final class Guest extends Access {
 	private static function initAction() {
 
 		$session = new Session();
-		echo json_encode($session->init(true));
+		Response::json($session->init(true));
 
 	}
 
@@ -143,12 +144,12 @@ final class Guest extends Access {
 
 			// Album Public
 			if ($album->checkPassword($_GET['password'])) $album->getArchive();
-			else                                          exit('Warning: Wrong password!');
+			else                                          Response::warning('Wrong password!');
 
 		} else {
 
 			// Album Private
-			exit('Warning: Album private or not downloadable!');
+			Response::warning('Album private or not downloadable!');
 
 		}
 
@@ -171,7 +172,7 @@ final class Guest extends Access {
 		} else {
 
 			// Photo Private
-			exit('Warning: Photo private or password incorrect!');
+			Response::warning('Photo private or password incorrect!');
 
 		}
 

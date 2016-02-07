@@ -5,6 +5,7 @@ namespace Lychee\Access;
 use Lychee\Modules\Album;
 use Lychee\Modules\Import;
 use Lychee\Modules\Photo;
+use Lychee\Modules\Response;
 use Lychee\Modules\Session;
 use Lychee\Modules\Settings;
 use Lychee\Modules\Validator;
@@ -72,7 +73,7 @@ final class Admin extends Access {
 	private static function getAlbumsAction() {
 
 		$album = new Album(null);
-		echo json_encode($album->getAll(false));
+		Response::json($album->getAll(false));
 
 	}
 
@@ -81,7 +82,7 @@ final class Admin extends Access {
 		Validator::required(isset($_POST['albumID']), __METHOD__);
 
 		$album = new Album($_POST['albumID']);
-		echo json_encode($album->get());
+		Response::json($album->get());
 
 	}
 
@@ -145,7 +146,7 @@ final class Admin extends Access {
 		Validator::required(isset($_POST['photoID'], $_POST['albumID']), __METHOD__);
 
 		$photo = new Photo($_POST['photoID']);
-		echo json_encode($photo->get($_POST['albumID']));
+		Response::json($photo->get($_POST['albumID']));
 
 	}
 
@@ -256,7 +257,7 @@ final class Admin extends Access {
 
 		Validator::required(isset($_POST['term']), __METHOD__);
 
-		echo json_encode(search($_POST['term']));
+		Response::json(search($_POST['term']));
 
 	}
 
@@ -265,7 +266,7 @@ final class Admin extends Access {
 	private static function initAction() {
 
 		$session = new Session();
-		echo json_encode($session->init(false));
+		Response::json($session->init(false));
 
 	}
 
