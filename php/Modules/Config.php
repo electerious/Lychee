@@ -43,12 +43,18 @@ if(!defined('LYCHEE')) Response::error('Direct access is not allowed!');
 
 	}
 
+	/**
+	 * @return boolean Returns true when the config exists.
+	 */
 	public static function exists() {
 
 		return file_exists(LYCHEE_CONFIG_FILE);
 
 	}
 
+	/**
+	 * @return array Returns the config.
+	 */
 	public static function get() {
 
 		require(LYCHEE_CONFIG_FILE);
