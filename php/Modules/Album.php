@@ -22,9 +22,6 @@ final class Album {
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
-		// Parse
-		if (strlen($title)>50) $title = substr($title, 0, 50);
-
 		// Properties
 		$public  = 0;
 		$visible = 1;
