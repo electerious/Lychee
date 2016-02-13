@@ -401,7 +401,7 @@ final class Album {
 			// Get album object
 			$album = $album->fetch_object();
 
-			// Photo not found
+			// Album not found?
 			if ($album===null) {
 				Log::error(Database::get(), __METHOD__, __LINE__, 'Could not find specified album');
 				return false;
@@ -563,6 +563,12 @@ final class Album {
 		// Get album object
 		$album = $albums->fetch_object();
 
+		// Album not found?
+		if ($album===null) {
+			Log::error(Database::get(), __METHOD__, __LINE__, 'Could not find specified album');
+			return false;
+		}
+
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
@@ -592,6 +598,12 @@ final class Album {
 
 		// Get album object
 		$album = $albums->fetch_object();
+
+		// Album not found?
+		if ($album===null) {
+			Log::error(Database::get(), __METHOD__, __LINE__, 'Could not find specified album');
+			return false;
+		}
 
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 1, func_get_args());
@@ -700,6 +712,12 @@ final class Album {
 
 		// Get album object
 		$album = $albums->fetch_object();
+
+		// Album not found?
+		if ($album===null) {
+			Log::error(Database::get(), __METHOD__, __LINE__, 'Could not find specified album');
+			return false;
+		}
 
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 1, func_get_args());

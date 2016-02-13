@@ -33,16 +33,20 @@ final class Photo {
 
 	}
 
-	public function add(array $files, $albumID = 0, $description = '', $tags = '', $returnOnError = false) {
-
-		// Use $returnOnError if you want to handle errors by your own
-		// e.g. when calling this functions inside an if-condition
+	/**
+	 * Creats new photo(s).
+	 * Exits on error.
+	 * Use $returnOnError if you want to handle errors by your own.
+	 * @return boolean Returns true when successful.
+	 */
+	public function add(array $files, $albumID = 0, $returnOnError = false) {
 
 		// Check permissions
 		if (hasPermissions(LYCHEE_UPLOADS)===false||
 			hasPermissions(LYCHEE_UPLOADS_BIG)===false||
 			hasPermissions(LYCHEE_UPLOADS_THUMB)===false) {
 				Log::error(Database::get(), __METHOD__, __LINE__, 'An upload-folder is missing or not readable and writable');
+				if ($returnOnError===true) return false;
 				Response::error('An upload-folder is missing or not readable and writable!');
 		}
 
@@ -649,6 +653,12 @@ final class Photo {
 		// Get photo object
 		$photo = $photos->fetch_assoc();
 
+		// Photo not found?
+		if ($photo===null) {
+			Log::error(Database::get(), __METHOD__, __LINE__, 'Could not find specified photo');
+			return false;
+		}
+
 		// Parse photo
 		$photo['sysdate'] = date('d M. Y', substr($photo['id'], 0, -4));
 		if (strlen($photo['takestamp'])>1) $photo['takedate'] = date('d M. Y', $photo['takestamp']);
@@ -675,6 +685,12 @@ final class Photo {
 
 				// Get album object
 				$album = $albums->fetch_assoc();
+
+				// Photo not found?
+				if ($photo===null) {
+					Log::error(Database::get(), __METHOD__, __LINE__, 'Could not find specified album');
+					return false;
+				}
 
 				// Parse album
 				$photo['public'] = ($album['public']==='1' ? '2' : $photo['public']);
@@ -823,7 +839,7 @@ final class Photo {
 		// Get photo object
 		$photo = $photos->fetch_object();
 
-		// Photo not found
+		// Photo not found?
 		if ($photo===null) {
 			Log::error(Database::get(), __METHOD__, __LINE__, 'Could not find specified photo');
 			return false;
@@ -977,6 +993,12 @@ final class Photo {
 		// Get photo object
 		$photo = $photos->fetch_object();
 
+		// Photo not found?
+		if ($photo===null) {
+			Log::error(Database::get(), __METHOD__, __LINE__, 'Could not find specified photo');
+			return false;
+		}
+
 		// Check if public
 		if ($photo->public==='1') {
 
@@ -1026,6 +1048,12 @@ final class Photo {
 
 		// Get photo object
 		$photo = $photos->fetch_object();
+
+		// Photo not found?
+		if ($photo===null) {
+			Log::error(Database::get(), __METHOD__, __LINE__, 'Could not find specified photo');
+			return false;
+		}
 
 		// Invert public
 		$public = ($photo->public==0 ? 1 : 0);
