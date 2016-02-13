@@ -31,12 +31,9 @@ final class Guest extends Access {
 			case 'Album::getArchive': self::getAlbumArchiveAction(); break;
 			case 'Photo::getArchive': self::getPhotoArchiveAction(); break;
 
-			// Error
-			default:                  self::fnNotFound(); break;
-
 		}
 
-		return true;
+		self::fnNotFound();
 
 	}
 

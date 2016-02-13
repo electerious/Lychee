@@ -14,12 +14,11 @@ final class Installation extends Access {
 
 			case 'Config::create': self::configCreateAction(); break;
 
-			// Error
 			default:               self::initAction(); break;
 
 		}
 
-		return true;
+		self::fnNotFound();
 
 	}
 
