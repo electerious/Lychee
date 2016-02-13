@@ -88,7 +88,7 @@ final class Admin extends Access {
 		Validator::required(isset($_POST['title']), __METHOD__);
 
 		$album = new Album(null);
-		echo $album->add($_POST['title']);
+		Response::json($album->add($_POST['title']));
 
 	}
 
@@ -97,7 +97,7 @@ final class Admin extends Access {
 		Validator::required(isset($_POST['albumIDs'], $_POST['title']), __METHOD__);
 
 		$album = new Album($_POST['albumIDs']);
-		echo $album->setTitle($_POST['title']);
+		Response::json($album->setTitle($_POST['title']));
 
 	}
 
@@ -106,7 +106,7 @@ final class Admin extends Access {
 		Validator::required(isset($_POST['albumID'], $_POST['description']), __METHOD__);
 
 		$album = new Album($_POST['albumID']);
-		echo $album->setDescription($_POST['description']);
+		Response::json($album->setDescription($_POST['description']));
 
 	}
 
@@ -115,7 +115,7 @@ final class Admin extends Access {
 		Validator::required(isset($_POST['albumID'], $_POST['password'], $_POST['visible'], $_POST['downloadable']), __METHOD__);
 
 		$album = new Album($_POST['albumID']);
-		echo $album->setPublic($_POST['public'], $_POST['password'], $_POST['visible'], $_POST['downloadable']);
+		Response::json($album->setPublic($_POST['public'], $_POST['password'], $_POST['visible'], $_POST['downloadable']));
 
 	}
 
@@ -124,7 +124,7 @@ final class Admin extends Access {
 		Validator::required(isset($_POST['albumIDs']), __METHOD__);
 
 		$album = new Album($_POST['albumIDs']);
-		echo $album->delete();
+		Response::json($album->delete());
 
 	}
 
@@ -132,7 +132,7 @@ final class Admin extends Access {
 
 		Validator::required(isset($_POST['albumIDs']), __METHOD__);
 		$album = new Album($_POST['albumIDs']);
-		echo $album->merge();
+		Response::json($album->merge());
 
 	}
 
@@ -152,7 +152,7 @@ final class Admin extends Access {
 		Validator::required(isset($_POST['photoIDs'], $_POST['title']), __METHOD__);
 
 		$photo = new Photo($_POST['photoIDs']);
-		echo $photo->setTitle($_POST['title']);
+		Response::json($photo->setTitle($_POST['title']));
 
 	}
 
@@ -161,7 +161,7 @@ final class Admin extends Access {
 		Validator::required(isset($_POST['photoID'], $_POST['description']), __METHOD__);
 
 		$photo = new Photo($_POST['photoID']);
-		echo $photo->setDescription($_POST['description']);
+		Response::json($photo->setDescription($_POST['description']));
 
 	}
 
@@ -170,7 +170,7 @@ final class Admin extends Access {
 		Validator::required(isset($_POST['photoIDs']), __METHOD__);
 
 		$photo = new Photo($_POST['photoIDs']);
-		echo $photo->setStar();
+		Response::json($photo->setStar());
 
 	}
 
@@ -179,7 +179,7 @@ final class Admin extends Access {
 		Validator::required(isset($_POST['photoID']), __METHOD__);
 
 		$photo = new Photo($_POST['photoID']);
-		echo $photo->setPublic();
+		Response::json($photo->setPublic());
 
 	}
 
@@ -188,7 +188,7 @@ final class Admin extends Access {
 		Validator::required(isset($_POST['photoIDs'], $_POST['albumID']), __METHOD__);
 
 		$photo = new Photo($_POST['photoIDs']);
-		echo $photo->setAlbum($_POST['albumID']);
+		Response::json($photo->setAlbum($_POST['albumID']));
 
 	}
 
@@ -197,7 +197,7 @@ final class Admin extends Access {
 		Validator::required(isset($_POST['photoIDs'], $_POST['tags']), __METHOD__);
 
 		$photo = new Photo($_POST['photoIDs']);
-		echo $photo->setTags($_POST['tags']);
+		Response::json($photo->setTags($_POST['tags']));
 
 	}
 
@@ -206,7 +206,7 @@ final class Admin extends Access {
 		Validator::required(isset($_POST['photoIDs']), __METHOD__);
 
 		$photo = new Photo($_POST['photoIDs']);
-		echo $photo->duplicate();
+		Response::json($photo->duplicate());
 
 	}
 
@@ -215,7 +215,7 @@ final class Admin extends Access {
 		Validator::required(isset($_POST['photoIDs']), __METHOD__);
 
 		$photo = new Photo($_POST['photoIDs']);
-		echo $photo->delete();
+		Response::json($photo->delete());
 
 	}
 
@@ -223,10 +223,10 @@ final class Admin extends Access {
 
 	private static function uploadAction() {
 
-		Validator::required(isset($_FILES, $_POST['albumID'], $_POST['tags']), __METHOD__);
+		Validator::required(isset($_FILES, $_POST['albumID']), __METHOD__);
 
 		$photo = new Photo(null);
-		echo $photo->add($_FILES, $_POST['albumID'], '', $_POST['tags']);
+		Response::json($photo->add($_FILES, $_POST['albumID']));
 
 	}
 
@@ -235,7 +235,7 @@ final class Admin extends Access {
 		Validator::required(isset($_POST['url'], $_POST['albumID']), __METHOD__);
 
 		$import = new Import();
-		echo $import->url($_POST['url'], $_POST['albumID']);
+		Response::json($import->url($_POST['url'], $_POST['albumID']));
 
 	}
 
@@ -272,14 +272,14 @@ final class Admin extends Access {
 		Validator::required(isset($_POST['user'], $_POST['password']), __METHOD__);
 
 		$session = new Session();
-		echo $session->login($_POST['user'], $_POST['password']);
+		Response::json($session->login($_POST['user'], $_POST['password']));
 
 	}
 
 	private static function logoutAction() {
 
 		$session = new Session();
-		echo $session->logout();
+		Response::json($session->logout());
 
 	}
 
@@ -290,7 +290,7 @@ final class Admin extends Access {
 		Validator::required(isset($_POST['username'], $_POST['password']), __METHOD__);
 
 		if (isset($_POST['oldPassword'])===false) $_POST['oldPassword'] = '';
-		echo Settings::setLogin($_POST['oldPassword'], $_POST['username'], $_POST['password']);
+		Response::json(Settings::setLogin($_POST['oldPassword'], $_POST['username'], $_POST['password']));
 
 	}
 
@@ -301,8 +301,8 @@ final class Admin extends Access {
 		$sA = Settings::setSortingAlbums($_POST['typeAlbums'], $_POST['orderAlbums']);
 		$sP = Settings::setSortingPhotos($_POST['typePhotos'], $_POST['orderPhotos']);
 
-		if ($sA===true&&$sP===true) echo true;
-		else                        echo false;
+		if ($sA===true&&$sP===true) Response::json(true);
+		else                        Response::json(false);
 
 	}
 
@@ -310,7 +310,7 @@ final class Admin extends Access {
 
 		Validator::required(isset($_POST['key']), __METHOD__);
 
-		echo Settings::setDropboxKey($_POST['key']);
+		Response::json(Settings::setDropboxKey($_POST['key']));
 
 	}
 

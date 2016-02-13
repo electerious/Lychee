@@ -55,8 +55,8 @@ final class Guest extends Access {
 		if ($album->getPublic()===true) {
 
 			// Album public
-			if ($album->checkPassword($_POST['password'])) Response::json($album->get());
-			else                                           Response::warning('Wrong password!');
+			if ($album->checkPassword($_POST['password'])===true) Response::json($album->get());
+			else                                                  Response::warning('Wrong password!');
 
 		} else {
 
@@ -76,13 +76,13 @@ final class Guest extends Access {
 		if ($album->getPublic()===true) {
 
 			// Album public
-			if ($album->checkPassword($_POST['password'])) echo true;
-			else                                           echo false;
+			if ($album->checkPassword($_POST['password'])===true) Response::json(true);
+			else                                                  Response::json(false);
 
 		} else {
 
 			// Album private
-			echo false;
+			Response::json(false);
 
 		}
 
@@ -118,14 +118,14 @@ final class Guest extends Access {
 		Validator::required(isset($_POST['user'], $_POST['password']), __METHOD__);
 
 		$session = new Session();
-		echo $session->login($_POST['user'], $_POST['password']);
+		Response::json($session->login($_POST['user'], $_POST['password']));
 
 	}
 
 	private static function logoutAction() {
 
 		$session = new Session();
-		echo $session->logout();
+		Response::json($session->logout());
 
 	}
 

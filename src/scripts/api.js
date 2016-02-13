@@ -27,8 +27,8 @@ api.post = function(fn, params, callback) {
 		}
 
 		// Convert 1 to true and an empty string to false
-		if (data==='1')     data = true
-		else if (data==='') data = false
+		if (data==='true')       data = true
+		else if (data==='false') data = false
 
 		// Convert to JSON if string start with '{' and ends with '}'
 		if (typeof data==='string' && data.substring(0, 1)==='{' && data.substring(data.length - 1, data.length)==='}') {

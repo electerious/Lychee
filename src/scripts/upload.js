@@ -115,7 +115,6 @@ upload.start = {
 
 			formData.append('function', 'Photo::add')
 			formData.append('albumID', albumID)
-			formData.append('tags', '')
 			formData.append(0, file)
 
 			xhr.open('POST', api.path)
@@ -128,7 +127,7 @@ upload.start = {
 				file.ready = true
 
 				// Set status
-				if (xhr.status===200 && xhr.responseText==='1') {
+				if (xhr.status===200 && xhr.responseText==='true') {
 
 					// Success
 					$('.basicModal .rows .row:nth-child(' + (file.num + 1) + ') .status')
