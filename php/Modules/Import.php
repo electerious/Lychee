@@ -4,7 +4,11 @@ namespace Lychee\Modules;
 
 final class Import {
 
-	private function photo($path, $albumID = 0, $description = '', $tags = '') {
+	/**
+	 * Creates an array similar to a file upload array and adds the photo to Lychee.
+	 * @return boolean Returns true when photo import was successful.
+	 */
+	private function photo($path, $albumID = 0) {
 
 		// No need to validate photo type and extension in this function.
 		// $photo->add will take care of it.
@@ -21,7 +25,7 @@ final class Import {
 		$nameFile[0]['size']     = $size;
 		$nameFile[0]['error']    = UPLOAD_ERR_OK;
 
-		if (!$photo->add($nameFile, $albumID, $description, $tags, true)) return false;
+		if ($photo->add($nameFile, $albumID, true)===false) return false;
 		return true;
 
 	}
@@ -140,7 +144,7 @@ final class Import {
 
 				$contains['photos'] = true;
 
-				if (!$this->photo($file, $albumID)) {
+				if ($this->photo($file, $albumID)===false) {
 					$error = true;
 					Log::error(Database::get(), __METHOD__, __LINE__, 'Could not import file (' . $file . ')');
 					continue;

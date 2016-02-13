@@ -79,172 +79,168 @@ final class Photo {
 
 		}
 
-		foreach ($files as $file) {
+		// Only process the first photo in the array
+		$file = $files[0];
 
-			// Check if file exceeds the upload_max_filesize directive
-			if ($file['error']===UPLOAD_ERR_INI_SIZE) {
-				Log::error(Database::get(), __METHOD__, __LINE__, 'The uploaded file exceeds the upload_max_filesize directive in php.ini');
-				if ($returnOnError===true) return false;
-				Response::error('The uploaded file exceeds the upload_max_filesize directive in php.ini!');
+		// Check if file exceeds the upload_max_filesize directive
+		if ($file['error']===UPLOAD_ERR_INI_SIZE) {
+			Log::error(Database::get(), __METHOD__, __LINE__, 'The uploaded file exceeds the upload_max_filesize directive in php.ini');
+			if ($returnOnError===true) return false;
+			Response::error('The uploaded file exceeds the upload_max_filesize directive in php.ini!');
+		}
+
+		// Check if file was only partially uploaded
+		if ($file['error']===UPLOAD_ERR_PARTIAL) {
+			Log::error(Database::get(), __METHOD__, __LINE__, 'The uploaded file was only partially uploaded');
+			if ($returnOnError===true) return false;
+			Response::error('The uploaded file was only partially uploaded!');
+		}
+
+		// Check if writing file to disk failed
+		if ($file['error']===UPLOAD_ERR_CANT_WRITE) {
+			Log::error(Database::get(), __METHOD__, __LINE__, 'Failed to write photo to disk');
+			if ($returnOnError===true) return false;
+			Response::error('Failed to write photo to disk!');
+		}
+
+		// Check if a extension stopped the file upload
+		if ($file['error']===UPLOAD_ERR_EXTENSION) {
+			Log::error(Database::get(), __METHOD__, __LINE__, 'A PHP extension stopped the file upload');
+			if ($returnOnError===true) return false;
+			Response::error('A PHP extension stopped the file upload!');
+		}
+
+		// Check if the upload was successful
+		if ($file['error']!==UPLOAD_ERR_OK) {
+			Log::error(Database::get(), __METHOD__, __LINE__, 'Upload contains an error (' . $file['error'] . ')');
+			if ($returnOnError===true) return false;
+			Response::error('Upload failed!');
+		}
+
+		// Verify extension
+		$extension = getExtension($file['name']);
+		if (!in_array(strtolower($extension), self::$validExtensions, true)) {
+			Log::error(Database::get(), __METHOD__, __LINE__, 'Photo format not supported');
+			if ($returnOnError===true) return false;
+			Response::error('Photo format not supported!');
+		}
+
+		// Verify image
+		$type = @exif_imagetype($file['tmp_name']);
+		if (!in_array($type, self::$validTypes, true)) {
+			Log::error(Database::get(), __METHOD__, __LINE__, 'Photo type not supported');
+			if ($returnOnError===true) return false;
+			Response::error('Photo type not supported!');
+		}
+
+		// Generate id
+		$id = str_replace('.', '', microtime(true));
+		while(strlen($id)<14) $id .= 0;
+
+		// Set paths
+		$tmp_name   = $file['tmp_name'];
+		$photo_name = md5($id) . $extension;
+		$path       = LYCHEE_UPLOADS_BIG . $photo_name;
+
+		// Calculate checksum
+		$checksum = sha1_file($tmp_name);
+		if ($checksum===false) {
+			Log::error(Database::get(), __METHOD__, __LINE__, 'Could not calculate checksum for photo');
+			if ($returnOnError===true) return false;
+			Response::error('Could not calculate checksum for photo!');
+		}
+
+		// Check if image exists based on checksum
+		if ($checksum===false) {
+
+			$checksum = '';
+			$exists   = false;
+
+		} else {
+
+			$exists = $this->exists($checksum);
+
+			if ($exists!==false) {
+				$photo_name = $exists['photo_name'];
+				$path       = $exists['path'];
+				$path_thumb = $exists['path_thumb'];
+				$medium     = ($exists['medium']==='1' ? 1 : 0);
+				$exists     = true;
 			}
 
-			// Check if file was only partially uploaded
-			if ($file['error']===UPLOAD_ERR_PARTIAL) {
-				Log::error(Database::get(), __METHOD__, __LINE__, 'The uploaded file was only partially uploaded');
-				if ($returnOnError===true) return false;
-				Response::error('The uploaded file was only partially uploaded!');
-			}
+		}
 
-			// Check if writing file to disk failed
-			if ($file['error']===UPLOAD_ERR_CANT_WRITE) {
-				Log::error(Database::get(), __METHOD__, __LINE__, 'Failed to write photo to disk');
-				if ($returnOnError===true) return false;
-				Response::error('Failed to write photo to disk!');
-			}
+		if ($exists===false) {
 
-			// Check if a extension stopped the file upload
-			if ($file['error']===UPLOAD_ERR_EXTENSION) {
-				Log::error(Database::get(), __METHOD__, __LINE__, 'A PHP extension stopped the file upload');
-				if ($returnOnError===true) return false;
-				Response::error('A PHP extension stopped the file upload!');
-			}
-
-			// Check if the upload was successful
-			if ($file['error']!==UPLOAD_ERR_OK) {
-				Log::error(Database::get(), __METHOD__, __LINE__, 'Upload contains an error (' . $file['error'] . ')');
-				if ($returnOnError===true) return false;
-				Response::error('Upload failed!');
-			}
-
-			// Verify extension
-			$extension = getExtension($file['name']);
-			if (!in_array(strtolower($extension), self::$validExtensions, true)) {
-				Log::error(Database::get(), __METHOD__, __LINE__, 'Photo format not supported');
-				if ($returnOnError===true) return false;
-				Response::error('Photo format not supported!');
-			}
-
-			// Verify image
-			$type = @exif_imagetype($file['tmp_name']);
-			if (!in_array($type, self::$validTypes, true)) {
-				Log::error(Database::get(), __METHOD__, __LINE__, 'Photo type not supported');
-				if ($returnOnError===true) return false;
-				Response::error('Photo type not supported!');
-			}
-
-			// Generate id
-			$id = str_replace('.', '', microtime(true));
-			while(strlen($id)<14) $id .= 0;
-
-			// Set paths
-			$tmp_name   = $file['tmp_name'];
-			$photo_name = md5($id) . $extension;
-			$path       = LYCHEE_UPLOADS_BIG . $photo_name;
-
-			// Calculate checksum
-			$checksum = sha1_file($tmp_name);
-			if ($checksum===false) {
-				Log::error(Database::get(), __METHOD__, __LINE__, 'Could not calculate checksum for photo');
-				if ($returnOnError===true) return false;
-				Response::error('Could not calculate checksum for photo!');
-			}
-
-			// Check if image exists based on checksum
-			if ($checksum===false) {
-
-				$checksum = '';
-				$exists   = false;
-
-			} else {
-
-				$exists = $this->exists($checksum);
-
-				if ($exists!==false) {
-					$photo_name = $exists['photo_name'];
-					$path       = $exists['path'];
-					$path_thumb = $exists['path_thumb'];
-					$medium     = ($exists['medium']==='1' ? 1 : 0);
-					$exists     = true;
-				}
-
-			}
-
-			if ($exists===false) {
-
-				// Import if not uploaded via web
-				if (!is_uploaded_file($tmp_name)) {
-					if (!@copy($tmp_name, $path)) {
-						Log::error(Database::get(), __METHOD__, __LINE__, 'Could not copy photo to uploads');
-						if ($returnOnError===true) return false;
-						Response::error('Could not copy photo to uploads!');
-					} else @unlink($tmp_name);
-				} else {
-					if (!@move_uploaded_file($tmp_name, $path)) {
-						Log::error(Database::get(), __METHOD__, __LINE__, 'Could not move photo to uploads');
-						if ($returnOnError===true) return false;
-						Response::error('Could not move photo to uploads!');
-					}
-				}
-
-			} else {
-
-				// Photo already exists
-				// Check if the user wants to skip duplicates
-				if (Settings::get()['skipDuplicates']==='1') {
-					Log::notice(Database::get(), __METHOD__, __LINE__, 'Skipped upload of existing photo because skipDuplicates is activated');
+			// Import if not uploaded via web
+			if (!is_uploaded_file($tmp_name)) {
+				if (!@copy($tmp_name, $path)) {
+					Log::error(Database::get(), __METHOD__, __LINE__, 'Could not copy photo to uploads');
 					if ($returnOnError===true) return false;
-					Response::warning('This photo has been skipped because it\'s already in your library.');
-				}
-
-			}
-
-			// Read infos
-			$info = $this->getInfo($path);
-
-			// Use title of file if IPTC title missing
-			if ($info['title']==='') $info['title'] = substr(basename($file['name'], $extension), 0, 30);
-
-			// Use description parameter if set
-			if ($description==='') $description = $info['description'];
-
-			if ($exists===false) {
-
-				// Set orientation based on EXIF data
-				if ($file['type']==='image/jpeg'&&isset($info['orientation'])&&$info['orientation']!=='') {
-					$adjustFile = $this->adjustFile($path, $info);
-					if ($adjustFile!==false) $info = $adjustFile;
-					else Log::notice(Database::get(), __METHOD__, __LINE__, 'Skipped adjustment of photo (' . $info['title'] . ')');
-				}
-
-				// Set original date
-				if ($info['takestamp']!==''&&$info['takestamp']!==0) @touch($path, $info['takestamp']);
-
-				// Create Thumb
-				if (!$this->createThumb($path, $photo_name, $info['type'], $info['width'], $info['height'])) {
-					Log::error(Database::get(), __METHOD__, __LINE__, 'Could not create thumbnail for photo');
+					Response::error('Could not copy photo to uploads!');
+				} else @unlink($tmp_name);
+			} else {
+				if (!@move_uploaded_file($tmp_name, $path)) {
+					Log::error(Database::get(), __METHOD__, __LINE__, 'Could not move photo to uploads');
 					if ($returnOnError===true) return false;
-					Response::error('Could not create thumbnail for photo!');
+					Response::error('Could not move photo to uploads!');
 				}
-
-				// Create Medium
-				if ($this->createMedium($path, $photo_name, $info['width'], $info['height'])) $medium = 1;
-				else $medium = 0;
-
-				// Set thumb url
-				$path_thumb = md5($id) . '.jpeg';
-
 			}
 
-			// Save to DB
-			$values = array(LYCHEE_TABLE_PHOTOS, $id, $info['title'], $photo_name, $description, $tags, $info['type'], $info['width'], $info['height'], $info['size'], $info['iso'], $info['aperture'], $info['make'], $info['model'], $info['shutter'], $info['focal'], $info['takestamp'], $path_thumb, $albumID, $public, $star, $checksum, $medium);
-			$query  = Database::prepare(Database::get(), "INSERT INTO ? (id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, checksum, medium) VALUES ('?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?')", $values);
-			$result = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
+		} else {
 
-			if ($result===false) {
+			// Photo already exists
+			// Check if the user wants to skip duplicates
+			if (Settings::get()['skipDuplicates']==='1') {
+				Log::notice(Database::get(), __METHOD__, __LINE__, 'Skipped upload of existing photo because skipDuplicates is activated');
 				if ($returnOnError===true) return false;
-				Response::error('Could not save photo in database!');
+				Response::warning('This photo has been skipped because it\'s already in your library.');
 			}
 
+		}
+
+		// Read infos
+		$info = $this->getInfo($path);
+
+		// Use title of file if IPTC title missing
+		if ($info['title']==='') $info['title'] = substr(basename($file['name'], $extension), 0, 30);
+
+		if ($exists===false) {
+
+			// Set orientation based on EXIF data
+			if ($file['type']==='image/jpeg'&&isset($info['orientation'])&&$info['orientation']!=='') {
+				$adjustFile = $this->adjustFile($path, $info);
+				if ($adjustFile!==false) $info = $adjustFile;
+				else Log::notice(Database::get(), __METHOD__, __LINE__, 'Skipped adjustment of photo (' . $info['title'] . ')');
+			}
+
+			// Set original date
+			if ($info['takestamp']!==''&&$info['takestamp']!==0) @touch($path, $info['takestamp']);
+
+			// Create Thumb
+			if (!$this->createThumb($path, $photo_name, $info['type'], $info['width'], $info['height'])) {
+				Log::error(Database::get(), __METHOD__, __LINE__, 'Could not create thumbnail for photo');
+				if ($returnOnError===true) return false;
+				Response::error('Could not create thumbnail for photo!');
+			}
+
+			// Create Medium
+			if ($this->createMedium($path, $photo_name, $info['width'], $info['height'])) $medium = 1;
+			else $medium = 0;
+
+			// Set thumb url
+			$path_thumb = md5($id) . '.jpeg';
+
+		}
+
+		// Save to DB
+		$values = array(LYCHEE_TABLE_PHOTOS, $id, $info['title'], $photo_name, $info['description'], '', $info['type'], $info['width'], $info['height'], $info['size'], $info['iso'], $info['aperture'], $info['make'], $info['model'], $info['shutter'], $info['focal'], $info['takestamp'], $path_thumb, $albumID, $public, $star, $checksum, $medium);
+		$query  = Database::prepare(Database::get(), "INSERT INTO ? (id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, checksum, medium) VALUES ('?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?')", $values);
+		$result = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
+
+		if ($result===false) {
+			if ($returnOnError===true) return false;
+			Response::error('Could not save photo in database!');
 		}
 
 		// Call plugins
