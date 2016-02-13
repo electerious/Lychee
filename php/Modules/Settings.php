@@ -6,6 +6,9 @@ final class Settings {
 
 	private static $cache = null;
 
+	/**
+	 * @return array Returns the settings of Lychee.
+	 */
 	public static function get() {
 
 		if (self::$cache) return self::$cache;
@@ -26,6 +29,9 @@ final class Settings {
 
 	}
 
+	/**
+	 * @return boolean Returns true when successful.
+	 */
 	private static function set($key, $value, $row = false) {
 
 		if ($row===false) {
@@ -50,6 +56,11 @@ final class Settings {
 
 	}
 
+	/**
+	 * Sets the username and password when current password is correct.
+	 * Exits on error.
+	 * @return true Returns true when successful.
+	 */
 	public static function setLogin($oldPassword = '', $username, $password) {
 
 		if ($oldPassword===self::get()['password']||self::get()['password']===crypt($oldPassword, self::get()['password'])) {
@@ -68,6 +79,10 @@ final class Settings {
 
 	}
 
+	/**
+	 * Sets a new username.
+	 * @return boolean Returns true when successful.
+	 */
 	private static function setUsername($username) {
 
 		// Check dependencies
@@ -84,6 +99,10 @@ final class Settings {
 
 	}
 
+	/**
+	 * Sets a new username.
+	 * @return boolean Returns true when successful.
+	 */
 	private static function setPassword($password) {
 
 		// Check dependencies
@@ -99,6 +118,10 @@ final class Settings {
 
 	}
 
+	/**
+	 * Sets a new dropboxKey.
+	 * @return boolean Returns true when successful.
+	 */
 	public static function setDropboxKey($dropboxKey) {
 
 		if (strlen($dropboxKey)<1||strlen($dropboxKey)>50) {
@@ -111,6 +134,10 @@ final class Settings {
 
 	}
 
+	/**
+	 * Sets a new sorting for the photos.
+	 * @return boolean Returns true when successful.
+	 */
 	public static function setSortingPhotos($type, $order) {
 
 		$sorting = 'ORDER BY ';
@@ -125,7 +152,9 @@ final class Settings {
 			case 'type':        $sorting .= 'type'; break;
 			case 'star':        $sorting .= 'star'; break;
 			case 'takestamp':   $sorting .= 'takestamp'; break;
-			default:            Response::error('Unknown type for sorting!');
+			default:            Log::error(Database::get(), __METHOD__, __LINE__, 'Could not update settings. Unknown type for sorting.');
+			                    return false;
+			                    break;
 
 		}
 
@@ -136,7 +165,9 @@ final class Settings {
 
 			case 'ASC':  $sorting .= 'ASC'; break;
 			case 'DESC': $sorting .= 'DESC'; break;
-			default:     Response::error('Unknown order for sorting!');
+			default:     Log::error(Database::get(), __METHOD__, __LINE__, 'Could not update settings. Unknown order for sorting.');
+			             return false;
+			             break;
 
 		}
 
@@ -148,6 +179,10 @@ final class Settings {
 
 	}
 
+	/**
+	 * Sets a new sorting for the albums.
+	 * @return boolean Returns true when successful.
+	 */
 	public static function setSortingAlbums($type, $order) {
 
 		$sorting = 'ORDER BY ';
@@ -159,7 +194,9 @@ final class Settings {
 			case 'title':       $sorting .= 'title'; break;
 			case 'description': $sorting .= 'description'; break;
 			case 'public':      $sorting .= 'public'; break;
-			default:            Response::error('Unknown type for sorting!');
+			default:            Log::error(Database::get(), __METHOD__, __LINE__, 'Could not update settings. Unknown type for sorting.');
+			                    return false;
+			                    break;
 
 		}
 
@@ -170,7 +207,9 @@ final class Settings {
 
 			case 'ASC':  $sorting .= 'ASC'; break;
 			case 'DESC': $sorting .= 'DESC'; break;
-			default:     Response::error('Unknown order for sorting!');
+			default:     Log::error(Database::get(), __METHOD__, __LINE__, 'Could not update settings. Unknown order for sorting.');
+			             return false;
+			             break;
 
 		}
 

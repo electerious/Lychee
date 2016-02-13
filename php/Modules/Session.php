@@ -4,6 +4,10 @@ namespace Lychee\Modules;
 
 final class Session {
 
+	/**
+	 * Reads and returns information about the Lychee installation.
+	 * @return array Returns an array with the login status and configuration.
+	 */
 	public function init($public = true) {
 
 		// Call plugins
@@ -15,11 +19,9 @@ final class Session {
 		// Path to Lychee for the server-import dialog
 		$return['config']['location'] = LYCHEE;
 
-		// Remove username and password from response
+		// Remove sensitive from response
 		unset($return['config']['username']);
 		unset($return['config']['password']);
-
-		// Remove identifier from response
 		unset($return['config']['identifier']);
 
 		// Check if login credentials exist and login if they don't
@@ -60,6 +62,10 @@ final class Session {
 
 	}
 
+	/**
+	 * Sets the session values when username and password correct.
+	 * @return boolean Returns true when login was successful.
+	 */
 	public function login($username, $password) {
 
 		// Call plugins
@@ -86,6 +92,10 @@ final class Session {
 
 	}
 
+	/**
+	 * Sets the session values when no there is no username and password in the database.
+	 * @return boolean Returns true when no login was found.
+	 */
 	private function noLogin() {
 
 		// Check if login credentials exist and login if they don't
@@ -100,14 +110,16 @@ final class Session {
 
 	}
 
+	/**
+	 * Unsets the session values.
+	 * @return boolean Returns true when logout was successful.
+	 */
 	public function logout() {
 
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
-		$_SESSION['login']      = null;
-		$_SESSION['identifier'] = null;
-
+		session_unset();
 		session_destroy();
 
 		// Call plugins

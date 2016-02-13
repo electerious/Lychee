@@ -8,6 +8,9 @@ final class Album {
 
 	private $albumIDs = null;
 
+	/**
+	 * @return boolean Returns true when successful.
+	 */
 	public function __construct($albumIDs) {
 
 		// Init vars
@@ -17,6 +20,9 @@ final class Album {
 
 	}
 
+	/**
+	 * @return integer|false ID of the created album.
+	 */
 	public function add($title = 'Untitled') {
 
 		// Call plugins
@@ -39,6 +45,10 @@ final class Album {
 
 	}
 
+	/**
+	 * Rurns album-attributes into a front-end friendly format. Note that some attributes remain unchanged.
+	 * @return array Returns album-attributes in a normalized structure.
+	 */
 	public static function prepareData(array $data) {
 
 		// This function requires the following album-attributes and turns them
@@ -72,6 +82,9 @@ final class Album {
 
 	}
 
+	/**
+	 * @return array|false Returns an array of photos and album information or false on failure.
+	 */
 	public function get() {
 
 		// Check dependencies
@@ -117,7 +130,7 @@ final class Album {
 		$photos          = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 		$previousPhotoID = '';
 
-		if ($photos===false) Response::error('Could not get photos of album from database!');
+		if ($photos===false) return false;
 
 		while ($photo = $photos->fetch_assoc()) {
 
@@ -167,6 +180,9 @@ final class Album {
 
 	}
 
+	/**
+	 * @return array|false Returns an array of albums or false on failure.
+	 */
 	public function getAll($public = true) {
 
 		// Call plugins
@@ -189,7 +205,7 @@ final class Album {
 		// Execute query
 		$albums = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
-		if ($albums===false) Response::error('Could not get albums from database!');
+		if ($albums===false) return false;
 
 		// For each album
 		while ($album = $albums->fetch_assoc()) {
@@ -205,7 +221,7 @@ final class Album {
 					$query  = Database::prepare(Database::get(), "SELECT thumbUrl FROM ? WHERE album = '?' ORDER BY star DESC, " . substr(Settings::get()['sortingPhotos'], 9) . " LIMIT 3", array(LYCHEE_TABLE_PHOTOS, $album['id']));
 					$thumbs = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
-					if ($thumbs===false) Response::error('Could not get thumbs of album from database!');
+					if ($thumbs===false) return false;
 
 					// For each thumb
 					$k = 0;
@@ -231,6 +247,9 @@ final class Album {
 
 	}
 
+	/**
+	 * @return array|false Returns an array of smart albums or false on failure.
+	 */
 	private function getSmartInfo() {
 
 		// Initialize return var
@@ -249,7 +268,7 @@ final class Album {
 		$unsorted = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 		$i        = 0;
 
-		if ($unsorted===false) Response::error('Could not get unsorted photos from database!');
+		if ($unsorted===false) return false;
 
 		$return['unsorted'] = array(
 			'thumbs' => array(),
@@ -271,7 +290,7 @@ final class Album {
 		$starred = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 		$i       = 0;
 
-		if ($starred===false) Response::error('Could not get starred photos from database!');
+		if ($starred===false) return false;
 
 		$return['starred'] = array(
 			'thumbs' => array(),
@@ -293,7 +312,7 @@ final class Album {
 		$public = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 		$i      = 0;
 
-		if ($public===false) Response::error('Could not get public photos from database!');
+		if ($public===false) return false;
 
 		$return['public'] = array(
 			'thumbs' => array(),
@@ -315,7 +334,7 @@ final class Album {
 		$recent = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 		$i      = 0;
 
-		if ($recent===false) Response::error('Could not get recent photos from database!');
+		if ($recent===false) return false;
 
 		$return['recent'] = array(
 			'thumbs' => array(),
@@ -334,6 +353,10 @@ final class Album {
 
 	}
 
+	/**
+	 * Starts a download of an album.
+	 * @return resource|boolean Sends a ZIP-file or returns false on failure.
+	 */
 	public function getArchive() {
 
 		// Check dependencies
@@ -373,7 +396,7 @@ final class Album {
 			$query = Database::prepare(Database::get(), "SELECT title FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
 			$album = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
-			if ($album===false) Response::error('Could not get album from database!');
+			if ($album===false) return false;
 
 			// Get album object
 			$album = $album->fetch_object();
@@ -381,7 +404,7 @@ final class Album {
 			// Photo not found
 			if ($album===null) {
 				Log::error(Database::get(), __METHOD__, __LINE__, 'Could not find specified album');
-				Response::error('Could not find specified album!');
+				return false;
 			}
 
 			// Set title
@@ -404,12 +427,12 @@ final class Album {
 		// Execute query
 		$photos = Database::execute(Database::get(), $photos, __METHOD__, __LINE__);
 
-		if ($album===null) Response::error('Could not get photos from database!');
+		if ($album===null) return false;
 
 		// Check if album empty
 		if ($photos->num_rows==0) {
 			Log::error(Database::get(), __METHOD__, __LINE__, 'Could not create ZipArchive without images');
-			Response::error('Could not create ZipArchive without images!');
+			return false;
 		}
 
 		// Parse each path
@@ -472,6 +495,9 @@ final class Album {
 
 	}
 
+	/**
+	 * @return boolean Returns true when successful.
+	 */
 	public function setTitle($title = 'Untitled') {
 
 		// Check dependencies
@@ -492,6 +518,9 @@ final class Album {
 
 	}
 
+	/**
+	 * @return boolean Returns true when successful.
+	 */
 	public function setDescription($description = '') {
 
 		// Check dependencies
@@ -512,6 +541,9 @@ final class Album {
 
 	}
 
+	/**
+	 * @return boolean Returns true when the album is public.
+	 */
 	public function getPublic() {
 
 		// Check dependencies
@@ -539,6 +571,9 @@ final class Album {
 
 	}
 
+	/**
+	 * @return boolean Returns true when the album is downloadable.
+	 */
 	public function getDownloadable() {
 
 		// Check dependencies
@@ -566,6 +601,9 @@ final class Album {
 
 	}
 
+	/**
+	 * @return boolean Returns true when successful.
+	 */
 	public function setPublic($public, $password, $visible, $downloadable) {
 
 		// Check dependencies
@@ -604,6 +642,9 @@ final class Album {
 
 	}
 
+	/**
+	 * @return boolean Returns true when successful.
+	 */
 	private function setPassword($password) {
 
 		// Check dependencies
@@ -640,6 +681,9 @@ final class Album {
 
 	}
 
+	/**
+	 * @return boolean Returns when album is public.
+	 */
 	public function checkPassword($password) {
 
 		// Check dependencies
@@ -667,6 +711,9 @@ final class Album {
 
 	}
 
+	/**
+	 * @return boolean Returns true when successful.
+	 */
 	public function merge() {
 
 		// Check dependencies
@@ -702,6 +749,9 @@ final class Album {
 
 	}
 
+	/**
+	 * @return boolean Returns true when successful.
+	 */
 	public function delete() {
 
 		// Check dependencies

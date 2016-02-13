@@ -21,6 +21,9 @@ final class Photo {
 		'.gif'
 	);
 
+	/**
+	 * @return boolean Returns true when successful.
+	 */
 	public function __construct($photoIDs) {
 
 		// Init vars
@@ -251,11 +254,14 @@ final class Photo {
 
 	}
 
+	/**
+	 * @return array|false Returns a subset of a photo when same photo exists or returns false on failure.
+	 */
 	private function exists($checksum, $photoID = null) {
 
 		// Exclude $photoID from select when $photoID is set
 		if (isset($photoID)) $query = Database::prepare(Database::get(), "SELECT id, url, thumbUrl, medium FROM ? WHERE checksum = '?' AND id <> '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $checksum, $photoID));
-		else $query = Database::prepare(Database::get(), "SELECT id, url, thumbUrl, medium FROM ? WHERE checksum = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $checksum));
+		else                 $query = Database::prepare(Database::get(), "SELECT id, url, thumbUrl, medium FROM ? WHERE checksum = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $checksum));
 
 		$result = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
@@ -280,6 +286,9 @@ final class Photo {
 
 	}
 
+	/**
+	 * @return boolean Returns true when successful.
+	 */
 	private function createThumb($url, $filename, $type, $width, $height) {
 
 		// Call plugins
@@ -369,17 +378,18 @@ final class Photo {
 
 	}
 
+	/**
+	 * Creates a smaller version of a photo when its size is bigger than a preset size.
+	 * Photo must be big enough, medium must be activated and Imagick must be installed and activated.
+	 * @return boolean Returns true when successful.
+	 */
 	private function createMedium($url, $filename, $width, $height) {
 
-		// Function creates a smaller version of a photo when its size is bigger than a preset size
 		// Excepts the following:
 		// (string) $url = Path to the photo-file
 		// (string) $filename = Name of the photo-file
 		// (int) $width = Width of the photo
 		// (int) $height = Height of the photo
-		// Returns the following
-		// (boolean) true = Success
-		// (boolean) false = Failure
 
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
@@ -446,15 +456,15 @@ final class Photo {
 
 	}
 
+	/**
+	 * Rotates and flips a photo based on its EXIF orientation.
+	 * @return array|false Returns an array with the new orientation, width, height or false on failure.
+	 */
 	public function adjustFile($path, array $info) {
 
-		// Function rotates and flips a photo based on its EXIF orientation
 		// Excepts the following:
 		// (string) $path = Path to the photo-file
 		// (array) $info = ['orientation', 'width', 'height']
-		// Returns the following
-		// (array) $info = ['orientation', 'width', 'height'] = Success
-		// (boolean) false = Failure
 
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
@@ -577,13 +587,14 @@ final class Photo {
 
 	}
 
+	/**
+	 * Rurns photo-attributes into a front-end friendly format. Note that some attributes remain unchanged.
+	 * @return array Returns photo-attributes in a normalized structure.
+	 */
 	public static function prepareData(array $data) {
 
-		// Function turns photo-attributes into a front-end friendly format. Note that some attributes remain unchanged.
 		// Excepts the following:
 		// (array) $data = ['id', 'title', 'tags', 'public', 'star', 'album', 'thumbUrl', 'takestamp', 'url']
-		// Returns the following:
-		// (array) $photo
 
 		// Init
 		$photo = null;
@@ -619,13 +630,13 @@ final class Photo {
 
 	}
 
+	/**
+	 * @return array|false Returns an array with information about the photo or false on failure.
+	 */
 	public function get($albumID) {
 
-		// Functions returns data of a photo
 		// Excepts the following:
 		// (string) $albumID = Album which is currently visible to the user
-		// Returns the following:
-		// (array) $photo
 
 		// Check dependencies
 		Validator::required(isset($this->photoIDs), __METHOD__);
@@ -637,7 +648,7 @@ final class Photo {
 		$query  = Database::prepare(Database::get(), "SELECT * FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
 		$photos = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
-		if ($photos===false) Response::error('Could not get photo from database!');
+		if ($photos===false) return false;
 
 		// Get photo object
 		$photo = $photos->fetch_assoc();
@@ -664,7 +675,7 @@ final class Photo {
 				$query  = Database::prepare(Database::get(), "SELECT public FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $photo['album']));
 				$albums = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
-				if ($albums===false) Response::error('Could not get album of photo from database!');
+				if ($albums===false) return false;
 
 				// Get album object
 				$album = $albums->fetch_assoc();
@@ -686,6 +697,10 @@ final class Photo {
 
 	}
 
+	/**
+	 * Reads and parses information and metadata out of a photo.
+	 * @return array Returns an array of photo information and metadata.
+	 */
 	public function getInfo($url) {
 
 		// Functions returns information and metadata of a photo
@@ -791,12 +806,11 @@ final class Photo {
 
 	}
 
+	/**
+	 * Starts a download of a photo.
+	 * @return resource|boolean Sends a ZIP-file or returns false on failure.
+	 */
 	public function getArchive() {
-
-		// Functions starts a download of a photo
-		// Returns the following:
-		// (boolean + output) true = Success
-		// (boolean) false = Failure
 
 		// Check dependencies
 		Validator::required(isset($this->photoIDs), __METHOD__);
@@ -808,7 +822,7 @@ final class Photo {
 		$query  = Database::prepare(Database::get(), "SELECT title, url FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
 		$photos = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
-		if ($photos===false) Response::error('Could not get photo from database!');
+		if ($photos===false) return false;
 
 		// Get photo object
 		$photo = $photos->fetch_object();
@@ -816,7 +830,7 @@ final class Photo {
 		// Photo not found
 		if ($photo===null) {
 			Log::error(Database::get(), __METHOD__, __LINE__, 'Could not find specified photo');
-			Response::error('Could not find specified photo!');
+			return false;
 		}
 
 		// Get extension
@@ -853,14 +867,11 @@ final class Photo {
 
 	}
 
+	/**
+	 * Sets the title of a photo.
+	 * @return boolean Returns true when successful.
+	 */
 	public function setTitle($title) {
-
-		// Functions sets the title of a photo
-		// Excepts the following:
-		// (string) $title = Title with a maximum length of 50 chars
-		// Returns the following:
-		// (boolean) true = Success
-		// (boolean) false = Failure
 
 		// Check dependencies
 		Validator::required(isset($this->photoIDs), __METHOD__);
@@ -880,14 +891,11 @@ final class Photo {
 
 	}
 
+	/**
+	 * Sets the description of a photo.
+	 * @return boolean Returns true when successful.
+	 */
 	public function setDescription($description) {
-
-		// Functions sets the description of a photo
-		// Excepts the following:
-		// (string) $description = Description with a maximum length of 1000 chars
-		// Returns the following:
-		// (boolean) true = Success
-		// (boolean) false = Failure
 
 		// Check dependencies
 		Validator::required(isset($this->photoIDs), __METHOD__);
@@ -907,12 +915,11 @@ final class Photo {
 
 	}
 
+	/**
+	 * Toggles the star property of a photo.
+	 * @return boolean Returns true when successful.
+	 */
 	public function setStar() {
-
-		// Functions stars a photo
-		// Returns the following:
-		// (boolean) true = Success
-		// (boolean) false = Failure
 
 		// Check dependencies
 		Validator::required(isset($this->photoIDs), __METHOD__);
@@ -951,13 +958,13 @@ final class Photo {
 
 	}
 
+	/**
+	 * Checks if photo or parent album is public.
+	 * @return integer 0 = Photo private and parent album private
+	 *                 1 = Album public, but password incorrect
+	 *                 2 = Photo public or album public and password correct
+	 */
 	public function getPublic($password) {
-
-		// Functions checks if photo or parent album is public
-		// Returns the following:
-		// (int) 0 = Photo private and parent album private
-		// (int) 1 = Album public, but password incorrect
-		// (int) 2 = Photo public or album public and password correct
 
 		// Check dependencies
 		Validator::required(isset($this->photoIDs), __METHOD__);
@@ -1003,12 +1010,11 @@ final class Photo {
 
 	}
 
+	/**
+	 * Toggles the public property of a photo.
+	 * @return boolean Returns true when successful.
+	 */
 	public function setPublic() {
-
-		// Functions toggles the public property of a photo
-		// Returns the following:
-		// (boolean) true = Success
-		// (boolean) false = Failure
 
 		// Check dependencies
 		Validator::required(isset($this->photoIDs), __METHOD__);
@@ -1040,12 +1046,11 @@ final class Photo {
 
 	}
 
+	/**
+	 * Sets the parent album of a photo.
+	 * @return boolean Returns true when successful.
+	 */
 	function setAlbum($albumID) {
-
-		// Functions sets the parent album of a photo
-		// Returns the following:
-		// (boolean) true = Success
-		// (boolean) false = Failure
 
 		// Check dependencies
 		Validator::required(isset($this->photoIDs), __METHOD__);
@@ -1065,14 +1070,14 @@ final class Photo {
 
 	}
 
+	/**
+	 * Sets the tags of a photo.
+	 * @return boolean Returns true when successful.
+	 */
 	public function setTags($tags) {
 
-		// Functions sets the tags of a photo
 		// Excepts the following:
 		// (string) $tags = Comma separated list of tags with a maximum length of 1000 chars
-		// Returns the following:
-		// (boolean) true = Success
-		// (boolean) false = Failure
 
 		// Check dependencies
 		Validator::required(isset($this->photoIDs), __METHOD__);
@@ -1096,12 +1101,11 @@ final class Photo {
 
 	}
 
+	/**
+	 * Duplicates a photo.
+	 * @return boolean Returns true when successful.
+	 */
 	public function duplicate() {
-
-		// Functions duplicates a photo
-		// Returns the following:
-		// (boolean) true = Success
-		// (boolean) false = Failure
 
 		// Check dependencies
 		Validator::required(isset($this->photoIDs), __METHOD__);
@@ -1139,12 +1143,11 @@ final class Photo {
 
 	}
 
+	/**
+	 * Deletes a photo with all its data and files.
+	 * @return boolean Returns true when successful.
+	 */
 	public function delete() {
-
-		// Functions deletes a photo with all its data and files
-		// Returns the following:
-		// (boolean) true = Success
-		// (boolean) false = Failure
 
 		// Check dependencies
 		Validator::required(isset($this->photoIDs), __METHOD__);

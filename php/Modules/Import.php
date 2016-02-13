@@ -26,6 +26,9 @@ final class Import {
 
 	}
 
+	/**
+	 * @return boolean Returns true when successful.
+	 */
 	public function url($urls, $albumID = 0) {
 
 		// Call plugins
@@ -85,6 +88,11 @@ final class Import {
 
 	}
 
+	/**
+	 * @return boolean|string Returns true when successful.
+	 *                        Warning: Folder empty or no readable files to process!
+	 *                        Notice: Import only contained albums!
+	 */
 	public function server($path, $albumID = 0) {
 
 		// Parse path
@@ -93,7 +101,7 @@ final class Import {
 
 		if (is_dir($path)===false) {
 			Log::error(Database::get(), __METHOD__, __LINE__, 'Given path is not a directory (' . $path . ')');
-			return 'Error: Given path is not a directory!';
+			return false;
 		}
 
 		// Skip folders of Lychee
@@ -101,7 +109,7 @@ final class Import {
 			$path===LYCHEE_UPLOADS_MEDIUM||($path . '/')===LYCHEE_UPLOADS_MEDIUM||
 			$path===LYCHEE_UPLOADS_THUMB||($path . '/')===LYCHEE_UPLOADS_THUMB) {
 				Log::error(Database::get(), __METHOD__, __LINE__, 'The given path is a reserved path of Lychee (' . $path . ')');
-				return 'Error: Given path is a reserved path of Lychee!';
+				return false;
 		}
 
 		$error              = false;

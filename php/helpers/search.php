@@ -4,6 +4,9 @@ use Lychee\Modules\Album;
 use Lychee\Modules\Database;
 use Lychee\Modules\Photo;
 
+/**
+ * @return array|false Returns an array with albums and photos.
+ */
 function search($term) {
 
 	// Initialize return var
