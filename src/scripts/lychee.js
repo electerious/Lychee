@@ -15,7 +15,6 @@ lychee = {
 
 	publicMode      : false,
 	viewMode        : false,
-	debugMode       : false,
 
 	checkForUpdates : '1',
 	sortingPhotos   : '',

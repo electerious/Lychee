@@ -35,9 +35,6 @@ api.post = function(fn, params, callback) {
 			data = $.parseJSON(data)
 		}
 
-		// Output response when debug mode is enabled
-		if (lychee.debugMode) console.log(data)
-
 		callback(data)
 
 	}
