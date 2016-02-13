@@ -50,16 +50,16 @@ final class Database {
 		// Check if the connection was successful
 		if ($connection===false) Response::error('' . $connection->connect_error);
 
-		if (!self::setCharset($connection)) Response::error('Could not set database charset!');
+		if (self::setCharset($connection)===false) Response::error('Could not set database charset!');
 
 		// Create database
-		if (!self::createDatabase($connection, $name)) Response::error('Could not create database!');
+		if (self::createDatabase($connection, $name)===false) Response::error('Could not create database!');
 
 		// Create tables
-		if (!self::createTables($connection)) Response::error('Could not create tables!');
+		if (self::createTables($connection)===false) Response::error('Could not create tables!');
 
 		// Update database
-		if (!self::update($connection, $name)) Response::error('Could not update database and tables!');
+		if (self::update($connection, $name)===false) Response::error('Could not update database and tables!');
 
 		$this->connection = $connection;
 

@@ -66,10 +66,10 @@ final class Settings {
 		if ($oldPassword===self::get()['password']||self::get()['password']===crypt($oldPassword, self::get()['password'])) {
 
 			// Save username
-			if (self::setUsername($username)!==true) Response::error('Updating username failed!');
+			if (self::setUsername($username)===false) Response::error('Updating username failed!');
 
 			// Save password
-			if (self::setPassword($password)!==true) Response::error('Updating password failed!');
+			if (self::setPassword($password)===false) Response::error('Updating password failed!');
 
 			return true;
 

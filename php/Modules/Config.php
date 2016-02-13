@@ -13,7 +13,7 @@ final class Config {
 		if ($connection===false) return 'Warning: Connection failed!';
 
 		// Check if user can create the database before saving the configuration
-		if (!Database::createDatabase($connection, $name)) return 'Warning: Creation failed!';
+		if (Database::createDatabase($connection, $name)===false) return 'Warning: Creation failed!';
 
 		// Escape data
 		$host     = mysqli_real_escape_string($connection, $host);

@@ -55,7 +55,7 @@ final class Guest extends Access {
 
 		$album = new Album($_POST['albumID']);
 
-		if ($album->getPublic()) {
+		if ($album->getPublic()===true) {
 
 			// Album public
 			if ($album->checkPassword($_POST['password'])) Response::json($album->get());
@@ -76,7 +76,7 @@ final class Guest extends Access {
 
 		$album = new Album($_POST['albumID']);
 
-		if ($album->getPublic()) {
+		if ($album->getPublic()===true) {
 
 			// Album public
 			if ($album->checkPassword($_POST['password'])) echo true;
