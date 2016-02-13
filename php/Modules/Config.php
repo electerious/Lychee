@@ -4,6 +4,13 @@ namespace Lychee\Modules;
 
 final class Config {
 
+	/**
+	 * Creates the configuration file.
+	 * @return true|string Returns true when successful.
+	 *                     Warning: Connection failed!
+	 *                     Warning: Creation failed!
+	 *                     Warning: Could not create file!
+	 */
 	public static function create($host, $user, $password, $name = 'lychee', $prefix = '') {
 
 		// Open a new connection to the MySQL server
@@ -24,8 +31,6 @@ final class Config {
 
 		// Save config.php
 $config = "<?php
-
-if(!defined('LYCHEE')) Response::error('Direct access is not allowed!');
 
 // Database configuration
 \$dbHost = '$host'; // Host of the database

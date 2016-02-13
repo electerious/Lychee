@@ -16,6 +16,9 @@ final class Database {
 		'030003' // 3.0.3
 	);
 
+	/**
+	 * @return object Returns a new or cached connection.
+	 */
 	public static function get() {
 
 		if (!self::$instance) {
@@ -36,6 +39,10 @@ final class Database {
 
 	}
 
+	/**
+	 * Exits on error.
+	 * @return boolean Returns true when successful.
+	 */
 	private function __construct($host, $user, $password, $name = 'lychee', $dbTablePrefix) {
 
 		// Check dependencies
@@ -63,8 +70,13 @@ final class Database {
 
 		$this->connection = $connection;
 
+		return true;
+
 	}
 
+	/**
+	 * @return object|false Returns the connection when successful.
+	 */
 	public static function connect($host = 'localhost', $user, $password) {
 
 		// Open a new connection to the MySQL server
@@ -77,6 +89,9 @@ final class Database {
 
 	}
 
+	/**
+	 * @return boolean Returns true when successful.
+	 */
 	private static function setCharset($connection) {
 
 		// Check dependencies
@@ -95,6 +110,9 @@ final class Database {
 
 	}
 
+	/**
+	 * @return boolean Returns true when successful.
+	 */
 	public static function createDatabase($connection, $name = 'lychee') {
 
 		// Check dependencies
@@ -113,6 +131,9 @@ final class Database {
 
 	}
 
+	/**
+	 * @return boolean Returns true when successful.
+	 */
 	private static function createTables($connection) {
 
 		// Check dependencies
@@ -238,6 +259,10 @@ final class Database {
 
 	}
 
+	/**
+	 * Exits when an update fails.
+	 * @return boolean Returns true when successful.
+	 */
 	private static function update($connection, $dbName) {
 
 		// Check dependencies
@@ -267,6 +292,9 @@ final class Database {
 
 	}
 
+	/**
+	 * @return boolean Returns true when successful.
+	 */
 	public static function setVersion($connection, $version) {
 
 		// Check dependencies
@@ -276,9 +304,13 @@ final class Database {
 		$result = self::execute($connection, $query, __METHOD__, __LINE__);
 
 		if ($result===false) return false;
+		return true;
 
 	}
 
+	/**
+	 * @return string Returns a escaped query.
+	 */
 	public static function prepare($connection, $query, array $data) {
 
 		// Check dependencies
@@ -345,6 +377,9 @@ final class Database {
 
 	}
 
+	/**
+	 * @return object|false Returns the results on success.
+	 */
 	public static function execute($connection, $query, $function, $line) {
 
 		// Check dependencies
