@@ -18,7 +18,7 @@ api.post = function(fn, params, callback) {
 
 	const success = (data) => {
 
-		setTimeout(() => loadingBar.hide(), 100)
+		setTimeout(loadingBar.hide, 100)
 
 		// Catch errors
 		if (typeof data==='string' && data.substring(0, 7)==='Error: ') {
