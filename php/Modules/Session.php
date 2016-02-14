@@ -50,7 +50,6 @@ final class Session {
 			unset($return['config']['login']);
 			unset($return['config']['location']);
 			unset($return['config']['imagick']);
-			unset($return['config']['medium']);
 			unset($return['config']['plugins']);
 
 		}

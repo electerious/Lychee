@@ -31,19 +31,6 @@ if (is_dir(LYCHEE_UPLOADS_MEDIUM)===false) {
 
 }
 
-// Add medium to settings
-$query  = Database::prepare($connection, "SELECT `key` FROM `?` WHERE `key` = 'medium' LIMIT 1", array(LYCHEE_TABLE_SETTINGS));
-$result = Database::execute($connection, $query, 'update_020700', __LINE__);
-
-if ($result->num_rows===0) {
-
-	$query  = Database::prepare($connection, "INSERT INTO `?` (`key`, `value`) VALUES ('medium', '1')", array(LYCHEE_TABLE_SETTINGS));
-	$result = Database::execute($connection, $query, 'update_020700', __LINE__);
-
-	if ($result===false) return false;
-
-}
-
 // Set version
 if (Database::setVersion($connection, '020700')===false) return false;
 

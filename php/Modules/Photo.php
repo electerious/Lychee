@@ -380,7 +380,7 @@ final class Photo {
 
 	/**
 	 * Creates a smaller version of a photo when its size is bigger than a preset size.
-	 * Photo must be big enough, medium must be activated and Imagick must be installed and activated.
+	 * Photo must be big enough and Imagick must be installed and activated.
 	 * @return boolean Returns true when successful.
 	 */
 	private function createMedium($url, $filename, $width, $height) {
@@ -413,11 +413,9 @@ final class Photo {
 		}
 
 		// Is photo big enough?
-		// Is medium activated?
 		// Is Imagick installed and activated?
 		if (($error===false)&&
 			($width>$newWidth||$height>$newHeight)&&
-			(Settings::get()['medium']==='1')&&
 			(extension_loaded('imagick')&&Settings::get()['imagick']==='1')) {
 
 			$newUrl = LYCHEE_UPLOADS_MEDIUM . $filename;

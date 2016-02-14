@@ -9,7 +9,6 @@ VALUES
   ('checkForUpdates','1'),
   ('sortingPhotos','ORDER BY id DESC'),
   ('sortingAlbums','ORDER BY id DESC'),
-  ('medium','1'),
   ('imagick','1'),
   ('dropboxKey',''),
   ('identifier',''),
