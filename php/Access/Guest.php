@@ -3,6 +3,7 @@
 namespace Lychee\Access;
 
 use Lychee\Modules\Album;
+use Lychee\Modules\Albums;
 use Lychee\Modules\Photo;
 use Lychee\Modules\Response;
 use Lychee\Modules\Session;
@@ -14,8 +15,10 @@ final class Guest extends Access {
 
 		switch ($fn) {
 
+			// Albums functions
+			case 'Albums::get':       self::getAlbumsAction(); break;
+
 			// Album functions
-			case 'Album::getAll':     self::getAlbumsAction(); break;
 			case 'Album::get':        self::getAlbumAction(); break;
 			case 'Album::getPublic':  self::checkAlbumAccessAction(); break;
 
@@ -37,14 +40,16 @@ final class Guest extends Access {
 
 	}
 
-	// Album functions
+	// Albums functions
 
 	private static function getAlbumsAction() {
 
-		$album = new Album(null);
-		Response::json($album->getAll(true));
+		$albums = new Albums();
+		Response::json($albums->get(true));
 
 	}
+
+	// Album functions
 
 	private static function getAlbumAction() {
 

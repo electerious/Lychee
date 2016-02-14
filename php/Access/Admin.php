@@ -3,6 +3,7 @@
 namespace Lychee\Access;
 
 use Lychee\Modules\Album;
+use Lychee\Modules\Albums;
 use Lychee\Modules\Import;
 use Lychee\Modules\Photo;
 use Lychee\Modules\Response;
@@ -16,8 +17,10 @@ final class Admin extends Access {
 
 		switch ($fn) {
 
+			// Albums functions
+			case 'Albums::get':             self::getAlbumsAction(); break;
+
 			// Album functions
-			case 'Album::getAll':           self::getAlbumsAction(); break;
 			case 'Album::get':              self::getAlbumAction(); break;
 			case 'Album::add':              self::addAlbumAction(); break;
 			case 'Album::setTitle':         self::setAlbumTitleAction(); break;
@@ -65,14 +68,16 @@ final class Admin extends Access {
 
 	}
 
-	// Album functions
+	// Albums functions
 
 	private static function getAlbumsAction() {
 
-		$album = new Album(null);
-		Response::json($album->getAll(false));
+		$albums = new Albums();
+		Response::json($albums->get(false));
 
 	}
+
+	// Album functions
 
 	private static function getAlbumAction() {
 
