@@ -115,10 +115,10 @@ lychee.login = function(data) {
 lychee.loginDialog = function() {
 
 	let msg = lychee.html`
-	          <form class='signIn' action='#'>
+	          <p class='signIn'>
 	              <input class='text' name='username' autocomplete='username' type='text' value='' placeholder='username' autocapitalize='off' autocorrect='off'>
 	              <input class='text' name='password' autocomplete='current-password' type='password' value='' placeholder='password'>
-	          </form>
+	          </p>
 	          <p class='version'>Lychee $${ lychee.version }<span> &#8211; <a target='_blank' href='$${ lychee.updateURL }'>Update available!</a><span></p>
 	          `
 
