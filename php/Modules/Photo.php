@@ -3,6 +3,7 @@
 namespace Lychee\Modules;
 
 use ZipArchive;
+use Imagick;
 
 final class Photo {
 

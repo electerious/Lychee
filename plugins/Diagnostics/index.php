@@ -9,6 +9,7 @@
 namespace Diagnostics;
 
 use Mysqli;
+use Imagick;
 use Lychee\Modules\Settings;
 
 $lychee = __DIR__ . '/../../';
