@@ -156,10 +156,9 @@ lychee.logout = function() {
 
 }
 
-lychee.goto = function(url) {
+lychee.goto = function(url = '') {
 
-	if (url===undefined) url = '#'
-	else                 url = '#' + url
+	url = '#' + url
 
 	history.pushState(null, null, url)
 	lychee.load()

@@ -386,7 +386,7 @@ upload.start = {
 
 						// Go back to the album overview to show the imported albums
 						if (visible.albums()) lychee.load()
-						else                  lychee.goto('')
+						else                  lychee.goto()
 
 						basicModal.close()
 

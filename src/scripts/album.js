@@ -55,7 +55,7 @@ album.load = function(albumID, refresh = false) {
 				} else {
 					// Album not public
 					lychee.content.show()
-					lychee.goto('')
+					lychee.goto()
 				}
 				return false
 			}
@@ -178,7 +178,7 @@ album.delete = function(albumIDs) {
 			} else {
 
 				albums.refresh()
-				lychee.goto('')
+				lychee.goto()
 
 			}
 

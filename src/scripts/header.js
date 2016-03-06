@@ -52,7 +52,7 @@ header.bind = function() {
 	header.dom('#button_trash')       .on(eventName, function() { photo.delete([ photo.getID() ]) })
 	header.dom('#button_archive')     .on(eventName, function() { album.getArchive(album.getID()) })
 	header.dom('#button_star')        .on(eventName, function() { photo.setStar([ photo.getID() ]) })
-	header.dom('#button_back_home')   .on(eventName, function() { lychee.goto('') })
+	header.dom('#button_back_home')   .on(eventName, function() { lychee.goto() })
 	header.dom('#button_back')        .on(eventName, function() { lychee.goto(album.getID()) })
 
 	header.dom('.header__search').on('keyup click', function() { search.find($(this).val()) })
