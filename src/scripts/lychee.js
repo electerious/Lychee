@@ -217,6 +217,7 @@ lychee.load = function() {
 
 		// Show Albums
 		if (visible.photo()) view.photo.hide()
+		lychee.content.show()
 		albums.load()
 
 	}
