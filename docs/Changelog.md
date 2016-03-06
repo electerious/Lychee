@@ -1,3 +1,29 @@
+## v3.1.0
+
+Released March ??, 2016
+
+**Warning**: It's no longer possible to update from Lychee versions older than 2.7.
+
+**Warning**: Plugin which use the plugin API of Lychee must be updated to work with the new back-end.
+
+**Notice**: It's no longer possible to edit the thumb quality in the database.
+
+**Notice**: It's no longer possible to disable the creation of medium-sized photos when Imagick is installed on the system.
+
+This updates includes a huge rewrite of the back-end. We are now using namespaces and the singleton pattern for Settings::get(), Database::get() and Plugins::get(). Everything is way better documented thanks to PHPDoc comments. Ugly `#` comments have been replaced with the more known `//`. Unused functions are gone and returns are more strict. We also added a handy module to output messages. Failed database updates and invalid queries will be saved to the log.
+
+- `New` Empty titles for albums
+- `Improved` Error messages and log output
+- `Improved` Back-end modules and plugins
+- `Improved` Database connect function and update mechanism
+- `Improved` Default photo title now "Untitled"
+- `Improved` Move to next photo after after moving a picture (#437)
+- `Improved` Return to album overview when canceling album password input
+- `Fixed` session_start() after sending headers (#433)
+- `Fixed` error when deleting last open photo in album
+- `Fixed` Photo sometimes not loading when visiting directly
+- `Fixed` Move album, merge album and switch album/photo menus no longer show empty titles for untitled albums/photos
+
 ## v3.0.9
 
 Released January 10, 2016
