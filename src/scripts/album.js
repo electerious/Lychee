@@ -157,11 +157,9 @@ album.delete = function(albumIDs) {
 
 	action.fn = function() {
 
-		let params
-
 		basicModal.close()
 
-		params = {
+		let params = {
 			albumIDs: albumIDs.join()
 		}
 
