@@ -594,7 +594,7 @@ album.merge = function(albumIDs) {
 				lychee.error(null, params, data)
 			} else {
 				albums.refresh()
-				albums.load()
+				lychee.goto()
 			}
 
 		})

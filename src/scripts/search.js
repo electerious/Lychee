@@ -94,7 +94,7 @@ search.reset = function() {
 		search.hash = null
 
 		lychee.animate('.divider', 'fadeOut')
-		albums.load()
+		lychee.goto()
 
 	}
 
