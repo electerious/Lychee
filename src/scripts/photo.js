@@ -39,7 +39,7 @@ photo.load = function(photoID, albumID) {
 
 		if (data==='Warning: Photo private!') {
 			lychee.content.show()
-			lychee.goto('')
+			lychee.goto()
 			return false
 		}
 
