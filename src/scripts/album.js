@@ -110,8 +110,6 @@ album.add = function() {
 
 		basicModal.close()
 
-		if (title.length===0) title = 'Untitled'
-
 		let params = {
 			title
 		}
