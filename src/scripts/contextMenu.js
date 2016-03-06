@@ -100,10 +100,14 @@ contextMenu.albumTitle = function(albumID, e) {
 			$.each(data.albums, function() {
 
 				if (!this.thumbs[0]) this.thumbs[0] = 'src/images/no_cover.svg'
+				if (this.title==='') this.title = 'Untitled'
 
-				let title = lychee.html`<img class='cover' width='16' height='16' src='$${ this.thumbs[0] }'><div class='title'>$${ this.title }</div>`
+				let html = lychee.html`<img class='cover' width='16' height='16' src='$${ this.thumbs[0] }'><div class='title'>$${ this.title }</div>`
 
-				if (this.id!=albumID) items.push({ title, fn: () => lychee.goto(this.id) })
+				if (this.id!=albumID) items.push({
+					title: html,
+					fn: () => lychee.goto(this.id)
+				})
 
 			})
 
@@ -130,10 +134,14 @@ contextMenu.mergeAlbum = function(albumID, e) {
 			$.each(data.albums, function() {
 
 				if (!this.thumbs[0]) this.thumbs[0] = 'src/images/no_cover.svg'
+				if (this.title==='') this.title = 'Untitled'
 
-				let title = lychee.html`<img class='cover' width='16' height='16' src='$${ this.thumbs[0] }'><div class='title'>$${ this.title }</div>`
+				let html = lychee.html`<img class='cover' width='16' height='16' src='$${ this.thumbs[0] }'><div class='title'>$${ this.title }</div>`
 
-				if (this.id!=albumID) items.push({ title, fn: () => album.merge([ albumID, this.id ]) })
+				if (this.id!=albumID) items.push({
+					title: html,
+					fn: () => album.merge([ albumID, this.id ])
+				})
 
 			})
 
@@ -206,9 +214,14 @@ contextMenu.photoTitle = function(albumID, photoID, e) {
 		// Generate list of albums
 		$.each(data.content, function(index) {
 
-			let title = lychee.html`<img class='cover' width='16' height='16' src='$${ this.thumbUrl }'><div class='title'>$${ this.title }</div>`
+			if (this.title==='') this.title = 'Untitled'
 
-			if (this.id!=photoID) items.push({ title, fn: () => lychee.goto(albumID + '/' + this.id) })
+			let html = lychee.html`<img class='cover' width='16' height='16' src='$${ this.thumbUrl }'><div class='title'>$${ this.title }</div>`
+
+			if (this.id!=photoID) items.push({
+				title: html,
+				fn: () => lychee.goto(albumID + '/' + this.id)
+			})
 
 		})
 
@@ -253,10 +266,14 @@ contextMenu.move = function(photoIDs, e) {
 			$.each(data.albums, function() {
 
 				if (!this.thumbs[0]) this.thumbs[0] = 'src/images/no_cover.svg'
+				if (this.title==='') this.title = 'Untitled'
 
-				let title = lychee.html`<img class='cover' width='16' height='16' src='$${ this.thumbs[0] }'><div class='title'>$${ this.title }</div>`
+				let html = lychee.html`<img class='cover' width='16' height='16' src='$${ this.thumbs[0] }'><div class='title'>$${ this.title }</div>`
 
-				if (this.id!=album.getID()) items.push({ title, fn: () => photo.setAlbum(photoIDs, this.id) })
+				if (this.id!=album.getID()) items.push({
+					title: html,
+					fn: () => photo.setAlbum(photoIDs, this.id)
+				})
 
 			})
 
