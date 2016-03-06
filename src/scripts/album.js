@@ -206,6 +206,9 @@ album.delete = function(albumIDs) {
 		if (album.json)       albumTitle = album.json.title
 		else if (albums.json) albumTitle = albums.getByID(albumIDs).title
 
+		// Fallback for album without a title
+		if (albumTitle==='') albumTitle = 'Untitled'
+
 		msg = lychee.html`<p>Are you sure you want to delete the album '$${ albumTitle }' and all of the photos it contains? This action can't be undone!</p>`
 
 	} else {
@@ -248,18 +251,13 @@ album.setTitle = function(albumIDs) {
 		if (album.json)       oldTitle = album.json.title
 		else if (albums.json) oldTitle = albums.getByID(albumIDs).title
 
-		if (!oldTitle) oldTitle = ''
-
 	}
 
 	const action = function(data) {
 
-		let newTitle = data.title
-
 		basicModal.close()
 
-		// Set title to Untitled when empty
-		newTitle = (newTitle==='') ? 'Untitled' : newTitle
+		let newTitle = data.title
 
 		if (visible.album()) {
 
@@ -317,7 +315,7 @@ album.setTitle = function(albumIDs) {
 
 album.setDescription = function(albumID) {
 
-	let oldDescription = album.json.description.replace(/'/g, '&apos;')
+	let oldDescription = album.json.description
 
 	const action = function(data) {
 
@@ -564,17 +562,17 @@ album.merge = function(albumIDs) {
 
 	// Get title of first album
 	if (albums.json) title = albums.getByID(albumIDs[0]).title
-	if (!title)      title = ''
 
-	title = title.replace(/'/g, '&apos;')
+	// Fallback for first album without a title
+	if (title==='') title = 'Untitled'
 
 	if (albumIDs.length===2) {
 
 		// Get title of second album
 		if (albums.json) sTitle = albums.getByID(albumIDs[1]).title
 
-		if (!sTitle) sTitle = ''
-		sTitle = sTitle.replace(/'/g, '&apos;')
+		// Fallback for second album without a title
+		if (sTitle==='') sTitle = 'Untitled'
 
 		msg = lychee.html`<p>Are you sure you want to merge the album '$${ sTitle }' into the album '$${ title }'?</p>`
 
