@@ -24,6 +24,21 @@ photo.getID = function() {
 
 photo.load = function(photoID, albumID) {
 
+	const checkContent = function() {
+		if (album.json!=null) photo.load(photoID, albumID)
+		else                  setTimeout(checkContent, 100)
+	}
+
+	const checkPasswd = function() {
+		if (password.value!=='') photo.load(photoID, albumID)
+		else                     setTimeout(checkPasswd, 200)
+	}
+
+	if (album.json==null) {
+		checkContent()
+		return false
+	}
+
 	let params = {
 		photoID,
 		albumID,
@@ -31,11 +46,6 @@ photo.load = function(photoID, albumID) {
 	}
 
 	api.post('Photo::get', params, function(data) {
-
-		const checkPasswd = function() {
-			if (password.value!=='') photo.load(photoID, albumID)
-			else                     setTimeout(checkPasswd, 250)
-		}
 
 		if (data==='Warning: Photo private!') {
 			lychee.content.show()
