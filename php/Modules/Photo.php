@@ -882,7 +882,7 @@ final class Photo {
 	 * Sets the title of a photo.
 	 * @return boolean Returns true when successful.
 	 */
-	public function setTitle($title) {
+	public function setTitle($title = 'Untitled') {
 
 		// Check dependencies
 		Validator::required(isset($this->photoIDs), __METHOD__);
