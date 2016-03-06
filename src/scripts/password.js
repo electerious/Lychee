@@ -23,6 +23,7 @@ password.get = function(albumID, callback, passwd) {
 	} else if (passwd==null) {
 
 		// Request password
+
 		password.getDialog(albumID, callback)
 
 	} else {
