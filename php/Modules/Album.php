@@ -33,15 +33,16 @@ final class Album {
 		$visible = 1;
 
 		// Database
-		$sysstamp = time();
-		$query    = Database::prepare(Database::get(), "INSERT INTO ? (title, sysstamp, public, visible) VALUES ('?', '?', '?', '?')", array(LYCHEE_TABLE_ALBUMS, $title, $sysstamp, $public, $visible));
-		$result   = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
+		$sysstamp  = time();
+		$query     = Database::prepare(Database::get(), "INSERT INTO ? (title, sysstamp, public, visible) VALUES ('?', '?', '?', '?')", array(LYCHEE_TABLE_ALBUMS, $title, $sysstamp, $public, $visible));
+		$result    = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
+		$insertID  = Database::get()->insert_id;
 
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		if ($result===false) return false;
-		return Database::get()->insert_id;
+		return $insertID;
 
 	}
 
