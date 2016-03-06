@@ -192,8 +192,8 @@ photo.delete = function(photoIDs) {
 
 	action.fn = function() {
 
-		let nextPhoto
-		let previousPhoto
+		let nextPhoto = null
+		let previousPhoto = null
 
 		basicModal.close()
 
@@ -219,8 +219,8 @@ photo.delete = function(photoIDs) {
 
 		// Go to next photo if there is a next photo and
 		// next photo is not the current one. Show album otherwise.
-		if (visible.photo() && nextPhoto!=='' && nextPhoto!==photo.getID()) lychee.goto(album.getID() + '/' + nextPhoto)
-		else if (!visible.albums())                                         lychee.goto(album.getID())
+		if (visible.photo() && nextPhoto!=null && nextPhoto!==photo.getID()) lychee.goto(album.getID() + '/' + nextPhoto)
+		else if (!visible.albums())                                          lychee.goto(album.getID())
 
 		let params = {
 			photoIDs: photoIDs.join()
