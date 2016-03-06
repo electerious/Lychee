@@ -335,13 +335,11 @@ photo.setTitle = function(photoIDs) {
 
 photo.setAlbum = function(photoIDs, albumID) {
 
-	let nextPhoto
-	let previousPhoto
+	let nextPhoto = null
+	let previousPhoto = null
 
 	if (!photoIDs) return false
 	if (photoIDs instanceof Array===false) photoIDs = [ photoIDs ]
-
-	if (visible.photo) lychee.goto(album.getID())
 
 	photoIDs.forEach(function(id, index, array) {
 
@@ -362,6 +360,11 @@ photo.setAlbum = function(photoIDs, albumID) {
 	})
 
 	albums.refresh()
+
+	// Go to next photo if there is a next photo and
+	// next photo is not the current one. Show album otherwise.
+	if (visible.photo() && nextPhoto!=null && nextPhoto!==photo.getID()) lychee.goto(album.getID() + '/' + nextPhoto)
+	else if (!visible.albums())                                          lychee.goto(album.getID())
 
 	let params = {
 		photoIDs: photoIDs.join(),
