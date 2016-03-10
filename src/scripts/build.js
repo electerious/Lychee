@@ -120,11 +120,11 @@ build.imageview = function(data, visibleControls) {
 
 	if (hasMedium===false) {
 
-		html += lychee.html`<div id='image' class='$${ visibleControls===true ? '' : 'full' }'><div><img src='$${ data.url }' draggable='false'></div></div>`
+		html += lychee.html`<img id='image' class='$${ visibleControls===true ? '' : 'full' }' src='$${ data.url }' draggable='false'>`
 
 	} else {
 
-		html += lychee.html`<div id='image' class='$${ visibleControls===true ? '' : 'full' }'><div><img src='$${ data.url }' srcset='$${ data.medium } 1920w, $${ data.url } $${ data.width }w' draggable='false'></div></div>`
+		html += lychee.html`<img id='image' class='$${ visibleControls===true ? '' : 'full' }' src='$${ data.url }' srcset='$${ data.medium } 1920w, $${ data.url } $${ data.width }w' draggable='false'>`
 
 	}
 
