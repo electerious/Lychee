@@ -4,7 +4,7 @@ Released March ??, 2016
 
 **Warning**: It's no longer possible to update from Lychee versions older than 2.7.
 
-**Warning**: Plugin which use the plugin API of Lychee must be updated to work with the new back-end.
+**Warning**: Plugins which use the plugin API of Lychee must be updated to work with the new back-end.
 
 **Notice**: It's no longer possible to edit the thumb quality in the database.
 
