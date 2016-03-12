@@ -223,7 +223,7 @@ sidebar.createStructure.album = function(data) {
 	let editable     = false
 	let structure    = {}
 	let _public      = ''
-	let visible      = ''
+	let hidden       = ''
 	let downloadable = ''
 	let password     = ''
 
@@ -242,14 +242,14 @@ sidebar.createStructure.album = function(data) {
 
 	}
 
-	// Set value for visible
+	// Set value for hidden
 	switch (data.visible) {
 
-		case '0' : visible = 'No'
+		case '0' : hidden = 'Yes'
 		           break
-		case '1' : visible = 'Yes'
+		case '1' : hidden = 'No'
 		           break
-		default  : visible = '-'
+		default  : hidden = '-'
 		           break
 
 	}
@@ -301,7 +301,7 @@ sidebar.createStructure.album = function(data) {
 		type  : sidebar.types.DEFAULT,
 		rows  : [
 			{ title: 'Public',       value: _public },
-			{ title: 'Visible',      value: visible },
+			{ title: 'Hidden',       value: hidden },
 			{ title: 'Downloadable', value: downloadable },
 			{ title: 'Password',     value: password }
 		]

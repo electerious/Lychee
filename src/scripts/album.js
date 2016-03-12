@@ -391,11 +391,11 @@ album.setPublic = function(albumID, modal, e) {
 		          <form>
 		              <div class='choice'>
 		                  <label>
-		                      <input type='checkbox' name='visible'>
+		                      <input type='checkbox' name='hidden'>
 		                      <span class='checkbox'>${ build.iconic('check') }</span>
-		                      <span class='label'>Visible</span>
+		                      <span class='label'>Hidden</span>
 		                  </label>
-		                  <p>Listed to visitors of your Lychee.</p>
+		                  <p>Only people with the direct link can view the album.</p>
 		              </div>
 		              <div class='choice'>
 		                  <label>
@@ -411,7 +411,7 @@ album.setPublic = function(albumID, modal, e) {
 		                      <span class='checkbox'>${ build.iconic('check') }</span>
 		                      <span class='label'>Password protected</span>
 		                  </label>
-		                  <p>Only accessible with a valid password.</p>
+		                  <p>Album only accessible with a valid password.</p>
 		                  <input class='text' name='passwordtext' type='password' placeholder='password' value=''>
 		              </div>
 		          </form>
@@ -431,9 +431,8 @@ album.setPublic = function(albumID, modal, e) {
 			}
 		})
 
-		// Active visible by default (public = 0)
-		if ((album.json.public==='1' && album.json.visible==='1') || (album.json.public==='0')) $('.basicModal .choice input[name="visible"]').click()
-		if (album.json.downloadable==='1')                                                      $('.basicModal .choice input[name="downloadable"]').click()
+		if (album.json.public==='1' && album.json.visible==='0') $('.basicModal .choice input[name="hidden"]').click()
+		if (album.json.downloadable==='1')                       $('.basicModal .choice input[name="downloadable"]').click()
 
 		$('.basicModal .choice input[name="password"]').on('change', function() {
 
@@ -453,8 +452,8 @@ album.setPublic = function(albumID, modal, e) {
 		album.json.public = '1'
 
 		// Set visible
-		if ($('.basicModal .choice input[name="visible"]:checked').length===1) album.json.visible = '1'
-		else                                                                   album.json.visible = '0'
+		if ($('.basicModal .choice input[name="hidden"]:checked').length===1) album.json.visible = '0'
+		else                                                                  album.json.visible = '1'
 
 		// Set downloadable
 		if ($('.basicModal .choice input[name="downloadable"]:checked').length===1) album.json.downloadable = '1'
@@ -482,12 +481,12 @@ album.setPublic = function(albumID, modal, e) {
 	// Set data and refresh view
 	if (visible.album()) {
 
-		album.json.visible      = (album.json.public==='0') ? '0' : album.json.visible
+		album.json.visible      = (album.json.public==='0') ? '1' : album.json.visible
 		album.json.downloadable = (album.json.public==='0') ? '0' : album.json.downloadable
 		album.json.password     = (album.json.public==='0') ? '0' : album.json.password
 
 		view.album.public()
-		view.album.visible()
+		view.album.hidden()
 		view.album.downloadable()
 		view.album.password()
 

@@ -246,10 +246,10 @@ view.album = {
 
 	},
 
-	visible: function() {
+	hidden: function() {
 
-		if (album.json.visible==='1') sidebar.changeAttr('visible', 'Yes')
-		else                          sidebar.changeAttr('visible', 'No')
+		if (album.json.visible==='1') sidebar.changeAttr('hidden', 'No')
+		else                          sidebar.changeAttr('hidden', 'Yes')
 
 	},
 
