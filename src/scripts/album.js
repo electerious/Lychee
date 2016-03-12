@@ -395,7 +395,7 @@ album.setPublic = function(albumID, modal, e) {
 		                      <span class='checkbox'>${ build.iconic('check') }</span>
 		                      <span class='label'>Hidden</span>
 		                  </label>
-		                  <p>Only people with the direct link can view the album.</p>
+		                  <p>Only people with the direct link can view this album.</p>
 		              </div>
 		              <div class='choice'>
 		                  <label>
