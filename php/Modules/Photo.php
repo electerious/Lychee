@@ -139,8 +139,7 @@ final class Photo {
 		}
 
 		// Generate id
-		$id = str_replace('.', '', microtime(true));
-		while(strlen($id)<14) $id .= 0;
+		$id = generateID();
 
 		// Set paths
 		$tmp_name   = $file['tmp_name'];
@@ -1149,8 +1148,7 @@ final class Photo {
 		while ($photo = $photos->fetch_object()) {
 
 			// Generate id
-			$id = str_replace('.', '', microtime(true));
-			while(strlen($id)<14) $id .= 0;
+			$id = generateID();
 
 			// Duplicate entry
 			$values = array(LYCHEE_TABLE_PHOTOS, $id, LYCHEE_TABLE_PHOTOS, $photo->id);

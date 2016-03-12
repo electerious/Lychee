@@ -29,20 +29,20 @@ final class Album {
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		// Properties
-		$public  = 0;
-		$visible = 1;
+		$id       = generateID();
+		$sysstamp = time();
+		$public   = 0;
+		$visible  = 1;
 
 		// Database
-		$sysstamp  = time();
-		$query     = Database::prepare(Database::get(), "INSERT INTO ? (title, sysstamp, public, visible) VALUES ('?', '?', '?', '?')", array(LYCHEE_TABLE_ALBUMS, $title, $sysstamp, $public, $visible));
-		$result    = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
-		$insertID  = Database::get()->insert_id;
+		$query  = Database::prepare(Database::get(), "INSERT INTO ? (id, title, sysstamp, public, visible) VALUES ('?', '?', '?', '?', '?')", array(LYCHEE_TABLE_ALBUMS, $id, $title, $sysstamp, $public, $visible));
+		$result = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		if ($result===false) return false;
-		return $insertID;
+		return $id;
 
 	}
 
