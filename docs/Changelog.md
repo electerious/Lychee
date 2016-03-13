@@ -13,7 +13,10 @@ Released March ??, 2016
 This updates includes a huge rewrite of the back-end. We are now using namespaces and the singleton pattern for Settings::get(), Database::get() and Plugins::get(). Everything is way better documented thanks to PHPDoc comments. Ugly `#` comments have been replaced with the more known `//`. Unused functions are gone and returns are more strict. We also added a handy module to output messages. Failed database updates and invalid queries will be saved to the log.
 
 - `New` Empty titles for albums
+- `New` Share albums as hidden so they are only viewable with a direct link (#27)
 - `Improved` Error messages and log output
+- `Improved` The search shows albums above photos (#434)
+- `Improved` Album id now based on the current microtime (#27)
 - `Improved` Back-end modules and plugins
 - `Improved` Database connect function and update mechanism
 - `Improved` Default photo title now "Untitled"
