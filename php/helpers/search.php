@@ -3,6 +3,7 @@
 use Lychee\Modules\Album;
 use Lychee\Modules\Database;
 use Lychee\Modules\Photo;
+use Lychee\Modules\Settings;
 
 /**
  * @return array|false Returns an array with albums and photos.
