@@ -356,6 +356,10 @@ final class Database {
 
 			}
 
+			// Put a backslash in front of every character that is part of the regular
+			// expression syntax. Avoids a backreference when using preg_replace.
+			$value = preg_quote($value);
+
 			// Replace
 			$query = preg_replace('/\?/', $value, $query, 1);
 
