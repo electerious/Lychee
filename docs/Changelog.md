@@ -22,6 +22,7 @@ This updates includes a huge rewrite of the back-end. We are now using namespace
 - `Improved` Default photo title now "Untitled"
 - `Improved` Move to next photo after after moving a picture (#437)
 - `Improved` Return to album overview when canceling album password input
+- `Fixed` incorrect escaping when using backslashes
 - `Fixed` session_start() after sending headers (#433)
 - `Fixed` error when deleting last open photo in album
 - `Fixed` Photo sometimes not loading when visiting directly
