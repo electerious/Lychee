@@ -47,7 +47,7 @@ search.find = function(term) {
 				if (albumsData==='' && photosData==='') html = 'error'
 				else if (albumsData==='')               html = build.divider('Photos') + photosData
 				else if (photosData==='')               html = build.divider('Albums') + albumsData
-				else                                    html = build.divider('Photos') + photosData + build.divider('Albums') + albumsData
+				else                                    html = build.divider('Albums') + albumsData + build.divider('Photos') + photosData
 
 				// Only refresh view when search results are different
 				if (search.hash!==data.hash) {
