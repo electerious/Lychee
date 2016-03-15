@@ -631,13 +631,13 @@ class Photo extends Module {
 
 			# Use takestamp
 			$photo['cameraDate']	= '1';
-			$photo['sysdate']		= date('d F Y', $data['takestamp']);
+			$photo['sysdate']		= strftime('%d %B %Y', $data['takestamp']);
 
 		} else {
 
 			# Use sysstamp from the id
 			$photo['cameraDate']	= '0';
-			$photo['sysdate']		= date('d F Y', substr($data['id'], 0, -4));
+			$photo['sysdate']		= strftime('%d %B %Y', substr($data['id'], 0, -4));
 
 		}
 
@@ -665,8 +665,8 @@ class Photo extends Module {
 		$photo	= $photos->fetch_assoc();
 
 		# Parse photo
-		$photo['sysdate'] = date('d M. Y', substr($photo['id'], 0, -4));
-		if (strlen($photo['takestamp'])>1) $photo['takedate'] = date('d M. Y', $photo['takestamp']);
+		$photo['sysdate'] = strftime('%d %b. %Y', substr($photo['id'], 0, -4));
+		if (strlen($photo['takestamp'])>1) $photo['takedate'] = strftime('%d %b. %Y', $photo['takestamp']);
 
 		# Parse medium
 		if ($photo['medium']==='1')	$photo['medium'] = LYCHEE_URL_UPLOADS_MEDIUM . $photo['url'];

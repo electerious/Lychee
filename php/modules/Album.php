@@ -76,7 +76,7 @@ class Album extends Module {
 		if (isset($data['downloadable']))	$album['downloadable'] = $data['downloadable'];
 
 		# Parse date
-		$album['sysdate'] = date('F Y', $data['sysstamp']);
+		$album['sysdate'] = strftime('%B %Y', $data['sysstamp']);
 
 		# Parse password
 		$album['password'] = ($data['password']=='' ? '0' : '1');
