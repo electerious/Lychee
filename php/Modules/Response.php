@@ -16,10 +16,9 @@ final class Response {
 
 	}
 
-	public static function json($str) {
-
-		exit(json_encode($str));
-
+	// JSON_NUMERIC_CHECK ensure the albums/photos ids will be converted from strings to integers
+	public static function json($str, $options = JSON_NUMERIC_CHECK) { 
+		exit(json_encode($str, $options));
 	}
 
 }
