@@ -22,12 +22,6 @@ All settings are stored in the database. You can change the properties manually,
 
 Your photos and albums are protected by a username and password. If both rows are empty, Lychee will prompt you to set them.
 
-#### Thumb Quality
-
-	thumbQuality = [0-100]
-
-Less means an inferiority quality of your thumbs, but faster loading. More means a better quality of your thumbs, but slower loading. The default value is 90. The allowed values are between 0 and 100.
-
 #### Check For Updates
 
 	checkForUpdates = [0|1]
@@ -57,12 +51,6 @@ This key is required to use the Dropbox import feature from your server. Lychee 
 	imagick = [0|1]
 
 If `1`, Lychee will use Imagick when available. Disable [Imagick](http://www.imagemagick.org) if you have problems or if you are using an outdated version. Lychee will use [GD](http://php.net/manual/en/book.image.php) when Imagick is disabled or not available.
-
-#### Medium
-
-	medium = [0|1]
-
-If `1`, Lychee will create a second, smaller version of your photo. This feature requires [Imagick](http://www.imagemagick.org) on your server and an activated `imagick` option the the settings table.
 
 #### Skip Duplicates on Upload
 

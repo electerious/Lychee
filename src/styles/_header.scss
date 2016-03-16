@@ -19,7 +19,7 @@
 		background: none;
 		border-bottom: none;
 
-		.header__error { background-color: rgba(10, 10, 10, .99); }
+		&.header--error { background-color: rgba(10, 10, 10, .99); }
 	}
 
 	// Toolbars -------------------------------------------------------------- //

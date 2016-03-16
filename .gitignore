@@ -7,12 +7,13 @@ uploads/big/*
 uploads/import/*
 uploads/medium/*
 uploads/thumb/*
-plugins/*
 
 !uploads/big/index.html
 !uploads/import/index.html
 !uploads/medium/index.html
 !uploads/thumb/index.html
 
-!plugins/check/
-!plugins/displaylog/
+plugins/*
+
+!plugins/Diagnostics/
+!plugins/Log/

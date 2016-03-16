@@ -1,33 +1,24 @@
 <?php
 
-###
-# @name			Autoload
-# @copyright	2015 by Tobias Reich
-###
+spl_autoload_register(function($class) {
 
-if (!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
+	$classPath = str_replace('Lychee\\', '', $class);
+	$classPath = str_replace('\\', DIRECTORY_SEPARATOR, $classPath);
 
-function lycheeAutoloaderModules($class_name) {
+	$file = LYCHEE . 'php/' . $classPath . '.php';
 
-	$modules = array('Album', 'Database', 'Import', 'Log', 'Module', 'Photo', 'Plugins', 'Session', 'Settings');
-	if (!in_array($class_name, $modules)) return false;
+	if (file_exists($file)===true) require $file;
 
-	$file = LYCHEE . 'php/modules/' . $class_name . '.php';
-	if (file_exists($file)!==false) require $file;
+});
 
-}
+spl_autoload_register(function($class) {
 
-function lycheeAutoloaderAccess($class_name) {
+	$classPath = str_replace('\\', DIRECTORY_SEPARATOR, $class);
 
-	$access = array('Access', 'Admin', 'Guest', 'Installation');
-	if (!in_array($class_name, $access)) return false;
+	$file = LYCHEE . 'plugins/' . $classPath . '.php';
 
-	$file = LYCHEE . 'php/access/' . $class_name . '.php';
-	if (file_exists($file)!==false) require $file;
+	if (file_exists($file)===true) require $file;
 
-}
-
-spl_autoload_register('lycheeAutoloaderModules');
-spl_autoload_register('lycheeAutoloaderAccess');
+});
 
 ?>

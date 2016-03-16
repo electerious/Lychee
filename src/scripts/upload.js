@@ -40,16 +40,16 @@ upload.start = {
 
 	local: function(files) {
 
-		let albumID = album.getID(),
-		    error   = false,
-		    warning = false
+		let albumID = album.getID()
+		let error   = false
+		let warning = false
 
 		const process = function(files, file) {
 
-			let formData     = new FormData(),
-				xhr          = new XMLHttpRequest(),
-				pre_progress = 0,
-				progress     = 0
+			let formData     = new FormData()
+			let xhr          = new XMLHttpRequest()
+			let pre_progress = 0
+			let progress     = 0
 
 			const finish = function() {
 
@@ -115,23 +115,22 @@ upload.start = {
 
 			formData.append('function', 'Photo::add')
 			formData.append('albumID', albumID)
-			formData.append('tags', '')
 			formData.append(0, file)
 
 			xhr.open('POST', api.path)
 
 			xhr.onload = function() {
 
-				let wait      = false,
-				    errorText = ''
+				let wait      = false
+				let errorText = ''
 
 				file.ready = true
 
 				// Set status
-				if (xhr.status===200 && xhr.responseText==='1') {
+				if (xhr.status===200 && xhr.responseText==='true') {
 
 					// Success
-					$('.basicModal .rows .row:nth-child(' + (file.num+1) + ') .status')
+					$('.basicModal .rows .row:nth-child(' + (file.num + 1) + ') .status')
 						.html('Finished')
 						.addClass('success')
 
@@ -143,7 +142,7 @@ upload.start = {
 						error     = true
 
 						// Error Status
-						$('.basicModal .rows .row:nth-child(' + (file.num+1) + ') .status')
+						$('.basicModal .rows .row:nth-child(' + (file.num + 1) + ') .status')
 							.html('Failed')
 							.addClass('error')
 
@@ -153,7 +152,7 @@ upload.start = {
 						warning   = true
 
 						// Warning Status
-						$('.basicModal .rows .row:nth-child(' + (file.num+1) + ') .status')
+						$('.basicModal .rows .row:nth-child(' + (file.num + 1) + ') .status')
 							.html('Skipped')
 							.addClass('warning')
 
@@ -163,13 +162,13 @@ upload.start = {
 						error     = true
 
 						// Error Status
-						$('.basicModal .rows .row:nth-child(' + (file.num+1) + ') .status')
+						$('.basicModal .rows .row:nth-child(' + (file.num + 1) + ') .status')
 							.html('Failed')
 							.addClass('error')
 
 					}
 
-					$('.basicModal .rows .row:nth-child(' + (file.num+1) + ') p.notice')
+					$('.basicModal .rows .row:nth-child(' + (file.num + 1) + ') p.notice')
 						.html(errorText)
 						.show()
 
@@ -210,11 +209,11 @@ upload.start = {
 
 					// Scroll to the uploading file
 					let scrollPos = 0
-					if ((file.num+1)>4) scrollPos = (file.num + 1 - 4) * 40
+					if ((file.num + 1)>4) scrollPos = (file.num + 1 - 4) * 40
 					$('.basicModal .rows').scrollTop(scrollPos)
 
 					// Set status to processing
-					$('.basicModal .rows .row:nth-child(' + (file.num+1) + ') .status').html('Processing')
+					$('.basicModal .rows .row:nth-child(' + (file.num + 1) + ') .status').html('Processing')
 
 					// Upload next file
 					if (file.next!=null) process(files, file.next)
@@ -236,7 +235,7 @@ upload.start = {
 			files[i].ready     = false
 			files[i].supported = true
 
-			if (i < files.length-1) files[i].next = files[i+1]
+			if (i < files.length-1) files[i].next = files[i + 1]
 			else                    files[i].next = null
 
 			// Check if file is supported
@@ -387,7 +386,7 @@ upload.start = {
 
 						// Go back to the album overview to show the imported albums
 						if (visible.albums()) lychee.load()
-						else                  lychee.goto('')
+						else                  lychee.goto()
 
 						basicModal.close()
 
@@ -480,7 +479,7 @@ upload.start = {
 			}
 
 			// Remove last comma
-			links = links.substr(0, links.length-1)
+			links = links.substr(0, links.length - 1)
 
 			upload.show('Importing from Dropbox', files, function() {
 

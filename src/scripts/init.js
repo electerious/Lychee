@@ -24,38 +24,38 @@ $(document).ready(function() {
 
 	// Keyboard
 	Mousetrap
-		.bind('left', function() {
+		.bind([ 'left' ], function() {
 			if (visible.photo()) { $('#imageview a#previous').click(); return false }
 		})
-		.bind('right', function() {
+		.bind([ 'right' ], function() {
 			if (visible.photo()) { $('#imageview a#next').click(); return false }
 		})
-		.bind('u', function() {
+		.bind([ 'u' ], function() {
 			if (!visible.photo()) { $('#upload_files').click(); return false }
 		})
-		.bind(['s', 'f'], function() {
+		.bind([ 's', 'f' ], function() {
 			if (visible.photo())       { header.dom('#button_star').click(); return false }
 			else if (visible.albums()) { header.dom('.header__search').focus(); return false }
 		})
-		.bind('r', function() {
+		.bind([ 'r' ], function() {
 			if (visible.album())      { album.setTitle(album.getID()); return false }
 			else if (visible.photo()) { photo.setTitle([photo.getID()]); return false }
 		})
-		.bind('d', function() {
+		.bind([ 'd' ], function() {
 			if (visible.photo())      { photo.setDescription(photo.getID()); return false }
 			else if (visible.album()) { album.setDescription(album.getID()); return false }
 		})
-		.bind('t', function() {
+		.bind([ 't' ], function() {
 			if (visible.photo()) { photo.editTags([photo.getID()]); return false }
 		})
-		.bind('i', function() {
+		.bind([ 'i' ], function() {
 			if (!visible.multiselect()) { sidebar.toggle(); return false }
 		})
-		.bind(['command+backspace', 'ctrl+backspace'], function() {
+		.bind([ 'command+backspace', 'ctrl+backspace' ], function() {
 			if (visible.photo() && basicModal.visible()===false)      { photo.delete([photo.getID()]); return false }
 			else if (visible.album() && basicModal.visible()===false) { album.delete([album.getID()]); return false }
 		})
-		.bind(['command+a', 'ctrl+a'], function() {
+		.bind([ 'command+a', 'ctrl+a' ], function() {
 			if (visible.album() && basicModal.visible()===false)       { multiselect.selectAll(); return false }
 			else if (visible.albums() && basicModal.visible()===false) { multiselect.selectAll(); return false }
 		})
@@ -64,11 +64,11 @@ $(document).ready(function() {
 		if (basicModal.visible()===true) basicModal.action()
 	})
 
-	Mousetrap.bindGlobal(['esc', 'command+up'], function() {
+	Mousetrap.bindGlobal([ 'esc', 'command+up' ], function() {
 		if (basicModal.visible()===true)                                             basicModal.cancel()
 		else if (visible.contextMenu())                                              contextMenu.close()
 		else if (visible.photo())                                                    lychee.goto(album.getID())
-		else if (visible.album())                                                    lychee.goto('')
+		else if (visible.album())                                                    lychee.goto()
 		else if (visible.albums() && header.dom('.header__search').val().length!==0) search.reset()
 		return false
 	})

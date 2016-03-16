@@ -89,8 +89,8 @@ multiselect.resize = function(e) {
 	    multiselect.position.bottom === null ||
 	    multiselect.position.left   === null) return false
 
-	let newSize      = {},
-	    documentSize = {}
+	let newSize      = {}
+	let documentSize = {}
 
 	// Get the position of the mouse
 	let mousePos = {
@@ -114,7 +114,7 @@ multiselect.resize = function(e) {
 
 		// Do not leave the screen
 		newSize.height = mousePos.y - multiselect.position.top
-		if ((multiselect.position.top+newSize.height)>=documentSize.height) {
+		if ((multiselect.position.top + newSize.height)>=documentSize.height) {
 			newSize.height -= (multiselect.position.top + newSize.height) - documentSize.height + 2
 		}
 
@@ -136,7 +136,7 @@ multiselect.resize = function(e) {
 
 		// Do not leave the screen
 		newSize.width = mousePos.x - multiselect.position.left
-		if ((multiselect.position.left+newSize.width)>=documentSize.width) {
+		if ((multiselect.position.left + newSize.width)>=documentSize.width) {
 			newSize.width -= (multiselect.position.left + newSize.width) - documentSize.width + 2
 		}
 
@@ -167,8 +167,8 @@ multiselect.getSize = function() {
 
 	if (!visible.multiselect()) return false
 
-	let $elem  = $('#multiselect'),
-	    offset = $elem.offset()
+	let $elem  = $('#multiselect')
+	let offset = $elem.offset()
 
 	return {
 		top    : offset.top,
@@ -181,9 +181,9 @@ multiselect.getSize = function() {
 
 multiselect.getSelection = function(e) {
 
-	let tolerance = 150,
-	    ids       = [],
-	    size      = multiselect.getSize()
+	let tolerance = 150
+	let ids       = []
+	let size      = multiselect.getSize()
 
 	if (visible.contextMenu())  return false
 	if (!visible.multiselect()) return false
@@ -192,19 +192,19 @@ multiselect.getSelection = function(e) {
 
 		let offset = $(this).offset()
 
-		if (offset.top>=(size.top-tolerance) &&
-			offset.left>=(size.left-tolerance) &&
-			(offset.top+206)<=(size.top+size.height+tolerance) &&
-			(offset.left+206)<=(size.left+size.width+tolerance)) {
+		if (offset.top>=(size.top - tolerance) &&
+			offset.left>=(size.left - tolerance) &&
+			(offset.top + 206)<=(size.top + size.height + tolerance) &&
+			(offset.left + 206)<=(size.left + size.width + tolerance)) {
 
-				let id = $(this).data('id')
+			let id = $(this).data('id')
 
-				if (id!=='0' && id!==0 && id!=='f' && id!=='s' && id!=='r' && id!=null) {
+			if (id!=='0' && id!==0 && id!=='f' && id!=='s' && id!=='r' && id!=null) {
 
-					ids.push(id)
-					$(this).addClass('active')
+				ids.push(id)
+				$(this).addClass('active')
 
-				}
+			}
 
 		}
 

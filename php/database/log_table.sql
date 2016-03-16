@@ -1,5 +1,4 @@
 # Dump of table lychee_log
-# Version 2.5
 # ------------------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS `?` (

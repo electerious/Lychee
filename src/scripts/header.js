@@ -46,17 +46,17 @@ header.bind = function() {
 	header.dom('#button_info')        .on(eventName, sidebar.toggle)
 	header.dom('.button_add')         .on(eventName, contextMenu.add)
 	header.dom('#button_more')        .on(eventName, function(e) { contextMenu.photoMore(photo.getID(), e) })
-	header.dom('#button_move')        .on(eventName, function(e) { contextMenu.move([photo.getID()], e) })
+	header.dom('#button_move')        .on(eventName, function(e) { contextMenu.move([ photo.getID() ], e) })
 	header.dom('.header__hostedwith') .on(eventName, function() { window.open(lychee.website) })
-	header.dom('#button_trash_album') .on(eventName, function() { album.delete([album.getID()]) })
-	header.dom('#button_trash')       .on(eventName, function() { photo.delete([photo.getID()]) })
+	header.dom('#button_trash_album') .on(eventName, function() { album.delete([ album.getID() ]) })
+	header.dom('#button_trash')       .on(eventName, function() { photo.delete([ photo.getID() ]) })
 	header.dom('#button_archive')     .on(eventName, function() { album.getArchive(album.getID()) })
-	header.dom('#button_star')        .on(eventName, function() { photo.setStar([photo.getID()]) })
-	header.dom('#button_back_home')   .on(eventName, function() { lychee.goto('') })
+	header.dom('#button_star')        .on(eventName, function() { photo.setStar([ photo.getID() ]) })
+	header.dom('#button_back_home')   .on(eventName, function() { lychee.goto() })
 	header.dom('#button_back')        .on(eventName, function() { lychee.goto(album.getID()) })
 
 	header.dom('.header__search').on('keyup click', function() { search.find($(this).val()) })
-	header.dom('.header__clear').on(eventName, function () {
+	header.dom('.header__clear').on(eventName, function() {
 		header.dom('.header__search').focus()
 		search.reset()
 	})
@@ -99,8 +99,8 @@ header.hide = function(e, delay = 500) {
 
 header.setTitle = function(title = 'Untitled') {
 
-	let $title = header.dom('.header__title'),
-	    html   = lychee.html`$${ title }${ build.iconic('caret-bottom') }`
+	let $title = header.dom('.header__title')
+	let html   = lychee.html`$${ title }${ build.iconic('caret-bottom') }`
 
 	$title.html(html)
 
