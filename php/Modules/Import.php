@@ -50,7 +50,7 @@ final class Import {
 			// This prevents us from downloading invalid photos.
 
 			// Verify extension
-			$extension = getExtension($url);
+			$extension = getExtension($url, true);
 			if (!in_array(strtolower($extension), Photo::$validExtensions, true)) {
 				$error = true;
 				Log::error(Database::get(), __METHOD__, __LINE__, 'Photo format not supported (' . $url . ')');

@@ -124,7 +124,7 @@ final class Photo {
 		}
 
 		// Verify extension
-		$extension = getExtension($file['name']);
+		$extension = getExtension($file['name'], false);
 		if (!in_array(strtolower($extension), self::$validExtensions, true)) {
 			Log::error(Database::get(), __METHOD__, __LINE__, 'Photo format not supported');
 			if ($returnOnError===true) return false;
@@ -845,8 +845,8 @@ final class Photo {
 		}
 
 		// Get extension
-		$extension = getExtension($photo->url);
-		if ($extension===false) {
+		$extension = getExtension($photo->url, true);
+		if (empty($extension)) {
 			Log::error(Database::get(), __METHOD__, __LINE__, 'Invalid photo extension');
 			return false;
 		}
