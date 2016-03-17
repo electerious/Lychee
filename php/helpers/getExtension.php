@@ -11,8 +11,8 @@ function getExtension($filename, $isURI = false) {
 
 	$extension = pathinfo($filename, PATHINFO_EXTENSION);
 
-    # Special cases
-    if (strpos($extension, ':')!==false) list($extension, ) = explode(':', $extension, 2);
+	# Special cases
+	if (strpos($extension, ':')!==false) list($extension, ) = explode(':', $extension, 2);
 
 	if (empty($extension)===false) $extension = '.' . $extension;
 
