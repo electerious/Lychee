@@ -275,11 +275,14 @@ upload.start = {
 
 				basicModal.close()
 
+				/*
+				// Only check for file validity on PHP side
 				let extension = data.link.split('.').pop()
 				if (extension!=='jpeg' && extension!=='jpg' && extension!=='png' && extension!=='gif' && extension!=='webp') {
 					loadingBar.show('error', 'File format of link not supported.')
 					return false
 				}
+				*/
 
 				files[0] = {
 					name      : data.link,
