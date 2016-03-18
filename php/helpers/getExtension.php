@@ -6,13 +6,14 @@
  */
 function getExtension($filename, $isURI = false) {
 
-	# If $filename is an URI, get only the path component
+	// If $filename is an URI, get only the path component
 	if ($isURI===true) $filename = parse_url($filename, PHP_URL_PATH);
 
 	$extension = pathinfo($filename, PATHINFO_EXTENSION);
 
-	# Special cases
-	if (strpos($extension, ':')!==false) list($extension, ) = explode(':', $extension, 2);
+	// Special cases
+	// https://github.com/electerious/Lychee/issues/482
+	list($extension) = explode(':', $extension, 2);
 
 	if (empty($extension)===false) $extension = '.' . $extension;
 
