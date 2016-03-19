@@ -275,12 +275,6 @@ upload.start = {
 
 				basicModal.close()
 
-				let extension = data.link.split('.').pop()
-				if (extension!=='jpeg' && extension!=='jpg' && extension!=='png' && extension!=='gif' && extension!=='webp') {
-					loadingBar.show('error', 'File format of link not supported.')
-					return false
-				}
-
 				files[0] = {
 					name      : data.link,
 					supported : true

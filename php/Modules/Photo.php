@@ -845,7 +845,7 @@ final class Photo {
 		}
 
 		// Get extension
-		$extension = getExtension($photo->url, true);
+		$extension = getExtension($photo->url, false);
 		if (empty($extension)===true) {
 			Log::error(Database::get(), __METHOD__, __LINE__, 'Invalid photo extension');
 			return false;

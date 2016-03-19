@@ -278,7 +278,7 @@ final class Album {
 			if (!@is_readable($photo->url)) continue;
 
 			// Get extension of image
-			$extension = getExtension($photo->url, true);
+			$extension = getExtension($photo->url, false);
 
 			// Set title for photo
 			$zipFileName = $zipTitle . '/' . $photo->title . $extension;
