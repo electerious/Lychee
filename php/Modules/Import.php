@@ -65,13 +65,12 @@ final class Import {
 				continue;
 			}
 
-			$pathinfo = pathinfo($url);
-			$filename = $pathinfo['filename'] . '.' . $pathinfo['extension'];
+			$filename = pathinfo($url, PATHINFO_FILENAME) . $extension;
 			$tmp_name = LYCHEE_DATA . $filename;
 
 			if (@copy($url, $tmp_name)===false) {
 				$error = true;
-				Log::error(Database::get(), __METHOD__, __LINE__, 'Could not copy file (' . $tmp_name . ') to temp-folder (' . $tmp_name . ')');
+				Log::error(Database::get(), __METHOD__, __LINE__, 'Could not copy file (' . $url . ') to temp-folder (' . $tmp_name . ')');
 				continue;
 			}
 
