@@ -155,6 +155,16 @@ contextMenu.mergeAlbum = function(albumID, e) {
 
 }
 
+contextMenu.searchPhotoMulti = function(photoIDs, e) {
+	multiselect.stopResize()
+
+	let items = [
+		{ title: build.iconic('cloud-download') + 'Download', fn: () => photo.getSelectionArchive(photoIDs) }
+	]
+
+	basicContext.show(items, e.originalEvent, contextMenu.close)
+}
+
 contextMenu.photo = function(photoID, e) {
 
 	// Notice for 'Move':

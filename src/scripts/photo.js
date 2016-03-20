@@ -652,6 +652,17 @@ photo.getArchive = function(photoID) {
 
 }
 
+photo.getSelectionArchive = function(photoIDs) {
+
+	let link
+	let url = `${ api.path }?function=Archive::getPhotoSelection&photoIDs=${ photoIDs.join(',') }`
+
+	if (location.href.indexOf('index.html')>0) link = location.href.replace(location.hash, '').replace('index.html', url)
+	else                                       link = location.href.replace(location.hash, '') + url
+
+	location.href = link
+}
+
 photo.getDirectLink = function() {
 
 	let url = ''
