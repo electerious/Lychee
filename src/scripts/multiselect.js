@@ -27,7 +27,6 @@ multiselect.show = function(e) {
 	if (lychee.publicMode)                          return false
 	if (!visible.albums() && !visible.album())      return false
 	if ($('.album:hover, .photo:hover').length!==0) return false
-	if (visible.search())                           return false
 	if (visible.multiselect())                      $('#multiselect').remove()
 
 	sidebar.setSelectable(false)
@@ -48,7 +47,6 @@ multiselect.show = function(e) {
 multiselect.selectAll = function() {
 
 	if (lychee.publicMode)                   return false
-	if (visible.search())                    return false
 	if (!visible.albums() && !visible.album) return false
 	if (visible.multiselect())               $('#multiselect').remove()
 
@@ -188,7 +186,11 @@ multiselect.getSelection = function(e) {
 	if (visible.contextMenu())  return false
 	if (!visible.multiselect()) return false
 
-	$('.photo, .album').each(function() {
+	let search_class
+	if (visible.search()) search_class = '.photo'
+	else                  search_class = '.photo, .album'
+
+	$(search_class).each(function() {
 
 		let offset = $(this).offset()
 
@@ -210,7 +212,8 @@ multiselect.getSelection = function(e) {
 
 	})
 
-	if (ids.length!==0 && visible.album())       contextMenu.photoMulti(ids, e)
+	if (ids.length!==0 && visible.search())      contextMenu.searchPhotoMulti(ids, e)
+	else if (ids.length!==0 && visible.album())  contextMenu.photoMulti(ids, e)
 	else if (ids.length!==0 && visible.albums()) contextMenu.albumMulti(ids, e)
 	else                                         multiselect.close()
 

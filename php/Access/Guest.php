@@ -4,6 +4,7 @@ namespace Lychee\Access;
 
 use Lychee\Modules\Album;
 use Lychee\Modules\Albums;
+use Lychee\Modules\Archive;
 use Lychee\Modules\Photo;
 use Lychee\Modules\Response;
 use Lychee\Modules\Session;
@@ -16,23 +17,24 @@ final class Guest extends Access {
 		switch ($fn) {
 
 			// Albums functions
-			case 'Albums::get':       self::getAlbumsAction(); break;
+			case 'Albums::get':                self::getAlbumsAction(); break;
 
 			// Album functions
-			case 'Album::get':        self::getAlbumAction(); break;
-			case 'Album::getPublic':  self::checkAlbumAccessAction(); break;
+			case 'Album::get':                 self::getAlbumAction(); break;
+			case 'Album::getPublic':           self::checkAlbumAccessAction(); break;
 
 			// Photo functions
-			case 'Photo::get':        self::getPhotoAction(); break;
+			case 'Photo::get':                 self::getPhotoAction(); break;
 
 			// Session functions
-			case 'Session::init':     self::initAction(); break;
-			case 'Session::login':    self::loginAction(); break;
-			case 'Session::logout':   self::logoutAction(); break;
+			case 'Session::init':              self::initAction(); break;
+			case 'Session::login':             self::loginAction(); break;
+			case 'Session::logout':            self::logoutAction(); break;
 
 			// $_GET functions
-			case 'Album::getArchive': self::getAlbumArchiveAction(); break;
-			case 'Photo::getArchive': self::getPhotoArchiveAction(); break;
+			case 'Album::getArchive':          self::getAlbumArchiveAction(); break;
+			case 'Photo::getArchive':          self::getPhotoArchiveAction(); break;
+			case 'Archive::getPhotoSelection': self::getPhotosArchiveAction(); break;
 
 		}
 
@@ -177,6 +179,14 @@ final class Guest extends Access {
 			Response::warning('Photo private or password incorrect!');
 
 		}
+
+	}
+
+	private static function getPhotosArchiveAction() {
+
+		Validator::required(isset($_GET['photoIDs']), __METHOD__);
+
+		Archive::getPhotoSelection($_GET['photoIDs']);
 
 	}
 
