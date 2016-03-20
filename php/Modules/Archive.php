@@ -15,6 +15,10 @@ final class Archive {
 		$this->tempZipFile = tempnam(sys_get_temp_dir(), 'Lychee_');
 	}
 
+	public function addFileToZip($filename) {
+		if (is_readable($filename)) $this->listOfFiles[] = $filename;
+	}
+
 	public function sendToClient() {
 		$this->createZip();
 
@@ -61,10 +65,6 @@ final class Archive {
 	}
 
 
-	private function addFileToZip($filename) {
-		if (is_readable($filename)) $this->listOfFiles[] = $filename;
-	}
-
 	private function createZip() {
 		if (empty($this->listOfFiles)) Response::error('Nothing to ZIP!');
 
@@ -80,6 +80,4 @@ final class Archive {
 
 		$zip->close();
 	}
-
-
 }
