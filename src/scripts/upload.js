@@ -46,10 +46,11 @@ upload.start = {
 
 		const process = function(files, file) {
 
-			let formData     = new FormData()
-			let xhr          = new XMLHttpRequest()
-			let pre_progress = 0
-			let progress     = 0
+			let formData          = new FormData()
+			let xhr               = new XMLHttpRequest()
+			let pre_progress      = 0
+			let progress          = 0
+			let next_file_started = false
 
 			const finish = function() {
 
@@ -84,34 +85,6 @@ upload.start = {
 
 			}
 
-			// Check if file is supported
-			if (file.supported===false) {
-
-				// Skip file
-				if (file.next!=null) process(files, file.next)
-				else {
-
-					// Look for supported files
-					// If zero files are supported, hide the upload after a delay
-
-					let hasSupportedFiles = false
-
-					for (let i = 0; i < files.length; i++) {
-
-						if (files[i].supported===true) {
-							hasSupportedFiles = true
-							break
-						}
-
-					}
-
-					if (hasSupportedFiles===false) setTimeout(finish, 2000)
-
-				}
-
-				return false
-
-			}
 
 			formData.append('function', 'Photo::add')
 			formData.append('albumID', albumID)
@@ -205,7 +178,7 @@ upload.start = {
 					pre_progress = progress
 				}
 
-				if (progress>=100) {
+				if (progress>=100 && next_file_started==false) {
 
 					// Scroll to the uploading file
 					let scrollPos = 0
@@ -216,7 +189,10 @@ upload.start = {
 					$('.basicModal .rows .row:nth-child(' + (file.num + 1) + ') .status').html('Processing')
 
 					// Upload next file
-					if (file.next!=null) process(files, file.next)
+					if (file.next!=null) {
+						process(files, file.next)
+						next_file_started = true
+					}
 
 				}
 
@@ -233,19 +209,9 @@ upload.start = {
 
 			files[i].num       = i
 			files[i].ready     = false
-			files[i].supported = true
 
 			if (i < files.length-1) files[i].next = files[i + 1]
 			else                    files[i].next = null
-
-			// Check if file is supported
-			if (files[i].type!=='image/jpeg' && files[i].type!=='image/jpg' && files[i].type!=='image/png' && files[i].type!=='image/gif') {
-
-				files[i].ready     = true
-				files[i].supported = false
-
-			}
-
 		}
 
 		window.onbeforeunload = function() { return 'Lychee is currently uploading!' }
@@ -276,8 +242,7 @@ upload.start = {
 				basicModal.close()
 
 				files[0] = {
-					name      : data.link,
-					supported : true
+					name      : data.link
 				}
 
 				upload.show('Importing URL', files, function() {
@@ -356,8 +321,7 @@ upload.start = {
 			let files = []
 
 			files[0] = {
-				name      : data.path,
-				supported : true
+				name      : data.path
 			}
 
 			upload.show('Importing from server', files, function() {
@@ -466,8 +430,7 @@ upload.start = {
 				links += files[i].link + ','
 
 				files[i] = {
-					name      : files[i].link,
-					supported : true
+					name      : files[i].link
 				}
 
 			}

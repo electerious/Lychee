@@ -187,12 +187,7 @@ build.uploadModal = function(title, files) {
 		html += lychee.html`
 		        <div class='row'>
 		            <a class='name'>$${ file.name }</a>
-		        `
-
-		if (file.supported===true) html += `<a class='status'></a>`
-		else                       html += `<a class='status error'>Not supported</a>`
-
-		html += `
+		            <a class='status'></a>
 		            <p class='notice'></p>
 		        </div>
 		        `
