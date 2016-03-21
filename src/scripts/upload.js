@@ -85,7 +85,6 @@ upload.start = {
 
 			}
 
-
 			formData.append('function', 'Photo::add')
 			formData.append('albumID', albumID)
 			formData.append(0, file)
@@ -178,7 +177,7 @@ upload.start = {
 					pre_progress = progress
 				}
 
-				if (progress>=100 && next_file_started==false) {
+				if (progress>=100 && next_file_started===false) {
 
 					// Scroll to the uploading file
 					let scrollPos = 0
@@ -212,6 +211,7 @@ upload.start = {
 
 			if (i < files.length-1) files[i].next = files[i + 1]
 			else                    files[i].next = null
+
 		}
 
 		window.onbeforeunload = function() { return 'Lychee is currently uploading!' }
