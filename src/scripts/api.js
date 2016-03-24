@@ -26,7 +26,7 @@ api.post = function(fn, params, callback) {
 			return false
 		}
 
-		// Convert 1 to true and an empty string to false
+		// Convert true and false to real booleans
 		if (data==='true')       data = true
 		else if (data==='false') data = false
 
