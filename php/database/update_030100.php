@@ -14,6 +14,6 @@ $result = Database::execute($connection, $query, 'update_030100', __LINE__);
 if ($result===false) Response::error('Could not adjust the length of the album id field!');
 
 // Set version
-// if (Database::setVersion($connection, '030100')===false) Response::error('Could not update version of database!');
+if (Database::setVersion($connection, '030100')===false) Response::error('Could not update version of database!');
 
 ?>
