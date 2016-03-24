@@ -208,8 +208,8 @@ upload.start = {
 
 		for (let i = 0; i < files.length; i++) {
 
-			files[i].num       = i
-			files[i].ready     = false
+			files[i].num   = i
+			files[i].ready = false
 
 			if (i < files.length-1) files[i].next = files[i + 1]
 			else                    files[i].next = null
@@ -244,7 +244,7 @@ upload.start = {
 				basicModal.close()
 
 				files[0] = {
-					name      : data.link
+					name: data.link
 				}
 
 				upload.show('Importing URL', files, function() {
@@ -323,7 +323,7 @@ upload.start = {
 			let files = []
 
 			files[0] = {
-				name      : data.path
+				name: data.path
 			}
 
 			upload.show('Importing from server', files, function() {
