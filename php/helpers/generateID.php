@@ -8,8 +8,9 @@ function generateID() {
 	// Ensure that the id has a length of 14 chars
 	while(strlen($id)<14) $id .= 0;
 
-	// Return the integer value of the id
-	return intval($id);
+	// Return id as a string. Don't convert the id to an integer
+	// as 14 digits are too big for 32bit PHP versions.
+	return $id;
 
 }
 

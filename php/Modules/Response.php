@@ -16,9 +16,9 @@ final class Response {
 
 	}
 
-	public static function json($str) {
+	public static function json($str, $options = 0) {
 
-		exit(json_encode($str));
+		exit(json_encode($str, $options));
 
 	}
 
