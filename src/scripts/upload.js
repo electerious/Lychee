@@ -120,6 +120,9 @@ upload.start = {
 							.html('Failed')
 							.addClass('error')
 
+						// Throw error
+						if (error===true) lychee.error('Upload failed. Server returned an error!', xhr, xhr.responseText)
+
 					} else if (xhr.responseText.substr(0, 8)==='Warning:') {
 
 						errorText = xhr.responseText.substr(8)
@@ -129,6 +132,9 @@ upload.start = {
 						$('.basicModal .rows .row:nth-child(' + (file.num + 1) + ') .status')
 							.html('Skipped')
 							.addClass('warning')
+
+						// Throw error
+						if (error===true) lychee.error('Upload failed. Server returned a warning!', xhr, xhr.responseText)
 
 					} else {
 
@@ -140,14 +146,14 @@ upload.start = {
 							.html('Failed')
 							.addClass('error')
 
+						// Throw error
+						if (error===true) lychee.error('Upload failed. Server returned an unkown error!', xhr, xhr.responseText)
+
 					}
 
 					$('.basicModal .rows .row:nth-child(' + (file.num + 1) + ') p.notice')
 						.html(errorText)
 						.show()
-
-					// Throw error
-					if (error===true) lychee.error('Upload failed. Server returned the status code ' + xhr.status + '!', xhr, xhr.responseText)
 
 				}
 
