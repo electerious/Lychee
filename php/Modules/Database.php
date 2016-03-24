@@ -56,7 +56,7 @@ final class Database {
 		$connection = self::connect($host, $user, $password);
 
 		// Check if the connection was successful
-		if ($connection===false) Response::error('' . $connection->connect_error);
+		if ($connection===false) Response::error($connection->connect_error);
 
 		if (self::setCharset($connection)===false) Response::error('Could not set database charset!');
 
