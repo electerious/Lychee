@@ -93,15 +93,22 @@ upload.start = {
 
 			xhr.onload = function() {
 
+				let data      = null
 				let wait      = false
 				let errorText = ''
 
 				const isNumber = (n) => (!isNaN(parseFloat(n)) && isFinite(n))
 
+				try {
+					data = JSON.parse(xhr.responseText)
+				} catch(e) {
+					data = ''
+				}
+
 				file.ready = true
 
 				// Set status
-				if (xhr.status===200 && isNumber(xhr.responseText)) {
+				if (xhr.status===200 && isNumber(data)) {
 
 					// Success
 					$('.basicModal .rows .row:nth-child(' + (file.num + 1) + ') .status')
@@ -110,9 +117,9 @@ upload.start = {
 
 				} else {
 
-					if (xhr.responseText.substr(0, 6)==='Error:') {
+					if (data.substr(0, 6)==='Error:') {
 
-						errorText = xhr.responseText.substr(6) + ' Please take a look at the console of your browser for further details.'
+						errorText = data.substr(6) + ' Please take a look at the console of your browser for further details.'
 						error     = true
 
 						// Error Status
@@ -121,11 +128,11 @@ upload.start = {
 							.addClass('error')
 
 						// Throw error
-						if (error===true) lychee.error('Upload failed. Server returned an error!', xhr, xhr.responseText)
+						if (error===true) lychee.error('Upload failed. Server returned an error!', xhr, data)
 
-					} else if (xhr.responseText.substr(0, 8)==='Warning:') {
+					} else if (data.substr(0, 8)==='Warning:') {
 
-						errorText = xhr.responseText.substr(8)
+						errorText = data.substr(8)
 						warning   = true
 
 						// Warning Status
@@ -134,7 +141,7 @@ upload.start = {
 							.addClass('warning')
 
 						// Throw error
-						if (error===true) lychee.error('Upload failed. Server returned a warning!', xhr, xhr.responseText)
+						if (error===true) lychee.error('Upload failed. Server returned a warning!', xhr, data)
 
 					} else {
 
@@ -147,7 +154,7 @@ upload.start = {
 							.addClass('error')
 
 						// Throw error
-						if (error===true) lychee.error('Upload failed. Server returned an unkown error!', xhr, xhr.responseText)
+						if (error===true) lychee.error('Upload failed. Server returned an unkown error!', xhr, data)
 
 					}
 
