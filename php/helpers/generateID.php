@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @return string Generated ID.
+ */
 function generateID() {
 
 	// Generate id based on the current microtime
