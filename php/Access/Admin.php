@@ -249,7 +249,7 @@ final class Admin extends Access {
 		Validator::required(isset($_POST['albumID'], $_POST['path']), __METHOD__);
 
 		$import = new Import();
-		echo $import->server($_POST['path'], $_POST['albumID']);
+		Response::json($import->server($_POST['path'], $_POST['albumID']));
 
 	}
 
