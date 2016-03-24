@@ -6,13 +6,13 @@ final class Response {
 
 	public static function warning($msg) {
 
-		exit('Warning: ' . $msg);
+		exit(json_encode('Warning: ' . $msg));
 
 	}
 
 	public static function error($msg) {
 
-		exit('Error: ' . $msg);
+		exit(json_encode('Error: ' . $msg));
 
 	}
 
