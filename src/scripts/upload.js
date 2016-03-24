@@ -96,10 +96,12 @@ upload.start = {
 				let wait      = false
 				let errorText = ''
 
+				const isNumber = (n) => (!isNaN(parseFloat(n)) && isFinite(n))
+
 				file.ready = true
 
 				// Set status
-				if (xhr.status===200 && xhr.responseText==='true') {
+				if (xhr.status===200 && isNumber(xhr.responseText)) {
 
 					// Success
 					$('.basicModal .rows .row:nth-child(' + (file.num + 1) + ') .status')

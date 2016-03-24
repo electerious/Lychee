@@ -231,7 +231,7 @@ final class Admin extends Access {
 		Validator::required(isset($_FILES, $_POST['albumID']), __METHOD__);
 
 		$photo = new Photo(null);
-		Response::json($photo->add($_FILES, $_POST['albumID']));
+		Response::json($photo->add($_FILES, $_POST['albumID']), JSON_NUMERIC_CHECK);
 
 	}
 
