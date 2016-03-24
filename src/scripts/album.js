@@ -116,9 +116,6 @@ album.add = function() {
 
 		api.post('Album::add', params, function(data) {
 
-			// Avoid first album to be true
-			if (data===true) data = 1
-
 			if (data!==false && isNumber(data)) {
 				albums.refresh()
 				lychee.goto(data)
