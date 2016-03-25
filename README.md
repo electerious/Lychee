@@ -1,5 +1,5 @@
 # Lychee
-
+##### THis Version Has Been Updated to Work with Sub Albums.
 #### A great looking and easy-to-use photo-management-system.
 
 ![Lychee](http://l.electerious.com/uploads/big/c4b58cb87d95aeaed78fdca581cc908c.jpg)
