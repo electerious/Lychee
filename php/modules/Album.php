@@ -25,7 +25,7 @@ class Album extends Module {
 
 	}
 
-	public function add($title = 'Untitled', $public = 0, $visible = 1) {
+	public function add($title = 'Untitled', $parent=0, $public = 0, $visible = 1 ) {
 
 		# Check dependencies
 		self::dependencies(isset($this->database));
@@ -38,7 +38,7 @@ class Album extends Module {
 
 		# Database
 		$sysstamp	= time();
-		$query		= Database::prepare($this->database, "INSERT INTO ? (title, sysstamp, public, visible) VALUES ('?', '?', '?', '?')", array(LYCHEE_TABLE_ALBUMS, $title, $sysstamp, $public, $visible));
+		$query		= Database::prepare($this->database, "INSERT INTO ? (title, sysstamp, public, visible, parent) VALUES ('?', '?', '?', '?', '?')", array(LYCHEE_TABLE_ALBUMS, $title, $sysstamp, $public, $visible, $parent));
 		$result		= $this->database->query($query);
 
 		# Call plugins
@@ -55,7 +55,7 @@ class Album extends Module {
 	public static function prepareData($data) {
 
 		# This function requires the following album-attributes and turns them
-		# into a front-end friendly format: id, title, public, sysstamp, password
+		# into a front-end friendly format: id, title, public, sysstamp, password, parent
 		# Note that some attributes remain unchanged
 
 		# Check dependencies
@@ -68,7 +68,7 @@ class Album extends Module {
 		$album['id']		= $data['id'];
 		$album['title']		= $data['title'];
 		$album['public']	= $data['public'];
-
+		$album['parent']    = $data['parent'];
 		# Additional attributes
 		# Only part of $album when available
 		if (isset($data['description']))	$album['description'] = $data['description'];
@@ -87,11 +87,36 @@ class Album extends Module {
 		return $album;
 
 	}
+	public function getSubAlbums() {
+		self::dependencies(isset($this->database, $this->settings, $this->albumIDs));
 
-	public function get() {
+		# Call plugins
+		$this->plugins(__METHOD__, 0, func_get_args());
+
+		foreach ($this->albumIDs as $albumID) {
+			$query	= Database::prepare($this->database, "SELECT * FROM ? WHERE parent = '?' ", array(LYCHEE_TABLE_ALBUMS, $albumID));
+			$subAlbums = $this->database->query($query);
+
+
+			while ($album = $subAlbums->fetch_assoc()) {
+
+				# Turn data from the database into a front-end friendly format
+				$album = Album::prepareData($album);
+				# Thumbs
+
+				# Add to return
+				$return['albums'][] = $album;
+
+			}
+		}
+
+		return $return;
+
+	}
+	public function get($public) {
 
 		# Check dependencies
-		self::dependencies(isset($this->database, $this->settings, $this->albumIDs));
+		self::dependencies(isset($this->database, $this->settings, $this->albumIDs,$public));
 
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
@@ -111,19 +136,48 @@ class Album extends Module {
 						$query = Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY)) " . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
 						break;
 
-			case '0':	$return['public'] = '0';
-						$query = Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE album = 0 " . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
+			case '1':	$return['public'] = '0';
+						$query = Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE album = 1 " . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
 						break;
 
 			default:	$query	= Database::prepare($this->database, "SELECT * FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
 						$albums = $this->database->query($query);
 						$return = $albums->fetch_assoc();
 						$return = Album::prepareData($return);
+						$query	= Database::prepare($this->database, "SELECT * FROM ? WHERE parent = '?' ", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
+						$subAlbums = $this->database->query($query);
 						$query	= Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE album = '?' " . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS, $this->albumIDs));
 						break;
 
 		}
+		# Get Subalbums
+		# For each album
+		while ($album = $subAlbums->fetch_assoc()) {
 
+			# Turn data from the database into a front-end friendly format
+			$album = Album::prepareData($album);
+			# Thumbs
+			if (($public===true&&$album['password']==='0')||
+				($public===false)) {
+
+					# Execute query
+					$query	= Database::prepare($this->database, "SELECT thumbUrl FROM ? WHERE album = '?' ORDER BY star DESC, " . substr($this->settings['sortingPhotos'], 9) . " LIMIT 3", array(LYCHEE_TABLE_PHOTOS, $album['id']));
+					$thumbs	= $this->database->query($query);
+
+					# For each thumb
+					$k = 0;
+					while ($thumb = $thumbs->fetch_object()) {
+						$album['thumbs'][$k] = LYCHEE_URL_UPLOADS_THUMB . $thumb->thumbUrl;
+						$k++;
+					}
+
+
+			}
+
+			# Add to return
+			$return['albums'][] = $album;
+
+		}
 		# Get photos
 		$photos				= $this->database->query($query);
 		$previousPhotoID	= '';
@@ -145,7 +199,7 @@ class Album extends Module {
 
 		}
 
-		if ($photos->num_rows===0) {
+		if ($photos->num_rows===0 && $subAlbums->num_rows===0) {
 
 			# Album empty
 			$return['content'] = false;
@@ -194,8 +248,8 @@ class Album extends Module {
 		if ($public===false) $return['smartalbums'] = $this->getSmartInfo();
 
 		# Albums query
-		if ($public===false)	$query = Database::prepare($this->database, 'SELECT id, title, public, sysstamp, password FROM ? ' . $this->settings['sortingAlbums'], array(LYCHEE_TABLE_ALBUMS));
-		else					$query = Database::prepare($this->database, 'SELECT id, title, public, sysstamp, password FROM ? WHERE public = 1 AND visible <> 0 ' . $this->settings['sortingAlbums'], array(LYCHEE_TABLE_ALBUMS));
+		if ($public===false)	$query = Database::prepare($this->database, 'SELECT id, title, public, sysstamp, password, parent FROM ? ' . $this->settings['sortingAlbums'], array(LYCHEE_TABLE_ALBUMS));
+		else					$query = Database::prepare($this->database, 'SELECT id, title, public, sysstamp, password, parent FROM ? WHERE public = 1 AND visible <> 0 ' . $this->settings['sortingAlbums'], array(LYCHEE_TABLE_ALBUMS));
 
 		# Execute query
 		$albums = $this->database->query($query);
@@ -209,27 +263,28 @@ class Album extends Module {
 
 			# Turn data from the database into a front-end friendly format
 			$album = Album::prepareData($album);
-
+			if ($album['parent'] == '0') {
 			# Thumbs
-			if (($public===true&&$album['password']==='0')||
-				($public===false)) {
+				if (($public===true&&$album['password']==='0')||
+					($public===false)) {
 
-					# Execute query
-					$query	= Database::prepare($this->database, "SELECT thumbUrl FROM ? WHERE album = '?' ORDER BY star DESC, " . substr($this->settings['sortingPhotos'], 9) . " LIMIT 3", array(LYCHEE_TABLE_PHOTOS, $album['id']));
-					$thumbs	= $this->database->query($query);
+						# Execute query
+						$query	= Database::prepare($this->database, "SELECT thumbUrl FROM ? WHERE album = '?' ORDER BY star DESC, " . substr($this->settings['sortingPhotos'], 9) . " LIMIT 3", array(LYCHEE_TABLE_PHOTOS, $album['id']));
+						$thumbs	= $this->database->query($query);
 
-					# For each thumb
-					$k = 0;
-					while ($thumb = $thumbs->fetch_object()) {
-						$album['thumbs'][$k] = LYCHEE_URL_UPLOADS_THUMB . $thumb->thumbUrl;
-						$k++;
-					}
+						# For each thumb
+						$k = 0;
+						while ($thumb = $thumbs->fetch_object()) {
+							$album['thumbs'][$k] = LYCHEE_URL_UPLOADS_THUMB . $thumb->thumbUrl;
+							$k++;
+						}
 
-			}
+				}
+
 
 			# Add to return
 			$return['albums'][] = $album;
-
+			}
 		}
 
 		# Num of albums
@@ -534,7 +589,7 @@ class Album extends Module {
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
 
-		if ($this->albumIDs==='0'||$this->albumIDs==='s'||$this->albumIDs==='f') return false;
+		if ($this->albumIDs==='1'||$this->albumIDs==='s'||$this->albumIDs==='f') return false;
 
 		# Execute query
 		$query	= Database::prepare($this->database, "SELECT public FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
@@ -557,7 +612,7 @@ class Album extends Module {
 		# Call plugins
 		$this->plugins(__METHOD__, 0, func_get_args());
 
-		if ($this->albumIDs==='0'||$this->albumIDs==='s'||$this->albumIDs==='f'||$this->albumIDs==='r') return false;
+		if ($this->albumIDs==='1'||$this->albumIDs==='s'||$this->albumIDs==='f'||$this->albumIDs==='r') return false;
 
 		# Execute query
 		$query	= Database::prepare($this->database, "SELECT downloadable FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
@@ -672,6 +727,50 @@ class Album extends Module {
 		else if ($album->password===crypt($password, $album->password)) return true;
 		return false;
 
+	}
+
+	public function getParent() {
+
+		# Check dependencies
+		self::dependencies(isset($this->database, $this->albumIDs));
+
+		# Call plugins
+		$this->plugins(__METHOD__, 0, func_get_args());
+
+		if ($this->albumIDs==='1'||$this->albumIDs==='s'||$this->albumIDs==='f') return 0;
+
+		# Execute query
+		$query	= Database::prepare($this->database, "SELECT parent FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
+		$albums	= $this->database->query($query);
+		$album	= $albums->fetch_object();
+
+		# Call plugins
+		$this->plugins(__METHOD__, 1, func_get_args());
+
+
+		return $album->parent;
+
+
+	}
+	public function setParent($parent = 0) {
+				# Check dependencies
+		self::dependencies(isset($this->database, $this->albumIDs));
+
+		# Call plugins
+		$this->plugins(__METHOD__, 0, func_get_args());
+
+		# Execute query
+		$query	= Database::prepare($this->database, "UPDATE ? SET parent = '?' WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $parent, $this->albumIDs));
+		$result	= $this->database->query($query);
+
+		# Call plugins
+		$this->plugins(__METHOD__, 1, func_get_args());
+
+		if (!$result) {
+			Log::error($this->database, __METHOD__, __LINE__, $this->database->error);
+			return false;
+		}
+		return true;
 	}
 
 	public function merge() {

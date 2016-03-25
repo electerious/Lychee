@@ -107,13 +107,6 @@ contextMenu.album = function (albumID, e) {
 			}
 		},
 		{
-			title: build.iconic('folder') + 'Move',
-			fn: () => {
-				basicContext.close();
-				contextMenu.moveAlbum([albumID], e)
-			}
-		},
-		{
 			title: build.iconic('trash') + 'Delete',
 			fn: () => album.delete([albumID])
 		}
@@ -179,7 +172,7 @@ contextMenu.albumTitle = function (albumID, e) {
 
 				if (!this.thumbs[0]) this.thumbs[0] = 'src/images/no_cover.svg'
 
-				let title = lychee.html `<img class='cover' width='16' height='16' src='${ this.thumbs[0] }'><div class='title'>$${ this.title }</div>`
+				let title = lychee.html `<img class='cover' width='16' height='16' src='$${ this.thumbs[0] }'><div class='title'>$${ this.title }</div>`
 
 				if (this.id != albumID) items.push({
 					title, fn: () => lychee.goto(this.id)
@@ -377,9 +370,7 @@ contextMenu.move = function (photoIDs, e) {
 
 	var items = []
 
-	api.post('Album::getAll', {
-		sub: true
-	}, function (data) {
+	api.post('Album::getAll', {}, function (data) {
 
 		if (data.num === 0) {
 
@@ -398,9 +389,34 @@ contextMenu.move = function (photoIDs, e) {
 			$.each(data.albums, function () {
 
 				if (!this.thumbs[0]) this.thumbs[0] = 'src/images/no_cover.svg'
-				treeNav = `<img class='cover' width='16' height='16' src='${ this.thumbs[0] }'><div class='title'>${ this.title }</div>`
+				treeNav += `<li><img class='cover' width='16' height='16' src='$${ this.thumbs[0] }'><div class='title'>$${ this.title }</div>`
+				let albumIDs = data.albums.length
+				let levels = 0
+				let hasSub = false
+				let parent = this.id
+				for (i = 0; i < albumIDs; i++) {
+					api.post('Album::getSub', this.id, function (data) {
+						lychee.error(null, params, data)
+						data.albums.forEach(function (alb) {
+							hasSub = true
+							lychee.error(null, params, alb)
+							if (!alb.thumbs[0]) alb.thumbs[0] = 'src/images/no_cover.svg'
 
+							if (alb.parent == parent && i != 0) {
+								treeNav += '</li>'
+							} else {
+								treeNav += '<ul>'
+								levels++
+							}
+							treeNav += `<li><img class='cover' width='16' height='16' src='$${ alb.thumbs[0] }'><div class='title'>$${ alb.title }</div>`
 
+							albumIDs++
+						})
+					})
+				}
+				for (i = 0; i < levels; i++) {
+					treeNav += '</li></ul>'
+				}
 				let title = treeNav
 
 				if (this.id != album.getID()) items.push({
@@ -427,59 +443,7 @@ contextMenu.move = function (photoIDs, e) {
 	})
 
 }
-contextMenu.moveAlbum = function (AlbumIDs, e) {
 
-	var items = []
-
-	api.post('Album::getAll', {
-		sub: true
-	}, function (data) {
-
-
-		// Generate list of albums
-		let treeNav = '<div class="acidjs-css3-treeview"><ul>'
-		$.each(data.albums, function () {
-
-			if (!this.thumbs[0]) this.thumbs[0] = 'src/images/no_cover.svg'
-			treeNav = `<img class='cover' width='16' height='16' src='${ this.thumbs[0] }'><div class='title'>${ this.title }</div>`
-
-
-			let title = treeNav
-			let newParID = this.id
-			if (this.id != album.getID()) items.push({
-				title, fn: function () {
-					album.setParent(AlbumIDs, newParID)
-					lychee.goto(AlbumIDs)
-					lychee.load()
-					location.reload()
-				}
-			})
-
-		})
-
-		// Show Unsorted when unsorted is not the current album
-		if (album.getID() !== '0') {
-
-			items.unshift({})
-			items.unshift({
-				title: 'Root',
-				fn: function () {
-					album.setParent(AlbumIDs, 0)
-					lychee.goto(AlbumIDs)
-					lychee.load()
-					location.reload()
-				}
-			})
-
-		}
-
-
-		basicContext.show(items, e.originalEvent, contextMenu.close)
-
-	})
-
-
-}
 contextMenu.sharePhoto = function (photoID, e) {
 
 	let link = photo.getViewLink(photoID),

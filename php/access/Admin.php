@@ -15,6 +15,7 @@ class Admin extends Access {
 		switch ($fn) {
 
 			# Album functions
+			case 'Album::getSub':			$this->getSubAlbums(); break;
 			case 'Album::getAll':			$this->getAlbums(); break;
 			case 'Album::get':				$this->getAlbum(); break;
 			case 'Album::add':				$this->addAlbum(); break;
@@ -75,12 +76,17 @@ class Admin extends Access {
 		echo json_encode($album->getAll(false));
 
 	}
+	private function getSubAlbums() {
 
+		$album = new Album($this->database, $this->plugins, $this->settings, $_POST['albumID']);
+		echo json_encode($album->getSubAlbums());
+
+	}
 	private function getAlbum() {
 
 		Module::dependencies(isset($_POST['albumID']));
 		$album = new Album($this->database, $this->plugins, $this->settings, $_POST['albumID']);
-		echo json_encode($album->get());
+		echo json_encode($album->get(false));
 
 	}
 
@@ -88,7 +94,7 @@ class Admin extends Access {
 
 		Module::dependencies(isset($_POST['title']));
 		$album = new Album($this->database, $this->plugins, $this->settings, null);
-		echo $album->add($_POST['title']);
+		echo $album->add($_POST['title'],$_POST['parent']);
 
 	}
 

@@ -1,0 +1,2541 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/nodejs', '/usr/bin/npm', 'install', '--no-bin-links' ]
+2 info using npm@1.4.21
+3 info using node@v0.10.25
+4 verbose readDependencies using package.json deps
+5 verbose install where, deps [ '/run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src',
+5 verbose install   [ 'babel-preset-es2015',
+5 verbose install     'basiccontext',
+5 verbose install     'basicmodal',
+5 verbose install     'gulp',
+5 verbose install     'gulp-autoprefixer',
+5 verbose install     'gulp-babel',
+5 verbose install     'gulp-concat',
+5 verbose install     'gulp-inject',
+5 verbose install     'gulp-load-plugins',
+5 verbose install     'gulp-minify-css',
+5 verbose install     'gulp-rimraf',
+5 verbose install     'gulp-sass',
+5 verbose install     'gulp-uglify',
+5 verbose install     'jquery',
+5 verbose install     'mousetrap' ] ]
+6 info preinstall Lychee@3.0.9
+7 verbose readDependencies using package.json deps
+8 verbose cache add [ 'basicmodal@^3.3.2', null ]
+9 verbose cache add name=undefined spec="basicmodal@^3.3.2" args=["basicmodal@^3.3.2",null]
+10 verbose parsed url { protocol: null,
+10 verbose parsed url   slashes: null,
+10 verbose parsed url   auth: null,
+10 verbose parsed url   host: null,
+10 verbose parsed url   port: null,
+10 verbose parsed url   hostname: null,
+10 verbose parsed url   hash: null,
+10 verbose parsed url   search: null,
+10 verbose parsed url   query: null,
+10 verbose parsed url   pathname: 'basicmodal@^3.3.2',
+10 verbose parsed url   path: 'basicmodal@^3.3.2',
+10 verbose parsed url   href: 'basicmodal@^3.3.2' }
+11 verbose cache add [ 'gulp@^3.9.0', null ]
+12 verbose cache add name=undefined spec="gulp@^3.9.0" args=["gulp@^3.9.0",null]
+13 verbose parsed url { protocol: null,
+13 verbose parsed url   slashes: null,
+13 verbose parsed url   auth: null,
+13 verbose parsed url   host: null,
+13 verbose parsed url   port: null,
+13 verbose parsed url   hostname: null,
+13 verbose parsed url   hash: null,
+13 verbose parsed url   search: null,
+13 verbose parsed url   query: null,
+13 verbose parsed url   pathname: 'gulp@^3.9.0',
+13 verbose parsed url   path: 'gulp@^3.9.0',
+13 verbose parsed url   href: 'gulp@^3.9.0' }
+14 verbose cache add name="basicmodal" spec="^3.3.2" args=["basicmodal","^3.3.2"]
+15 verbose parsed url { protocol: null,
+15 verbose parsed url   slashes: null,
+15 verbose parsed url   auth: null,
+15 verbose parsed url   host: null,
+15 verbose parsed url   port: null,
+15 verbose parsed url   hostname: null,
+15 verbose parsed url   hash: null,
+15 verbose parsed url   search: null,
+15 verbose parsed url   query: null,
+15 verbose parsed url   pathname: '^3.3.2',
+15 verbose parsed url   path: '^3.3.2',
+15 verbose parsed url   href: '^3.3.2' }
+16 verbose addNamed [ 'basicmodal', '^3.3.2' ]
+17 verbose addNamed [ null, '>=3.3.2-0 <4.0.0-0' ]
+18 verbose cache add [ 'gulp-autoprefixer@3.1.0', null ]
+19 verbose cache add name=undefined spec="gulp-autoprefixer@3.1.0" args=["gulp-autoprefixer@3.1.0",null]
+20 verbose parsed url { protocol: null,
+20 verbose parsed url   slashes: null,
+20 verbose parsed url   auth: null,
+20 verbose parsed url   host: null,
+20 verbose parsed url   port: null,
+20 verbose parsed url   hostname: null,
+20 verbose parsed url   hash: null,
+20 verbose parsed url   search: null,
+20 verbose parsed url   query: null,
+20 verbose parsed url   pathname: 'gulp-autoprefixer@3.1.0',
+20 verbose parsed url   path: 'gulp-autoprefixer@3.1.0',
+20 verbose parsed url   href: 'gulp-autoprefixer@3.1.0' }
+21 verbose cache add name="gulp" spec="^3.9.0" args=["gulp","^3.9.0"]
+22 verbose parsed url { protocol: null,
+22 verbose parsed url   slashes: null,
+22 verbose parsed url   auth: null,
+22 verbose parsed url   host: null,
+22 verbose parsed url   port: null,
+22 verbose parsed url   hostname: null,
+22 verbose parsed url   hash: null,
+22 verbose parsed url   search: null,
+22 verbose parsed url   query: null,
+22 verbose parsed url   pathname: '^3.9.0',
+22 verbose parsed url   path: '^3.9.0',
+22 verbose parsed url   href: '^3.9.0' }
+23 verbose addNamed [ 'gulp', '^3.9.0' ]
+24 verbose addNamed [ null, '>=3.9.0-0 <4.0.0-0' ]
+25 silly lockFile 91be2261-basicmodal-3-3-2 basicmodal@^3.3.2
+26 verbose lock basicmodal@^3.3.2 /home/patrick/.npm/91be2261-basicmodal-3-3-2.lock
+27 silly lockFile a7ccee77-gulp-3-9-0 gulp@^3.9.0
+28 verbose lock gulp@^3.9.0 /home/patrick/.npm/a7ccee77-gulp-3-9-0.lock
+29 verbose cache add [ 'gulp-concat@^2.6.0', null ]
+30 verbose cache add name=undefined spec="gulp-concat@^2.6.0" args=["gulp-concat@^2.6.0",null]
+31 verbose parsed url { protocol: null,
+31 verbose parsed url   slashes: null,
+31 verbose parsed url   auth: null,
+31 verbose parsed url   host: null,
+31 verbose parsed url   port: null,
+31 verbose parsed url   hostname: null,
+31 verbose parsed url   hash: null,
+31 verbose parsed url   search: null,
+31 verbose parsed url   query: null,
+31 verbose parsed url   pathname: 'gulp-concat@^2.6.0',
+31 verbose parsed url   path: 'gulp-concat@^2.6.0',
+31 verbose parsed url   href: 'gulp-concat@^2.6.0' }
+32 verbose cache add [ 'gulp-babel@^6.1.1', null ]
+33 verbose cache add name=undefined spec="gulp-babel@^6.1.1" args=["gulp-babel@^6.1.1",null]
+34 verbose parsed url { protocol: null,
+34 verbose parsed url   slashes: null,
+34 verbose parsed url   auth: null,
+34 verbose parsed url   host: null,
+34 verbose parsed url   port: null,
+34 verbose parsed url   hostname: null,
+34 verbose parsed url   hash: null,
+34 verbose parsed url   search: null,
+34 verbose parsed url   query: null,
+34 verbose parsed url   pathname: 'gulp-babel@^6.1.1',
+34 verbose parsed url   path: 'gulp-babel@^6.1.1',
+34 verbose parsed url   href: 'gulp-babel@^6.1.1' }
+35 verbose cache add [ 'gulp-inject@^3.0.0', null ]
+36 verbose cache add name=undefined spec="gulp-inject@^3.0.0" args=["gulp-inject@^3.0.0",null]
+37 verbose parsed url { protocol: null,
+37 verbose parsed url   slashes: null,
+37 verbose parsed url   auth: null,
+37 verbose parsed url   host: null,
+37 verbose parsed url   port: null,
+37 verbose parsed url   hostname: null,
+37 verbose parsed url   hash: null,
+37 verbose parsed url   search: null,
+37 verbose parsed url   query: null,
+37 verbose parsed url   pathname: 'gulp-inject@^3.0.0',
+37 verbose parsed url   path: 'gulp-inject@^3.0.0',
+37 verbose parsed url   href: 'gulp-inject@^3.0.0' }
+38 verbose cache add [ 'gulp-load-plugins@^1.2.0', null ]
+39 verbose cache add name=undefined spec="gulp-load-plugins@^1.2.0" args=["gulp-load-plugins@^1.2.0",null]
+40 verbose parsed url { protocol: null,
+40 verbose parsed url   slashes: null,
+40 verbose parsed url   auth: null,
+40 verbose parsed url   host: null,
+40 verbose parsed url   port: null,
+40 verbose parsed url   hostname: null,
+40 verbose parsed url   hash: null,
+40 verbose parsed url   search: null,
+40 verbose parsed url   query: null,
+40 verbose parsed url   pathname: 'gulp-load-plugins@^1.2.0',
+40 verbose parsed url   path: 'gulp-load-plugins@^1.2.0',
+40 verbose parsed url   href: 'gulp-load-plugins@^1.2.0' }
+41 verbose cache add [ 'gulp-minify-css@^1.2.3', null ]
+42 verbose cache add name=undefined spec="gulp-minify-css@^1.2.3" args=["gulp-minify-css@^1.2.3",null]
+43 verbose parsed url { protocol: null,
+43 verbose parsed url   slashes: null,
+43 verbose parsed url   auth: null,
+43 verbose parsed url   host: null,
+43 verbose parsed url   port: null,
+43 verbose parsed url   hostname: null,
+43 verbose parsed url   hash: null,
+43 verbose parsed url   search: null,
+43 verbose parsed url   query: null,
+43 verbose parsed url   pathname: 'gulp-minify-css@^1.2.3',
+43 verbose parsed url   path: 'gulp-minify-css@^1.2.3',
+43 verbose parsed url   href: 'gulp-minify-css@^1.2.3' }
+44 verbose cache add name="gulp-autoprefixer" spec="3.1.0" args=["gulp-autoprefixer","3.1.0"]
+45 verbose parsed url { protocol: null,
+45 verbose parsed url   slashes: null,
+45 verbose parsed url   auth: null,
+45 verbose parsed url   host: null,
+45 verbose parsed url   port: null,
+45 verbose parsed url   hostname: null,
+45 verbose parsed url   hash: null,
+45 verbose parsed url   search: null,
+45 verbose parsed url   query: null,
+45 verbose parsed url   pathname: '3.1.0',
+45 verbose parsed url   path: '3.1.0',
+45 verbose parsed url   href: '3.1.0' }
+46 verbose addNamed [ 'gulp-autoprefixer', '3.1.0' ]
+47 verbose addNamed [ '3.1.0', '3.1.0' ]
+48 silly lockFile 1e11cca8-gulp-autoprefixer-3-1-0 gulp-autoprefixer@3.1.0
+49 verbose lock gulp-autoprefixer@3.1.0 /home/patrick/.npm/1e11cca8-gulp-autoprefixer-3-1-0.lock
+50 verbose cache add name="gulp-concat" spec="^2.6.0" args=["gulp-concat","^2.6.0"]
+51 verbose parsed url { protocol: null,
+51 verbose parsed url   slashes: null,
+51 verbose parsed url   auth: null,
+51 verbose parsed url   host: null,
+51 verbose parsed url   port: null,
+51 verbose parsed url   hostname: null,
+51 verbose parsed url   hash: null,
+51 verbose parsed url   search: null,
+51 verbose parsed url   query: null,
+51 verbose parsed url   pathname: '^2.6.0',
+51 verbose parsed url   path: '^2.6.0',
+51 verbose parsed url   href: '^2.6.0' }
+52 verbose addNamed [ 'gulp-concat', '^2.6.0' ]
+53 verbose addNamed [ null, '>=2.6.0-0 <3.0.0-0' ]
+54 silly lockFile 743f1d08-gulp-concat-2-6-0 gulp-concat@^2.6.0
+55 verbose lock gulp-concat@^2.6.0 /home/patrick/.npm/743f1d08-gulp-concat-2-6-0.lock
+56 verbose cache add [ 'gulp-rimraf@^0.2.0', null ]
+57 verbose cache add name=undefined spec="gulp-rimraf@^0.2.0" args=["gulp-rimraf@^0.2.0",null]
+58 verbose parsed url { protocol: null,
+58 verbose parsed url   slashes: null,
+58 verbose parsed url   auth: null,
+58 verbose parsed url   host: null,
+58 verbose parsed url   port: null,
+58 verbose parsed url   hostname: null,
+58 verbose parsed url   hash: null,
+58 verbose parsed url   search: null,
+58 verbose parsed url   query: null,
+58 verbose parsed url   pathname: 'gulp-rimraf@^0.2.0',
+58 verbose parsed url   path: 'gulp-rimraf@^0.2.0',
+58 verbose parsed url   href: 'gulp-rimraf@^0.2.0' }
+59 verbose cache add [ 'gulp-sass@^2.1.1', null ]
+60 verbose cache add name=undefined spec="gulp-sass@^2.1.1" args=["gulp-sass@^2.1.1",null]
+61 verbose parsed url { protocol: null,
+61 verbose parsed url   slashes: null,
+61 verbose parsed url   auth: null,
+61 verbose parsed url   host: null,
+61 verbose parsed url   port: null,
+61 verbose parsed url   hostname: null,
+61 verbose parsed url   hash: null,
+61 verbose parsed url   search: null,
+61 verbose parsed url   query: null,
+61 verbose parsed url   pathname: 'gulp-sass@^2.1.1',
+61 verbose parsed url   path: 'gulp-sass@^2.1.1',
+61 verbose parsed url   href: 'gulp-sass@^2.1.1' }
+62 verbose cache add name="gulp-babel" spec="^6.1.1" args=["gulp-babel","^6.1.1"]
+63 verbose parsed url { protocol: null,
+63 verbose parsed url   slashes: null,
+63 verbose parsed url   auth: null,
+63 verbose parsed url   host: null,
+63 verbose parsed url   port: null,
+63 verbose parsed url   hostname: null,
+63 verbose parsed url   hash: null,
+63 verbose parsed url   search: null,
+63 verbose parsed url   query: null,
+63 verbose parsed url   pathname: '^6.1.1',
+63 verbose parsed url   path: '^6.1.1',
+63 verbose parsed url   href: '^6.1.1' }
+64 verbose addNamed [ 'gulp-babel', '^6.1.1' ]
+65 verbose addNamed [ null, '>=6.1.1-0 <7.0.0-0' ]
+66 silly lockFile aaee0646-gulp-babel-6-1-1 gulp-babel@^6.1.1
+67 verbose lock gulp-babel@^6.1.1 /home/patrick/.npm/aaee0646-gulp-babel-6-1-1.lock
+68 silly addNameRange { name: 'basicmodal',
+68 silly addNameRange   range: '>=3.3.2-0 <4.0.0-0',
+68 silly addNameRange   hasData: false }
+69 silly addNameRange { name: 'gulp', range: '>=3.9.0-0 <4.0.0-0', hasData: false }
+70 verbose cache add name="gulp-inject" spec="^3.0.0" args=["gulp-inject","^3.0.0"]
+71 verbose parsed url { protocol: null,
+71 verbose parsed url   slashes: null,
+71 verbose parsed url   auth: null,
+71 verbose parsed url   host: null,
+71 verbose parsed url   port: null,
+71 verbose parsed url   hostname: null,
+71 verbose parsed url   hash: null,
+71 verbose parsed url   search: null,
+71 verbose parsed url   query: null,
+71 verbose parsed url   pathname: '^3.0.0',
+71 verbose parsed url   path: '^3.0.0',
+71 verbose parsed url   href: '^3.0.0' }
+72 verbose addNamed [ 'gulp-inject', '^3.0.0' ]
+73 verbose addNamed [ null, '>=3.0.0-0 <4.0.0-0' ]
+74 silly lockFile 4600829c-gulp-inject-3-0-0 gulp-inject@^3.0.0
+75 verbose lock gulp-inject@^3.0.0 /home/patrick/.npm/4600829c-gulp-inject-3-0-0.lock
+76 verbose cache add [ 'jquery@^2.1.4', null ]
+77 verbose cache add name=undefined spec="jquery@^2.1.4" args=["jquery@^2.1.4",null]
+78 verbose parsed url { protocol: null,
+78 verbose parsed url   slashes: null,
+78 verbose parsed url   auth: null,
+78 verbose parsed url   host: null,
+78 verbose parsed url   port: null,
+78 verbose parsed url   hostname: null,
+78 verbose parsed url   hash: null,
+78 verbose parsed url   search: null,
+78 verbose parsed url   query: null,
+78 verbose parsed url   pathname: 'jquery@^2.1.4',
+78 verbose parsed url   path: 'jquery@^2.1.4',
+78 verbose parsed url   href: 'jquery@^2.1.4' }
+79 verbose cache add [ 'gulp-uglify@^1.5.1', null ]
+80 verbose cache add name=undefined spec="gulp-uglify@^1.5.1" args=["gulp-uglify@^1.5.1",null]
+81 verbose parsed url { protocol: null,
+81 verbose parsed url   slashes: null,
+81 verbose parsed url   auth: null,
+81 verbose parsed url   host: null,
+81 verbose parsed url   port: null,
+81 verbose parsed url   hostname: null,
+81 verbose parsed url   hash: null,
+81 verbose parsed url   search: null,
+81 verbose parsed url   query: null,
+81 verbose parsed url   pathname: 'gulp-uglify@^1.5.1',
+81 verbose parsed url   path: 'gulp-uglify@^1.5.1',
+81 verbose parsed url   href: 'gulp-uglify@^1.5.1' }
+82 verbose cache add [ 'mousetrap@^1.5.3', null ]
+83 verbose cache add name=undefined spec="mousetrap@^1.5.3" args=["mousetrap@^1.5.3",null]
+84 verbose parsed url { protocol: null,
+84 verbose parsed url   slashes: null,
+84 verbose parsed url   auth: null,
+84 verbose parsed url   host: null,
+84 verbose parsed url   port: null,
+84 verbose parsed url   hostname: null,
+84 verbose parsed url   hash: null,
+84 verbose parsed url   search: null,
+84 verbose parsed url   query: null,
+84 verbose parsed url   pathname: 'mousetrap@^1.5.3',
+84 verbose parsed url   path: 'mousetrap@^1.5.3',
+84 verbose parsed url   href: 'mousetrap@^1.5.3' }
+85 verbose cache add name="gulp-load-plugins" spec="^1.2.0" args=["gulp-load-plugins","^1.2.0"]
+86 verbose parsed url { protocol: null,
+86 verbose parsed url   slashes: null,
+86 verbose parsed url   auth: null,
+86 verbose parsed url   host: null,
+86 verbose parsed url   port: null,
+86 verbose parsed url   hostname: null,
+86 verbose parsed url   hash: null,
+86 verbose parsed url   search: null,
+86 verbose parsed url   query: null,
+86 verbose parsed url   pathname: '^1.2.0',
+86 verbose parsed url   path: '^1.2.0',
+86 verbose parsed url   href: '^1.2.0' }
+87 verbose addNamed [ 'gulp-load-plugins', '^1.2.0' ]
+88 verbose addNamed [ null, '>=1.2.0-0 <2.0.0-0' ]
+89 silly lockFile 1dd78359-gulp-load-plugins-1-2-0 gulp-load-plugins@^1.2.0
+90 verbose lock gulp-load-plugins@^1.2.0 /home/patrick/.npm/1dd78359-gulp-load-plugins-1-2-0.lock
+91 verbose cache add name="gulp-minify-css" spec="^1.2.3" args=["gulp-minify-css","^1.2.3"]
+92 verbose parsed url { protocol: null,
+92 verbose parsed url   slashes: null,
+92 verbose parsed url   auth: null,
+92 verbose parsed url   host: null,
+92 verbose parsed url   port: null,
+92 verbose parsed url   hostname: null,
+92 verbose parsed url   hash: null,
+92 verbose parsed url   search: null,
+92 verbose parsed url   query: null,
+92 verbose parsed url   pathname: '^1.2.3',
+92 verbose parsed url   path: '^1.2.3',
+92 verbose parsed url   href: '^1.2.3' }
+93 verbose addNamed [ 'gulp-minify-css', '^1.2.3' ]
+94 verbose addNamed [ null, '>=1.2.3-0 <2.0.0-0' ]
+95 silly lockFile b395207d-gulp-minify-css-1-2-3 gulp-minify-css@^1.2.3
+96 verbose lock gulp-minify-css@^1.2.3 /home/patrick/.npm/b395207d-gulp-minify-css-1-2-3.lock
+97 verbose cache add name="gulp-rimraf" spec="^0.2.0" args=["gulp-rimraf","^0.2.0"]
+98 verbose parsed url { protocol: null,
+98 verbose parsed url   slashes: null,
+98 verbose parsed url   auth: null,
+98 verbose parsed url   host: null,
+98 verbose parsed url   port: null,
+98 verbose parsed url   hostname: null,
+98 verbose parsed url   hash: null,
+98 verbose parsed url   search: null,
+98 verbose parsed url   query: null,
+98 verbose parsed url   pathname: '^0.2.0',
+98 verbose parsed url   path: '^0.2.0',
+98 verbose parsed url   href: '^0.2.0' }
+99 verbose addNamed [ 'gulp-rimraf', '^0.2.0' ]
+100 verbose addNamed [ null, '>=0.2.0-0 <0.3.0-0' ]
+101 silly lockFile fc46df53-gulp-rimraf-0-2-0 gulp-rimraf@^0.2.0
+102 verbose lock gulp-rimraf@^0.2.0 /home/patrick/.npm/fc46df53-gulp-rimraf-0-2-0.lock
+103 verbose cache add name="gulp-sass" spec="^2.1.1" args=["gulp-sass","^2.1.1"]
+104 verbose parsed url { protocol: null,
+104 verbose parsed url   slashes: null,
+104 verbose parsed url   auth: null,
+104 verbose parsed url   host: null,
+104 verbose parsed url   port: null,
+104 verbose parsed url   hostname: null,
+104 verbose parsed url   hash: null,
+104 verbose parsed url   search: null,
+104 verbose parsed url   query: null,
+104 verbose parsed url   pathname: '^2.1.1',
+104 verbose parsed url   path: '^2.1.1',
+104 verbose parsed url   href: '^2.1.1' }
+105 verbose addNamed [ 'gulp-sass', '^2.1.1' ]
+106 verbose addNamed [ null, '>=2.1.1-0 <3.0.0-0' ]
+107 silly lockFile e046b123-gulp-sass-2-1-1 gulp-sass@^2.1.1
+108 verbose lock gulp-sass@^2.1.1 /home/patrick/.npm/e046b123-gulp-sass-2-1-1.lock
+109 silly addNameRange { name: 'gulp-concat',
+109 silly addNameRange   range: '>=2.6.0-0 <3.0.0-0',
+109 silly addNameRange   hasData: false }
+110 verbose cache add [ 'babel-preset-es2015@^6.3.13', null ]
+111 verbose cache add name=undefined spec="babel-preset-es2015@^6.3.13" args=["babel-preset-es2015@^6.3.13",null]
+112 verbose parsed url { protocol: null,
+112 verbose parsed url   slashes: null,
+112 verbose parsed url   auth: null,
+112 verbose parsed url   host: null,
+112 verbose parsed url   port: null,
+112 verbose parsed url   hostname: null,
+112 verbose parsed url   hash: null,
+112 verbose parsed url   search: null,
+112 verbose parsed url   query: null,
+112 verbose parsed url   pathname: 'babel-preset-es2015@^6.3.13',
+112 verbose parsed url   path: 'babel-preset-es2015@^6.3.13',
+112 verbose parsed url   href: 'babel-preset-es2015@^6.3.13' }
+113 verbose cache add [ 'basiccontext@^3.5.1', null ]
+114 verbose cache add name=undefined spec="basiccontext@^3.5.1" args=["basiccontext@^3.5.1",null]
+115 verbose parsed url { protocol: null,
+115 verbose parsed url   slashes: null,
+115 verbose parsed url   auth: null,
+115 verbose parsed url   host: null,
+115 verbose parsed url   port: null,
+115 verbose parsed url   hostname: null,
+115 verbose parsed url   hash: null,
+115 verbose parsed url   search: null,
+115 verbose parsed url   query: null,
+115 verbose parsed url   pathname: 'basiccontext@^3.5.1',
+115 verbose parsed url   path: 'basiccontext@^3.5.1',
+115 verbose parsed url   href: 'basiccontext@^3.5.1' }
+116 silly addNameRange { name: 'gulp-babel',
+116 silly addNameRange   range: '>=6.1.1-0 <7.0.0-0',
+116 silly addNameRange   hasData: false }
+117 verbose cache add name="jquery" spec="^2.1.4" args=["jquery","^2.1.4"]
+118 verbose parsed url { protocol: null,
+118 verbose parsed url   slashes: null,
+118 verbose parsed url   auth: null,
+118 verbose parsed url   host: null,
+118 verbose parsed url   port: null,
+118 verbose parsed url   hostname: null,
+118 verbose parsed url   hash: null,
+118 verbose parsed url   search: null,
+118 verbose parsed url   query: null,
+118 verbose parsed url   pathname: '^2.1.4',
+118 verbose parsed url   path: '^2.1.4',
+118 verbose parsed url   href: '^2.1.4' }
+119 verbose addNamed [ 'jquery', '^2.1.4' ]
+120 verbose addNamed [ null, '>=2.1.4-0 <3.0.0-0' ]
+121 silly lockFile 6f5fcb58-jquery-2-1-4 jquery@^2.1.4
+122 verbose lock jquery@^2.1.4 /home/patrick/.npm/6f5fcb58-jquery-2-1-4.lock
+123 verbose cache add name="gulp-uglify" spec="^1.5.1" args=["gulp-uglify","^1.5.1"]
+124 verbose parsed url { protocol: null,
+124 verbose parsed url   slashes: null,
+124 verbose parsed url   auth: null,
+124 verbose parsed url   host: null,
+124 verbose parsed url   port: null,
+124 verbose parsed url   hostname: null,
+124 verbose parsed url   hash: null,
+124 verbose parsed url   search: null,
+124 verbose parsed url   query: null,
+124 verbose parsed url   pathname: '^1.5.1',
+124 verbose parsed url   path: '^1.5.1',
+124 verbose parsed url   href: '^1.5.1' }
+125 verbose addNamed [ 'gulp-uglify', '^1.5.1' ]
+126 verbose addNamed [ null, '>=1.5.1-0 <2.0.0-0' ]
+127 silly lockFile b532aeb3-gulp-uglify-1-5-1 gulp-uglify@^1.5.1
+128 verbose lock gulp-uglify@^1.5.1 /home/patrick/.npm/b532aeb3-gulp-uglify-1-5-1.lock
+129 verbose cache add name="mousetrap" spec="^1.5.3" args=["mousetrap","^1.5.3"]
+130 verbose parsed url { protocol: null,
+130 verbose parsed url   slashes: null,
+130 verbose parsed url   auth: null,
+130 verbose parsed url   host: null,
+130 verbose parsed url   port: null,
+130 verbose parsed url   hostname: null,
+130 verbose parsed url   hash: null,
+130 verbose parsed url   search: null,
+130 verbose parsed url   query: null,
+130 verbose parsed url   pathname: '^1.5.3',
+130 verbose parsed url   path: '^1.5.3',
+130 verbose parsed url   href: '^1.5.3' }
+131 verbose addNamed [ 'mousetrap', '^1.5.3' ]
+132 verbose addNamed [ null, '>=1.5.3-0 <2.0.0-0' ]
+133 silly lockFile 85b6bd74-mousetrap-1-5-3 mousetrap@^1.5.3
+134 verbose lock mousetrap@^1.5.3 /home/patrick/.npm/85b6bd74-mousetrap-1-5-3.lock
+135 silly addNameRange { name: 'gulp-inject',
+135 silly addNameRange   range: '>=3.0.0-0 <4.0.0-0',
+135 silly addNameRange   hasData: false }
+136 verbose cache add name="babel-preset-es2015" spec="^6.3.13" args=["babel-preset-es2015","^6.3.13"]
+137 verbose parsed url { protocol: null,
+137 verbose parsed url   slashes: null,
+137 verbose parsed url   auth: null,
+137 verbose parsed url   host: null,
+137 verbose parsed url   port: null,
+137 verbose parsed url   hostname: null,
+137 verbose parsed url   hash: null,
+137 verbose parsed url   search: null,
+137 verbose parsed url   query: null,
+137 verbose parsed url   pathname: '^6.3.13',
+137 verbose parsed url   path: '^6.3.13',
+137 verbose parsed url   href: '^6.3.13' }
+138 verbose addNamed [ 'babel-preset-es2015', '^6.3.13' ]
+139 verbose addNamed [ null, '>=6.3.13-0 <7.0.0-0' ]
+140 silly lockFile b69bd922-babel-preset-es2015-6-3-13 babel-preset-es2015@^6.3.13
+141 verbose lock babel-preset-es2015@^6.3.13 /home/patrick/.npm/b69bd922-babel-preset-es2015-6-3-13.lock
+142 silly addNameRange { name: 'gulp-load-plugins',
+142 silly addNameRange   range: '>=1.2.0-0 <2.0.0-0',
+142 silly addNameRange   hasData: false }
+143 verbose cache add name="basiccontext" spec="^3.5.1" args=["basiccontext","^3.5.1"]
+144 verbose parsed url { protocol: null,
+144 verbose parsed url   slashes: null,
+144 verbose parsed url   auth: null,
+144 verbose parsed url   host: null,
+144 verbose parsed url   port: null,
+144 verbose parsed url   hostname: null,
+144 verbose parsed url   hash: null,
+144 verbose parsed url   search: null,
+144 verbose parsed url   query: null,
+144 verbose parsed url   pathname: '^3.5.1',
+144 verbose parsed url   path: '^3.5.1',
+144 verbose parsed url   href: '^3.5.1' }
+145 verbose addNamed [ 'basiccontext', '^3.5.1' ]
+146 verbose addNamed [ null, '>=3.5.1-0 <4.0.0-0' ]
+147 silly lockFile aeb93e44-basiccontext-3-5-1 basiccontext@^3.5.1
+148 verbose lock basiccontext@^3.5.1 /home/patrick/.npm/aeb93e44-basiccontext-3-5-1.lock
+149 silly addNameRange { name: 'gulp-minify-css',
+149 silly addNameRange   range: '>=1.2.3-0 <2.0.0-0',
+149 silly addNameRange   hasData: false }
+150 silly addNameRange { name: 'gulp-rimraf',
+150 silly addNameRange   range: '>=0.2.0-0 <0.3.0-0',
+150 silly addNameRange   hasData: false }
+151 silly addNameRange { name: 'gulp-sass',
+151 silly addNameRange   range: '>=2.1.1-0 <3.0.0-0',
+151 silly addNameRange   hasData: false }
+152 silly addNameRange { name: 'jquery', range: '>=2.1.4-0 <3.0.0-0', hasData: false }
+153 silly addNameRange { name: 'gulp-uglify',
+153 silly addNameRange   range: '>=1.5.1-0 <2.0.0-0',
+153 silly addNameRange   hasData: false }
+154 silly addNameRange { name: 'mousetrap',
+154 silly addNameRange   range: '>=1.5.3-0 <2.0.0-0',
+154 silly addNameRange   hasData: false }
+155 silly addNameRange { name: 'babel-preset-es2015',
+155 silly addNameRange   range: '>=6.3.13-0 <7.0.0-0',
+155 silly addNameRange   hasData: false }
+156 silly addNameRange { name: 'basiccontext',
+156 silly addNameRange   range: '>=3.5.1-0 <4.0.0-0',
+156 silly addNameRange   hasData: false }
+157 verbose request where is /gulp
+158 verbose request registry https://registry.npmjs.org/
+159 verbose request id 360cf31b7f088fdb
+160 verbose url raw /gulp
+161 verbose url resolving [ 'https://registry.npmjs.org/', './gulp' ]
+162 verbose url resolved https://registry.npmjs.org/gulp
+163 verbose request where is https://registry.npmjs.org/gulp
+164 info trying registry request attempt 1 at 18:58:14
+165 verbose etag "7QCC999WX4TQXQA2NJNPKSMZ"
+166 http GET https://registry.npmjs.org/gulp
+167 verbose request where is /basicmodal
+168 verbose request registry https://registry.npmjs.org/
+169 verbose url raw /basicmodal
+170 verbose url resolving [ 'https://registry.npmjs.org/', './basicmodal' ]
+171 verbose url resolved https://registry.npmjs.org/basicmodal
+172 verbose request where is https://registry.npmjs.org/basicmodal
+173 info trying registry request attempt 1 at 18:58:14
+174 verbose etag "6XONW49AXSE8GT4LIS5UT5GUQ"
+175 http GET https://registry.npmjs.org/basicmodal
+176 verbose request where is /gulp-autoprefixer
+177 verbose request registry https://registry.npmjs.org/
+178 verbose url raw /gulp-autoprefixer
+179 verbose url resolving [ 'https://registry.npmjs.org/', './gulp-autoprefixer' ]
+180 verbose url resolved https://registry.npmjs.org/gulp-autoprefixer
+181 verbose request where is https://registry.npmjs.org/gulp-autoprefixer
+182 info trying registry request attempt 1 at 18:58:14
+183 verbose etag "7O2YT5JZB39OR5AQEBWLMYOFD"
+184 http GET https://registry.npmjs.org/gulp-autoprefixer
+185 verbose request where is /gulp-concat
+186 verbose request registry https://registry.npmjs.org/
+187 verbose url raw /gulp-concat
+188 verbose url resolving [ 'https://registry.npmjs.org/', './gulp-concat' ]
+189 verbose url resolved https://registry.npmjs.org/gulp-concat
+190 verbose request where is https://registry.npmjs.org/gulp-concat
+191 info trying registry request attempt 1 at 18:58:14
+192 verbose etag "775FYJFDQV52IQ9QPWJA272LC"
+193 http GET https://registry.npmjs.org/gulp-concat
+194 verbose request where is /gulp-babel
+195 verbose request registry https://registry.npmjs.org/
+196 verbose url raw /gulp-babel
+197 verbose url resolving [ 'https://registry.npmjs.org/', './gulp-babel' ]
+198 verbose url resolved https://registry.npmjs.org/gulp-babel
+199 verbose request where is https://registry.npmjs.org/gulp-babel
+200 info trying registry request attempt 1 at 18:58:14
+201 verbose etag "A2OV4UZZRVENVLN6RRDS59USP"
+202 http GET https://registry.npmjs.org/gulp-babel
+203 verbose request where is /gulp-inject
+204 verbose request registry https://registry.npmjs.org/
+205 verbose url raw /gulp-inject
+206 verbose url resolving [ 'https://registry.npmjs.org/', './gulp-inject' ]
+207 verbose url resolved https://registry.npmjs.org/gulp-inject
+208 verbose request where is https://registry.npmjs.org/gulp-inject
+209 info trying registry request attempt 1 at 18:58:14
+210 verbose etag "7NFA4Y511DO2OB0P3A2P12JLJ"
+211 http GET https://registry.npmjs.org/gulp-inject
+212 verbose request where is /gulp-load-plugins
+213 verbose request registry https://registry.npmjs.org/
+214 verbose url raw /gulp-load-plugins
+215 verbose url resolving [ 'https://registry.npmjs.org/', './gulp-load-plugins' ]
+216 verbose url resolved https://registry.npmjs.org/gulp-load-plugins
+217 verbose request where is https://registry.npmjs.org/gulp-load-plugins
+218 info trying registry request attempt 1 at 18:58:14
+219 verbose etag "EW53YFN6N5K25IVWM9KLYNTXO"
+220 http GET https://registry.npmjs.org/gulp-load-plugins
+221 verbose request where is /gulp-minify-css
+222 verbose request registry https://registry.npmjs.org/
+223 verbose url raw /gulp-minify-css
+224 verbose url resolving [ 'https://registry.npmjs.org/', './gulp-minify-css' ]
+225 verbose url resolved https://registry.npmjs.org/gulp-minify-css
+226 verbose request where is https://registry.npmjs.org/gulp-minify-css
+227 info trying registry request attempt 1 at 18:58:14
+228 verbose etag "BA75WR71BY04D8AN7Y7O2NMRD"
+229 http GET https://registry.npmjs.org/gulp-minify-css
+230 verbose request where is /gulp-rimraf
+231 verbose request registry https://registry.npmjs.org/
+232 verbose url raw /gulp-rimraf
+233 verbose url resolving [ 'https://registry.npmjs.org/', './gulp-rimraf' ]
+234 verbose url resolved https://registry.npmjs.org/gulp-rimraf
+235 verbose request where is https://registry.npmjs.org/gulp-rimraf
+236 info trying registry request attempt 1 at 18:58:14
+237 verbose etag "2Z8Q9K0RKCPDLCS8ZV6XK4ZQU"
+238 http GET https://registry.npmjs.org/gulp-rimraf
+239 verbose request where is /gulp-sass
+240 verbose request registry https://registry.npmjs.org/
+241 verbose url raw /gulp-sass
+242 verbose url resolving [ 'https://registry.npmjs.org/', './gulp-sass' ]
+243 verbose url resolved https://registry.npmjs.org/gulp-sass
+244 verbose request where is https://registry.npmjs.org/gulp-sass
+245 info trying registry request attempt 1 at 18:58:14
+246 verbose etag "4FORI23GL7284ZUI1NGBR8A33"
+247 http GET https://registry.npmjs.org/gulp-sass
+248 verbose request where is /jquery
+249 verbose request registry https://registry.npmjs.org/
+250 verbose url raw /jquery
+251 verbose url resolving [ 'https://registry.npmjs.org/', './jquery' ]
+252 verbose url resolved https://registry.npmjs.org/jquery
+253 verbose request where is https://registry.npmjs.org/jquery
+254 info trying registry request attempt 1 at 18:58:14
+255 verbose etag "WKP3GVMD8LGXQYRPRXSH2I8U"
+256 http GET https://registry.npmjs.org/jquery
+257 verbose request where is /gulp-uglify
+258 verbose request registry https://registry.npmjs.org/
+259 verbose url raw /gulp-uglify
+260 verbose url resolving [ 'https://registry.npmjs.org/', './gulp-uglify' ]
+261 verbose url resolved https://registry.npmjs.org/gulp-uglify
+262 verbose request where is https://registry.npmjs.org/gulp-uglify
+263 info trying registry request attempt 1 at 18:58:14
+264 verbose etag "E27RINPYS0N45UGDFB4WGRQH0"
+265 http GET https://registry.npmjs.org/gulp-uglify
+266 verbose request where is /mousetrap
+267 verbose request registry https://registry.npmjs.org/
+268 verbose url raw /mousetrap
+269 verbose url resolving [ 'https://registry.npmjs.org/', './mousetrap' ]
+270 verbose url resolved https://registry.npmjs.org/mousetrap
+271 verbose request where is https://registry.npmjs.org/mousetrap
+272 info trying registry request attempt 1 at 18:58:14
+273 verbose etag "1ZD3VJ36WU26HPS9SIUBUKRP1"
+274 http GET https://registry.npmjs.org/mousetrap
+275 verbose request where is /babel-preset-es2015
+276 verbose request registry https://registry.npmjs.org/
+277 verbose url raw /babel-preset-es2015
+278 verbose url resolving [ 'https://registry.npmjs.org/', './babel-preset-es2015' ]
+279 verbose url resolved https://registry.npmjs.org/babel-preset-es2015
+280 verbose request where is https://registry.npmjs.org/babel-preset-es2015
+281 info trying registry request attempt 1 at 18:58:14
+282 verbose etag "E605YTQXANIHLYKFNFDUFG4I0"
+283 http GET https://registry.npmjs.org/babel-preset-es2015
+284 verbose request where is /basiccontext
+285 verbose request registry https://registry.npmjs.org/
+286 verbose url raw /basiccontext
+287 verbose url resolving [ 'https://registry.npmjs.org/', './basiccontext' ]
+288 verbose url resolved https://registry.npmjs.org/basiccontext
+289 verbose request where is https://registry.npmjs.org/basiccontext
+290 info trying registry request attempt 1 at 18:58:14
+291 verbose etag "CWSOOP83GPICX2HS8IUXL61G"
+292 http GET https://registry.npmjs.org/basiccontext
+293 http 304 https://registry.npmjs.org/gulp
+294 silly registry.get cb [ 304,
+294 silly registry.get   { date: 'Sun, 06 Mar 2016 23:58:14 GMT',
+294 silly registry.get     via: '1.1 varnish',
+294 silly registry.get     'cache-control': 'max-age=300',
+294 silly registry.get     etag: '"7QCC999WX4TQXQA2NJNPKSMZ"',
+294 silly registry.get     age: '33',
+294 silly registry.get     connection: 'keep-alive',
+294 silly registry.get     'x-served-by': 'cache-atl6225-ATL',
+294 silly registry.get     'x-cache': 'HIT',
+294 silly registry.get     'x-cache-hits': '1',
+294 silly registry.get     'x-timer': 'S1457308694.280401,VS0,VE0',
+294 silly registry.get     vary: 'Accept' } ]
+295 verbose etag https://registry.npmjs.org/gulp from cache
+296 silly addNameRange number 2 { name: 'gulp', range: '>=3.9.0-0 <4.0.0-0', hasData: true }
+297 silly addNameRange versions [ 'gulp',
+297 silly addNameRange   [ '0.0.1',
+297 silly addNameRange     '0.0.2',
+297 silly addNameRange     '0.0.3',
+297 silly addNameRange     '0.0.4',
+297 silly addNameRange     '0.0.5',
+297 silly addNameRange     '0.0.7',
+297 silly addNameRange     '0.0.8',
+297 silly addNameRange     '0.0.9',
+297 silly addNameRange     '0.1.0',
+297 silly addNameRange     '0.2.0',
+297 silly addNameRange     '1.0.0',
+297 silly addNameRange     '1.1.0',
+297 silly addNameRange     '1.2.0',
+297 silly addNameRange     '1.2.1',
+297 silly addNameRange     '2.0.0',
+297 silly addNameRange     '2.0.1',
+297 silly addNameRange     '2.1.0',
+297 silly addNameRange     '2.2.0',
+297 silly addNameRange     '2.3.0',
+297 silly addNameRange     '2.4.0',
+297 silly addNameRange     '2.4.1',
+297 silly addNameRange     '2.6.0',
+297 silly addNameRange     '2.6.1',
+297 silly addNameRange     '2.7.0',
+297 silly addNameRange     '3.0.0',
+297 silly addNameRange     '3.1.1',
+297 silly addNameRange     '3.1.2',
+297 silly addNameRange     '3.1.3',
+297 silly addNameRange     '3.1.4',
+297 silly addNameRange     '3.2.0',
+297 silly addNameRange     '3.2.1',
+297 silly addNameRange     '3.2.2',
+297 silly addNameRange     '3.2.3',
+297 silly addNameRange     '3.2.4',
+297 silly addNameRange     '3.2.5',
+297 silly addNameRange     '3.3.0',
+297 silly addNameRange     '3.3.1',
+297 silly addNameRange     '3.3.2',
+297 silly addNameRange     '3.3.4',
+297 silly addNameRange     '3.4.0',
+297 silly addNameRange     '3.5.0',
+297 silly addNameRange     '3.5.1',
+297 silly addNameRange     '3.5.2',
+297 silly addNameRange     '3.5.5',
+297 silly addNameRange     '3.5.6',
+297 silly addNameRange     '3.6.0',
+297 silly addNameRange     '3.6.1',
+297 silly addNameRange     '3.6.2',
+297 silly addNameRange     '3.7.0',
+297 silly addNameRange     '3.8.0',
+297 silly addNameRange     '3.8.1',
+297 silly addNameRange     '3.8.2',
+297 silly addNameRange     '3.8.3',
+297 silly addNameRange     '3.8.4',
+297 silly addNameRange     '3.8.5',
+297 silly addNameRange     '3.8.6',
+297 silly addNameRange     '3.8.7',
+297 silly addNameRange     '3.8.8',
+297 silly addNameRange     '3.8.9',
+297 silly addNameRange     '3.8.10',
+297 silly addNameRange     '3.8.11',
+297 silly addNameRange     '3.9.0',
+297 silly addNameRange     '3.9.1' ] ]
+298 verbose addNamed [ 'gulp', '3.9.1' ]
+299 verbose addNamed [ '3.9.1', '3.9.1' ]
+300 silly lockFile d9f1ef79-gulp-3-9-1 gulp@3.9.1
+301 verbose lock gulp@3.9.1 /home/patrick/.npm/d9f1ef79-gulp-3-9-1.lock
+302 silly lockFile d9f1ef79-gulp-3-9-1 gulp@3.9.1
+303 silly lockFile d9f1ef79-gulp-3-9-1 gulp@3.9.1
+304 silly lockFile a7ccee77-gulp-3-9-0 gulp@^3.9.0
+305 silly lockFile a7ccee77-gulp-3-9-0 gulp@^3.9.0
+306 http 200 https://registry.npmjs.org/gulp-autoprefixer
+307 silly registry.get cb [ 200,
+307 silly registry.get   { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+307 silly registry.get     etag: '"E0LRQOC5D950TVL1G8ANVER7A"',
+307 silly registry.get     'content-type': 'application/json',
+307 silly registry.get     'cache-control': 'max-age=300',
+307 silly registry.get     'content-length': '31942',
+307 silly registry.get     'accept-ranges': 'bytes',
+307 silly registry.get     date: 'Sun, 06 Mar 2016 23:58:14 GMT',
+307 silly registry.get     via: '1.1 varnish',
+307 silly registry.get     age: '33',
+307 silly registry.get     connection: 'keep-alive',
+307 silly registry.get     'x-served-by': 'cache-atl6248-ATL',
+307 silly registry.get     'x-cache': 'HIT',
+307 silly registry.get     'x-cache-hits': '1',
+307 silly registry.get     'x-timer': 'S1457308694.291468,VS0,VE0',
+307 silly registry.get     vary: 'Accept' } ]
+308 silly lockFile 30915da9-ixer-gulp-autoprefixer-3-1-0-tgz https://registry.npmjs.org/gulp-autoprefixer/-/gulp-autoprefixer-3.1.0.tgz
+309 verbose lock https://registry.npmjs.org/gulp-autoprefixer/-/gulp-autoprefixer-3.1.0.tgz /home/patrick/.npm/30915da9-ixer-gulp-autoprefixer-3-1-0-tgz.lock
+310 verbose addRemoteTarball [ 'https://registry.npmjs.org/gulp-autoprefixer/-/gulp-autoprefixer-3.1.0.tgz',
+310 verbose addRemoteTarball   '2b3ada439fdb120ed4eb3a574b122234a8ba283a' ]
+311 info retry fetch attempt 1 at 18:58:14
+312 verbose fetch to= /tmp/npm-9797-jZIRykoS/registry.npmjs.org/gulp-autoprefixer/-/gulp-autoprefixer-3.1.0.tgz
+313 http GET https://registry.npmjs.org/gulp-autoprefixer/-/gulp-autoprefixer-3.1.0.tgz
+314 http 200 https://registry.npmjs.org/gulp-concat
+315 silly registry.get cb [ 200,
+315 silly registry.get   { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+315 silly registry.get     etag: '"E44S3LT72LG4SCY92U7K6WRSV"',
+315 silly registry.get     'content-type': 'application/json',
+315 silly registry.get     'cache-control': 'max-age=300',
+315 silly registry.get     'content-length': '39060',
+315 silly registry.get     'accept-ranges': 'bytes',
+315 silly registry.get     date: 'Sun, 06 Mar 2016 23:58:14 GMT',
+315 silly registry.get     via: '1.1 varnish',
+315 silly registry.get     age: '238',
+315 silly registry.get     connection: 'keep-alive',
+315 silly registry.get     'x-served-by': 'cache-atl6238-ATL',
+315 silly registry.get     'x-cache': 'HIT',
+315 silly registry.get     'x-cache-hits': '2',
+315 silly registry.get     'x-timer': 'S1457308694.301043,VS0,VE0',
+315 silly registry.get     vary: 'Accept' } ]
+316 silly addNameRange number 2 { name: 'gulp-concat',
+316 silly addNameRange   range: '>=2.6.0-0 <3.0.0-0',
+316 silly addNameRange   hasData: true }
+317 silly addNameRange versions [ 'gulp-concat',
+317 silly addNameRange   [ '0.0.1',
+317 silly addNameRange     '1.0.0',
+317 silly addNameRange     '1.1.0',
+317 silly addNameRange     '2.0.0',
+317 silly addNameRange     '2.1.0',
+317 silly addNameRange     '2.1.1',
+317 silly addNameRange     '2.1.2',
+317 silly addNameRange     '2.1.3',
+317 silly addNameRange     '2.1.4',
+317 silly addNameRange     '2.1.5',
+317 silly addNameRange     '2.1.6',
+317 silly addNameRange     '2.1.7',
+317 silly addNameRange     '2.2.0',
+317 silly addNameRange     '2.3.0',
+317 silly addNameRange     '2.3.3',
+317 silly addNameRange     '2.3.4',
+317 silly addNameRange     '2.3.5',
+317 silly addNameRange     '2.4.0',
+317 silly addNameRange     '2.4.1',
+317 silly addNameRange     '2.4.2',
+317 silly addNameRange     '2.4.3',
+317 silly addNameRange     '2.5.0',
+317 silly addNameRange     '2.5.1',
+317 silly addNameRange     '2.5.2',
+317 silly addNameRange     '2.6.0' ] ]
+318 verbose addNamed [ 'gulp-concat', '2.6.0' ]
+319 verbose addNamed [ '2.6.0', '2.6.0' ]
+320 silly lockFile 03b8a742-gulp-concat-2-6-0 gulp-concat@2.6.0
+321 verbose lock gulp-concat@2.6.0 /home/patrick/.npm/03b8a742-gulp-concat-2-6-0.lock
+322 silly lockFile 03b8a742-gulp-concat-2-6-0 gulp-concat@2.6.0
+323 silly lockFile 03b8a742-gulp-concat-2-6-0 gulp-concat@2.6.0
+324 silly lockFile 743f1d08-gulp-concat-2-6-0 gulp-concat@^2.6.0
+325 silly lockFile 743f1d08-gulp-concat-2-6-0 gulp-concat@^2.6.0
+326 http 304 https://registry.npmjs.org/basicmodal
+327 silly registry.get cb [ 304,
+327 silly registry.get   { date: 'Sun, 06 Mar 2016 23:58:14 GMT',
+327 silly registry.get     via: '1.1 varnish',
+327 silly registry.get     'cache-control': 'max-age=300',
+327 silly registry.get     etag: '"6XONW49AXSE8GT4LIS5UT5GUQ"',
+327 silly registry.get     age: '0',
+327 silly registry.get     connection: 'keep-alive',
+327 silly registry.get     'x-served-by': 'cache-atl6243-ATL',
+327 silly registry.get     'x-cache': 'MISS',
+327 silly registry.get     'x-cache-hits': '0',
+327 silly registry.get     'x-timer': 'S1457308694.284542,VS0,VE58',
+327 silly registry.get     vary: 'Accept' } ]
+328 verbose etag https://registry.npmjs.org/basicmodal from cache
+329 silly addNameRange number 2 { name: 'basicmodal',
+329 silly addNameRange   range: '>=3.3.2-0 <4.0.0-0',
+329 silly addNameRange   hasData: true }
+330 silly addNameRange versions [ 'basicmodal',
+330 silly addNameRange   [ '3.0.0',
+330 silly addNameRange     '3.0.1',
+330 silly addNameRange     '3.0.2',
+330 silly addNameRange     '3.1.0',
+330 silly addNameRange     '3.1.1',
+330 silly addNameRange     '3.1.2',
+330 silly addNameRange     '3.1.3',
+330 silly addNameRange     '3.1.4',
+330 silly addNameRange     '3.1.6',
+330 silly addNameRange     '3.1.7',
+330 silly addNameRange     '3.3.0',
+330 silly addNameRange     '3.3.2',
+330 silly addNameRange     '3.3.3' ] ]
+331 verbose addNamed [ 'basicmodal', '3.3.3' ]
+332 verbose addNamed [ '3.3.3', '3.3.3' ]
+333 silly lockFile a729835c-basicmodal-3-3-3 basicmodal@3.3.3
+334 verbose lock basicmodal@3.3.3 /home/patrick/.npm/a729835c-basicmodal-3-3-3.lock
+335 silly lockFile a729835c-basicmodal-3-3-3 basicmodal@3.3.3
+336 silly lockFile a729835c-basicmodal-3-3-3 basicmodal@3.3.3
+337 silly lockFile 91be2261-basicmodal-3-3-2 basicmodal@^3.3.2
+338 silly lockFile 91be2261-basicmodal-3-3-2 basicmodal@^3.3.2
+339 http 200 https://registry.npmjs.org/gulp-babel
+340 silly registry.get cb [ 200,
+340 silly registry.get   { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+340 silly registry.get     etag: '"EYT5GPWKHTW06AZWYQXK93973"',
+340 silly registry.get     'content-type': 'application/json',
+340 silly registry.get     'cache-control': 'max-age=300',
+340 silly registry.get     'content-length': '21184',
+340 silly registry.get     'accept-ranges': 'bytes',
+340 silly registry.get     date: 'Sun, 06 Mar 2016 23:58:14 GMT',
+340 silly registry.get     via: '1.1 varnish',
+340 silly registry.get     age: '272',
+340 silly registry.get     connection: 'keep-alive',
+340 silly registry.get     'x-served-by': 'cache-atl6235-ATL',
+340 silly registry.get     'x-cache': 'HIT',
+340 silly registry.get     'x-cache-hits': '2',
+340 silly registry.get     'x-timer': 'S1457308694.320876,VS0,VE0',
+340 silly registry.get     vary: 'Accept' } ]
+341 http 200 https://registry.npmjs.org/gulp-inject
+342 silly registry.get cb [ 200,
+342 silly registry.get   { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+342 silly registry.get     etag: '"CR92Q26M2NPQ54JS97MKG5460"',
+342 silly registry.get     'content-type': 'application/json',
+342 silly registry.get     'cache-control': 'max-age=300',
+342 silly registry.get     'content-length': '53502',
+342 silly registry.get     'accept-ranges': 'bytes',
+342 silly registry.get     date: 'Sun, 06 Mar 2016 23:58:14 GMT',
+342 silly registry.get     via: '1.1 varnish',
+342 silly registry.get     age: '224',
+342 silly registry.get     connection: 'keep-alive',
+342 silly registry.get     'x-served-by': 'cache-atl6225-ATL',
+342 silly registry.get     'x-cache': 'HIT',
+342 silly registry.get     'x-cache-hits': '1',
+342 silly registry.get     'x-timer': 'S1457308694.304928,VS0,VE0',
+342 silly registry.get     vary: 'Accept' } ]
+343 silly addNameRange number 2 { name: 'gulp-babel',
+343 silly addNameRange   range: '>=6.1.1-0 <7.0.0-0',
+343 silly addNameRange   hasData: true }
+344 silly addNameRange versions [ 'gulp-babel',
+344 silly addNameRange   [ '4.0.0',
+344 silly addNameRange     '4.0.1',
+344 silly addNameRange     '5.0.0',
+344 silly addNameRange     '5.1.0',
+344 silly addNameRange     '5.2.0',
+344 silly addNameRange     '5.2.1',
+344 silly addNameRange     '5.3.0',
+344 silly addNameRange     '6.0.0',
+344 silly addNameRange     '6.1.0',
+344 silly addNameRange     '6.1.1',
+344 silly addNameRange     '6.1.2' ] ]
+345 verbose addNamed [ 'gulp-babel', '6.1.2' ]
+346 verbose addNamed [ '6.1.2', '6.1.2' ]
+347 silly lockFile 7f8c95d9-gulp-babel-6-1-2 gulp-babel@6.1.2
+348 verbose lock gulp-babel@6.1.2 /home/patrick/.npm/7f8c95d9-gulp-babel-6-1-2.lock
+349 silly addNameRange number 2 { name: 'gulp-inject',
+349 silly addNameRange   range: '>=3.0.0-0 <4.0.0-0',
+349 silly addNameRange   hasData: true }
+350 silly addNameRange versions [ 'gulp-inject',
+350 silly addNameRange   [ '0.1.0',
+350 silly addNameRange     '0.1.1',
+350 silly addNameRange     '0.2.0',
+350 silly addNameRange     '0.2.1',
+350 silly addNameRange     '0.2.2',
+350 silly addNameRange     '0.3.0',
+350 silly addNameRange     '0.3.1',
+350 silly addNameRange     '0.4.0',
+350 silly addNameRange     '0.4.1',
+350 silly addNameRange     '1.0.0',
+350 silly addNameRange     '1.0.1',
+350 silly addNameRange     '1.0.2',
+350 silly addNameRange     '1.1.0',
+350 silly addNameRange     '1.1.1',
+350 silly addNameRange     '1.2.0',
+350 silly addNameRange     '1.3.0',
+350 silly addNameRange     '1.3.1',
+350 silly addNameRange     '1.5.0',
+350 silly addNameRange     '2.0.0',
+350 silly addNameRange     '2.0.1',
+350 silly addNameRange     '2.1.0',
+350 silly addNameRange     '2.2.0',
+350 silly addNameRange     '3.0.0' ] ]
+351 verbose addNamed [ 'gulp-inject', '3.0.0' ]
+352 verbose addNamed [ '3.0.0', '3.0.0' ]
+353 silly lockFile 65173dc9-gulp-inject-3-0-0 gulp-inject@3.0.0
+354 verbose lock gulp-inject@3.0.0 /home/patrick/.npm/65173dc9-gulp-inject-3-0-0.lock
+355 silly lockFile 7f8c95d9-gulp-babel-6-1-2 gulp-babel@6.1.2
+356 silly lockFile 7f8c95d9-gulp-babel-6-1-2 gulp-babel@6.1.2
+357 silly lockFile aaee0646-gulp-babel-6-1-1 gulp-babel@^6.1.1
+358 silly lockFile aaee0646-gulp-babel-6-1-1 gulp-babel@^6.1.1
+359 silly lockFile 65173dc9-gulp-inject-3-0-0 gulp-inject@3.0.0
+360 silly lockFile 65173dc9-gulp-inject-3-0-0 gulp-inject@3.0.0
+361 silly lockFile 4600829c-gulp-inject-3-0-0 gulp-inject@^3.0.0
+362 silly lockFile 4600829c-gulp-inject-3-0-0 gulp-inject@^3.0.0
+363 http 200 https://registry.npmjs.org/gulp-load-plugins
+364 silly registry.get cb [ 200,
+364 silly registry.get   { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+364 silly registry.get     etag: '"9W7XIMTF1RU87UYPN9RVNPUNK"',
+364 silly registry.get     'content-type': 'application/json',
+364 silly registry.get     'cache-control': 'max-age=300',
+364 silly registry.get     'content-length': '37075',
+364 silly registry.get     'accept-ranges': 'bytes',
+364 silly registry.get     date: 'Sun, 06 Mar 2016 23:58:14 GMT',
+364 silly registry.get     via: '1.1 varnish',
+364 silly registry.get     age: '126',
+364 silly registry.get     connection: 'keep-alive',
+364 silly registry.get     'x-served-by': 'cache-atl6248-ATL',
+364 silly registry.get     'x-cache': 'HIT',
+364 silly registry.get     'x-cache-hits': '2',
+364 silly registry.get     'x-timer': 'S1457308694.343581,VS0,VE0',
+364 silly registry.get     vary: 'Accept' } ]
+365 silly addNameRange number 2 { name: 'gulp-load-plugins',
+365 silly addNameRange   range: '>=1.2.0-0 <2.0.0-0',
+365 silly addNameRange   hasData: true }
+366 silly addNameRange versions [ 'gulp-load-plugins',
+366 silly addNameRange   [ '0.2.0',
+366 silly addNameRange     '0.3.0',
+366 silly addNameRange     '0.4.0',
+366 silly addNameRange     '0.5.0',
+366 silly addNameRange     '0.5.1',
+366 silly addNameRange     '0.6.0-beta',
+366 silly addNameRange     '0.5.2',
+366 silly addNameRange     '0.5.3',
+366 silly addNameRange     '0.6.0',
+366 silly addNameRange     '0.7.0',
+366 silly addNameRange     '0.7.1',
+366 silly addNameRange     '0.8.0',
+366 silly addNameRange     '0.8.1',
+366 silly addNameRange     '0.9.0',
+366 silly addNameRange     '0.10.0',
+366 silly addNameRange     '1.0.0-rc.1',
+366 silly addNameRange     '1.0.0',
+366 silly addNameRange     '1.1.0',
+366 silly addNameRange     '1.2.0' ] ]
+367 verbose addNamed [ 'gulp-load-plugins', '1.2.0' ]
+368 verbose addNamed [ '1.2.0', '1.2.0' ]
+369 silly lockFile abb2ad5b-gulp-load-plugins-1-2-0 gulp-load-plugins@1.2.0
+370 verbose lock gulp-load-plugins@1.2.0 /home/patrick/.npm/abb2ad5b-gulp-load-plugins-1-2-0.lock
+371 silly lockFile abb2ad5b-gulp-load-plugins-1-2-0 gulp-load-plugins@1.2.0
+372 silly lockFile abb2ad5b-gulp-load-plugins-1-2-0 gulp-load-plugins@1.2.0
+373 silly lockFile 1dd78359-gulp-load-plugins-1-2-0 gulp-load-plugins@^1.2.0
+374 silly lockFile 1dd78359-gulp-load-plugins-1-2-0 gulp-load-plugins@^1.2.0
+375 http 200 https://registry.npmjs.org/gulp-minify-css
+376 silly registry.get cb [ 200,
+376 silly registry.get   { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+376 silly registry.get     etag: '"2WI9GVKLZOVTW6HOQIDEFAPH7"',
+376 silly registry.get     'content-type': 'application/json',
+376 silly registry.get     'cache-control': 'max-age=300',
+376 silly registry.get     'content-length': '65723',
+376 silly registry.get     'accept-ranges': 'bytes',
+376 silly registry.get     date: 'Sun, 06 Mar 2016 23:58:14 GMT',
+376 silly registry.get     via: '1.1 varnish',
+376 silly registry.get     age: '72',
+376 silly registry.get     connection: 'keep-alive',
+376 silly registry.get     'x-served-by': 'cache-atl6238-ATL',
+376 silly registry.get     'x-cache': 'HIT',
+376 silly registry.get     'x-cache-hits': '1',
+376 silly registry.get     'x-timer': 'S1457308694.353089,VS0,VE0',
+376 silly registry.get     vary: 'Accept' } ]
+377 silly addNameRange number 2 { name: 'gulp-minify-css',
+377 silly addNameRange   range: '>=1.2.3-0 <2.0.0-0',
+377 silly addNameRange   hasData: true }
+378 silly addNameRange versions [ 'gulp-minify-css',
+378 silly addNameRange   [ '0.0.1',
+378 silly addNameRange     '0.1.0',
+378 silly addNameRange     '0.2.0',
+378 silly addNameRange     '0.3.0',
+378 silly addNameRange     '0.3.1',
+378 silly addNameRange     '0.3.2',
+378 silly addNameRange     '0.3.3',
+378 silly addNameRange     '0.3.4',
+378 silly addNameRange     '0.3.5',
+378 silly addNameRange     '0.3.6',
+378 silly addNameRange     '0.3.7',
+378 silly addNameRange     '0.3.8',
+378 silly addNameRange     '0.3.9',
+378 silly addNameRange     '0.3.10',
+378 silly addNameRange     '0.3.11',
+378 silly addNameRange     '0.3.12',
+378 silly addNameRange     '0.3.13',
+378 silly addNameRange     '0.4.0',
+378 silly addNameRange     '0.4.1',
+378 silly addNameRange     '0.4.2',
+378 silly addNameRange     '0.4.3',
+378 silly addNameRange     '0.4.4',
+378 silly addNameRange     '0.4.5',
+378 silly addNameRange     '0.4.6',
+378 silly addNameRange     '0.5.0',
+378 silly addNameRange     '0.5.1',
+378 silly addNameRange     '1.0.0',
+378 silly addNameRange     '1.1.0',
+378 silly addNameRange     '1.1.1',
+378 silly addNameRange     '1.1.2',
+378 silly addNameRange     '1.1.2-1',
+378 silly addNameRange     '1.1.3',
+378 silly addNameRange     '1.1.4',
+378 silly addNameRange     '1.1.5',
+378 silly addNameRange     '1.1.6',
+378 silly addNameRange     '1.2.0',
+378 silly addNameRange     '1.2.1',
+378 silly addNameRange     '1.2.2',
+378 silly addNameRange     '1.2.3',
+378 silly addNameRange     '1.2.4' ] ]
+379 verbose addNamed [ 'gulp-minify-css', '1.2.4' ]
+380 verbose addNamed [ '1.2.4', '1.2.4' ]
+381 silly lockFile 3a69208b-gulp-minify-css-1-2-4 gulp-minify-css@1.2.4
+382 verbose lock gulp-minify-css@1.2.4 /home/patrick/.npm/3a69208b-gulp-minify-css-1-2-4.lock
+383 silly lockFile 583b4c77-fy-css-gulp-minify-css-1-2-4-tgz https://registry.npmjs.org/gulp-minify-css/-/gulp-minify-css-1.2.4.tgz
+384 verbose lock https://registry.npmjs.org/gulp-minify-css/-/gulp-minify-css-1.2.4.tgz /home/patrick/.npm/583b4c77-fy-css-gulp-minify-css-1-2-4-tgz.lock
+385 verbose addRemoteTarball [ 'https://registry.npmjs.org/gulp-minify-css/-/gulp-minify-css-1.2.4.tgz',
+385 verbose addRemoteTarball   'b6164957602ea27f9e5ad88227695dd205778c06' ]
+386 info retry fetch attempt 1 at 18:58:14
+387 verbose fetch to= /tmp/npm-9797-jZIRykoS/registry.npmjs.org/gulp-minify-css/-/gulp-minify-css-1.2.4.tgz
+388 http GET https://registry.npmjs.org/gulp-minify-css/-/gulp-minify-css-1.2.4.tgz
+389 http 200 https://registry.npmjs.org/gulp-rimraf
+390 silly registry.get cb [ 200,
+390 silly registry.get   { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+390 silly registry.get     etag: '"30RWEXG796GDHB13HESFBSH94"',
+390 silly registry.get     'content-type': 'application/json',
+390 silly registry.get     'cache-control': 'max-age=300',
+390 silly registry.get     'content-length': '17832',
+390 silly registry.get     'accept-ranges': 'bytes',
+390 silly registry.get     date: 'Sun, 06 Mar 2016 23:58:14 GMT',
+390 silly registry.get     via: '1.1 varnish',
+390 silly registry.get     age: '87',
+390 silly registry.get     connection: 'keep-alive',
+390 silly registry.get     'x-served-by': 'cache-atl6243-ATL',
+390 silly registry.get     'x-cache': 'HIT',
+390 silly registry.get     'x-cache-hits': '1',
+390 silly registry.get     'x-timer': 'S1457308694.368329,VS0,VE0',
+390 silly registry.get     vary: 'Accept' } ]
+391 silly addNameRange number 2 { name: 'gulp-rimraf',
+391 silly addNameRange   range: '>=0.2.0-0 <0.3.0-0',
+391 silly addNameRange   hasData: true }
+392 silly addNameRange versions [ 'gulp-rimraf',
+392 silly addNameRange   [ '0.0.1',
+392 silly addNameRange     '0.0.2',
+392 silly addNameRange     '0.0.3',
+392 silly addNameRange     '0.0.4',
+392 silly addNameRange     '0.0.5',
+392 silly addNameRange     '0.0.6',
+392 silly addNameRange     '0.0.7',
+392 silly addNameRange     '0.0.8',
+392 silly addNameRange     '0.0.9',
+392 silly addNameRange     '0.0.10',
+392 silly addNameRange     '0.1.0',
+392 silly addNameRange     '0.1.1',
+392 silly addNameRange     '0.2.0' ] ]
+393 verbose addNamed [ 'gulp-rimraf', '0.2.0' ]
+394 verbose addNamed [ '0.2.0', '0.2.0' ]
+395 silly lockFile 9427ec32-gulp-rimraf-0-2-0 gulp-rimraf@0.2.0
+396 verbose lock gulp-rimraf@0.2.0 /home/patrick/.npm/9427ec32-gulp-rimraf-0-2-0.lock
+397 silly lockFile 9427ec32-gulp-rimraf-0-2-0 gulp-rimraf@0.2.0
+398 silly lockFile 9427ec32-gulp-rimraf-0-2-0 gulp-rimraf@0.2.0
+399 silly lockFile fc46df53-gulp-rimraf-0-2-0 gulp-rimraf@^0.2.0
+400 silly lockFile fc46df53-gulp-rimraf-0-2-0 gulp-rimraf@^0.2.0
+401 http 200 https://registry.npmjs.org/gulp-sass
+402 silly registry.get cb [ 200,
+402 silly registry.get   { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+402 silly registry.get     etag: '"55XD6QTI4K0DJVOLHUOJH2MLD"',
+402 silly registry.get     'content-type': 'application/json',
+402 silly registry.get     'cache-control': 'max-age=300',
+402 silly registry.get     'content-length': '49034',
+402 silly registry.get     'accept-ranges': 'bytes',
+402 silly registry.get     date: 'Sun, 06 Mar 2016 23:58:14 GMT',
+402 silly registry.get     via: '1.1 varnish',
+402 silly registry.get     age: '87',
+402 silly registry.get     connection: 'keep-alive',
+402 silly registry.get     'x-served-by': 'cache-atl6235-ATL',
+402 silly registry.get     'x-cache': 'HIT',
+402 silly registry.get     'x-cache-hits': '1',
+402 silly registry.get     'x-timer': 'S1457308694.379149,VS0,VE0',
+402 silly registry.get     vary: 'Accept' } ]
+403 http 200 https://registry.npmjs.org/gulp-uglify
+404 silly registry.get cb [ 200,
+404 silly registry.get   { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+404 silly registry.get     etag: '"C10ITFVM6GOWZZDJYLJ3FZO1W"',
+404 silly registry.get     'content-type': 'application/json',
+404 silly registry.get     'cache-control': 'max-age=300',
+404 silly registry.get     'content-length': '40967',
+404 silly registry.get     'accept-ranges': 'bytes',
+404 silly registry.get     date: 'Sun, 06 Mar 2016 23:58:14 GMT',
+404 silly registry.get     via: '1.1 varnish',
+404 silly registry.get     age: '9',
+404 silly registry.get     connection: 'keep-alive',
+404 silly registry.get     'x-served-by': 'cache-atl6248-ATL',
+404 silly registry.get     'x-cache': 'HIT',
+404 silly registry.get     'x-cache-hits': '1',
+404 silly registry.get     'x-timer': 'S1457308694.391582,VS0,VE0',
+404 silly registry.get     vary: 'Accept' } ]
+405 http 200 https://registry.npmjs.org/jquery
+406 silly registry.get cb [ 200,
+406 silly registry.get   { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+406 silly registry.get     etag: '"8MTL7MP4HZUMBW92VFJGYBXIZ"',
+406 silly registry.get     'content-type': 'application/json',
+406 silly registry.get     'cache-control': 'max-age=300',
+406 silly registry.get     'content-length': '59072',
+406 silly registry.get     'accept-ranges': 'bytes',
+406 silly registry.get     date: 'Sun, 06 Mar 2016 23:58:14 GMT',
+406 silly registry.get     via: '1.1 varnish',
+406 silly registry.get     age: '2',
+406 silly registry.get     connection: 'keep-alive',
+406 silly registry.get     'x-served-by': 'cache-atl6225-ATL',
+406 silly registry.get     'x-cache': 'HIT',
+406 silly registry.get     'x-cache-hits': '3',
+406 silly registry.get     'x-timer': 'S1457308694.380507,VS0,VE0',
+406 silly registry.get     vary: 'Accept' } ]
+407 silly addNameRange number 2 { name: 'gulp-sass', range: '>=2.1.1-0 <3.0.0-0', hasData: true }
+408 silly addNameRange versions [ 'gulp-sass',
+408 silly addNameRange   [ '0.1.0',
+408 silly addNameRange     '0.2.1',
+408 silly addNameRange     '0.2.2',
+408 silly addNameRange     '0.2.3',
+408 silly addNameRange     '0.3.0',
+408 silly addNameRange     '0.4.0',
+408 silly addNameRange     '0.4.1',
+408 silly addNameRange     '0.5.0',
+408 silly addNameRange     '0.5.1',
+408 silly addNameRange     '0.5.2',
+408 silly addNameRange     '0.6.0',
+408 silly addNameRange     '0.7.0',
+408 silly addNameRange     '0.7.1',
+408 silly addNameRange     '0.7.2',
+408 silly addNameRange     '0.7.3',
+408 silly addNameRange     '1.0.0',
+408 silly addNameRange     '1.1.0',
+408 silly addNameRange     '1.2.0',
+408 silly addNameRange     '1.2.1',
+408 silly addNameRange     '1.2.2',
+408 silly addNameRange     '1.2.3',
+408 silly addNameRange     '1.2.4',
+408 silly addNameRange     '1.3.0',
+408 silly addNameRange     '1.3.1',
+408 silly addNameRange     '1.3.2',
+408 silly addNameRange     '1.3.3',
+408 silly addNameRange     '2.0.0-alpha.1',
+408 silly addNameRange     '2.0.0',
+408 silly addNameRange     '2.0.2',
+408 silly addNameRange     '2.0.3',
+408 silly addNameRange     '2.0.4',
+408 silly addNameRange     '2.1.0-beta',
+408 silly addNameRange     '2.1.0',
+408 silly addNameRange     '2.1.1',
+408 silly addNameRange     '2.2.0',
+408 silly addNameRange     '2.3.0-beta.1' ] ]
+409 verbose addNamed [ 'gulp-sass', '2.2.0' ]
+410 verbose addNamed [ '2.2.0', '2.2.0' ]
+411 silly lockFile 53771eeb-gulp-sass-2-2-0 gulp-sass@2.2.0
+412 verbose lock gulp-sass@2.2.0 /home/patrick/.npm/53771eeb-gulp-sass-2-2-0.lock
+413 silly addNameRange number 2 { name: 'gulp-uglify',
+413 silly addNameRange   range: '>=1.5.1-0 <2.0.0-0',
+413 silly addNameRange   hasData: true }
+414 silly addNameRange versions [ 'gulp-uglify',
+414 silly addNameRange   [ '0.0.1',
+414 silly addNameRange     '0.0.3',
+414 silly addNameRange     '0.0.4',
+414 silly addNameRange     '0.1.0',
+414 silly addNameRange     '0.2.0',
+414 silly addNameRange     '0.2.1',
+414 silly addNameRange     '0.3.0',
+414 silly addNameRange     '0.3.1',
+414 silly addNameRange     '0.3.2',
+414 silly addNameRange     '1.0.0-0',
+414 silly addNameRange     '1.0.0',
+414 silly addNameRange     '1.0.1',
+414 silly addNameRange     '1.0.2',
+414 silly addNameRange     '1.1.0',
+414 silly addNameRange     '1.2.0',
+414 silly addNameRange     '1.3.0',
+414 silly addNameRange     '1.4.0',
+414 silly addNameRange     '1.4.1',
+414 silly addNameRange     '1.4.2',
+414 silly addNameRange     '1.5.1',
+414 silly addNameRange     '1.5.2',
+414 silly addNameRange     '1.5.3' ] ]
+415 verbose addNamed [ 'gulp-uglify', '1.5.3' ]
+416 verbose addNamed [ '1.5.3', '1.5.3' ]
+417 silly lockFile e4f052c9-gulp-uglify-1-5-3 gulp-uglify@1.5.3
+418 verbose lock gulp-uglify@1.5.3 /home/patrick/.npm/e4f052c9-gulp-uglify-1-5-3.lock
+419 silly addNameRange number 2 { name: 'jquery', range: '>=2.1.4-0 <3.0.0-0', hasData: true }
+420 silly addNameRange versions [ 'jquery',
+420 silly addNameRange   [ '1.5.1',
+420 silly addNameRange     '1.6.2',
+420 silly addNameRange     '1.6.3',
+420 silly addNameRange     '1.7.2',
+420 silly addNameRange     '1.7.3',
+420 silly addNameRange     '1.8.2',
+420 silly addNameRange     '1.8.3',
+420 silly addNameRange     '2.1.0-beta2',
+420 silly addNameRange     '2.1.0-beta3',
+420 silly addNameRange     '1.11.0-beta3',
+420 silly addNameRange     '1.11.0-rc1',
+420 silly addNameRange     '2.1.0-rc1',
+420 silly addNameRange     '1.11.0',
+420 silly addNameRange     '2.1.0',
+420 silly addNameRange     '2.1.1-beta1',
+420 silly addNameRange     '1.11.1-beta1',
+420 silly addNameRange     '2.1.1-rc1',
+420 silly addNameRange     '1.11.1-rc1',
+420 silly addNameRange     '2.1.1-rc2',
+420 silly addNameRange     '1.11.1-rc2',
+420 silly addNameRange     '2.1.1',
+420 silly addNameRange     '1.11.1',
+420 silly addNameRange     '1.9.1',
+420 silly addNameRange     '2.1.2',
+420 silly addNameRange     '1.11.2',
+420 silly addNameRange     '2.1.3',
+420 silly addNameRange     '2.1.4',
+420 silly addNameRange     '1.11.3',
+420 silly addNameRange     '3.0.0-alpha1',
+420 silly addNameRange     '1.12.0',
+420 silly addNameRange     '2.2.0',
+420 silly addNameRange     '3.0.0-beta1',
+420 silly addNameRange     '1.12.1',
+420 silly addNameRange     '2.2.1' ] ]
+421 verbose addNamed [ 'jquery', '2.2.1' ]
+422 verbose addNamed [ '2.2.1', '2.2.1' ]
+423 silly lockFile 97d245d8-jquery-2-2-1 jquery@2.2.1
+424 verbose lock jquery@2.2.1 /home/patrick/.npm/97d245d8-jquery-2-2-1.lock
+425 silly lockFile 86cb871f-ulp-uglify-gulp-uglify-1-5-3-tgz https://registry.npmjs.org/gulp-uglify/-/gulp-uglify-1.5.3.tgz
+426 verbose lock https://registry.npmjs.org/gulp-uglify/-/gulp-uglify-1.5.3.tgz /home/patrick/.npm/86cb871f-ulp-uglify-gulp-uglify-1-5-3-tgz.lock
+427 silly lockFile 8aa94fa3-pmjs-org-jquery-jquery-2-2-1-tgz https://registry.npmjs.org/jquery/-/jquery-2.2.1.tgz
+428 verbose lock https://registry.npmjs.org/jquery/-/jquery-2.2.1.tgz /home/patrick/.npm/8aa94fa3-pmjs-org-jquery-jquery-2-2-1-tgz.lock
+429 verbose addRemoteTarball [ 'https://registry.npmjs.org/gulp-uglify/-/gulp-uglify-1.5.3.tgz',
+429 verbose addRemoteTarball   '60a00b3975aba4186442a494979e9dfa3f13d0d6' ]
+430 verbose addRemoteTarball [ 'https://registry.npmjs.org/jquery/-/jquery-2.2.1.tgz',
+430 verbose addRemoteTarball   '3c3e16854ad3d2ac44ac65021b17426d22ad803f' ]
+431 info retry fetch attempt 1 at 18:58:14
+432 verbose fetch to= /tmp/npm-9797-jZIRykoS/registry.npmjs.org/gulp-uglify/-/gulp-uglify-1.5.3.tgz
+433 info retry fetch attempt 1 at 18:58:14
+434 verbose fetch to= /tmp/npm-9797-jZIRykoS/registry.npmjs.org/jquery/-/jquery-2.2.1.tgz
+435 http GET https://registry.npmjs.org/gulp-uglify/-/gulp-uglify-1.5.3.tgz
+436 http GET https://registry.npmjs.org/jquery/-/jquery-2.2.1.tgz
+437 silly lockFile 53771eeb-gulp-sass-2-2-0 gulp-sass@2.2.0
+438 silly lockFile 53771eeb-gulp-sass-2-2-0 gulp-sass@2.2.0
+439 silly lockFile e046b123-gulp-sass-2-1-1 gulp-sass@^2.1.1
+440 silly lockFile e046b123-gulp-sass-2-1-1 gulp-sass@^2.1.1
+441 http 200 https://registry.npmjs.org/mousetrap
+442 silly registry.get cb [ 200,
+442 silly registry.get   { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+442 silly registry.get     etag: '"68TDWW5S4FZQKQU9UJN1C95LS"',
+442 silly registry.get     'content-type': 'application/json',
+442 silly registry.get     'cache-control': 'max-age=300',
+442 silly registry.get     'content-length': '10400',
+442 silly registry.get     'accept-ranges': 'bytes',
+442 silly registry.get     date: 'Sun, 06 Mar 2016 23:58:14 GMT',
+442 silly registry.get     via: '1.1 varnish',
+442 silly registry.get     age: '0',
+442 silly registry.get     connection: 'keep-alive',
+442 silly registry.get     'x-served-by': 'cache-atl6238-ATL',
+442 silly registry.get     'x-cache': 'HIT',
+442 silly registry.get     'x-cache-hits': '1',
+442 silly registry.get     'x-timer': 'S1457308694.413080,VS0,VE30',
+442 silly registry.get     vary: 'Accept' } ]
+443 silly addNameRange number 2 { name: 'mousetrap', range: '>=1.5.3-0 <2.0.0-0', hasData: true }
+444 silly addNameRange versions [ 'mousetrap', [ '0.0.1', '1.4.6', '1.5.1', '1.5.2', '1.5.3' ] ]
+445 verbose addNamed [ 'mousetrap', '1.5.3' ]
+446 verbose addNamed [ '1.5.3', '1.5.3' ]
+447 silly lockFile aa4448d0-mousetrap-1-5-3 mousetrap@1.5.3
+448 verbose lock mousetrap@1.5.3 /home/patrick/.npm/aa4448d0-mousetrap-1-5-3.lock
+449 silly lockFile aa4448d0-mousetrap-1-5-3 mousetrap@1.5.3
+450 silly lockFile aa4448d0-mousetrap-1-5-3 mousetrap@1.5.3
+451 silly lockFile 85b6bd74-mousetrap-1-5-3 mousetrap@^1.5.3
+452 silly lockFile 85b6bd74-mousetrap-1-5-3 mousetrap@^1.5.3
+453 http 200 https://registry.npmjs.org/gulp-autoprefixer/-/gulp-autoprefixer-3.1.0.tgz
+454 silly lockFile 30915da9-ixer-gulp-autoprefixer-3-1-0-tgz https://registry.npmjs.org/gulp-autoprefixer/-/gulp-autoprefixer-3.1.0.tgz
+455 silly lockFile 30915da9-ixer-gulp-autoprefixer-3-1-0-tgz https://registry.npmjs.org/gulp-autoprefixer/-/gulp-autoprefixer-3.1.0.tgz
+456 silly lockFile 1e11cca8-gulp-autoprefixer-3-1-0 gulp-autoprefixer@3.1.0
+457 silly lockFile 1e11cca8-gulp-autoprefixer-3-1-0 gulp-autoprefixer@3.1.0
+458 http 200 https://registry.npmjs.org/babel-preset-es2015
+459 silly registry.get cb [ 200,
+459 silly registry.get   { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+459 silly registry.get     etag: '"92L4VA8G154A3UK8WTX0VBWCF"',
+459 silly registry.get     'content-type': 'application/json',
+459 silly registry.get     'cache-control': 'max-age=300',
+459 silly registry.get     'content-length': '33118',
+459 silly registry.get     'accept-ranges': 'bytes',
+459 silly registry.get     date: 'Sun, 06 Mar 2016 23:58:14 GMT',
+459 silly registry.get     via: '1.1 varnish',
+459 silly registry.get     age: '0',
+459 silly registry.get     connection: 'keep-alive',
+459 silly registry.get     'x-served-by': 'cache-atl6243-ATL',
+459 silly registry.get     'x-cache': 'HIT',
+459 silly registry.get     'x-cache-hits': '1',
+459 silly registry.get     'x-timer': 'S1457308694.420826,VS0,VE82',
+459 silly registry.get     vary: 'Accept' } ]
+460 silly addNameRange number 2 { name: 'babel-preset-es2015',
+460 silly addNameRange   range: '>=6.3.13-0 <7.0.0-0',
+460 silly addNameRange   hasData: true }
+461 silly addNameRange versions [ 'babel-preset-es2015',
+461 silly addNameRange   [ '6.0.2',
+461 silly addNameRange     '6.0.8',
+461 silly addNameRange     '6.0.11',
+461 silly addNameRange     '6.0.12',
+461 silly addNameRange     '6.0.14',
+461 silly addNameRange     '6.0.15',
+461 silly addNameRange     '6.1.2',
+461 silly addNameRange     '6.1.4',
+461 silly addNameRange     '6.1.17',
+461 silly addNameRange     '6.1.18',
+461 silly addNameRange     '6.2.4',
+461 silly addNameRange     '6.3.13',
+461 silly addNameRange     '6.5.0',
+461 silly addNameRange     '6.5.0-1',
+461 silly addNameRange     '6.6.0' ] ]
+462 verbose addNamed [ 'babel-preset-es2015', '6.6.0' ]
+463 verbose addNamed [ '6.6.0', '6.6.0' ]
+464 silly lockFile 172d6825-babel-preset-es2015-6-6-0 babel-preset-es2015@6.6.0
+465 verbose lock babel-preset-es2015@6.6.0 /home/patrick/.npm/172d6825-babel-preset-es2015-6-6-0.lock
+466 silly lockFile 0378e675-15-babel-preset-es2015-6-6-0-tgz https://registry.npmjs.org/babel-preset-es2015/-/babel-preset-es2015-6.6.0.tgz
+467 verbose lock https://registry.npmjs.org/babel-preset-es2015/-/babel-preset-es2015-6.6.0.tgz /home/patrick/.npm/0378e675-15-babel-preset-es2015-6-6-0-tgz.lock
+468 verbose addRemoteTarball [ 'https://registry.npmjs.org/babel-preset-es2015/-/babel-preset-es2015-6.6.0.tgz',
+468 verbose addRemoteTarball   '88b33e58fec94c6ebde58dc65ece5d14e0ec2568' ]
+469 info retry fetch attempt 1 at 18:58:14
+470 verbose fetch to= /tmp/npm-9797-jZIRykoS/registry.npmjs.org/babel-preset-es2015/-/babel-preset-es2015-6.6.0.tgz
+471 http GET https://registry.npmjs.org/babel-preset-es2015/-/babel-preset-es2015-6.6.0.tgz
+472 http 200 https://registry.npmjs.org/gulp-minify-css/-/gulp-minify-css-1.2.4.tgz
+473 silly lockFile 583b4c77-fy-css-gulp-minify-css-1-2-4-tgz https://registry.npmjs.org/gulp-minify-css/-/gulp-minify-css-1.2.4.tgz
+474 silly lockFile 583b4c77-fy-css-gulp-minify-css-1-2-4-tgz https://registry.npmjs.org/gulp-minify-css/-/gulp-minify-css-1.2.4.tgz
+475 silly lockFile 3a69208b-gulp-minify-css-1-2-4 gulp-minify-css@1.2.4
+476 silly lockFile 3a69208b-gulp-minify-css-1-2-4 gulp-minify-css@1.2.4
+477 silly lockFile b395207d-gulp-minify-css-1-2-3 gulp-minify-css@^1.2.3
+478 silly lockFile b395207d-gulp-minify-css-1-2-3 gulp-minify-css@^1.2.3
+479 http 200 https://registry.npmjs.org/gulp-uglify/-/gulp-uglify-1.5.3.tgz
+480 silly lockFile 86cb871f-ulp-uglify-gulp-uglify-1-5-3-tgz https://registry.npmjs.org/gulp-uglify/-/gulp-uglify-1.5.3.tgz
+481 silly lockFile 86cb871f-ulp-uglify-gulp-uglify-1-5-3-tgz https://registry.npmjs.org/gulp-uglify/-/gulp-uglify-1.5.3.tgz
+482 silly lockFile e4f052c9-gulp-uglify-1-5-3 gulp-uglify@1.5.3
+483 silly lockFile e4f052c9-gulp-uglify-1-5-3 gulp-uglify@1.5.3
+484 silly lockFile b532aeb3-gulp-uglify-1-5-1 gulp-uglify@^1.5.1
+485 silly lockFile b532aeb3-gulp-uglify-1-5-1 gulp-uglify@^1.5.1
+486 http 200 https://registry.npmjs.org/jquery/-/jquery-2.2.1.tgz
+487 http 304 https://registry.npmjs.org/basiccontext
+488 silly registry.get cb [ 304,
+488 silly registry.get   { date: 'Sun, 06 Mar 2016 23:58:14 GMT',
+488 silly registry.get     via: '1.1 varnish',
+488 silly registry.get     'cache-control': 'max-age=300',
+488 silly registry.get     etag: '"CWSOOP83GPICX2HS8IUXL61G"',
+488 silly registry.get     age: '0',
+488 silly registry.get     connection: 'keep-alive',
+488 silly registry.get     'x-served-by': 'cache-atl6235-ATL',
+488 silly registry.get     'x-cache': 'MISS',
+488 silly registry.get     'x-cache-hits': '0',
+488 silly registry.get     'x-timer': 'S1457308694.451172,VS0,VE176',
+488 silly registry.get     vary: 'Accept' } ]
+489 verbose etag https://registry.npmjs.org/basiccontext from cache
+490 silly addNameRange number 2 { name: 'basiccontext',
+490 silly addNameRange   range: '>=3.5.1-0 <4.0.0-0',
+490 silly addNameRange   hasData: true }
+491 silly addNameRange versions [ 'basiccontext',
+491 silly addNameRange   [ '3.0.0',
+491 silly addNameRange     '3.0.1',
+491 silly addNameRange     '3.0.2',
+491 silly addNameRange     '3.0.3',
+491 silly addNameRange     '3.1.0',
+491 silly addNameRange     '3.1.1',
+491 silly addNameRange     '3.1.2',
+491 silly addNameRange     '3.2.0',
+491 silly addNameRange     '3.2.1',
+491 silly addNameRange     '3.3.0',
+491 silly addNameRange     '3.3.1',
+491 silly addNameRange     '3.4.0',
+491 silly addNameRange     '3.5.0',
+491 silly addNameRange     '3.5.1' ] ]
+492 verbose addNamed [ 'basiccontext', '3.5.1' ]
+493 verbose addNamed [ '3.5.1', '3.5.1' ]
+494 silly lockFile f4cbc03b-basiccontext-3-5-1 basiccontext@3.5.1
+495 verbose lock basiccontext@3.5.1 /home/patrick/.npm/f4cbc03b-basiccontext-3-5-1.lock
+496 silly lockFile f4cbc03b-basiccontext-3-5-1 basiccontext@3.5.1
+497 silly lockFile f4cbc03b-basiccontext-3-5-1 basiccontext@3.5.1
+498 silly lockFile aeb93e44-basiccontext-3-5-1 basiccontext@^3.5.1
+499 silly lockFile aeb93e44-basiccontext-3-5-1 basiccontext@^3.5.1
+500 http 200 https://registry.npmjs.org/babel-preset-es2015/-/babel-preset-es2015-6.6.0.tgz
+501 silly lockFile 0378e675-15-babel-preset-es2015-6-6-0-tgz https://registry.npmjs.org/babel-preset-es2015/-/babel-preset-es2015-6.6.0.tgz
+502 silly lockFile 0378e675-15-babel-preset-es2015-6-6-0-tgz https://registry.npmjs.org/babel-preset-es2015/-/babel-preset-es2015-6.6.0.tgz
+503 silly lockFile 172d6825-babel-preset-es2015-6-6-0 babel-preset-es2015@6.6.0
+504 silly lockFile 172d6825-babel-preset-es2015-6-6-0 babel-preset-es2015@6.6.0
+505 silly lockFile b69bd922-babel-preset-es2015-6-3-13 babel-preset-es2015@^6.3.13
+506 silly lockFile b69bd922-babel-preset-es2015-6-3-13 babel-preset-es2015@^6.3.13
+507 silly lockFile 8aa94fa3-pmjs-org-jquery-jquery-2-2-1-tgz https://registry.npmjs.org/jquery/-/jquery-2.2.1.tgz
+508 silly lockFile 8aa94fa3-pmjs-org-jquery-jquery-2-2-1-tgz https://registry.npmjs.org/jquery/-/jquery-2.2.1.tgz
+509 silly lockFile 97d245d8-jquery-2-2-1 jquery@2.2.1
+510 silly lockFile 97d245d8-jquery-2-2-1 jquery@2.2.1
+511 silly lockFile 6f5fcb58-jquery-2-1-4 jquery@^2.1.4
+512 silly lockFile 6f5fcb58-jquery-2-1-4 jquery@^2.1.4
+513 silly resolved [ { name: 'gulp',
+513 silly resolved     description: 'The streaming build system',
+513 silly resolved     version: '3.9.1',
+513 silly resolved     homepage: 'http://gulpjs.com',
+513 silly resolved     repository: { type: 'git', url: 'git+https://github.com/gulpjs/gulp.git' },
+513 silly resolved     author:
+513 silly resolved      { name: 'Fractal',
+513 silly resolved        email: 'contact@wearefractal.com',
+513 silly resolved        url: 'http://wearefractal.com/' },
+513 silly resolved     tags: [ 'build', 'stream', 'system', 'make', 'tool', 'asset', 'pipeline' ],
+513 silly resolved     files: [ 'index.js', 'lib', 'bin', 'completion', 'gulp.1' ],
+513 silly resolved     bin: { gulp: './bin/gulp.js' },
+513 silly resolved     man: [ 'gulp.1' ],
+513 silly resolved     dependencies:
+513 silly resolved      { archy: '^1.0.0',
+513 silly resolved        chalk: '^1.0.0',
+513 silly resolved        deprecated: '^0.0.1',
+513 silly resolved        'gulp-util': '^3.0.0',
+513 silly resolved        interpret: '^1.0.0',
+513 silly resolved        liftoff: '^2.1.0',
+513 silly resolved        minimist: '^1.1.0',
+513 silly resolved        orchestrator: '^0.3.0',
+513 silly resolved        'pretty-hrtime': '^1.0.0',
+513 silly resolved        semver: '^4.1.0',
+513 silly resolved        tildify: '^1.0.0',
+513 silly resolved        v8flags: '^2.0.2',
+513 silly resolved        'vinyl-fs': '^0.3.0' },
+513 silly resolved     devDependencies:
+513 silly resolved      { coveralls: '^2.7.0',
+513 silly resolved        eslint: '^1.7.3',
+513 silly resolved        'eslint-config-gulp': '^2.0.0',
+513 silly resolved        'graceful-fs': '^3.0.0',
+513 silly resolved        istanbul: '^0.3.0',
+513 silly resolved        jscs: '^2.3.5',
+513 silly resolved        'jscs-preset-gulp': '^1.0.0',
+513 silly resolved        'marked-man': '^0.1.3',
+513 silly resolved        mkdirp: '^0.5.0',
+513 silly resolved        mocha: '^2.0.1',
+513 silly resolved        'mocha-lcov-reporter': '^0.0.1',
+513 silly resolved        q: '^1.0.0',
+513 silly resolved        rimraf: '^2.2.5',
+513 silly resolved        should: '^5.0.1' },
+513 silly resolved     scripts:
+513 silly resolved      { prepublish: 'marked-man --name gulp docs/CLI.md > gulp.1',
+513 silly resolved        lint: 'eslint . && jscs *.js bin/ lib/ test/',
+513 silly resolved        pretest: 'npm run lint',
+513 silly resolved        test: 'mocha --reporter spec',
+513 silly resolved        coveralls: 'istanbul cover _mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage' },
+513 silly resolved     engines: { node: '>= 0.9' },
+513 silly resolved     license: 'MIT',
+513 silly resolved     gitHead: '9c14e3a13a73a32e424f144d62566671b2fcdbed',
+513 silly resolved     bugs: { url: 'https://github.com/gulpjs/gulp/issues' },
+513 silly resolved     _id: 'gulp@3.9.1',
+513 silly resolved     _shasum: '571ce45928dd40af6514fc4011866016c13845b4',
+513 silly resolved     _from: 'gulp@^3.9.0',
+513 silly resolved     _npmVersion: '2.14.14',
+513 silly resolved     _nodeVersion: '0.10.41',
+513 silly resolved     _npmUser: { name: 'phated', email: 'blaine@iceddev.com' },
+513 silly resolved     maintainers: [ [Object], [Object] ],
+513 silly resolved     dist:
+513 silly resolved      { shasum: '571ce45928dd40af6514fc4011866016c13845b4',
+513 silly resolved        tarball: 'http://registry.npmjs.org/gulp/-/gulp-3.9.1.tgz' },
+513 silly resolved     _npmOperationalInternal:
+513 silly resolved      { host: 'packages-6-west.internal.npmjs.com',
+513 silly resolved        tmp: 'tmp/gulp-3.9.1.tgz_1454957415500_0.15343931876122952' },
+513 silly resolved     directories: {},
+513 silly resolved     _resolved: 'https://registry.npmjs.org/gulp/-/gulp-3.9.1.tgz',
+513 silly resolved     readme: 'ERROR: No README data found!' },
+513 silly resolved   { name: 'gulp-concat',
+513 silly resolved     description: 'Concatenates files',
+513 silly resolved     version: '2.6.0',
+513 silly resolved     repository:
+513 silly resolved      { type: 'git',
+513 silly resolved        url: 'git+https://github.com/wearefractal/gulp-concat.git' },
+513 silly resolved     author:
+513 silly resolved      { name: 'Fractal',
+513 silly resolved        email: 'contact@wearefractal.com',
+513 silly resolved        url: 'http://wearefractal.com/' },
+513 silly resolved     files: [ 'index.js' ],
+513 silly resolved     keywords: [ 'gulpplugin' ],
+513 silly resolved     dependencies:
+513 silly resolved      { 'concat-with-sourcemaps': '^1.0.0',
+513 silly resolved        'gulp-util': '^3.0.1',
+513 silly resolved        through2: '^0.6.3' },
+513 silly resolved     devDependencies:
+513 silly resolved      { gulp: '^3.8.7',
+513 silly resolved        'gulp-sourcemaps': '^1.1.4',
+513 silly resolved        istanbul: '^0.3.2',
+513 silly resolved        mocha: '^2.0.1',
+513 silly resolved        'mocha-lcov-reporter': '0.0.1',
+513 silly resolved        should: '^5.0.0',
+513 silly resolved        'stream-array': '^1.0.1',
+513 silly resolved        'stream-assert': '^2.0.1' },
+513 silly resolved     scripts: { test: 'mocha', coverage: 'istanbul cover _mocha' },
+513 silly resolved     engines: { node: '>= 0.10' },
+513 silly resolved     license: 'MIT',
+513 silly resolved     gitHead: '48e757a90687a8c5bca9d2945285ac0689aa7023',
+513 silly resolved     bugs: { url: 'https://github.com/wearefractal/gulp-concat/issues' },
+513 silly resolved     homepage: 'https://github.com/wearefractal/gulp-concat#readme',
+513 silly resolved     _id: 'gulp-concat@2.6.0',
+513 silly resolved     _shasum: '585cfb115411f348773131140566b6a81c69cb91',
+513 silly resolved     _from: 'gulp-concat@^2.6.0',
+513 silly resolved     _npmVersion: '2.10.0',
+513 silly resolved     _nodeVersion: '2.0.1',
+513 silly resolved     _npmUser: { name: 'fractal', email: 'contact@wearefractal.com' },
+513 silly resolved     maintainers: [ [Object] ],
+513 silly resolved     dist:
+513 silly resolved      { shasum: '585cfb115411f348773131140566b6a81c69cb91',
+513 silly resolved        tarball: 'http://registry.npmjs.org/gulp-concat/-/gulp-concat-2.6.0.tgz' },
+513 silly resolved     directories: {},
+513 silly resolved     _resolved: 'https://registry.npmjs.org/gulp-concat/-/gulp-concat-2.6.0.tgz',
+513 silly resolved     readme: 'ERROR: No README data found!' },
+513 silly resolved   { name: 'basicmodal',
+513 silly resolved     moduleName: 'basicModal',
+513 silly resolved     version: '3.3.3',
+513 silly resolved     authors: [ 'Tobias Reich <tobias@electerious.com>' ],
+513 silly resolved     description: 'Easy-to-use modal window for your website or webapp',
+513 silly resolved     main: 'dist/basicModal.min.js',
+513 silly resolved     keywords: [ 'modal', 'js', 'window', 'popup' ],
+513 silly resolved     scripts: { start: 'gulp watch', compile: 'gulp' },
+513 silly resolved     license: 'MIT',
+513 silly resolved     homepage: 'http://github.com/electerious/basicModal',
+513 silly resolved     repository:
+513 silly resolved      { type: 'git',
+513 silly resolved        url: 'git+https://github.com/electerious/basicModal.git' },
+513 silly resolved     devDependencies: { '@electerious/basictasks': '1.1.4', gulp: '^3.9.1' },
+513 silly resolved     gitHead: '12782b59f7f97e2e8c210c831b1cf926f3dbb05c',
+513 silly resolved     bugs: { url: 'https://github.com/electerious/basicModal/issues' },
+513 silly resolved     _id: 'basicmodal@3.3.3',
+513 silly resolved     _shasum: 'eb96008ef543c9c539a6304cf700c5dacf4e489d',
+513 silly resolved     _from: 'basicmodal@^3.3.2',
+513 silly resolved     _npmVersion: '3.6.0',
+513 silly resolved     _nodeVersion: '5.5.0',
+513 silly resolved     _npmUser: { name: 'electerious', email: 'tobias@electerious.com' },
+513 silly resolved     dist:
+513 silly resolved      { shasum: 'eb96008ef543c9c539a6304cf700c5dacf4e489d',
+513 silly resolved        tarball: 'http://registry.npmjs.org/basicmodal/-/basicmodal-3.3.3.tgz' },
+513 silly resolved     maintainers: [ [Object] ],
+513 silly resolved     _npmOperationalInternal:
+513 silly resolved      { host: 'packages-6-west.internal.npmjs.com',
+513 silly resolved        tmp: 'tmp/basicmodal-3.3.3.tgz_1454963925852_0.700592199806124' },
+513 silly resolved     directories: {},
+513 silly resolved     _resolved: 'https://registry.npmjs.org/basicmodal/-/basicmodal-3.3.3.tgz',
+513 silly resolved     readme: 'ERROR: No README data found!' },
+513 silly resolved   { name: 'gulp-babel',
+513 silly resolved     version: '6.1.2',
+513 silly resolved     description: 'Use next generation JavaScript, today',
+513 silly resolved     license: 'MIT',
+513 silly resolved     repository:
+513 silly resolved      { type: 'git',
+513 silly resolved        url: 'git+https://github.com/babel/gulp-babel.git' },
+513 silly resolved     author:
+513 silly resolved      { name: 'Sindre Sorhus',
+513 silly resolved        email: 'sindresorhus@gmail.com',
+513 silly resolved        url: 'sindresorhus.com' },
+513 silly resolved     engines: { node: '>=0.10.0' },
+513 silly resolved     scripts: { test: 'xo && mocha' },
+513 silly resolved     files: [ 'index.js' ],
+513 silly resolved     keywords:
+513 silly resolved      [ 'gulpplugin',
+513 silly resolved        'babel',
+513 silly resolved        'transpiler',
+513 silly resolved        'es2015',
+513 silly resolved        'es6',
+513 silly resolved        'rewriting',
+513 silly resolved        'transformation',
+513 silly resolved        'syntax',
+513 silly resolved        'codegen',
+513 silly resolved        'desugaring',
+513 silly resolved        'javascript',
+513 silly resolved        'ecmascript',
+513 silly resolved        'compiler' ],
+513 silly resolved     dependencies:
+513 silly resolved      { 'babel-core': '^6.0.2',
+513 silly resolved        'gulp-util': '^3.0.0',
+513 silly resolved        'object-assign': '^4.0.1',
+513 silly resolved        'replace-ext': '0.0.1',
+513 silly resolved        through2: '^2.0.0',
+513 silly resolved        'vinyl-sourcemaps-apply': '^0.2.0' },
+513 silly resolved     devDependencies:
+513 silly resolved      { 'babel-plugin-transform-es2015-arrow-functions': '^6.0.2',
+513 silly resolved        'babel-plugin-transform-es2015-block-scoping': '^6.0.9',
+513 silly resolved        'babel-plugin-transform-es2015-classes': '^6.0.8',
+513 silly resolved        'gulp-sourcemaps': '^1.1.1',
+513 silly resolved        mocha: '*',
+513 silly resolved        xo: '*' },
+513 silly resolved     xo: { envs: [Object] },
+513 silly resolved     gitHead: 'f7d6e35c21ddd626bd51b19c338255dd28d5f195',
+513 silly resolved     bugs: { url: 'https://github.com/babel/gulp-babel/issues' },
+513 silly resolved     homepage: 'https://github.com/babel/gulp-babel#readme',
+513 silly resolved     _id: 'gulp-babel@6.1.2',
+513 silly resolved     _shasum: '7c0176e4ba3f244c60588a0c4b320a45d1adefce',
+513 silly resolved     _from: 'gulp-babel@^6.1.1',
+513 silly resolved     _npmVersion: '3.7.0',
+513 silly resolved     _nodeVersion: '4.2.4',
+513 silly resolved     _npmUser: { name: 'sindresorhus', email: 'sindresorhus@gmail.com' },
+513 silly resolved     dist:
+513 silly resolved      { shasum: '7c0176e4ba3f244c60588a0c4b320a45d1adefce',
+513 silly resolved        tarball: 'http://registry.npmjs.org/gulp-babel/-/gulp-babel-6.1.2.tgz' },
+513 silly resolved     maintainers: [ [Object], [Object] ],
+513 silly resolved     directories: {},
+513 silly resolved     _resolved: 'https://registry.npmjs.org/gulp-babel/-/gulp-babel-6.1.2.tgz',
+513 silly resolved     readme: 'ERROR: No README data found!' },
+513 silly resolved   { name: 'gulp-inject',
+513 silly resolved     version: '3.0.0',
+513 silly resolved     description: 'A javascript, stylesheet and webcomponent injection plugin for Gulp, i.e. inject file references into your index.html',
+513 silly resolved     keywords:
+513 silly resolved      [ 'gulpplugin',
+513 silly resolved        'inject',
+513 silly resolved        'stylesheets',
+513 silly resolved        'webcomponents',
+513 silly resolved        'scripts',
+513 silly resolved        'index' ],
+513 silly resolved     homepage: 'https://github.com/klei/gulp-inject',
+513 silly resolved     bugs: { url: 'https://github.com/klei/gulp-inject/issues' },
+513 silly resolved     author:
+513 silly resolved      { name: 'Joakim Carlstein',
+513 silly resolved        email: 'joakim@klei.se',
+513 silly resolved        url: 'http://joakim.beng.se' },
+513 silly resolved     main: 'index.js',
+513 silly resolved     repository: { type: 'git', url: 'git://github.com/klei/gulp-inject.git' },
+513 silly resolved     scripts: { test: 'mocha -R spec src/**/*_test.js' },
+513 silly resolved     dependencies: { 'gulp-util': '^3.0.0', 'event-stream': '^3.1.0' },
+513 silly resolved     devDependencies: { mocha: '~2.0.1', should: '^4.0.4' },
+513 silly resolved     engines: { node: '>=0.10.0', npm: '>=1.2.10' },
+513 silly resolved     licenses: [ [Object] ],
+513 silly resolved     gitHead: 'e246aa8693689219292078aef70efc4202ec4812',
+513 silly resolved     _id: 'gulp-inject@3.0.0',
+513 silly resolved     _shasum: '2dc1ea94a960de909d765ef2252ed9af3bd1ed50',
+513 silly resolved     _from: 'gulp-inject@^3.0.0',
+513 silly resolved     _npmVersion: '3.3.3',
+513 silly resolved     _nodeVersion: '4.0.0',
+513 silly resolved     _npmUser: { name: 'joakimbeng', email: 'joakim@klei.se' },
+513 silly resolved     dist:
+513 silly resolved      { shasum: '2dc1ea94a960de909d765ef2252ed9af3bd1ed50',
+513 silly resolved        tarball: 'http://registry.npmjs.org/gulp-inject/-/gulp-inject-3.0.0.tgz' },
+513 silly resolved     maintainers: [ [Object] ],
+513 silly resolved     directories: {},
+513 silly resolved     _resolved: 'https://registry.npmjs.org/gulp-inject/-/gulp-inject-3.0.0.tgz',
+513 silly resolved     readme: 'ERROR: No README data found!' },
+513 silly resolved   { name: 'gulp-load-plugins',
+513 silly resolved     version: '1.2.0',
+513 silly resolved     description: 'Automatically load any gulp plugins in your package.json',
+513 silly resolved     scripts: { test: 'NODE_PATH=test/global_modules mocha' },
+513 silly resolved     files: [ 'index.js' ],
+513 silly resolved     repository:
+513 silly resolved      { type: 'git',
+513 silly resolved        url: 'git+https://github.com/jackfranklin/gulp-load-plugins.git' },
+513 silly resolved     keywords: [ 'gulpfriendly', 'gulp', 'require', 'load', 'plugins' ],
+513 silly resolved     author: { name: 'Jack Franklin' },
+513 silly resolved     contributors:
+513 silly resolved      [ [Object],
+513 silly resolved        [Object],
+513 silly resolved        [Object],
+513 silly resolved        [Object],
+513 silly resolved        [Object],
+513 silly resolved        [Object],
+513 silly resolved        [Object],
+513 silly resolved        [Object],
+513 silly resolved        [Object],
+513 silly resolved        [Object],
+513 silly resolved        [Object],
+513 silly resolved        [Object] ],
+513 silly resolved     license: 'MIT',
+513 silly resolved     dependencies:
+513 silly resolved      { 'findup-sync': '^0.2.1',
+513 silly resolved        'gulp-util': '^3.0.7',
+513 silly resolved        multimatch: '2.0.0',
+513 silly resolved        resolve: '^1.1.6' },
+513 silly resolved     devDependencies:
+513 silly resolved      { jshint: '^2.5.1',
+513 silly resolved        mocha: '^2.1.0',
+513 silly resolved        proxyquire: '^1.0.1',
+513 silly resolved        sinon: '^1.9.1' },
+513 silly resolved     gitHead: '78a3c25d5b3dc037bdfd0bafa8a96c65ecd9ebf1',
+513 silly resolved     bugs: { url: 'https://github.com/jackfranklin/gulp-load-plugins/issues' },
+513 silly resolved     homepage: 'https://github.com/jackfranklin/gulp-load-plugins#readme',
+513 silly resolved     _id: 'gulp-load-plugins@1.2.0',
+513 silly resolved     _shasum: '49513d284313cba79b8446e17cb36311e5175b70',
+513 silly resolved     _from: 'gulp-load-plugins@^1.2.0',
+513 silly resolved     _npmVersion: '3.5.2',
+513 silly resolved     _nodeVersion: '4.2.1',
+513 silly resolved     _npmUser: { name: 'jackfranklin', email: 'jack@jackfranklin.net' },
+513 silly resolved     dist:
+513 silly resolved      { shasum: '49513d284313cba79b8446e17cb36311e5175b70',
+513 silly resolved        tarball: 'http://registry.npmjs.org/gulp-load-plugins/-/gulp-load-plugins-1.2.0.tgz' },
+513 silly resolved     maintainers: [ [Object] ],
+513 silly resolved     directories: {},
+513 silly resolved     _resolved: 'https://registry.npmjs.org/gulp-load-plugins/-/gulp-load-plugins-1.2.0.tgz',
+513 silly resolved     readme: 'ERROR: No README data found!' },
+513 silly resolved   { name: 'gulp-rimraf',
+513 silly resolved     description: 'rimraf plugin for gulp',
+513 silly resolved     version: '0.2.0',
+513 silly resolved     homepage: 'https://github.com/robrich/gulp-rimraf',
+513 silly resolved     repository: { type: 'git', url: 'git://github.com/robrich/gulp-rimraf.git' },
+513 silly resolved     author: { name: 'Rob Richardson', url: 'http://robrich.org/' },
+513 silly resolved     main: './index.js',
+513 silly resolved     keywords:
+513 silly resolved      [ 'gulpplugin',
+513 silly resolved        'rimraf',
+513 silly resolved        'clean',
+513 silly resolved        'remove',
+513 silly resolved        'delete',
+513 silly resolved        'gulp-clean' ],
+513 silly resolved     dependencies: { 'gulp-util': '^3.0.1', rimraf: '^2.4.3', through2: '^2.0.0' },
+513 silly resolved     devDependencies:
+513 silly resolved      { jshint: '^2.8.0',
+513 silly resolved        mocha: '^2.3.3',
+513 silly resolved        should: '^7.1.0',
+513 silly resolved        vinyl: '^1.0.0' },
+513 silly resolved     scripts: { test: 'mocha && jshint .' },
+513 silly resolved     engines: { node: '>= 0.10.0' },
+513 silly resolved     license: 'MIT',
+513 silly resolved     gitHead: '5910c5b286f3835f941848f4374133809d0aa755',
+513 silly resolved     bugs: { url: 'https://github.com/robrich/gulp-rimraf/issues' },
+513 silly resolved     _id: 'gulp-rimraf@0.2.0',
+513 silly resolved     _shasum: 'b602ac6ccedf5cebe0a8e8bf4e89ce20fb84c4e2',
+513 silly resolved     _from: 'gulp-rimraf@^0.2.0',
+513 silly resolved     _npmVersion: '2.13.1',
+513 silly resolved     _nodeVersion: '4.1.1',
+513 silly resolved     _npmUser: { name: 'robrich', email: 'robrich@robrich.org' },
+513 silly resolved     maintainers: [ [Object] ],
+513 silly resolved     dist:
+513 silly resolved      { shasum: 'b602ac6ccedf5cebe0a8e8bf4e89ce20fb84c4e2',
+513 silly resolved        tarball: 'http://registry.npmjs.org/gulp-rimraf/-/gulp-rimraf-0.2.0.tgz' },
+513 silly resolved     directories: {},
+513 silly resolved     _resolved: 'https://registry.npmjs.org/gulp-rimraf/-/gulp-rimraf-0.2.0.tgz',
+513 silly resolved     readme: 'ERROR: No README data found!' },
+513 silly resolved   { name: 'gulp-sass',
+513 silly resolved     version: '2.2.0',
+513 silly resolved     description: 'Gulp plugin for sass',
+513 silly resolved     main: 'index.js',
+513 silly resolved     scripts: { test: 'mocha test' },
+513 silly resolved     repository: { type: 'git', url: 'git://github.com/dlmanning/gulp-sass.git' },
+513 silly resolved     keywords: [ 'gulpplugin', 'sass', 'gulp' ],
+513 silly resolved     author: { name: 'David Manning' },
+513 silly resolved     license: 'MIT',
+513 silly resolved     bugs: { url: 'https://github.com/dlmanning/gulp-sass/issues' },
+513 silly resolved     dependencies:
+513 silly resolved      { 'gulp-util': '^3.0',
+513 silly resolved        'node-sass': '^3.4.1',
+513 silly resolved        'object-assign': '^4.0.1',
+513 silly resolved        through2: '^2.0.0',
+513 silly resolved        'vinyl-sourcemaps-apply': '^0.2.0' },
+513 silly resolved     devDependencies:
+513 silly resolved      { 'autoprefixer-core': '^5.2.1',
+513 silly resolved        eslint: '^1.6.0',
+513 silly resolved        globule: '^0.2.0',
+513 silly resolved        gulp: '^3.8.11',
+513 silly resolved        'gulp-postcss': '^5.1.10',
+513 silly resolved        'gulp-sourcemaps': '^1.5.2',
+513 silly resolved        'gulp-tap': '^0.1.3',
+513 silly resolved        mocha: '^2.2.1',
+513 silly resolved        rimraf: '^2.4.3',
+513 silly resolved        should: '^7.1.0' },
+513 silly resolved     gitHead: '1888f3561f7db25c016dbc17ace4fcfd4456e940',
+513 silly resolved     homepage: 'https://github.com/dlmanning/gulp-sass#readme',
+513 silly resolved     _id: 'gulp-sass@2.2.0',
+513 silly resolved     _shasum: 'ac7fb33112443ee4fd2df7468ed966a14a72476f',
+513 silly resolved     _from: 'gulp-sass@^2.1.1',
+513 silly resolved     _npmVersion: '2.13.2',
+513 silly resolved     _nodeVersion: '2.5.0',
+513 silly resolved     _npmUser: { name: 'xzyfer', email: 'xzyfer@gmail.com' },
+513 silly resolved     maintainers: [ [Object], [Object], [Object] ],
+513 silly resolved     dist:
+513 silly resolved      { shasum: 'ac7fb33112443ee4fd2df7468ed966a14a72476f',
+513 silly resolved        tarball: 'http://registry.npmjs.org/gulp-sass/-/gulp-sass-2.2.0.tgz' },
+513 silly resolved     _npmOperationalInternal:
+513 silly resolved      { host: 'packages-5-east.internal.npmjs.com',
+513 silly resolved        tmp: 'tmp/gulp-sass-2.2.0.tgz_1454585742634_0.3176706349477172' },
+513 silly resolved     directories: {},
+513 silly resolved     _resolved: 'https://registry.npmjs.org/gulp-sass/-/gulp-sass-2.2.0.tgz',
+513 silly resolved     readme: 'ERROR: No README data found!' },
+513 silly resolved   { name: 'mousetrap',
+513 silly resolved     version: '1.5.3',
+513 silly resolved     description: 'Simple library for handling keyboard shortcuts',
+513 silly resolved     main: 'mousetrap.js',
+513 silly resolved     directories: { test: 'tests' },
+513 silly resolved     scripts: { test: 'grunt mocha' },
+513 silly resolved     repository: { type: 'git', url: 'git://github.com/ccampbell/mousetrap.git' },
+513 silly resolved     keywords: [ 'keyboard', 'shortcuts', 'events' ],
+513 silly resolved     author: { name: 'Craig Campbell' },
+513 silly resolved     license: 'Apache 2.0',
+513 silly resolved     gitHead: 'c202a0bd4967d5a3064f9cb376db51dec9345336',
+513 silly resolved     devDependencies:
+513 silly resolved      { grunt: '~0.4.1',
+513 silly resolved        'grunt-complexity': '~0.1.2',
+513 silly resolved        'grunt-mocha': '~0.3.1' },
+513 silly resolved     bugs: { url: 'https://github.com/ccampbell/mousetrap/issues' },
+513 silly resolved     homepage: 'https://github.com/ccampbell/mousetrap',
+513 silly resolved     _id: 'mousetrap@1.5.3',
+513 silly resolved     dist:
+513 silly resolved      { shasum: '33a900b15184427c4f583e9d9822ee6c3eaf265b',
+513 silly resolved        tarball: 'http://registry.npmjs.org/mousetrap/-/mousetrap-1.5.3.tgz' },
+513 silly resolved     _from: 'mousetrap@^1.5.3',
+513 silly resolved     _npmVersion: '1.4.3',
+513 silly resolved     _npmUser: { name: 'ccampbell', email: 'iamcraigcampbell@gmail.com' },
+513 silly resolved     maintainers: [ [Object], [Object] ],
+513 silly resolved     _shasum: '33a900b15184427c4f583e9d9822ee6c3eaf265b',
+513 silly resolved     _resolved: 'https://registry.npmjs.org/mousetrap/-/mousetrap-1.5.3.tgz',
+513 silly resolved     readme: 'ERROR: No README data found!' },
+513 silly resolved   { name: 'gulp-autoprefixer',
+513 silly resolved     version: '3.1.0',
+513 silly resolved     description: 'Prefix CSS',
+513 silly resolved     license: 'MIT',
+513 silly resolved     repository:
+513 silly resolved      { type: 'git',
+513 silly resolved        url: 'https://github.com/sindresorhus/gulp-autoprefixer' },
+513 silly resolved     author:
+513 silly resolved      { name: 'Sindre Sorhus',
+513 silly resolved        email: 'sindresorhus@gmail.com',
+513 silly resolved        url: 'sindresorhus.com' },
+513 silly resolved     engines: { node: '>=0.12.0' },
+513 silly resolved     scripts: { test: 'xo && mocha' },
+513 silly resolved     files: [ 'index.js' ],
+513 silly resolved     keywords:
+513 silly resolved      [ 'gulpplugin',
+513 silly resolved        'autoprefixer',
+513 silly resolved        'postcss',
+513 silly resolved        'css',
+513 silly resolved        'prefix',
+513 silly resolved        'prefixes',
+513 silly resolved        'stylesheet',
+513 silly resolved        'preprocess',
+513 silly resolved        'postcss-runner' ],
+513 silly resolved     dependencies:
+513 silly resolved      { autoprefixer: '^6.0.0',
+513 silly resolved        'gulp-util': '^3.0.0',
+513 silly resolved        postcss: '^5.0.4',
+513 silly resolved        through2: '^2.0.0',
+513 silly resolved        'vinyl-sourcemaps-apply': '^0.2.0' },
+513 silly resolved     devDependencies: { 'gulp-sourcemaps': '^1.1.1', mocha: '*', xo: '*' },
+513 silly resolved     gitHead: '8cc62f4fa3c8bc8ab1efe2c59fe7c13ee5c7b652',
+513 silly resolved     bugs: { url: 'https://github.com/sindresorhus/gulp-autoprefixer/issues' },
+513 silly resolved     homepage: 'https://github.com/sindresorhus/gulp-autoprefixer',
+513 silly resolved     _id: 'gulp-autoprefixer@3.1.0',
+513 silly resolved     _shasum: '2b3ada439fdb120ed4eb3a574b122234a8ba283a',
+513 silly resolved     _from: 'gulp-autoprefixer@3.1.0',
+513 silly resolved     _npmVersion: '2.14.4',
+513 silly resolved     _nodeVersion: '4.1.1',
+513 silly resolved     _npmUser: { name: 'sindresorhus', email: 'sindresorhus@gmail.com' },
+513 silly resolved     dist:
+513 silly resolved      { shasum: '2b3ada439fdb120ed4eb3a574b122234a8ba283a',
+513 silly resolved        tarball: 'http://registry.npmjs.org/gulp-autoprefixer/-/gulp-autoprefixer-3.1.0.tgz' },
+513 silly resolved     maintainers: [ [Object], [Object] ],
+513 silly resolved     directories: {},
+513 silly resolved     _resolved: 'https://registry.npmjs.org/gulp-autoprefixer/-/gulp-autoprefixer-3.1.0.tgz' },
+513 silly resolved   { name: 'gulp-minify-css',
+513 silly resolved     description: 'Minify css with clean-css.',
+513 silly resolved     version: '1.2.4',
+513 silly resolved     license: 'MIT',
+513 silly resolved     files: [ 'index.js' ],
+513 silly resolved     scripts:
+513 silly resolved      { pretest: 'eslint --fix --config @shinnn/node-legacy --env mocha index.js test',
+513 silly resolved        test: 'node --harmony_destructuring node_modules/mocha/bin/_mocha --full-trace',
+513 silly resolved        'test-dot': 'node --harmony_destructuring node_modules/mocha/bin/_mocha --reporter dot --full-trace',
+513 silly resolved        coverage: 'node --harmony_destructuring node_modules/istanbul/lib/cli cover _mocha -- --full-trace',
+513 silly resolved        coveralls: '${npm_package_scripts_coverage} && istanbul-coveralls' },
+513 silly resolved     dependencies:
+513 silly resolved      { 'clean-css': '^3.3.3',
+513 silly resolved        'gulp-util': '^3.0.5',
+513 silly resolved        'object-assign': '^4.0.1',
+513 silly resolved        'readable-stream': '^2.0.0',
+513 silly resolved        'vinyl-bufferstream': '^1.0.1',
+513 silly resolved        'vinyl-sourcemaps-apply': '^0.2.0' },
+513 silly resolved     devDependencies:
+513 silly resolved      { '@shinnn/eslint-config-node-legacy': '^1.0.0',
+513 silly resolved        chai: '^3.0.0',
+513 silly resolved        eslint: '^1.10.2',
+513 silly resolved        'from2-string': '^1.0.2',
+513 silly resolved        'gulp-sourcemaps': '^1.5.2',
+513 silly resolved        'gulp-stylus': '^2.0.5',
+513 silly resolved        istanbul: '^0.4.1',
+513 silly resolved        'istanbul-coveralls': '^1.0.3',
+513 silly resolved        mocha: '^2.2.5',
+513 silly resolved        'stream-combiner2': '^1.1.1',
+513 silly resolved        vinyl: '^1.1.0' },
+513 silly resolved     gitHead: 'ae54239a273d6ae7bb0234fcde3545f5044aed72',
+513 silly resolved     _id: 'gulp-minify-css@1.2.4',
+513 silly resolved     _shasum: 'b6164957602ea27f9e5ad88227695dd205778c06',
+513 silly resolved     _from: 'gulp-minify-css@^1.2.3',
+513 silly resolved     _npmVersion: '3.6.0',
+513 silly resolved     _nodeVersion: '5.6.0',
+513 silly resolved     _npmUser: { name: 'murphydanger', email: 'j957453@trbvm.com' },
+513 silly resolved     dist:
+513 silly resolved      { shasum: 'b6164957602ea27f9e5ad88227695dd205778c06',
+513 silly resolved        tarball: 'http://registry.npmjs.org/gulp-minify-css/-/gulp-minify-css-1.2.4.tgz' },
+513 silly resolved     maintainers: [ [Object], [Object] ],
+513 silly resolved     _npmOperationalInternal:
+513 silly resolved      { host: 'packages-9-west.internal.npmjs.com',
+513 silly resolved        tmp: 'tmp/gulp-minify-css-1.2.4.tgz_1456309500783_0.5351310917176306' },
+513 silly resolved     directories: {},
+513 silly resolved     _resolved: 'https://registry.npmjs.org/gulp-minify-css/-/gulp-minify-css-1.2.4.tgz' },
+513 silly resolved   { name: 'gulp-uglify',
+513 silly resolved     description: 'Minify files with UglifyJS.',
+513 silly resolved     version: '1.5.3',
+513 silly resolved     author: { name: 'Terin Stock', email: 'terinjokes@gmail.com' },
+513 silly resolved     bugs: { url: 'https://github.com/terinjokes/gulp-uglify/issues' },
+513 silly resolved     dependencies:
+513 silly resolved      { deap: '^1.0.0',
+513 silly resolved        'fancy-log': '^1.0.0',
+513 silly resolved        'gulp-util': '^3.0.0',
+513 silly resolved        isobject: '^2.0.0',
+513 silly resolved        through2: '^2.0.0',
+513 silly resolved        'uglify-js': '2.6.2',
+513 silly resolved        'uglify-save-license': '^0.4.1',
+513 silly resolved        'vinyl-sourcemaps-apply': '^0.2.0' },
+513 silly resolved     devDependencies:
+513 silly resolved      { cmem: '^1.0.0',
+513 silly resolved        coveralls: '^2.11.4',
+513 silly resolved        'gulp-concat': '^2.0.0',
+513 silly resolved        'gulp-sourcemaps': '^1.0.0',
+513 silly resolved        istanbul: '^0.4.0',
+513 silly resolved        tape: '^4.0.0',
+513 silly resolved        vinyl: '^1.0.0',
+513 silly resolved        xo: '^0.12.0' },
+513 silly resolved     homepage: 'https://github.com/terinjokes/gulp-uglify/',
+513 silly resolved     keywords: [ 'gulpplugin' ],
+513 silly resolved     license: 'MIT',
+513 silly resolved     main: 'index.js',
+513 silly resolved     repository:
+513 silly resolved      { type: 'git',
+513 silly resolved        url: 'git+https://github.com/terinjokes/gulp-uglify.git' },
+513 silly resolved     xo: { space: true },
+513 silly resolved     files: [ 'index.js', 'minifier.js', 'lib/' ],
+513 silly resolved     scripts:
+513 silly resolved      { test: 'xo && istanbul cover ./node_modules/tape/bin/tape test/*.js',
+513 silly resolved        coverage: 'cat ./coverage/lcov.info | coveralls' },
+513 silly resolved     gitHead: '1a3e6cbab0bab89f856450b160f2d1349f1a0ff7',
+513 silly resolved     _id: 'gulp-uglify@1.5.3',
+513 silly resolved     _shasum: '60a00b3975aba4186442a494979e9dfa3f13d0d6',
+513 silly resolved     _from: 'gulp-uglify@^1.5.1',
+513 silly resolved     _npmVersion: '2.14.17',
+513 silly resolved     _nodeVersion: '4.3.0',
+513 silly resolved     _npmUser: { name: 'terinjokes', email: 'terinjokes@gmail.com' },
+513 silly resolved     dist:
+513 silly resolved      { shasum: '60a00b3975aba4186442a494979e9dfa3f13d0d6',
+513 silly resolved        tarball: 'http://registry.npmjs.org/gulp-uglify/-/gulp-uglify-1.5.3.tgz' },
+513 silly resolved     maintainers: [ [Object] ],
+513 silly resolved     _npmOperationalInternal:
+513 silly resolved      { host: 'packages-9-west.internal.npmjs.com',
+513 silly resolved        tmp: 'tmp/gulp-uglify-1.5.3.tgz_1456172275335_0.5384800920728594' },
+513 silly resolved     directories: {},
+513 silly resolved     _resolved: 'https://registry.npmjs.org/gulp-uglify/-/gulp-uglify-1.5.3.tgz' },
+513 silly resolved   { name: 'basiccontext',
+513 silly resolved     moduleName: 'basicContext',
+513 silly resolved     version: '3.5.1',
+513 silly resolved     authors: [ 'Tobias Reich <tobias@electerious.com>' ],
+513 silly resolved     description: 'Easy-to-use context-menu for your website or webapp',
+513 silly resolved     main: 'dist/basicContext.min.js',
+513 silly resolved     keywords: [ 'context', 'menu', 'popup', 'right-click' ],
+513 silly resolved     license: 'MIT',
+513 silly resolved     homepage: 'http://github.com/electerious/basicContext',
+513 silly resolved     repository:
+513 silly resolved      { type: 'git',
+513 silly resolved        url: 'git+https://github.com/electerious/basicContext.git' },
+513 silly resolved     devDependencies:
+513 silly resolved      { '@electerious/modulizer': '^1.0.1',
+513 silly resolved        gulp: '^3.9.0',
+513 silly resolved        'gulp-autoprefixer': '3.1.0',
+513 silly resolved        'gulp-babel': '^5.2.1',
+513 silly resolved        'gulp-concat': '^2.6.0',
+513 silly resolved        'gulp-footer': '^1.0.5',
+513 silly resolved        'gulp-header': '^1.7.1',
+513 silly resolved        'gulp-load-plugins': '^1.2.0',
+513 silly resolved        'gulp-minify-css': '^1.2.3',
+513 silly resolved        'gulp-rename': '^1.2.2',
+513 silly resolved        'gulp-sass': '^2.1.1',
+513 silly resolved        'gulp-uglify': '^1.5.1',
+513 silly resolved        'gulp-util': '^3.0.7' },
+513 silly resolved     gitHead: 'e01ae9d3d60516b4f6e2921dbd924c29abca9470',
+513 silly resolved     bugs: { url: 'https://github.com/electerious/basicContext/issues' },
+513 silly resolved     _id: 'basiccontext@3.5.1',
+513 silly resolved     scripts: {},
+513 silly resolved     _shasum: 'e1f512d447c8c19c48d0a616f77a725d6b181ee0',
+513 silly resolved     _from: 'basiccontext@^3.5.1',
+513 silly resolved     _npmVersion: '3.5.2',
+513 silly resolved     _nodeVersion: '5.1.1',
+513 silly resolved     _npmUser: { name: 'electerious', email: 'tobias@electerious.com' },
+513 silly resolved     dist:
+513 silly resolved      { shasum: 'e1f512d447c8c19c48d0a616f77a725d6b181ee0',
+513 silly resolved        tarball: 'http://registry.npmjs.org/basiccontext/-/basiccontext-3.5.1.tgz' },
+513 silly resolved     maintainers: [ [Object] ],
+513 silly resolved     directories: {},
+513 silly resolved     _resolved: 'https://registry.npmjs.org/basiccontext/-/basiccontext-3.5.1.tgz',
+513 silly resolved     readme: 'ERROR: No README data found!' },
+513 silly resolved   { name: 'babel-preset-es2015',
+513 silly resolved     version: '6.6.0',
+513 silly resolved     description: 'Babel preset for all es2015 plugins.',
+513 silly resolved     author: { name: 'Sebastian McKenzie', email: 'sebmck@gmail.com' },
+513 silly resolved     homepage: 'https://babeljs.io/',
+513 silly resolved     license: 'MIT',
+513 silly resolved     repository:
+513 silly resolved      { type: 'git',
+513 silly resolved        url: 'https://github.com/babel/babel/tree/master/packages/babel-preset-es2015' },
+513 silly resolved     main: 'index.js',
+513 silly resolved     dependencies:
+513 silly resolved      { 'babel-plugin-transform-es2015-template-literals': '^6.6.0',
+513 silly resolved        'babel-plugin-transform-es2015-literals': '^6.3.13',
+513 silly resolved        'babel-plugin-transform-es2015-function-name': '^6.3.13',
+513 silly resolved        'babel-plugin-transform-es2015-arrow-functions': '^6.3.13',
+513 silly resolved        'babel-plugin-transform-es2015-block-scoped-functions': '^6.3.13',
+513 silly resolved        'babel-plugin-transform-es2015-classes': '^6.6.0',
+513 silly resolved        'babel-plugin-transform-es2015-object-super': '^6.3.13',
+513 silly resolved        'babel-plugin-transform-es2015-shorthand-properties': '^6.3.13',
+513 silly resolved        'babel-plugin-transform-es2015-computed-properties': '^6.3.13',
+513 silly resolved        'babel-plugin-transform-es2015-duplicate-keys': '^6.6.0',
+513 silly resolved        'babel-plugin-transform-es2015-for-of': '^6.6.0',
+513 silly resolved        'babel-plugin-transform-es2015-sticky-regex': '^6.3.13',
+513 silly resolved        'babel-plugin-transform-es2015-unicode-regex': '^6.3.13',
+513 silly resolved        'babel-plugin-check-es2015-constants': '^6.3.13',
+513 silly resolved        'babel-plugin-transform-es2015-spread': '^6.3.13',
+513 silly resolved        'babel-plugin-transform-es2015-parameters': '^6.6.0',
+513 silly resolved        'babel-plugin-transform-es2015-destructuring': '^6.6.0',
+513 silly resolved        'babel-plugin-transform-es2015-block-scoping': '^6.6.0',
+513 silly resolved        'babel-plugin-transform-es2015-typeof-symbol': '^6.6.0',
+513 silly resolved        'babel-plugin-transform-es2015-modules-commonjs': '^6.6.0',
+513 silly resolved        'babel-plugin-transform-regenerator': '^6.6.0' },
+513 silly resolved     devDependencies: { 'babel-helper-transform-fixture-test-runner': '^6.3.13' },
+513 silly resolved     _id: 'babel-preset-es2015@6.6.0',
+513 silly resolved     scripts: {},
+513 silly resolved     _shasum: '88b33e58fec94c6ebde58dc65ece5d14e0ec2568',
+513 silly resolved     _from: 'babel-preset-es2015@^6.3.13',
+513 silly resolved     _npmVersion: '3.6.0',
+513 silly resolved     _nodeVersion: '5.1.0',
+513 silly resolved     _npmUser: { name: 'hzoo', email: 'hi@henryzoo.com' },
+513 silly resolved     dist:
+513 silly resolved      { shasum: '88b33e58fec94c6ebde58dc65ece5d14e0ec2568',
+513 silly resolved        tarball: 'http://registry.npmjs.org/babel-preset-es2015/-/babel-preset-es2015-6.6.0.tgz' },
+513 silly resolved     maintainers: [ [Object], [Object], [Object], [Object], [Object], [Object] ],
+513 silly resolved     _npmOperationalInternal:
+513 silly resolved      { host: 'packages-5-east.internal.npmjs.com',
+513 silly resolved        tmp: 'tmp/babel-preset-es2015-6.6.0.tgz_1456780384602_0.3743636200670153' },
+513 silly resolved     directories: {},
+513 silly resolved     _resolved: 'https://registry.npmjs.org/babel-preset-es2015/-/babel-preset-es2015-6.6.0.tgz' },
+513 silly resolved   { name: 'jquery',
+513 silly resolved     title: 'jQuery',
+513 silly resolved     description: 'JavaScript library for DOM operations',
+513 silly resolved     version: '2.2.1',
+513 silly resolved     main: 'dist/jquery.js',
+513 silly resolved     homepage: 'http://jquery.com',
+513 silly resolved     author:
+513 silly resolved      { name: 'jQuery Foundation and other contributors',
+513 silly resolved        url: 'https://github.com/jquery/jquery/blob/2.2.1/AUTHORS.txt' },
+513 silly resolved     repository: { type: 'git', url: 'git+https://github.com/jquery/jquery.git' },
+513 silly resolved     keywords: [ 'jquery', 'javascript', 'browser', 'library' ],
+513 silly resolved     bugs: { url: 'https://github.com/jquery/jquery/issues' },
+513 silly resolved     license: 'MIT',
+513 silly resolved     dependencies: {},
+513 silly resolved     devDependencies:
+513 silly resolved      { commitplease: '2.0.0',
+513 silly resolved        'core-js': '0.9.17',
+513 silly resolved        grunt: '0.4.5',
+513 silly resolved        'grunt-babel': '5.0.1',
+513 silly resolved        'grunt-cli': '0.1.13',
+513 silly resolved        'grunt-compare-size': '0.4.0',
+513 silly resolved        'grunt-contrib-jshint': '0.11.2',
+513 silly resolved        'grunt-contrib-uglify': '0.9.2',
+513 silly resolved        'grunt-contrib-watch': '0.6.1',
+513 silly resolved        'grunt-git-authors': '2.0.1',
+513 silly resolved        'grunt-jscs': '2.1.0',
+513 silly resolved        'grunt-jsonlint': '1.0.4',
+513 silly resolved        'grunt-npmcopy': '0.1.0',
+513 silly resolved        'gzip-js': '0.3.2',
+513 silly resolved        jsdom: '5.6.1',
+513 silly resolved        'load-grunt-tasks': '1.0.0',
+513 silly resolved        qunitjs: '1.17.1',
+513 silly resolved        'qunit-assert-step': '1.0.3',
+513 silly resolved        requirejs: '2.1.17',
+513 silly resolved        sinon: '1.10.3',
+513 silly resolved        sizzle: '2.2.1',
+513 silly resolved        'strip-json-comments': '1.0.3',
+513 silly resolved        testswarm: '1.1.0',
+513 silly resolved        'win-spawn': '2.0.0' },
+513 silly resolved     scripts:
+513 silly resolved      { build: 'npm install && grunt',
+513 silly resolved        start: 'grunt watch',
+513 silly resolved        test: 'grunt && grunt test' },
+513 silly resolved     commitplease: { components: [Object] },
+513 silly resolved     gitHead: '788eaba2f83e7b7445c7a83a50c81c0704423874',
+513 silly resolved     _id: 'jquery@2.2.1',
+513 silly resolved     _shasum: '3c3e16854ad3d2ac44ac65021b17426d22ad803f',
+513 silly resolved     _from: 'jquery@^2.1.4',
+513 silly resolved     _npmVersion: '2.14.19',
+513 silly resolved     _nodeVersion: '0.10.42',
+513 silly resolved     _npmUser: { name: 'timmywil', email: 'timmywillisn@gmail.com' },
+513 silly resolved     maintainers: [ [Object], [Object], [Object], [Object] ],
+513 silly resolved     dist:
+513 silly resolved      { shasum: '3c3e16854ad3d2ac44ac65021b17426d22ad803f',
+513 silly resolved        tarball: 'http://registry.npmjs.org/jquery/-/jquery-2.2.1.tgz' },
+513 silly resolved     _npmOperationalInternal:
+513 silly resolved      { host: 'packages-9-west.internal.npmjs.com',
+513 silly resolved        tmp: 'tmp/jquery-2.2.1.tgz_1456168325917_0.42471840139478445' },
+513 silly resolved     directories: {},
+513 silly resolved     _resolved: 'https://registry.npmjs.org/jquery/-/jquery-2.2.1.tgz' } ]
+514 info install gulp@3.9.1 into /run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src
+515 info install gulp-concat@2.6.0 into /run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src
+516 info install basicmodal@3.3.3 into /run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src
+517 info install gulp-babel@6.1.2 into /run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src
+518 info install gulp-inject@3.0.0 into /run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src
+519 info install gulp-load-plugins@1.2.0 into /run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src
+520 info install gulp-rimraf@0.2.0 into /run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src
+521 info install gulp-sass@2.2.0 into /run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src
+522 info install mousetrap@1.5.3 into /run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src
+523 info install gulp-autoprefixer@3.1.0 into /run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src
+524 info install gulp-minify-css@1.2.4 into /run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src
+525 info install gulp-uglify@1.5.3 into /run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src
+526 info install basiccontext@3.5.1 into /run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src
+527 info install babel-preset-es2015@6.6.0 into /run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src
+528 info install jquery@2.2.1 into /run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src
+529 info installOne gulp@3.9.1
+530 info installOne gulp-concat@2.6.0
+531 info installOne basicmodal@3.3.3
+532 info installOne gulp-babel@6.1.2
+533 info installOne gulp-inject@3.0.0
+534 info installOne gulp-load-plugins@1.2.0
+535 info installOne gulp-rimraf@0.2.0
+536 info installOne gulp-sass@2.2.0
+537 info installOne mousetrap@1.5.3
+538 info installOne gulp-autoprefixer@3.1.0
+539 warn engine gulp-autoprefixer@3.1.0: wanted: {"node":">=0.12.0"} (current: {"node":"0.10.25","npm":"1.4.21"})
+540 info installOne gulp-minify-css@1.2.4
+541 info installOne gulp-uglify@1.5.3
+542 info installOne basiccontext@3.5.1
+543 info installOne babel-preset-es2015@6.6.0
+544 info installOne jquery@2.2.1
+545 verbose node_modules/gulp unbuild
+546 verbose node_modules/gulp-inject unbuild
+547 verbose node_modules/gulp-concat unbuild
+548 verbose node_modules/basicmodal unbuild
+549 verbose node_modules/gulp-sass unbuild
+550 verbose node_modules/gulp-babel unbuild
+551 verbose node_modules/gulp-load-plugins unbuild
+552 verbose node_modules/gulp-rimraf unbuild
+553 verbose node_modules/mousetrap unbuild
+554 verbose node_modules/basiccontext unbuild
+555 verbose tar unpack /home/patrick/.npm/gulp/3.9.1/package.tgz
+556 silly lockFile 2aa1f063-are-lychee-src-node-modules-gulp tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp
+557 verbose lock tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp /home/patrick/.npm/2aa1f063-are-lychee-src-node-modules-gulp.lock
+558 silly lockFile 7bc30e5b-trick-npm-gulp-3-9-1-package-tgz tar:///home/patrick/.npm/gulp/3.9.1/package.tgz
+559 verbose lock tar:///home/patrick/.npm/gulp/3.9.1/package.tgz /home/patrick/.npm/7bc30e5b-trick-npm-gulp-3-9-1-package-tgz.lock
+560 verbose tar unpack /home/patrick/.npm/gulp-inject/3.0.0/package.tgz
+561 silly lockFile e1275247-hee-src-node-modules-gulp-inject tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-inject
+562 verbose lock tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-inject /home/patrick/.npm/e1275247-hee-src-node-modules-gulp-inject.lock
+563 silly lockFile ed408ae9-pm-gulp-inject-3-0-0-package-tgz tar:///home/patrick/.npm/gulp-inject/3.0.0/package.tgz
+564 verbose lock tar:///home/patrick/.npm/gulp-inject/3.0.0/package.tgz /home/patrick/.npm/ed408ae9-pm-gulp-inject-3-0-0-package-tgz.lock
+565 verbose tar unpack /home/patrick/.npm/gulp-concat/2.6.0/package.tgz
+566 silly lockFile e30c094c-hee-src-node-modules-gulp-concat tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-concat
+567 verbose lock tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-concat /home/patrick/.npm/e30c094c-hee-src-node-modules-gulp-concat.lock
+568 silly lockFile 55e91460-pm-gulp-concat-2-6-0-package-tgz tar:///home/patrick/.npm/gulp-concat/2.6.0/package.tgz
+569 verbose lock tar:///home/patrick/.npm/gulp-concat/2.6.0/package.tgz /home/patrick/.npm/55e91460-pm-gulp-concat-2-6-0-package-tgz.lock
+570 verbose tar unpack /home/patrick/.npm/basicmodal/3.3.3/package.tgz
+571 silly lockFile 75148ec2-chee-src-node-modules-basicmodal tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/basicmodal
+572 verbose lock tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/basicmodal /home/patrick/.npm/75148ec2-chee-src-node-modules-basicmodal.lock
+573 silly lockFile e3b433c1-npm-basicmodal-3-3-3-package-tgz tar:///home/patrick/.npm/basicmodal/3.3.3/package.tgz
+574 verbose lock tar:///home/patrick/.npm/basicmodal/3.3.3/package.tgz /home/patrick/.npm/e3b433c1-npm-basicmodal-3-3-3-package-tgz.lock
+575 verbose tar unpack /home/patrick/.npm/gulp-sass/2.2.0/package.tgz
+576 silly lockFile b5fffc66-ychee-src-node-modules-gulp-sass tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-sass
+577 verbose lock tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-sass /home/patrick/.npm/b5fffc66-ychee-src-node-modules-gulp-sass.lock
+578 silly lockFile 90232f79--npm-gulp-sass-2-2-0-package-tgz tar:///home/patrick/.npm/gulp-sass/2.2.0/package.tgz
+579 verbose lock tar:///home/patrick/.npm/gulp-sass/2.2.0/package.tgz /home/patrick/.npm/90232f79--npm-gulp-sass-2-2-0-package-tgz.lock
+580 verbose tar unpack /home/patrick/.npm/gulp-babel/6.1.2/package.tgz
+581 silly lockFile f053d3ca-chee-src-node-modules-gulp-babel tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-babel
+582 verbose lock tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-babel /home/patrick/.npm/f053d3ca-chee-src-node-modules-gulp-babel.lock
+583 silly lockFile bf8e2f58-npm-gulp-babel-6-1-2-package-tgz tar:///home/patrick/.npm/gulp-babel/6.1.2/package.tgz
+584 verbose lock tar:///home/patrick/.npm/gulp-babel/6.1.2/package.tgz /home/patrick/.npm/bf8e2f58-npm-gulp-babel-6-1-2-package-tgz.lock
+585 verbose tar unpack /home/patrick/.npm/gulp-load-plugins/1.2.0/package.tgz
+586 silly lockFile 57eb003f-c-node-modules-gulp-load-plugins tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-load-plugins
+587 verbose lock tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-load-plugins /home/patrick/.npm/57eb003f-c-node-modules-gulp-load-plugins.lock
+588 silly lockFile c5ba1a45-p-load-plugins-1-2-0-package-tgz tar:///home/patrick/.npm/gulp-load-plugins/1.2.0/package.tgz
+589 verbose lock tar:///home/patrick/.npm/gulp-load-plugins/1.2.0/package.tgz /home/patrick/.npm/c5ba1a45-p-load-plugins-1-2-0-package-tgz.lock
+590 verbose node_modules/gulp-autoprefixer unbuild
+591 verbose tar unpack /home/patrick/.npm/gulp-rimraf/0.2.0/package.tgz
+592 silly lockFile bb34d74c-hee-src-node-modules-gulp-rimraf tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-rimraf
+593 verbose lock tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-rimraf /home/patrick/.npm/bb34d74c-hee-src-node-modules-gulp-rimraf.lock
+594 silly lockFile 70e2f9aa-pm-gulp-rimraf-0-2-0-package-tgz tar:///home/patrick/.npm/gulp-rimraf/0.2.0/package.tgz
+595 verbose lock tar:///home/patrick/.npm/gulp-rimraf/0.2.0/package.tgz /home/patrick/.npm/70e2f9aa-pm-gulp-rimraf-0-2-0-package-tgz.lock
+596 verbose node_modules/gulp-minify-css unbuild
+597 verbose tar unpack /home/patrick/.npm/mousetrap/1.5.3/package.tgz
+598 silly lockFile e3f65e74-ychee-src-node-modules-mousetrap tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/mousetrap
+599 verbose lock tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/mousetrap /home/patrick/.npm/e3f65e74-ychee-src-node-modules-mousetrap.lock
+600 silly lockFile 8b64be3c--npm-mousetrap-1-5-3-package-tgz tar:///home/patrick/.npm/mousetrap/1.5.3/package.tgz
+601 verbose lock tar:///home/patrick/.npm/mousetrap/1.5.3/package.tgz /home/patrick/.npm/8b64be3c--npm-mousetrap-1-5-3-package-tgz.lock
+602 verbose tar unpack /home/patrick/.npm/basiccontext/3.5.1/package.tgz
+603 silly lockFile a0a99eb6-ee-src-node-modules-basiccontext tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/basiccontext
+604 verbose lock tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/basiccontext /home/patrick/.npm/a0a99eb6-ee-src-node-modules-basiccontext.lock
+605 silly lockFile 50c1245f-m-basiccontext-3-5-1-package-tgz tar:///home/patrick/.npm/basiccontext/3.5.1/package.tgz
+606 verbose lock tar:///home/patrick/.npm/basiccontext/3.5.1/package.tgz /home/patrick/.npm/50c1245f-m-basiccontext-3-5-1-package-tgz.lock
+607 verbose node_modules/gulp-uglify unbuild
+608 verbose node_modules/babel-preset-es2015 unbuild
+609 verbose node_modules/jquery unbuild
+610 silly gunzTarPerm modes [ '775', '664' ]
+611 silly gunzTarPerm modes [ '775', '664' ]
+612 silly gunzTarPerm modes [ '775', '664' ]
+613 silly gunzTarPerm modes [ '775', '664' ]
+614 silly gunzTarPerm modes [ '775', '664' ]
+615 silly gunzTarPerm modes [ '775', '664' ]
+616 silly gunzTarPerm modes [ '775', '664' ]
+617 silly gunzTarPerm modes [ '775', '664' ]
+618 silly gunzTarPerm modes [ '775', '664' ]
+619 silly gunzTarPerm modes [ '775', '664' ]
+620 verbose tar unpack /home/patrick/.npm/gulp-autoprefixer/3.1.0/package.tgz
+621 silly lockFile 174f00ad-c-node-modules-gulp-autoprefixer tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-autoprefixer
+622 verbose lock tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-autoprefixer /home/patrick/.npm/174f00ad-c-node-modules-gulp-autoprefixer.lock
+623 silly lockFile ccd0b3b7-p-autoprefixer-3-1-0-package-tgz tar:///home/patrick/.npm/gulp-autoprefixer/3.1.0/package.tgz
+624 verbose lock tar:///home/patrick/.npm/gulp-autoprefixer/3.1.0/package.tgz /home/patrick/.npm/ccd0b3b7-p-autoprefixer-3-1-0-package-tgz.lock
+625 verbose tar unpack /home/patrick/.npm/gulp-minify-css/1.2.4/package.tgz
+626 silly lockFile fcedd9e0-src-node-modules-gulp-minify-css tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-minify-css
+627 verbose lock tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-minify-css /home/patrick/.npm/fcedd9e0-src-node-modules-gulp-minify-css.lock
+628 silly lockFile 9a93d2e9-ulp-minify-css-1-2-4-package-tgz tar:///home/patrick/.npm/gulp-minify-css/1.2.4/package.tgz
+629 verbose lock tar:///home/patrick/.npm/gulp-minify-css/1.2.4/package.tgz /home/patrick/.npm/9a93d2e9-ulp-minify-css-1-2-4-package-tgz.lock
+630 verbose tar unpack /home/patrick/.npm/gulp-uglify/1.5.3/package.tgz
+631 silly lockFile fa49733d-hee-src-node-modules-gulp-uglify tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-uglify
+632 verbose lock tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-uglify /home/patrick/.npm/fa49733d-hee-src-node-modules-gulp-uglify.lock
+633 silly lockFile 508447e9-pm-gulp-uglify-1-5-3-package-tgz tar:///home/patrick/.npm/gulp-uglify/1.5.3/package.tgz
+634 verbose lock tar:///home/patrick/.npm/gulp-uglify/1.5.3/package.tgz /home/patrick/.npm/508447e9-pm-gulp-uglify-1-5-3-package-tgz.lock
+635 verbose tar unpack /home/patrick/.npm/babel-preset-es2015/6.6.0/package.tgz
+636 silly lockFile 8aaca310-node-modules-babel-preset-es2015 tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/babel-preset-es2015
+637 verbose lock tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/babel-preset-es2015 /home/patrick/.npm/8aaca310-node-modules-babel-preset-es2015.lock
+638 silly lockFile 03a906f2--preset-es2015-6-6-0-package-tgz tar:///home/patrick/.npm/babel-preset-es2015/6.6.0/package.tgz
+639 verbose lock tar:///home/patrick/.npm/babel-preset-es2015/6.6.0/package.tgz /home/patrick/.npm/03a906f2--preset-es2015-6-6-0-package-tgz.lock
+640 verbose tar unpack /home/patrick/.npm/jquery/2.2.1/package.tgz
+641 silly lockFile 374dd387-e-lychee-src-node-modules-jquery tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/jquery
+642 verbose lock tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/jquery /home/patrick/.npm/374dd387-e-lychee-src-node-modules-jquery.lock
+643 silly lockFile 1a224acc-ick-npm-jquery-2-2-1-package-tgz tar:///home/patrick/.npm/jquery/2.2.1/package.tgz
+644 verbose lock tar:///home/patrick/.npm/jquery/2.2.1/package.tgz /home/patrick/.npm/1a224acc-ick-npm-jquery-2-2-1-package-tgz.lock
+645 silly gunzTarPerm modes [ '775', '664' ]
+646 silly gunzTarPerm modes [ '775', '664' ]
+647 silly gunzTarPerm extractEntry package.json
+648 silly gunzTarPerm modified mode [ 'package.json', 420, 436 ]
+649 silly gunzTarPerm modes [ '775', '664' ]
+650 silly gunzTarPerm modes [ '775', '664' ]
+651 silly gunzTarPerm modes [ '775', '664' ]
+652 silly gunzTarPerm extractEntry package.json
+653 silly gunzTarPerm modified mode [ 'package.json', 420, 436 ]
+654 silly gunzTarPerm extractEntry package.json
+655 silly gunzTarPerm modified mode [ 'package.json', 420, 436 ]
+656 silly gunzTarPerm extractEntry package.json
+657 silly gunzTarPerm modified mode [ 'package.json', 420, 436 ]
+658 silly gunzTarPerm extractEntry package.json
+659 silly gunzTarPerm modified mode [ 'package.json', 420, 436 ]
+660 silly gunzTarPerm extractEntry package.json
+661 silly gunzTarPerm modified mode [ 'package.json', 420, 436 ]
+662 silly gunzTarPerm extractEntry package.json
+663 silly gunzTarPerm modified mode [ 'package.json', 420, 436 ]
+664 silly gunzTarPerm extractEntry package.json
+665 silly gunzTarPerm modified mode [ 'package.json', 438, 436 ]
+666 silly gunzTarPerm extractEntry package.json
+667 silly gunzTarPerm modified mode [ 'package.json', 420, 436 ]
+668 silly gunzTarPerm extractEntry package.json
+669 silly gunzTarPerm modified mode [ 'package.json', 420, 436 ]
+670 silly gunzTarPerm extractEntry README.md
+671 silly gunzTarPerm modified mode [ 'README.md', 420, 436 ]
+672 silly gunzTarPerm extractEntry LICENSE
+673 silly gunzTarPerm modified mode [ 'LICENSE', 420, 436 ]
+674 silly gunzTarPerm extractEntry README.md
+675 silly gunzTarPerm modified mode [ 'README.md', 420, 436 ]
+676 silly gunzTarPerm extractEntry LICENSE
+677 silly gunzTarPerm modified mode [ 'LICENSE', 420, 436 ]
+678 silly gunzTarPerm extractEntry index.js
+679 silly gunzTarPerm modified mode [ 'index.js', 420, 436 ]
+680 silly gunzTarPerm extractEntry src/extname/index.js
+681 silly gunzTarPerm modified mode [ 'src/extname/index.js', 420, 436 ]
+682 silly gunzTarPerm extractEntry src/inject/index.js
+683 silly gunzTarPerm modified mode [ 'src/inject/index.js', 420, 436 ]
+684 silly gunzTarPerm extractEntry src/tags/index.js
+685 silly gunzTarPerm modified mode [ 'src/tags/index.js', 420, 436 ]
+686 silly gunzTarPerm extractEntry src/transform/index.js
+687 silly gunzTarPerm modified mode [ 'src/transform/index.js', 420, 436 ]
+688 silly gunzTarPerm extractEntry README.md
+689 silly gunzTarPerm modified mode [ 'README.md', 420, 436 ]
+690 silly gunzTarPerm extractEntry LICENSE
+691 silly gunzTarPerm modified mode [ 'LICENSE', 493, 509 ]
+692 silly gunzTarPerm extractEntry .npmignore
+693 silly gunzTarPerm modified mode [ '.npmignore', 438, 436 ]
+694 silly gunzTarPerm extractEntry LICENSE
+695 silly gunzTarPerm extractEntry package.json
+696 silly gunzTarPerm modified mode [ 'package.json', 420, 436 ]
+697 silly gunzTarPerm extractEntry .npmignore
+698 silly gunzTarPerm modified mode [ '.npmignore', 420, 436 ]
+699 silly gunzTarPerm extractEntry README.md
+700 silly gunzTarPerm modified mode [ 'README.md', 420, 436 ]
+701 silly gunzTarPerm extractEntry index.js
+702 silly gunzTarPerm modified mode [ 'index.js', 420, 436 ]
+703 silly gunzTarPerm extractEntry license
+704 silly gunzTarPerm modified mode [ 'license', 420, 436 ]
+705 silly gunzTarPerm extractEntry README.md
+706 silly gunzTarPerm modified mode [ 'README.md', 420, 436 ]
+707 silly gunzTarPerm extractEntry index.js
+708 silly gunzTarPerm modified mode [ 'index.js', 420, 436 ]
+709 silly gunzTarPerm extractEntry package.json
+710 silly gunzTarPerm modified mode [ 'package.json', 420, 436 ]
+711 silly gunzTarPerm extractEntry .npmignore
+712 silly gunzTarPerm modified mode [ '.npmignore', 438, 436 ]
+713 silly gunzTarPerm extractEntry README.md
+714 silly gunzTarPerm modified mode [ 'README.md', 438, 436 ]
+715 silly gunzTarPerm extractEntry package.json
+716 silly gunzTarPerm modified mode [ 'package.json', 420, 436 ]
+717 silly gunzTarPerm extractEntry .npmignore
+718 silly gunzTarPerm modified mode [ '.npmignore', 420, 436 ]
+719 silly gunzTarPerm extractEntry README.md
+720 silly gunzTarPerm modified mode [ 'README.md', 420, 436 ]
+721 silly gunzTarPerm extractEntry package.json
+722 silly gunzTarPerm modified mode [ 'package.json', 420, 436 ]
+723 silly gunzTarPerm extractEntry .npmignore
+724 silly gunzTarPerm modified mode [ '.npmignore', 420, 436 ]
+725 silly gunzTarPerm extractEntry LICENSE
+726 silly gunzTarPerm modified mode [ 'LICENSE', 420, 436 ]
+727 silly gunzTarPerm extractEntry package.json
+728 silly gunzTarPerm modified mode [ 'package.json', 420, 436 ]
+729 error tar.unpack untar error /home/patrick/.npm/gulp-inject/3.0.0/package.tgz
+730 silly lockFile e1275247-hee-src-node-modules-gulp-inject tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-inject
+731 silly lockFile e1275247-hee-src-node-modules-gulp-inject tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-inject
+732 silly gunzTarPerm extractEntry index.js
+733 silly gunzTarPerm modified mode [ 'index.js', 420, 436 ]
+734 silly gunzTarPerm extractEntry license
+735 silly gunzTarPerm modified mode [ 'license', 420, 436 ]
+736 silly gunzTarPerm extractEntry README.md
+737 silly gunzTarPerm modified mode [ 'README.md', 420, 436 ]
+738 silly gunzTarPerm extractEntry index.js
+739 silly gunzTarPerm modified mode [ 'index.js', 420, 436 ]
+740 error tar.unpack untar error /home/patrick/.npm/gulp-concat/2.6.0/package.tgz
+741 silly lockFile e30c094c-hee-src-node-modules-gulp-concat tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-concat
+742 silly lockFile e30c094c-hee-src-node-modules-gulp-concat tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-concat
+743 silly gunzTarPerm extractEntry README.md
+744 silly gunzTarPerm modified mode [ 'README.md', 420, 436 ]
+745 silly gunzTarPerm extractEntry index.js
+746 silly gunzTarPerm modified mode [ 'index.js', 420, 436 ]
+747 error tar.unpack untar error /home/patrick/.npm/basicmodal/3.3.3/package.tgz
+748 silly lockFile 75148ec2-chee-src-node-modules-basicmodal tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/basicmodal
+749 silly lockFile 75148ec2-chee-src-node-modules-basicmodal tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/basicmodal
+750 error tar.unpack untar error /home/patrick/.npm/gulp-sass/2.2.0/package.tgz
+751 silly lockFile b5fffc66-ychee-src-node-modules-gulp-sass tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-sass
+752 silly lockFile b5fffc66-ychee-src-node-modules-gulp-sass tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-sass
+753 error tar.unpack untar error /home/patrick/.npm/gulp-load-plugins/1.2.0/package.tgz
+754 silly lockFile 57eb003f-c-node-modules-gulp-load-plugins tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-load-plugins
+755 silly lockFile 57eb003f-c-node-modules-gulp-load-plugins tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-load-plugins
+756 silly lockFile ed408ae9-pm-gulp-inject-3-0-0-package-tgz tar:///home/patrick/.npm/gulp-inject/3.0.0/package.tgz
+757 silly lockFile ed408ae9-pm-gulp-inject-3-0-0-package-tgz tar:///home/patrick/.npm/gulp-inject/3.0.0/package.tgz
+758 error tar.unpack untar error /home/patrick/.npm/gulp-rimraf/0.2.0/package.tgz
+759 silly lockFile bb34d74c-hee-src-node-modules-gulp-rimraf tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-rimraf
+760 silly lockFile bb34d74c-hee-src-node-modules-gulp-rimraf tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-rimraf
+761 silly lockFile 55e91460-pm-gulp-concat-2-6-0-package-tgz tar:///home/patrick/.npm/gulp-concat/2.6.0/package.tgz
+762 silly lockFile 55e91460-pm-gulp-concat-2-6-0-package-tgz tar:///home/patrick/.npm/gulp-concat/2.6.0/package.tgz
+763 silly lockFile e3b433c1-npm-basicmodal-3-3-3-package-tgz tar:///home/patrick/.npm/basicmodal/3.3.3/package.tgz
+764 silly lockFile e3b433c1-npm-basicmodal-3-3-3-package-tgz tar:///home/patrick/.npm/basicmodal/3.3.3/package.tgz
+765 error tar.unpack untar error /home/patrick/.npm/mousetrap/1.5.3/package.tgz
+766 silly lockFile e3f65e74-ychee-src-node-modules-mousetrap tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/mousetrap
+767 silly lockFile e3f65e74-ychee-src-node-modules-mousetrap tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/mousetrap
+768 silly gunzTarPerm extractEntry .npmignore
+769 silly gunzTarPerm modified mode [ '.npmignore', 420, 436 ]
+770 silly gunzTarPerm extractEntry README.md
+771 silly gunzTarPerm modified mode [ 'README.md', 420, 436 ]
+772 silly lockFile 90232f79--npm-gulp-sass-2-2-0-package-tgz tar:///home/patrick/.npm/gulp-sass/2.2.0/package.tgz
+773 silly lockFile 90232f79--npm-gulp-sass-2-2-0-package-tgz tar:///home/patrick/.npm/gulp-sass/2.2.0/package.tgz
+774 silly lockFile c5ba1a45-p-load-plugins-1-2-0-package-tgz tar:///home/patrick/.npm/gulp-load-plugins/1.2.0/package.tgz
+775 silly lockFile c5ba1a45-p-load-plugins-1-2-0-package-tgz tar:///home/patrick/.npm/gulp-load-plugins/1.2.0/package.tgz
+776 verbose node_modules/gulp-inject unbuild
+777 error tar.unpack untar error /home/patrick/.npm/gulp-babel/6.1.2/package.tgz
+778 silly lockFile f053d3ca-chee-src-node-modules-gulp-babel tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-babel
+779 silly lockFile f053d3ca-chee-src-node-modules-gulp-babel tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-babel
+780 silly gunzTarPerm extractEntry README.md
+781 silly gunzTarPerm modified mode [ 'README.md', 420, 436 ]
+782 silly gunzTarPerm extractEntry AUTHORS.txt
+783 silly gunzTarPerm modified mode [ 'AUTHORS.txt', 420, 436 ]
+784 error tar.unpack untar error /home/patrick/.npm/gulp/3.9.1/package.tgz
+785 silly lockFile 2aa1f063-are-lychee-src-node-modules-gulp tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp
+786 silly lockFile 2aa1f063-are-lychee-src-node-modules-gulp tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp
+787 silly lockFile 70e2f9aa-pm-gulp-rimraf-0-2-0-package-tgz tar:///home/patrick/.npm/gulp-rimraf/0.2.0/package.tgz
+788 silly lockFile 70e2f9aa-pm-gulp-rimraf-0-2-0-package-tgz tar:///home/patrick/.npm/gulp-rimraf/0.2.0/package.tgz
+789 verbose node_modules/gulp-concat unbuild
+790 verbose node_modules/basicmodal unbuild
+791 silly lockFile 8b64be3c--npm-mousetrap-1-5-3-package-tgz tar:///home/patrick/.npm/mousetrap/1.5.3/package.tgz
+792 silly lockFile 8b64be3c--npm-mousetrap-1-5-3-package-tgz tar:///home/patrick/.npm/mousetrap/1.5.3/package.tgz
+793 verbose node_modules/gulp-sass unbuild
+794 verbose node_modules/gulp-load-plugins unbuild
+795 error tar.unpack untar error /home/patrick/.npm/basiccontext/3.5.1/package.tgz
+796 silly lockFile a0a99eb6-ee-src-node-modules-basiccontext tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/basiccontext
+797 silly lockFile a0a99eb6-ee-src-node-modules-basiccontext tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/basiccontext
+798 silly lockFile bf8e2f58-npm-gulp-babel-6-1-2-package-tgz tar:///home/patrick/.npm/gulp-babel/6.1.2/package.tgz
+799 silly lockFile bf8e2f58-npm-gulp-babel-6-1-2-package-tgz tar:///home/patrick/.npm/gulp-babel/6.1.2/package.tgz
+800 silly lockFile 7bc30e5b-trick-npm-gulp-3-9-1-package-tgz tar:///home/patrick/.npm/gulp/3.9.1/package.tgz
+801 silly lockFile 7bc30e5b-trick-npm-gulp-3-9-1-package-tgz tar:///home/patrick/.npm/gulp/3.9.1/package.tgz
+802 verbose node_modules/gulp-rimraf unbuild
+803 verbose node_modules/mousetrap unbuild
+804 silly lockFile 50c1245f-m-basiccontext-3-5-1-package-tgz tar:///home/patrick/.npm/basiccontext/3.5.1/package.tgz
+805 silly lockFile 50c1245f-m-basiccontext-3-5-1-package-tgz tar:///home/patrick/.npm/basiccontext/3.5.1/package.tgz
+806 verbose node_modules/gulp-babel unbuild
+807 verbose node_modules/gulp unbuild
+808 verbose node_modules/basiccontext unbuild
+809 error tar.unpack untar error /home/patrick/.npm/gulp-autoprefixer/3.1.0/package.tgz
+810 silly lockFile 174f00ad-c-node-modules-gulp-autoprefixer tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-autoprefixer
+811 silly lockFile 174f00ad-c-node-modules-gulp-autoprefixer tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-autoprefixer
+812 error tar.unpack untar error /home/patrick/.npm/gulp-uglify/1.5.3/package.tgz
+813 silly lockFile fa49733d-hee-src-node-modules-gulp-uglify tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-uglify
+814 silly lockFile fa49733d-hee-src-node-modules-gulp-uglify tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-uglify
+815 error tar.unpack untar error /home/patrick/.npm/gulp-minify-css/1.2.4/package.tgz
+816 silly lockFile fcedd9e0-src-node-modules-gulp-minify-css tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-minify-css
+817 silly lockFile fcedd9e0-src-node-modules-gulp-minify-css tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-minify-css
+818 silly lockFile ccd0b3b7-p-autoprefixer-3-1-0-package-tgz tar:///home/patrick/.npm/gulp-autoprefixer/3.1.0/package.tgz
+819 silly lockFile ccd0b3b7-p-autoprefixer-3-1-0-package-tgz tar:///home/patrick/.npm/gulp-autoprefixer/3.1.0/package.tgz
+820 silly lockFile 508447e9-pm-gulp-uglify-1-5-3-package-tgz tar:///home/patrick/.npm/gulp-uglify/1.5.3/package.tgz
+821 silly lockFile 508447e9-pm-gulp-uglify-1-5-3-package-tgz tar:///home/patrick/.npm/gulp-uglify/1.5.3/package.tgz
+822 info preuninstall gulp-inject@3.0.0
+823 silly lockFile 9a93d2e9-ulp-minify-css-1-2-4-package-tgz tar:///home/patrick/.npm/gulp-minify-css/1.2.4/package.tgz
+824 silly lockFile 9a93d2e9-ulp-minify-css-1-2-4-package-tgz tar:///home/patrick/.npm/gulp-minify-css/1.2.4/package.tgz
+825 verbose node_modules/gulp-autoprefixer unbuild
+826 info preuninstall gulp-concat@2.6.0
+827 info preuninstall basicmodal@3.3.3
+828 verbose node_modules/gulp-uglify unbuild
+829 info preuninstall gulp-sass@2.2.0
+830 verbose node_modules/gulp-minify-css unbuild
+831 error tar.unpack untar error /home/patrick/.npm/babel-preset-es2015/6.6.0/package.tgz
+832 silly lockFile 8aaca310-node-modules-babel-preset-es2015 tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/babel-preset-es2015
+833 silly lockFile 8aaca310-node-modules-babel-preset-es2015 tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/babel-preset-es2015
+834 info preuninstall gulp-load-plugins@1.2.0
+835 info preuninstall gulp-rimraf@0.2.0
+836 info preuninstall mousetrap@1.5.3
+837 error tar.unpack untar error /home/patrick/.npm/jquery/2.2.1/package.tgz
+838 silly lockFile 374dd387-e-lychee-src-node-modules-jquery tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/jquery
+839 silly lockFile 374dd387-e-lychee-src-node-modules-jquery tar:///run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/jquery
+840 info preuninstall gulp-babel@6.1.2
+841 info uninstall gulp-inject@3.0.0
+842 info preuninstall gulp@3.9.1
+843 silly lockFile 03a906f2--preset-es2015-6-6-0-package-tgz tar:///home/patrick/.npm/babel-preset-es2015/6.6.0/package.tgz
+844 silly lockFile 03a906f2--preset-es2015-6-6-0-package-tgz tar:///home/patrick/.npm/babel-preset-es2015/6.6.0/package.tgz
+845 info uninstall gulp-concat@2.6.0
+846 info uninstall basicmodal@3.3.3
+847 silly lockFile 1a224acc-ick-npm-jquery-2-2-1-package-tgz tar:///home/patrick/.npm/jquery/2.2.1/package.tgz
+848 silly lockFile 1a224acc-ick-npm-jquery-2-2-1-package-tgz tar:///home/patrick/.npm/jquery/2.2.1/package.tgz
+849 info uninstall gulp-sass@2.2.0
+850 verbose node_modules/babel-preset-es2015 unbuild
+851 info preuninstall basiccontext@3.5.1
+852 verbose node_modules/jquery unbuild
+853 info uninstall gulp-load-plugins@1.2.0
+854 info uninstall gulp-rimraf@0.2.0
+855 info uninstall mousetrap@1.5.3
+856 verbose true,/run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules,/run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules unbuild gulp-inject@3.0.0
+857 info postuninstall gulp-inject@3.0.0
+858 info uninstall gulp-babel@6.1.2
+859 info uninstall gulp@3.9.1
+860 verbose true,/run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules,/run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules unbuild gulp-concat@2.6.0
+861 info postuninstall gulp-concat@2.6.0
+862 verbose true,/run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules,/run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules unbuild basicmodal@3.3.3
+863 info postuninstall basicmodal@3.3.3
+864 verbose true,/run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules,/run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules unbuild gulp-sass@2.2.0
+865 info postuninstall gulp-sass@2.2.0
+866 info uninstall basiccontext@3.5.1
+867 verbose true,/run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules,/run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules unbuild gulp-load-plugins@1.2.0
+868 info postuninstall gulp-load-plugins@1.2.0
+869 info preuninstall gulp-autoprefixer@3.1.0
+870 verbose true,/run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules,/run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules unbuild gulp-rimraf@0.2.0
+871 info postuninstall gulp-rimraf@0.2.0
+872 verbose true,/run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules,/run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules unbuild mousetrap@1.5.3
+873 info postuninstall mousetrap@1.5.3
+874 info preuninstall gulp-uglify@1.5.3
+875 verbose true,/run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules,/run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules unbuild gulp-babel@6.1.2
+876 info postuninstall gulp-babel@6.1.2
+877 verbose true,/run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules,/run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules unbuild gulp@3.9.1
+878 verbose /run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/.bin,[object Object] binRoot
+879 info preuninstall gulp-minify-css@1.2.4
+880 verbose true,/run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules,/run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules unbuild basiccontext@3.5.1
+881 info postuninstall basiccontext@3.5.1
+882 info uninstall gulp-autoprefixer@3.1.0
+883 info uninstall gulp-uglify@1.5.3
+884 info postuninstall gulp@3.9.1
+885 info preuninstall babel-preset-es2015@6.6.0
+886 info uninstall gulp-minify-css@1.2.4
+887 info preuninstall jquery@2.2.1
+888 verbose true,/run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules,/run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules unbuild gulp-autoprefixer@3.1.0
+889 info postuninstall gulp-autoprefixer@3.1.0
+890 verbose true,/run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules,/run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules unbuild gulp-uglify@1.5.3
+891 info postuninstall gulp-uglify@1.5.3
+892 info uninstall babel-preset-es2015@6.6.0
+893 error Error: UNKNOWN, chmod '/run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-inject/package.json'
+894 error If you need help, you may report this *entire* log,
+894 error including the npm and node versions, at:
+894 error     <http://github.com/npm/npm/issues>
+895 error System Linux 4.2.0-27-generic
+896 error command "/usr/bin/nodejs" "/usr/bin/npm" "install" "--no-bin-links"
+897 error cwd /run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src
+898 error node -v v0.10.25
+899 error npm -v 1.4.21
+900 error path /run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-inject/package.json
+901 error fstream_path /run/user/1000/gvfs/smb-share:server=192.168.56.102,share=lychee/src/node_modules/gulp-inject/package.json
+902 error fstream_type File
+903 error fstream_class FileWriter
+904 error fstream_finish_call chmod
+905 error code UNKNOWN
+906 error errno -1
+907 error fstream_stack /usr/lib/nodejs/fstream/lib/writer.js:305:19
+907 error fstream_stack Object.oncomplete (evalmachine.<anonymous>:107:15)
+908 verbose exit [ -1, true ]

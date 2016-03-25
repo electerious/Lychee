@@ -9,53 +9,76 @@ header = {
 
 }
 
-header.dom = function(selector) {
+header.dom = function (selector) {
 
-	if (selector==null || selector==='') return header._dom
+	if (selector == null || selector === '') return header._dom
 	return header._dom.find(selector)
 
 }
 
-header.bind = function() {
+header.bind = function () {
 
 	// Event Name
 	let eventName = lychee.getEventName()
 
-	header.dom('.header__title').on(eventName, function(e) {
+	header.dom('.header__title').on(eventName, function (e) {
 
-		if ($(this).hasClass('header__title--editable')===false) return false
+		if ($(this).hasClass('header__title--editable') === false) return false
 
 		if (visible.photo()) contextMenu.photoTitle(album.getID(), photo.getID(), e)
-		else                 contextMenu.albumTitle(album.getID(), e)
+		else contextMenu.albumTitle(album.getID(), e)
 
 	})
 
-	header.dom('#button_share').on(eventName, function(e) {
-		if (photo.json.public==='1' || photo.json.public==='2') contextMenu.sharePhoto(photo.getID(), e)
-		else                                                    photo.setPublic(photo.getID(), e)
+	header.dom('#button_share').on(eventName, function (e) {
+		if (photo.json.public === '1' || photo.json.public === '2') contextMenu.sharePhoto(photo.getID(), e)
+		else photo.setPublic(photo.getID(), e)
 	})
 
-	header.dom('#button_share_album').on(eventName, function(e) {
-		if (album.json.public==='1') contextMenu.shareAlbum(album.getID(), e)
-		else                         album.setPublic(album.getID(), true, e)
+	header.dom('#button_share_album').on(eventName, function (e) {
+		if (album.json.public === '1') contextMenu.shareAlbum(album.getID(), e)
+		else album.setPublic(album.getID(), true, e)
 	})
 
-	header.dom('#button_signin')      .on(eventName, lychee.loginDialog)
-	header.dom('#button_settings')    .on(eventName, contextMenu.settings)
-	header.dom('#button_info_album')  .on(eventName, sidebar.toggle)
-	header.dom('#button_info')        .on(eventName, sidebar.toggle)
-	header.dom('.button_add')         .on(eventName, contextMenu.add)
-	header.dom('#button_more')        .on(eventName, function(e) { contextMenu.photoMore(photo.getID(), e) })
-	header.dom('#button_move')        .on(eventName, function(e) { contextMenu.move([photo.getID()], e) })
-	header.dom('.header__hostedwith') .on(eventName, function() { window.open(lychee.website) })
-	header.dom('#button_trash_album') .on(eventName, function() { album.delete([album.getID()]) })
-	header.dom('#button_trash')       .on(eventName, function() { photo.delete([photo.getID()]) })
-	header.dom('#button_archive')     .on(eventName, function() { album.getArchive(album.getID()) })
-	header.dom('#button_star')        .on(eventName, function() { photo.setStar([photo.getID()]) })
-	header.dom('#button_back_home')   .on(eventName, function() { lychee.goto('') })
-	header.dom('#button_back')        .on(eventName, function() { lychee.goto(album.getID()) })
+	header.dom('#button_signin').on(eventName, lychee.loginDialog)
+	header.dom('#button_settings').on(eventName, contextMenu.settings)
+	header.dom('#button_info_album').on(eventName, sidebar.toggle)
+	header.dom('#button_info').on(eventName, sidebar.toggle)
+	header.dom('.button_add').on(eventName, contextMenu.add)
+	header.dom('#button_more').on(eventName, function (e) {
+		contextMenu.photoMore(photo.getID(), e)
+	})
+	header.dom('#button_move').on(eventName, function (e) {
+		contextMenu.move([photo.getID()], e)
+	})
+	header.dom('#button_move_album').on(eventName, function (e) {
+		contextMenu.moveAlbum([album.getID()], e)
+	})
+	header.dom('.header__hostedwith').on(eventName, function () {
+		window.open(lychee.website)
+	})
+	header.dom('#button_trash_album').on(eventName, function () {
+		album.delete([album.getID()])
+	})
+	header.dom('#button_trash').on(eventName, function () {
+		photo.delete([photo.getID()])
+	})
+	header.dom('#button_archive').on(eventName, function () {
+		album.getArchive(album.getID())
+	})
+	header.dom('#button_star').on(eventName, function () {
+		photo.setStar([photo.getID()])
+	})
+	header.dom('#button_back_home').on(eventName, function () {
+		lychee.goto(album.getParentLink())
+	})
+	header.dom('#button_back').on(eventName, function () {
+		lychee.goto(album.getID())
+	})
 
-	header.dom('.header__search').on('keyup click', function() { search.find($(this).val()) })
+	header.dom('.header__search').on('keyup click', function () {
+		search.find($(this).val())
+	})
 	header.dom('.header__clear').on(eventName, function () {
 		header.dom('.header__search').focus()
 		search.reset()
@@ -65,7 +88,7 @@ header.bind = function() {
 
 }
 
-header.show = function() {
+header.show = function () {
 
 	clearTimeout($(window).data('timeout'))
 
@@ -76,13 +99,13 @@ header.show = function() {
 
 }
 
-header.hide = function(e, delay = 500) {
+header.hide = function (e, delay = 500) {
 
-	if (visible.photo() && !visible.sidebar() && !visible.contextMenu() && basicModal.visible()===false) {
+	if (visible.photo() && !visible.sidebar() && !visible.contextMenu() && basicModal.visible() === false) {
 
 		clearTimeout($(window).data('timeout'))
 
-		$(window).data('timeout', setTimeout(function() {
+		$(window).data('timeout', setTimeout(function () {
 
 			lychee.imageview.addClass('full')
 			header.dom().addClass('header--hidden')
@@ -97,10 +120,10 @@ header.hide = function(e, delay = 500) {
 
 }
 
-header.setTitle = function(title = 'Untitled') {
+header.setTitle = function (title = 'Untitled') {
 
 	let $title = header.dom('.header__title'),
-	    html   = lychee.html`$${ title }${ build.iconic('caret-bottom') }`
+		html = lychee.html `$${ title }${ build.iconic('caret-bottom') }`
 
 	$title.html(html)
 
@@ -108,9 +131,9 @@ header.setTitle = function(title = 'Untitled') {
 
 }
 
-header.setMode = function(mode) {
+header.setMode = function (mode) {
 
-	if (mode==='albums' && lychee.publicMode===true) mode = 'public'
+	if (mode === 'albums' && lychee.publicMode === true) mode = 'public'
 
 	switch (mode) {
 
@@ -141,15 +164,15 @@ header.setMode = function(mode) {
 			header.dom('.header__toolbar--album').addClass('header__toolbar--visible')
 
 			// Hide download button when album empty
-			if (album.json.content===false) $('#button_archive').hide()
-			else                            $('#button_archive').show()
+			if (album.json.content === false) $('#button_archive').hide()
+			else $('#button_archive').show()
 
 			// Hide download button when not logged in and album not downloadable
-			if (lychee.publicMode===true && album.json.downloadable==='0') $('#button_archive').hide()
+			if (lychee.publicMode === true && album.json.downloadable === '0') $('#button_archive').hide()
 
-			if (albumID==='s' || albumID==='f' || albumID==='r') {
+			if (albumID === 's' || albumID === 'f' || albumID === 'r') {
 				$('#button_info_album, #button_trash_album, #button_share_album').hide()
-			} else if (albumID==='0') {
+			} else if (albumID === '0') {
 				$('#button_info_album, #button_share_album').hide()
 				$('#button_trash_album').show()
 			} else {
@@ -174,15 +197,15 @@ header.setMode = function(mode) {
 
 }
 
-header.setEditable = function(editable) {
+header.setEditable = function (editable) {
 
 	let $title = header.dom('.header__title')
 
 	// Hide editable icon when not logged in
-	if (lychee.publicMode===true) editable = false
+	if (lychee.publicMode === true) editable = false
 
 	if (editable) $title.addClass('header__title--editable')
-	else          $title.removeClass('header__title--editable')
+	else $title.removeClass('header__title--editable')
 
 	return true
 

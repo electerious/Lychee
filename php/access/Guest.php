@@ -15,6 +15,7 @@ class Guest extends Access {
 		switch ($fn) {
 
 			# Album functions
+			case 'Album::getSub':		$this->getSubAlbums(); break;
 			case 'Album::getAll':		$this->getAlbums(); break;
 			case 'Album::get':			$this->getAlbum(); break;
 			case 'Album::getPublic':	$this->checkAlbumAccess(); break;
@@ -49,7 +50,12 @@ class Guest extends Access {
 		echo json_encode($album->getAll(true));
 
 	}
+	private function getSubAlbums() {
 
+		$album = new Album($this->database, $this->plugins, $this->settings, $_POST['albumID']);
+		echo json_encode($album->getSubAlbums());
+
+	}
 	private function getAlbum() {
 
 		Module::dependencies(isset($_POST['albumID'], $_POST['password']));
@@ -58,7 +64,7 @@ class Guest extends Access {
 		if ($album->getPublic()) {
 
 			# Album public
-			if ($album->checkPassword($_POST['password']))	echo json_encode($album->get());
+			if ($album->checkPassword($_POST['password']))	echo json_encode($album->get(true));
 			else											echo 'Warning: Wrong password!';
 
 		} else {

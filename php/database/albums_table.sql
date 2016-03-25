@@ -11,5 +11,7 @@ CREATE TABLE IF NOT EXISTS `?` (
   `visible` tinyint(1) NOT NULL DEFAULT '1',
   `downloadable` tinyint(1) NOT NULL DEFAULT '0',
   `password` varchar(100) DEFAULT NULL,
+  `parent` int(11) NOT NULL DEFAULT '0',
+
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;

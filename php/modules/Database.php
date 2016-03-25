@@ -57,7 +57,9 @@ class Database extends Module {
 			'020700', #2.7.0
 			'030000', #3.0.0
 			'030001', #3.0.1
-			'030003' #3.0.3
+			'030003', #3.0.3
+			'030004' #3.0.4
+
 		);
 
 		# For each update
@@ -119,85 +121,62 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 \$dbTablePrefix = '$prefix'; # Table prefix
 
 ?>";
-
 		# Save file
 		if (file_put_contents(LYCHEE_CONFIG_FILE, $config)===false) return 'Warning: Could not create file!';
-
 		return true;
-
 	}
-
 	static function createDatabase($database, $name = 'lychee') {
-
 		# Check dependencies
 		Module::dependencies(isset($database, $name));
-
 		# Create database
 		$query	= Database::prepare($database, 'CREATE DATABASE IF NOT EXISTS ?', array($name));
 		$result = $database->query($query);
-
 		if (!$database->select_db($name)||!$result) return false;
 		return true;
-
 	}
-
 	static function createTables($database) {
-
 		# Check dependencies
 		Module::dependencies(isset($database));
-
 		# Create log
 		$exist = Database::prepare($database, 'SELECT * FROM ? LIMIT 0', array(LYCHEE_TABLE_LOG));
 		if (!$database->query($exist)) {
-
 			# Read file
 			$file	= __DIR__ . '/../database/log_table.sql';
 			$query	= @file_get_contents($file);
-
 			if (!isset($query)||$query===false) return false;
-
 			# Create table
 			$query = Database::prepare($database, $query, array(LYCHEE_TABLE_LOG));
 			if (!$database->query($query)) return false;
-
 		}
-
 		# Create settings
 		$exist = Database::prepare($database, 'SELECT * FROM ? LIMIT 0', array(LYCHEE_TABLE_SETTINGS));
 		if (!$database->query($exist)) {
-
 			# Read file
 			$file	= __DIR__ . '/../database/settings_table.sql';
 			$query	= @file_get_contents($file);
-
 			if (!isset($query)||$query===false) {
 				Log::error($database, __METHOD__, __LINE__, 'Could not load query for lychee_settings');
 				return false;
 			}
-
 			# Create table
 			$query = Database::prepare($database, $query, array(LYCHEE_TABLE_SETTINGS));
 			if (!$database->query($query)) {
 				Log::error($database, __METHOD__, __LINE__, $database->error);
 				return false;
 			}
-
 			# Read file
 			$file	= __DIR__ . '/../database/settings_content.sql';
 			$query	= @file_get_contents($file);
-
 			if (!isset($query)||$query===false) {
 				Log::error($database, __METHOD__, __LINE__, 'Could not load content-query for lychee_settings');
 				return false;
 			}
-
 			# Add content
 			$query = Database::prepare($database, $query, array(LYCHEE_TABLE_SETTINGS));
 			if (!$database->query($query)) {
 				Log::error($database, __METHOD__, __LINE__, $database->error);
 				return false;
 			}
-
 			# Generate identifier
 			$identifier	= md5(microtime(true));
 			$query		= Database::prepare($database, "UPDATE `?` SET `value` = '?' WHERE `key` = 'identifier' LIMIT 1", array(LYCHEE_TABLE_SETTINGS, $identifier));
@@ -205,73 +184,54 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 				Log::error($database, __METHOD__, __LINE__, $database->error);
 				return false;
 			}
-
 		}
-
 		# Create albums
 		$exist = Database::prepare($database, 'SELECT * FROM ? LIMIT 0', array(LYCHEE_TABLE_ALBUMS));
 		if (!$database->query($exist)) {
-
 			# Read file
 			$file	= __DIR__ . '/../database/albums_table.sql';
 			$query	= @file_get_contents($file);
-
 			if (!isset($query)||$query===false) {
 				Log::error($database, __METHOD__, __LINE__, 'Could not load query for lychee_albums');
 				return false;
 			}
-
 			# Create table
 			$query = Database::prepare($database, $query, array(LYCHEE_TABLE_ALBUMS));
 			if (!$database->query($query)) {
 				Log::error($database, __METHOD__, __LINE__, $database->error);
 				return false;
 			}
-
 		}
-
 		# Create photos
 		$exist = Database::prepare($database, 'SELECT * FROM ? LIMIT 0', array(LYCHEE_TABLE_PHOTOS));
 		if (!$database->query($exist)) {
-
 			# Read file
 			$file	= __DIR__ . '/../database/photos_table.sql';
 			$query	= @file_get_contents($file);
-
 			if (!isset($query)||$query===false) {
 				Log::error($database, __METHOD__, __LINE__, 'Could not load query for lychee_photos');
 				return false;
 			}
-
 			# Create table
 			$query = Database::prepare($database, $query, array(LYCHEE_TABLE_PHOTOS));
 			if (!$database->query($query)) {
 				Log::error($database, __METHOD__, __LINE__, $database->error);
 				return false;
 			}
-
 		}
-
 		return true;
-
 	}
-
 	static function setVersion($database, $version) {
-
 		$query	= Database::prepare($database, "UPDATE ? SET value = '?' WHERE `key` = 'version'", array(LYCHEE_TABLE_SETTINGS, $version));
 		$result = $database->query($query);
 		if (!$result) {
 			Log::error($database, __METHOD__, __LINE__, 'Could not update database (' . $database->error . ')');
 			return false;
 		}
-
 	}
-
 	static function prepare($database, $query, $data) {
-
 		# Check dependencies
 		Module::dependencies(isset($database, $query, $data));
-
 		# Count the number of placeholders and compare it with the number of arguments
 		# If it doesn't match, calculate the difference and skip this number of placeholders before starting the replacement
 		# This avoids problems with placeholders in user-input
@@ -282,57 +242,36 @@ if(!defined('LYCHEE')) exit('Error: Direct access is not allowed!');
 			'placeholder'	=> substr_count($query, '?'),
 			'data'			=> count($data)
 		);
-
 		if (($num['data']-$num['placeholder'])<0) Log::notice($database, __METHOD__, __LINE__, 'Could not completely prepare query. Query has more placeholders than values.');
-
 		foreach ($data as $value) {
-
 			# Escape
 			$value = mysqli_real_escape_string($database, $value);
-
 			# Recalculate number of placeholders
 			$num['placeholder'] = substr_count($query, '?');
-
 			# Calculate number of skips
 			if ($num['placeholder']>$num['data']) $skip = $num['placeholder'] - $num['data'];
-
 			if ($skip>0) {
-
 				# Need to skip $skip placeholders, because the user input contained placeholders
 				# Calculate a substring which does not contain the user placeholders
 				# 1 or -1 is the length of the placeholder (placeholder = ?)
-
 				$pos = -1;
 				for ($i=$skip; $i>0; $i--) $pos = strpos($query, '?', $pos + 1);
 				$pos++;
-
 				$temp	= substr($query, 0, $pos); # First part of $query
 				$query	= substr($query, $pos); # Last part of $query
-
 			}
-
 			# Replace
 			$query = preg_replace('/\?/', $value, $query, 1);
-
 			if ($skip>0) {
-
 				# Reassemble the parts of $query
 				$query = $temp . $query;
-
 			}
-
 			# Reset skip
 			$skip = 0;
-
 			# Decrease number of data elements
 			$num['data']--;
-
 		}
-
 		return $query;
-
 	}
-
 }
-
 ?>

@@ -9,31 +9,33 @@ albums = {
 
 }
 
-albums.load = function() {
+albums.load = function () {
 
 	let startTime = new Date().getTime()
 
 	lychee.animate('.content', 'contentZoomOut')
 
-	if (albums.json===null) {
+	if (albums.json === null) {
 
-		api.post('Album::getAll', {}, function(data) {
+		api.post('Album::getAll', {
+			sub: false
+		}, function (data) {
 
 			let waitTime = 0
 
 			// Smart Albums
-			if (lychee.publicMode===false) albums._createSmartAlbums(data.smartalbums)
+			if (lychee.publicMode === false) albums._createSmartAlbums(data.smartalbums)
 
 			albums.json = data
 
 			// Calculate delay
 			let durationTime = (new Date().getTime() - startTime)
-			if (durationTime>300) waitTime = 0
-			else                  waitTime = 300 - durationTime
+			if (durationTime > 300) waitTime = 0
+			else waitTime = 300 - durationTime
 
 			// Skip delay when opening a blank Lychee
 			if (!visible.albums() && !visible.photo() && !visible.album()) waitTime = 0
-			if (visible.album() && lychee.content.html()==='')             waitTime = 0
+			if (visible.album() && lychee.content.html() === '') waitTime = 0
 
 			setTimeout(() => {
 				header.setMode('albums')
@@ -54,9 +56,9 @@ albums.load = function() {
 	}
 }
 
-albums.parse = function(album) {
+albums.parse = function (album) {
 
-	if (album.password==='1' && lychee.publicMode===true) {
+	if (album.password === '1' && lychee.publicMode === true) {
 		album.thumbs[0] = 'src/images/password.svg'
 		album.thumbs[1] = 'src/images/password.svg'
 		album.thumbs[2] = 'src/images/password.svg'
@@ -68,57 +70,57 @@ albums.parse = function(album) {
 
 }
 
-albums._createSmartAlbums = function(data) {
+albums._createSmartAlbums = function (data) {
 
 	data.unsorted = {
-		id       : 0,
-		title    : 'Unsorted',
-		sysdate  : data.unsorted.num + ' photos',
-		unsorted : '1',
-		thumbs   : data.unsorted.thumbs
+		id: 0,
+		title: 'Unsorted',
+		sysdate: data.unsorted.num + ' photos',
+		unsorted: '1',
+		thumbs: data.unsorted.thumbs
 	}
 
 	data.starred = {
-		id      : 'f',
-		title   : 'Starred',
-		sysdate : data.starred.num + ' photos',
-		star    : '1',
-		thumbs  : data.starred.thumbs
+		id: 'f',
+		title: 'Starred',
+		sysdate: data.starred.num + ' photos',
+		star: '1',
+		thumbs: data.starred.thumbs
 	}
 
 	data.public = {
-		id      : 's',
-		title   : 'Public',
-		sysdate : data.public.num + ' photos',
-		public  : '1',
-		thumbs  : data.public.thumbs
+		id: 's',
+		title: 'Public',
+		sysdate: data.public.num + ' photos',
+		public: '1',
+		thumbs: data.public.thumbs
 	}
 
 	data.recent = {
-		id      : 'r',
-		title   : 'Recent',
-		sysdate : data.recent.num + ' photos',
-		recent  : '1',
-		thumbs  : data.recent.thumbs
+		id: 'r',
+		title: 'Recent',
+		sysdate: data.recent.num + ' photos',
+		recent: '1',
+		thumbs: data.recent.thumbs
 	}
 
 }
 
-albums.getByID = function(albumID) {
+albums.getByID = function (albumID) {
 
 	// Function returns the JSON of an album
 
-	if (albumID==null)       return undefined
-	if (!albums.json)        return undefined
+	if (albumID == null) return undefined
+	if (!albums.json) return undefined
 	if (!albums.json.albums) return undefined
 
 	let json = undefined
 
-	$.each(albums.json.albums, function(i) {
+	$.each(albums.json.albums, function (i) {
 
 		let elem = albums.json.albums[i]
 
-		if (elem.id==albumID) json = elem
+		if (elem.id == albumID) json = elem
 
 	})
 
@@ -126,19 +128,19 @@ albums.getByID = function(albumID) {
 
 }
 
-albums.deleteByID = function(albumID) {
+albums.deleteByID = function (albumID) {
 
 	// Function returns the JSON of an album
 
-	if (albumID==null)       return false
-	if (!albums.json)        return false
+	if (albumID == null) return false
+	if (!albums.json) return false
 	if (!albums.json.albums) return false
 
 	var deleted = false
 
-	$.each(albums.json.albums, function(i) {
+	$.each(albums.json.albums, function (i) {
 
-		if (albums.json.albums[i].id==albumID) {
+		if (albums.json.albums[i].id == albumID) {
 			albums.json.albums.splice(i, 1)
 			deleted = true
 			return false
@@ -150,7 +152,7 @@ albums.deleteByID = function(albumID) {
 
 }
 
-albums.refresh = function() {
+albums.refresh = function () {
 
 	albums.json = null
 

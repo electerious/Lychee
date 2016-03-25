@@ -130,7 +130,7 @@ view.album = {
 					break
 				default:
 					if (album.json.init) sidebar.changeAttr('title', album.json.title)
-					lychee.setTitle(album.json.FilePath, true)
+					lychee.setTitle(album.json.title, true)
 					break
 			}
 
@@ -144,10 +144,10 @@ view.album = {
 
 			let photosData = ''
 
-			if (album.json.albums || album.json.content !== false) {
+			if (album.json.albums && album.json.content !== false) {
 				// Build photos
-				$.each(album.json.albums, function () {
-						albums.parse(this)
+				$.each(album.json.content, function () {
+
 						photosData += build.album(this)
 					})
 					// Build photos
@@ -228,10 +228,6 @@ view.album = {
 	},
 
 	public: function () {
-
-
-
-
 
 		if (album.json.public === '1') {
 
