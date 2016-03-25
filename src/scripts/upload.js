@@ -44,6 +44,134 @@ upload.start = {
 		let error   = false
 		let warning = false
 
+		const preprocess = function(files, file){
+			// Check if file is supported
+			if (file.supported===false) {
+
+				// Skip file
+				if (file.next!=null) preprocess(files, file.next)
+				else {
+
+					// Look for supported files
+					// If zero files are supported, hide the upload after a delay
+
+					let hasSupportedFiles = false
+
+					for (let i = 0; i < files.length; i++) {
+
+						if (files[i].supported===true) {
+							hasSupportedFiles = true
+							break
+						}
+
+					}
+
+					if (hasSupportedFiles===false) setTimeout(finish, 2000)
+
+				}
+
+				return false
+
+			}
+
+			if(!('FileReader' in window)) {
+				process(files, file)
+				return
+			}
+			
+			let xhr          = new XMLHttpRequest()
+			let formData     = new FormData()
+			
+			
+			var sha1 = CryptoJS.algo.SHA1.create();
+            var read = 0;
+            var unit = 1024 * 1024;
+            var blob;
+            var reader = new FileReader();
+            reader.readAsArrayBuffer(file.slice(read, read + unit));
+            reader.onload = function(e) {
+                var bytes = CryptoJS.lib.WordArray.create(e.target.result);
+                sha1.update(bytes);
+                read += unit;
+                if (read < file.size) {
+                    blob = file.slice(read, read + unit);
+                    reader.readAsArrayBuffer(blob);
+                } else {
+                    var hash = sha1.finalize();
+                    console.log(hash.toString(CryptoJS.enc.Hex)); // print the result
+
+
+                    xhr.open('POST', api.path)
+					formData.append('function', 'Photo::isDuplicate')
+					formData.append('hash', hash.toString(CryptoJS.enc.Hex))
+					xhr.onload = function() {
+						if (xhr.status===200 && xhr.responseText==='false') {
+							process(files, file)
+						}
+						else{
+							if (file.next!=null) 
+								$('.basicModal .rows .row:nth-child(' + (file.num + 1) + ')').scrollIntoView();
+
+							file.ready = true
+							$('.basicModal .rows .row:nth-child(' + (file.num + 1) + ') .status').html('Skipped (Duplicate)')
+							// Upload next file
+							if (file.next!=null) 
+								preprocess(files, file.next)
+			
+
+							let wait      = false
+							for (let i = 0; i < files.length; i++) {
+
+								if (files[i].ready===false) {
+									wait = true
+									break
+								}
+
+							}
+
+							// Finish upload when all files are finished
+							if (wait===false) finish()
+						}
+					}
+					xhr.send(formData)
+                }
+            }
+
+		}
+
+		const finish = function() {
+
+			window.onbeforeunload = null
+
+			$('#upload_files').val('')
+
+			if (error===false && warning===false) {
+
+				// Success
+				basicModal.close()
+				upload.notify('Upload complete')
+
+			} else if (error===false && warning===true) {
+
+				// Warning
+				$('.basicModal #basicModal__action.hidden').show()
+				upload.notify('Upload complete')
+
+			} else {
+
+				// Error
+				$('.basicModal #basicModal__action.hidden').show()
+				upload.notify('Upload complete', 'Failed to upload one or more photos.')
+
+			}
+
+			albums.refresh()
+
+			if (album.getID()===false) lychee.goto('0')
+			else                       album.load(albumID)
+
+		}
+
 		const process = function(files, file) {
 
 			let formData          = new FormData()
@@ -52,38 +180,6 @@ upload.start = {
 			let progress          = 0
 			let next_file_started = false
 
-			const finish = function() {
-
-				window.onbeforeunload = null
-
-				$('#upload_files').val('')
-
-				if (error===false && warning===false) {
-
-					// Success
-					basicModal.close()
-					upload.notify('Upload complete')
-
-				} else if (error===false && warning===true) {
-
-					// Warning
-					$('.basicModal #basicModal__action.hidden').show()
-					upload.notify('Upload complete')
-
-				} else {
-
-					// Error
-					$('.basicModal #basicModal__action.hidden').show()
-					upload.notify('Upload complete', 'Failed to upload one or more photos.')
-
-				}
-
-				albums.refresh()
-
-				if (album.getID()===false) lychee.goto('0')
-				else                       album.load(albumID)
-
-			}
 
 			formData.append('function', 'Photo::add')
 			formData.append('albumID', albumID)
@@ -207,7 +303,7 @@ upload.start = {
 
 					// Upload next file
 					if (file.next!=null) {
-						process(files, file.next)
+						preprocess(files, file.next)
 						next_file_started = true
 					}
 
@@ -237,7 +333,7 @@ upload.start = {
 		upload.show('Uploading', files, function() {
 
 			// Upload first file
-			process(files, files[0])
+			preprocess(files, files[0])
 
 		})
 

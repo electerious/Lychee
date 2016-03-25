@@ -39,6 +39,7 @@ final class Admin extends Access {
 			case 'Photo::setTags':          self::setPhotoTagsAction(); break;
 			case 'Photo::duplicate':        self::duplicatePhotoAction(); break;
 			case 'Photo::delete':           self::deletePhotoAction(); break;
+			case 'Photo::isDuplicate':      self::isDuplicateAction(); break;
 
 			// Add functions
 			case 'Photo::add':              self::uploadAction(); break;
@@ -221,6 +222,19 @@ final class Admin extends Access {
 
 		$photo = new Photo($_POST['photoIDs']);
 		Response::json($photo->delete());
+
+	}
+
+	private static function isDuplicateAction() {
+
+		Validator::required(isset($_POST['hash']), __METHOD__);
+
+		$photo = new Photo(null);
+		$ret = $photo->exists($_POST['hash']);
+		if($ret!=false){
+			$ret = true;
+		}
+		Response::json($ret);
 
 	}
 
