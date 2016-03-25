@@ -195,9 +195,12 @@ upload.start = {
 				if (progress>=100 && next_file_started===false) {
 
 					// Scroll to the uploading file
-					let scrollPos = 0
-					if ((file.num + 1)>4) scrollPos = (file.num + 1 - 4) * 40
-					$('.basicModal .rows').scrollTop(scrollPos)
+					if (file.next!=null) 
+						$('.basicModal .rows .row:nth-child(' + (file.num+1) + ') .status').scrollIntoView();
+
+
+
+
 
 					// Set status to processing
 					$('.basicModal .rows .row:nth-child(' + (file.num + 1) + ') .status').html('Processing')
