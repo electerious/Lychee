@@ -26,8 +26,8 @@ view.albums = {
 
 		init: function() {
 
-			let smartData  = '',
-			    albumsData = ''
+			let smartData  = ''
+			let albumsData = ''
 
 			// Smart Albums
 			if (lychee.publicMode===false) {
@@ -246,10 +246,10 @@ view.album = {
 
 	},
 
-	visible: function() {
+	hidden: function() {
 
-		if (album.json.visible==='1') sidebar.changeAttr('visible', 'Yes')
-		else                          sidebar.changeAttr('visible', 'No')
+		if (album.json.visible==='1') sidebar.changeAttr('hidden', 'No')
+		else                          sidebar.changeAttr('hidden', 'Yes')
 
 	},
 
@@ -271,8 +271,8 @@ view.album = {
 
 		if ((visible.album() || !album.json.init) && !visible.photo()) {
 
-			let structure = sidebar.createStructure.album(album.json),
-			    html      = sidebar.render(structure)
+			let structure = sidebar.createStructure.album(album.json)
+			let html      = sidebar.render(structure)
 
 			sidebar.dom('.sidebar__wrapper').html(html)
 			sidebar.bind()
@@ -408,27 +408,33 @@ view.photo = {
 
 		lychee.imageview.html(build.imageview(photo.json, visible.header()))
 
-		let $nextArrow     = lychee.imageview.find('a#next'),
-		    $previousArrow = lychee.imageview.find('a#previous'),
-		    photoID        = photo.getID(),
-		    hasNext        = album.json && album.json.content && album.json.content[photoID] && album.json.content[photoID].nextPhoto!=='',
-		    hasPrevious    = album.json && album.json.content && album.json.content[photoID] && album.json.content[photoID].previousPhoto!==''
+		let $nextArrow     = lychee.imageview.find('a#next')
+		let $previousArrow = lychee.imageview.find('a#previous')
+		let photoID        = photo.getID()
+		let hasNext        = album.json && album.json.content && album.json.content[photoID] && album.json.content[photoID].nextPhoto!==''
+		let hasPrevious    = album.json && album.json.content && album.json.content[photoID] && album.json.content[photoID].previousPhoto!==''
 
-		if (hasNext===false || lychee.viewMode===true) { $nextArrow.hide() }
-		else {
+		if (hasNext===false || lychee.viewMode===true) {
 
-			let nextPhotoID = album.json.content[photoID].nextPhoto,
-			    nextPhoto   = album.json.content[nextPhotoID]
+			$nextArrow.hide()
+
+		} else {
+
+			let nextPhotoID = album.json.content[photoID].nextPhoto
+			let nextPhoto   = album.json.content[nextPhotoID]
 
 			$nextArrow.css('background-image', lychee.html`linear-gradient(to bottom, rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)), url("$${ nextPhoto.thumbUrl }")`)
 
 		}
 
-		if (hasPrevious===false || lychee.viewMode===true) { $previousArrow.hide() }
-		else {
+		if (hasPrevious===false || lychee.viewMode===true) {
 
-			let previousPhotoID = album.json.content[photoID].previousPhoto,
-			    previousPhoto   = album.json.content[previousPhotoID]
+			$previousArrow.hide()
+
+		} else {
+
+			let previousPhotoID = album.json.content[photoID].previousPhoto
+			let previousPhoto   = album.json.content[previousPhotoID]
 
 			$previousArrow.css('background-image', lychee.html`linear-gradient(to bottom, rgba(0, 0, 0, .4), rgba(0, 0, 0, .4)), url("$${ previousPhoto.thumbUrl }")`)
 
@@ -438,8 +444,8 @@ view.photo = {
 
 	sidebar: function() {
 
-		let structure = sidebar.createStructure.photo(photo.json),
-		    html      = sidebar.render(structure)
+		let structure = sidebar.createStructure.photo(photo.json)
+		let html      = sidebar.render(structure)
 
 		sidebar.dom('.sidebar__wrapper').html(html)
 		sidebar.bind()

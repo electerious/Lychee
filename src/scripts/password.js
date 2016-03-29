@@ -9,7 +9,7 @@ password = {
 
 }
 
-password.get = function(albumID, callback, passwd) {
+password.get = function(albumID, callback) {
 
 	if (lychee.publicMode===false)                                  callback()
 	else if (album.json && album.json.password==='0')               callback()
@@ -17,17 +17,25 @@ password.get = function(albumID, callback, passwd) {
 	else if (!albums.json && !album.json) {
 
 		// Continue without password
+
 		album.json = { password: true }
 		callback('')
 
-	} else if (passwd==null) {
-
-		// Request password
-		password.getDialog(albumID, callback)
-
 	} else {
 
-		// Check password
+		// Request password
+
+		password.getDialog(albumID, callback)
+
+	}
+
+}
+
+password.getDialog = function(albumID, callback) {
+
+	const action = (data) => {
+
+		let passwd = data.password
 
 		let params = {
 			albumID,
@@ -48,16 +56,10 @@ password.get = function(albumID, callback, passwd) {
 
 	}
 
-}
-
-password.getDialog = function(albumID, callback) {
-
-	const action = (data) => password.get(albumID, callback, data.password)
-
 	const cancel = () => {
 
 		basicModal.close()
-		if (visible.albums()===false) lychee.goto()
+		if (!visible.albums()) lychee.goto()
 
 	}
 

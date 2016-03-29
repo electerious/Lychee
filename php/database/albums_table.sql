@@ -1,9 +1,8 @@
 # Dump of table lychee_albums
-# Version 2.5
 # ------------------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS `?` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` bigint(14) NOT NULL,
   `title` varchar(100) NOT NULL DEFAULT '',
   `description` varchar(1000) DEFAULT '',
   `sysstamp` int(11) NOT NULL,

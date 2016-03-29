@@ -55,7 +55,7 @@ album.load = function(albumID, refresh = false) {
 				} else {
 					// Album not public
 					lychee.content.show()
-					lychee.goto('')
+					lychee.goto()
 				}
 				return false
 			}
@@ -110,12 +110,11 @@ album.add = function() {
 
 		basicModal.close()
 
-		if (title.length===0) title = 'Untitled'
+		let params = {
+			title
+		}
 
-		api.post('Album::add', { title }, function(data) {
-
-			// Avoid first album to be true
-			if (data===true) data = 1
+		api.post('Album::add', params, function(data) {
 
 			if (data!==false && isNumber(data)) {
 				albums.refresh()
@@ -146,20 +145,18 @@ album.add = function() {
 
 album.delete = function(albumIDs) {
 
-	let action     = {},
-	    cancel     = {},
-	    msg        = ''
+	let action = {}
+	let cancel = {}
+	let msg    = ''
 
 	if (!albumIDs) return false
-	if (albumIDs instanceof Array===false) albumIDs = [albumIDs]
+	if (albumIDs instanceof Array===false) albumIDs = [ albumIDs ]
 
 	action.fn = function() {
 
-		let params
-
 		basicModal.close()
 
-		params = {
+		let params = {
 			albumIDs: albumIDs.join()
 		}
 
@@ -176,7 +173,7 @@ album.delete = function(albumIDs) {
 			} else {
 
 				albums.refresh()
-				lychee.goto('')
+				lychee.goto()
 
 			}
 
@@ -203,6 +200,9 @@ album.delete = function(albumIDs) {
 		// Get title
 		if (album.json)       albumTitle = album.json.title
 		else if (albums.json) albumTitle = albums.getByID(albumIDs).title
+
+		// Fallback for album without a title
+		if (albumTitle==='') albumTitle = 'Untitled'
 
 		msg = lychee.html`<p>Are you sure you want to delete the album '$${ albumTitle }' and all of the photos it contains? This action can't be undone!</p>`
 
@@ -234,11 +234,11 @@ album.delete = function(albumIDs) {
 
 album.setTitle = function(albumIDs) {
 
-	let oldTitle = '',
-	    msg      = ''
+	let oldTitle = ''
+	let msg      = ''
 
 	if (!albumIDs) return false
-	if (albumIDs instanceof Array===false) albumIDs = [albumIDs]
+	if (albumIDs instanceof Array===false) albumIDs = [ albumIDs ]
 
 	if (albumIDs.length===1) {
 
@@ -246,18 +246,13 @@ album.setTitle = function(albumIDs) {
 		if (album.json)       oldTitle = album.json.title
 		else if (albums.json) oldTitle = albums.getByID(albumIDs).title
 
-		if (!oldTitle) oldTitle = ''
-
 	}
 
 	const action = function(data) {
 
-		let newTitle = data.title
-
 		basicModal.close()
 
-		// Set title to Untitled when empty
-		newTitle = (newTitle==='') ? 'Untitled' : newTitle
+		let newTitle = data.title
 
 		if (visible.album()) {
 
@@ -315,7 +310,7 @@ album.setTitle = function(albumIDs) {
 
 album.setDescription = function(albumID) {
 
-	let oldDescription = album.json.description.replace(/'/g, '&apos;')
+	let oldDescription = album.json.description
 
 	const action = function(data) {
 
@@ -365,12 +360,12 @@ album.setPublic = function(albumID, modal, e) {
 
 	if (modal===true) {
 
-		let text   = '',
-		    action = {}
+		let text   = ''
+		let action = {}
 
 		action.fn = () => {
 
-			// setPublic function without showing the modal
+			// Call setPublic function without showing the modal
 			album.setPublic(album.getID(), false, e)
 
 		}
@@ -393,11 +388,11 @@ album.setPublic = function(albumID, modal, e) {
 		          <form>
 		              <div class='choice'>
 		                  <label>
-		                      <input type='checkbox' name='visible'>
+		                      <input type='checkbox' name='hidden'>
 		                      <span class='checkbox'>${ build.iconic('check') }</span>
-		                      <span class='label'>Visible</span>
+		                      <span class='label'>Hidden</span>
 		                  </label>
-		                  <p>Listed to visitors of your Lychee.</p>
+		                  <p>Only people with the direct link can view this album.</p>
 		              </div>
 		              <div class='choice'>
 		                  <label>
@@ -413,7 +408,7 @@ album.setPublic = function(albumID, modal, e) {
 		                      <span class='checkbox'>${ build.iconic('check') }</span>
 		                      <span class='label'>Password protected</span>
 		                  </label>
-		                  <p>Only accessible with a valid password.</p>
+		                  <p>Album only accessible with a valid password.</p>
 		                  <input class='text' name='passwordtext' type='password' placeholder='password' value=''>
 		              </div>
 		          </form>
@@ -433,9 +428,8 @@ album.setPublic = function(albumID, modal, e) {
 			}
 		})
 
-		// Active visible by default (public = 0)
-		if ((album.json.public==='1' && album.json.visible==='1') || (album.json.public==='0')) $('.basicModal .choice input[name="visible"]').click()
-		if (album.json.downloadable==='1')                                                      $('.basicModal .choice input[name="downloadable"]').click()
+		if (album.json.public==='1' && album.json.visible==='0') $('.basicModal .choice input[name="hidden"]').click()
+		if (album.json.downloadable==='1')                       $('.basicModal .choice input[name="downloadable"]').click()
 
 		$('.basicModal .choice input[name="password"]').on('change', function() {
 
@@ -455,8 +449,8 @@ album.setPublic = function(albumID, modal, e) {
 		album.json.public = '1'
 
 		// Set visible
-		if ($('.basicModal .choice input[name="visible"]:checked').length===1) album.json.visible = '1'
-		else                                                                   album.json.visible = '0'
+		if ($('.basicModal .choice input[name="hidden"]:checked').length===1) album.json.visible = '0'
+		else                                                                  album.json.visible = '1'
 
 		// Set downloadable
 		if ($('.basicModal .choice input[name="downloadable"]:checked').length===1) album.json.downloadable = '1'
@@ -484,12 +478,12 @@ album.setPublic = function(albumID, modal, e) {
 	// Set data and refresh view
 	if (visible.album()) {
 
-		album.json.visible      = (album.json.public==='0') ? '0' : album.json.visible
+		album.json.visible      = (album.json.public==='0') ? '1' : album.json.visible
 		album.json.downloadable = (album.json.public==='0') ? '0' : album.json.downloadable
 		album.json.password     = (album.json.public==='0') ? '0' : album.json.password
 
 		view.album.public()
-		view.album.visible()
+		view.album.hidden()
 		view.album.downloadable()
 		view.album.password()
 
@@ -515,8 +509,8 @@ album.setPublic = function(albumID, modal, e) {
 
 album.share = function(service) {
 
-	let link = '',
-	    url  = location.href
+	let link = ''
+	let url  = location.href
 
 	switch (service) {
 		case 'twitter':
@@ -539,8 +533,8 @@ album.share = function(service) {
 
 album.getArchive = function(albumID) {
 
-	let link,
-	    url = `${ api.path }?function=Album::getArchive&albumID=${ albumID }`
+	let link = ''
+	let url  = `${ api.path }?function=Album::getArchive&albumID=${ albumID }`
 
 	if (location.href.indexOf('index.html')>0) link = location.href.replace(location.hash, '').replace('index.html', url)
 	else                                       link = location.href.replace(location.hash, '') + url
@@ -553,26 +547,26 @@ album.getArchive = function(albumID) {
 
 album.merge = function(albumIDs) {
 
-	let title  = '',
-	    sTitle = '',
-	    msg    = ''
+	let title  = ''
+	let sTitle = ''
+	let msg    = ''
 
 	if (!albumIDs) return false
-	if (albumIDs instanceof Array===false) albumIDs = [albumIDs]
+	if (albumIDs instanceof Array===false) albumIDs = [ albumIDs ]
 
 	// Get title of first album
 	if (albums.json) title = albums.getByID(albumIDs[0]).title
-	if (!title)      title = ''
 
-	title = title.replace(/'/g, '&apos;')
+	// Fallback for first album without a title
+	if (title==='') title = 'Untitled'
 
 	if (albumIDs.length===2) {
 
 		// Get title of second album
 		if (albums.json) sTitle = albums.getByID(albumIDs[1]).title
 
-		if (!sTitle) sTitle = ''
-		sTitle = sTitle.replace(/'/g, '&apos;')
+		// Fallback for second album without a title
+		if (sTitle==='') sTitle = 'Untitled'
 
 		msg = lychee.html`<p>Are you sure you want to merge the album '$${ sTitle }' into the album '$${ title }'?</p>`
 
@@ -596,7 +590,7 @@ album.merge = function(albumIDs) {
 				lychee.error(null, params, data)
 			} else {
 				albums.refresh()
-				albums.load()
+				lychee.goto()
 			}
 
 		})

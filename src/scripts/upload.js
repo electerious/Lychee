@@ -40,16 +40,17 @@ upload.start = {
 
 	local: function(files) {
 
-		let albumID = album.getID(),
-		    error   = false,
-		    warning = false
+		let albumID = album.getID()
+		let error   = false
+		let warning = false
 
 		const process = function(files, file) {
 
-			let formData     = new FormData(),
-				xhr          = new XMLHttpRequest(),
-				pre_progress = 0,
-				progress     = 0
+			let formData          = new FormData()
+			let xhr               = new XMLHttpRequest()
+			let pre_progress      = 0
+			let progress          = 0
+			let next_file_started = false
 
 			const finish = function() {
 
@@ -84,78 +85,63 @@ upload.start = {
 
 			}
 
-			// Check if file is supported
-			if (file.supported===false) {
-
-				// Skip file
-				if (file.next!=null) process(files, file.next)
-				else {
-
-					// Look for supported files
-					// If zero files are supported, hide the upload after a delay
-
-					let hasSupportedFiles = false
-
-					for (let i = 0; i < files.length; i++) {
-
-						if (files[i].supported===true) {
-							hasSupportedFiles = true
-							break
-						}
-
-					}
-
-					if (hasSupportedFiles===false) setTimeout(finish, 2000)
-
-				}
-
-				return false
-
-			}
-
 			formData.append('function', 'Photo::add')
 			formData.append('albumID', albumID)
-			formData.append('tags', '')
 			formData.append(0, file)
 
 			xhr.open('POST', api.path)
 
 			xhr.onload = function() {
 
-				let wait      = false,
-				    errorText = ''
+				let data      = null
+				let wait      = false
+				let errorText = ''
+
+				const isNumber = (n) => (!isNaN(parseFloat(n)) && isFinite(n))
+
+				try {
+					data = JSON.parse(xhr.responseText)
+				} catch(e) {
+					data = ''
+				}
 
 				file.ready = true
 
 				// Set status
-				if (xhr.status===200 && xhr.responseText==='1') {
+				if (xhr.status===200 && isNumber(data)) {
 
 					// Success
-					$('.basicModal .rows .row:nth-child(' + (file.num+1) + ') .status')
+					$('.basicModal .rows .row:nth-child(' + (file.num + 1) + ') .status')
 						.html('Finished')
 						.addClass('success')
 
 				} else {
 
-					if (xhr.responseText.substr(0, 6)==='Error:') {
+					if (data.substr(0, 6)==='Error:') {
 
-						errorText = xhr.responseText.substr(6) + ' Please take a look at the console of your browser for further details.'
+						errorText = data.substr(6) + ' Please take a look at the console of your browser for further details.'
 						error     = true
 
 						// Error Status
-						$('.basicModal .rows .row:nth-child(' + (file.num+1) + ') .status')
+						$('.basicModal .rows .row:nth-child(' + (file.num + 1) + ') .status')
 							.html('Failed')
 							.addClass('error')
 
-					} else if (xhr.responseText.substr(0, 8)==='Warning:') {
+						// Throw error
+						if (error===true) lychee.error('Upload failed. Server returned an error!', xhr, data)
 
-						errorText = xhr.responseText.substr(8)
+					} else if (data.substr(0, 8)==='Warning:') {
+
+						errorText = data.substr(8)
 						warning   = true
 
 						// Warning Status
-						$('.basicModal .rows .row:nth-child(' + (file.num+1) + ') .status')
+						$('.basicModal .rows .row:nth-child(' + (file.num + 1) + ') .status')
 							.html('Skipped')
 							.addClass('warning')
+
+						// Throw error
+						if (error===true) lychee.error('Upload failed. Server returned a warning!', xhr, data)
 
 					} else {
 
@@ -163,18 +149,18 @@ upload.start = {
 						error     = true
 
 						// Error Status
-						$('.basicModal .rows .row:nth-child(' + (file.num+1) + ') .status')
+						$('.basicModal .rows .row:nth-child(' + (file.num + 1) + ') .status')
 							.html('Failed')
 							.addClass('error')
 
+						// Throw error
+						if (error===true) lychee.error('Upload failed. Server returned an unkown error!', xhr, data)
+
 					}
 
-					$('.basicModal .rows .row:nth-child(' + (file.num+1) + ') p.notice')
+					$('.basicModal .rows .row:nth-child(' + (file.num + 1) + ') p.notice')
 						.html(errorText)
 						.show()
-
-					// Throw error
-					if (error===true) lychee.error('Upload failed. Server returned the status code ' + xhr.status + '!', xhr, xhr.responseText)
 
 				}
 
@@ -206,18 +192,21 @@ upload.start = {
 					pre_progress = progress
 				}
 
-				if (progress>=100) {
+				if (progress>=100 && next_file_started===false) {
 
 					// Scroll to the uploading file
 					let scrollPos = 0
-					if ((file.num+1)>4) scrollPos = (file.num + 1 - 4) * 40
+					if ((file.num + 1)>4) scrollPos = (file.num + 1 - 4) * 40
 					$('.basicModal .rows').scrollTop(scrollPos)
 
 					// Set status to processing
-					$('.basicModal .rows .row:nth-child(' + (file.num+1) + ') .status').html('Processing')
+					$('.basicModal .rows .row:nth-child(' + (file.num + 1) + ') .status').html('Processing')
 
 					// Upload next file
-					if (file.next!=null) process(files, file.next)
+					if (file.next!=null) {
+						process(files, file.next)
+						next_file_started = true
+					}
 
 				}
 
@@ -232,20 +221,11 @@ upload.start = {
 
 		for (let i = 0; i < files.length; i++) {
 
-			files[i].num       = i
-			files[i].ready     = false
-			files[i].supported = true
+			files[i].num   = i
+			files[i].ready = false
 
-			if (i < files.length-1) files[i].next = files[i+1]
+			if (i < files.length-1) files[i].next = files[i + 1]
 			else                    files[i].next = null
-
-			// Check if file is supported
-			if (files[i].type!=='image/jpeg' && files[i].type!=='image/jpg' && files[i].type!=='image/png' && files[i].type!=='image/gif') {
-
-				files[i].ready     = true
-				files[i].supported = false
-
-			}
 
 		}
 
@@ -276,15 +256,8 @@ upload.start = {
 
 				basicModal.close()
 
-				let extension = data.link.split('.').pop()
-				if (extension!=='jpeg' && extension!=='jpg' && extension!=='png' && extension!=='gif' && extension!=='webp') {
-					loadingBar.show('error', 'File format of link not supported.')
-					return false
-				}
-
 				files[0] = {
-					name      : data.link,
-					supported : true
+					name: data.link
 				}
 
 				upload.show('Importing URL', files, function() {
@@ -363,8 +336,7 @@ upload.start = {
 			let files = []
 
 			files[0] = {
-				name      : data.path,
-				supported : true
+				name: data.path
 			}
 
 			upload.show('Importing from server', files, function() {
@@ -387,7 +359,7 @@ upload.start = {
 
 						// Go back to the album overview to show the imported albums
 						if (visible.albums()) lychee.load()
-						else                  lychee.goto('')
+						else                  lychee.goto()
 
 						basicModal.close()
 
@@ -473,14 +445,13 @@ upload.start = {
 				links += files[i].link + ','
 
 				files[i] = {
-					name      : files[i].link,
-					supported : true
+					name      : files[i].link
 				}
 
 			}
 
 			// Remove last comma
-			links = links.substr(0, links.length-1)
+			links = links.substr(0, links.length - 1)
 
 			upload.show('Importing from Dropbox', files, function() {
 

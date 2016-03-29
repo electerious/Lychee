@@ -146,7 +146,6 @@
 		margin: 0 5px 0 0;
 		width: 8px;
 		height: 8px;
-		filter: drop-shadow(0 1px 3px black(.4));
 	}
 
 	.album img[data-overlay='false'] + .overlay h1,
@@ -185,7 +184,6 @@
 			fill: #fff;
 			width: 16px;
 			height: 16px;
-			filter: drop-shadow($shadowLight);
 		}
 	}
 
@@ -225,7 +223,6 @@
 	left: 50%;
 	padding-top: 20px;
 	color: white(.35);
-	text-shadow: 0 -1px 0 black(.4);
 	text-align: center;
 	transform: translateX(-50%) translateY(-50%);
 
@@ -234,7 +231,6 @@
 		margin: 0 0 10px;
 		width: 50px;
 		height: 50px;
-		filter: drop-shadow(0 -1px 0 black(.4));
 	}
 
 	p {

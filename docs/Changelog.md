@@ -1,3 +1,38 @@
+## v3.1.0
+
+Released March ??, 2016
+
+**Warning**: It's no longer possible to update from Lychee versions older than 2.7.
+
+**Warning**: Plugins which use the plugin API of Lychee must be updated to work with the new back-end.
+
+**Notice**: It's no longer possible to edit the thumb quality in the database.
+
+**Notice**: It's no longer possible to disable the creation of medium-sized photos when Imagick is installed on the system.
+
+This updates includes a huge rewrite of the back-end. We are now using namespaces and the singleton pattern for Settings::get(), Database::get() and Plugins::get(). Everything is way better documented thanks to PHPDoc comments. Ugly `#` comments have been replaced with the more known `//`. Unused functions are gone and returns are more strict. We also added a handy module to output messages. Failed database updates and invalid queries will be saved to the log.
+
+- `New` Empty titles for albums
+- `New` Share albums as hidden so they are only viewable with a direct link (#27)
+- `New` Log failed and successful login attempts (Thanks @qligier, #382 #246)
+- `Improved` error messages and log output
+- `Improved` The search shows albums above photos (#434)
+- `Improved` Album id now based on the current microtime (#27)
+- `Improved` Back-end modules and plugins
+- `Improved` Database connect function and update mechanism
+- `Improved` Default photo title now "Untitled"
+- `Improved` Move to next photo after after moving a picture (#437)
+- `Improved` Return to album overview when canceling album password input
+- `Improved` URL import now accepts photo URLs containing "?" and ":" (Thanks @qligier, #482)
+- `Improved` Replaced date by strftime to simplify date translations (Thanks @qligier, #461)
+- `Fixed` Missing icons in Safari 9.1
+- `Fixed` duplicate uploads (Thanks @qligier, #433)
+- `Fixed` incorrect escaping when using backslashes
+- `Fixed` session_start() after sending headers (#433)
+- `Fixed` error when deleting last open photo in album
+- `Fixed` Photo sometimes not loading when visiting directly
+- `Fixed` Move album, merge album and switch album/photo menus no longer show empty titles for untitled albums/photos
+
 ## v3.0.9
 
 Released January 10, 2016

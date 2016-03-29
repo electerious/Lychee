@@ -11,8 +11,8 @@ lychee.content = $('.content')
 
 lychee.getEventName = function() {
 
-	let touchendSupport = (/Android|iPhone|iPad|iPod/i).test(navigator.userAgent || navigator.vendor || window.opera) && ('ontouchend' in document.documentElement),
-	    eventName       = (touchendSupport===true ? 'touchend' : 'click')
+	let touchendSupport = (/Android|iPhone|iPad|iPod/i).test(navigator.userAgent || navigator.vendor || window.opera) && ('ontouchend' in document.documentElement)
+	let eventName       = (touchendSupport===true ? 'touchend' : 'click')
 
 	return eventName
 
@@ -39,8 +39,8 @@ lychee.html = function(literalSections, ...substs) {
 
 	// Use raw literal sections: we don’t want
 	// backslashes (\n etc.) to be interpreted
-	let raw    = literalSections.raw,
-	    result = ''
+	let raw    = literalSections.raw
+	let result = ''
 
 	substs.forEach((subst, i) => {
 
@@ -63,7 +63,7 @@ lychee.html = function(literalSections, ...substs) {
 	// Take care of last literal section
 	// (Never fails, because an empty template string
 	// produces one literal section, an empty string)
-	result += raw[raw.length-1]
+	result += raw[raw.length - 1]
 
 	return result
 
@@ -88,7 +88,7 @@ $(document).ready(function() {
 	// Direct Link
 	header.dom('#button_direct').on(eventName, function() {
 
-		let link = $('#imageview #image').css('background-image').replace(/"/g,'').replace(/url\(|\)$/ig, '')
+		let link = $('#imageview img').attr('src').replace(/"/g,'').replace(/url\(|\)$/ig, '')
 		window.open(link, '_newtab')
 
 	})
@@ -127,8 +127,8 @@ const loadPhotoInfo = function(photoID) {
 		imageview.addClass('fadeIn').show()
 
 		// Render Sidebar
-		let structure = sidebar.createStructure.photo(data),
-		    html      = sidebar.render(structure)
+		let structure = sidebar.createStructure.photo(data)
+		let html      = sidebar.render(structure)
 
 		sidebar.dom('.sidebar__wrapper').html(html)
 		sidebar.bind()

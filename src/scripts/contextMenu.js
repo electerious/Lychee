@@ -31,8 +31,8 @@ contextMenu.settings = function(e) {
 		{ title: build.iconic('dropbox', 'ionicons') + 'Set Dropbox', fn: settings.setDropboxKey },
 		{ },
 		{ title: build.iconic('info') + 'About Lychee', fn: () => window.open(lychee.website) },
-		{ title: build.iconic('wrench') + 'Diagnostics', fn: () => window.open('plugins/check/') },
-		{ title: build.iconic('align-left') + 'Show Log', fn: () => window.open('plugins/displaylog/') },
+		{ title: build.iconic('wrench') + 'Diagnostics', fn: () => window.open('plugins/Diagnostics/') },
+		{ title: build.iconic('align-left') + 'Show Log', fn: () => window.open('plugins/Log/') },
 		{ },
 		{ title: build.iconic('account-logout') + 'Sign Out', fn: lychee.logout }
 	]
@@ -53,9 +53,9 @@ contextMenu.album = function(albumID, e) {
 	let showMerge = (albums.json && albums.json.albums && Object.keys(albums.json.albums).length>1)
 
 	let items = [
-		{ title: build.iconic('pencil') + 'Rename', fn: () => album.setTitle([albumID]) },
+		{ title: build.iconic('pencil') + 'Rename', fn: () => album.setTitle([ albumID ]) },
 		{ title: build.iconic('collapse-left') + 'Merge', visible: showMerge, fn: () => { basicContext.close(); contextMenu.mergeAlbum(albumID, e) } },
-		{ title: build.iconic('trash') + 'Delete', fn: () => album.delete([albumID]) }
+		{ title: build.iconic('trash') + 'Delete', fn: () => album.delete([ albumID ]) }
 	]
 
 	$('.album[data-id="' + albumID + '"]').addClass('active')
@@ -90,7 +90,7 @@ contextMenu.albumMulti = function(albumIDs, e) {
 
 contextMenu.albumTitle = function(albumID, e) {
 
-	api.post('Album::getAll', {}, function(data) {
+	api.post('Albums::get', {}, function(data) {
 
 		let items = []
 
@@ -100,10 +100,14 @@ contextMenu.albumTitle = function(albumID, e) {
 			$.each(data.albums, function() {
 
 				if (!this.thumbs[0]) this.thumbs[0] = 'src/images/no_cover.svg'
+				if (this.title==='') this.title = 'Untitled'
 
-				let title = lychee.html`<img class='cover' width='16' height='16' src='$${ this.thumbs[0] }'><div class='title'>$${ this.title }</div>`
+				let html = lychee.html`<img class='cover' width='16' height='16' src='$${ this.thumbs[0] }'><div class='title'>$${ this.title }</div>`
 
-				if (this.id!=albumID) items.push({ title, fn: () => lychee.goto(this.id) })
+				if (this.id!=albumID) items.push({
+					title: html,
+					fn: () => lychee.goto(this.id)
+				})
 
 			})
 
@@ -111,7 +115,7 @@ contextMenu.albumTitle = function(albumID, e) {
 
 		}
 
-		items.unshift({ title: build.iconic('pencil') + 'Rename', fn: () => album.setTitle([albumID]) })
+		items.unshift({ title: build.iconic('pencil') + 'Rename', fn: () => album.setTitle([ albumID ]) })
 
 		basicContext.show(items, e.originalEvent, contextMenu.close)
 
@@ -121,7 +125,7 @@ contextMenu.albumTitle = function(albumID, e) {
 
 contextMenu.mergeAlbum = function(albumID, e) {
 
-	api.post('Album::getAll', {}, function(data) {
+	api.post('Albums::get', {}, function(data) {
 
 		let items = []
 
@@ -130,10 +134,14 @@ contextMenu.mergeAlbum = function(albumID, e) {
 			$.each(data.albums, function() {
 
 				if (!this.thumbs[0]) this.thumbs[0] = 'src/images/no_cover.svg'
+				if (this.title==='') this.title = 'Untitled'
 
-				let title = lychee.html`<img class='cover' width='16' height='16' src='$${ this.thumbs[0] }'><div class='title'>$${ this.title }</div>`
+				let html = lychee.html`<img class='cover' width='16' height='16' src='$${ this.thumbs[0] }'><div class='title'>$${ this.title }</div>`
 
-				if (this.id!=albumID) items.push({ title, fn: () => album.merge([albumID, this.id]) })
+				if (this.id!=albumID) items.push({
+					title: html,
+					fn: () => album.merge([ albumID, this.id ])
+				})
 
 			})
 
@@ -154,13 +162,13 @@ contextMenu.photo = function(photoID, e) {
 	// in order to keep the selection
 
 	let items = [
-		{ title: build.iconic('star') + 'Star', fn: () => photo.setStar([photoID]) },
-		{ title: build.iconic('tag') + 'Tags', fn: () => photo.editTags([photoID]) },
+		{ title: build.iconic('star') + 'Star', fn: () => photo.setStar([ photoID ]) },
+		{ title: build.iconic('tag') + 'Tags', fn: () => photo.editTags([ photoID ]) },
 		{ },
-		{ title: build.iconic('pencil') + 'Rename', fn: () => photo.setTitle([photoID]) },
-		{ title: build.iconic('layers') + 'Duplicate', fn: () => photo.duplicate([photoID]) },
-		{ title: build.iconic('folder') + 'Move', fn: () => { basicContext.close(); contextMenu.move([photoID], e) } },
-		{ title: build.iconic('trash') + 'Delete', fn: () => photo.delete([photoID]) }
+		{ title: build.iconic('pencil') + 'Rename', fn: () => photo.setTitle([ photoID ]) },
+		{ title: build.iconic('layers') + 'Duplicate', fn: () => photo.duplicate([ photoID ]) },
+		{ title: build.iconic('folder') + 'Move', fn: () => { basicContext.close(); contextMenu.move([ photoID ], e) } },
+		{ title: build.iconic('trash') + 'Delete', fn: () => photo.delete([ photoID ]) }
 	]
 
 	$('.photo[data-id="' + photoID + '"]').addClass('active')
@@ -194,7 +202,7 @@ contextMenu.photoMulti = function(photoIDs, e) {
 contextMenu.photoTitle = function(albumID, photoID, e) {
 
 	let items = [
-		{ title: build.iconic('pencil') + 'Rename', fn: () => photo.setTitle([photoID]) }
+		{ title: build.iconic('pencil') + 'Rename', fn: () => photo.setTitle([ photoID ]) }
 	]
 
 	let data = album.json
@@ -206,9 +214,14 @@ contextMenu.photoTitle = function(albumID, photoID, e) {
 		// Generate list of albums
 		$.each(data.content, function(index) {
 
-			let title = lychee.html`<img class='cover' width='16' height='16' src='$${ this.thumbUrl }'><div class='title'>$${ this.title }</div>`
+			if (this.title==='') this.title = 'Untitled'
 
-			if (this.id!=photoID) items.push({ title, fn: () => lychee.goto(albumID + '/' + this.id) })
+			let html = lychee.html`<img class='cover' width='16' height='16' src='$${ this.thumbUrl }'><div class='title'>$${ this.title }</div>`
+
+			if (this.id!=photoID) items.push({
+				title: html,
+				fn: () => lychee.goto(albumID + '/' + this.id)
+			})
 
 		})
 
@@ -236,9 +249,9 @@ contextMenu.photoMore = function(photoID, e) {
 
 contextMenu.move = function(photoIDs, e) {
 
-	var items = []
+	let items = []
 
-	api.post('Album::getAll', {}, function(data) {
+	api.post('Albums::get', {}, function(data) {
 
 		if (data.num===0) {
 
@@ -253,10 +266,14 @@ contextMenu.move = function(photoIDs, e) {
 			$.each(data.albums, function() {
 
 				if (!this.thumbs[0]) this.thumbs[0] = 'src/images/no_cover.svg'
+				if (this.title==='') this.title = 'Untitled'
 
-				let title = lychee.html`<img class='cover' width='16' height='16' src='$${ this.thumbs[0] }'><div class='title'>$${ this.title }</div>`
+				let html = lychee.html`<img class='cover' width='16' height='16' src='$${ this.thumbs[0] }'><div class='title'>$${ this.title }</div>`
 
-				if (this.id!=album.getID()) items.push({ title, fn: () => photo.setAlbum(photoIDs, this.id) })
+				if (this.id!=album.getID()) items.push({
+					title: html,
+					fn: () => photo.setAlbum(photoIDs, this.id)
+				})
 
 			})
 
@@ -278,8 +295,8 @@ contextMenu.move = function(photoIDs, e) {
 
 contextMenu.sharePhoto = function(photoID, e) {
 
-	let link      = photo.getViewLink(photoID),
-		iconClass = 'ionicons'
+	let link      = photo.getViewLink(photoID)
+	let iconClass = 'ionicons'
 
 	let items = [
 		{ title: `<input readonly id="link" value="${ link }">`, fn: () => {}, class: 'basicContext__item--noHover' },

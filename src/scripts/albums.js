@@ -17,7 +17,7 @@ albums.load = function() {
 
 	if (albums.json===null) {
 
-		api.post('Album::getAll', {}, function(data) {
+		api.post('Albums::get', {}, function(data) {
 
 			let waitTime = 0
 
@@ -134,7 +134,7 @@ albums.deleteByID = function(albumID) {
 	if (!albums.json)        return false
 	if (!albums.json.albums) return false
 
-	var deleted = false
+	let deleted = false
 
 	$.each(albums.json.albums, function(i) {
 

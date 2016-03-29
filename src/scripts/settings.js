@@ -9,11 +9,11 @@ settings.createConfig = function() {
 
 	const action = function(data) {
 
-		let dbName        = data.dbName        || '',
-		    dbUser        = data.dbUser        || '',
-		    dbPassword    = data.dbPassword    || '',
-		    dbHost        = data.dbHost        || '',
-		    dbTablePrefix = data.dbTablePrefix || ''
+		let dbName        = data.dbName        || ''
+		let dbUser        = data.dbUser        || ''
+		let dbPassword    = data.dbPassword    || ''
+		let dbHost        = data.dbHost        || ''
+		let dbTablePrefix = data.dbTablePrefix || ''
 
 		if (dbUser.length<1) {
 			basicModal.error('dbUser')
@@ -31,12 +31,12 @@ settings.createConfig = function() {
 			dbTablePrefix
 		}
 
-		api.post('Database::createConfig', params, function(data) {
+		api.post('Config::create', params, function(data) {
 
 			if (data!==true) {
 
 				// Connection failed
-				if (data.indexOf('Warning: Connection failed!')!==-1) {
+				if (data==='Warning: Connection failed!') {
 
 					basicModal.show({
 						body: '<p>Unable to connect to host database because access was denied. Double-check your host, username and password and ensure that access from your current location is permitted.</p>',
@@ -53,7 +53,7 @@ settings.createConfig = function() {
 				}
 
 				// Creation failed
-				if (data.indexOf('Warning: Creation failed!')!==-1) {
+				if (data==='Warning: Creation failed!') {
 
 					basicModal.show({
 						body: '<p>Unable to create the database. Double-check your host, username and password and ensure that the specified user has the rights to modify and add content to the database.</p>',
@@ -70,7 +70,7 @@ settings.createConfig = function() {
 				}
 
 				// Could not create file
-				if (data.indexOf('Warning: Could not create file!')!==-1) {
+				if (data==='Warning: Could not create file!') {
 
 					basicModal.show({
 						body: "<p>Unable to save this configuration. Permission denied in <b>'data/'</b>. Please set the read, write and execute rights for others in <b>'data/'</b> and <b>'uploads/'</b>. Take a look at the readme for more information.</p>",
@@ -140,8 +140,8 @@ settings.createLogin = function() {
 
 	const action = function(data) {
 
-		let username = data.username,
-		    password = data.password
+		let username = data.username
+		let password = data.password
 
 		if (username.length<1) {
 			basicModal.error('username')
@@ -204,9 +204,9 @@ settings.setLogin = function() {
 
 	const action = function(data) {
 
-		let oldPassword = data.oldPassword || '',
-		    username    = data.username    || '',
-		    password    = data.password    || ''
+		let oldPassword = data.oldPassword || ''
+		let username    = data.username    || ''
+		let password    = data.password    || ''
 
 		if (oldPassword.length<1) {
 			basicModal.error('oldPassword')
@@ -269,8 +269,8 @@ settings.setLogin = function() {
 
 settings.setSorting = function() {
 
-	let sortingPhotos = [],
-	    sortingAlbums = []
+	let sortingPhotos = []
+	let sortingAlbums = []
 
 	const action = function() {
 

@@ -21,21 +21,25 @@
 		right: 30px;
 		bottom: 30px;
 		left: 30px;
-		transition: top .3s, right .3s, bottom .3s, left .3s, opacity .2s, transform .2s;
+		margin: auto;
+		max-width: calc(100% - 60px);
+		max-height: calc(100% - 90px);
+		width: auto;
+		height: auto;
+		transition: top .3s, right .3s, bottom .3s, left .3s, max-width .3s, max-height .3s;
 		will-change: transform;
-
-		display: flex;
-		justify-content: center;
-		align-items: center;
 
 		animation-name: zoomIn;
 		animation-duration: .3s;
 		animation-timing-function: $timingBounce;
 
 		@media (max-width: 640px) {
+			top: 60px;
 			right: 20px;
 			bottom: 20px;
 			left: 20px;
+			max-width: calc(100% - 40px);
+			max-height: calc(100% - 80px);
 		}
 	}
 
@@ -44,20 +48,8 @@
 		right: 0;
 		bottom: 0;
 		left: 0;
-	}
-
-	#image > div {
-		width: 0;
-		height: 0;
-	}
-
-	#image img {
-		position: absolute;
 		max-width: 100%;
 		max-height: 100%;
-		width: auto;
-		height: auto;
-		transform: translate(-50%, -50%);
 	}
 
 	// Previous/Next Buttons -------------------------------------------------------------- //
@@ -113,7 +105,6 @@
 
 		.iconic {
 			fill: white(.8);
-			filter: drop-shadow(0 1px 0 black(.4));
 		}
 	}
 
