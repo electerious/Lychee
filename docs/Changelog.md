@@ -1,6 +1,6 @@
 ## v3.1.0
 
-Released March ??, 2016
+Released March 29, 2016
 
 **Warning**: It's no longer possible to update from Lychee versions older than 2.7.
 
