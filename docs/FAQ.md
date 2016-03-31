@@ -56,3 +56,6 @@ There's a problem with images compressed by ImageOptim. [Read more.](https://git
 
 #### How to change the title of the site?
 [#455](https://github.com/electerious/Lychee/issues/455)
+
+#### How to reset username and password?
+Simply delete the whole `lychee_settings` table from the database. Lychee will regenerate it and ask you to enter a new username and password.
