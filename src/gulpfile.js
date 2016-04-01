@@ -28,6 +28,9 @@ paths.view = {
 	],
 	scripts: [
 		'node_modules/jquery/dist/jquery.min.js',
+		'../jquery.scrollIntoView.min.js',
+		'../sha1.js',
+		'../lib-typedarrays-min.js',
 		'../dist/_view--javascript.js'
 	],
 	svg: [
@@ -86,7 +89,10 @@ paths.main = {
 		'node_modules/mousetrap/plugins/global-bind/mousetrap-global-bind.min.js',
 		'node_modules/basiccontext/dist/basicContext.min.js',
 		'node_modules/basicmodal/dist/basicModal.min.js',
-		'../dist/_main--javascript.js'
+		'../dist/_main--javascript.js',
+		'../sha1.js',
+		'../lib-typedarrays-min.js',
+		'../jquery.scrollIntoView.min.js'
 	],
 	scss: [
 		'./styles/*.scss'

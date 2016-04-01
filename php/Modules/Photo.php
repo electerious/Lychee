@@ -258,7 +258,7 @@ final class Photo {
 	/**
 	 * @return array|false Returns a subset of a photo when same photo exists or returns false on failure.
 	 */
-	private function exists($checksum, $photoID = null) {
+	public function exists($checksum, $photoID = null) {
 
 		// Exclude $photoID from select when $photoID is set
 		if (isset($photoID)) $query = Database::prepare(Database::get(), "SELECT id, url, thumbUrl, medium FROM ? WHERE checksum = '?' AND id <> '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $checksum, $photoID));
