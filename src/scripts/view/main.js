@@ -9,15 +9,6 @@ let lychee = {}
 
 lychee.content = $('.content')
 
-lychee.getEventName = function() {
-
-	let touchendSupport = (/Android|iPhone|iPad|iPod/i).test(navigator.userAgent || navigator.vendor || window.opera) && ('ontouchend' in document.documentElement)
-	let eventName       = (touchendSupport===true ? 'touchend' : 'click')
-
-	return eventName
-
-}
-
 lychee.escapeHTML = function(html = '') {
 
 	// Ensure that html is a string
@@ -132,19 +123,16 @@ $(document).ready(function() {
 	// Save ID of photo
 	let photoID = gup('p')
 
-	// Event Name
-	let eventName = lychee.getEventName()
-
 	// Set API error handler
 	api.onError = error
 
 	// Share
-	header.dom('#button_share').on(eventName, function(e) {
+	header.dom('#button_share').on('click', function(e) {
 		contextMenu.sharePhoto(photoID, e)
 	})
 
 	// Infobox
-	header.dom('#button_info').on(eventName, sidebar.toggle)
+	header.dom('#button_info').on('click', sidebar.toggle)
 
 	// Load photo
 	loadPhotoInfo(photoID)
