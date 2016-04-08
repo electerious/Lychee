@@ -1184,9 +1184,9 @@
       "resolved": "https://registry.npmjs.org/jodid25519/-/jodid25519-1.0.2.tgz"
     },
     "jquery": {
-      "version": "2.2.2",
-      "from": "jquery@>=2.2.2 <3.0.0",
-      "resolved": "https://registry.npmjs.org/jquery/-/jquery-2.2.2.tgz"
+      "version": "2.2.3",
+      "from": "jquery@>=2.2.3 <3.0.0",
+      "resolved": "https://registry.npmjs.org/jquery/-/jquery-2.2.3.tgz"
     },
     "js-base64": {
       "version": "2.1.9",

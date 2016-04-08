@@ -27,7 +27,7 @@
     "gulp-rimraf": "^0.2.0",
     "gulp-sass": "^2.2.0",
     "gulp-uglify": "^1.5.3",
-    "jquery": "^2.2.2",
+    "jquery": "^2.2.3",
     "mousetrap": "^1.5.3"
   }
 }
