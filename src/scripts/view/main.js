@@ -69,6 +69,59 @@ lychee.html = function(literalSections, ...substs) {
 
 }
 
+// Sub-implementation of photo -------------------------------------------------------------- //
+
+let photo = {}
+
+photo.share = function(photoID, service) {
+
+	let link = ''
+	let url  = location.toString()
+
+	switch (service) {
+		case 'twitter':
+			link = `https://twitter.com/share?url=${ encodeURI(url) }`
+			break
+		case 'facebook':
+			link = `http://www.facebook.com/sharer.php?u=${ encodeURI(url) }`
+			break
+		case 'mail':
+			link = `mailto:?subject=&body=${ encodeURI(url) }`
+			break
+		default:
+			link = ''
+			break
+	}
+
+	if (link!=='') location.href = link
+
+}
+
+photo.getDirectLink = function() {
+
+	return $('#imageview img').attr('src').replace(/"/g,'').replace(/url\(|\)$/ig, '')
+
+}
+
+// Sub-implementation of contextMenu -------------------------------------------------------------- //
+
+let contextMenu = {}
+
+contextMenu.sharePhoto = function(photoID, e) {
+
+	let iconClass = 'ionicons'
+
+	let items = [
+		{ title: build.iconic('twitter', iconClass) + 'Twitter', fn: () => photo.share(photoID, 'twitter') },
+		{ title: build.iconic('facebook', iconClass) + 'Facebook', fn: () => photo.share(photoID, 'facebook') },
+		{ title: build.iconic('envelope-closed') + 'Mail', fn: () => photo.share(photoID, 'mail') },
+		{ title: build.iconic('link-intact') + 'Direct Link', fn: () => window.open(photo.getDirectLink(), '_newtab') }
+	]
+
+	basicContext.show(items, e.originalEvent)
+
+}
+
 // Main -------------------------------------------------------------- //
 
 let loadingBar = { show() {}, hide() {} }
@@ -76,24 +129,25 @@ let imageview  = $('#imageview')
 
 $(document).ready(function() {
 
+	// Save ID of photo
+	let photoID = gup('p')
+
 	// Event Name
 	let eventName = lychee.getEventName()
 
 	// Set API error handler
 	api.onError = error
 
+	// Share
+	header.dom('#button_share').on(eventName, function(e) {
+		contextMenu.sharePhoto(photoID, e)
+	})
+
 	// Infobox
 	header.dom('#button_info').on(eventName, sidebar.toggle)
 
-	// Direct Link
-	header.dom('#button_direct').on(eventName, function() {
-
-		let link = $('#imageview img').attr('src').replace(/"/g,'').replace(/url\(|\)$/ig, '')
-		window.open(link, '_newtab')
-
-	})
-
-	loadPhotoInfo(gup('p'))
+	// Load photo
+	loadPhotoInfo(photoID)
 
 })
 
