@@ -71,8 +71,8 @@ lychee.html = function(literalSections, ...substs) {
 
 // Main -------------------------------------------------------------- //
 
-let loadingBar = { show() {}, hide() {} },
-    imageview  = $('#imageview')
+let loadingBar = { show() {}, hide() {} }
+let imageview  = $('#imageview')
 
 $(document).ready(function() {
 
