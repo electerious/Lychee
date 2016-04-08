@@ -3,7 +3,7 @@
  * @copyright   2015 by Tobias Reich
  */
 
-// Sub-implementation of Lychee -------------------------------------------------------------- //
+// Sub-implementation of lychee -------------------------------------------------------------- //
 
 let lychee = {}
 
