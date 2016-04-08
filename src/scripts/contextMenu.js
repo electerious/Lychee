@@ -304,7 +304,7 @@ contextMenu.sharePhoto = function(photoID, e) {
 		{ title: build.iconic('twitter', iconClass) + 'Twitter', fn: () => photo.share(photoID, 'twitter') },
 		{ title: build.iconic('facebook', iconClass) + 'Facebook', fn: () => photo.share(photoID, 'facebook') },
 		{ title: build.iconic('envelope-closed') + 'Mail', fn: () => photo.share(photoID, 'mail') },
-		{ title: build.iconic('dropbox', iconClass) + 'Dropbox', fn: () => photo.share(photoID, 'dropbox') },
+		{ title: build.iconic('dropbox', iconClass) + 'Dropbox', visible: lychee.publicMode===false, fn: () => photo.share(photoID, 'dropbox') },
 		{ title: build.iconic('link-intact') + 'Direct Link', fn: () => window.open(photo.getDirectLink()) },
 		{ visible: lychee.publicMode===false },
 		{ title: build.iconic('ban') + 'Make Private', visible: lychee.publicMode===false, fn: () => photo.setPublic(photoID) }
