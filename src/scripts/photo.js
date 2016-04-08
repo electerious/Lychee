@@ -610,18 +610,17 @@ photo.deleteTag = function(photoID, index) {
 
 photo.share = function(photoID, service) {
 
-	let link = ''
 	let url  = photo.getViewLink(photoID)
 
 	switch (service) {
 		case 'twitter':
-			link = `https://twitter.com/share?url=${ encodeURI(url) }`
+			window.open(`https://twitter.com/share?url=${ encodeURI(url) }`)
 			break
 		case 'facebook':
-			link = `http://www.facebook.com/sharer.php?u=${ encodeURI(url) }&t=${ encodeURI(photo.json.title) }`
+			window.open(`http://www.facebook.com/sharer.php?u=${ encodeURI(url) }&t=${ encodeURI(photo.json.title) }`)
 			break
 		case 'mail':
-			link = `mailto:?subject=${ encodeURI(photo.json.title) }&body=${ encodeURI(url) }`
+			location.href = `mailto:?subject=${ encodeURI(photo.json.title) }&body=${ encodeURI(url) }`
 			break
 		case 'dropbox':
 			lychee.loadDropbox(function() {
@@ -629,12 +628,7 @@ photo.share = function(photoID, service) {
 				Dropbox.save(photo.getDirectLink(), filename)
 			})
 			break
-		default:
-			link = ''
-			break
 	}
-
-	if (link!=='') location.href = link
 
 }
 

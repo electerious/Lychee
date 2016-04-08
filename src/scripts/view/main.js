@@ -66,25 +66,19 @@ let photo = {}
 
 photo.share = function(photoID, service) {
 
-	let link = ''
 	let url  = location.toString()
 
 	switch (service) {
 		case 'twitter':
-			link = `https://twitter.com/share?url=${ encodeURI(url) }`
+			window.open(`https://twitter.com/share?url=${ encodeURI(url) }`)
 			break
 		case 'facebook':
-			link = `http://www.facebook.com/sharer.php?u=${ encodeURI(url) }`
+			window.open(`http://www.facebook.com/sharer.php?u=${ encodeURI(url) }`)
 			break
 		case 'mail':
-			link = `mailto:?subject=&body=${ encodeURI(url) }`
-			break
-		default:
-			link = ''
+			location.href = `mailto:?subject=&body=${ encodeURI(url) }`
 			break
 	}
-
-	if (link!=='') location.href = link
 
 }
 
