@@ -239,7 +239,7 @@ final class Photo {
 		}
 
 		// Save to DB
-		$values = array(LYCHEE_TABLE_PHOTOS, $id, $info['title'], $photo_name, $info['description'], '', $info['type'], $info['width'], $info['height'], $info['size'], $info['iso'], $info['aperture'], $info['make'], $info['model'], $info['shutter'], $info['focal'], $info['takestamp'], $path_thumb, $albumID, $public, $star, $checksum, $medium);
+		$values = array(LYCHEE_TABLE_PHOTOS, $id, $info['title'], $photo_name, $info['description'], $info['tags'], $info['type'], $info['width'], $info['height'], $info['size'], $info['iso'], $info['aperture'], $info['make'], $info['model'], $info['shutter'], $info['focal'], $info['takestamp'], $path_thumb, $albumID, $public, $star, $checksum, $medium);
 		$query  = Database::prepare(Database::get(), "INSERT INTO ? (id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, checksum, medium) VALUES ('?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?')", $values);
 		$result = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
@@ -767,7 +767,7 @@ final class Photo {
 				if (!empty($iptcInfo['2#120'][0])) $return['description'] = $iptcInfo['2#120'][0];
 
 				// Tags
-				if (!empty($iptcInfo['2#025'])) $return['tags'] = $iptcInfo['2#025'];
+				if (!empty($iptcInfo['2#025'])) $return['tags'] = str_replace('; ', ',', $iptcInfo['2#025']);
 
 				// Position
 				$fields = array();
