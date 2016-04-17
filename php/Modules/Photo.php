@@ -809,7 +809,7 @@ final class Photo {
 					$temp = round($temp, 1);
 					$return['focal'] = $temp . ' mm';
 				}
-				$return['focal'] = $exif['FocalLength'] . ' mm';
+				else $return['focal'] = $exif['FocalLength'] . ' mm';
 			}
 
 			if (!empty($exif['DateTimeOriginal'])) $return['takestamp'] = strtotime($exif['DateTimeOriginal']);
