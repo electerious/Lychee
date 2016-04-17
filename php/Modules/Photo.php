@@ -819,8 +819,11 @@ final class Photo {
 			if (!empty($exif['UndefinedTag:0xA434'])) $return['lens'] = trim($exif['UndefinedTag:0xA434']);
 
 
-			$return['latitude']    = '';
-			$return['longitude']   = '';
+			// Deal with GPS coordinates
+			if (!empty($exif['GPSLatitude']) && !empty($exif['GPSLatitudeRef']))
+				$return['latitude'] = getGPSCoordinate($exif['GPSLatitude'], $exif['GPSLatitudeRef']);
+			if (!empty($exif['GPSLongitude']) && !empty($exif['GPSLongitudeRef']))
+				$return['longitude'] = getGPSCoordinate($exif['GPSLongitude'], $exif['GPSLongitudeRef']);
 
 		}
 
