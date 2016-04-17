@@ -767,7 +767,7 @@ final class Photo {
 				if (!empty($iptcInfo['2#120'][0])) $return['description'] = $iptcInfo['2#120'][0];
 
 				// Tags
-				if (!empty($iptcInfo['2#025'])) $return['tags'] = str_replace('; ', ',', $iptcInfo['2#025']);
+				if (!empty($iptcInfo['2#025'])) $return['tags'] = implode(',', $iptcInfo['2#025']);
 
 				// Position
 				$fields = array();
