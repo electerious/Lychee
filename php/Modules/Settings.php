@@ -221,6 +221,13 @@ final class Settings {
 
 	}
 
+	/**
+	 * @return array Returns the settings of Lychee.
+	 */
+	public static function hasImagick() {
+		return (bool)(extension_loaded('imagick')&&self::get()['imagick']==='1');
+	}
+
 }
 
 ?>
