@@ -771,10 +771,10 @@ final class Photo {
 
 				// Position
 				$fields = array();
-				if (!empty($iptcInfo['2#090'])) $fields[] = trim($iptcInfo['2#090']);
-				if (!empty($iptcInfo['2#092'])) $fields[] = trim($iptcInfo['2#092']);
-				if (!empty($iptcInfo['2#095'])) $fields[] = trim($iptcInfo['2#095']);
-				if (!empty($iptcInfo['2#101'])) $fields[] = trim($iptcInfo['2#101']);
+				if (!empty($iptcInfo['2#090'])) $fields[] = trim($iptcInfo['2#090'][0]);
+				if (!empty($iptcInfo['2#092'])) $fields[] = trim($iptcInfo['2#092'][0]);
+				if (!empty($iptcInfo['2#095'])) $fields[] = trim($iptcInfo['2#095'][0]);
+				if (!empty($iptcInfo['2#101'])) $fields[] = trim($iptcInfo['2#101'][0]);
 
 				if (!empty($fields)) $return['position'] = implode(', ', $fields);
 
