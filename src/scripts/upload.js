@@ -93,13 +93,22 @@ upload.start = {
 
 			xhr.onload = function() {
 
+				let data      = null
 				let wait      = false
 				let errorText = ''
+
+				const isNumber = (n) => (!isNaN(parseFloat(n)) && isFinite(n))
+
+				try {
+					data = JSON.parse(xhr.responseText)
+				} catch(e) {
+					data = ''
+				}
 
 				file.ready = true
 
 				// Set status
-				if (xhr.status===200 && xhr.responseText==='true') {
+				if (xhr.status===200 && isNumber(data)) {
 
 					// Success
 					$('.basicModal .rows .row:nth-child(' + (file.num + 1) + ') .status')
@@ -108,9 +117,9 @@ upload.start = {
 
 				} else {
 
-					if (xhr.responseText.substr(0, 6)==='Error:') {
+					if (data.substr(0, 6)==='Error:') {
 
-						errorText = xhr.responseText.substr(6) + ' Please take a look at the console of your browser for further details.'
+						errorText = data.substr(6) + ' Please take a look at the console of your browser for further details.'
 						error     = true
 
 						// Error Status
@@ -118,15 +127,21 @@ upload.start = {
 							.html('Failed')
 							.addClass('error')
 
-					} else if (xhr.responseText.substr(0, 8)==='Warning:') {
+						// Throw error
+						if (error===true) lychee.error('Upload failed. Server returned an error!', xhr, data)
 
-						errorText = xhr.responseText.substr(8)
+					} else if (data.substr(0, 8)==='Warning:') {
+
+						errorText = data.substr(8)
 						warning   = true
 
 						// Warning Status
 						$('.basicModal .rows .row:nth-child(' + (file.num + 1) + ') .status')
 							.html('Skipped')
 							.addClass('warning')
+
+						// Throw error
+						if (error===true) lychee.error('Upload failed. Server returned a warning!', xhr, data)
 
 					} else {
 
@@ -138,14 +153,14 @@ upload.start = {
 							.html('Failed')
 							.addClass('error')
 
+						// Throw error
+						if (error===true) lychee.error('Upload failed. Server returned an unkown error!', xhr, data)
+
 					}
 
 					$('.basicModal .rows .row:nth-child(' + (file.num + 1) + ') p.notice')
 						.html(errorText)
 						.show()
-
-					// Throw error
-					if (error===true) lychee.error('Upload failed. Server returned the status code ' + xhr.status + '!', xhr, xhr.responseText)
 
 				}
 
@@ -206,8 +221,8 @@ upload.start = {
 
 		for (let i = 0; i < files.length; i++) {
 
-			files[i].num       = i
-			files[i].ready     = false
+			files[i].num   = i
+			files[i].ready = false
 
 			if (i < files.length-1) files[i].next = files[i + 1]
 			else                    files[i].next = null
@@ -242,7 +257,7 @@ upload.start = {
 				basicModal.close()
 
 				files[0] = {
-					name      : data.link
+					name: data.link
 				}
 
 				upload.show('Importing URL', files, function() {
@@ -321,7 +336,7 @@ upload.start = {
 			let files = []
 
 			files[0] = {
-				name      : data.path
+				name: data.path
 			}
 
 			upload.show('Importing from server', files, function() {

@@ -93,7 +93,7 @@ final class Admin extends Access {
 		Validator::required(isset($_POST['title']), __METHOD__);
 
 		$album = new Album(null);
-		Response::json($album->add($_POST['title']));
+		Response::json($album->add($_POST['title']), JSON_NUMERIC_CHECK);
 
 	}
 
@@ -231,7 +231,7 @@ final class Admin extends Access {
 		Validator::required(isset($_FILES, $_POST['albumID']), __METHOD__);
 
 		$photo = new Photo(null);
-		Response::json($photo->add($_FILES, $_POST['albumID']));
+		Response::json($photo->add($_FILES, $_POST['albumID']), JSON_NUMERIC_CHECK);
 
 	}
 
@@ -249,7 +249,7 @@ final class Admin extends Access {
 		Validator::required(isset($_POST['albumID'], $_POST['path']), __METHOD__);
 
 		$import = new Import();
-		echo $import->server($_POST['path'], $_POST['albumID']);
+		Response::json($import->server($_POST['path'], $_POST['albumID']));
 
 	}
 

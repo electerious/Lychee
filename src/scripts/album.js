@@ -116,9 +116,6 @@ album.add = function() {
 
 		api.post('Album::add', params, function(data) {
 
-			// Avoid first album to be true
-			if (data===true) data = 1
-
 			if (data!==false && isNumber(data)) {
 				albums.refresh()
 				lychee.goto(data)
@@ -512,25 +509,19 @@ album.setPublic = function(albumID, modal, e) {
 
 album.share = function(service) {
 
-	let link = ''
 	let url  = location.href
 
 	switch (service) {
 		case 'twitter':
-			link = `https://twitter.com/share?url=${ encodeURI(url) }`
+			window.open(`https://twitter.com/share?url=${ encodeURI(url) }`)
 			break
 		case 'facebook':
-			link = `http://www.facebook.com/sharer.php?u=${ encodeURI(url) }&t=${ encodeURI(album.json.title) }`
+			window.open(`http://www.facebook.com/sharer.php?u=${ encodeURI(url) }&t=${ encodeURI(album.json.title) }`)
 			break
 		case 'mail':
-			link = `mailto:?subject=${ encodeURI(album.json.title) }&body=${ encodeURI(url) }`
-			break
-		default:
-			link = ''
+			location.href = `mailto:?subject=${ encodeURI(album.json.title) }&body=${ encodeURI(url) }`
 			break
 	}
-
-	if (link!=='') location.href = link
 
 }
 

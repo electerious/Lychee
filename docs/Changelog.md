@@ -1,6 +1,6 @@
 ## v3.1.0
 
-Released March ??, 2016
+Released March 29, 2016
 
 **Warning**: It's no longer possible to update from Lychee versions older than 2.7.
 
@@ -14,7 +14,8 @@ This updates includes a huge rewrite of the back-end. We are now using namespace
 
 - `New` Empty titles for albums
 - `New` Share albums as hidden so they are only viewable with a direct link (#27)
-- `Improved` Error messages and log output
+- `New` Log failed and successful login attempts (Thanks @qligier, #382 #246)
+- `Improved` error messages and log output
 - `Improved` The search shows albums above photos (#434)
 - `Improved` Album id now based on the current microtime (#27)
 - `Improved` Back-end modules and plugins
@@ -22,6 +23,10 @@ This updates includes a huge rewrite of the back-end. We are now using namespace
 - `Improved` Default photo title now "Untitled"
 - `Improved` Move to next photo after after moving a picture (#437)
 - `Improved` Return to album overview when canceling album password input
+- `Improved` URL import now accepts photo URLs containing "?" and ":" (Thanks @qligier, #482)
+- `Improved` Replaced date by strftime to simplify date translations (Thanks @qligier, #461)
+- `Fixed` Missing icons in Safari 9.1
+- `Fixed` duplicate uploads (Thanks @qligier, #433)
 - `Fixed` incorrect escaping when using backslashes
 - `Fixed` session_start() after sending headers (#433)
 - `Fixed` error when deleting last open photo in album

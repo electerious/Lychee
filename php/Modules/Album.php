@@ -21,7 +21,7 @@ final class Album {
 	}
 
 	/**
-	 * @return integer|false ID of the created album.
+	 * @return string|false ID of the created album.
 	 */
 	public function add($title = 'Untitled') {
 

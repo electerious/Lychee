@@ -39,7 +39,7 @@ final class Photo {
 	 * Creats new photo(s).
 	 * Exits on error.
 	 * Use $returnOnError if you want to handle errors by your own.
-	 * @return boolean Returns true when successful.
+	 * @return string|false ID of the added photo.
 	 */
 	public function add(array $files, $albumID = 0, $returnOnError = false) {
 
@@ -251,7 +251,7 @@ final class Photo {
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
-		return true;
+		return $id;
 
 	}
 

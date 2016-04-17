@@ -26,7 +26,6 @@
 		color: white(.9);
 		font-size: 14px;
 		text-align: left;
-		text-shadow: $shadow;
 		line-height: 20px;
 
 		b {
@@ -56,7 +55,6 @@
 		padding: 13px 0 15px;
 		background: black(.02);
 		color: white(.5);
-		text-shadow: $shadow;
 		border-top: 1px solid black(.2);
 		box-shadow: inset 0 1px 0 white(.02);
 		cursor: default;
@@ -85,7 +83,6 @@
 		width: 100%;
 		background-color: transparent;
 		color: #fff;
-		text-shadow: $shadow;
 		border: none;
 		// Do not use rgba() for border-bottom
 		// to avoid a blurry line in Safari on non-retina screens
@@ -116,7 +113,6 @@
 			color: white(1);
 			font-size: 14px;
 			font-weight: 700;
-			text-shadow: $shadow;
 		}
 
 		label input {
@@ -258,7 +254,6 @@
 		color: #fff;
 		font-size: 16px;
 		font-weight: bold;
-		text-shadow: $shadow;
 		text-align: center;
 	}
 

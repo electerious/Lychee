@@ -236,8 +236,14 @@ lychee.setTitle = function(title, editable) {
 
 lychee.setMode = function(mode) {
 
-	$('#button_settings, #button_trash_album, #button_share_album, .button_add, .header__divider').remove()
-	$('#button_trash, #button_move, #button_share, #button_star').remove()
+	$('#button_settings, #button_trash_album, .button_add, .header__divider').remove()
+	$('#button_trash, #button_move, #button_star').remove()
+
+	$('#button_share, #button_share_album')
+		.removeClass('button--eye')
+		.addClass('button--share')
+		.find('use')
+		.attr('xlink:href', '#share')
 
 	$(document)
 		.off('click',       '.header__title--editable')
