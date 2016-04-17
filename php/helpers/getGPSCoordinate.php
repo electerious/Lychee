@@ -5,9 +5,9 @@
  * @return string Normalized coordinate as float number (degrees).
  */
 function getGPSCoordinate($coordinate, $ref) {
-	$degrees = count($coordinate) > 0 ? gps2Num($coordinate[0]) : 0;
-    $minutes = count($coordinate) > 1 ? gps2Num($coordinate[1]) : 0;
-    $seconds = count($coordinate) > 2 ? gps2Num($coordinate[2]) : 0;
+	$degrees = count($coordinate) > 0 ? formattedToFloatGPS($coordinate[0]) : 0;
+    $minutes = count($coordinate) > 1 ? formattedToFloatGPS($coordinate[1]) : 0;
+    $seconds = count($coordinate) > 2 ? formattedToFloatGPS($coordinate[2]) : 0;
 
     $flip = ($ref == 'W' || $ref == 'S') ? -1 : 1;
 
