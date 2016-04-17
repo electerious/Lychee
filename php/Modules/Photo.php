@@ -783,7 +783,7 @@ final class Photo {
 		}
 
 		// Read EXIF
-		if ($info['mime']=='image/jpeg') $exif = @exif_read_data($url, 'EXIF', 0);
+		if ($info['mime']=='image/jpeg') $exif = exif_read_data($url, 'EXIF', 0);
 		else $exif = false;
 
 		// EXIF Metadata
@@ -802,15 +802,14 @@ final class Photo {
 
 			if (!empty($exif['ExposureTime'])) $return['shutter'] = $exif['ExposureTime'] . ' s';
 
-			$temp = @$exif['FocalLength'];
-			if (isset($temp)) {
-				if (strpos($temp, '/')!==false) {
-					$temp = explode('/', $temp, 2);
+			if (!empty($exif['FocalLength'])) {
+				if (strpos($exif['FocalLength'], '/')!==false) {
+					$temp = explode('/', $exif['FocalLength'], 2);
 					$temp = $temp[0] / $temp[1];
 					$temp = round($temp, 1);
 					$return['focal'] = $temp . ' mm';
 				}
-				$return['focal'] = $temp . ' mm';
+				$return['focal'] = $exif['FocalLength'] . ' mm';
 			}
 
 			if (!empty($exif['DateTimeOriginal'])) $return['takestamp'] = strtotime($exif['DateTimeOriginal']);
