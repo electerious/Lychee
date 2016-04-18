@@ -239,7 +239,7 @@ final class Photo {
 		}
 
 		// Save to DB
-		$values = array(LYCHEE_TABLE_PHOTOS, $id, $info['title'], $photo_name, $info['description'], '', $info['type'], $info['width'], $info['height'], $info['size'], $info['iso'], $info['aperture'], $info['make'], $info['model'], $info['shutter'], $info['focal'], $info['takestamp'], $path_thumb, $albumID, $public, $star, $checksum, $medium);
+		$values = array(LYCHEE_TABLE_PHOTOS, $id, $info['title'], $photo_name, $info['description'], $info['tags'], $info['type'], $info['width'], $info['height'], $info['size'], $info['iso'], $info['aperture'], $info['make'], $info['model'], $info['shutter'], $info['focal'], $info['takestamp'], $path_thumb, $albumID, $public, $star, $checksum, $medium);
 		$query  = Database::prepare(Database::get(), "INSERT INTO ? (id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, checksum, medium) VALUES ('?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?')", $values);
 		$result = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
@@ -307,7 +307,7 @@ final class Photo {
 		$newUrl2x  = LYCHEE_UPLOADS_THUMB . $photoName[0] . '@2x.jpeg';
 
 		// Create thumbnails with Imagick
-		if(extension_loaded('imagick')&&Settings::get()['imagick']==='1') {
+		if(Settings::hasImagick()) {
 
 			// Read image
 			$thumb = new Imagick();
@@ -727,39 +727,11 @@ final class Photo {
 		$info      = getimagesize($url, $iptcArray);
 
 		// General information
-		$return['type']   = $info['mime'];
-		$return['width']  = $info[0];
-		$return['height'] = $info[1];
-
-		// Size
-		$size = filesize($url)/1024;
-		if ($size>=1024) $return['size'] = round($size/1024, 1) . ' MB';
-		else $return['size'] = round($size, 1) . ' KB';
-
-		// IPTC Metadata Fallback
+		$return['type']        = $info['mime'];
+		$return['width']       = $info[0];
+		$return['height']      = $info[1];
 		$return['title']       = '';
 		$return['description'] = '';
-
-		// IPTC Metadata
-		if(isset($iptcArray['APP13'])) {
-
-			$iptcInfo = iptcparse($iptcArray['APP13']);
-			if (is_array($iptcInfo)) {
-
-				$temp = @$iptcInfo['2#105'][0];
-				if (isset($temp)&&strlen($temp)>0) $return['title'] = $temp;
-
-				$temp = @$iptcInfo['2#120'][0];
-				if (isset($temp)&&strlen($temp)>0) $return['description'] = $temp;
-
-				$temp = @$iptcInfo['2#005'][0];
-				if (isset($temp)&&strlen($temp)>0&&$return['title']==='') $return['title'] = $temp;
-
-			}
-
-		}
-
-		// EXIF Metadata Fallback
 		$return['orientation'] = '';
 		$return['iso']         = '';
 		$return['aperture']    = '';
@@ -768,45 +740,95 @@ final class Photo {
 		$return['shutter']     = '';
 		$return['focal']       = '';
 		$return['takestamp']   = 0;
+		$return['lens']        = '';
+		$return['tags']        = array();
+		$return['position']    = '';
+		$return['latitude']    = '';
+		$return['longitude']   = '';
+		$return['altitude']    = '';
+
+		// Size
+		$size = filesize($url)/1024;
+		if ($size>=1024) $return['size'] = round($size/1024, 1) . ' MB';
+		else $return['size'] = round($size, 1) . ' KB';
+
+		// IPTC Metadata
+		// See https://www.iptc.org/std/IIM/4.2/specification/IIMV4.2.pdf for mapping
+		if(isset($iptcArray['APP13'])) {
+
+			$iptcInfo = iptcparse($iptcArray['APP13']);
+			if (is_array($iptcInfo)) {
+
+				// Title
+				if (!empty($iptcInfo['2#105'][0])) $return['title'] = $iptcInfo['2#105'][0];
+				else if (!empty($iptcInfo['2#005'][0])) $return['title'] = $iptcInfo['2#005'][0];
+
+				// Description
+				if (!empty($iptcInfo['2#120'][0])) $return['description'] = $iptcInfo['2#120'][0];
+
+				// Tags
+				if (!empty($iptcInfo['2#025'])) $return['tags'] = implode(',', $iptcInfo['2#025']);
+
+				// Position
+				$fields = array();
+				if (!empty($iptcInfo['2#090'])) $fields[] = trim($iptcInfo['2#090'][0]);
+				if (!empty($iptcInfo['2#092'])) $fields[] = trim($iptcInfo['2#092'][0]);
+				if (!empty($iptcInfo['2#095'])) $fields[] = trim($iptcInfo['2#095'][0]);
+				if (!empty($iptcInfo['2#101'])) $fields[] = trim($iptcInfo['2#101'][0]);
+
+				if (!empty($fields)) $return['position'] = implode(', ', $fields);
+
+			}
+
+		}
 
 		// Read EXIF
-		if ($info['mime']=='image/jpeg') $exif = @exif_read_data($url, 'EXIF', 0);
+		if ($info['mime']=='image/jpeg') $exif = exif_read_data($url, 'EXIF', 0);
 		else $exif = false;
 
 		// EXIF Metadata
 		if ($exif!==false) {
 
+			// Orientation
 			if (isset($exif['Orientation'])) $return['orientation'] = $exif['Orientation'];
 			else if (isset($exif['IFD0']['Orientation'])) $return['orientation'] = $exif['IFD0']['Orientation'];
 
-			$temp = @$exif['ISOSpeedRatings'];
-			if (isset($temp)) $return['iso'] = $temp;
+			// ISO
+			if (!empty($exif['ISOSpeedRatings'])) $return['iso'] = $exif['ISOSpeedRatings'];
 
-			$temp = @$exif['COMPUTED']['ApertureFNumber'];
-			if (isset($temp)) $return['aperture'] = $temp;
+			// Aperture
+			if (!empty($exif['COMPUTED']['ApertureFNumber'])) $return['aperture'] = $exif['COMPUTED']['ApertureFNumber'];
 
-			$temp = @$exif['Make'];
-			if (isset($temp)) $return['make'] = trim($temp);
+			// Make
+			if (!empty($exif['Make'])) $return['make'] = trim($exif['Make']);
 
-			$temp = @$exif['Model'];
-			if (isset($temp)) $return['model'] = trim($temp);
+			// Model
+			if (!empty($exif['Model'])) $return['model'] = trim($exif['Model']);
 
-			$temp = @$exif['ExposureTime'];
-			if (isset($temp)) $return['shutter'] = $exif['ExposureTime'] . ' s';
+			// Exposure
+			if (!empty($exif['ExposureTime'])) $return['shutter'] = $exif['ExposureTime'] . ' s';
 
-			$temp = @$exif['FocalLength'];
-			if (isset($temp)) {
-				if (strpos($temp, '/')!==FALSE) {
-					$temp = explode('/', $temp, 2);
+			// Focal Length
+			if (!empty($exif['FocalLength'])) {
+				if (strpos($exif['FocalLength'], '/')!==false) {
+					$temp = explode('/', $exif['FocalLength'], 2);
 					$temp = $temp[0] / $temp[1];
 					$temp = round($temp, 1);
 					$return['focal'] = $temp . ' mm';
+				} else {
+					$return['focal'] = $exif['FocalLength'] . ' mm';
 				}
-				$return['focal'] = $temp . ' mm';
 			}
 
-			$temp = @$exif['DateTimeOriginal'];
-			if (isset($temp)) $return['takestamp'] = strtotime($temp);
+			// Takestamp
+			if (!empty($exif['DateTimeOriginal'])) $return['takestamp'] = strtotime($exif['DateTimeOriginal']);
+
+			// Lens field from Lightroom
+			if (!empty($exif['UndefinedTag:0xA434'])) $return['lens'] = trim($exif['UndefinedTag:0xA434']);
+
+			// Deal with GPS coordinates
+			if (!empty($exif['GPSLatitude']) && !empty($exif['GPSLatitudeRef'])) $return['latitude'] = getGPSCoordinate($exif['GPSLatitude'], $exif['GPSLatitudeRef']);
+			if (!empty($exif['GPSLongitude']) && !empty($exif['GPSLongitudeRef'])) $return['longitude'] = getGPSCoordinate($exif['GPSLongitude'], $exif['GPSLongitudeRef']);
 
 		}
 

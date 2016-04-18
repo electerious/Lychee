@@ -11,7 +11,7 @@ Updating Lychee with `git` is the easiest way:
 
 ### Update manually
 
-1. Download the [newest Version](https://github.com/electerious/Lychee/release)
+1. Download the [newest Version](https://github.com/electerious/Lychee/releases)
 2. Replace all existing files, excluding `uploads/` and `data/`
 3. Open Lychee (and enter your database details)
 
