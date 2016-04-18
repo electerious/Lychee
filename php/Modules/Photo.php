@@ -741,7 +741,7 @@ final class Photo {
 		$return['focal']       = '';
 		$return['takestamp']   = 0;
 		$return['lens']        = '';
-		$return['tags']        = array();
+		$return['tags']        = '';
 		$return['position']    = '';
 		$return['latitude']    = '';
 		$return['longitude']   = '';
@@ -783,7 +783,7 @@ final class Photo {
 		}
 
 		// Read EXIF
-		if ($info['mime']=='image/jpeg') $exif = exif_read_data($url, 'EXIF', 0);
+		if ($info['mime']=='image/jpeg') $exif = @exif_read_data($url, 'EXIF', false, false);
 		else $exif = false;
 
 		// EXIF Metadata
