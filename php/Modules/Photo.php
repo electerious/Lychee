@@ -789,40 +789,46 @@ final class Photo {
 		// EXIF Metadata
 		if ($exif!==false) {
 
+			// Orientation
 			if (isset($exif['Orientation'])) $return['orientation'] = $exif['Orientation'];
 			else if (isset($exif['IFD0']['Orientation'])) $return['orientation'] = $exif['IFD0']['Orientation'];
 
+			// ISO
 			if (!empty($exif['ISOSpeedRatings'])) $return['iso'] = $exif['ISOSpeedRatings'];
 
+			// Aperture
 			if (!empty($exif['COMPUTED']['ApertureFNumber'])) $return['aperture'] = $exif['COMPUTED']['ApertureFNumber'];
 
+			// Make
 			if (!empty($exif['Make'])) $return['make'] = trim($exif['Make']);
 
+			// Model
 			if (!empty($exif['Model'])) $return['model'] = trim($exif['Model']);
 
+			// Exposure
 			if (!empty($exif['ExposureTime'])) $return['shutter'] = $exif['ExposureTime'] . ' s';
 
+			// Focal Length
 			if (!empty($exif['FocalLength'])) {
 				if (strpos($exif['FocalLength'], '/')!==false) {
 					$temp = explode('/', $exif['FocalLength'], 2);
 					$temp = $temp[0] / $temp[1];
 					$temp = round($temp, 1);
 					$return['focal'] = $temp . ' mm';
+				} else {
+					$return['focal'] = $exif['FocalLength'] . ' mm';
 				}
-				else $return['focal'] = $exif['FocalLength'] . ' mm';
 			}
 
+			// Takestamp
 			if (!empty($exif['DateTimeOriginal'])) $return['takestamp'] = strtotime($exif['DateTimeOriginal']);
 
 			// Lens field from Lightroom
 			if (!empty($exif['UndefinedTag:0xA434'])) $return['lens'] = trim($exif['UndefinedTag:0xA434']);
 
-
 			// Deal with GPS coordinates
-			if (!empty($exif['GPSLatitude']) && !empty($exif['GPSLatitudeRef']))
-				$return['latitude'] = getGPSCoordinate($exif['GPSLatitude'], $exif['GPSLatitudeRef']);
-			if (!empty($exif['GPSLongitude']) && !empty($exif['GPSLongitudeRef']))
-				$return['longitude'] = getGPSCoordinate($exif['GPSLongitude'], $exif['GPSLongitudeRef']);
+			if (!empty($exif['GPSLatitude']) && !empty($exif['GPSLatitudeRef'])) $return['latitude'] = getGPSCoordinate($exif['GPSLatitude'], $exif['GPSLatitudeRef']);
+			if (!empty($exif['GPSLongitude']) && !empty($exif['GPSLongitudeRef'])) $return['longitude'] = getGPSCoordinate($exif['GPSLongitude'], $exif['GPSLongitudeRef']);
 
 		}
 
