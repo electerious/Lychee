@@ -27,7 +27,6 @@
 		width: auto;
 		height: auto;
 		transition: top .3s, right .3s, bottom .3s, left .3s, max-width .3s, max-height .3s;
-		will-change: transform;
 
 		animation-name: zoomIn;
 		animation-duration: .3s;
