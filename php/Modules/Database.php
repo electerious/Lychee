@@ -56,7 +56,7 @@ final class Database {
 		$connection = self::connect($host, $user, $password);
 
 		// Check if the connection was successful
-		if ($connection===false) Response::error($connection->connect_error);
+		if ($connection===false) Response::error(self::connect_error());
 
 		if (self::setCharset($connection)===false) Response::error('Could not set database charset!');
 
@@ -88,6 +88,13 @@ final class Database {
 
 		return $connection;
 
+	}
+
+	/**
+	 * @return string Returns the string description of the last connect error
+	 */
+	public static function connect_error() {
+		return mysqli_connect_error();
 	}
 
 	/**
