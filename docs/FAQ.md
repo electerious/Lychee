@@ -2,10 +2,10 @@
 If Lychee is not working properly, try to open `plugins/Diagnostics/index.php`. This script will display all errors it can find.
 
 #### What do I need to run Lychee on my server?
-To run Lychee, everything you need is a web-server with PHP 5.3 or later and a MySQL-Database.
+To run Lychee, everything you need is a web-server with PHP 5.5 or later and a MySQL-Database.
 
 #### I can't upload photos
-If you experience problems uploading large photos, you might want to change the PHP parameters in `.htaccess` (if you are using the PHP Apache module) or in `.user.ini` (if you are using PHP >= 5.3 with CGI or FastCGI).
+If you experience problems uploading large photos, you might want to change the PHP parameters in `.htaccess` (if you are using the PHP Apache module) or in `.user.ini` (if you are using PHP >= 5.5 with CGI or FastCGI).
 
 If possible, change these settings directly in your `php.ini`. We recommend to increase the values of the following properties:
 
