@@ -1,3 +1,17 @@
+## v3.1.1
+
+Released April 30, 2016
+
+- `New` share button when logged out (#473)
+- `New` Import of IPTC photo tags (Thanks @qligier, #514)
+- `New` Added reset username and password to FAQ (#500 #128)
+- `Improved` Removed will-change from the main image to improve the image rendering in Chrome (#501)
+- `Improved ` scroll and rendering performance by removing will-change
+- `Improved` Open Facebook and Twitter sharing sheet in new window
+- `Improved` EXIF and IPTC extraction (Thanks @qligier, #518)
+- `Fixed` broken URL in Update.md (#516)
+- `Fixed` error 500 on database connect error (Thanks @tribut, #530)
+
 ## v3.1.0
 
 Released March 29, 2016
