@@ -306,9 +306,11 @@ contextMenu.sharePhoto = function(photoID, e) {
 		{ title: build.iconic('envelope-closed') + 'Mail', fn: () => photo.share(photoID, 'mail') },
 		{ title: build.iconic('dropbox', iconClass) + 'Dropbox', visible: lychee.publicMode===false, fn: () => photo.share(photoID, 'dropbox') },
 		{ title: build.iconic('link-intact') + 'Direct Link', fn: () => window.open(photo.getDirectLink()) },
-		{ visible: lychee.publicMode===false },
+		{ },
 		{ title: build.iconic('ban') + 'Make Private', visible: lychee.publicMode===false, fn: () => photo.setPublic(photoID) }
 	]
+
+	if (lychee.publicMode===true) items.splice(7, 1)
 
 	basicContext.show(items, e.originalEvent)
 	$('.basicContext input#link').focus().select()
@@ -325,10 +327,12 @@ contextMenu.shareAlbum = function(albumID, e) {
 		{ title: build.iconic('twitter', iconClass) + 'Twitter', fn: () => album.share('twitter') },
 		{ title: build.iconic('facebook', iconClass) + 'Facebook', fn: () => album.share('facebook') },
 		{ title: build.iconic('envelope-closed') + 'Mail', fn: () => album.share('mail') },
-		{ visible: lychee.publicMode===false },
+		{ },
 		{ title: build.iconic('pencil') + 'Edit Sharing', visible: lychee.publicMode===false, fn: () => album.setPublic(albumID, true, e) },
 		{ title: build.iconic('ban') + 'Make Private', visible: lychee.publicMode===false, fn: () => album.setPublic(albumID, false) }
 	]
+
+	if (lychee.publicMode===true) items.splice(5, 1)
 
 	basicContext.show(items, e.originalEvent)
 	$('.basicContext input#link').focus().select()
