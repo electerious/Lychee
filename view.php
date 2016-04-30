@@ -48,11 +48,11 @@
 
 			<a class="header__title"></a>
 
+			<a class="button button--share" id="button_share" title="Share Photo">
+				<svg class="iconic"><use xlink:href="#share"></use></svg>
+			</a>
 			<a class="button button--info" id="button_info" title="About Photo">
 				<svg class="iconic"><use xlink:href="#info"></use></svg>
-			</a>
-			<a class="button" id="button_direct" title="Direct Link">
-				<svg class="iconic"><use xlink:href="#link-intact"></use></svg>
 			</a>
 
 		</div>

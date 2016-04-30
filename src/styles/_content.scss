@@ -57,10 +57,10 @@
 			width: 200px;
 			height: 200px;
 			background: #222;
+			color: #222;
 			box-shadow: 0 2px 5px black(.5);
 			border: 1px solid white(.5);
 			transition: opacity .3s ease-out, transform .3s ease-out, border-color .3s ease-out;
-			will-change: transform;
 		}
 
 		&:hover img,

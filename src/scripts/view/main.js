@@ -3,20 +3,11 @@
  * @copyright   2015 by Tobias Reich
  */
 
-// Sub-implementation of Lychee -------------------------------------------------------------- //
+// Sub-implementation of lychee -------------------------------------------------------------- //
 
 let lychee = {}
 
 lychee.content = $('.content')
-
-lychee.getEventName = function() {
-
-	let touchendSupport = (/Android|iPhone|iPad|iPod/i).test(navigator.userAgent || navigator.vendor || window.opera) && ('ontouchend' in document.documentElement)
-	let eventName       = (touchendSupport===true ? 'touchend' : 'click')
-
-	return eventName
-
-}
 
 lychee.escapeHTML = function(html = '') {
 
@@ -69,31 +60,85 @@ lychee.html = function(literalSections, ...substs) {
 
 }
 
+lychee.getEventName = function() {
+
+	let touchendSupport = (/Android|iPhone|iPad|iPod/i).test(navigator.userAgent || navigator.vendor || window.opera) && ('ontouchend' in document.documentElement)
+	let eventName       = (touchendSupport===true ? 'touchend' : 'click')
+
+	return eventName
+
+}
+
+// Sub-implementation of photo -------------------------------------------------------------- //
+
+let photo = {}
+
+photo.share = function(photoID, service) {
+
+	let url  = location.toString()
+
+	switch (service) {
+		case 'twitter':
+			window.open(`https://twitter.com/share?url=${ encodeURI(url) }`)
+			break
+		case 'facebook':
+			window.open(`http://www.facebook.com/sharer.php?u=${ encodeURI(url) }`)
+			break
+		case 'mail':
+			location.href = `mailto:?subject=&body=${ encodeURI(url) }`
+			break
+	}
+
+}
+
+photo.getDirectLink = function() {
+
+	return $('#imageview img').attr('src').replace(/"/g,'').replace(/url\(|\)$/ig, '')
+
+}
+
+// Sub-implementation of contextMenu -------------------------------------------------------------- //
+
+let contextMenu = {}
+
+contextMenu.sharePhoto = function(photoID, e) {
+
+	let iconClass = 'ionicons'
+
+	let items = [
+		{ title: build.iconic('twitter', iconClass) + 'Twitter', fn: () => photo.share(photoID, 'twitter') },
+		{ title: build.iconic('facebook', iconClass) + 'Facebook', fn: () => photo.share(photoID, 'facebook') },
+		{ title: build.iconic('envelope-closed') + 'Mail', fn: () => photo.share(photoID, 'mail') },
+		{ title: build.iconic('link-intact') + 'Direct Link', fn: () => window.open(photo.getDirectLink(), '_newtab') }
+	]
+
+	basicContext.show(items, e.originalEvent)
+
+}
+
 // Main -------------------------------------------------------------- //
 
-let loadingBar = { show() {}, hide() {} },
-    imageview  = $('#imageview')
+let loadingBar = { show() {}, hide() {} }
+let imageview  = $('#imageview')
 
 $(document).ready(function() {
 
-	// Event Name
-	let eventName = lychee.getEventName()
+	// Save ID of photo
+	let photoID = gup('p')
 
 	// Set API error handler
 	api.onError = error
 
-	// Infobox
-	header.dom('#button_info').on(eventName, sidebar.toggle)
-
-	// Direct Link
-	header.dom('#button_direct').on(eventName, function() {
-
-		let link = $('#imageview img').attr('src').replace(/"/g,'').replace(/url\(|\)$/ig, '')
-		window.open(link, '_newtab')
-
+	// Share
+	header.dom('#button_share').on('click', function(e) {
+		contextMenu.sharePhoto(photoID, e)
 	})
 
-	loadPhotoInfo(gup('p'))
+	// Infobox
+	header.dom('#button_info').on('click', sidebar.toggle)
+
+	// Load photo
+	loadPhotoInfo(photoID)
 
 })
 
