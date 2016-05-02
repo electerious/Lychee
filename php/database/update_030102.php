@@ -40,7 +40,6 @@ if ($result===false) Response::error('Could not change type of the id field!');
 // Change type of the id field
 $query  = Database::prepare($connection, "ALTER TABLE `?` CHANGE `id` `id` BIGINT(14) UNSIGNED NOT NULL", [LYCHEE_TABLE_ALBUMS]);
 $result = Database::execute($connection, $query, 'update_030102', __LINE__);
-
 if ($result===false) Response::error('Could not change type of the id field!');
 
 // Set version
