@@ -146,7 +146,7 @@ class Album extends Module {
 						$return = Album::prepareData($return);
 						$query	= Database::prepare($this->database, "SELECT * FROM ? WHERE parent = '?' ", array(LYCHEE_TABLE_ALBUMS, $this->getParent() . "," . $this->albumIDs));
 						$subAlbums = $this->database->query($query);
-						$query	= Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE album = '?' " . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS, $this->albumIDs));
+						$queryP	= Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE album = '?' " . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS, $this->albumIDs));
 						break;
 
 		}
@@ -179,7 +179,7 @@ class Album extends Module {
 
 		}
 		# Get photos
-		$photos				= $this->database->query($query);
+		$photos				= $this->database->query($queryP);
 		$previousPhotoID	= '';
 		while ($photo = $photos->fetch_assoc()) {
 
