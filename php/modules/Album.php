@@ -159,10 +159,18 @@ class Album extends Module {
 			# Thumbs
 			if (($public===true&&$album['password']==='0')||
 				($public===false)) {
+					$querySA	= Database::prepare($this->database, "SELECT * FROM ? WHERE parent LIKE '%,?%'", array(LYCHEE_TABLE_ALBUMS, $album['id']));
+					$subAlbumsA = $this->database->query($querySA);
+					$subAlbumsStr = "'" . $album['id'] . "'";
+					while ($SAlbum = $subAlbumsA->fetch_assoc()) {
+						$SAlbum = Album::prepareData($SAlbum);
 
-					# Execute query
-					$query	= Database::prepare($this->database, "SELECT thumbUrl FROM ? WHERE album = '?' ORDER BY star DESC, " . substr($this->settings['sortingPhotos'], 9) . " LIMIT 3", array(LYCHEE_TABLE_PHOTOS, $album['id']));
+						$subAlbumsStr .= ",'" . $SAlbum['id'] . "'";
+
+					}
+					$query	= Database::prepare($this->database, "SELECT thumbUrl FROM ? WHERE album IN (" . $subAlbumsStr .") ORDER BY star DESC, " . substr($this->settings['sortingPhotos'], 9) . " LIMIT 3", array(LYCHEE_TABLE_PHOTOS));
 					$thumbs	= $this->database->query($query);
+
 
 					# For each thumb
 					$k = 0;
@@ -268,9 +276,18 @@ class Album extends Module {
 				if (($public===true&&$album['password']==='0')||
 					($public===false)) {
 
-						# Execute query
-						$query	= Database::prepare($this->database, "SELECT thumbUrl FROM ? WHERE album = '?' ORDER BY star DESC, " . substr($this->settings['sortingPhotos'], 9) . " LIMIT 3", array(LYCHEE_TABLE_PHOTOS, $album['id']));
-						$thumbs	= $this->database->query($query);
+					$querySA	= Database::prepare($this->database, "SELECT * FROM ? WHERE parent LIKE '%,?%'", array(LYCHEE_TABLE_ALBUMS, $album['id']));
+					$subAlbumsA = $this->database->query($querySA);
+					$subAlbumsStr = "'" . $album['id'] . "'";
+					while ($SAlbum = $subAlbumsA->fetch_assoc()) {
+						$SAlbum = Album::prepareData($SAlbum);
+
+						$subAlbumsStr .= ",'" . $SAlbum['id'] . "'";
+
+					}
+					$query	= Database::prepare($this->database, "SELECT thumbUrl FROM ? WHERE album IN (" . $subAlbumsStr .") ORDER BY star DESC, " . substr($this->settings['sortingPhotos'], 9) . " LIMIT 3", array(LYCHEE_TABLE_PHOTOS));
+					$thumbs	= $this->database->query($query);
+
 
 						# For each thumb
 						$k = 0;

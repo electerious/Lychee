@@ -130,7 +130,7 @@ view.album = {
 					break
 				default:
 					if (album.json.init) sidebar.changeAttr('title', album.json.title)
-					lychee.setTitle(album.json.FilePath, true)
+					lychee.setTitle(album.json.title, true)
 					break
 			}
 

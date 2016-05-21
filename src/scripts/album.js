@@ -36,7 +36,8 @@ album.getParentLink = function () {
 	if (id === '0' || id === 'f' || id === 's' || id === 'r') {
 		return ''
 	} else {
-		let par = album.json.parent.split(',')[0]
+		let parA = album.json.parent.split(',')
+		let par = parA[parA.length - 1]
 		let link = (par == 0) ? '' : par
 		return link
 	}
