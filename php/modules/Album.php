@@ -159,7 +159,7 @@ class Album extends Module {
 			# Thumbs
 			if (($public===true&&$album['password']==='0')||
 				($public===false)) {
-					$querySA	= Database::prepare($this->database, "SELECT * FROM ? WHERE parent LIKE '%,?%'", array(LYCHEE_TABLE_ALBUMS, $album['id']));
+					$querySA	= Database::prepare($this->database, "SELECT * FROM ? WHERE parent LIKE '%,?,%' OR parent LIKE '%,?'", array(LYCHEE_TABLE_ALBUMS, $album['id'], $album['id']));
 					$subAlbumsA = $this->database->query($querySA);
 					$subAlbumsStr = "'" . $album['id'] . "'";
 					while ($SAlbum = $subAlbumsA->fetch_assoc()) {
@@ -276,7 +276,7 @@ class Album extends Module {
 				if (($public===true&&$album['password']==='0')||
 					($public===false)) {
 
-					$querySA	= Database::prepare($this->database, "SELECT * FROM ? WHERE parent LIKE '%,?%'", array(LYCHEE_TABLE_ALBUMS, $album['id']));
+					$querySA	= Database::prepare($this->database, "SELECT * FROM ? WHERE parent LIKE '%,?,%' OR parent LIKE '%,?'", array(LYCHEE_TABLE_ALBUMS, $album['id'], $album['id']));
 					$subAlbumsA = $this->database->query($querySA);
 					$subAlbumsStr = "'" . $album['id'] . "'";
 					while ($SAlbum = $subAlbumsA->fetch_assoc()) {
