@@ -472,37 +472,66 @@ final class Photo {
 
 		if (extension_loaded('imagick')&&Settings::get()['imagick']==='1') {
 
-			switch ($info['orientation']) {
+			$image = new Imagick();
+			$image->readImage($path);
 
-				case 3:
-					$rotateImage = 180;
-					break;
+			$orientation = $image->getImageOrientation();
 
-				case 6:
-					$rotateImage = 90;
-					$swapSize    = true;
-					break;
+			// Check if the images needs to be adjusted at all
+			if ($orientation!==Imagick::ORIENTATION_TOPLEFT) {
 
-				case 8:
-					$rotateImage = 270;
-					$swapSize    = true;
-					break;
+				switch ($orientation) {
 
-				default:
-					return false;
-					break;
+					case Imagick::ORIENTATION_TOPLEFT:
+						break;
 
-			}
+					case Imagick::ORIENTATION_TOPRIGHT:
+						$image->flopImage();
+						break;
 
-			if ($rotateImage!==0) {
-				$image = new Imagick();
-				$image->readImage($path);
-				$image->rotateImage(new ImagickPixel(), $rotateImage);
-				$image->setImageOrientation(1);
+					case Imagick::ORIENTATION_BOTTOMRIGHT:
+						$image->rotateImage(new ImagickPixel(), 180);
+						break;
+
+					case Imagick::ORIENTATION_BOTTOMLEFT:
+						$image->flopImage();
+						$image->rotateImage(new ImagickPixel(), 180);
+						break;
+
+					case Imagick::ORIENTATION_LEFTTOP:
+						$image->flopImage();
+						$image->rotateImage(new ImagickPixel(), -90);
+						$swapSize = true;
+						break;
+
+					case Imagick::ORIENTATION_RIGHTTOP:
+						$image->rotateImage(new ImagickPixel(), 90);
+						$swapSize = true;
+						break;
+
+					case Imagick::ORIENTATION_RIGHTBOTTOM:
+						$image->flopImage();
+						$image->rotateImage(new ImagickPixel(), 90);
+						$swapSize = true;
+						break;
+
+					case Imagick::ORIENTATION_LEFTBOTTOM:
+						$image->rotateImage(new ImagickPixel(), -90);
+						$swapSize = true;
+						break;
+
+					default:
+						break;
+
+				}
+
+				$image->setImageOrientation(Imagick::ORIENTATION_TOPLEFT);
 				$image->writeImage($path);
-				$image->clear();
-				$image->destroy();
+
 			}
+
+			$image->clear();
+			$image->destroy();
 
 		} else {
 
