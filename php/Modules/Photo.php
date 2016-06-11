@@ -484,59 +484,58 @@ final class Photo {
 
 			$orientation = $image->getImageOrientation();
 
-			// Check if the images needs to be adjusted at all
-			if ($orientation!==Imagick::ORIENTATION_TOPLEFT) {
+			switch ($orientation) {
 
-				switch ($orientation) {
+				case Imagick::ORIENTATION_TOPLEFT:
+					return false;
+					break;
 
-					case Imagick::ORIENTATION_TOPLEFT:
-						break;
+				case Imagick::ORIENTATION_TOPRIGHT:
+					$image->flopImage();
+					break;
 
-					case Imagick::ORIENTATION_TOPRIGHT:
-						$image->flopImage();
-						break;
+				case Imagick::ORIENTATION_BOTTOMRIGHT:
+					$image->rotateImage(new ImagickPixel(), 180);
+					break;
 
-					case Imagick::ORIENTATION_BOTTOMRIGHT:
-						$image->rotateImage(new ImagickPixel(), 180);
-						break;
+				case Imagick::ORIENTATION_BOTTOMLEFT:
+					$image->flopImage();
+					$image->rotateImage(new ImagickPixel(), 180);
+					break;
 
-					case Imagick::ORIENTATION_BOTTOMLEFT:
-						$image->flopImage();
-						$image->rotateImage(new ImagickPixel(), 180);
-						break;
+				case Imagick::ORIENTATION_LEFTTOP:
+					$image->flopImage();
+					$image->rotateImage(new ImagickPixel(), -90);
+					$swapSize = true;
+					break;
 
-					case Imagick::ORIENTATION_LEFTTOP:
-						$image->flopImage();
-						$image->rotateImage(new ImagickPixel(), -90);
-						$swapSize = true;
-						break;
+				case Imagick::ORIENTATION_RIGHTTOP:
+					$image->rotateImage(new ImagickPixel(), 90);
+					$swapSize = true;
+					break;
 
-					case Imagick::ORIENTATION_RIGHTTOP:
-						$image->rotateImage(new ImagickPixel(), 90);
-						$swapSize = true;
-						break;
+				case Imagick::ORIENTATION_RIGHTBOTTOM:
+					$image->flopImage();
+					$image->rotateImage(new ImagickPixel(), 90);
+					$swapSize = true;
+					break;
 
-					case Imagick::ORIENTATION_RIGHTBOTTOM:
-						$image->flopImage();
-						$image->rotateImage(new ImagickPixel(), 90);
-						$swapSize = true;
-						break;
+				case Imagick::ORIENTATION_LEFTBOTTOM:
+					$image->rotateImage(new ImagickPixel(), -90);
+					$swapSize = true;
+					break;
 
-					case Imagick::ORIENTATION_LEFTBOTTOM:
-						$image->rotateImage(new ImagickPixel(), -90);
-						$swapSize = true;
-						break;
-
-					default:
-						break;
-
-				}
-
-				$image->setImageOrientation(Imagick::ORIENTATION_TOPLEFT);
-				$image->writeImage($path);
+				default:
+					return false;
+					break;
 
 			}
 
+			// Adjust photo
+			$image->setImageOrientation(Imagick::ORIENTATION_TOPLEFT);
+			$image->writeImage($path);
+
+			// Free memory
 			$image->clear();
 			$image->destroy();
 
@@ -547,6 +546,11 @@ final class Photo {
 			$sourceImg = imagecreatefromjpeg($path);
 
 			switch ($info['orientation']) {
+
+				case 1:
+					// do nothing
+					return false;
+					break;
 
 				case 2:
 					// mirror
@@ -597,6 +601,7 @@ final class Photo {
 			}
 
 			// Recreate photo
+			// In this step the photos also loses its metadata :(
 			$newSourceImg = imagecreatetruecolor($newWidth, $newHeight);
 			imagecopyresampled($newSourceImg, $sourceImg, 0, 0, 0, 0, $newWidth, $newHeight, $newWidth, $newHeight);
 			imagejpeg($newSourceImg, $path, 100);
