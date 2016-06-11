@@ -314,6 +314,9 @@ final class Photo {
 			$thumb->setImageCompressionQuality($quality);
 			$thumb->setImageFormat('jpeg');
 
+			// Remove metadata to save some bytes
+			$thumb->stripImage();
+
 			// Copy image for 2nd thumb version
 			$thumb2x = clone $thumb;
 
@@ -394,6 +397,9 @@ final class Photo {
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
+		// Quality of medium-photo
+		$quality = 90;
+
 		// Set to true when creation of medium-photo failed
 		$error = false;
 
@@ -426,6 +432,8 @@ final class Photo {
 
 			// Adjust image
 			$medium->scaleImage($newWidth, $newHeight, true);
+			$medium->stripImage();
+			$medium->setImageCompressionQuality($quality);
 
 			// Save image
 			try { $medium->writeImage($newUrl); }
