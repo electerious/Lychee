@@ -1,3 +1,13 @@
+## v3.1.2
+
+Released June ?, 2016
+
+- `Improved` Added indexes to SQL fields to improve query execution time (Thanks @qligier, #533)
+- `Improved` Protocol-relative URLs for open graph metadata (#546)
+- `Improved` Remove metadata from medium-sized images and thumbnails (Imagick only) (#556)
+- `Improved` Reduce quality of medium-sized images (Imagick only) (#556)
+- `Improved` orientation-handling with Imagick (#556)
+
 ## v3.1.1
 
 Released April 30, 2016
