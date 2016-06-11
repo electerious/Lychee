@@ -295,7 +295,7 @@ final class Photo {
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		// Quality of thumbnails
-		$thumbQuality = 90;
+		$quality = 90;
 
 		// Size of the thumbnail
 		$newWidth  = 200;
@@ -311,7 +311,7 @@ final class Photo {
 			// Read image
 			$thumb = new Imagick();
 			$thumb->readImage($url);
-			$thumb->setImageCompressionQuality($thumbQuality);
+			$thumb->setImageCompressionQuality($quality);
 			$thumb->setImageFormat('jpeg');
 
 			// Copy image for 2nd thumb version
