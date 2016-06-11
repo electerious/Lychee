@@ -8,7 +8,7 @@ use Lychee\Modules\Database;
 use Lychee\Modules\Response;
 
 // Change type of the album id field
-$query  = Database::prepare($connection, "ALTER TABLE `?` CHANGE `album` `album` BIGINT UNSIGNED NOT NULL", array(LYCHEE_TABLE_PHOTOS));
+$query  = Database::prepare($connection, "ALTER TABLE `?` CHANGE `album` `album` BIGINT(14) UNSIGNED NOT NULL", array(LYCHEE_TABLE_PHOTOS));
 $result = Database::execute($connection, $query, 'update_030102', __LINE__);
 
 if ($result===false) Response::error('Could not change type of the album id field!');
