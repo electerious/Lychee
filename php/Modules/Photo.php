@@ -208,7 +208,7 @@ final class Photo {
 		$info = $this->getInfo($path);
 
 		// Use title of file if IPTC title missing
-		if ($info['title']==='') $info['title'] = substr(basename($file['name'], $extension), 0, 30);
+		if ($info['title']==='') $info['title'] = substr(basename($file['name'], $extension), 0, 100);
 
 		if ($exists===false) {
 
