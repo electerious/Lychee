@@ -238,7 +238,6 @@ final class Photo {
 
 		}
 
-		// Save to DB
 		$values = array(LYCHEE_TABLE_PHOTOS, $id, $info['title'], $photo_name, $info['description'], $info['tags'], $info['type'], $info['width'], $info['height'], $info['size'], $info['iso'], $info['aperture'], $info['make'], $info['model'], $info['shutter'], $info['focal'], $info['takestamp'], $path_thumb, $albumID, $public, $star, $checksum, $medium);
 		$query  = Database::prepare(Database::get(), "INSERT INTO ? (id, title, url, description, tags, type, width, height, size, iso, aperture, make, model, shutter, focal, takestamp, thumbUrl, album, public, star, checksum, medium) VALUES ('?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?')", $values);
 		$result = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
@@ -296,7 +295,7 @@ final class Photo {
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		// Quality of thumbnails
-		$thumbQuality = 90;
+		$quality = 90;
 
 		// Size of the thumbnail
 		$newWidth  = 200;
@@ -312,8 +311,11 @@ final class Photo {
 			// Read image
 			$thumb = new Imagick();
 			$thumb->readImage($url);
-			$thumb->setImageCompressionQuality($thumbQuality);
+			$thumb->setImageCompressionQuality($quality);
 			$thumb->setImageFormat('jpeg');
+
+			// Remove metadata to save some bytes
+			$thumb->stripImage();
 
 			// Copy image for 2nd thumb version
 			$thumb2x = clone $thumb;
@@ -359,12 +361,12 @@ final class Photo {
 
 			// Create thumb
 			fastImageCopyResampled($thumb, $sourceImg, 0, 0, $startWidth, $startHeight, $newWidth, $newHeight, $newSize, $newSize);
-			imagejpeg($thumb, $newUrl, $thumbQuality);
+			imagejpeg($thumb, $newUrl, $quality);
 			imagedestroy($thumb);
 
 			// Create retina thumb
 			fastImageCopyResampled($thumb2x, $sourceImg, 0, 0, $startWidth, $startHeight, $newWidth*2, $newHeight*2, $newSize, $newSize);
-			imagejpeg($thumb2x, $newUrl2x, $thumbQuality);
+			imagejpeg($thumb2x, $newUrl2x, $quality);
 			imagedestroy($thumb2x);
 
 			// Free memory
@@ -394,6 +396,9 @@ final class Photo {
 
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
+
+		// Quality of medium-photo
+		$quality = 90;
 
 		// Set to true when creation of medium-photo failed
 		$error = false;
@@ -427,6 +432,8 @@ final class Photo {
 
 			// Adjust image
 			$medium->scaleImage($newWidth, $newHeight, true);
+			$medium->stripImage();
+			$medium->setImageCompressionQuality($quality);
 
 			// Save image
 			try { $medium->writeImage($newUrl); }
@@ -472,20 +479,50 @@ final class Photo {
 
 		if (extension_loaded('imagick')&&Settings::get()['imagick']==='1') {
 
-			switch ($info['orientation']) {
+			$image = new Imagick();
+			$image->readImage($path);
 
-				case 3:
-					$rotateImage = 180;
+			$orientation = $image->getImageOrientation();
+
+			switch ($orientation) {
+
+				case Imagick::ORIENTATION_TOPLEFT:
+					return false;
 					break;
 
-				case 6:
-					$rotateImage = 90;
-					$swapSize    = true;
+				case Imagick::ORIENTATION_TOPRIGHT:
+					$image->flopImage();
 					break;
 
-				case 8:
-					$rotateImage = 270;
-					$swapSize    = true;
+				case Imagick::ORIENTATION_BOTTOMRIGHT:
+					$image->rotateImage(new ImagickPixel(), 180);
+					break;
+
+				case Imagick::ORIENTATION_BOTTOMLEFT:
+					$image->flopImage();
+					$image->rotateImage(new ImagickPixel(), 180);
+					break;
+
+				case Imagick::ORIENTATION_LEFTTOP:
+					$image->flopImage();
+					$image->rotateImage(new ImagickPixel(), -90);
+					$swapSize = true;
+					break;
+
+				case Imagick::ORIENTATION_RIGHTTOP:
+					$image->rotateImage(new ImagickPixel(), 90);
+					$swapSize = true;
+					break;
+
+				case Imagick::ORIENTATION_RIGHTBOTTOM:
+					$image->flopImage();
+					$image->rotateImage(new ImagickPixel(), 90);
+					$swapSize = true;
+					break;
+
+				case Imagick::ORIENTATION_LEFTBOTTOM:
+					$image->rotateImage(new ImagickPixel(), -90);
+					$swapSize = true;
 					break;
 
 				default:
@@ -494,15 +531,13 @@ final class Photo {
 
 			}
 
-			if ($rotateImage!==0) {
-				$image = new Imagick();
-				$image->readImage($path);
-				$image->rotateImage(new ImagickPixel(), $rotateImage);
-				$image->setImageOrientation(1);
-				$image->writeImage($path);
-				$image->clear();
-				$image->destroy();
-			}
+			// Adjust photo
+			$image->setImageOrientation(Imagick::ORIENTATION_TOPLEFT);
+			$image->writeImage($path);
+
+			// Free memory
+			$image->clear();
+			$image->destroy();
 
 		} else {
 
@@ -511,6 +546,11 @@ final class Photo {
 			$sourceImg = imagecreatefromjpeg($path);
 
 			switch ($info['orientation']) {
+
+				case 1:
+					// do nothing
+					return false;
+					break;
 
 				case 2:
 					// mirror
@@ -561,6 +601,7 @@ final class Photo {
 			}
 
 			// Recreate photo
+			// In this step the photos also loses its metadata :(
 			$newSourceImg = imagecreatetruecolor($newWidth, $newHeight);
 			imagecopyresampled($newSourceImg, $sourceImg, 0, 0, 0, 0, $newWidth, $newHeight, $newWidth, $newHeight);
 			imagejpeg($newSourceImg, $path, 100);

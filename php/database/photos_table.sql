@@ -2,8 +2,8 @@
 # ------------------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS `?` (
-  `id` bigint(14) NOT NULL,
-  `title` varchar(100) NOT NULL,
+  `id` bigint(14) unsigned NOT NULL,
+  `title` varchar(100) NOT NULL DEFAULT '',
   `description` varchar(1000) DEFAULT '',
   `url` varchar(100) NOT NULL,
   `tags` varchar(1000) NOT NULL DEFAULT '',
@@ -20,9 +20,11 @@ CREATE TABLE IF NOT EXISTS `?` (
   `focal` varchar(20) NOT NULL,
   `takestamp` int(11) DEFAULT NULL,
   `star` tinyint(1) NOT NULL,
-  `thumbUrl` varchar(50) NOT NULL,
-  `album` varchar(30) NOT NULL DEFAULT '0',
-  `checksum` VARCHAR(100) DEFAULT NULL,
+  `thumbUrl` char(37) NOT NULL,
+  `album` bigint(20) unsigned NOT NULL,
+  `checksum` char(40) DEFAULT NULL,
   `medium` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+  PRIMARY KEY (`id`),
+  KEY `Index_album` (`album`),
+  KEY `Index_star` (`star`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
