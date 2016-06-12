@@ -361,12 +361,12 @@ final class Photo {
 
 			// Create thumb
 			fastImageCopyResampled($thumb, $sourceImg, 0, 0, $startWidth, $startHeight, $newWidth, $newHeight, $newSize, $newSize);
-			imagejpeg($thumb, $newUrl, $thumbQuality);
+			imagejpeg($thumb, $newUrl, $quality);
 			imagedestroy($thumb);
 
 			// Create retina thumb
 			fastImageCopyResampled($thumb2x, $sourceImg, 0, 0, $startWidth, $startHeight, $newWidth*2, $newHeight*2, $newSize, $newSize);
-			imagejpeg($thumb2x, $newUrl2x, $thumbQuality);
+			imagejpeg($thumb2x, $newUrl2x, $quality);
 			imagedestroy($thumb2x);
 
 			// Free memory
