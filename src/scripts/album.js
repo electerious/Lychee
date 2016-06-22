@@ -24,7 +24,7 @@ album.getID = function () {
 	// Search
 	if (isID(id) === false) id = $('.album:hover, .album.active').attr('data-id')
 	if (isID(id) === false) id = $('.photo:hover, .photo.active').attr('data-album-id')
-
+	lychee.error(id)
 	if (isID(id) === true) return id
 	else return false
 
@@ -252,10 +252,9 @@ album.delete = function (albumIDs) {
 			api.post('Album::getAll', params, function (data) {
 
 				data.albums.forEach(function (alb) {
-					let parentsStr = alb.parent.split(',')
-					let parents = parentsStr.map(Number);
+					let parents = alb.parent.split(',')
 					if (parents.some(function (v) {
-							return (albumIDs.indexOf(v) > -1);
+							return (albumIDs.indexOf(parseInt(v)) > -1);
 						})) {
 						api.post('Album::setParent', {
 							albumID: alb.id,
@@ -307,90 +306,86 @@ album.delete = function (albumIDs) {
 				sub: true
 			}, function (data) {
 
-				if (data.parent != '0') {
-					subAlbExist = true
-					SubAlbIds.push(id)
+				if (data.albums.length > 0) {
+					basicModal.show({
+
+
+						body: `<p>It has been determined there are subalbums in the album(s) you selected.<br>Would you like to also delete them</p>`,
+						buttons: {
+							action: {
+								title: 'Delete All Albums, Sub Albums, and Photos',
+								fn: function (data) {
+									let params
+									basicModal.close()
+									params = {
+										sub: true
+									}
+									loadingBar.show("working", "Deleting Album")
+									api.post('Album::getAll', params, function (data) {
+
+										data.albums.forEach(function (alb) {
+											let parents = alb.parent.split(',')
+
+											if (parents.some(function (v, i, a) {
+													return (albumIDs.indexOf(v) != -1)
+												})) {
+
+												albumIDs.push(alb.id)
+											}
+										})
+										params = {
+											albumIDs: albumIDs.join()
+										}
+
+										api.post('Album::delete', params, function (data) {
+
+
+
+											if (visible.albums()) {
+
+												albumIDs.forEach(function (id) {
+													albums.json.num--
+														view.albums.content.delete(id)
+													albums.deleteByID(id)
+												})
+
+											} else {
+
+												albums.refresh()
+												lychee.goto('')
+
+											}
+
+
+
+											if (data !== true) lychee.error(null, params, data)
+
+
+											albumIDs = []
+
+										})
+									})
+									loadingBar.hide()
+								},
+								class: 'red'
+							},
+							cancel: {
+								title: 'Delete All Albums and direct photos and move Subalbums to root',
+
+
+								fn: del.fn
+							}
+						}
+					})
+
+				} else {
+					del.fn()
 				}
 			})
 		})
 
 
 
-		if (!subAlbExist) {
-
-			basicModal.show({
-
-
-				body: `<p>It has been determined there are subalbums in the album(s) you selected.<br>Would you like to also delete them</p>`,
-				buttons: {
-					action: {
-						title: 'Delete All Albums, Sub Albums, and Photos',
-						fn: function (data) {
-							let params
-							basicModal.close()
-							params = {
-								sub: true
-							}
-							api.post('Album::getAll', params, function (data) {
-
-								data.albums.forEach(function (alb) {
-									let parentsStr = alb.parent.split(',')
-									let parents = parentsStr.map(Number);
-
-
-									if (parents.some(function (v) {
-											return (albumIDs.indexOf(v) > -1);
-										})) {
-										albumIDs.push(alb.id)
-									}
-								})
-								params = {
-									albumIDs: albumIDs.join()
-								}
-
-								api.post('Album::delete', params, function (data) {
-
-
-
-									if (visible.albums()) {
-
-										albumIDs.forEach(function (id) {
-											albums.json.num--
-												view.albums.content.delete(id)
-											albums.deleteByID(id)
-										})
-
-									} else {
-
-										albums.refresh()
-										lychee.goto('')
-
-									}
-
-
-
-									if (data !== true) lychee.error(null, params, data)
-
-
-
-								})
-							})
-						},
-						class: 'red'
-					},
-					cancel: {
-						title: 'Delete All Albums and direct photos and move Subalbums to root',
-
-
-						fn: del.fn
-					}
-				}
-			})
-		} else {
-			del.fn()
-
-
-		}
 
 
 

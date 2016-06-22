@@ -5,58 +5,58 @@
 
 lychee = {
 
-	title           : document.title,
-	version         : '3.0.9',
-	version_code    : '030009',
+	title: document.title,
+	version: '3.0.9',
+	version_code: '030009',
 
-	update_path     : '//update.electerious.com/index.json',
-	updateURL       : 'https://github.com/electerious/Lychee',
-	website         : 'http://lychee.electerious.com',
+	update_path: '//update.electerious.com/index.json',
+	updateURL: 'https://github.com/electerious/Lychee',
+	website: 'http://lychee.electerious.com',
 
-	publicMode      : false,
-	viewMode        : false,
-	debugMode       : false,
+	publicMode: false,
+	viewMode: false,
+	debugMode: false,
 
-	checkForUpdates : '1',
-	sortingPhotos   : '',
-	sortingAlbums   : '',
-	location        : '',
+	checkForUpdates: '1',
+	sortingPhotos: '',
+	sortingAlbums: '',
+	location: '',
 
-	dropbox         : false,
-	dropboxKey      : '',
+	dropbox: false,
+	dropboxKey: '',
 
-	content         : $('.content'),
-	imageview       : $('#imageview')
+	content: $('.content'),
+	imageview: $('#imageview')
 
 }
 
-lychee.init = function() {
+lychee.init = function () {
 
 	let params = {
 		version: lychee.version_code
 	}
 
-	api.post('Session::init', params, function(data) {
+	api.post('Session::init', params, function (data) {
 
 		// Check status
 		// 0 = No configuration
 		// 1 = Logged out
 		// 2 = Logged in
 
-		if (data.status===2) {
+		if (data.status === 2) {
 
 			// Logged in
 
-			lychee.sortingPhotos   = data.config.sortingPhotos   || ''
-			lychee.sortingAlbums   = data.config.sortingAlbums   || ''
-			lychee.dropboxKey      = data.config.dropboxKey      || ''
-			lychee.location        = data.config.location        || ''
+			lychee.sortingPhotos = data.config.sortingPhotos || ''
+			lychee.sortingAlbums = data.config.sortingAlbums || ''
+			lychee.dropboxKey = data.config.dropboxKey || ''
+			lychee.location = data.config.location || ''
 			lychee.checkForUpdates = data.config.checkForUpdates || '1'
 
 			// Show dialog when there is no username and password
-			if (data.config.login===false) settings.createLogin()
+			if (data.config.login === false) settings.createLogin()
 
-		} else if (data.status===1) {
+		} else if (data.status === 1) {
 
 			// Logged out
 
@@ -64,7 +64,7 @@ lychee.init = function() {
 
 			lychee.setMode('public')
 
-		} else if (data.status===0) {
+		} else if (data.status === 0) {
 
 			// No configuration
 
@@ -86,23 +86,24 @@ lychee.init = function() {
 
 }
 
-lychee.login = function(data) {
+lychee.login = function (data) {
 
-	let user     = data.username,
-	    password = data.password
+	let user = data.username,
+		password = data.password
 
 	let params = {
 		user,
 		password
 	}
 
-	api.post('Session::login', params, function(data) {
+	api.post('Session::login', params, function (data) {
 
-		if (data===true) {
+		if (data === true) {
 
 			// Use 'try' to catch a thrown error when Safari is in private mode
-			try { localStorage.setItem('lychee_username', user) }
-			catch (err) {}
+			try {
+				localStorage.setItem('lychee_username', user)
+			} catch (err) {}
 
 			window.location.reload()
 
@@ -117,9 +118,9 @@ lychee.login = function(data) {
 
 }
 
-lychee.loginDialog = function() {
+lychee.loginDialog = function () {
 
-	let msg = lychee.html`
+	let msg = lychee.html `
 	          <p class='signIn'>
 	              <input class='text' name='username' autocomplete='username' type='text' value='' placeholder='username' autocapitalize='off' autocorrect='off'>
 	              <input class='text' name='password' autocomplete='current-password' type='password' value='' placeholder='password'>
@@ -143,46 +144,46 @@ lychee.loginDialog = function() {
 
 	if (localStorage) {
 		let localUsername = localStorage.getItem('lychee_username')
-		if (localUsername!=null && localUsername.length>0) {
+		if (localUsername != null && localUsername.length > 0) {
 			$('.basicModal input[name="username"]').val(localUsername)
 			$('.basicModal input[name="password"]').focus()
 		}
 	}
 
-	if (lychee.checkForUpdates==='1') lychee.getUpdate()
+	if (lychee.checkForUpdates === '1') lychee.getUpdate()
 
 }
 
-lychee.logout = function() {
+lychee.logout = function () {
 
-	api.post('Session::logout', {}, function() {
+	api.post('Session::logout', {}, function () {
 		window.location.reload()
 	})
 
 }
 
-lychee.goto = function(url) {
+lychee.goto = function (url) {
 
-	if (url===undefined) url = '#'
-	else                 url = '#' + url
+	if (url === undefined) url = '#'
+	else url = '#' + url
 
 	history.pushState(null, null, url)
 	lychee.load()
 
 }
 
-lychee.load = function() {
+lychee.load = function () {
 
 	let albumID = '',
-	    photoID = '',
-	    hash    = document.location.hash.replace('#', '').split('/')
+		photoID = '',
+		hash = document.location.hash.replace('#', '').split('/')
 
 	$('.no_content').remove()
 	contextMenu.close()
 	multiselect.close()
 
-	if (hash[0]!=null) albumID = hash[0]
-	if (hash[1]!=null) photoID = hash[1]
+	if (hash[0] != null) albumID = hash[0]
+	if (hash[1] != null) photoID = hash[1]
 
 	if (albumID && photoID) {
 
@@ -190,7 +191,7 @@ lychee.load = function() {
 		photo.json = null
 
 		// Show Photo
-		if (lychee.content.html()==='' || (header.dom('.header__search').length && header.dom('.header__search').val().length!==0)) {
+		if (lychee.content.html() === '' || (header.dom('.header__search').length && header.dom('.header__search').val().length !== 0)) {
 			lychee.content.hide()
 			album.load(albumID, true)
 		}
@@ -203,13 +204,13 @@ lychee.load = function() {
 
 		// Show Album
 		if (visible.photo()) view.photo.hide()
-		if (album.json && albumID==album.json.id) view.album.title()
+		if (album.json && albumID == album.json.id) view.album.title()
 		else album.load(albumID)
 
 	} else {
 
 		// Trash albums.json when filled with search results
-		if (search.hash!=null) {
+		if (search.hash != null) {
 			albums.json = null
 			search.hash = null
 		}
@@ -229,16 +230,18 @@ lychee.load = function() {
 
 }
 
-lychee.getUpdate = function() {
+lychee.getUpdate = function () {
 
 	$.ajax({
-		url     : lychee.update_path,
-		success : function(data) { if (data.lychee.version>parseInt(lychee.version_code)) $('.version span').show() },
+		url: lychee.update_path,
+		success: function (data) {
+			if (data.lychee.version > parseInt(lychee.version_code)) $('.version span').show()
+		},
 	})
 
 }
 
-lychee.setTitle = function(title, editable) {
+lychee.setTitle = function (title, editable) {
 
 	document.title = lychee.title + ' - ' + title
 
@@ -247,14 +250,14 @@ lychee.setTitle = function(title, editable) {
 
 }
 
-lychee.setMode = function(mode) {
+lychee.setMode = function (mode) {
 
 	$('#button_settings, #button_trash_album, #button_share_album, .button_add, .header__divider').remove()
 	$('#button_trash, #button_move, #button_share, #button_star').remove()
 
 	$(document)
-		.off('click',       '.header__title--editable')
-		.off('touchend',    '.header__title--editable')
+		.off('click', '.header__title--editable')
+		.off('touchend', '.header__title--editable')
 		.off('contextmenu', '.photo')
 		.off('contextmenu', '.album')
 		.off('drop')
@@ -269,24 +272,24 @@ lychee.setMode = function(mode) {
 		.unbind(['command+backspace', 'ctrl+backspace'])
 		.unbind(['command+a', 'ctrl+a'])
 
-	if (mode==='public') {
+	if (mode === 'public') {
 
 		lychee.publicMode = true
 
-	} else if (mode==='view') {
+	} else if (mode === 'view') {
 
 		Mousetrap.unbind(['esc', 'command+up'])
 		$('#button_back, a#next, a#previous').remove()
 		$('.no_content').remove()
 
 		lychee.publicMode = true
-		lychee.viewMode   = true
+		lychee.viewMode = true
 
 	}
 
 }
 
-lychee.animate = function(obj, animation) {
+lychee.animate = function (obj, animation) {
 
 	let animations = [
 		['fadeIn', 'fadeOut'],
@@ -297,7 +300,7 @@ lychee.animate = function(obj, animation) {
 
 	for (let i = 0; i < animations.length; i++) {
 		for (let x = 0; x < animations[i].length; x++) {
-			if (animations[i][x]==animation) {
+			if (animations[i][x] == animation) {
 				obj.removeClass(animations[i][0] + ' ' + animations[i][1]).addClass(animation)
 				return true
 			}
@@ -308,12 +311,12 @@ lychee.animate = function(obj, animation) {
 
 }
 
-lychee.retinize = function(path = '') {
+lychee.retinize = function (path = '') {
 
 	let extention = path.split('.').pop(),
-	    isPhoto   = extention!=='svg'
+		isPhoto = extention !== 'svg'
 
-	if (isPhoto===true) {
+	if (isPhoto === true) {
 
 		path = path.replace(/\.[^/.]+$/, '')
 		path = path + '@2x' + '.' + extention
@@ -327,30 +330,30 @@ lychee.retinize = function(path = '') {
 
 }
 
-lychee.loadDropbox = function(callback) {
+lychee.loadDropbox = function (callback) {
 
 	if (!lychee.dropbox && lychee.dropboxKey) {
 
 		loadingBar.show()
 
 		let g = document.createElement('script'),
-		    s = document.getElementsByTagName('script')[0]
+			s = document.getElementsByTagName('script')[0]
 
-		g.src   = 'https://www.dropbox.com/static/api/1/dropins.js'
-		g.id    = 'dropboxjs'
-		g.type  = 'text/javascript'
+		g.src = 'https://www.dropbox.com/static/api/1/dropins.js'
+		g.id = 'dropboxjs'
+		g.type = 'text/javascript'
 		g.async = 'true'
 		g.setAttribute('data-app-key', lychee.dropboxKey)
-		g.onload = g.onreadystatechange = function() {
+		g.onload = g.onreadystatechange = function () {
 			let rs = this.readyState
-			if (rs && rs!=='complete' && rs!=='loaded') return
+			if (rs && rs !== 'complete' && rs !== 'loaded') return
 			lychee.dropbox = true
 			loadingBar.hide()
 			callback()
 		}
 		s.parentNode.insertBefore(g, s)
 
-	} else if (lychee.dropbox&&lychee.dropboxKey) {
+	} else if (lychee.dropbox && lychee.dropboxKey) {
 
 		callback()
 
@@ -362,38 +365,38 @@ lychee.loadDropbox = function(callback) {
 
 }
 
-lychee.getEventName = function() {
+lychee.getEventName = function () {
 
 	let touchendSupport = (/Android|iPhone|iPad|iPod/i).test(navigator.userAgent || navigator.vendor || window.opera) && ('ontouchend' in document.documentElement),
-	    eventName       = (touchendSupport===true ? 'touchend' : 'click')
+		eventName = (touchendSupport === true ? 'touchend' : 'click')
 
 	return eventName
 
 }
 
-lychee.escapeHTML = function(html = '') {
+lychee.escapeHTML = function (html = '') {
 
 	// Ensure that html is a string
 	html += ''
 
 	// Escape all critical characters
 	html = html.replace(/&/g, '&amp;')
-	           .replace(/</g, '&lt;')
-	           .replace(/>/g, '&gt;')
-	           .replace(/"/g, '&quot;')
-	           .replace(/'/g, '&#039;')
-	           .replace(/`/g, '&#96;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&#039;')
+		.replace(/`/g, '&#96;')
 
 	return html
 
 }
 
-lychee.html = function(literalSections, ...substs) {
+lychee.html = function (literalSections, ...substs) {
 
 	// Use raw literal sections: we don’t want
 	// backslashes (\n etc.) to be interpreted
-	let raw    = literalSections.raw,
-	    result = ''
+	let raw = literalSections.raw,
+		result = ''
 
 	substs.forEach((subst, i) => {
 
@@ -403,9 +406,9 @@ lychee.html = function(literalSections, ...substs) {
 
 		// If the substitution is preceded by a dollar sign,
 		// we escape special characters in it
-		if (lit.slice(-1)==='$') {
+		if (lit.slice(-1) === '$') {
 			subst = lychee.escapeHTML(subst)
-			lit   = lit.slice(0, -1)
+			lit = lit.slice(0, -1)
 		}
 
 		result += lit
@@ -416,18 +419,18 @@ lychee.html = function(literalSections, ...substs) {
 	// Take care of last literal section
 	// (Never fails, because an empty template string
 	// produces one literal section, an empty string)
-	result += raw[raw.length-1]
+	result += raw[raw.length - 1]
 
 	return result
 
 }
 
-lychee.error = function(errorThrown, params, data) {
+lychee.error = function (errorThrown, params, data) {
 
 	console.error({
-		description : errorThrown,
-		params      : params,
-		response    : data
+		description: errorThrown,
+		params: params,
+		response: data
 	})
 
 	loadingBar.show('error', errorThrown)

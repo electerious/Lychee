@@ -125,19 +125,19 @@ class Album extends Module {
 		switch ($this->albumIDs) {
 
 			case 'f':	$return['public'] = '0';
-						$query = Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE star = 1 " . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
+						$queryP = Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE star = 1 " . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
 						break;
 
 			case 's':	$return['public'] = '0';
-						$query = Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE public = 1 " . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
+						$queryP = Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE public = 1 " . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
 						break;
 
 			case 'r':	$return['public'] = '0';
-						$query = Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY)) " . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
+						$queryP = Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY)) " . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
 						break;
 
 			case '0':	$return['public'] = '0';
-						$query = Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE album = 0 " . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
+						$queryP = Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE album = 0 " . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS));
 						break;
 
 			default:	$query	= Database::prepare($this->database, "SELECT * FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
@@ -147,45 +147,38 @@ class Album extends Module {
 						$query	= Database::prepare($this->database, "SELECT * FROM ? WHERE parent = '?' ", array(LYCHEE_TABLE_ALBUMS, $this->getParent() . "," . $this->albumIDs));
 						$subAlbums = $this->database->query($query);
 						$queryP	= Database::prepare($this->database, "SELECT id, title, tags, public, star, album, thumbUrl, takestamp, url FROM ? WHERE album = '?' " . $this->settings['sortingPhotos'], array(LYCHEE_TABLE_PHOTOS, $this->albumIDs));
+						while ($album = $subAlbums->fetch_assoc()) {
+
+							# Turn data from the database into a front-end friendly format
+							$album = Album::prepareData($album);
+							# Thumbs
+							if (($public===true&&$album['password']==='0')||
+								($public===false)) {
+									$querySA	= Database::prepare($this->database, "SELECT * FROM ? WHERE parent LIKE '%,?,%' OR parent LIKE '%,?'", array(LYCHEE_TABLE_ALBUMS, $album['id'], $album['id']));
+									$subAlbumsA = $this->database->query($querySA);
+									$subAlbumsStr = "'" . $album['id'] . "'";
+									while ($SAlbum = $subAlbumsA->fetch_assoc()) {
+										$SAlbum = Album::prepareData($SAlbum);
+										$subAlbumsStr .= ",'" . $SAlbum['id'] . "'";
+									}
+									$query	= Database::prepare($this->database, "SELECT thumbUrl FROM ? WHERE album IN (" . $subAlbumsStr .") ORDER BY star DESC, " . substr($this->settings['sortingPhotos'], 9) . " LIMIT 3", array(LYCHEE_TABLE_PHOTOS));
+									$thumbs	= $this->database->query($query);
+									# For each thumb
+									$k = 0;
+									while ($thumb = $thumbs->fetch_object()) {
+										$album['thumbs'][$k] = LYCHEE_URL_UPLOADS_THUMB . $thumb->thumbUrl;
+										$k++;
+									}
+							}
+							# Add to return
+							$return['albums'][] = $album;
+						}
 						break;
 
 		}
 		# Get Subalbums
 		# For each album
-		while ($album = $subAlbums->fetch_assoc()) {
 
-			# Turn data from the database into a front-end friendly format
-			$album = Album::prepareData($album);
-			# Thumbs
-			if (($public===true&&$album['password']==='0')||
-				($public===false)) {
-					$querySA	= Database::prepare($this->database, "SELECT * FROM ? WHERE parent LIKE '%,?,%' OR parent LIKE '%,?'", array(LYCHEE_TABLE_ALBUMS, $album['id'], $album['id']));
-					$subAlbumsA = $this->database->query($querySA);
-					$subAlbumsStr = "'" . $album['id'] . "'";
-					while ($SAlbum = $subAlbumsA->fetch_assoc()) {
-						$SAlbum = Album::prepareData($SAlbum);
-
-						$subAlbumsStr .= ",'" . $SAlbum['id'] . "'";
-
-					}
-					$query	= Database::prepare($this->database, "SELECT thumbUrl FROM ? WHERE album IN (" . $subAlbumsStr .") ORDER BY star DESC, " . substr($this->settings['sortingPhotos'], 9) . " LIMIT 3", array(LYCHEE_TABLE_PHOTOS));
-					$thumbs	= $this->database->query($query);
-
-
-					# For each thumb
-					$k = 0;
-					while ($thumb = $thumbs->fetch_object()) {
-						$album['thumbs'][$k] = LYCHEE_URL_UPLOADS_THUMB . $thumb->thumbUrl;
-						$k++;
-					}
-
-
-			}
-
-			# Add to return
-			$return['albums'][] = $album;
-
-		}
 		# Get photos
 		$photos				= $this->database->query($queryP);
 		$previousPhotoID	= '';
@@ -237,7 +230,7 @@ class Album extends Module {
 
 	}
 
-	public function getAll($public) {
+	public function getAll($public, $sub) {
 
 		# Check dependencies
 		self::dependencies(isset($this->database, $this->settings, $public));
@@ -251,7 +244,12 @@ class Album extends Module {
 			'albums'		=> null,
 			'num'			=> 0
 		);
-
+		if ($sub == "true") {
+			$sub = true;
+		}
+		else{
+			$sub = false;
+		}
 		# Get SmartAlbums
 		if ($public===false) $return['smartalbums'] = $this->getSmartInfo();
 
@@ -301,6 +299,10 @@ class Album extends Module {
 
 			# Add to return
 			$return['albums'][] = $album;
+			}
+			else if ($sub === true) {
+				$return['albums'][] = $album;
+
 			}
 		}
 

@@ -5,27 +5,27 @@
 
 loadingBar = {
 
-	status : null,
-	_dom   : $('#loading')
+	status: null,
+	_dom: $('#loading')
 
 }
 
-loadingBar.dom = function(selector) {
+loadingBar.dom = function (selector) {
 
-	if (selector==null || selector==='') return loadingBar._dom
+	if (selector == null || selector === '') return loadingBar._dom
 	return loadingBar._dom.find(selector)
 
 }
 
-loadingBar.show = function(status, errorText) {
+loadingBar.show = function (status, errorText) {
 
-	if (status==='error') {
+	if (status === 'error') {
 
 		// Set status
 		loadingBar.status = 'error'
 
 		// Parse text
-		if (errorText)  errorText = errorText.replace('<br>', '')
+		if (errorText) errorText = errorText.replace('<br>', '')
 		if (!errorText) errorText = 'Whoops, it looks like something went wrong. Please reload the site and try again!'
 
 		// Move header down
@@ -44,9 +44,30 @@ loadingBar.show = function(status, errorText) {
 
 		return true
 
-	}
+	} else if (status === 'working') {
+		// Set status
+		loadingBar.status = 'working'
 
-	if (loadingBar.status===null) {
+		// Parse text
+		if (errorText) errorText = errorText.replace('<br>', '')
+		if (!errorText) errorText = 'Performing the Operation'
+
+		// Move header down
+		if (visible.header()) header.dom().addClass('header__error')
+
+		// Modify loading
+		loadingBar.dom()
+			.removeClass('loading uploading error')
+			.html(`<h1>Error: <span>${ errorText }</span></h1>`)
+			.addClass(status)
+			.show()
+
+		// Set timeout
+		clearTimeout(loadingBar._timeout)
+
+		return true
+	}
+	if (loadingBar.status === null) {
 
 		// Set status
 		loadingBar.status = 'loading'
@@ -73,9 +94,9 @@ loadingBar.show = function(status, errorText) {
 
 }
 
-loadingBar.hide = function(force) {
+loadingBar.hide = function (force) {
 
-	if ((loadingBar.status!=='error' && loadingBar.status!=null) || force) {
+	if ((loadingBar.status !== 'error' && loadingBar.status != null && loadingBar.status != 'working') || force) {
 
 		// Remove status
 		loadingBar.status = null

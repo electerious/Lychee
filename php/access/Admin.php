@@ -73,7 +73,7 @@ class Admin extends Access {
 	private function getAlbums() {
 
 		$album = new Album($this->database, $this->plugins, $this->settings, null);
-		echo json_encode($album->getAll(false));
+		echo json_encode($album->getAll(false, $_POST['sub']));
 
 	}
 	private function getSubAlbums() {
