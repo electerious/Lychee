@@ -253,8 +253,8 @@ album.delete = function (albumIDs) {
 
 				data.albums.forEach(function (alb) {
 					let parents = alb.parent.split(',')
-					if (parents.some(function (v) {
-							return (albumIDs.indexOf(parseInt(v)) > -1);
+					if (parents.some(function (v, i, a) {
+							return (albumIDs.indexOf(v) != -1)
 						})) {
 						api.post('Album::setParent', {
 							albumID: alb.id,
