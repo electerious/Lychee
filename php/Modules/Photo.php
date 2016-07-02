@@ -634,7 +634,7 @@ final class Photo {
 	public static function prepareData(array $data) {
 
 		// Excepts the following:
-		// (array) $data = ['id', 'title', 'tags', 'public', 'star', 'album', 'thumbUrl', 'takestamp', 'url']
+		// (array) $data = ['id', 'title', 'tags', 'public', 'star', 'album', 'thumbUrl', 'takestamp', 'url', 'medium']
 
 		// Init
 		$photo = null;
@@ -647,7 +647,11 @@ final class Photo {
 		$photo['star']   = $data['star'];
 		$photo['album']  = $data['album'];
 
-		// Parse urls
+		// Parse medium
+		if ($data['medium']==='1') $photo['medium'] = LYCHEE_URL_UPLOADS_MEDIUM . $data['url'];
+		else                       $photo['medium'] = '';
+
+		// Parse paths
 		$photo['thumbUrl'] = LYCHEE_URL_UPLOADS_THUMB . $data['thumbUrl'];
 		$photo['url']      = LYCHEE_URL_UPLOADS_BIG . $data['url'];
 
