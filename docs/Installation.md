@@ -3,7 +3,7 @@ Everything you need is a web-server with PHP 5.5 or later and a MySQL-Database.
 
 The following PHP extensions must be activated:
 
-	exif, gd, json, mbstring, mysqli, zip
+	session, exif, mbstring, gd, mysqli, json, zip
 	
 To use Lychee without restrictions, we recommend to increase the values of the following properties in `php.ini`:
 
