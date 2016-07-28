@@ -44,8 +44,10 @@ final class Guest extends Access {
 
 	private static function getAlbumsAction() {
 
+		Validator::required(isset($_POST['parent']), __METHOD__);
+
 		$albums = new Albums();
-		Response::json($albums->get(true));
+		Response::json($albums->get(true, $_POST['parent']));
 
 	}
 

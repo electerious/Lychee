@@ -23,7 +23,7 @@ final class Album {
 	/**
 	 * @return string|false ID of the created album.
 	 */
-	public function add($title = 'Untitled') {
+	public function add($title = 'Untitled', $parent = 0) {
 
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
@@ -35,7 +35,7 @@ final class Album {
 		$visible  = 1;
 
 		// Database
-		$query  = Database::prepare(Database::get(), "INSERT INTO ? (id, title, sysstamp, public, visible) VALUES ('?', '?', '?', '?', '?')", array(LYCHEE_TABLE_ALBUMS, $id, $title, $sysstamp, $public, $visible));
+		$query  = Database::prepare(Database::get(), "INSERT INTO ? (id, title, sysstamp, public, visible, parent) VALUES ('?', '?', '?', '?', '?', '?')", array(LYCHEE_TABLE_ALBUMS, $id, $title, $sysstamp, $public, $visible, $parent));
 		$result = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
 		// Call plugins
@@ -78,6 +78,8 @@ final class Album {
 
 		// Parse thumbs or set default value
 		$album['thumbs'] = (isset($data['thumbs']) ? explode(',', $data['thumbs']) : array());
+
+		$album['parent'] = $data['parent'];
 
 		return $album;
 

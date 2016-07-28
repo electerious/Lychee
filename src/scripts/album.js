@@ -5,7 +5,8 @@
 
 album = {
 
-	json: null
+	json: null,
+	subjson: null
 
 }
 
@@ -24,15 +25,29 @@ album.getID = function() {
 		return $.isNumeric(id)
 	}
 
-	if (photo.json)      id = photo.json.album
-	else if (album.json) id = album.json.id
-
 	// Search
 	if (isID(id)===false) id = $('.album:hover, .album.active').attr('data-id')
 	if (isID(id)===false) id = $('.photo:hover, .photo.active').attr('data-album-id')
 
+	if (isID(id)===false) {
+		if (photo.json)      id = photo.json.album
+		else if (album.json) id = album.json.id
+	}
+
 	if (isID(id)===true) return id
 	else                 return false
+
+}
+
+album.getParent = function () {
+
+	let id = album.json.id;
+
+	if (album.isSmartID(id) || album.json.parent==0) {
+		return ''
+	} else {
+		return album.json.parent
+	}
 
 }
 
@@ -96,6 +111,28 @@ album.load = function(albumID, refresh = false) {
 
 		})
 
+		if (!album.isSmartID(albumID)) {
+			params = {
+				parent: albumID
+			}
+
+			api.post('Albums::get', params, function(data) {
+
+				let waitTime = 0
+
+				album.subjson = data
+
+				// Calculate delay
+				let durationTime = (new Date().getTime() - startTime)
+				if (durationTime>300) waitTime = 0
+				else                  waitTime = 300 - durationTime
+
+				setTimeout(() => {
+					view.album.init()
+				}, waitTime)
+
+			})
+		}
 	})
 
 }
@@ -106,18 +143,35 @@ album.parse = function() {
 
 }
 
-album.add = function() {
+function buildAlbumOptions(albums, select, parent = 0, layer = 0) {
+	var cmbxOptions = ''
+	for (i in albums) {
+		if (albums[i].parent == parent) {
+			let title = (layer > 0 ? "&nbsp;&nbsp;".repeat(layer - 1) + "└ " : "") + albums[i].title
+			cmbxOptions += `<option `;
+			if (select == albums[i].id)
+				cmbxOptions += `selected="selected" `
+			cmbxOptions += `value='` + albums[i].id + `'>` + title + `</option>`
+			cmbxOptions += buildAlbumOptions(albums, select, albums[i].id, layer + 1)
+		}
+	}
+	return cmbxOptions
+}
+
+album.add = function(albumID = 0) {
 
 	const action = function(data) {
 
 		let title = data.title
+		let parent = data.parent
 
 		const isNumber = (n) => (!isNaN(parseFloat(n)) && isFinite(n))
 
 		basicModal.close()
 
 		let params = {
-			title
+			title,
+			parent
 		}
 
 		api.post('Album::add', params, function(data) {
@@ -133,18 +187,28 @@ album.add = function() {
 
 	}
 
-	basicModal.show({
-		body: `<p>Enter a title for the new album: <input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='Untitled'></p>`,
-		buttons: {
-			action: {
-				title: 'Create Album',
-				fn: action
-			},
-			cancel: {
-				title: 'Cancel',
-				fn: basicModal.close
+	api.post('Albums::get', {
+		parent: -1
+	}, function (data) {
+		var cmbxOptions = `<select name='parent'>`
+		cmbxOptions += `<option value='0'>- None -</option>`
+		cmbxOptions += buildAlbumOptions(data.albums, albumID)
+		cmbxOptions += '</select>'
+
+		basicModal.show({
+			body: `<p>Enter a title for the new album: <input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='Untitled'></p>`
+				+ `<p>Select the parent album:<br/>` + cmbxOptions + `</p>`,
+			buttons: {
+				action: {
+					title: 'Create Album',
+					fn: action
+				},
+				cancel: {
+					title: 'Cancel',
+					fn: basicModal.close
+				}
 			}
-		}
+		})
 	})
 
 }
@@ -204,8 +268,8 @@ album.delete = function(albumIDs) {
 		cancel.title = 'Keep Album'
 
 		// Get title
-		if (album.json)       albumTitle = album.json.title
-		else if (albums.json) albumTitle = albums.getByID(albumIDs).title
+		if (album.json && album.json.id == albumIDs[0]) albumTitle = album.json.title
+		else if (albums.json || album.subjson)          albumTitle = albums.getByID(albumIDs).title
 
 		// Fallback for album without a title
 		if (albumTitle==='') albumTitle = 'Untitled'
@@ -249,8 +313,8 @@ album.setTitle = function(albumIDs) {
 	if (albumIDs.length===1) {
 
 		// Get old title if only one album is selected
-		if (album.json)       oldTitle = album.json.title
-		else if (albums.json) oldTitle = albums.getByID(albumIDs).title
+		if (album.json && album.json.id == albumIDs[0]) oldTitle = album.json.title
+		else if (albums.json || album.subjson)          oldTitle = albums.getByID(albumIDs).title
 
 	}
 
@@ -264,10 +328,17 @@ album.setTitle = function(albumIDs) {
 
 			// Rename only one album
 
-			album.json.title = newTitle
-			view.album.title()
+			if (album.json.id == albumIDs[0]) {
+				album.json.title = newTitle
+				view.album.title()
+			}
 
-			if (albums.json) albums.getByID(albumIDs[0]).title = newTitle
+			if (albums.json || album.subjson) {
+				albumIDs.forEach(function(id) {
+					albums.getByID(id).title = newTitle
+					view.album.content.title(id)
+				})
+			}
 
 		} else if (visible.albums()) {
 
@@ -545,7 +616,7 @@ album.getArchive = function(albumID) {
 
 }
 
-album.merge = function(albumIDs) {
+album.merge = function(albumIDs, titles = []) {
 
 	let title  = ''
 	let sTitle = ''
@@ -555,7 +626,8 @@ album.merge = function(albumIDs) {
 	if (albumIDs instanceof Array===false) albumIDs = [ albumIDs ]
 
 	// Get title of first album
-	if (albums.json) title = albums.getByID(albumIDs[0]).title
+	if (titles.length > 0)                 title = titles[0]
+	else if (albums.json || album.subjson) title = albums.getByID(albumIDs[0]).title
 
 	// Fallback for first album without a title
 	if (title==='') title = 'Untitled'
@@ -563,7 +635,8 @@ album.merge = function(albumIDs) {
 	if (albumIDs.length===2) {
 
 		// Get title of second album
-		if (albums.json) sTitle = albums.getByID(albumIDs[1]).title
+		if (titles.length > 1)                 sTitle = titles[1]
+		else if (albums.json || album.subjson) sTitle = albums.getByID(albumIDs[1]).title
 
 		// Fallback for second album without a title
 		if (sTitle==='') sTitle = 'Untitled'
