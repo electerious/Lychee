@@ -47,7 +47,7 @@ contextMenu.album = function(albumID, e) {
 	// fn must call basicContext.close() first,
 	// in order to keep the selection
 
-	if (albumID==='0' || albumID==='f' || albumID==='s' || albumID==='r') return false
+	if (album.isSmartID(albumID)) return false
 
 	// Show merge-item when there's more than one album
 	let showMerge = (albums.json && albums.json.albums && Object.keys(albums.json.albums).length>1)

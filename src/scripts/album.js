@@ -9,12 +9,18 @@ album = {
 
 }
 
+album.isSmartID = function(id) {
+
+	return id==='0' || id==='f' || id==='s' || id==='r'
+
+}
+
 album.getID = function() {
 
 	let id = null
 
 	let isID = (id) => {
-		if (id==='0' || id==='f' || id==='s' || id==='r') return true
+		if (album.isSmartID(id)) return true
 		return $.isNumeric(id)
 	}
 
