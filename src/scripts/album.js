@@ -100,39 +100,44 @@ album.load = function(albumID, refresh = false) {
 
 			setTimeout(() => {
 
-				view.album.init()
+				let finish = function() {
+					view.album.init()
 
-				if (refresh===false) {
-					lychee.animate(lychee.content, 'contentZoomIn')
-					header.setMode('album')
+					if (refresh===false) {
+						lychee.animate(lychee.content, 'contentZoomIn')
+						header.setMode('album')
+					}
+				}
+
+				if (!album.isSmartID(albumID)) {
+					params = {
+						parent: albumID
+					}
+
+					api.post('Albums::get', params, function(data) {
+
+						let waitTime = 0
+
+						album.subjson = data
+
+						// Calculate delay
+						let durationTime = (new Date().getTime() - startTime)
+						if (durationTime>300) waitTime = 0
+						else                  waitTime = 300 - durationTime
+
+						setTimeout(() => {
+							finish()
+						}, waitTime)
+
+					})
+				}
+				else {
+					finish()
 				}
 
 			}, waitTime)
 
 		})
-
-		if (!album.isSmartID(albumID)) {
-			params = {
-				parent: albumID
-			}
-
-			api.post('Albums::get', params, function(data) {
-
-				let waitTime = 0
-
-				album.subjson = data
-
-				// Calculate delay
-				let durationTime = (new Date().getTime() - startTime)
-				if (durationTime>300) waitTime = 0
-				else                  waitTime = 300 - durationTime
-
-				setTimeout(() => {
-					view.album.init()
-				}, waitTime)
-
-			})
-		}
 	})
 
 }
