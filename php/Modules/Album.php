@@ -516,8 +516,11 @@ final class Album {
 		$visible      = ($visible==='1' ? 1 : 0);
 		$downloadable = ($downloadable==='1' ? 1 : 0);
 
+		// Get all album ids, including subalbums
+		$ids = $this->addSubAlbumIDs($this->albumIDs);
+
 		// Set public
-		$query  = Database::prepare(Database::get(), "UPDATE ? SET public = '?', visible = '?', downloadable = '?', password = NULL WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $public, $visible, $downloadable, $this->albumIDs));
+		$query  = Database::prepare(Database::get(), "UPDATE ? SET public = '?', visible = '?', downloadable = '?', password = NULL WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $public, $visible, $downloadable, $ids));
 		$result = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
 		if ($result===false) return false;
@@ -525,7 +528,7 @@ final class Album {
 		// Reset permissions for photos
 		if ($public===1) {
 
-			$query  = Database::prepare(Database::get(), "UPDATE ? SET public = 0 WHERE album IN (?)", array(LYCHEE_TABLE_PHOTOS, $this->albumIDs));
+			$query  = Database::prepare(Database::get(), "UPDATE ? SET public = 0 WHERE album IN (?)", array(LYCHEE_TABLE_PHOTOS, $ids));
 			$result = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
 			if ($result===false) return false;
