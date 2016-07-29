@@ -475,6 +475,31 @@ final class Album {
 
 	}
 
+	private function getSubAlbums($albumID) {
+
+		$query = Database::prepare(Database::get(), "SELECT id FROM ? WHERE parent = '?'", array(LYCHEE_TABLE_ALBUMS, $albumID));
+		$albums = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
+
+		$ids = array();
+		while($album = $albums->fetch_assoc()) {
+			$ids = array_merge($ids, array($album['id']), $this->getSubAlbums($album['id']));
+		}
+
+		return $ids;
+
+	}
+
+	private function addSubAlbumIDs($ids) {
+
+		$res = array();
+
+		foreach(explode(',', $ids) as $id)
+			$res = array_merge($res, array($id), $this->getSubAlbums($id));
+
+		return implode(',', $res);
+
+	}
+
 	/**
 	 * @return boolean Returns true when successful.
 	 */
@@ -640,11 +665,14 @@ final class Album {
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
+		// Get all album ids, including subalbums
+		$ids = $this->addSubAlbumIDs($this->albumIDs);
+
 		// Init vars
 		$photoIDs = array();
 
 		// Execute query
-		$query  = Database::prepare(Database::get(), "SELECT id FROM ? WHERE album IN (?)", array(LYCHEE_TABLE_PHOTOS, $this->albumIDs));
+		$query  = Database::prepare(Database::get(), "SELECT id FROM ? WHERE album IN (?)", array(LYCHEE_TABLE_PHOTOS, $ids));
 		$photos = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
 		if ($photos===false) return false;
@@ -665,7 +693,7 @@ final class Album {
 		}
 
 		// Delete albums
-		$query  = Database::prepare(Database::get(), "DELETE FROM ? WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
+		$query  = Database::prepare(Database::get(), "DELETE FROM ? WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $ids));
 		$result = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
 		// Call plugins
