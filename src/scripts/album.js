@@ -340,8 +340,11 @@ album.setTitle = function(albumIDs) {
 
 			if (albums.json || album.subjson) {
 				albumIDs.forEach(function(id) {
-					albums.getByID(id).title = newTitle
-					view.album.content.title(id)
+					let a = albums.getByID(id)
+					if (a) {
+						a.title = newTitle
+						view.album.content.title(id)
+					}
 				})
 			}
 
