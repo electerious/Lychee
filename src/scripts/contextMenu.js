@@ -211,11 +211,13 @@ contextMenu.photo = function(photoID, e) {
 
 function countSubAlbums(photoIDs) {
 	let count = 0
-	for (i in photoIDs) {
-		for (j in album.subjson.albums) {
-			if (album.subjson.albums[j].id == photoIDs[i]) {
-				count++
-				break
+	if (album.subjson) {
+		for (i in photoIDs) {
+			for (j in album.subjson.albums) {
+				if (album.subjson.albums[j].id == photoIDs[i]) {
+					count++
+					break
+				}
 			}
 		}
 	}
