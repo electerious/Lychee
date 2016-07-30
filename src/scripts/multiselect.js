@@ -199,7 +199,7 @@ multiselect.getSelection = function(e) {
 
 			let id = $(this).data('id')
 
-			if (!album.isSmartID(id) && id!=null) {
+			if (id!=null && id!==0 && !album.isSmartID(id)) {
 
 				ids.push(id)
 				$(this).addClass('active')
