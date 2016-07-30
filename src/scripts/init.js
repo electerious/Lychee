@@ -68,7 +68,7 @@ $(document).ready(function() {
 		if (basicModal.visible()===true)                                             basicModal.cancel()
 		else if (visible.contextMenu())                                              contextMenu.close()
 		else if (visible.photo())                                                    lychee.goto(album.getID())
-		else if (visible.album())                                                    lychee.goto()
+		else if (visible.album())                                                    lychee.goto(album.getParent())
 		else if (visible.albums() && header.dom('.header__search').val().length!==0) search.reset()
 		return false
 	})
