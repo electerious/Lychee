@@ -640,10 +640,7 @@ final class Album {
 		// Ensure that we don't merge an album into its own subalbum
 		foreach($albumIDs as $id) {
 			foreach($this->getSubAlbums($id) as $sid) {
-				if($sid == $albumID) {
-					Log::error(Database::get(), __METHOD__, __LINE__, 'Cannot move album into its own subalbum');
-					return false;
-				}
+				if($sid == $albumID) return false;
 			}
 		}
 

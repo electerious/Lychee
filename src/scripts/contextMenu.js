@@ -3,7 +3,7 @@
  * @copyright   2015 by Tobias Reich
  */
 
-function buildAlbumList(albums, albumID, action, parent = 0, layer = 0) {
+function buildAlbumList(albums, exclude, action, parent = 0, layer = 0) {
 	let items = []
 
 	for (i in albums) {
@@ -20,7 +20,7 @@ function buildAlbumList(albums, albumID, action, parent = 0, layer = 0) {
 			let prefix = layer > 0 ? "&nbsp;&nbsp;".repeat(layer - 1) + "└ " : ""
 			let html = prefix + lychee.html`<img class='cover' width='16' height='16' src='$${ thumb }'><div class='title'>$${ album.title }</div>`
 
-			if (album.id!=albumID) {
+			if (exclude.indexOf(album.id) == -1) {
 				items.push({
 					title: html,
 					fn: () => action(album)
@@ -34,7 +34,7 @@ function buildAlbumList(albums, albumID, action, parent = 0, layer = 0) {
 				})
 			}
 
-			items = items.concat(buildAlbumList(albums, albumID, action, album.id, layer + 1))
+			items = items.concat(buildAlbumList(albums, exclude, action, album.id, layer + 1))
 		}
 	}
 
@@ -134,7 +134,7 @@ contextMenu.albumTitle = function(albumID, e) {
 
 		if (data.albums && data.num>1) {
 
-			items = buildAlbumList(data.albums, albumID, (a) => lychee.goto(a.id))
+			items = buildAlbumList(data.albums, [albumID], (a) => lychee.goto(a.id))
 
 			items.unshift({ })
 
@@ -148,6 +148,14 @@ contextMenu.albumTitle = function(albumID, e) {
 
 }
 
+function getAlbumFrom(albums, id) {
+	for (a in albums) {
+		if (albums[a].id == id)
+			return albums[a]
+	}
+	return null
+}
+
 contextMenu.mergeAlbum = function(albumID, e) {
 
 	api.post('Albums::get', { parent: -1 }, function(data) {
@@ -156,9 +164,18 @@ contextMenu.mergeAlbum = function(albumID, e) {
 
 		if (data.albums && data.num>1) {
 
-			let title = albums.getByID(albumID).title
+			let selalbum = albums.getByID(albumID)
+			let title = selalbum.title
 
-			items = buildAlbumList(data.albums, albumID, (a) => album.merge([ albumID, a.id ], [title, a.title]))
+			// disable all parents; we cannot move them into us
+			let exclude = [albumID]
+			let a = getAlbumFrom(data.albums, selalbum.parent)
+			while (a != null) {
+				exclude.push(a.id)
+				a = getAlbumFrom(data.albums, a.parent)
+			}
+
+			items = buildAlbumList(data.albums, exclude, (a) => album.merge([ albumID, a.id ], [title, a.title]))
 
 		}
 
@@ -253,7 +270,7 @@ contextMenu.photoTitle = function(albumID, photoID, e) {
 
 		items.push({ })
 
-		items = items.concat(buildAlbumList(data.content, photoID, (a) => lychee.goto(albumID + '/' + a.id)))
+		items = items.concat(buildAlbumList(data.content, [photoID], (a) => lychee.goto(albumID + '/' + a.id)))
 
 	}
 
@@ -292,7 +309,7 @@ contextMenu.move = function(photoIDs, e) {
 
 		} else {
 
-			items = buildAlbumList(data.albums, album.getID(), (a) => photo.setAlbum(photoIDs, a.id))
+			items = buildAlbumList(data.albums, [album.getID()], (a) => photo.setAlbum(photoIDs, a.id))
 
 			// Show Unsorted when unsorted is not the current album
 			if (album.getID()!=='0') {
