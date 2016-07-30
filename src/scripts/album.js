@@ -279,14 +279,14 @@ album.delete = function(albumIDs) {
 		// Fallback for album without a title
 		if (albumTitle==='') albumTitle = 'Untitled'
 
-		msg = lychee.html`<p>Are you sure you want to delete the album '$${ albumTitle }' and all of the photos it contains? This action can't be undone!</p>`
+		msg = lychee.html`<p>Are you sure you want to delete the album '$${ albumTitle }' and all of the photos and subalbums it contains? This action can't be undone!</p>`
 
 	} else {
 
 		action.title = 'Delete Albums and Photos'
 		cancel.title = 'Keep Albums'
 
-		msg = lychee.html`<p>Are you sure you want to delete all $${ albumIDs.length } selected albums and all of the photos they contain? This action can't be undone!</p>`
+		msg = lychee.html`<p>Are you sure you want to delete all $${ albumIDs.length } selected albums and all of the photos and subalbums they contain? This action can't be undone!</p>`
 
 	}
 
