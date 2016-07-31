@@ -42,9 +42,7 @@ album.getID = function() {
 
 album.getParent = function() {
 
-	let id = album.json.id
-
-	if (album.isSmartID(id)===true || album.json.parent==0) return ''
+	if (album.json==null || album.isSmartID(album.json.id)===true || album.json.parent==0) return ''
 
 	return album.json.parent
 
