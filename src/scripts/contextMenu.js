@@ -7,34 +7,27 @@ function buildAlbumList(albums, exclude, action, parent = 0, layer = 0) {
 	let items = []
 
 	for (i in albums) {
-		if ((layer == 0 && !albums[i].parent) || albums[i].parent == parent) {
+		if ((layer==0 && !albums[i].parent) || albums[i].parent==parent) {
+
 			let album = albums[i]
 
 			let thumb = 'src/images/no_cover.svg'
-			if (album.thumbs && album.thumbs[0])
-				thumb = album.thumbs[0]
-			else if(album.thumbUrl)
-				thumb = album.thumbUrl
+			if (album.thumbs && album.thumbs[0]) thumb = album.thumbs[0]
+			else if (album.thumbUrl)             thumb = album.thumbUrl
+
 			if (album.title==='') album.title = 'Untitled'
 
 			let prefix = layer > 0 ? "&nbsp;&nbsp;".repeat(layer - 1) + "└ " : ""
-			let html = prefix + lychee.html`<img class='cover' width='16' height='16' src='$${ thumb }'><div class='title'>$${ album.title }</div>`
+			let html   = prefix + lychee.html`<img class='cover' width='16' height='16' src='$${ thumb }'><div class='title'>$${ album.title }</div>`
 
-			if (exclude.indexOf(album.id) == -1) {
-				items.push({
-					title: html,
-					fn: () => action(album)
-				})
-			}
-			else {
-				html = "<div class='disabled'>" + html + "</div>"
-				items.push({
-					title: html,
-					fn: () => {}
-				})
-			}
+			items.push({
+				title: html,
+				disabled: (exclude.indexOf(album.id)!==-1),
+				fn: () => action(album)
+			})
 
 			items = items.concat(buildAlbumList(albums, exclude, action, album.id, layer + 1))
+
 		}
 	}
 
