@@ -3,9 +3,47 @@
  * @copyright   2015 by Tobias Reich
  */
 
+function buildAlbumList(albums, exclude, action, parent = 0, layer = 0) {
+	let items = []
+
+	for (i in albums) {
+		if ((layer == 0 && !albums[i].parent) || albums[i].parent == parent) {
+			let album = albums[i]
+
+			let thumb = 'src/images/no_cover.svg'
+			if (album.thumbs && album.thumbs[0])
+				thumb = album.thumbs[0]
+			else if(album.thumbUrl)
+				thumb = album.thumbUrl
+			if (album.title==='') album.title = 'Untitled'
+
+			let prefix = layer > 0 ? "&nbsp;&nbsp;".repeat(layer - 1) + "└ " : ""
+			let html = prefix + lychee.html`<img class='cover' width='16' height='16' src='$${ thumb }'><div class='title'>$${ album.title }</div>`
+
+			if (exclude.indexOf(album.id) == -1) {
+				items.push({
+					title: html,
+					fn: () => action(album)
+				})
+			}
+			else {
+				html = "<div class='disabled'>" + html + "</div>"
+				items.push({
+					title: html,
+					fn: () => {}
+				})
+			}
+
+			items = items.concat(buildAlbumList(albums, exclude, action, album.id, layer + 1))
+		}
+	}
+
+	return items
+}
+
 contextMenu = {}
 
-contextMenu.add = function(e) {
+contextMenu.add = function(albumID, e) {
 
 	let items = [
 		{ title: build.iconic('image') + 'Upload Photo', fn: () => $('#upload_files').click() },
@@ -14,7 +52,7 @@ contextMenu.add = function(e) {
 		{ title: build.iconic('dropbox', 'ionicons') + 'Import from Dropbox', fn: upload.start.dropbox },
 		{ title: build.iconic('terminal') + 'Import from Server', fn: upload.start.server },
 		{ },
-		{ title: build.iconic('folder') + 'New Album', fn: album.add }
+		{ title: build.iconic('folder') + 'New Album', fn: () => album.add(albumID) }
 	]
 
 	basicContext.show(items, e.originalEvent)
@@ -47,7 +85,7 @@ contextMenu.album = function(albumID, e) {
 	// fn must call basicContext.close() first,
 	// in order to keep the selection
 
-	if (albumID==='0' || albumID==='f' || albumID==='s' || albumID==='r') return false
+	if (album.isSmartID(albumID)) return false
 
 	// Show merge-item when there's more than one album
 	let showMerge = (albums.json && albums.json.albums && Object.keys(albums.json.albums).length>1)
@@ -90,26 +128,13 @@ contextMenu.albumMulti = function(albumIDs, e) {
 
 contextMenu.albumTitle = function(albumID, e) {
 
-	api.post('Albums::get', {}, function(data) {
+	api.post('Albums::get', { parent: -1 }, function(data) {
 
 		let items = []
 
 		if (data.albums && data.num>1) {
 
-			// Generate list of albums
-			$.each(data.albums, function() {
-
-				if (!this.thumbs[0]) this.thumbs[0] = 'src/images/no_cover.svg'
-				if (this.title==='') this.title = 'Untitled'
-
-				let html = lychee.html`<img class='cover' width='16' height='16' src='$${ this.thumbs[0] }'><div class='title'>$${ this.title }</div>`
-
-				if (this.id!=albumID) items.push({
-					title: html,
-					fn: () => lychee.goto(this.id)
-				})
-
-			})
+			items = buildAlbumList(data.albums, [albumID], (a) => lychee.goto(a.id))
 
 			items.unshift({ })
 
@@ -123,27 +148,34 @@ contextMenu.albumTitle = function(albumID, e) {
 
 }
 
+function getAlbumFrom(albums, id) {
+	for (a in albums) {
+		if (albums[a].id == id)
+			return albums[a]
+	}
+	return null
+}
+
 contextMenu.mergeAlbum = function(albumID, e) {
 
-	api.post('Albums::get', {}, function(data) {
+	api.post('Albums::get', { parent: -1 }, function(data) {
 
 		let items = []
 
 		if (data.albums && data.num>1) {
 
-			$.each(data.albums, function() {
+			let selalbum = albums.getByID(albumID)
+			let title = selalbum.title
 
-				if (!this.thumbs[0]) this.thumbs[0] = 'src/images/no_cover.svg'
-				if (this.title==='') this.title = 'Untitled'
+			// disable all parents; we cannot move them into us
+			let exclude = [albumID]
+			let a = getAlbumFrom(data.albums, selalbum.parent)
+			while (a != null) {
+				exclude.push(a.id)
+				a = getAlbumFrom(data.albums, a.parent)
+			}
 
-				let html = lychee.html`<img class='cover' width='16' height='16' src='$${ this.thumbs[0] }'><div class='title'>$${ this.title }</div>`
-
-				if (this.id!=albumID) items.push({
-					title: html,
-					fn: () => album.merge([ albumID, this.id ])
-				})
-
-			})
+			items = buildAlbumList(data.albums, exclude, (a) => album.merge([ albumID, a.id ], [title, a.title]))
 
 		}
 
@@ -177,13 +209,42 @@ contextMenu.photo = function(photoID, e) {
 
 }
 
+function countSubAlbums(photoIDs) {
+	let count = 0
+	if (album.subjson) {
+		for (i in photoIDs) {
+			for (j in album.subjson.albums) {
+				if (album.subjson.albums[j].id == photoIDs[i]) {
+					count++
+					break
+				}
+			}
+		}
+	}
+	return count
+}
+
 contextMenu.photoMulti = function(photoIDs, e) {
+
+	let subcount = countSubAlbums(photoIDs)
+	let photocount = photoIDs.length - subcount
+
+	if (subcount && photocount) {
+		$('.photo.active, .album.active').removeClass('active')
+		multiselect.close()
+		lychee.error("Please select either albums or photos!")
+		return
+	}
+	if (subcount) {
+		contextMenu.albumMulti(photoIDs, e)
+		return
+	}
+
+	multiselect.stopResize()
 
 	// Notice for 'Move All':
 	// fn must call basicContext.close() first,
 	// in order to keep the selection and multiselect
-
-	multiselect.stopResize()
 
 	let items = [
 		{ title: build.iconic('star') + 'Star All', fn: () => photo.setStar(photoIDs) },
@@ -211,19 +272,7 @@ contextMenu.photoTitle = function(albumID, photoID, e) {
 
 		items.push({ })
 
-		// Generate list of albums
-		$.each(data.content, function(index) {
-
-			if (this.title==='') this.title = 'Untitled'
-
-			let html = lychee.html`<img class='cover' width='16' height='16' src='$${ this.thumbUrl }'><div class='title'>$${ this.title }</div>`
-
-			if (this.id!=photoID) items.push({
-				title: html,
-				fn: () => lychee.goto(albumID + '/' + this.id)
-			})
-
-		})
+		items = items.concat(buildAlbumList(data.content, [photoID], (a) => lychee.goto(albumID + '/' + a.id)))
 
 	}
 
@@ -251,7 +300,7 @@ contextMenu.move = function(photoIDs, e) {
 
 	let items = []
 
-	api.post('Albums::get', {}, function(data) {
+	api.post('Albums::get', { parent: -1 }, function(data) {
 
 		if (data.num===0) {
 
@@ -262,20 +311,7 @@ contextMenu.move = function(photoIDs, e) {
 
 		} else {
 
-			// Generate list of albums
-			$.each(data.albums, function() {
-
-				if (!this.thumbs[0]) this.thumbs[0] = 'src/images/no_cover.svg'
-				if (this.title==='') this.title = 'Untitled'
-
-				let html = lychee.html`<img class='cover' width='16' height='16' src='$${ this.thumbs[0] }'><div class='title'>$${ this.title }</div>`
-
-				if (this.id!=album.getID()) items.push({
-					title: html,
-					fn: () => photo.setAlbum(photoIDs, this.id)
-				})
-
-			})
+			items = buildAlbumList(data.albums, [album.getID()], (a) => photo.setAlbum(photoIDs, a.id))
 
 			// Show Unsorted when unsorted is not the current album
 			if (album.getID()!=='0') {

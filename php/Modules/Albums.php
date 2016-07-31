@@ -16,7 +16,7 @@ final class Albums {
 	/**
 	 * @return array|false Returns an array of albums or false on failure.
 	 */
-	public function get($public = true) {
+	public function get($public = true, $parent = 0) {
 
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
@@ -32,8 +32,8 @@ final class Albums {
 		if ($public===false) $return['smartalbums'] = $this->getSmartAlbums();
 
 		// Albums query
-		if ($public===false) $query = Database::prepare(Database::get(), 'SELECT id, title, public, sysstamp, password FROM ? ' . Settings::get()['sortingAlbums'], array(LYCHEE_TABLE_ALBUMS));
-		else                 $query = Database::prepare(Database::get(), 'SELECT id, title, public, sysstamp, password FROM ? WHERE public = 1 AND visible <> 0 ' . Settings::get()['sortingAlbums'], array(LYCHEE_TABLE_ALBUMS));
+		if ($public===false) $query = Database::prepare(Database::get(), "SELECT id, title, public, sysstamp, password, parent FROM ? " . ($parent != -1 ? "WHERE parent = '?' " : "") . Settings::get()['sortingAlbums'], array(LYCHEE_TABLE_ALBUMS, $parent));
+		else                 $query = Database::prepare(Database::get(), "SELECT id, title, public, sysstamp, password, parent FROM ? " . ($parent != -1 ? "WHERE parent = '?' " : "") . " AND public = 1 AND visible <> 0 " . Settings::get()['sortingAlbums'], array(LYCHEE_TABLE_ALBUMS, $parent));
 
 		// Execute query
 		$albums = Database::execute(Database::get(), $query, __METHOD__, __LINE__);

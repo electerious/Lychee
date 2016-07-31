@@ -6,8 +6,8 @@
 lychee = {
 
 	title           : document.title,
-	version         : '3.1.2',
-	versionCode     : '030102',
+	version         : '3.1.3',
+	versionCode     : '030103',
 
 	updatePath      : '//update.electerious.com/index.json',
 	updateURL       : 'https://github.com/electerious/Lychee',
@@ -170,6 +170,7 @@ lychee.load = function() {
 
 		// Trash data
 		photo.json = null
+		albums.json = null
 
 		// Show Photo
 		if (lychee.content.html()==='' || (header.dom('.header__search').length && header.dom('.header__search').val().length!==0)) {
@@ -182,6 +183,7 @@ lychee.load = function() {
 
 		// Trash data
 		photo.json = null
+		albums.json = null
 
 		// Show Album
 		if (visible.photo()) view.photo.hide()
@@ -197,6 +199,7 @@ lychee.load = function() {
 		}
 
 		// Trash data
+		album.subjson = null
 		album.json = null
 		photo.json = null
 
