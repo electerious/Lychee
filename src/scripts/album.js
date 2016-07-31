@@ -12,7 +12,7 @@ album = {
 
 album.isSmartID = function(id) {
 
-	return id==='0' || id==='f' || id==='s' || id==='r'
+	return (id==='0' || id==='f' || id==='s' || id==='r')
 
 }
 
@@ -21,7 +21,7 @@ album.getID = function() {
 	let id = null
 
 	let isID = (id) => {
-		if (album.isSmartID(id)) return true
+		if (album.isSmartID(id)===true) return true
 		return $.isNumeric(id)
 	}
 
@@ -35,19 +35,18 @@ album.getID = function() {
 	}
 
 	if (isID(id)===true) return id
-	else                 return false
+
+	return false
 
 }
 
-album.getParent = function () {
+album.getParent = function() {
 
-	let id = album.json.id;
+	let id = album.json.id
 
-	if (album.isSmartID(id) || album.json.parent==0) {
-		return ''
-	} else {
-		return album.json.parent
-	}
+	if (album.isSmartID(id)===true || album.json.parent==0) return ''
+
+	return album.json.parent
 
 }
 
@@ -109,7 +108,8 @@ album.load = function(albumID, refresh = false) {
 					}
 				}
 
-				if (!album.isSmartID(albumID)) {
+				if (album.isSmartID(albumID)===false) {
+
 					params = {
 						parent: albumID
 					}
@@ -125,14 +125,14 @@ album.load = function(albumID, refresh = false) {
 						if (durationTime>300) waitTime = 0
 						else                  waitTime = 300 - durationTime
 
-						setTimeout(() => {
-							finish()
-						}, waitTime)
+						setTimeout(finish, waitTime)
 
 					})
-				}
-				else {
+
+				} else {
+
 					finish()
+
 				}
 
 			}, waitTime)
@@ -192,17 +192,22 @@ album.add = function(albumID = 0) {
 
 	}
 
-	api.post('Albums::get', {
-		parent: -1
-	}, function (data) {
-		var cmbxOptions = `<select name='parent'>`
-		cmbxOptions += `<option value='0'>- None -</option>`
-		cmbxOptions += buildAlbumOptions(data.albums, albumID)
-		cmbxOptions += '</select>'
+	api.post('Albums::get', { parent: -1 }, function(data) {
+
+		let cmbxOptions = `
+		                  <select name='parent'>
+		                  	<option value='0'>- None -</option>
+		                  	${ buildAlbumOptions(data.albums, albumID) }
+		                  </select>
+		                  `
+
+		let msg = `
+		          <p>Enter a title for the new album: <input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='Untitled'></p>
+		          <p>Select the parent album:<br/> ${ cmbxOptions }</p>
+		          `
 
 		basicModal.show({
-			body: `<p>Enter a title for the new album: <input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='Untitled'></p>`
-				+ `<p>Select the parent album:<br/>` + cmbxOptions + `</p>`,
+			body: msg,
 			buttons: {
 				action: {
 					title: 'Create Album',
@@ -214,6 +219,7 @@ album.add = function(albumID = 0) {
 				}
 			}
 		})
+
 	})
 
 }

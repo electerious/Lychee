@@ -8,14 +8,19 @@ use Lychee\Modules\Database;
 use Lychee\Modules\Response;
 
 // Add parent field to albums
-$query = Database::prepare($connection, "SELECT `parent` FROM `?` LIMIT 1", array(LYCHEE_TABLE_ALBUMS));
-if (!Database::execute($connection, $query, "update_030103", __LINE__)) {
-   $query  = Database::prepare($connection, "ALTER TABLE `?` ADD `parent` BIGINT(14) NOT NULL DEFAULT 0", array(LYCHEE_TABLE_ALBUMS));
-   $result = Database::execute($connection, $query, "update_030103", __LINE__);
-   if (!$result) {
-       Log::error($database, 'update_030103', __LINE__, 'Could not update database (' . $database->error . ')');
-       return false;
-   }
+$query  = Database::prepare($connection, "SELECT `parent` FROM `?` LIMIT 1", array(LYCHEE_TABLE_ALBUMS));
+$result = Database::execute($connection, $query, "update_030103", __LINE__);
+
+if ($result===false) {
+
+	$query  = Database::prepare($connection, "ALTER TABLE `?` ADD `parent` BIGINT(14) NOT NULL DEFAULT 0", array(LYCHEE_TABLE_ALBUMS));
+	$result = Database::execute($connection, $query, "update_030103", __LINE__);
+
+	if ($result===false) {
+		Log::error($database, 'update_030103', __LINE__, 'Could not update database (' . $database->error . ')');
+		return false;
+	}
+
 }
 
 // Set version

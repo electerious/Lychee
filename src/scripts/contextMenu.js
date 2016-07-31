@@ -134,7 +134,7 @@ contextMenu.albumTitle = function(albumID, e) {
 
 		if (data.albums && data.num>1) {
 
-			items = buildAlbumList(data.albums, [albumID], (a) => lychee.goto(a.id))
+			items = buildAlbumList(data.albums, [ albumID ], (a) => lychee.goto(a.id))
 
 			items.unshift({ })
 
@@ -168,14 +168,14 @@ contextMenu.mergeAlbum = function(albumID, e) {
 			let title = selalbum.title
 
 			// disable all parents; we cannot move them into us
-			let exclude = [albumID]
+			let exclude = [ albumID ]
 			let a = getAlbumFrom(data.albums, selalbum.parent)
 			while (a != null) {
 				exclude.push(a.id)
 				a = getAlbumFrom(data.albums, a.parent)
 			}
 
-			items = buildAlbumList(data.albums, exclude, (a) => album.merge([ albumID, a.id ], [title, a.title]))
+			items = buildAlbumList(data.albums, exclude, (a) => album.merge([ albumID, a.id ], [ title, a.title ]))
 
 		}
 
@@ -232,7 +232,7 @@ contextMenu.photoMulti = function(photoIDs, e) {
 	if (subcount && photocount) {
 		$('.photo.active, .album.active').removeClass('active')
 		multiselect.close()
-		lychee.error("Please select either albums or photos!")
+		lychee.error('Please select either albums or photos!')
 		return
 	}
 	if (subcount) {
@@ -272,7 +272,7 @@ contextMenu.photoTitle = function(albumID, photoID, e) {
 
 		items.push({ })
 
-		items = items.concat(buildAlbumList(data.content, [photoID], (a) => lychee.goto(albumID + '/' + a.id)))
+		items = items.concat(buildAlbumList(data.content, [ photoID ], (a) => lychee.goto(albumID + '/' + a.id)))
 
 	}
 
@@ -311,7 +311,7 @@ contextMenu.move = function(photoIDs, e) {
 
 		} else {
 
-			items = buildAlbumList(data.albums, [album.getID()], (a) => photo.setAlbum(photoIDs, a.id))
+			items = buildAlbumList(data.albums, [ album.getID() ], (a) => photo.setAlbum(photoIDs, a.id))
 
 			// Show Unsorted when unsorted is not the current album
 			if (album.getID()!=='0') {

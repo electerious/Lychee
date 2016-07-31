@@ -178,18 +178,25 @@ view.album = {
 
 		title: function(photoID) {
 
+			let ntitle = ''
+			let prefix = ''
+
 			if (album.json.content[photoID]) {
-				ntitle = album.json.content[photoID].title
+
 				prefix = '.photo'
-			}
-			else {
+				ntitle = album.json.content[photoID].title
+
+			} else {
+
+				prefix = '.album'
+
 				for (i in album.subjson.albums) {
-					if (album.subjson.albums[i].id == photoID) {
+					if (album.subjson.albums[i].id==photoID) {
 						ntitle = album.subjson.albums[i].title
 						break
 					}
 				}
-				prefix = '.album'
+
 			}
 
 			ntitle = lychee.escapeHTML(ntitle)

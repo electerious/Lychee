@@ -282,7 +282,7 @@ final class Album {
 	private function cleanZipName($name) {
 
 		// Illicit chars
-		$badChars =	array_merge(
+		$badChars = array_merge(
 			array_map('chr', range(0,31)),
 			array("<", ">", ":", '"', "/", "\\", "|", "?", "*")
 		);

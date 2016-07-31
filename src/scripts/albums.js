@@ -17,7 +17,7 @@ albums.load = function() {
 
 	if (albums.json===null) {
 
-		params = {
+		let params = {
 			parent: 0
 		}
 
