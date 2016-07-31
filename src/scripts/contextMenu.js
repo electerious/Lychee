@@ -3,7 +3,8 @@
  * @copyright   2015 by Tobias Reich
  */
 
-function buildAlbumList(albums, exclude, action, parent = 0, layer = 0) {
+const buildAlbumList = function(albums, exclude, action, parent = 0, layer = 0) {
+
 	let items = []
 
 	for (i in albums) {
@@ -17,8 +18,13 @@ function buildAlbumList(albums, exclude, action, parent = 0, layer = 0) {
 
 			if (album.title==='') album.title = 'Untitled'
 
-			let prefix = layer > 0 ? "&nbsp;&nbsp;".repeat(layer - 1) + "└ " : ""
-			let html   = prefix + lychee.html`<img class='cover' width='16' height='16' src='$${ thumb }'><div class='title'>$${ album.title }</div>`
+			let prefix = (layer > 0 ? '&nbsp;&nbsp;'.repeat(layer - 1) + '└ ' : '')
+
+			let html = lychee.html`
+			           ${ prefix }
+			           <img class='cover' width='16' height='16' src='$${ thumb }'>
+			           <div class='title'>$${ album.title }</div>
+			           `
 
 			items.push({
 				title: html,
@@ -32,6 +38,37 @@ function buildAlbumList(albums, exclude, action, parent = 0, layer = 0) {
 	}
 
 	return items
+
+}
+
+const getAlbumFrom = function(albums, id) {
+
+	for (a in albums) {
+		if (albums[a].id == id) return albums[a]
+	}
+
+	return null
+
+}
+
+const countSubAlbums = function(photoIDs) {
+
+	let count = 0
+
+	if (album.subjson) {
+
+		for (i in photoIDs) {
+			for (j in album.subjson.albums) {
+				if (album.subjson.albums[j].id == photoIDs[i]) {
+					count++
+					break
+				}
+			}
+		}
+
+	}
+
+	return count
 }
 
 contextMenu = {}
@@ -141,14 +178,6 @@ contextMenu.albumTitle = function(albumID, e) {
 
 }
 
-function getAlbumFrom(albums, id) {
-	for (a in albums) {
-		if (albums[a].id == id)
-			return albums[a]
-	}
-	return null
-}
-
 contextMenu.mergeAlbum = function(albumID, e) {
 
 	api.post('Albums::get', { parent: -1 }, function(data) {
@@ -160,7 +189,8 @@ contextMenu.mergeAlbum = function(albumID, e) {
 			let selalbum = albums.getByID(albumID)
 			let title = selalbum.title
 
-			// disable all parents; we cannot move them into us
+			// Disable all parents
+			// It's not possible to move them into us
 			let exclude = [ albumID ]
 			let a = getAlbumFrom(data.albums, selalbum.parent)
 			while (a != null) {
@@ -200,21 +230,6 @@ contextMenu.photo = function(photoID, e) {
 
 	basicContext.show(items, e.originalEvent, contextMenu.close)
 
-}
-
-function countSubAlbums(photoIDs) {
-	let count = 0
-	if (album.subjson) {
-		for (i in photoIDs) {
-			for (j in album.subjson.albums) {
-				if (album.subjson.albums[j].id == photoIDs[i]) {
-					count++
-					break
-				}
-			}
-		}
-	}
-	return count
 }
 
 contextMenu.photoMulti = function(photoIDs, e) {
