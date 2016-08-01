@@ -72,6 +72,10 @@
 			transition: none;
 			border-color: darken($colorBlue, 15%);
 		}
+
+		&.selected img {
+			border-width: 2px;
+		}
 	}
 
 	// Album -------------------------------------------------------------- //
