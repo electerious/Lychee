@@ -637,13 +637,6 @@ final class Album {
 		$albumID = array_splice($albumIDs, 0, 1);
 		$albumID = $albumID[0];
 
-		// Ensure that we don't merge an album into its own subalbum
-		foreach($albumIDs as $id) {
-			foreach($this->getSubAlbums($id) as $sid) {
-				if($sid == $albumID) return false;
-			}
-		}
-
 		// Move photos
 		$query  = Database::prepare(Database::get(), "UPDATE ? SET album = ? WHERE album IN (?)", array(LYCHEE_TABLE_PHOTOS, $albumID, $this->albumIDs));
 		$result = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
