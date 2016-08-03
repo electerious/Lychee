@@ -635,7 +635,7 @@ album.getArchive = function(albumID) {
 
 }
 
-album.merge = function(albumIDs, titles = []) {
+const getMessage = function(albumIDs, titles, operation) {
 
 	let title  = ''
 	let sTitle = ''
@@ -660,13 +660,19 @@ album.merge = function(albumIDs, titles = []) {
 		// Fallback for second album without a title
 		if (sTitle==='') sTitle = 'Untitled'
 
-		msg = lychee.html`<p>Are you sure you want to merge the album '$${ sTitle }' into the album '$${ title }'?</p>`
+		msg = lychee.html`<p>Are you sure you want to ${ operation } the album '$${ sTitle }' into the album '$${ title }'?</p>`
 
 	} else {
 
-		msg = lychee.html`<p>Are you sure you want to merge all selected albums into the album '$${ title }'?</p>`
+		msg = lychee.html`<p>Are you sure you want to ${ operation } all selected albums into the album '$${ title }'?</p>`
 
 	}
+
+	return msg
+
+}
+
+album.merge = function(albumIDs, titles = []) {
 
 	const action = function() {
 
@@ -690,7 +696,7 @@ album.merge = function(albumIDs, titles = []) {
 	}
 
 	basicModal.show({
-		body: msg,
+		body: getMessage(albumIDs, titles, 'merge'),
 		buttons: {
 			action: {
 				title: 'Merge Albums',
@@ -699,6 +705,46 @@ album.merge = function(albumIDs, titles = []) {
 			},
 			cancel: {
 				title: "Don't Merge",
+				fn: basicModal.close
+			}
+		}
+	})
+
+}
+
+album.move = function(albumIDs, titles = []) {
+
+	const action = function() {
+
+		basicModal.close()
+
+		let params = {
+			albumIDs: albumIDs.join()
+		}
+
+		api.post('Album::move', params, function(data) {
+
+			if (data!==true) {
+				lychee.error(null, params, data)
+			} else {
+				albums.refresh()
+				lychee.goto()
+			}
+
+		})
+
+	}
+
+	basicModal.show({
+		body: getMessage(albumIDs, titles, 'move'),
+		buttons: {
+			action: {
+				title: 'Move Albums',
+				fn: action,
+				class: 'red'
+			},
+			cancel: {
+				title: "Don't Move",
 				fn: basicModal.close
 			}
 		}

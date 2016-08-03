@@ -51,6 +51,24 @@ const getAlbumFrom = function(albums, id) {
 
 }
 
+const getSubIDs = function(albums, albumID) {
+
+	let ids = [ albumID ]
+
+	for (a in albums) {
+		if (albums[a].parent==albumID) {
+
+			let sub = getSubIDs(albums, albums[a].id)
+			for (id in sub)
+				ids.push(sub[id])
+
+		}
+	}
+
+	return ids
+
+}
+
 const countSubAlbums = function(photoIDs) {
 
 	let count = 0
@@ -123,6 +141,7 @@ contextMenu.album = function(albumID, e) {
 	let items = [
 		{ title: build.iconic('pencil') + 'Rename', fn: () => album.setTitle([ albumID ]) },
 		{ title: build.iconic('collapse-left') + 'Merge', visible: showMerge, fn: () => { basicContext.close(); contextMenu.mergeAlbum(albumID, e) } },
+		{ title: build.iconic('folder') + 'Move', visible: showMerge, fn: () => { basicContext.close(); contextMenu.moveAlbum([ albumID ], e) } },
 		{ title: build.iconic('trash') + 'Delete', fn: () => album.delete([ albumID ]) }
 	]
 
@@ -147,6 +166,7 @@ contextMenu.albumMulti = function(albumIDs, e) {
 		{ title: build.iconic('pencil') + 'Rename All', fn: () => album.setTitle(albumIDs) },
 		{ title: build.iconic('collapse-left') + 'Merge All', visible: showMerge && autoMerge, fn: () => album.merge(albumIDs) },
 		{ title: build.iconic('collapse-left') + 'Merge', visible: showMerge && !autoMerge, fn: () => { basicContext.close(); contextMenu.mergeAlbum(albumIDs[0], e) } },
+		{ title: build.iconic('folder') + 'Move All', visible: showMerge, fn: () => { basicContext.close(); contextMenu.moveAlbum(albumIDs, e) } },
 		{ title: build.iconic('trash') + 'Delete All', fn: () => album.delete(albumIDs) }
 	]
 
@@ -199,6 +219,38 @@ contextMenu.mergeAlbum = function(albumID, e) {
 			}
 
 			items = buildAlbumList(data.albums, exclude, (a) => album.merge([ albumID, a.id ], [ title, a.title ]))
+
+		}
+
+		if (items.length===0) return false
+
+		basicContext.show(items, e.originalEvent, contextMenu.close)
+
+	})
+
+}
+
+contextMenu.moveAlbum = function(albumIDs, e) {
+
+	api.post('Albums::get', { parent: -1 }, function(data) {
+
+		let items = []
+
+		if (data.albums && data.num>1) {
+
+			let title = albums.getByID(albumIDs[0]).title
+			// Disable all childs
+			// It's not possible to move us into them
+			let exclude = []
+			for (i in albumIDs) {
+				let sub = getSubIDs(data.albums, String(albumIDs[i]))
+				for (s in sub)
+					exclude.push(sub[s])
+			}
+
+			items = buildAlbumList(data.albums, exclude, (a) => album.move([ a.id ].concat(albumIDs), [ a.title, title ]))
+
+			items.unshift({ title: 'Root', fn: () => album.move([ 0 ].concat(albumIDs), [ 'Root', title ]) })
 
 		}
 
