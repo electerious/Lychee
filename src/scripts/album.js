@@ -3,6 +3,26 @@
  * @copyright   2015 by Tobias Reich
  */
 
+const buildAlbumOptions = function(albums, select, parent = 0, layer = 0) {
+
+	var cmbxOptions = ''
+
+	for (i in albums) {
+		if (albums[i].parent==parent) {
+
+			let title = (layer>0 ? '&nbsp;&nbsp;'.repeat(layer - 1) + '└ ' : '') + albums[i].title
+			let selected = select==albums[i].id ? ' selected="selected"' : ''
+
+			cmbxOptions += `<option${ selected } value='${ albums[i].id }'>${ title }</option>`
+			cmbxOptions += buildAlbumOptions(albums, select, albums[i].id, layer + 1)
+
+		}
+	}
+
+	return cmbxOptions
+
+}
+
 album = {
 
 	json: null,
@@ -146,21 +166,6 @@ album.parse = function() {
 
 	if (!album.json.title) album.json.title = 'Untitled'
 
-}
-
-function buildAlbumOptions(albums, select, parent = 0, layer = 0) {
-	var cmbxOptions = ''
-	for (i in albums) {
-		if (albums[i].parent == parent) {
-			let title = (layer > 0 ? "&nbsp;&nbsp;".repeat(layer - 1) + "└ " : "") + albums[i].title
-			cmbxOptions += `<option `;
-			if (select == albums[i].id)
-				cmbxOptions += `selected="selected" `
-			cmbxOptions += `value='` + albums[i].id + `'>` + title + `</option>`
-			cmbxOptions += buildAlbumOptions(albums, select, albums[i].id, layer + 1)
-		}
-	}
-	return cmbxOptions
 }
 
 album.add = function(albumID = 0) {

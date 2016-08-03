@@ -193,7 +193,7 @@ contextMenu.mergeAlbum = function(albumID, e) {
 			// It's not possible to move them into us
 			let exclude = [ albumID ]
 			let a = getAlbumFrom(data.albums, selalbum.parent)
-			while (a != null) {
+			while (a!=null) {
 				exclude.push(a.id)
 				a = getAlbumFrom(data.albums, a.parent)
 			}
