@@ -53,10 +53,13 @@ if (hasPermissions(LYCHEE_UPLOADS)===false)        $error .= ('Error: \'uploads/
 if (hasPermissions(LYCHEE_DATA)===false)           $error .= ('Error: \'data/\' is missing or has insufficient read/write privileges' . PHP_EOL);
 
 // About GD
-$gdVersion = gd_info();
-if (!$gdVersion['JPEG Support'])                                          $error .= ('Error: PHP gd extension without jpeg support' . PHP_EOL);
-if (!$gdVersion['PNG Support'])                                           $error .= ('Error: PHP gd extension without png support' . PHP_EOL);
-if (!$gdVersion['GIF Read Support'] || !$gdVersion['GIF Create Support']) $error .= ('Error: PHP gd extension without full gif support' . PHP_EOL);
+$gdVersion = array('GD Version' => '-');
+if (function_exists('gd_info')) {
+	$gdVersion = gd_info();
+	if (!$gdVersion['JPEG Support'])                                          $error .= ('Error: PHP gd extension without jpeg support' . PHP_EOL);
+	if (!$gdVersion['PNG Support'])                                           $error .= ('Error: PHP gd extension without png support' . PHP_EOL);
+	if (!$gdVersion['GIF Read Support'] || !$gdVersion['GIF Create Support']) $error .= ('Error: PHP gd extension without full gif support' . PHP_EOL);
+}
 
 // Load config
 if (!file_exists(LYCHEE_CONFIG_FILE)) exit('Error: Configuration not found. Please install Lychee for additional tests');
