@@ -135,13 +135,10 @@ contextMenu.album = function(albumID, e) {
 
 	if (album.isSmartID(albumID)) return false
 
-	// Show merge-item when there's more than one album
-	let showMerge = (albums.json && albums.json.albums && Object.keys(albums.json.albums).length>1)
-
 	let items = [
 		{ title: build.iconic('pencil') + 'Rename', fn: () => album.setTitle([ albumID ]) },
-		{ title: build.iconic('collapse-left') + 'Merge', visible: showMerge, fn: () => { basicContext.close(); contextMenu.mergeAlbum(albumID, e) } },
-		{ title: build.iconic('folder') + 'Move', visible: showMerge, fn: () => { basicContext.close(); contextMenu.moveAlbum([ albumID ], e) } },
+		{ title: build.iconic('collapse-left') + 'Merge', fn: () => { basicContext.close(); contextMenu.mergeAlbum(albumID, e) } },
+		{ title: build.iconic('folder') + 'Move', fn: () => { basicContext.close(); contextMenu.moveAlbum([ albumID ], e) } },
 		{ title: build.iconic('trash') + 'Delete', fn: () => album.delete([ albumID ]) }
 	]
 
@@ -159,14 +156,11 @@ contextMenu.albumMulti = function(albumIDs, e) {
 	// Show list of albums otherwise
 	let autoMerge = (albumIDs.length>1 ? true : false)
 
-	// Show merge-item when there's more than one album
-	let showMerge = (albums.json && albums.json.albums && Object.keys(albums.json.albums).length>1)
-
 	let items = [
 		{ title: build.iconic('pencil') + 'Rename All', fn: () => album.setTitle(albumIDs) },
-		{ title: build.iconic('collapse-left') + 'Merge All', visible: showMerge && autoMerge, fn: () => album.merge(albumIDs) },
-		{ title: build.iconic('collapse-left') + 'Merge', visible: showMerge && !autoMerge, fn: () => { basicContext.close(); contextMenu.mergeAlbum(albumIDs[0], e) } },
-		{ title: build.iconic('folder') + 'Move All', visible: showMerge, fn: () => { basicContext.close(); contextMenu.moveAlbum(albumIDs, e) } },
+		{ title: build.iconic('collapse-left') + 'Merge All', visible: autoMerge, fn: () => album.merge(albumIDs) },
+		{ title: build.iconic('collapse-left') + 'Merge', visible: !autoMerge, fn: () => { basicContext.close(); contextMenu.mergeAlbum(albumIDs[0], e) } },
+		{ title: build.iconic('folder') + 'Move All', fn: () => { basicContext.close(); contextMenu.moveAlbum(albumIDs, e) } },
 		{ title: build.iconic('trash') + 'Delete All', fn: () => album.delete(albumIDs) }
 	]
 
