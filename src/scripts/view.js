@@ -313,7 +313,7 @@ view.photo = {
 		$(document).bind('mousemove', function() {
 			clearTimeout(timeout)
 			header.show()
-			timeout = setTimeout(header.hide, 500)
+			timeout = setTimeout(header.hide, 1000)
 		})
 
 		lychee.animate(lychee.imageview, 'fadeIn')
