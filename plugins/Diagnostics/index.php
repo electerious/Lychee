@@ -99,6 +99,10 @@ if (empty(ini_get('allow_url_fopen'))) echo('Warning: You may experience problem
 // Check mysql version
 if ($database->server_version<50500) echo('Warning: Lychee uses the GBK charset to avoid sql injections on your MySQL version. Please update to MySQL 5.5 or higher to enable UTF-8 support.' . PHP_EOL);
 
+// Check imagick
+if (!extension_loaded('imagick')) echo('Warning: Pictures that are rotated lose their metadata! Please install Imagick to avoid that.' . PHP_EOL);
+else if (!$settings['imagick']) echo('Warning: Pictures that are rotated lose their metadata! Please enable Imagick in settings to avoid that.' . PHP_EOL);
+
 // Output
 if ($error==='') echo('No critical problems found. Lychee should work without problems!' . PHP_EOL);
 else             echo $error;
