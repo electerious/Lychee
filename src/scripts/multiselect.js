@@ -202,7 +202,7 @@ multiselect.getSelection = function(e) {
 			if (id!=null && id!==0 && album.isSmartID(id)===false) {
 
 				ids.push(id)
-				$(this).addClass('active')
+				multiselect.select(this)
 
 			}
 
@@ -213,6 +213,22 @@ multiselect.getSelection = function(e) {
 	if (ids.length!==0 && visible.album())       contextMenu.photoMulti(ids, e)
 	else if (ids.length!==0 && visible.albums()) contextMenu.albumMulti(ids, e)
 	else                                         multiselect.close()
+
+}
+
+multiselect.select = function(id) {
+
+	let el = $(id)
+	el.addClass('selected')
+	el.addClass('active')
+
+}
+
+multiselect.deselect = function(id) {
+
+	let el = $(id)
+	el.removeClass('selected')
+	el.removeClass('active')
 
 }
 

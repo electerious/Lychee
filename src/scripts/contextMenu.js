@@ -126,7 +126,7 @@ contextMenu.album = function(albumID, e) {
 		{ title: build.iconic('trash') + 'Delete', fn: () => album.delete([ albumID ]) }
 	]
 
-	$('.album[data-id="' + albumID + '"]').addClass('active')
+	multiselect.select('.album[data-id="' + albumID + '"]')
 
 	basicContext.show(items, e.originalEvent, contextMenu.close)
 
@@ -226,7 +226,7 @@ contextMenu.photo = function(photoID, e) {
 		{ title: build.iconic('trash') + 'Delete', fn: () => photo.delete([ photoID ]) }
 	]
 
-	$('.photo[data-id="' + photoID + '"]').addClass('active')
+	multiselect.select('.photo[data-id="' + photoID + '"]')
 
 	basicContext.show(items, e.originalEvent, contextMenu.close)
 
@@ -238,7 +238,7 @@ contextMenu.photoMulti = function(photoIDs, e) {
 	let photocount = photoIDs.length - subcount
 
 	if (subcount && photocount) {
-		$('.photo.active, .album.active').removeClass('active')
+		multiselect.deselect('.photo.active, .album.active')
 		multiselect.close()
 		lychee.error('Please select either albums or photos!')
 		return
@@ -389,7 +389,7 @@ contextMenu.close = function() {
 
 	basicContext.close()
 
-	$('.photo.active, .album.active').removeClass('active')
+	multiselect.deselect('.photo.active, .album.active')
 	if (visible.multiselect()) multiselect.close()
 
 }
