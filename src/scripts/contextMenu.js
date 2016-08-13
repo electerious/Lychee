@@ -242,7 +242,7 @@ contextMenu.moveAlbum = function(albumIDs, e) {
 					exclude.push(sub[s])
 			}
 
-			items = buildAlbumList(data.albums, exclude, (a) => album.move([ a.id ].concat(albumIDs), [ a.title, title ]))
+			items = buildAlbumList(data.albums, exclude, (a) => album.move([ a.id ].concat(albumIDs), [ a.title, title ]), 0, 1)
 
 			items.unshift({ title: 'Root', fn: () => album.move([ 0 ].concat(albumIDs), [ 'Root', title ]) })
 

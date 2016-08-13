@@ -675,11 +675,11 @@ const getMessage = function(albumIDs, titles, operation) {
 		// Fallback for second album without a title
 		if (sTitle==='') sTitle = 'Untitled'
 
-		msg = lychee.html`<p>Are you sure you want to ${ operation } the album '$${ sTitle }' into the album '$${ title }'?</p>`
+		msg = lychee.html`<p>Are you sure you want to ${ operation } the album '$${ sTitle }' into '$${ title }'?</p>`
 
 	} else {
 
-		msg = lychee.html`<p>Are you sure you want to ${ operation } all selected albums into the album '$${ title }'?</p>`
+		msg = lychee.html`<p>Are you sure you want to ${ operation } all selected albums into '$${ title }'?</p>`
 
 	}
 
