@@ -256,6 +256,21 @@ album.delete = function(albumIDs) {
 					albums.deleteByID(id)
 				})
 
+			} else if (visible.album()) {
+				
+				// if we deleted the current album, go to its parent
+				if (albumIDs.length==1 && album.json.id==albumIDs[0]) {
+
+					let id = album.getParent()
+					album.refresh()
+					lychee.goto(id)
+
+				}
+				// otherwise, we deleted a subalbum
+				else {
+					album.reload()
+				}
+
 			} else {
 
 				albums.refresh()
@@ -684,12 +699,8 @@ album.merge = function(albumIDs, titles = []) {
 
 		api.post('Album::merge', params, function(data) {
 
-			if (data!==true) {
-				lychee.error(null, params, data)
-			} else {
-				albums.refresh()
-				lychee.goto()
-			}
+			if (data!==true) lychee.error(null, params, data)
+			else             album.reload()
 
 		})
 
@@ -724,12 +735,8 @@ album.move = function(albumIDs, titles = []) {
 
 		api.post('Album::move', params, function(data) {
 
-			if (data!==true) {
-				lychee.error(null, params, data)
-			} else {
-				albums.refresh()
-				lychee.goto()
-			}
+			if (data!==true) lychee.error(null, params, data)
+			else             album.reload()
 
 		})
 
@@ -749,5 +756,24 @@ album.move = function(albumIDs, titles = []) {
 			}
 		}
 	})
+
+}
+
+album.reload = function() {
+
+	let albumID = album.getID()
+	
+	album.refresh()
+	albums.refresh()
+	
+	if (visible.album()) lychee.goto(albumID)
+	else                 lychee.goto()
+
+}
+
+album.refresh = function() {
+
+	album.json = null
+	album.subjson = null
 
 }
