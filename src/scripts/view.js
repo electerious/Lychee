@@ -158,7 +158,7 @@ view.album = {
 
 			if (album.json.content && album.json.content!==false) {
 
-				photosData += build.divider('Photos')
+				photosData += build.divider('Photos', 'divider-photos')
 
 				// Build photos
 				$.each(album.json.content, function() {
@@ -236,6 +236,7 @@ view.album = {
 				if (!visible.albums()) {
 					album.json.num--
 					view.album.num()
+					if (album.json.num == 0) $('#divider-photos').hide()
 				}
 			})
 
