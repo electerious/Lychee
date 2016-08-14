@@ -3,7 +3,11 @@
  * @copyright   2015 by Tobias Reich
  */
 
-multiselect = {}
+multiselect = {
+
+	ids    : []
+
+}
 
 multiselect.position = {
 
@@ -19,6 +23,72 @@ multiselect.bind = function() {
 	$('.content').on('mousedown', (e) => { if (e.which===1) multiselect.show(e) })
 
 	return true
+
+}
+
+multiselect.toggleItem = function(object, id) {
+
+	if (album.isSmartID(id)) return
+
+	let pos = $.inArray(id, multiselect.ids)
+	if (pos!=-1) {
+		multiselect.ids.splice(pos, 1)
+		multiselect.deselect(object)
+	}
+	else {
+		multiselect.ids.push(id)
+		multiselect.select(object)
+	}
+
+}
+
+multiselect.albumClick = function(e, albumObj) {
+
+	let id = albumObj.attr('data-id')
+
+	if (e.ctrlKey) multiselect.toggleItem(albumObj, id)
+	else           lychee.goto(id)
+
+}
+
+multiselect.photoClick = function(e, photoObj) {
+
+	let id = photoObj.attr('data-id')
+
+	if (e.ctrlKey) multiselect.toggleItem(photoObj, id)
+	else           lychee.goto(album.getID() + '/' + id)
+
+}
+
+multiselect.albumContextMenu = function(e, albumObj) {
+
+	let id = albumObj.attr('data-id')
+
+	if ($.inArray(id, multiselect.ids)!=-1) {
+		contextMenu.albumMulti(multiselect.ids, e)
+	}
+	else {
+		multiselect.deselect('.photo.active, .album.active')
+		contextMenu.album(album.getID(), e)
+	}
+
+	multiselect.ids = []
+
+}
+
+multiselect.photoContextMenu = function(e, photoObj) {
+
+	let id = photoObj.attr('data-id')
+
+	if ($.inArray(id, multiselect.ids)!=-1) {
+		contextMenu.photoMulti(multiselect.ids, e)
+	}
+	else {
+		multiselect.deselect('.photo.active, .album.active')
+		contextMenu.photo(photo.getID(), e)
+	}
+
+	multiselect.ids = []
 
 }
 
@@ -233,6 +303,9 @@ multiselect.deselect = function(id) {
 }
 
 multiselect.close = function() {
+
+	multiselect.deselect('.photo.active, .album.active')
+	multiselect.ids = []
 
 	sidebar.setSelectable(true)
 

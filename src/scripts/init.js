@@ -96,12 +96,12 @@ $(document).ready(function() {
 	$(document)
 
 		// Navigation
-		.on('click', '.album', function() { lychee.goto($(this).attr('data-id')) })
-		.on('click', '.photo', function() { lychee.goto(album.getID() + '/' + $(this).attr('data-id')) })
+		.on('click', '.album', function(e) { multiselect.albumClick(e, $(this)) })
+		.on('click', '.photo', function(e) { multiselect.photoClick(e, $(this)) })
 
 		// Context Menu
-		.on('contextmenu', '.photo', function(e) { contextMenu.photo(photo.getID(), e) })
-		.on('contextmenu', '.album', function(e) { contextMenu.album(album.getID(), e) })
+		.on('contextmenu', '.photo', function(e) { multiselect.photoContextMenu(e, $(this)) })
+		.on('contextmenu', '.album', function(e) { multiselect.albumContextMenu(e, $(this)) })
 
 		// Upload
 		.on('change', '#upload_files', function() { basicModal.close(); upload.start.local(this.files) })
