@@ -66,13 +66,12 @@ multiselect.albumContextMenu = function(e, albumObj) {
 
 	if ($.inArray(id, multiselect.ids)!=-1) {
 		contextMenu.albumMulti(multiselect.ids, e)
+		multiselect.ids = []
 	}
 	else {
-		multiselect.deselect('.photo.active, .album.active')
+		multiselect.clearSelection()
 		contextMenu.album(album.getID(), e)
 	}
-
-	multiselect.ids = []
 
 }
 
@@ -82,12 +81,18 @@ multiselect.photoContextMenu = function(e, photoObj) {
 
 	if ($.inArray(id, multiselect.ids)!=-1) {
 		contextMenu.photoMulti(multiselect.ids, e)
+		multiselect.ids = []
 	}
 	else {
-		multiselect.deselect('.photo.active, .album.active')
+		multiselect.clearSelection()
 		contextMenu.photo(photo.getID(), e)
 	}
 
+}
+
+multiselect.clearSelection = function() {
+
+	multiselect.deselect('.photo.active, .album.active')
 	multiselect.ids = []
 
 }
@@ -99,6 +104,8 @@ multiselect.show = function(e) {
 	if ($('.album:hover, .photo:hover').length!==0) return false
 	if (visible.search())                           return false
 	if (visible.multiselect())                      $('#multiselect').remove()
+
+	multiselect.clearSelection()
 
 	sidebar.setSelectable(false)
 
@@ -304,8 +311,7 @@ multiselect.deselect = function(id) {
 
 multiselect.close = function() {
 
-	multiselect.deselect('.photo.active, .album.active')
-	multiselect.ids = []
+	multiselect.clearSelection()
 
 	sidebar.setSelectable(true)
 
