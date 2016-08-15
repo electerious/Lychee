@@ -637,13 +637,6 @@ final class Album {
 		$albumID = array_splice($albumIDs, 0, 1);
 		$albumID = $albumID[0];
 
-		// Ensure that we don't merge an album into its own subalbum
-		foreach($albumIDs as $id) {
-			foreach($this->getSubAlbums($id) as $sid) {
-				if($sid == $albumID) return false;
-			}
-		}
-
 		// Move photos
 		$query  = Database::prepare(Database::get(), "UPDATE ? SET album = ? WHERE album IN (?)", array(LYCHEE_TABLE_PHOTOS, $albumID, $this->albumIDs));
 		$result = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
@@ -662,6 +655,40 @@ final class Album {
 
 		// Delete other albums
 		$query  = Database::prepare(Database::get(), "DELETE FROM ? WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $filteredIDs));
+		$result = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
+
+		// Call plugins
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
+
+		if ($result===false) return false;
+		return true;
+
+	}
+
+	/**
+	 * @return boolean Returns true when successful.
+	 */
+	public function move() {
+
+		// Check dependencies
+		Validator::required(isset($this->albumIDs), __METHOD__);
+
+		// Call plugins
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
+
+		// Convert to array
+		$albumIDs = explode(',', $this->albumIDs);
+
+		// Get first albumID
+		$albumID = array_splice($albumIDs, 0, 1);
+		$albumID = $albumID[0];
+
+		// $albumIDs contains all IDs without the first albumID
+		// Convert to string
+		$filteredIDs = implode(',', $albumIDs);
+
+		// Move albums
+		$query  = Database::prepare(Database::get(), "UPDATE ? SET parent = ? WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $albumID, $filteredIDs));
 		$result = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
 		// Call plugins

@@ -3,6 +3,26 @@
  * @copyright   2015 by Tobias Reich
  */
 
+const buildAlbumOptions = function(albums, select, parent = 0, layer = 0) {
+
+	var cmbxOptions = ''
+
+	for (i in albums) {
+		if (albums[i].parent==parent) {
+
+			let title = (layer>0 ? '&nbsp;&nbsp;'.repeat(layer - 1) + '└ ' : '') + albums[i].title
+			let selected = select==albums[i].id ? ' selected="selected"' : ''
+
+			cmbxOptions += `<option${ selected } value='${ albums[i].id }'>${ title }</option>`
+			cmbxOptions += buildAlbumOptions(albums, select, albums[i].id, layer + 1)
+
+		}
+	}
+
+	return cmbxOptions
+
+}
+
 album = {
 
 	json: null,
@@ -146,21 +166,6 @@ album.parse = function() {
 
 }
 
-function buildAlbumOptions(albums, select, parent = 0, layer = 0) {
-	var cmbxOptions = ''
-	for (i in albums) {
-		if (albums[i].parent == parent) {
-			let title = (layer > 0 ? "&nbsp;&nbsp;".repeat(layer - 1) + "└ " : "") + albums[i].title
-			cmbxOptions += `<option `;
-			if (select == albums[i].id)
-				cmbxOptions += `selected="selected" `
-			cmbxOptions += `value='` + albums[i].id + `'>` + title + `</option>`
-			cmbxOptions += buildAlbumOptions(albums, select, albums[i].id, layer + 1)
-		}
-	}
-	return cmbxOptions
-}
-
 album.add = function(albumID = 0) {
 
 	const action = function(data) {
@@ -248,6 +253,21 @@ album.delete = function(albumIDs) {
 					view.albums.content.delete(id)
 					albums.deleteByID(id)
 				})
+
+			} else if (visible.album()) {
+				
+				// if we deleted the current album, go to its parent
+				if (albumIDs.length==1 && album.json.id==albumIDs[0]) {
+
+					let id = album.getParent()
+					album.refresh()
+					lychee.goto(id)
+
+				}
+				// otherwise, we deleted a subalbum
+				else {
+					album.reload()
+				}
 
 			} else {
 
@@ -628,7 +648,7 @@ album.getArchive = function(albumID) {
 
 }
 
-album.merge = function(albumIDs, titles = []) {
+const getMessage = function(albumIDs, titles, operation) {
 
 	let title  = ''
 	let sTitle = ''
@@ -653,13 +673,19 @@ album.merge = function(albumIDs, titles = []) {
 		// Fallback for second album without a title
 		if (sTitle==='') sTitle = 'Untitled'
 
-		msg = lychee.html`<p>Are you sure you want to merge the album '$${ sTitle }' into the album '$${ title }'?</p>`
+		msg = lychee.html`<p>Are you sure you want to ${ operation } the album '$${ sTitle }' into '$${ title }'?</p>`
 
 	} else {
 
-		msg = lychee.html`<p>Are you sure you want to merge all selected albums into the album '$${ title }'?</p>`
+		msg = lychee.html`<p>Are you sure you want to ${ operation } all selected albums into '$${ title }'?</p>`
 
 	}
+
+	return msg
+
+}
+
+album.merge = function(albumIDs, titles = []) {
 
 	const action = function() {
 
@@ -671,19 +697,15 @@ album.merge = function(albumIDs, titles = []) {
 
 		api.post('Album::merge', params, function(data) {
 
-			if (data!==true) {
-				lychee.error(null, params, data)
-			} else {
-				albums.refresh()
-				lychee.goto()
-			}
+			if (data!==true) lychee.error(null, params, data)
+			else             album.reload()
 
 		})
 
 	}
 
 	basicModal.show({
-		body: msg,
+		body: getMessage(albumIDs, titles, 'merge'),
 		buttons: {
 			action: {
 				title: 'Merge Albums',
@@ -696,5 +718,60 @@ album.merge = function(albumIDs, titles = []) {
 			}
 		}
 	})
+
+}
+
+album.move = function(albumIDs, titles = []) {
+
+	const action = function() {
+
+		basicModal.close()
+
+		let params = {
+			albumIDs: albumIDs.join()
+		}
+
+		api.post('Album::move', params, function(data) {
+
+			if (data!==true) lychee.error(null, params, data)
+			else             album.reload()
+
+		})
+
+	}
+
+	basicModal.show({
+		body: getMessage(albumIDs, titles, 'move'),
+		buttons: {
+			action: {
+				title: 'Move Albums',
+				fn: action,
+				class: 'red'
+			},
+			cancel: {
+				title: "Don't Move",
+				fn: basicModal.close
+			}
+		}
+	})
+
+}
+
+album.reload = function() {
+
+	let albumID = album.getID()
+	
+	album.refresh()
+	albums.refresh()
+	
+	if (visible.album()) lychee.goto(albumID)
+	else                 lychee.goto()
+
+}
+
+album.refresh = function() {
+
+	album.json = null
+	album.subjson = null
 
 }
