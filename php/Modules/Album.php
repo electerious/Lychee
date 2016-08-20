@@ -182,7 +182,7 @@ final class Album {
 	}
 
 	/**
-	 * Starts a download of an album.
+	 * Starts a download of albums.
 	 * @return resource|boolean Sends a ZIP-file or returns false on failure.
 	 */
 	public function getArchive() {
@@ -207,30 +207,12 @@ final class Album {
 				$photos   = Database::prepare(Database::get(), 'SELECT title, url FROM ? WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY)) GROUP BY checksum', array(LYCHEE_TABLE_PHOTOS));
 				$zipTitle = 'Recent';
 				break;
-			default:
+			case 0:
+				$photos   = Database::prepare(Database::get(), 'SELECT title, url FROM ? WHERE album = 0', array(LYCHEE_TABLE_PHOTOS));
 				$zipTitle = 'Unsorted';
-
-				// Get title from database when album is not a SmartAlbum
-				if ($this->albumIDs!=0 && is_numeric($this->albumIDs)) {
-
-					$query = Database::prepare(Database::get(), "SELECT title FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
-					$album = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
-
-					if ($album===false) return false;
-
-					// Get album object
-					$album = $album->fetch_object();
-
-					// Album not found?
-					if ($album===null) {
-						Log::error(Database::get(), __METHOD__, __LINE__, 'Could not find specified album');
-						return false;
-					}
-
-					// Set title
-					$zipTitle = $album->title;
-
-				}
+				break;
+			default:
+				$zipTitle = 'Albums';
 				break;
 		}
 
@@ -240,10 +222,21 @@ final class Album {
 			case 's':
 			case 'f':
 			case 'r':
+			case 0:
                 if (!$archive->addPhotos($zipTitle, $photos)) return false;
                 break;
+
 			default:
-				if (!$archive->addAlbum($zipTitle, $this->albumIDs)) return false;
+				// load titles from DB
+				$query = Database::prepare(Database::get(), "SELECT id, title FROM ? WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
+				$albums = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
+
+				if ($albums===false) return false;
+
+				// add these albums to zip
+				while ($album = $albums->fetch_object()) {
+					if (!$archive->addAlbum($album->title, $album->id)) return false;
+				}
 				break;
 		}
 

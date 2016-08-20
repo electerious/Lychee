@@ -115,6 +115,7 @@ contextMenu.album = function(albumID, e) {
 	if (album.isSmartID(albumID)) return false
 
 	let items = [
+		{ title: build.iconic('cloud-download') + 'Download', fn: () => album.getArchive([ albumID ]) },
 		{ title: build.iconic('pencil') + 'Rename', fn: () => album.setTitle([ albumID ]) },
 		{ title: build.iconic('collapse-left') + 'Merge', fn: () => { basicContext.close(); contextMenu.mergeAlbum(albumID, e) } },
 		{ title: build.iconic('folder') + 'Move', fn: () => { basicContext.close(); contextMenu.moveAlbum([ albumID ], e) } },
@@ -136,6 +137,7 @@ contextMenu.albumMulti = function(albumIDs, e) {
 	let autoMerge = (albumIDs.length>1 ? true : false)
 
 	let items = [
+		{ title: build.iconic('cloud-download') + 'Download All', fn: () => album.getArchive(albumIDs) },
 		{ title: build.iconic('pencil') + 'Rename All', fn: () => album.setTitle(albumIDs) },
 		{ title: build.iconic('collapse-left') + 'Merge All', visible: autoMerge, fn: () => album.merge(albumIDs) },
 		{ title: build.iconic('collapse-left') + 'Merge', visible: !autoMerge, fn: () => { basicContext.close(); contextMenu.mergeAlbum(albumIDs[0], e) } },

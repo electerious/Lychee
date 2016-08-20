@@ -334,9 +334,9 @@ final class Admin extends Access {
 
 	private static function getAlbumArchiveAction() {
 
-		Validator::required(isset($_GET['albumID']), __METHOD__);
+		Validator::required(isset($_GET['albumIDs']), __METHOD__);
 
-		$album = new Album($_GET['albumID']);
+		$album = new Album($_GET['albumIDs']);
 		$album->getArchive();
 
 	}

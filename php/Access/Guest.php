@@ -140,9 +140,9 @@ final class Guest extends Access {
 
 	private static function getAlbumArchiveAction() {
 
-		Validator::required(isset($_GET['albumID'], $_GET['password']), __METHOD__);
+		Validator::required(isset($_GET['albumIDs'], $_GET['password']), __METHOD__);
 
-		$album = new Album($_GET['albumID']);
+		$album = new Album($_GET['albumIDs']);
 
 		if ($album->getPublic()&&$album->getDownloadable()) {
 
