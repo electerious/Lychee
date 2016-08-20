@@ -554,8 +554,7 @@ final class Photo {
 
 				case 2:
 					// mirror
-					// not yet implemented
-					return false;
+					imageflip($sourceImg, IMG_FLIP_HORIZONTAL);
 					break;
 
 				case 3:
@@ -564,14 +563,16 @@ final class Photo {
 
 				case 4:
 					// rotate 180 and mirror
-					// not yet implemented
-					return false;
+					imageflip($sourceImg, IMG_FLIP_VERTICAL);
 					break;
 
 				case 5:
 					// rotate 90 and mirror
-					// not yet implemented
-					return false;
+					$sourceImg = imagerotate($sourceImg, -90, 0);
+                    $newWidth  = $info['height'];
+                    $newHeight = $info['width'];
+                    $swapSize  = true;
+                    imageflip($sourceImg, IMG_FLIP_HORIZONTAL);
 					break;
 
 				case 6:
@@ -583,8 +584,11 @@ final class Photo {
 
 				case 7:
 					// rotate -90 and mirror
-					// not yet implemented
-					return false;
+					$sourceImg = imagerotate($sourceImg, 90, 0);
+                    $newWidth  = $info['height'];
+                    $newHeight = $info['width'];
+                    $swapSize  = true;
+                    imageflip($sourceImg, IMG_FLIP_HORIZONTAL);
 					break;
 
 				case 8:
