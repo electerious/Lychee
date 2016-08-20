@@ -48,9 +48,17 @@ photo.load = function(photoID, albumID) {
 	api.post('Photo::get', params, function(data) {
 
 		if (data==='Warning: Photo private!') {
+
+			// if we were in private mode, restart lychee. maybe the cookie has expired
+			if (!lychee.publicMode) {
+				lychee.restart()
+				return false
+			}
+
 			lychee.content.show()
 			lychee.goto()
 			return false
+
 		}
 
 		if (data==='Warning: Wrong password!') {

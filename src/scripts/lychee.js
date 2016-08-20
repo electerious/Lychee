@@ -144,6 +144,12 @@ lychee.logout = function() {
 
 }
 
+lychee.restart = function() {
+
+	document.location.href = ''
+
+}
+
 lychee.goto = function(url = '') {
 
 	url = '#' + url
@@ -417,6 +423,12 @@ lychee.html = function(literalSections, ...substs) {
 }
 
 lychee.error = function(errorThrown, params, data) {
+
+	// if the requested function was not found, our cookie has probably expired
+	if (data.startsWith('Error: Function not found!')) {
+		lychee.restart()
+		return
+	}
 
 	console.error({
 		description : errorThrown,

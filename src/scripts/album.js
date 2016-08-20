@@ -49,6 +49,12 @@ album.load = function(albumID, refresh = false) {
 
 			if (data==='Warning: Album private!') {
 
+				// if we were in private mode, restart lychee. maybe the cookie has expired
+				if (!lychee.publicMode) {
+					lychee.restart()
+					return false
+				}
+
 				if (document.location.hash.replace('#', '').split('/')[1]!=undefined) {
 					// Display photo only
 					lychee.setMode('view')
