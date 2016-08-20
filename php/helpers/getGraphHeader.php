@@ -24,8 +24,8 @@ function getGraphHeader($photoID) {
 	else                    $dir = 'big';
 
 	$parseUrl = parse_url('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-	$url      = $parseUrl['scheme'] . '://' . $parseUrl['host'] . $parseUrl['path'] . '?' . $parseUrl['query'];
-	$picture  = $parseUrl['scheme'] . '://' . $parseUrl['host'] . $parseUrl['path'] . '/../uploads/' . $dir . '/' . $row->url;
+	$url      = '//' . $parseUrl['host'] . $parseUrl['path'] . '?' . $parseUrl['query'];
+	$picture  = '//' . $parseUrl['host'] . $parseUrl['path'] . '/../uploads/' . $dir . '/' . $row->url;
 
 	$url     = htmlentities($url);
 	$picture = htmlentities($picture);

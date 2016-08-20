@@ -60,6 +60,15 @@ lychee.html = function(literalSections, ...substs) {
 
 }
 
+lychee.getEventName = function() {
+
+	let touchendSupport = (/Android|iPhone|iPad|iPod/i).test(navigator.userAgent || navigator.vendor || window.opera) && ('ontouchend' in document.documentElement)
+	let eventName       = (touchendSupport===true ? 'touchend' : 'click')
+
+	return eventName
+
+}
+
 // Sub-implementation of photo -------------------------------------------------------------- //
 
 let photo = {}
