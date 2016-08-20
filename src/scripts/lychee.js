@@ -425,7 +425,7 @@ lychee.html = function(literalSections, ...substs) {
 lychee.error = function(errorThrown, params, data) {
 
 	// in this case, our cookie has probably expired
-	if (data.startsWith('Error: Function not available for guests.')) {
+	if (data==='Error: Function not available for guests.') {
 		lychee.restart()
 		return
 	}
