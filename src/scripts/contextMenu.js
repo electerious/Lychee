@@ -310,7 +310,7 @@ contextMenu.photoMore = function(photoID, e) {
 
 	let items = [
 		{ title: build.iconic('fullscreen-enter') + 'Full Photo', fn: () => window.open(photo.getDirectLink()) },
-		{ title: build.iconic('cloud-download') + 'Download', visible: showDownload, fn: () => photo.getArchive(photoID) }
+		{ title: build.iconic('cloud-download') + 'Download', visible: showDownload, fn: () => photo.getPhoto(photoID) }
 	]
 
 	basicContext.show(items, e.originalEvent)

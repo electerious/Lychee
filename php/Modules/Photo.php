@@ -889,9 +889,9 @@ final class Photo {
 
 	/**
 	 * Starts a download of a photo.
-	 * @return resource|boolean Sends a ZIP-file or returns false on failure.
+	 * @return resource|boolean Sends the photo or returns false on failure.
 	 */
-	public function getArchive() {
+	public function getPhoto() {
 
 		// Check dependencies
 		Validator::required(isset($this->photoIDs), __METHOD__);

@@ -32,7 +32,7 @@ final class Guest extends Access {
 
 			// $_GET functions
 			case 'Album::getArchive': self::getAlbumArchiveAction(); break;
-			case 'Photo::getArchive': self::getPhotoArchiveAction(); break;
+			case 'Photo::getPhoto':   self::getPhotoFileAction(); break;
 
 		}
 
@@ -159,7 +159,7 @@ final class Guest extends Access {
 
 	}
 
-	private static function getPhotoArchiveAction() {
+	private static function getPhotoFileAction() {
 
 		Validator::required(isset($_GET['photoID'], $_GET['password']), __METHOD__);
 
@@ -171,7 +171,7 @@ final class Guest extends Access {
 		if ($pgP===2) {
 
 			// Photo Public
-			$photo->getArchive();
+			$photo->getPhoto();
 
 		} else {
 
