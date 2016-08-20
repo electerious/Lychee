@@ -34,9 +34,40 @@ final class Guest extends Access {
 			case 'Album::getArchive': self::getAlbumArchiveAction(); break;
 			case 'Photo::getArchive': self::getPhotoArchiveAction(); break;
 
+			// Admin functions
+			case 'Album::add':
+			case 'Album::setTitle':
+			case 'Album::setDescription':
+			case 'Album::setPublic':
+			case 'Album::delete':
+			case 'Album::merge':
+			case 'Photo::setTitle':
+			case 'Photo::setDescription':
+			case 'Photo::setStar':
+			case 'Photo::setPublic':
+			case 'Photo::setAlbum':
+			case 'Photo::setTags':
+			case 'Photo::duplicate':
+			case 'Photo::delete':
+			case 'Photo::add':
+			case 'Import::url':
+			case 'Import::server':
+			case 'search':
+			case 'Settings::setLogin':
+			case 'Settings::setSorting':
+			case 'Settings::setDropboxKey':
+				self::adminAction();
+				break;
+
 		}
 
 		self::fnNotFound();
+
+	}
+
+	private static function adminAction() {
+
+		Response::error('Function not available for guests.');
 
 	}
 
