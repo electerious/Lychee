@@ -417,6 +417,18 @@ lychee.html = function(literalSections, ...substs) {
 
 }
 
+lychee.getURL = function(path) {
+
+	let pos = location.href.indexOf('#')
+	let url = pos!=-1 ? location.href.substring(0, pos) : location.href
+
+	if (location.href.indexOf('index.html')>0) url = url.replace('index.html', path)
+	else                                       url += path
+
+	return url
+
+}
+
 lychee.error = function(errorThrown, params, data) {
 
 	console.error({

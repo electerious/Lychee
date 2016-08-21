@@ -627,18 +627,12 @@ album.share = function(service) {
 
 album.getArchive = function(albumIDs) {
 
-	let link = ''
-	let url  = `${ api.path }?function=Album::getArchive&albumIDs=${ albumIDs.join(',') }`
+	let path  = `${ api.path }?function=Album::getArchive&albumIDs=${ albumIDs.join(',') }`
+	let url = lychee.getURL(path)
 
-	var pos = location.href.indexOf('#')
-	link = pos!=-1 ? location.href.substring(0, pos) : location.href
+	if (lychee.publicMode===true) url += `&password=${ encodeURIComponent(password.value) }`
 
-	if (location.href.indexOf('index.html')>0) link = link.replace('index.html', url)
-	else                                       link += url
-
-	if (lychee.publicMode===true) link += `&password=${ encodeURIComponent(password.value) }`
-
-	location.href = link
+	location.href = url
 
 }
 

@@ -635,29 +635,23 @@ photo.share = function(photoID, service) {
 
 photo.getPhoto = function(photoID) {
 
-	let link
-	let url = `${ api.path }?function=Photo::getPhoto&photoID=${ photoID }`
+	let path = `${ api.path }?function=Photo::getPhoto&photoID=${ photoID }`
+	let url = lychee.getURL(path)
 
-	if (location.href.indexOf('index.html')>0) link = location.href.replace(location.hash, '').replace('index.html', url)
-	else                                       link = location.href.replace(location.hash, '') + url
+	if (lychee.publicMode===true) url += `&password=${ encodeURIComponent(password.value) }`
 
-	if (lychee.publicMode===true) link += `&password=${ encodeURIComponent(password.value) }`
-
-	location.href = link
+	location.href = url
 
 }
 
 photo.getArchive = function(photoIDs) {
 
-	let link
-	let url = `${ api.path }?function=Photo::getArchive&photoIDs=${ photoIDs.join(',') }`
+	let path = `${ api.path }?function=Photo::getArchive&photoIDs=${ photoIDs.join(',') }`
+	let url = lychee.getURL(path)
 
-	if (location.href.indexOf('index.html')>0) link = location.href.replace(location.hash, '').replace('index.html', url)
-	else                                       link = location.href.replace(location.hash, '') + url
+	if (lychee.publicMode===true) url += `&password=${ encodeURIComponent(password.value) }`
 
-	if (lychee.publicMode===true) link += `&password=${ encodeURIComponent(password.value) }`
-
-	location.href = link
+	location.href = url
 
 }
 
@@ -673,9 +667,8 @@ photo.getDirectLink = function() {
 
 photo.getViewLink = function(photoID) {
 
-	let url = 'view.php?p=' + photoID
+	let path = 'view.php?p=' + photoID
 
-	if (location.href.indexOf('index.html')>0) return location.href.replace('index.html' + location.hash, url)
-	else                                       return location.href.replace(location.hash, url)
+	return lychee.getURL(path)
 
 }
