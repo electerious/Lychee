@@ -61,6 +61,7 @@ final class Admin extends Access {
 
 			// $_GET functions
 			case 'Album::getArchive':       self::getAlbumArchiveAction(); break;
+			case 'Photo::getArchive':       self::getPhotoArchiveAction(); break;
 			case 'Photo::getPhoto':         self::getPhotoFileAction(); break;
 
 		}
@@ -338,6 +339,15 @@ final class Admin extends Access {
 
 		$album = new Album($_GET['albumIDs']);
 		$album->getArchive();
+
+	}
+
+	private static function getPhotoArchiveAction() {
+
+		Validator::required(isset($_GET['photoIDs']), __METHOD__);
+
+		$photo = new Photo($_GET['photoIDs']);
+		$photo->getArchive();
 
 	}
 

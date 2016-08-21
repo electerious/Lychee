@@ -949,6 +949,33 @@ final class Photo {
 	}
 
 	/**
+	 * Starts a download of photos.
+	 * @return resource|boolean Sends a ZIP-file or returns false on failure.
+	 */
+	public function getArchive() {
+
+		// Check dependencies
+		Validator::required(isset($this->photoIDs), __METHOD__);
+
+		// Call plugins
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
+
+		$archive = new Archive('Photos');
+
+		$query   = Database::prepare(Database::get(), 'SELECT title, url FROM ? WHERE id IN (?)', array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
+
+        if (!$archive->addPhotos('', $query)) return false;
+
+		$archive->send();
+
+		// Call plugins
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
+
+		return true;
+
+	}
+
+	/**
 	 * Sets the title of a photo.
 	 * @return boolean Returns true when successful.
 	 */

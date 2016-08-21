@@ -244,6 +244,7 @@ contextMenu.photo = function(photoID, e) {
 	// in order to keep the selection
 
 	let items = [
+		{ title: build.iconic('cloud-download') + 'Download', fn: () => photo.getPhoto(photoID) },
 		{ title: build.iconic('star') + 'Star', fn: () => photo.setStar([ photoID ]) },
 		{ title: build.iconic('tag') + 'Tags', fn: () => photo.editTags([ photoID ]) },
 		{ },
@@ -268,6 +269,7 @@ contextMenu.photoMulti = function(photoIDs, e) {
 	// in order to keep the selection and multiselect
 
 	let items = [
+		{ title: build.iconic('cloud-download') + 'Download All', fn: () => photo.getArchive(photoIDs) },
 		{ title: build.iconic('star') + 'Star All', fn: () => photo.setStar(photoIDs) },
 		{ title: build.iconic('tag') + 'Tag All', fn: () => photo.editTags(photoIDs) },
 		{ },
