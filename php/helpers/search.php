@@ -29,6 +29,11 @@ function search($term) {
 	while($photo = $result->fetch_assoc()) {
 
 		$photo = Photo::prepareData($photo);
+
+		// for operations in the search view
+		$photo['nextPhoto'] = '';
+		$photo['previousPhoto'] = '';
+
 		$return['photos'][$photo['id']] = $photo;
 
 	}
