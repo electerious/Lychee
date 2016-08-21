@@ -251,8 +251,6 @@ lychee.setMode = function(mode) {
 	$(document)
 		.off('click',       '.header__title--editable')
 		.off('touchend',    '.header__title--editable')
-		.off('contextmenu', '.photo')
-		.off('contextmenu', '.album')
 		.off('drop')
 
 	Mousetrap
