@@ -82,12 +82,12 @@ photo.preloadNext = function(photoID) {
 	    album.json.content[photoID].nextPhoto!='') {
 
 		let nextPhoto = album.json.content[photoID].nextPhoto
+		let url       = album.json.content[nextPhoto].url
 		let medium    = album.json.content[nextPhoto].medium
+		let href      = (medium!=null && medium!=='' ? medium : url)
 
-		if (medium!=null && medium!=='') {
-			$('head [data-prefetch]').remove()
-			$('head').append(`<link data-prefetch rel="prefetch" href="${ medium }">`)
-		}
+		$('head [data-prefetch]').remove()
+		$('head').append(`<link data-prefetch rel="prefetch" href="${ href }">`)
 
 	}
 
