@@ -6,8 +6,8 @@
 lychee = {
 
 	title           : document.title,
-	version         : '3.1.2',
-	versionCode     : '030102',
+	version         : '3.1.3',
+	versionCode     : '030103',
 
 	updatePath      : '//update.electerious.com/index.json',
 	updateURL       : 'https://github.com/electerious/Lychee',
@@ -185,6 +185,7 @@ lychee.load = function() {
 
 		// Show Album
 		if (visible.photo()) view.photo.hide()
+		if (visible.sidebar() && (albumID==='0' || albumID==='f' || albumID==='s' || albumID==='r')) sidebar.toggle()
 		if (album.json && albumID==album.json.id) view.album.title()
 		else album.load(albumID)
 
