@@ -45,7 +45,7 @@ multiselect.albumClick = function(e, albumObj) {
 
 	let id = albumObj.attr('data-id')
 
-	if (e.ctrlKey) multiselect.toggleItem(albumObj, id)
+	if (e.shiftKey) multiselect.toggleItem(albumObj, id)
 	else           lychee.goto(id)
 
 }
@@ -54,7 +54,7 @@ multiselect.photoClick = function(e, photoObj) {
 
 	let id = photoObj.attr('data-id')
 
-	if (e.ctrlKey) multiselect.toggleItem(photoObj, id)
+	if (e.shiftKey) multiselect.toggleItem(photoObj, id)
 	else           lychee.goto(album.getID() + '/' + id)
 
 }
