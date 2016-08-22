@@ -53,10 +53,13 @@ if (hasPermissions(LYCHEE_UPLOADS)===false)        $error .= ('Error: \'uploads/
 if (hasPermissions(LYCHEE_DATA)===false)           $error .= ('Error: \'data/\' is missing or has insufficient read/write privileges' . PHP_EOL);
 
 // About GD
-$gdVersion = gd_info();
-if (!$gdVersion['JPEG Support'])                                          $error .= ('Error: PHP gd extension without jpeg support' . PHP_EOL);
-if (!$gdVersion['PNG Support'])                                           $error .= ('Error: PHP gd extension without png support' . PHP_EOL);
-if (!$gdVersion['GIF Read Support'] || !$gdVersion['GIF Create Support']) $error .= ('Error: PHP gd extension without full gif support' . PHP_EOL);
+$gdVersion = array('GD Version' => '-');
+if (function_exists('gd_info')) {
+	$gdVersion = gd_info();
+	if (!$gdVersion['JPEG Support'])                                          $error .= ('Error: PHP gd extension without jpeg support' . PHP_EOL);
+	if (!$gdVersion['PNG Support'])                                           $error .= ('Error: PHP gd extension without png support' . PHP_EOL);
+	if (!$gdVersion['GIF Read Support'] || !$gdVersion['GIF Create Support']) $error .= ('Error: PHP gd extension without full gif support' . PHP_EOL);
+}
 
 // Load config
 if (!file_exists(LYCHEE_CONFIG_FILE)) exit('Error: Configuration not found. Please install Lychee for additional tests');
@@ -95,6 +98,10 @@ if (empty(ini_get('allow_url_fopen'))) echo('Warning: You may experience problem
 
 // Check mysql version
 if ($database->server_version<50500) echo('Warning: Lychee uses the GBK charset to avoid sql injections on your MySQL version. Please update to MySQL 5.5 or higher to enable UTF-8 support.' . PHP_EOL);
+
+// Check imagick
+if (!extension_loaded('imagick')) echo('Warning: Pictures that are rotated lose their metadata! Please install Imagick to avoid that.' . PHP_EOL);
+else if (!$settings['imagick']) echo('Warning: Pictures that are rotated lose their metadata! Please enable Imagick in settings to avoid that.' . PHP_EOL);
 
 // Output
 if ($error==='') echo('No critical problems found. Lychee should work without problems!' . PHP_EOL);

@@ -343,9 +343,12 @@ view.photo = {
 		$('body').css('overflow', 'hidden')
 
 		// Fullscreen
-		$(document)
-			.bind('mouseenter', header.show)
-			.bind('mouseleave', header.hide)
+		var timeout
+		$(document).bind('mousemove', function() {
+			clearTimeout(timeout)
+			header.show()
+			timeout = setTimeout(header.hide, 1000)
+		})
 
 		lychee.animate(lychee.imageview, 'fadeIn')
 
@@ -363,8 +366,7 @@ view.photo = {
 
 		// Disable Fullscreen
 		$(document)
-			.unbind('mouseenter')
-			.unbind('mouseleave')
+			.unbind('mousemove')
 
 		// Hide Photo
 		lychee.animate(lychee.imageview, 'fadeOut')

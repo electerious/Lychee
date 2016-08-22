@@ -159,7 +159,7 @@ multiselect.resize = function(e) {
 
 multiselect.stopResize = function() {
 
-	$(document).off('mousemove mouseup')
+	if (multiselect.position.top!==null) $(document).off('mousemove mouseup')
 
 }
 
