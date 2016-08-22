@@ -34,8 +34,7 @@ multiselect.toggleItem = function(object, id) {
 	if (pos!=-1) {
 		multiselect.ids.splice(pos, 1)
 		multiselect.deselect(object)
-	}
-	else {
+	} else {
 		multiselect.ids.push(id)
 		multiselect.select(object)
 	}
@@ -67,8 +66,7 @@ multiselect.albumContextMenu = function(e, albumObj) {
 	if ($.inArray(id, multiselect.ids)!=-1) {
 		contextMenu.albumMulti(multiselect.ids, e)
 		multiselect.ids = []
-	}
-	else {
+	} else {
 		multiselect.clearSelection()
 		contextMenu.album(album.getID(), e)
 	}
@@ -82,8 +80,7 @@ multiselect.photoContextMenu = function(e, photoObj) {
 	if ($.inArray(id, multiselect.ids)!=-1) {
 		contextMenu.photoMulti(multiselect.ids, e)
 		multiselect.ids = []
-	}
-	else {
+	} else {
 		multiselect.clearSelection()
 		contextMenu.photo(photo.getID(), e)
 	}
@@ -296,6 +293,7 @@ multiselect.getSelection = function(e) {
 multiselect.select = function(id) {
 
 	let el = $(id)
+
 	el.addClass('selected')
 	el.addClass('active')
 
@@ -304,6 +302,7 @@ multiselect.select = function(id) {
 multiselect.deselect = function(id) {
 
 	let el = $(id)
+
 	el.removeClass('selected')
 	el.removeClass('active')
 
