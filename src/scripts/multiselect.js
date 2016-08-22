@@ -3,7 +3,11 @@
  * @copyright   2015 by Tobias Reich
  */
 
-multiselect = {}
+multiselect = {
+
+	ids    : []
+
+}
 
 multiselect.position = {
 
@@ -22,6 +26,77 @@ multiselect.bind = function() {
 
 }
 
+multiselect.toggleItem = function(object, id) {
+
+	if (album.isSmartID(id)) return
+
+	let pos = $.inArray(id, multiselect.ids)
+	if (pos!=-1) {
+		multiselect.ids.splice(pos, 1)
+		multiselect.deselect(object)
+	}
+	else {
+		multiselect.ids.push(id)
+		multiselect.select(object)
+	}
+
+}
+
+multiselect.albumClick = function(e, albumObj) {
+
+	let id = albumObj.attr('data-id')
+
+	if (e.ctrlKey) multiselect.toggleItem(albumObj, id)
+	else           lychee.goto(id)
+
+}
+
+multiselect.photoClick = function(e, photoObj) {
+
+	let id = photoObj.attr('data-id')
+
+	if (e.ctrlKey) multiselect.toggleItem(photoObj, id)
+	else           lychee.goto(album.getID() + '/' + id)
+
+}
+
+multiselect.albumContextMenu = function(e, albumObj) {
+
+	let id = albumObj.attr('data-id')
+
+	if ($.inArray(id, multiselect.ids)!=-1) {
+		contextMenu.albumMulti(multiselect.ids, e)
+		multiselect.ids = []
+	}
+	else {
+		multiselect.clearSelection()
+		contextMenu.album(album.getID(), e)
+	}
+
+}
+
+multiselect.photoContextMenu = function(e, photoObj) {
+
+	let id = photoObj.attr('data-id')
+
+	if ($.inArray(id, multiselect.ids)!=-1) {
+		contextMenu.photoMulti(multiselect.ids, e)
+		multiselect.ids = []
+	}
+	else {
+		multiselect.clearSelection()
+		contextMenu.photo(photo.getID(), e)
+	}
+
+}
+
+multiselect.clearSelection = function() {
+
+	multiselect.deselect('.photo.active, .album.active')
+	multiselect.ids = []
+
+}
+
 multiselect.show = function(e) {
 
 	if (lychee.publicMode)                          return false
@@ -29,6 +104,8 @@ multiselect.show = function(e) {
 	if ($('.album:hover, .photo:hover').length!==0) return false
 	if (visible.search())                           return false
 	if (visible.multiselect())                      $('#multiselect').remove()
+
+	multiselect.clearSelection()
 
 	sidebar.setSelectable(false)
 
@@ -202,7 +279,7 @@ multiselect.getSelection = function(e) {
 			if (id!=null && id!==0 && album.isSmartID(id)===false) {
 
 				ids.push(id)
-				$(this).addClass('active')
+				multiselect.select(this)
 
 			}
 
@@ -216,7 +293,25 @@ multiselect.getSelection = function(e) {
 
 }
 
+multiselect.select = function(id) {
+
+	let el = $(id)
+	el.addClass('selected')
+	el.addClass('active')
+
+}
+
+multiselect.deselect = function(id) {
+
+	let el = $(id)
+	el.removeClass('selected')
+	el.removeClass('active')
+
+}
+
 multiselect.close = function() {
+
+	multiselect.clearSelection()
 
 	sidebar.setSelectable(true)
 
