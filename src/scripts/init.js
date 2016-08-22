@@ -55,10 +55,6 @@ $(document).ready(function() {
 			if (visible.photo() && basicModal.visible()===false)      { photo.delete([photo.getID()]); return false }
 			else if (visible.album() && basicModal.visible()===false) { album.delete([album.getID()]); return false }
 		})
-		.bind([ 'command+a', 'ctrl+a' ], function() {
-			if (visible.album() && basicModal.visible()===false)       { multiselect.selectAll(); return false }
-			else if (visible.albums() && basicModal.visible()===false) { multiselect.selectAll(); return false }
-		})
 
 	Mousetrap.bindGlobal('enter', function() {
 		if (basicModal.visible()===true) basicModal.action()

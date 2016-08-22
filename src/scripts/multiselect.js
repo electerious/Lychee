@@ -120,43 +120,6 @@ multiselect.show = function(e) {
 
 }
 
-multiselect.selectAll = function() {
-
-	if (lychee.publicMode)                   return false
-	if (visible.search())                    return false
-	if (!visible.albums() && !visible.album) return false
-	if (visible.multiselect())               $('#multiselect').remove()
-
-	sidebar.setSelectable(false)
-
-	multiselect.position.top    = 70
-	multiselect.position.right  = 40
-	multiselect.position.bottom = 90
-	multiselect.position.left   = 20
-
-	$('body').append(build.multiselect(multiselect.position.top, multiselect.position.left))
-
-	let documentSize = {
-		width  : $(document).width(),
-		height : $(document).height()
-	}
-
-	let newSize = {
-		width  : documentSize.width - multiselect.position.right + 2,
-		height : documentSize.height - multiselect.position.bottom
-	}
-
-	let e = {
-		pageX : documentSize.width - (multiselect.position.right / 2),
-		pageY : documentSize.height - multiselect.position.bottom
-	}
-
-	$('#multiselect').css(newSize)
-
-	multiselect.getSelection(e)
-
-}
-
 multiselect.resize = function(e) {
 
 	if (multiselect.position.top    === null ||
