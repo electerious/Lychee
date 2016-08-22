@@ -5,7 +5,7 @@
 
 multiselect = {
 
-	ids    : []
+	ids: []
 
 }
 
@@ -31,6 +31,7 @@ multiselect.toggleItem = function(object, id) {
 	if (album.isSmartID(id)) return
 
 	let pos = $.inArray(id, multiselect.ids)
+
 	if (pos!=-1) {
 		multiselect.ids.splice(pos, 1)
 		multiselect.deselect(object)
@@ -46,7 +47,7 @@ multiselect.albumClick = function(e, albumObj) {
 	let id = albumObj.attr('data-id')
 
 	if (e.shiftKey) multiselect.toggleItem(albumObj, id)
-	else           lychee.goto(id)
+	else            lychee.goto(id)
 
 }
 
@@ -55,7 +56,7 @@ multiselect.photoClick = function(e, photoObj) {
 	let id = photoObj.attr('data-id')
 
 	if (e.shiftKey) multiselect.toggleItem(photoObj, id)
-	else           lychee.goto(album.getID() + '/' + id)
+	else            lychee.goto(album.getID() + '/' + id)
 
 }
 
