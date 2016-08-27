@@ -42,6 +42,17 @@ multiselect.toggleItem = function(object, id) {
 
 }
 
+multiselect.addItem = function(object, id) {
+
+	let pos = $.inArray(id, multiselect.ids)
+
+	if (pos==-1) {
+		multiselect.ids.push(id)
+		multiselect.select(object)
+	}
+
+}
+
 multiselect.albumClick = function(e, albumObj) {
 
 	let id = albumObj.attr('data-id')
@@ -102,8 +113,6 @@ multiselect.show = function(e) {
 	if ($('.album:hover, .photo:hover').length!==0) return false
 	if (visible.search())                           return false
 	if (visible.multiselect())                      $('#multiselect').remove()
-
-	multiselect.clearSelection()
 
 	sidebar.setSelectable(false)
 
@@ -226,6 +235,11 @@ multiselect.getSelection = function(e) {
 	if (visible.contextMenu())  return false
 	if (!visible.multiselect()) return false
 
+	if (!e.shiftKey && (size.width==0 || size.height==0)) {
+		multiselect.close()
+		return false
+	}
+
 	$('.photo, .album').each(function() {
 
 		let offset = $(this).offset()
@@ -235,22 +249,15 @@ multiselect.getSelection = function(e) {
 			(offset.top + 206)<=(size.top + size.height + tolerance) &&
 			(offset.left + 206)<=(size.left + size.width + tolerance)) {
 
-			let id = $(this).data('id')
+			let id = $(this).attr('data-id')
 
-			if (id!=null && id!==0 && album.isSmartID(id)===false) {
-
-				ids.push(id)
-				multiselect.select(this)
-
-			}
-
+			multiselect.addItem($(this), id)
+			
 		}
 
 	})
 
-	if (ids.length!==0 && visible.album())       contextMenu.photoMulti(ids, e)
-	else if (ids.length!==0 && visible.albums()) contextMenu.albumMulti(ids, e)
-	else                                         multiselect.close()
+	multiselect.hide()
 
 }
 
@@ -272,9 +279,7 @@ multiselect.deselect = function(id) {
 
 }
 
-multiselect.close = function() {
-
-	multiselect.clearSelection()
+multiselect.hide = function() {
 
 	sidebar.setSelectable(true)
 
@@ -287,5 +292,13 @@ multiselect.close = function() {
 
 	lychee.animate('#multiselect', 'fadeOut')
 	setTimeout(() => $('#multiselect').remove(), 300)
+
+}
+
+multiselect.close = function() {
+
+	multiselect.clearSelection()
+
+	multiselect.hide()
 
 }
