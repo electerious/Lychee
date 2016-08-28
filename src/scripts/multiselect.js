@@ -252,7 +252,7 @@ multiselect.getSelection = function(e) {
 			let id = $(this).attr('data-id')
 
 			multiselect.addItem($(this), id)
-			
+
 		}
 
 	})
