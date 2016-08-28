@@ -90,7 +90,7 @@ multiselect.albumContextMenu = function(e, albumObj) {
 	let id       = albumObj.attr('data-id')
 	let selected = multiselect.isSelected(id).selected
 
-	if (selected===false) {
+	if (selected!==false) {
 		contextMenu.albumMulti(multiselect.ids, e)
 		multiselect.ids = []
 	} else {
@@ -105,7 +105,7 @@ multiselect.photoContextMenu = function(e, photoObj) {
 	let id       = photoObj.attr('data-id')
 	let selected = multiselect.isSelected(id).selected
 
-	if (selected===false) {
+	if (selected!==false) {
 		contextMenu.photoMulti(multiselect.ids, e)
 		multiselect.ids = []
 	} else {
