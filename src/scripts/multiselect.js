@@ -28,17 +28,10 @@ multiselect.bind = function() {
 
 multiselect.toggleItem = function(object, id) {
 
-	if (album.isSmartID(id)) return
-
 	let pos = $.inArray(id, multiselect.ids)
 
-	if (pos!=-1) {
-		multiselect.ids.splice(pos, 1)
-		multiselect.deselect(object)
-	} else {
-		multiselect.ids.push(id)
-		multiselect.select(object)
-	}
+	if (pos===-1) multiselect.addItem(object, id)
+	else          multiselect.removeItem(object, id)
 
 }
 
@@ -46,10 +39,22 @@ multiselect.addItem = function(object, id) {
 
 	let pos = $.inArray(id, multiselect.ids)
 
-	if (pos==-1) {
-		multiselect.ids.push(id)
-		multiselect.select(object)
-	}
+	if (album.isSmartID(id)) return
+	if (pos!==-1) return
+
+	multiselect.ids.push(id)
+	multiselect.select(object)
+
+}
+
+multiselect.removeItem = function(object, id) {
+
+	let pos = $.inArray(id, multiselect.ids)
+
+	if (pos===-1) return
+
+	multiselect.ids.splice(pos, 1)
+	multiselect.deselect(object)
 
 }
 
