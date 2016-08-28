@@ -1,6 +1,6 @@
 ## v3.1.4
 
-Released August 27, 2016
+Released August 28, 2016
 
 - `Fixed` Search stopped working because of an undefined index error (#605)
 - `Fixed` Better next/previous photo check to prevent an error when opening an album with only one photo
