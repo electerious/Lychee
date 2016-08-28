@@ -11,7 +11,9 @@ const isSelectKeyPressed = function(e) {
 
 multiselect = {
 
-	ids: []
+	ids            : [],
+	albumsSelected : 0,
+	photosSelected : 0
 
 }
 
@@ -57,8 +59,18 @@ multiselect.addItem = function(object, id) {
 	if (album.isSmartID(id)) return
 	if (multiselect.isSelected(id).selected===true) return
 
+	let isAlbum = object.hasClass('album')
+	if ((isAlbum && multiselect.photosSelected > 0) ||
+	    (!isAlbum && multiselect.albumsSelected > 0)) {
+		lychee.error('Please select either albums or photos!')
+		return
+	}
+
 	multiselect.ids.push(id)
 	multiselect.select(object)
+
+	if (isAlbum) multiselect.albumsSelected++
+	else         multiselect.photosSelected++
 
 }
 
@@ -70,6 +82,10 @@ multiselect.removeItem = function(object, id) {
 
 	multiselect.ids.splice(pos, 1)
 	multiselect.deselect(object)
+
+	let isAlbum = object.hasClass('album')
+	if (isAlbum) multiselect.albumsSelected--
+	else         multiselect.photosSelected--
 
 }
 
@@ -98,7 +114,7 @@ multiselect.albumContextMenu = function(e, albumObj) {
 
 	if (selected!==false) {
 		contextMenu.albumMulti(multiselect.ids, e)
-		multiselect.ids = []
+		multiselect.clearSelection(false)
 	} else {
 		multiselect.clearSelection()
 		contextMenu.album(album.getID(), e)
@@ -113,7 +129,7 @@ multiselect.photoContextMenu = function(e, photoObj) {
 
 	if (selected!==false) {
 		contextMenu.photoMulti(multiselect.ids, e)
-		multiselect.ids = []
+		multiselect.clearSelection(false)
 	} else {
 		multiselect.clearSelection()
 		contextMenu.photo(photo.getID(), e)
@@ -121,10 +137,13 @@ multiselect.photoContextMenu = function(e, photoObj) {
 
 }
 
-multiselect.clearSelection = function() {
+multiselect.clearSelection = function(deselect = true) {
 
-	multiselect.deselect('.photo.active, .album.active')
+	if (deselect) multiselect.deselect('.photo.active, .album.active')
+
 	multiselect.ids = []
+	multiselect.albumsSelected = 0
+	multiselect.photosSelected = 0
 
 }
 

@@ -69,26 +69,6 @@ const getSubIDs = function(albums, albumID) {
 
 }
 
-const countSubAlbums = function(photoIDs) {
-
-	let count = 0
-
-	if (album.subjson) {
-
-		for (i in photoIDs) {
-			for (j in album.subjson.albums) {
-				if (album.subjson.albums[j].id == photoIDs[i]) {
-					count++
-					break
-				}
-			}
-		}
-
-	}
-
-	return count
-}
-
 contextMenu = {}
 
 contextMenu.add = function(albumID, e) {
@@ -279,20 +259,6 @@ contextMenu.photo = function(photoID, e) {
 }
 
 contextMenu.photoMulti = function(photoIDs, e) {
-
-	let subcount = countSubAlbums(photoIDs)
-	let photocount = photoIDs.length - subcount
-
-	if (subcount && photocount) {
-		multiselect.deselect('.photo.active, .album.active')
-		multiselect.close()
-		lychee.error('Please select either albums or photos!')
-		return
-	}
-	if (subcount) {
-		contextMenu.albumMulti(photoIDs, e)
-		return
-	}
 
 	multiselect.stopResize()
 
