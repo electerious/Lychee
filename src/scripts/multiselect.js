@@ -26,21 +26,30 @@ multiselect.bind = function() {
 
 }
 
-multiselect.toggleItem = function(object, id) {
+multiselect.isSelected = function(id) {
 
 	let pos = $.inArray(id, multiselect.ids)
 
-	if (pos===-1) multiselect.addItem(object, id)
-	else          multiselect.removeItem(object, id)
+	return {
+		selected : (pos===-1 ? false : true),
+		position : pos
+	}
+
+}
+
+multiselect.toggleItem = function(object, id) {
+
+	let selected = multiselect.isSelected(id).selected
+
+	if (selected===false) multiselect.addItem(object, id)
+	else                  multiselect.removeItem(object, id)
 
 }
 
 multiselect.addItem = function(object, id) {
 
-	let pos = $.inArray(id, multiselect.ids)
-
 	if (album.isSmartID(id)) return
-	if (pos!==-1) return
+	if (multiselect.isSelected(id).selected===true) return
 
 	multiselect.ids.push(id)
 	multiselect.select(object)
@@ -49,9 +58,9 @@ multiselect.addItem = function(object, id) {
 
 multiselect.removeItem = function(object, id) {
 
-	let pos = $.inArray(id, multiselect.ids)
+	let { selected, pos } = multiselect.isSelected(id)
 
-	if (pos===-1) return
+	if (selected===false) return
 
 	multiselect.ids.splice(pos, 1)
 	multiselect.deselect(object)
@@ -78,9 +87,10 @@ multiselect.photoClick = function(e, photoObj) {
 
 multiselect.albumContextMenu = function(e, albumObj) {
 
-	let id = albumObj.attr('data-id')
+	let id       = albumObj.attr('data-id')
+	let selected = multiselect.isSelected(id).selected
 
-	if ($.inArray(id, multiselect.ids)!=-1) {
+	if (selected===false) {
 		contextMenu.albumMulti(multiselect.ids, e)
 		multiselect.ids = []
 	} else {
@@ -92,9 +102,10 @@ multiselect.albumContextMenu = function(e, albumObj) {
 
 multiselect.photoContextMenu = function(e, photoObj) {
 
-	let id = photoObj.attr('data-id')
+	let id       = photoObj.attr('data-id')
+	let selected = multiselect.isSelected(id).selected
 
-	if ($.inArray(id, multiselect.ids)!=-1) {
+	if (selected===false) {
 		contextMenu.photoMulti(multiselect.ids, e)
 		multiselect.ids = []
 	} else {
