@@ -14,7 +14,7 @@ The following keys and shortcuts can be used in Lychee.
 | Key | Action |
 |:-----------|:------------|
 | `s` or `f` | Search |
-| `shift`+`left-click` | Select album individually |
+| `meta-key`+`left-click` | Select album individually |
 | `right-click` | Open context-menu |
 
 ### Album
@@ -25,7 +25,7 @@ The following keys and shortcuts can be used in Lychee.
 | `i` | Show information |
 | `cmd`+`backspace` | Delete album |
 | `ctrl`+`backspace` | Delete album |
-| `shift`+`left-click` | Select album/photo individually |
+| `meta-key`+`left-click` | Select album/photo individually |
 | `right-click` | Open context-menu |
 
 ### Photo
