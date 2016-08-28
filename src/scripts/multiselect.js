@@ -57,8 +57,8 @@ multiselect.albumClick = function(e, albumObj) {
 
 	let id = albumObj.attr('data-id')
 
-	if (e.shiftKey) multiselect.toggleItem(albumObj, id)
-	else            lychee.goto(id)
+	if (e.metaKey===true) multiselect.toggleItem(albumObj, id)
+	else                  lychee.goto(id)
 
 }
 
@@ -66,8 +66,8 @@ multiselect.photoClick = function(e, photoObj) {
 
 	let id = photoObj.attr('data-id')
 
-	if (e.shiftKey) multiselect.toggleItem(photoObj, id)
-	else            lychee.goto(album.getID() + '/' + id)
+	if (e.metaKey===true) multiselect.toggleItem(photoObj, id)
+	else                  lychee.goto(album.getID() + '/' + id)
 
 }
 
@@ -235,7 +235,7 @@ multiselect.getSelection = function(e) {
 	if (visible.contextMenu())  return false
 	if (!visible.multiselect()) return false
 
-	if (!e.shiftKey && (size.width==0 || size.height==0)) {
+	if (e.metaKey===false && (size.width==0 || size.height==0)) {
 		multiselect.close()
 		return false
 	}
