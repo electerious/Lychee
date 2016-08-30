@@ -3,9 +3,17 @@
  * @copyright   2015 by Tobias Reich
  */
 
+const isSelectKeyPressed = function(e) {
+
+	return e.metaKey || e.ctrlKey
+
+}
+
 multiselect = {
 
-	ids: []
+	ids            : [],
+	albumsSelected : 0,
+	photosSelected : 0
 
 }
 
@@ -51,8 +59,18 @@ multiselect.addItem = function(object, id) {
 	if (album.isSmartID(id)) return
 	if (multiselect.isSelected(id).selected===true) return
 
+	let isAlbum = object.hasClass('album')
+	if ((isAlbum && multiselect.photosSelected > 0) ||
+	    (!isAlbum && multiselect.albumsSelected > 0)) {
+		lychee.error('Please select either albums or photos!')
+		return
+	}
+
 	multiselect.ids.push(id)
 	multiselect.select(object)
+
+	if (isAlbum) multiselect.albumsSelected++
+	else         multiselect.photosSelected++
 
 }
 
@@ -65,14 +83,18 @@ multiselect.removeItem = function(object, id) {
 	multiselect.ids.splice(pos, 1)
 	multiselect.deselect(object)
 
+	let isAlbum = object.hasClass('album')
+	if (isAlbum) multiselect.albumsSelected--
+	else         multiselect.photosSelected--
+
 }
 
 multiselect.albumClick = function(e, albumObj) {
 
 	let id = albumObj.attr('data-id')
 
-	if (e.metaKey===true) multiselect.toggleItem(albumObj, id)
-	else                  lychee.goto(id)
+	if (isSelectKeyPressed(e)) multiselect.toggleItem(albumObj, id)
+	else                       lychee.goto(id)
 
 }
 
@@ -80,8 +102,8 @@ multiselect.photoClick = function(e, photoObj) {
 
 	let id = photoObj.attr('data-id')
 
-	if (e.metaKey===true) multiselect.toggleItem(photoObj, id)
-	else                  lychee.goto(album.getID() + '/' + id)
+	if (isSelectKeyPressed(e)) multiselect.toggleItem(photoObj, id)
+	else                       lychee.goto(album.getID() + '/' + id)
 
 }
 
@@ -90,9 +112,9 @@ multiselect.albumContextMenu = function(e, albumObj) {
 	let id       = albumObj.attr('data-id')
 	let selected = multiselect.isSelected(id).selected
 
-	if (selected===false) {
+	if (selected!==false) {
 		contextMenu.albumMulti(multiselect.ids, e)
-		multiselect.ids = []
+		multiselect.clearSelection(false)
 	} else {
 		multiselect.clearSelection()
 		contextMenu.album(album.getID(), e)
@@ -105,9 +127,9 @@ multiselect.photoContextMenu = function(e, photoObj) {
 	let id       = photoObj.attr('data-id')
 	let selected = multiselect.isSelected(id).selected
 
-	if (selected===false) {
+	if (selected!==false) {
 		contextMenu.photoMulti(multiselect.ids, e)
-		multiselect.ids = []
+		multiselect.clearSelection(false)
 	} else {
 		multiselect.clearSelection()
 		contextMenu.photo(photo.getID(), e)
@@ -115,10 +137,13 @@ multiselect.photoContextMenu = function(e, photoObj) {
 
 }
 
-multiselect.clearSelection = function() {
+multiselect.clearSelection = function(deselect = true) {
 
-	multiselect.deselect('.photo.active, .album.active')
+	if (deselect) multiselect.deselect('.photo.active, .album.active')
+
 	multiselect.ids = []
+	multiselect.albumsSelected = 0
+	multiselect.photosSelected = 0
 
 }
 
@@ -251,7 +276,7 @@ multiselect.getSelection = function(e) {
 	if (visible.contextMenu())  return false
 	if (!visible.multiselect()) return false
 
-	if (e.metaKey===false && (size.width==0 || size.height==0)) {
+	if (!isSelectKeyPressed(e) && (size.width==0 || size.height==0)) {
 		multiselect.close()
 		return false
 	}
