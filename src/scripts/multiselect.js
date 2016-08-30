@@ -60,6 +60,7 @@ multiselect.addItem = function(object, id) {
 	if (multiselect.isSelected(id).selected===true) return
 
 	let isAlbum = object.hasClass('album')
+
 	if ((isAlbum && multiselect.photosSelected > 0) ||
 	    (!isAlbum && multiselect.albumsSelected > 0)) {
 		lychee.error('Please select either albums or photos!')
@@ -84,6 +85,7 @@ multiselect.removeItem = function(object, id) {
 	multiselect.deselect(object)
 
 	let isAlbum = object.hasClass('album')
+
 	if (isAlbum) multiselect.albumsSelected--
 	else         multiselect.photosSelected--
 
