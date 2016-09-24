@@ -13,4 +13,5 @@ VALUES
   ('dropboxKey',''),
   ('identifier',''),
   ('skipDuplicates','0'),
-  ('plugins','');
+  ('plugins',''),
+  ('fullscreenTiming','3');

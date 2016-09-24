@@ -222,6 +222,20 @@ final class Settings {
 	}
 
 	/**
+	 * Sets the timing before activating fullscreen mode
+	 * @param int $timing Time before the fullscreen mode is activated (0 to disable)
+	 * @return boolean Returns true when successful
+	 */
+	public static function setFullscreenTiming($timing) {
+
+		// Keep the timing between 0 and 255
+		$timing = (int)min(255, max(0, (int)$timing));
+
+		if (self::set('fullscreenTiming', $timing, true)===false) return false;
+		return true;
+	}
+
+	/**
 	 * @return array Returns the Imagick setting.
 	 */
 	public static function hasImagick() {

@@ -309,12 +309,14 @@ view.photo = {
 		$('body').css('overflow', 'hidden')
 
 		// Fullscreen
-		var timeout
-		$(document).bind('mousemove', function() {
-			clearTimeout(timeout)
-			header.show()
-			timeout = setTimeout(header.hide, 1000)
-		})
+		if (lychee.fullscreenTiming>0) {
+			var timeout
+			$(document).bind('mousemove', function() {
+				clearTimeout(timeout)
+				header.show()
+				timeout = setTimeout(header.hide, 1000*lychee.fullscreenTiming)
+			})
+		}
 
 		lychee.animate(lychee.imageview, 'fadeIn')
 

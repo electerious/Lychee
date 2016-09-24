@@ -426,3 +426,49 @@ settings.setDropboxKey = function(callback) {
 	})
 
 }
+
+settings.setOptions = function(callback) {
+
+	const action = function(data) {
+
+		let fullscreenTiming = data.fullscreenTiming
+
+		if (data.fullscreenTiming.length<1) {
+			basicModal.error('fullscreenTiming')
+			return false
+		}
+
+		basicModal.close()
+
+		api.post('Settings::setOptions', { fullscreenTiming }, function(data) {
+
+			if (data===true) {
+				lychee.fullscreenTiming = fullscreenTiming
+			} else lychee.error(null, params, data)
+
+		})
+
+	}
+
+	let msg = lychee.html`
+	          <p>
+	              Activate fullscreen after n seconds of inactivity (0 to disable):
+	              <input class='text' name='fullscreenTiming' type='number' min='0' max='255' step='1' placeholder='Timing' value='$${ lychee.fullscreenTiming }'>
+	          </p>
+	          `
+
+	basicModal.show({
+		body: msg,
+		buttons: {
+			action: {
+				title: 'Set Options',
+				fn: action
+			},
+			cancel: {
+				title: 'Cancel',
+				fn: basicModal.close
+			}
+		}
+	})
+
+}
