@@ -7,7 +7,7 @@
 use Lychee\Modules\Database;
 use Lychee\Modules\Response;
 
-// Add skipDuplicates to settings
+// Add fullscreenTiming to settings
 $query  = Database::prepare($connection, "SELECT `key` FROM `?` WHERE `key` = 'fullscreenTiming' LIMIT 1", array(LYCHEE_TABLE_SETTINGS));
 $result = Database::execute($connection, $query, 'update_030105', __LINE__);
 
