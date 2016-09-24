@@ -85,6 +85,8 @@
 		&:hover img:nth-child(1),
 		&:hover img:nth-child(2) {
 			opacity: 1;
+			-webkit-backface-visibility: hidden;
+			-moz-transform-style: preserve-3d;
 		}
 
 		&:hover img:nth-child(1) {
