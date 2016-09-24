@@ -5,27 +5,29 @@
 
 lychee = {
 
-	title           : document.title,
-	version         : '3.1.4',
-	versionCode     : '030104',
+	title            : document.title,
+	version          : '3.1.4',
+	versionCode      : '030104',
 
-	updatePath      : '//update.electerious.com/index.json',
-	updateURL       : 'https://github.com/electerious/Lychee',
-	website         : 'http://lychee.electerious.com',
+	updatePath       : '//update.electerious.com/index.json',
+	updateURL        : 'https://github.com/electerious/Lychee',
+	website          : 'http://lychee.electerious.com',
 
-	publicMode      : false,
-	viewMode        : false,
+	publicMode       : false,
+	viewMode         : false,
 
-	checkForUpdates : '1',
-	sortingPhotos   : '',
-	sortingAlbums   : '',
-	location        : '',
+	checkForUpdates  : '1',
+	sortingPhotos    : '',
+	sortingAlbums    : '',
+	location         : '',
 
-	dropbox         : false,
-	dropboxKey      : '',
+	fullscreenTiming : '3',
 
-	content         : $('.content'),
-	imageview       : $('#imageview')
+	dropbox          : false,
+	dropboxKey       : '',
+
+	content          : $('.content'),
+	imageview        : $('#imageview')
 
 }
 
@@ -42,11 +44,12 @@ lychee.init = function() {
 
 			// Logged in
 
-			lychee.sortingPhotos   = data.config.sortingPhotos   || ''
-			lychee.sortingAlbums   = data.config.sortingAlbums   || ''
-			lychee.dropboxKey      = data.config.dropboxKey      || ''
-			lychee.location        = data.config.location        || ''
-			lychee.checkForUpdates = data.config.checkForUpdates || '1'
+			lychee.sortingPhotos    = data.config.sortingPhotos    || ''
+			lychee.sortingAlbums    = data.config.sortingAlbums    || ''
+			lychee.dropboxKey       = data.config.dropboxKey       || ''
+			lychee.location         = data.config.location         || ''
+			lychee.checkForUpdates  = data.config.checkForUpdates  || '1'
+			lychee.fullscreenTiming = data.config.fullscreenTiming || '3'
 
 			// Show dialog when there is no username and password
 			if (data.config.login===false) settings.createLogin()

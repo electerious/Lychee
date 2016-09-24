@@ -57,6 +57,7 @@ final class Admin extends Access {
 			case 'Settings::setLogin':      self::setLoginAction(); break;
 			case 'Settings::setSorting':    self::setSortingAction(); break;
 			case 'Settings::setDropboxKey': self::setDropboxKeyAction(); break;
+			case 'Settings::setOptions':    self::setOptionsAction(); break;
 
 			// $_GET functions
 			case 'Album::getArchive':       self::getAlbumArchiveAction(); break;
@@ -316,6 +317,14 @@ final class Admin extends Access {
 		Validator::required(isset($_POST['key']), __METHOD__);
 
 		Response::json(Settings::setDropboxKey($_POST['key']));
+
+	}
+
+	private static function setOptionsAction() {
+
+		Validator::required(isset($_POST['fullscreenTiming']), __METHOD__);
+
+		Response::json(Settings::setFullscreenTiming($_POST['fullscreenTiming']));
 
 	}
 
