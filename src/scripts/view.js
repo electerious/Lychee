@@ -413,8 +413,8 @@ view.photo = {
 		let $nextArrow     = lychee.imageview.find('a#next')
 		let $previousArrow = lychee.imageview.find('a#previous')
 		let photoID        = photo.getID()
-		let hasNext        = album.json && album.json.content && album.json.content[photoID] && album.json.content[photoID].nextPhoto!==''
-		let hasPrevious    = album.json && album.json.content && album.json.content[photoID] && album.json.content[photoID].previousPhoto!==''
+		let hasNext        = album.json && album.json.content && album.json.content[photoID] && album.json.content[photoID].nextPhoto!=null && album.json.content[photoID].nextPhoto!==''
+		let hasPrevious    = album.json && album.json.content && album.json.content[photoID] && album.json.content[photoID].previousPhoto!=null && album.json.content[photoID].previousPhoto!==''
 
 		if (hasNext===false || lychee.viewMode===true) {
 

@@ -10,9 +10,14 @@
 	transition: background-color .3s;
 
 	// Modes -------------------------------------------------------------- //
-	&.view { background-color: inherit; }
+	&.view {
+		background-color: inherit;
+	}
 
-	&.full { background-color: black(1); }
+	&.full {
+		background-color: black(1);
+		cursor: none;
+	}
 
 	// ImageView -------------------------------------------------------------- //
 	#image {

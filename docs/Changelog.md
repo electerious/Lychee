@@ -1,3 +1,22 @@
+## v3.1.4
+
+Released August 28, 2016
+
+- `Fixed` Search stopped working because of an undefined index error (#605)
+- `Fixed` Better next/previous photo check to prevent an error when opening an album with only one photo
+
+## v3.1.3
+
+Released August 22, 2016
+
+- `Improved` rotate and flip images with GD based on EXIF orientation (Thanks @qligier, #600)
+- `Improved` enter/leave fullscreen-mode by (not) moving the mouse for one second (Thanks @hrniels, #583)
+- `Improved` Prefetch the medium photo instead of the big one (Thanks @Bramas, #446)
+- `Improved` Added "session" to required extensions (#579)
+- `Improved` Added warning if Imagick is not installed/enabled (Thanks @hrniels, #590)
+- `Fixed` Don't assume that gd_info exists when running diagnostics (Thanks @hrniels, #589 #565)
+- `Fixed` Sidebar showing up in smart albums when navigating back from the photo-view
+
 ## v3.1.2
 
 Released June 12, 2016
