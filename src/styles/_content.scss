@@ -85,6 +85,10 @@
 		&:hover img:nth-child(1),
 		&:hover img:nth-child(2) {
 			opacity: 1;
+			// Keep the composited layer created by the browser during the animation.
+			// Makes the border of the transformed thumb look better.
+			// See https://github.com/electerious/Lychee/pull/626 for more.
+			will-change: transform;
 		}
 
 		&:hover img:nth-child(1) {
