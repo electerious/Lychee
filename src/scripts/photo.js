@@ -634,6 +634,14 @@ photo.share = function(photoID, service) {
 
 }
 
+photo.isFullScreen = function() {
+	return (album.json.fullscreen==='1')
+}
+
+photo.isShareable = function() {
+	return (album.json.shareable==='1')
+}
+
 photo.getArchive = function(photoID) {
 
 	let link

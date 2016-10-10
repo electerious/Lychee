@@ -225,6 +225,8 @@ sidebar.createStructure.album = function(data) {
 	let _public      = ''
 	let hidden       = ''
 	let downloadable = ''
+	let fullscreen   = ''
+	let shareable    = ''
 	let password     = ''
 
 	// Enable editable when user logged in
@@ -266,6 +268,30 @@ sidebar.createStructure.album = function(data) {
 
 	}
 
+	// Set value for fullscreen
+	switch (data.fullscreen) {
+
+		case '0' : fullscreen = 'No'
+		           break
+		case '1' : fullscreen = 'Yes'
+		           break
+		default  : fullscreen = '-'
+		           break
+
+	}
+
+	// Set value for shareable
+	switch (data.shareable) {
+
+		case '0' : shareable = 'No'
+		           break
+		case '1' : shareable = 'Yes'
+		           break
+		default  : shareable = '-'
+		           break
+
+	}
+
 	// Set value for password
 	switch (data.password) {
 
@@ -303,6 +329,8 @@ sidebar.createStructure.album = function(data) {
 			{ title: 'Public',       value: _public },
 			{ title: 'Hidden',       value: hidden },
 			{ title: 'Downloadable', value: downloadable },
+			{ title: 'Full Screen',  value: fullscreen },
+			{ title: 'Shareable',    value: shareable },
 			{ title: 'Password',     value: password }
 		]
 	}

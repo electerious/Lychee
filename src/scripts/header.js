@@ -148,6 +148,9 @@ header.setMode = function(mode) {
 				$('#button_info_album, #button_trash_album, #button_share_album').show()
 			}
 
+			// Hide share button when not logged in and album is not shareable
+			if (lychee.publicMode===true && !album.isShareable()) $('#button_share_album').hide()
+
 			return true
 			break
 
@@ -156,6 +159,12 @@ header.setMode = function(mode) {
 			header.dom().addClass('header--view')
 			header.dom('.header__toolbar--public, .header__toolbar--albums, .header__toolbar--album').removeClass('header__toolbar--visible')
 			header.dom('.header__toolbar--photo').addClass('header__toolbar--visible')
+
+			// Hide share button when not logged in and photo is not shareable
+			if (lychee.publicMode===true && !photo.isShareable()) $('#button_share').hide()
+
+			// Hide more button when not logged in and photo is not downloadable or viewable on full screen
+			if (lychee.publicMode===true && !photo.isFullScreen() && album.json.downloadable==='0') $('#button_more').hide()
 
 			return true
 			break
