@@ -309,9 +309,12 @@ view.photo = {
 		$('body').css('overflow', 'hidden')
 
 		// Fullscreen
-		$(document)
-			.bind('mouseenter', header.show)
-			.bind('mouseleave', header.hide)
+		var timeout
+		$(document).bind('mousemove', function() {
+			clearTimeout(timeout)
+			header.show()
+			timeout = setTimeout(header.hide, 1000)
+		})
 
 		lychee.animate(lychee.imageview, 'fadeIn')
 
@@ -329,8 +332,7 @@ view.photo = {
 
 		// Disable Fullscreen
 		$(document)
-			.unbind('mouseenter')
-			.unbind('mouseleave')
+			.unbind('mousemove')
 
 		// Hide Photo
 		lychee.animate(lychee.imageview, 'fadeOut')
@@ -411,8 +413,8 @@ view.photo = {
 		let $nextArrow     = lychee.imageview.find('a#next')
 		let $previousArrow = lychee.imageview.find('a#previous')
 		let photoID        = photo.getID()
-		let hasNext        = album.json && album.json.content && album.json.content[photoID] && album.json.content[photoID].nextPhoto!==''
-		let hasPrevious    = album.json && album.json.content && album.json.content[photoID] && album.json.content[photoID].previousPhoto!==''
+		let hasNext        = album.json && album.json.content && album.json.content[photoID] && album.json.content[photoID].nextPhoto!=null && album.json.content[photoID].nextPhoto!==''
+		let hasPrevious    = album.json && album.json.content && album.json.content[photoID] && album.json.content[photoID].previousPhoto!=null && album.json.content[photoID].previousPhoto!==''
 
 		if (hasNext===false || lychee.viewMode===true) {
 

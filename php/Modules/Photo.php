@@ -554,8 +554,7 @@ final class Photo {
 
 				case 2:
 					// mirror
-					// not yet implemented
-					return false;
+					imageflip($sourceImg, IMG_FLIP_HORIZONTAL);
 					break;
 
 				case 3:
@@ -564,14 +563,16 @@ final class Photo {
 
 				case 4:
 					// rotate 180 and mirror
-					// not yet implemented
-					return false;
+					imageflip($sourceImg, IMG_FLIP_VERTICAL);
 					break;
 
 				case 5:
 					// rotate 90 and mirror
-					// not yet implemented
-					return false;
+					$sourceImg = imagerotate($sourceImg, -90, 0);
+					$newWidth  = $info['height'];
+					$newHeight = $info['width'];
+					$swapSize  = true;
+					imageflip($sourceImg, IMG_FLIP_HORIZONTAL);
 					break;
 
 				case 6:
@@ -583,8 +584,11 @@ final class Photo {
 
 				case 7:
 					// rotate -90 and mirror
-					// not yet implemented
-					return false;
+					$sourceImg = imagerotate($sourceImg, 90, 0);
+					$newWidth  = $info['height'];
+					$newHeight = $info['width'];
+					$swapSize  = true;
+					imageflip($sourceImg, IMG_FLIP_HORIZONTAL);
 					break;
 
 				case 8:
@@ -634,7 +638,7 @@ final class Photo {
 	public static function prepareData(array $data) {
 
 		// Excepts the following:
-		// (array) $data = ['id', 'title', 'tags', 'public', 'star', 'album', 'thumbUrl', 'takestamp', 'url']
+		// (array) $data = ['id', 'title', 'tags', 'public', 'star', 'album', 'thumbUrl', 'takestamp', 'url', 'medium']
 
 		// Init
 		$photo = null;
@@ -647,7 +651,11 @@ final class Photo {
 		$photo['star']   = $data['star'];
 		$photo['album']  = $data['album'];
 
-		// Parse urls
+		// Parse medium
+		if ($data['medium']==='1') $photo['medium'] = LYCHEE_URL_UPLOADS_MEDIUM . $data['url'];
+		else                       $photo['medium'] = '';
+
+		// Parse paths
 		$photo['thumbUrl'] = LYCHEE_URL_UPLOADS_THUMB . $data['thumbUrl'];
 		$photo['url']      = LYCHEE_URL_UPLOADS_BIG . $data['url'];
 
