@@ -1,6 +1,5 @@
 /**
  * @description Swipes and moves an object.
- * @copyright   2015 by Tobias Reich
  */
 
 swipe = {

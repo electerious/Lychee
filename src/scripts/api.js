@@ -1,6 +1,5 @@
 /**
  * @description This module communicates with Lychee's API
- * @copyright   2015 by Tobias Reich
  */
 
 api = {

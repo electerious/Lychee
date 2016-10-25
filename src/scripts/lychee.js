@@ -1,13 +1,12 @@
 /**
  * @description This module provides the basic functions of Lychee.
- * @copyright   2015 by Tobias Reich
  */
 
 lychee = {
 
 	title           : document.title,
-	version         : '3.1.4',
-	versionCode     : '030104',
+	version         : '3.1.5',
+	versionCode     : '030105',
 
 	updatePath      : '//update.electerious.com/index.json',
 	updateURL       : 'https://github.com/electerious/Lychee',

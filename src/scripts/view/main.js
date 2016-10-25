@@ -1,6 +1,5 @@
 /**
  * @description Used to view single photos with view.php
- * @copyright   2015 by Tobias Reich
  */
 
 // Sub-implementation of lychee -------------------------------------------------------------- //

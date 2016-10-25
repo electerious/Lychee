@@ -1,6 +1,5 @@
 /**
  * @description Searches through your photos and albums.
- * @copyright   2015 by Tobias Reich
  */
 
 search = {

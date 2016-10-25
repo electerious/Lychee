@@ -1,6 +1,5 @@
 /**
  * @description This module is used to check if elements are visible or not.
- * @copyright   2015 by Tobias Reich
  */
 
 visible = {}

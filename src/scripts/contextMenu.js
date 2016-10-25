@@ -1,6 +1,5 @@
 /**
  * @description This module is used for the context menu.
- * @copyright   2015 by Tobias Reich
  */
 
 contextMenu = {}
