@@ -1,6 +1,5 @@
 /**
  * @description Lets you change settings.
- * @copyright   2015 by Tobias Reich
  */
 
 settings = {}

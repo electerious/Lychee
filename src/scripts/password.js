@@ -1,6 +1,5 @@
 /**
  * @description Controls the access to password-protected albums and photos.
- * @copyright   2015 by Tobias Reich
  */
 
 password = {

@@ -1,6 +1,5 @@
 /**
  * @description This module takes care of the header.
- * @copyright   2015 by Tobias Reich
  */
 
 header = {

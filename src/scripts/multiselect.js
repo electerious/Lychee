@@ -1,6 +1,5 @@
 /**
  * @description Select multiple albums or photos.
- * @copyright   2015 by Tobias Reich
  */
 
 multiselect = {}
