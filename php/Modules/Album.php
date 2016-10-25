@@ -475,26 +475,27 @@ final class Album {
 
 	}
 
-	private function getSubAlbums($albumID) {
+	public static function getSubAlbums($albumID) {
 
 		$query = Database::prepare(Database::get(), "SELECT id FROM ? WHERE parent = '?'", array(LYCHEE_TABLE_ALBUMS, $albumID));
 		$albums = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
 		$ids = array();
 		while($album = $albums->fetch_assoc()) {
-			$ids = array_merge($ids, array($album['id']), $this->getSubAlbums($album['id']));
+			$ids = array_merge($ids, array($album['id']), self::getSubAlbums($album['id']));
 		}
 
 		return $ids;
 
 	}
 
-	private function addSubAlbumIDs($ids) {
+
+	public static function addSubAlbumIDs($ids) {
 
 		$res = array();
 
 		foreach(explode(',', $ids) as $id)
-			$res = array_merge($res, array($id), $this->getSubAlbums($id));
+			$res = array_merge($res, array($id), self::getSubAlbums($id));
 
 		return implode(',', $res);
 

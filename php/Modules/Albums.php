@@ -51,7 +51,7 @@ final class Albums {
 				($public===false)) {
 
 					// Execute query
-					$query  = Database::prepare(Database::get(), "SELECT thumbUrl FROM ? WHERE album = '?' ORDER BY star DESC, " . substr(Settings::get()['sortingPhotos'], 9) . " LIMIT 3", array(LYCHEE_TABLE_PHOTOS, $album['id']));
+					$query  = Database::prepare(Database::get(), "SELECT thumbUrl FROM ? WHERE album IN (?) ORDER BY star DESC, " . substr(Settings::get()['sortingPhotos'], 9) . " LIMIT 3", array(LYCHEE_TABLE_PHOTOS, Album::addSubAlbumIDs($album['id'])));
 					$thumbs = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
 					if ($thumbs===false) return false;
