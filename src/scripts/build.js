@@ -14,11 +14,11 @@ build.iconic = function(icon, classes = '') {
 
 }
 
-build.divider = function(title) {
+build.divider = function(title, id = '') {
 
 	let html = ''
 
-	html += lychee.html`<div class='divider'><h1>$${ title }</h1></div>`
+	html += lychee.html`<div class='divider' id='$${ id }'><h1>$${ title }</h1></div>`
 
 	return html
 

@@ -124,14 +124,18 @@ sidebar.createStructure.photo = function(data) {
 	// Set value for public
 	switch (data.public) {
 
-		case '0' : _public = 'No'
-		           break
-		case '1' : _public = 'Yes'
-		           break
-		case '2' : _public = 'Yes (Album)'
-		           break
-		default :  _public = '-'
-		           break
+		case '0':
+			_public = 'No'
+			break
+		case '1':
+			_public = 'Yes'
+			break
+		case '2':
+			_public = 'Yes (Album)'
+			break
+		default:
+			_public = '-'
+			break
 
 	}
 

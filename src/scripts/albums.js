@@ -16,7 +16,11 @@ albums.load = function() {
 
 	if (albums.json===null) {
 
-		api.post('Albums::get', {}, function(data) {
+		let params = {
+			parent: 0
+		}
+
+		api.post('Albums::get', params, function(data) {
 
 			let waitTime = 0
 
@@ -108,18 +112,21 @@ albums.getByID = function(albumID) {
 	// Function returns the JSON of an album
 
 	if (albumID==null)       return undefined
-	if (!albums.json)        return undefined
-	if (!albums.json.albums) return undefined
+	if (albumID instanceof Array)
+		albumID = albumID[0]
 
 	let json = undefined
 
-	$.each(albums.json.albums, function(i) {
+	let func = function() {
+		if (this.id==albumID) json = this
+	}
 
-		let elem = albums.json.albums[i]
-
-		if (elem.id==albumID) json = elem
-
-	})
+	if (albums.json && albums.json.albums) {
+		$.each(albums.json.albums, func)
+	}
+	else if (album.subjson && album.subjson.albums) {
+		$.each(album.subjson.albums, func)
+	}
 
 	return json
 

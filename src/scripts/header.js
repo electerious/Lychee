@@ -43,7 +43,7 @@ header.bind = function() {
 	header.dom('#button_settings')    .on(eventName, contextMenu.settings)
 	header.dom('#button_info_album')  .on(eventName, sidebar.toggle)
 	header.dom('#button_info')        .on(eventName, sidebar.toggle)
-	header.dom('.button_add')         .on(eventName, contextMenu.add)
+	header.dom('.button_add')         .on(eventName, function(e) { contextMenu.add(album.getID(), e) })
 	header.dom('#button_more')        .on(eventName, function(e) { contextMenu.photoMore(photo.getID(), e) })
 	header.dom('#button_move')        .on(eventName, function(e) { contextMenu.move([ photo.getID() ], e) })
 	header.dom('.header__hostedwith') .on(eventName, function() { window.open(lychee.website) })
@@ -51,7 +51,7 @@ header.bind = function() {
 	header.dom('#button_trash')       .on(eventName, function() { photo.delete([ photo.getID() ]) })
 	header.dom('#button_archive')     .on(eventName, function() { album.getArchive(album.getID()) })
 	header.dom('#button_star')        .on(eventName, function() { photo.setStar([ photo.getID() ]) })
-	header.dom('#button_back_home')   .on(eventName, function() { lychee.goto() })
+	header.dom('#button_back_home')   .on(eventName, function() { lychee.goto(album.getParent()) })
 	header.dom('#button_back')        .on(eventName, function() { lychee.goto(album.getID()) })
 
 	header.dom('.header__search').on('keyup click', function() { search.find($(this).val()) })
@@ -132,8 +132,8 @@ header.setMode = function(mode) {
 			header.dom('.header__toolbar--album').addClass('header__toolbar--visible')
 
 			// Hide download button when album empty
-			if (album.json.content===false) $('#button_archive').hide()
-			else                            $('#button_archive').show()
+			if (album.json.content===false && album.subjson.num==0) $('#button_archive').hide()
+			else                                                    $('#button_archive').show()
 
 			// Hide download button when not logged in and album not downloadable
 			if (lychee.publicMode===true && album.json.downloadable==='0') $('#button_archive').hide()

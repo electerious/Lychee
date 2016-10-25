@@ -72,7 +72,7 @@ settings.createConfig = function() {
 				if (data==='Warning: Could not create file!') {
 
 					basicModal.show({
-						body: "<p>Unable to save this configuration. Permission denied in <b>'data/'</b>. Please set the read, write and execute rights for others in <b>'data/'</b> and <b>'uploads/'</b>. Take a look at the readme for more information.</p>",
+						body: `<p>Unable to save this configuration. Permission denied in <b>'data/'</b>. Please set the read, write and execute rights for others in <b>'data/'</b> and <b>'uploads/'</b>. Take a look at the readme for more information.</p>`,
 						buttons: {
 							action: {
 								title: 'Retry',

@@ -54,10 +54,6 @@ $(document).ready(function() {
 			if (visible.photo() && basicModal.visible()===false)      { photo.delete([photo.getID()]); return false }
 			else if (visible.album() && basicModal.visible()===false) { album.delete([album.getID()]); return false }
 		})
-		.bind([ 'command+a', 'ctrl+a' ], function() {
-			if (visible.album() && basicModal.visible()===false)       { multiselect.selectAll(); return false }
-			else if (visible.albums() && basicModal.visible()===false) { multiselect.selectAll(); return false }
-		})
 
 	Mousetrap.bindGlobal('enter', function() {
 		if (basicModal.visible()===true) basicModal.action()
@@ -67,7 +63,7 @@ $(document).ready(function() {
 		if (basicModal.visible()===true)                                             basicModal.cancel()
 		else if (visible.contextMenu())                                              contextMenu.close()
 		else if (visible.photo())                                                    lychee.goto(album.getID())
-		else if (visible.album())                                                    lychee.goto()
+		else if (visible.album())                                                    lychee.goto(album.getParent())
 		else if (visible.albums() && header.dom('.header__search').val().length!==0) search.reset()
 		return false
 	})
@@ -95,12 +91,12 @@ $(document).ready(function() {
 	$(document)
 
 		// Navigation
-		.on('click', '.album', function() { lychee.goto($(this).attr('data-id')) })
-		.on('click', '.photo', function() { lychee.goto(album.getID() + '/' + $(this).attr('data-id')) })
+		.on('click', '.album', function(e) { multiselect.albumClick(e, $(this)) })
+		.on('click', '.photo', function(e) { multiselect.photoClick(e, $(this)) })
 
 		// Context Menu
-		.on('contextmenu', '.photo', function(e) { contextMenu.photo(photo.getID(), e) })
-		.on('contextmenu', '.album', function(e) { contextMenu.album(album.getID(), e) })
+		.on('contextmenu', '.photo', function(e) { multiselect.photoContextMenu(e, $(this)) })
+		.on('contextmenu', '.album', function(e) { multiselect.albumContextMenu(e, $(this)) })
 
 		// Upload
 		.on('change', '#upload_files', function() { basicModal.close(); upload.start.local(this.files) })

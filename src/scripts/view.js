@@ -143,7 +143,21 @@ view.album = {
 
 			let photosData = ''
 
+			// Sub albums
+			if (album.subjson && album.subjson.albums && album.subjson.num!==0) {
+
+				photosData = build.divider('Albums')
+
+				$.each(album.subjson.albums, function() {
+					albums.parse(this)
+					photosData += build.album(this)
+				})
+
+			}
+
 			if (album.json.content && album.json.content!==false) {
+
+				photosData += build.divider('Photos', 'divider-photos')
 
 				// Build photos
 				$.each(album.json.content, function() {
@@ -163,13 +177,32 @@ view.album = {
 
 		title: function(photoID) {
 
-			let title = album.json.content[photoID].title
+			let ntitle = ''
+			let prefix = ''
 
-			title = lychee.escapeHTML(title)
+			if (album.json.content[photoID]) {
 
-			$('.photo[data-id="' + photoID + '"] .overlay h1')
-				.html(title)
-				.attr('title', title)
+				prefix = '.photo'
+				ntitle = album.json.content[photoID].title
+
+			} else {
+
+				prefix = '.album'
+
+				for (i in album.subjson.albums) {
+					if (album.subjson.albums[i].id==photoID) {
+						ntitle = album.subjson.albums[i].title
+						break
+					}
+				}
+
+			}
+
+			ntitle = lychee.escapeHTML(ntitle)
+
+			$(prefix + '[data-id="' + photoID + '"] .overlay h1')
+				.html(ntitle)
+				.attr('title', ntitle)
 
 		},
 
@@ -202,6 +235,7 @@ view.album = {
 				if (!visible.albums()) {
 					album.json.num--
 					view.album.num()
+					if (album.json.num == 0) $('#divider-photos').hide()
 				}
 			})
 

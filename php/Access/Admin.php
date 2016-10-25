@@ -28,6 +28,7 @@ final class Admin extends Access {
 			case 'Album::setPublic':        self::setAlbumPublicAction(); break;
 			case 'Album::delete':           self::deleteAlbumAction(); break;
 			case 'Album::merge':            self::mergeAlbumsAction(); break;
+			case 'Album::move':             self::moveAlbumsAction(); break;
 
 			// Photo functions
 			case 'Photo::get':              self::getPhotoAction(); break;
@@ -72,8 +73,10 @@ final class Admin extends Access {
 
 	private static function getAlbumsAction() {
 
+		Validator::required(isset($_POST['parent']), __METHOD__);
+
 		$albums = new Albums();
-		Response::json($albums->get(false));
+		Response::json($albums->get(false, $_POST['parent']));
 
 	}
 
@@ -90,10 +93,10 @@ final class Admin extends Access {
 
 	private static function addAlbumAction() {
 
-		Validator::required(isset($_POST['title']), __METHOD__);
+		Validator::required(isset($_POST['title'], $_POST['parent']), __METHOD__);
 
 		$album = new Album(null);
-		Response::json($album->add($_POST['title']), JSON_NUMERIC_CHECK);
+		Response::json($album->add($_POST['title'], $_POST['parent']), JSON_NUMERIC_CHECK);
 
 	}
 
@@ -138,6 +141,14 @@ final class Admin extends Access {
 		Validator::required(isset($_POST['albumIDs']), __METHOD__);
 		$album = new Album($_POST['albumIDs']);
 		Response::json($album->merge());
+
+	}
+
+	private static function moveAlbumsAction() {
+
+		Validator::required(isset($_POST['albumIDs']), __METHOD__);
+		$album = new Album($_POST['albumIDs']);
+		Response::json($album->move());
 
 	}
 
