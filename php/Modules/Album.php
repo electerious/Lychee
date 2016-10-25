@@ -69,6 +69,7 @@ final class Album {
 		if (isset($data['description']))  $album['description'] = $data['description'];
 		if (isset($data['visible']))      $album['visible'] = $data['visible'];
 		if (isset($data['downloadable'])) $album['downloadable'] = $data['downloadable'];
+		if (isset($data['parent']))       $album['parent'] = $data['parent'];
 
 		// Parse date
 		$album['sysdate'] = strftime('%B %Y', $data['sysstamp']);
@@ -79,7 +80,6 @@ final class Album {
 		// Parse thumbs or set default value
 		$album['thumbs'] = (isset($data['thumbs']) ? explode(',', $data['thumbs']) : array());
 
-		$album['parent'] = $data['parent'];
 
 		return $album;
 
