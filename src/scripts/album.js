@@ -170,7 +170,7 @@ album.add = function(albumID = 0) {
 	const action = function(data) {
 
 		let title = data.title
-		let parent = data.parent
+		let parent = albumID
 
 		const isNumber = (n) => (!isNaN(parseFloat(n)) && isFinite(n))
 
@@ -196,16 +196,8 @@ album.add = function(albumID = 0) {
 
 	api.post('Albums::get', { parent: -1 }, function(data) {
 
-		let cmbxOptions = `
-		                  <select name='parent'>
-		                  	<option value='0'>- None -</option>
-		                  	${ buildAlbumOptions(data.albums, albumID) }
-		                  </select>
-		                  `
-
 		let msg = `
 		          <p>Enter a title for the new album: <input class='text' name='title' type='text' maxlength='50' placeholder='Title' value='Untitled'></p>
-		          <p>Select the parent album:<br/> ${ cmbxOptions }</p>
 		          `
 
 		basicModal.show({
@@ -254,7 +246,7 @@ album.delete = function(albumIDs) {
 				})
 
 			} else if (visible.album()) {
-				
+
 				// if we deleted the current album, go to its parent
 				if (albumIDs.length==1 && album.json.id==albumIDs[0]) {
 
@@ -759,10 +751,10 @@ album.move = function(albumIDs, titles = []) {
 album.reload = function() {
 
 	let albumID = album.getID()
-	
+
 	album.refresh()
 	albums.refresh()
-	
+
 	if (visible.album()) lychee.goto(albumID)
 	else                 lychee.goto()
 
