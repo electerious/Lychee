@@ -1,6 +1,5 @@
 /**
  * @description This module provides the basic functions of Lychee.
- * @copyright   2015 by Tobias Reich
  */
 
 lychee = {

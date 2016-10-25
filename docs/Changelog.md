@@ -1,3 +1,10 @@
+## v3.1.5
+
+Released October 25, 2016
+
+- `New` Hide mouse pointer in full screen mode (#620)
+- `Improved` Smoothing rotation of album (#626)
+
 ## v3.1.4
 
 Released August 28, 2016

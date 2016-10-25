@@ -1,6 +1,5 @@
 /**
  * @description Takes care of every action an album can handle and execute.
- * @copyright   2015 by Tobias Reich
  */
 
 const buildAlbumOptions = function(albums, select, parent = 0, layer = 0) {

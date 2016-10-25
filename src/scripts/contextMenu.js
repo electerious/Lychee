@@ -1,6 +1,5 @@
 /**
  * @description This module is used for the context menu.
- * @copyright   2015 by Tobias Reich
  */
 
 const buildAlbumList = function(albums, exclude, action, parent = 0, layer = 0) {
