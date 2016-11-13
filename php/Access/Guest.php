@@ -33,6 +33,7 @@ final class Guest extends Access {
 			// $_GET functions
 			case 'Album::getArchive': self::getAlbumArchiveAction(); break;
 			case 'Photo::getArchive': self::getPhotoArchiveAction(); break;
+			case 'Photo::getPhoto':   self::getPhotoFileAction(); break;
 
 		}
 
@@ -140,9 +141,9 @@ final class Guest extends Access {
 
 	private static function getAlbumArchiveAction() {
 
-		Validator::required(isset($_GET['albumID'], $_GET['password']), __METHOD__);
+		Validator::required(isset($_GET['albumIDs'], $_GET['password']), __METHOD__);
 
-		$album = new Album($_GET['albumID']);
+		$album = new Album($_GET['albumIDs']);
 
 		if ($album->getPublic()&&$album->getDownloadable()) {
 
@@ -161,24 +162,27 @@ final class Guest extends Access {
 
 	private static function getPhotoArchiveAction() {
 
+		Validator::required(isset($_GET['photoIDs']), $_GET['password'], __METHOD__);
+
+		$photo = new Photo($_GET['photoIDs']);
+
+		$pgP = $photo->getPublic($_GET['password']);
+
+		if ($pgP===2) $photo->getArchive();
+		else          Response::warning('Photo private or password incorrect!');
+
+	}
+
+	private static function getPhotoFileAction() {
+
 		Validator::required(isset($_GET['photoID'], $_GET['password']), __METHOD__);
 
 		$photo = new Photo($_GET['photoID']);
 
 		$pgP = $photo->getPublic($_GET['password']);
 
-		// Photo Download
-		if ($pgP===2) {
-
-			// Photo Public
-			$photo->getArchive();
-
-		} else {
-
-			// Photo Private
-			Response::warning('Photo private or password incorrect!');
-
-		}
+		if ($pgP===2) $photo->getPhoto();
+		else          Response::warning('Photo private or password incorrect!');
 
 	}
 

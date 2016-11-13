@@ -251,8 +251,6 @@ lychee.setMode = function(mode) {
 	$(document)
 		.off('click',       '.header__title--editable')
 		.off('touchend',    '.header__title--editable')
-		.off('contextmenu', '.photo')
-		.off('contextmenu', '.album')
 		.off('drop')
 
 	Mousetrap
@@ -416,6 +414,18 @@ lychee.html = function(literalSections, ...substs) {
 	result += raw[raw.length - 1]
 
 	return result
+
+}
+
+lychee.getURL = function(path) {
+
+	let pos = location.href.indexOf('#')
+	let url = pos!=-1 ? location.href.substring(0, pos) : location.href
+
+	if (location.href.indexOf('index.html')>0) url = url.replace('index.html', path)
+	else                                       url += path
+
+	return url
 
 }
 

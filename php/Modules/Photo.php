@@ -2,7 +2,6 @@
 
 namespace Lychee\Modules;
 
-use ZipArchive;
 use Imagick;
 use ImagickPixel;
 
@@ -890,9 +889,9 @@ final class Photo {
 
 	/**
 	 * Starts a download of a photo.
-	 * @return resource|boolean Sends a ZIP-file or returns false on failure.
+	 * @return resource|boolean Sends the photo or returns false on failure.
 	 */
-	public function getArchive() {
+	public function getPhoto() {
 
 		// Check dependencies
 		Validator::required(isset($this->photoIDs), __METHOD__);
@@ -941,6 +940,33 @@ final class Photo {
 
 		// Send file
 		readfile(LYCHEE_UPLOADS_BIG . $photo->url);
+
+		// Call plugins
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
+
+		return true;
+
+	}
+
+	/**
+	 * Starts a download of photos.
+	 * @return resource|boolean Sends a ZIP-file or returns false on failure.
+	 */
+	public function getArchive() {
+
+		// Check dependencies
+		Validator::required(isset($this->photoIDs), __METHOD__);
+
+		// Call plugins
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
+
+		$archive = new Archive('Photos');
+
+		$query   = Database::prepare(Database::get(), 'SELECT title, url FROM ? WHERE id IN (?)', array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
+
+        if (!$archive->addPhotos('', $query)) return false;
+
+		$archive->send();
 
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 1, func_get_args());
@@ -1041,10 +1067,10 @@ final class Photo {
 	}
 
 	/**
-	 * Checks if photo or parent album is public.
-	 * @return integer 0 = Photo private and parent album private
-	 *                 1 = Album public, but password incorrect
-	 *                 2 = Photo public or album public and password correct
+	 * Checks if all photos or their parent albums are public.
+	 * @return integer 0 = At least one photo private and parent album private
+	 *                 1 = At least one album public, but password incorrect
+	 *                 2 = All photos public or album public and password correct
 	 */
 	public function getPublic($password) {
 
@@ -1055,46 +1081,34 @@ final class Photo {
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
 
 		// Get photo
-		$query  = Database::prepare(Database::get(), "SELECT public, album FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_PHOTOS, $this->photoIDs));
+		$query  = Database::prepare(Database::get(), "SELECT p.public AS photo_public, a.public AS album_public, password FROM ? AS p JOIN ? AS a ON a.id = p.album WHERE p.id IN (?)", array(LYCHEE_TABLE_PHOTOS, LYCHEE_TABLE_ALBUMS, $this->photoIDs));
 		$photos = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
 		if ($photos===false) return 0;
 
-		// Get photo object
-		$photo = $photos->fetch_object();
-
-		// Photo not found?
-		if ($photo===null) {
-			Log::error(Database::get(), __METHOD__, __LINE__, 'Could not find specified photo');
-			return false;
+		// Not all photos found?
+		if ($photos->num_rows != count(explode(',', $this->photoIDs))) {
+			Log::error(Database::get(), __METHOD__, __LINE__, 'Could not find specified photos');
+			return 0;
 		}
 
-		// Check if public
-		if ($photo->public==='1') {
+		while ($photo = $photos->fetch_object()) {
 
-			// Photo public
-			return 2;
+			// Check if public
+			if ($photo->photo_public==='1') continue;
 
-		} else {
+			// Album private
+			if ($photo->album_public==='0') return 0;
 
-			// Check if album public
-			$album = new Album($photo->album);
-			$agP   = $album->getPublic();
-			$acP   = $album->checkPassword($password);
-
-			// Album public and password correct
-			if ($agP===true&&$acP===true) return 2;
-
-			// Album public, but password incorrect
-			if ($agP===true&&$acP===false) return 1;
+			// Check if password is correct
+			if ($photo->password!='' && $photo->password!==crypt($password, $photo->password)) return 1;
 
 		}
 
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
-		// Photo private
-		return 0;
+		return 2;
 
 	}
 
