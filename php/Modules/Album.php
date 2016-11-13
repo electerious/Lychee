@@ -2,8 +2,6 @@
 
 namespace Lychee\Modules;
 
-use ZipArchive;
-
 final class Album {
 
 	private $albumIDs = null;
@@ -184,7 +182,7 @@ final class Album {
 	}
 
 	/**
-	 * Starts a download of an album.
+	 * Starts a download of albums.
 	 * @return resource|boolean Sends a ZIP-file or returns false on failure.
 	 */
 	public function getArchive() {
@@ -209,151 +207,45 @@ final class Album {
 				$photos   = Database::prepare(Database::get(), 'SELECT title, url FROM ? WHERE LEFT(id, 10) >= unix_timestamp(DATE_SUB(NOW(), INTERVAL 1 DAY)) GROUP BY checksum', array(LYCHEE_TABLE_PHOTOS));
 				$zipTitle = 'Recent';
 				break;
-			default:
+			case 0:
+				$photos   = Database::prepare(Database::get(), 'SELECT title, url FROM ? WHERE album = 0', array(LYCHEE_TABLE_PHOTOS));
 				$zipTitle = 'Unsorted';
-
-				// Get title from database when album is not a SmartAlbum
-				if ($this->albumIDs!=0 && is_numeric($this->albumIDs)) {
-
-					$query = Database::prepare(Database::get(), "SELECT title FROM ? WHERE id = '?' LIMIT 1", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
-					$album = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
-
-					if ($album===false) return false;
-
-					// Get album object
-					$album = $album->fetch_object();
-
-					// Album not found?
-					if ($album===null) {
-						Log::error(Database::get(), __METHOD__, __LINE__, 'Could not find specified album');
-						return false;
-					}
-
-					// Set title
-					$zipTitle = $album->title;
-
-				}
+				break;
+			default:
+				$zipTitle = 'Albums';
 				break;
 		}
 
-		// Escape title
-		$zipTitle = $this->cleanZipName($zipTitle);
+		$archive = new Archive($zipTitle);
 
-		$filename = LYCHEE_DATA . $zipTitle . '.zip';
-
-		// Create zip
-		$zip = new ZipArchive();
-		if ($zip->open($filename, ZIPARCHIVE::CREATE)!==TRUE) {
-			Log::error(Database::get(), __METHOD__, __LINE__, 'Could not create ZipArchive');
-			return false;
-		}
-
-		// Add photos to zip
 		switch($this->albumIDs) {
 			case 's':
 			case 'f':
 			case 'r':
-				$this->addPhotosToZip($zip, $zipTitle, $photos);
-				break;
+			case 0:
+                if (!$archive->addPhotos($zipTitle, $photos)) return false;
+                break;
+
 			default:
-				$this->addAlbumToZip($zip, $zipTitle, $this->albumIDs);
+				// load titles from DB
+				$query = Database::prepare(Database::get(), "SELECT id, title FROM ? WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $this->albumIDs));
+				$albums = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
+
+				if ($albums===false) return false;
+
+				// add these albums to zip
+				while ($album = $albums->fetch_object()) {
+					if (!$archive->addAlbum($album->title, $album->id)) return false;
+				}
 				break;
 		}
 
-		// Finish zip
-		$zip->close();
-
-		// Send zip
-		header("Content-Type: application/zip");
-		header("Content-Disposition: attachment; filename=\"$zipTitle.zip\"");
-		header("Content-Length: " . filesize($filename));
-		readfile($filename);
-
-		// Delete zip
-		unlink($filename);
+		$archive->send();
 
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 1, func_get_args());
 
 		return true;
-
-	}
-
-	private function cleanZipName($name) {
-
-		// Illicit chars
-		$badChars = array_merge(
-			array_map('chr', range(0,31)),
-			array("<", ">", ":", '"', "/", "\\", "|", "?", "*")
-		);
-
-		return str_replace($badChars, '', $name);
-
-	}
-
-	private function addAlbumToZip($zip, $path, $albumID) {
-
-		// Fetch album title
-		$photos = Database::prepare(Database::get(), "SELECT title, url FROM ? WHERE album = '?'", array(LYCHEE_TABLE_PHOTOS, $albumID));
-
-		$this->addPhotosToZip($zip, $path, $photos);
-
-		// Fetch subalbums
-		$query = Database::prepare(Database::get(), "SELECT id, title FROM ? WHERE parent = '?'", array(LYCHEE_TABLE_ALBUMS, $albumID));
-		$albums = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
-
-		// Add them recursively
-		while($album = $albums->fetch_assoc()) {
-			$this->addAlbumToZip($zip, $path . '/' . $this->cleanZipName($album['title']), $album['id']);
-		}
-
-	}
-
-	private function addPhotosToZip($zip, $path, $query) {
-
-		// Execute query
-		$photos = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
-
-		// Parse each path
-		$files = array();
-		while ($photo = $photos->fetch_object()) {
-
-			// Parse url
-			$photo->url = LYCHEE_UPLOADS_BIG . $photo->url;
-
-			// Parse title
-			$photo->title = $this->cleanZipName($photo->title);
-			if (!isset($photo->title)||$photo->title==='') $photo->title = 'Untitled';
-
-			// Check if readable
-			if (!@is_readable($photo->url)) continue;
-
-			// Get extension of image
-			$extension = getExtension($photo->url, false);
-
-			// Set title for photo
-			$zipFileName = $path . '/' . $photo->title . $extension;
-
-			// Check for duplicates
-			if (!empty($files)) {
-				$i = 1;
-				while (in_array($zipFileName, $files)) {
-
-					// Set new title for photo
-					$zipFileName = $path . '/' . $photo->title . '-' . $i . $extension;
-
-					$i++;
-
-				}
-			}
-
-			// Add to array
-			$files[] = $zipFileName;
-
-			// Add photo to zip
-			$zip->addFile($photo->url, $zipFileName);
-
-		}
 
 	}
 

@@ -120,8 +120,8 @@ These hooks are called from `php/modules/Photo.php`.
 | Photo::get:after |  |
 | Photo::getInfo:before | Lychee reads the metadata of an image |
 | Photo::getInfo:after |  |
-| Photo::getArchive:before | User downloads photo |
-| Photo::getArchive:after |  |
+| Photo::getPhoto:before | User downloads photo |
+| Photo::getPhoto:after |  |
 | Photo::setTitle:before | User renames photo |
 | Photo::setTitle:after |  |
 | Photo::setDescription:before | User sets description |

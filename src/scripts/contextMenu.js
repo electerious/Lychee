@@ -115,10 +115,11 @@ contextMenu.album = function(albumID, e) {
 	if (album.isSmartID(albumID)) return false
 
 	let items = [
-		{ title: build.iconic('pencil') + 'Rename', fn: () => album.setTitle([ albumID ]) },
-		{ title: build.iconic('collapse-left') + 'Merge', fn: () => { basicContext.close(); contextMenu.mergeAlbum(albumID, e) } },
-		{ title: build.iconic('folder') + 'Move', fn: () => { basicContext.close(); contextMenu.moveAlbum([ albumID ], e) } },
-		{ title: build.iconic('trash') + 'Delete', fn: () => album.delete([ albumID ]) }
+		{ title: build.iconic('cloud-download') + 'Download', fn: () => album.getArchive([ albumID ]) },
+		{ title: build.iconic('pencil') + 'Rename', visible: !lychee.publicMode, fn: () => album.setTitle([ albumID ]) },
+		{ title: build.iconic('collapse-left') + 'Merge', visible: !lychee.publicMode, fn: () => { basicContext.close(); contextMenu.mergeAlbum(albumID, e) } },
+		{ title: build.iconic('folder') + 'Move', visible: !lychee.publicMode, fn: () => { basicContext.close(); contextMenu.moveAlbum([ albumID ], e) } },
+		{ title: build.iconic('trash') + 'Delete', visible: !lychee.publicMode, fn: () => album.delete([ albumID ]) }
 	]
 
 	multiselect.select('.album[data-id="' + albumID + '"]')
@@ -136,11 +137,12 @@ contextMenu.albumMulti = function(albumIDs, e) {
 	let autoMerge = (albumIDs.length>1 ? true : false)
 
 	let items = [
-		{ title: build.iconic('pencil') + 'Rename All', fn: () => album.setTitle(albumIDs) },
-		{ title: build.iconic('collapse-left') + 'Merge All', visible: autoMerge, fn: () => album.merge(albumIDs) },
-		{ title: build.iconic('collapse-left') + 'Merge', visible: !autoMerge, fn: () => { basicContext.close(); contextMenu.mergeAlbum(albumIDs[0], e) } },
-		{ title: build.iconic('folder') + 'Move All', fn: () => { basicContext.close(); contextMenu.moveAlbum(albumIDs, e) } },
-		{ title: build.iconic('trash') + 'Delete All', fn: () => album.delete(albumIDs) }
+		{ title: build.iconic('cloud-download') + 'Download All', fn: () => album.getArchive(albumIDs) },
+		{ title: build.iconic('pencil') + 'Rename All', visible: !lychee.publicMode, fn: () => album.setTitle(albumIDs) },
+		{ title: build.iconic('collapse-left') + 'Merge All', visible: !lychee.publicMode && autoMerge, fn: () => album.merge(albumIDs) },
+		{ title: build.iconic('collapse-left') + 'Merge', visible: !lychee.publicMode && !autoMerge, fn: () => { basicContext.close(); contextMenu.mergeAlbum(albumIDs[0], e) } },
+		{ title: build.iconic('folder') + 'Move All', visible: !lychee.publicMode, fn: () => { basicContext.close(); contextMenu.moveAlbum(albumIDs, e) } },
+		{ title: build.iconic('trash') + 'Delete All', visible: !lychee.publicMode, fn: () => album.delete(albumIDs) }
 	]
 
 	items.push()
@@ -242,14 +244,20 @@ contextMenu.photo = function(photoID, e) {
 	// in order to keep the selection
 
 	let items = [
-		{ title: build.iconic('star') + 'Star', fn: () => photo.setStar([ photoID ]) },
-		{ title: build.iconic('tag') + 'Tags', fn: () => photo.editTags([ photoID ]) },
-		{ },
-		{ title: build.iconic('pencil') + 'Rename', fn: () => photo.setTitle([ photoID ]) },
-		{ title: build.iconic('layers') + 'Duplicate', fn: () => photo.duplicate([ photoID ]) },
-		{ title: build.iconic('folder') + 'Move', fn: () => { basicContext.close(); contextMenu.move([ photoID ], e) } },
-		{ title: build.iconic('trash') + 'Delete', fn: () => photo.delete([ photoID ]) }
+		{ title: build.iconic('cloud-download') + 'Download', fn: () => photo.getPhoto(photoID) }
 	]
+
+	if (!lychee.publicMode) {
+		items = items.concat([
+			{ title: build.iconic('star') + 'Star', fn: () => photo.setStar([ photoID ]) },
+			{ title: build.iconic('tag') + 'Tags', fn: () => photo.editTags([ photoID ]) },
+			{ },
+			{ title: build.iconic('pencil') + 'Rename', fn: () => photo.setTitle([ photoID ]) },
+			{ title: build.iconic('layers') + 'Duplicate', fn: () => photo.duplicate([ photoID ]) },
+			{ title: build.iconic('folder') + 'Move', fn: () => { basicContext.close(); contextMenu.move([ photoID ], e) } },
+			{ title: build.iconic('trash') + 'Delete', fn: () => photo.delete([ photoID ]) }
+		])
+	}
 
 	multiselect.select('.photo[data-id="' + photoID + '"]')
 
@@ -266,14 +274,20 @@ contextMenu.photoMulti = function(photoIDs, e) {
 	// in order to keep the selection and multiselect
 
 	let items = [
-		{ title: build.iconic('star') + 'Star All', fn: () => photo.setStar(photoIDs) },
-		{ title: build.iconic('tag') + 'Tag All', fn: () => photo.editTags(photoIDs) },
-		{ },
-		{ title: build.iconic('pencil') + 'Rename All', fn: () => photo.setTitle(photoIDs) },
-		{ title: build.iconic('layers') + 'Duplicate All', fn: () => photo.duplicate(photoIDs) },
-		{ title: build.iconic('folder') + 'Move All', fn: () => { basicContext.close(); contextMenu.move(photoIDs, e) } },
-		{ title: build.iconic('trash') + 'Delete All', fn: () => photo.delete(photoIDs) }
+		{ title: build.iconic('cloud-download') + 'Download All', fn: () => photo.getArchive(photoIDs) }
 	]
+
+	if (!lychee.publicMode) {
+		items = items.concat([
+			{ title: build.iconic('star') + 'Star All', fn: () => photo.setStar(photoIDs) },
+			{ title: build.iconic('tag') + 'Tag All', fn: () => photo.editTags(photoIDs) },
+			{ },
+			{ title: build.iconic('pencil') + 'Rename All', fn: () => photo.setTitle(photoIDs) },
+			{ title: build.iconic('layers') + 'Duplicate All', fn: () => photo.duplicate(photoIDs) },
+			{ title: build.iconic('folder') + 'Move All', fn: () => { basicContext.close(); contextMenu.move(photoIDs, e) } },
+			{ title: build.iconic('trash') + 'Delete All', fn: () => photo.delete(photoIDs) }
+		])
+	}
 
 	basicContext.show(items, e.originalEvent, contextMenu.close)
 
@@ -308,7 +322,7 @@ contextMenu.photoMore = function(photoID, e) {
 
 	let items = [
 		{ title: build.iconic('fullscreen-enter') + 'Full Photo', fn: () => window.open(photo.getDirectLink()) },
-		{ title: build.iconic('cloud-download') + 'Download', visible: showDownload, fn: () => photo.getArchive(photoID) }
+		{ title: build.iconic('cloud-download') + 'Download', visible: showDownload, fn: () => photo.getPhoto(photoID) }
 	]
 
 	basicContext.show(items, e.originalEvent)
