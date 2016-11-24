@@ -255,8 +255,6 @@ final class Album {
 		// Execute query
 		$photos = Database::execute(Database::get(), $photos, __METHOD__, __LINE__);
 
-		if ($album===null) return false;
-
 		// Check if album empty
 		if ($photos->num_rows==0) {
 			Log::error(Database::get(), __METHOD__, __LINE__, 'Could not create ZipArchive without images');
