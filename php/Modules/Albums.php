@@ -16,7 +16,7 @@ final class Albums {
 	/**
 	 * @return array|false Returns an array of albums or false on failure.
 	 */
-	public function get($public = true) {
+	public function get($public = true, $filter_params = null) {
 
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
@@ -32,8 +32,42 @@ final class Albums {
 		if ($public===false) $return['smartalbums'] = $this->getSmartAlbums();
 
 		// Albums query
-		if ($public===false) $query = Database::prepare(Database::get(), 'SELECT id, title, public, sysstamp, password FROM ? ' . Settings::get()['sortingAlbums'], array(LYCHEE_TABLE_ALBUMS));
-		else                 $query = Database::prepare(Database::get(), 'SELECT id, title, public, sysstamp, password FROM ? WHERE public = 1 AND visible <> 0 ' . Settings::get()['sortingAlbums'], array(LYCHEE_TABLE_ALBUMS));
+		if ($public===false) $sql = 'SELECT id, title, public, sysstamp, password FROM ? ';
+		else                 $sql = 'SELECT id, title, public, sysstamp, password FROM ? WHERE public = 1 AND visible <> 0 ';
+
+		$query_params = array ();
+		$query_params[] = LYCHEE_TABLE_ALBUMS;
+
+		if ($filter_params !== null)
+		{
+			$query_params[] = LYCHEE_TABLE_PHOTOS;
+
+			$xary = array ();
+			if (isset ($filter_params['star']) && $filter_params['star'])
+			{
+				$xary[] = 'star = 1';
+			}
+			if (isset ($filter_params['tags']) && $filter_params['tags'])
+			{
+				$xary[] = "tags LIKE '%?%'";
+				$query_params[] = $filter_params['tags'];
+			}
+
+			$where_clause = join (" AND ", $xary);
+			if ($public)
+			{
+				$sql .= "AND ";
+			}
+			else
+			{
+				$sql .= "WHERE ";
+			}
+			
+			$sql .= "id IN (SELECT DISTINCT album FROM ? WHERE $where_clause) "; 
+		}
+
+		$sql .= Settings::get()['sortingAlbums'];
+		$query = Database::prepare (Database::get (), $sql, $query_params);
 
 		// Execute query
 		$albums = Database::execute(Database::get(), $query, __METHOD__, __LINE__);

@@ -73,8 +73,14 @@ final class Admin extends Access {
 	private static function getAlbumsAction() {
 
 		$albums = new Albums();
-		Response::json($albums->get(false));
-
+		if (isset ($_POST['filterParams']))
+		{
+			Response::json($albums->get(false, $_POST['filterParams']));
+		}
+		else
+		{
+			Response::json($albums->get(false));
+		}
 	}
 
 	// Album functions
