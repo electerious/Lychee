@@ -15,7 +15,14 @@ view.albums = {
 
 	title: function() {
 
-		lychee.setTitle('Albums', false)
+		if (filter.isFilterActive())
+		{
+			lychee.setTitle('Albums (filtered)', false)
+		}
+		else
+		{
+			lychee.setTitle('Albums', false)
+		}
 
 	},
 
