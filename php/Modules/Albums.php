@@ -35,12 +35,15 @@ final class Albums {
 		if ($public===false) $sql = 'SELECT id, title, public, sysstamp, password FROM ? ';
 		else                 $sql = 'SELECT id, title, public, sysstamp, password FROM ? WHERE public = 1 AND visible <> 0 ';
 
-		$query_params = array ();
-		$query_params[] = LYCHEE_TABLE_ALBUMS;
+		$query_params1 = array (LYCHEE_TABLE_ALBUMS);
+		$query_params2 = array ();
+
+		$filter_where1 = '';
+		$filter_where2 = '';
 
 		if ($filter_params !== null)
 		{
-			$query_params[] = LYCHEE_TABLE_PHOTOS;
+			$query_params1[] = LYCHEE_TABLE_PHOTOS;
 
 			$xary = array ();
 			if (isset ($filter_params['star']) && $filter_params['star'])
@@ -50,10 +53,12 @@ final class Albums {
 			if (isset ($filter_params['tags']) && $filter_params['tags'])
 			{
 				$xary[] = "tags LIKE '%?%'";
-				$query_params[] = $filter_params['tags'];
+				$query_params1[] = $filter_params['tags'];
+				$query_params2[] = $filter_params['tags'];
 			}
 
-			$where_clause = join (" AND ", $xary);
+			$filter_where1 = join (" AND ", $xary);
+			$filter_where2 = "AND " . join (" AND ", $xary);
 			if ($public)
 			{
 				$sql .= "AND ";
@@ -63,11 +68,11 @@ final class Albums {
 				$sql .= "WHERE ";
 			}
 			
-			$sql .= "id IN (SELECT DISTINCT album FROM ? WHERE $where_clause) "; 
+			$sql .= "id IN (SELECT DISTINCT album FROM ? WHERE $filter_where1) "; 
 		}
 
 		$sql .= Settings::get()['sortingAlbums'];
-		$query = Database::prepare (Database::get (), $sql, $query_params);
+		$query = Database::prepare (Database::get (), $sql, $query_params1);
 
 		// Execute query
 		$albums = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
@@ -85,7 +90,11 @@ final class Albums {
 				($public===false)) {
 
 					// Execute query
-					$query  = Database::prepare(Database::get(), "SELECT thumbUrl FROM ? WHERE album = '?' ORDER BY star DESC, " . substr(Settings::get()['sortingPhotos'], 9) . " LIMIT 3", array(LYCHEE_TABLE_PHOTOS, $album['id']));
+					$query  = Database::prepare(Database::get(), "SELECT thumbUrl FROM ? WHERE album = '?' "
+							. $filter_where2
+							. " ORDER BY star DESC, " 
+							. substr(Settings::get()['sortingPhotos'], 9) 
+							. " LIMIT 3", array_merge (array(LYCHEE_TABLE_PHOTOS, $album['id']), $query_params2));
 					$thumbs = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
 					if ($thumbs===false) return false;
