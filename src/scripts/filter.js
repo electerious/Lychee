@@ -27,13 +27,13 @@ filter.setFilter = function() {
 
 		basicModal.close();
 
+		albums.refresh();
 		if (album.json !== null)
 		{
 			album.load(album.json.id, true);
 		}
 		else
 		{
-			albums.refresh();
 			albums.load();
 		}
 	};
