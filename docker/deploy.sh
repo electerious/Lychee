@@ -15,10 +15,12 @@ cd $SCRIPTPATH
 # load the variables
 source $SCRIPTPATH/docker_settings.sh
 
-CONTAINER_IMAGE="`echo $REGISTRY`/`echo $PROJECT_NAME`"
+if [[ $REGISTRY ]]; then
+    CONTAINER_IMAGE="`echo $REGISTRY`/`echo $PROJECT_NAME`"
+else
+    CONTAINER_IMAGE="`echo $PROJECT_NAME`"
+fi
 
-echo $PROJECT_NAME
-echo "============"
 
 docker kill $PROJECT_NAME
 docker rm $PROJECT_NAME

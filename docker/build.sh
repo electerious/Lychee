@@ -22,21 +22,31 @@ cp -f Dockerfile ../../.
 cp -f .dockerignore ../../.
 cd ../../.
 
+if [[ $REGISTRY ]]; then
+    TAG="`echo $REGISTRY`/`echo $PROJECT_NAME`"
+else
+    TAG=$PROJECT_NAME
+fi
+
+
 # Ask the user if they want to use the docker cache
 read -p "Do you want to use a cached build (y/n)? " -n 1 -r
 echo ""   # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-    docker build --pull --tag $REGISTRY/$PROJECT_NAME .
+    docker build --pull --tag $TAG .
 else
-    docker build --no-cache --pull --tag $REGISTRY/$PROJECT_NAME .
+    docker build --no-cache --pull --tag $TAG .
 fi
 
 # Remove the duplicated Dockerfile after the build.
 rm $SCRIPTPATH/../../Dockerfile
 rm $SCRIPTPATH/../../.dockerignore
 
-docker push $REGISTRY/$PROJECT_NAME
+if [[ $REGISTRY ]]; then
+    docker push $TAG
+fi
+
 
 echo "Run the container with the following command:"
 echo "bash deploy.sh"
