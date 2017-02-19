@@ -10,11 +10,10 @@ RUN apt-get dist-upgrade -y
 
 
 # Install the relevant packages
-RUN apt-get install vim apache2 libapache2-mod-php5 php5-cli php5-mysqlnd curl php5-curl php5-mcrypt -y
-
-
-# Install yui-compressor for js (and possibly css) minification later.
-RUN apt-get install yui-compressor -y
+RUN apt-get install vim apache2 libapache2-mod-php5 php5-cli php5-mysqlnd php5-mcrypt \
+unzip php5-common php5-json php5-cli php5-gd php5-imagick php5-json php5-mcrypt php5-readline \
+php-pear libgd-tools \
+-y
 
 # Install supervisor (through PIP)
 RUN apt-get install python-pip python-dev build-essential -y
