@@ -5,8 +5,8 @@
 lychee = {
 
 	title           : document.title,
-	version         : '3.1.5',
-	versionCode     : '030105',
+	version         : '3.1.6',
+	versionCode     : '030106',
 
 	updatePath      : '//update.electerious.com/index.json',
 	updateURL       : 'https://github.com/electerious/Lychee',
