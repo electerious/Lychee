@@ -1,3 +1,10 @@
+## v3.1.6
+
+Released March 20, 2017
+
+- `Fixed` Downloading a SmartAlbum results in crash (#652)
+- `Fixed` htaccess IfModule for PHP7 (#653)
+
 ## v3.1.5
 
 Released October 25, 2016
