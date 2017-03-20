@@ -14,20 +14,20 @@
     "compile": "gulp"
   },
   "dependencies": {
-    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-es2015": "^6.24.0",
     "basiccontext": "^3.5.1",
-    "basicmodal": "^3.3.7",
+    "basicmodal": "^3.3.8",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "3.1.1",
     "gulp-babel": "^6.1.2",
-    "gulp-concat": "^2.6.0",
-    "gulp-inject": "^4.1.0",
-    "gulp-load-plugins": "^1.3.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-inject": "^4.2.0",
+    "gulp-load-plugins": "^1.5.0",
     "gulp-minify-css": "^1.2.4",
-    "gulp-rimraf": "^0.2.0",
-    "gulp-sass": "^2.3.2",
-    "gulp-uglify": "^2.0.0",
-    "jquery": "^3.1.1",
+    "gulp-rimraf": "^0.2.1",
+    "gulp-sass": "^3.1.0",
+    "gulp-uglify": "^2.1.1",
+    "jquery": "^3.2.0",
     "mousetrap": "^1.6.0"
   }
 }
