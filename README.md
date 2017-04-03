@@ -29,7 +29,7 @@ Lychee is ready to use, right out of the box. If you want to contribute and edit
 
 ### Keyboard Shortcuts
 
-These shortcuts will help you to use Lychee even faster. [Keyboard Shortcuts &#187;](docs/Keyboard Shortcuts.md)
+These shortcuts will help you to use Lychee even faster. [Keyboard Shortcuts &#187;](docs/Keyboard%20Shortcuts.md)
 
 ### Dropbox import
 
