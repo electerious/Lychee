@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `?` (
   `star` tinyint(1) NOT NULL,
   `thumbUrl` char(37) NOT NULL,
   `album` bigint(20) unsigned NOT NULL,
-  `checksum` char(40) DEFAULT NULL,
+  `checksum` char(40) NOT NULL UNIQUE,
   `medium` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `Index_album` (`album`),
