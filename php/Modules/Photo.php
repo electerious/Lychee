@@ -709,7 +709,7 @@ final class Photo {
 
 		// Parse photo
 		$photo['sysdate'] = strftime('%d %b. %Y', substr($photo['id'], 0, -4));
-		if (strlen($photo['takestamp'])>1) $photo['takedate'] = strftime('%d %b. %Y', $photo['takestamp']);
+		if (strlen($photo['takestamp'])>1) $photo['takedate'] = strftime('%d %b. %Y %T', $photo['takestamp']);
 
 		// Parse medium
 		if ($photo['medium']==='1') $photo['medium'] = LYCHEE_URL_UPLOADS_MEDIUM . $photo['url'];
