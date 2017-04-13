@@ -1,5 +1,7 @@
 Options -Indexes
 
+RedirectMatch 404 /\.git
+
 # ---
 # Uncomment these lines to change PHP parameters if you are using the PHP Apache module
 # ---
