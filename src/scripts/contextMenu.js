@@ -161,6 +161,7 @@ contextMenu.photo = function(photoID, e) {
 	// in order to keep the selection
 
 	let items = [
+		{ title: build.iconic('fullscreen-enter') + 'Copy Link', fn: () => window.prompt("Copy to clipboard: Ctrl+C (on PC) Cmd+C (on Mac), Enter", photo.getDirectLink()) },
 		{ title: build.iconic('star') + 'Star', fn: () => photo.setStar([ photoID ]) },
 		{ title: build.iconic('tag') + 'Tags', fn: () => photo.editTags([ photoID ]) },
 		{ },
