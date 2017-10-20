@@ -73,4 +73,4 @@ Take a look at the [FAQ](docs/FAQ.md) if you have problems. Discovered a bug? Pl
 
 ## Donate
 
-I am working hard on continuously developing and maintaining Lychee. Please consider making a donation via [Flattr](https://flattr.com/submit/auto?user_id=electerious&url=http%3A%2F%2Flychee.electerious.com&title=Lychee&category=software) or PayPal (from [our site](http://lychee.electerious.com/)) to keep the project going strong and me motivated.
+I am working hard on continuously developing and maintaining Lychee. Please consider making a donation via PayPal (from [our site](http://lychee.electerious.com/)) to keep the project going strong and me motivated.
