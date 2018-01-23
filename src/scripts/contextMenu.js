@@ -237,8 +237,13 @@ contextMenu.photoMore = function(photoID, e) {
 	// b) Downloadable is 1 and public mode is on
 	let showDownload = lychee.publicMode===false || ((album.json && album.json.downloadable && album.json.downloadable==='1') && lychee.publicMode===true)
 
+	// Show fullscreen-item when
+	// a) Public mode is off
+	// b) Fullscreen is 1 and public mode is on
+	let showFullScreen = lychee.publicMode===false || ((album.json && album.json.fullscreen && album.json.fullscreen==='1') && lychee.publicMode===true)
+
 	let items = [
-		{ title: build.iconic('fullscreen-enter') + 'Full Photo', fn: () => window.open(photo.getDirectLink()) },
+		{ title: build.iconic('fullscreen-enter') + 'Full Photo', visible: showFullScreen, fn: () => window.open(photo.getDirectLink()) },
 		{ title: build.iconic('cloud-download') + 'Download', visible: showDownload, fn: () => photo.getArchive(photoID) }
 	]
 
@@ -298,18 +303,19 @@ contextMenu.sharePhoto = function(photoID, e) {
 	let iconClass = 'ionicons'
 
 	let items = [
-		{ title: `<input readonly id="link" value="${ link }">`, fn: () => {}, class: 'basicContext__item--noHover' },
+		{ title: `<input readonly id="link" value="${ link }">`, visible: photo.isShareable(), fn: () => {}, class: 'basicContext__item--noHover' },
 		{ },
-		{ title: build.iconic('twitter', iconClass) + 'Twitter', fn: () => photo.share(photoID, 'twitter') },
-		{ title: build.iconic('facebook', iconClass) + 'Facebook', fn: () => photo.share(photoID, 'facebook') },
-		{ title: build.iconic('envelope-closed') + 'Mail', fn: () => photo.share(photoID, 'mail') },
-		{ title: build.iconic('dropbox', iconClass) + 'Dropbox', visible: lychee.publicMode===false, fn: () => photo.share(photoID, 'dropbox') },
-		{ title: build.iconic('link-intact') + 'Direct Link', fn: () => window.open(photo.getDirectLink()) },
+		{ title: build.iconic('twitter', iconClass) + 'Twitter', visible: photo.isShareable(), fn: () => photo.share(photoID, 'twitter') },
+		{ title: build.iconic('facebook', iconClass) + 'Facebook', visible: photo.isShareable(), fn: () => photo.share(photoID, 'facebook') },
+		{ title: build.iconic('envelope-closed') + 'Mail', visible: photo.isShareable(), fn: () => photo.share(photoID, 'mail') },
+		{ title: build.iconic('dropbox', iconClass) + 'Dropbox', visible: photo.isShareable() && lychee.publicMode===false, fn: () => photo.share(photoID, 'dropbox') },
+		{ title: build.iconic('link-intact') + 'Direct Link', visible: photo.isShareable(), fn: () => window.open(photo.getDirectLink()) },
 		{ },
 		{ title: build.iconic('ban') + 'Make Private', visible: lychee.publicMode===false, fn: () => photo.setPublic(photoID) }
 	]
 
-	if (lychee.publicMode===true) items.splice(7, 1)
+	if (!photo.isShareable() || lychee.publicMode===true) items.splice(7, 1)
+	if (!photo.isShareable()) items.splice(1, 1)
 
 	basicContext.show(items, e.originalEvent)
 	$('.basicContext input#link').focus().select()
@@ -321,17 +327,18 @@ contextMenu.shareAlbum = function(albumID, e) {
 	let iconClass = 'ionicons'
 
 	let items = [
-		{ title: `<input readonly id="link" value="${ location.href }">`, fn: () => {}, class: 'basicContext__item--noHover' },
+		{ title: `<input readonly id="link" value="${ location.href }">`, visible: album.isShareable(), fn: () => {}, class: 'basicContext__item--noHover' },
 		{ },
-		{ title: build.iconic('twitter', iconClass) + 'Twitter', fn: () => album.share('twitter') },
-		{ title: build.iconic('facebook', iconClass) + 'Facebook', fn: () => album.share('facebook') },
-		{ title: build.iconic('envelope-closed') + 'Mail', fn: () => album.share('mail') },
+		{ title: build.iconic('twitter', iconClass) + 'Twitter', visible: album.isShareable(), fn: () => album.share('twitter') },
+		{ title: build.iconic('facebook', iconClass) + 'Facebook', visible: album.isShareable(), fn: () => album.share('facebook') },
+		{ title: build.iconic('envelope-closed') + 'Mail', visible: album.isShareable(), fn: () => album.share('mail') },
 		{ },
 		{ title: build.iconic('pencil') + 'Edit Sharing', visible: lychee.publicMode===false, fn: () => album.setPublic(albumID, true, e) },
 		{ title: build.iconic('ban') + 'Make Private', visible: lychee.publicMode===false, fn: () => album.setPublic(albumID, false) }
 	]
 
-	if (lychee.publicMode===true) items.splice(5, 1)
+	if (!album.isShareable() || lychee.publicMode===true) items.splice(5, 1)
+	if (!album.isShareable()) items.splice(1, 1)
 
 	basicContext.show(items, e.originalEvent)
 	$('.basicContext input#link').focus().select()

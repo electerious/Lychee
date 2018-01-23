@@ -259,6 +259,20 @@ view.album = {
 
 	},
 
+	fullscreen: function() {
+
+		if (album.json.fullscreen==='1') sidebar.changeAttr('fullscreen', 'Yes')
+		else                             sidebar.changeAttr('fullscreen', 'No')
+
+	},
+
+	shareable: function() {
+
+		if (album.json.shareable==='1') sidebar.changeAttr('shareable', 'Yes')
+		else                            sidebar.changeAttr('shareable', 'No')
+
+	},
+
 	password: function() {
 
 		if (album.json.password==='1') sidebar.changeAttr('password', 'Yes')

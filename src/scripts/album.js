@@ -403,6 +403,22 @@ album.setPublic = function(albumID, modal, e) {
 		              </div>
 		              <div class='choice'>
 		                  <label>
+		                      <input type='checkbox' name='fullscreen'>
+		                      <span class='checkbox'>${ build.iconic('check') }</span>
+		                      <span class='label'>Enable Full Screen View</span>
+		                  </label>
+		                  <p>Visitors of your Lychee can view photos in this album with the full screen.</p>
+		              </div>
+		              <div class='choice'>
+		                  <label>
+		                      <input type='checkbox' name='shareable'>
+		                      <span class='checkbox'>${ build.iconic('check') }</span>
+		                      <span class='label'>Shareable</span>
+		                  </label>
+		                  <p>Visitors of your Lychee can share this album.</p>
+		              </div>
+		              <div class='choice'>
+		                  <label>
 		                      <input type='checkbox' name='password'>
 		                      <span class='checkbox'>${ build.iconic('check') }</span>
 		                      <span class='label'>Password protected</span>
@@ -429,6 +445,8 @@ album.setPublic = function(albumID, modal, e) {
 
 		if (album.json.public==='1' && album.json.visible==='0') $('.basicModal .choice input[name="hidden"]').click()
 		if (album.json.downloadable==='1')                       $('.basicModal .choice input[name="downloadable"]').click()
+		if (album.json.fullscreen==='1')                         $('.basicModal .choice input[name="fullscreen"]').click()
+		if (album.json.shareable==='1')                          $('.basicModal .choice input[name="shareable"]').click()
 
 		$('.basicModal .choice input[name="password"]').on('change', function() {
 
@@ -455,6 +473,14 @@ album.setPublic = function(albumID, modal, e) {
 		if ($('.basicModal .choice input[name="downloadable"]:checked').length===1) album.json.downloadable = '1'
 		else                                                                        album.json.downloadable = '0'
 
+		// Set fullscreen
+		if ($('.basicModal .choice input[name="fullscreen"]:checked').length===1) album.json.fullscreen = '1'
+		else                                                                      album.json.fullscreen = '0'
+
+		// Set shareable
+		if ($('.basicModal .choice input[name="shareable"]:checked').length===1) album.json.shareable = '1'
+		else                                                                     album.json.shareable = '0'
+
 		// Set password
 		if ($('.basicModal .choice input[name="password"]:checked').length===1) {
 			password            = $('.basicModal .choice input[name="passwordtext"]').val()
@@ -479,11 +505,15 @@ album.setPublic = function(albumID, modal, e) {
 
 		album.json.visible      = (album.json.public==='0') ? '1' : album.json.visible
 		album.json.downloadable = (album.json.public==='0') ? '0' : album.json.downloadable
+		album.json.fullscreen   = (album.json.public==='0') ? '0' : album.json.fullscreen
+		album.json.shareable    = (album.json.public==='0') ? '0' : album.json.shareable
 		album.json.password     = (album.json.public==='0') ? '0' : album.json.password
 
 		view.album.public()
 		view.album.hidden()
 		view.album.downloadable()
+		view.album.fullscreen()
+		view.album.shareable()
 		view.album.password()
 
 		if (album.json.public==='1') contextMenu.shareAlbum(albumID, e)
@@ -495,7 +525,9 @@ album.setPublic = function(albumID, modal, e) {
 		public       : album.json.public,
 		password     : password,
 		visible      : album.json.visible,
-		downloadable : album.json.downloadable
+		downloadable : album.json.downloadable,
+		fullscreen   : album.json.fullscreen,
+		shareable    : album.json.shareable
 	}
 
 	api.post('Album::setPublic', params, function(data) {
@@ -522,6 +554,10 @@ album.share = function(service) {
 			break
 	}
 
+}
+
+album.isShareable = function() {
+	return (album.json.shareable==='1')
 }
 
 album.getArchive = function(albumID) {

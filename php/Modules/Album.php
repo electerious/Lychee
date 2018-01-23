@@ -69,6 +69,8 @@ final class Album {
 		if (isset($data['description']))  $album['description'] = $data['description'];
 		if (isset($data['visible']))      $album['visible'] = $data['visible'];
 		if (isset($data['downloadable'])) $album['downloadable'] = $data['downloadable'];
+		if (isset($data['fullscreen']))   $album['fullscreen'] = $data['fullscreen'];
+		if (isset($data['shareable']))    $album['shareable'] = $data['shareable'];
 
 		// Parse date
 		$album['sysdate'] = strftime('%B %Y', $data['sysstamp']);
@@ -442,7 +444,7 @@ final class Album {
 	/**
 	 * @return boolean Returns true when successful.
 	 */
-	public function setPublic($public, $password, $visible, $downloadable) {
+	public function setPublic($public, $password, $visible, $downloadable, $fullscreen, $shareable) {
 
 		// Check dependencies
 		Validator::required(isset($this->albumIDs), __METHOD__);
@@ -454,9 +456,11 @@ final class Album {
 		$public       = ($public==='1' ? 1 : 0);
 		$visible      = ($visible==='1' ? 1 : 0);
 		$downloadable = ($downloadable==='1' ? 1 : 0);
+		$fullscreen   = ($fullscreen==='1' ? 1 : 0);
+		$shareable    = ($shareable==='1' ? 1 : 0);
 
 		// Set public
-		$query  = Database::prepare(Database::get(), "UPDATE ? SET public = '?', visible = '?', downloadable = '?', password = NULL WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $public, $visible, $downloadable, $this->albumIDs));
+		$query  = Database::prepare(Database::get(), "UPDATE ? SET public = '?', visible = '?', downloadable = '?', fullscreen = '?', shareable = '?', password = NULL WHERE id IN (?)", array(LYCHEE_TABLE_ALBUMS, $public, $visible, $downloadable, $fullscreen, $shareable, $this->albumIDs));
 		$result = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
 
 		if ($result===false) return false;
