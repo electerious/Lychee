@@ -143,6 +143,12 @@ lychee.logout = function() {
 
 }
 
+lychee.restart = function() {
+
+	document.location.href = ''
+
+}
+
 lychee.goto = function(url = '') {
 
 	url = '#' + url
@@ -417,6 +423,12 @@ lychee.html = function(literalSections, ...substs) {
 }
 
 lychee.error = function(errorThrown, params, data) {
+
+	// in this case, our cookie has probably expired
+	if (data==='Error: Function not available for guests.') {
+		lychee.restart()
+		return
+	}
 
 	console.error({
 		description : errorThrown,
