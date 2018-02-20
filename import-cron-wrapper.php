@@ -3,20 +3,21 @@ namespace Lychee\Modules;
 
 if (php_sapi_name() == "cli") { //Only for CLI
 
-	require("/var/www/lychee/php/define.php");
-	require("/var/www/lychee/php/Modules/Import.php");
-	require("/var/www/lychee/php/Modules/Plugins.php");
-	require("/var/www/lychee/php/Modules/Settings.php");
-	require("/var/www/lychee/php/Modules/Database.php");
-	require("/var/www/lychee/php/Modules/Config.php");
-	require("/var/www/lychee/php/Modules/Validator.php");
-	require("/var/www/lychee/php/Modules/Photo.php");
-	require("/var/www/lychee/php/Modules/Log.php");
-	require("/var/www/lychee/php/helpers/hasPermissions.php");
-	require("/var/www/lychee/php/helpers/getExtension.php");
-	require("/var/www/lychee/php/helpers/generateID.php");
+	require ( __DIR__ . "/php/define.php");
+	require ( LYCHEE . "php/Modules/Album.php");
+	require ( LYCHEE . "php/Modules/Import.php");
+	require ( LYCHEE . "php/Modules/Plugins.php");
+	require ( LYCHEE . "php/Modules/Settings.php");
+	require ( LYCHEE . "php/Modules/Database.php");
+	require ( LYCHEE . "php/Modules/Config.php");
+	require ( LYCHEE . "php/Modules/Validator.php");
+	require ( LYCHEE . "php/Modules/Photo.php");
+	require ( LYCHEE . "php/Modules/Log.php");
+	require ( LYCHEE . "php/helpers/hasPermissions.php");
+	require ( LYCHEE . "php/helpers/getExtension.php");
+	require ( LYCHEE . "php/helpers/generateID.php");
 
-	$import_location='/var/www/lychee/uploads/import/';
+	$import_location=LYCHEE_UPLOADS_IMPORT;
 
 	if (isset($argv[1])) {
 			$import_location=$argv[1];
