@@ -832,7 +832,7 @@ final class Photo {
 		}
 
 		// Read EXIF
-		if ($info['mime']=='image/jpeg') $exif = @exif_read_data($url, 'EXIF', false, false);
+		if ($info['mime']=='image/jpeg') $exif = @exif_read_data($url, 'EXIF, IFD0', false, false);
 		else $exif = false;
 
 		// EXIF Metadata
