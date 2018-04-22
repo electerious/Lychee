@@ -2,6 +2,8 @@
 
 #### A great looking and easy-to-use photo-management-system.
 
+*Since the 1st of April 2018 this project has moved to it's own Organisation (https://github.com/LycheeOrg) where people are able to submit their fixes to it. We, the Organisation owners, want to thank electerious (Tobias Reich) for the opportunity to make this project live on.*
+
 ![Lychee](http://l.electerious.com/uploads/big/c4b58cb87d95aeaed78fdca581cc908c.jpg)
 ![Lychee](http://l.electerious.com/uploads/big/075ac5de5b5d6c593acbb700f0e1d739.jpg)
 
@@ -70,7 +72,3 @@ Here's a list of all available Plugins and Extensions:
 ## Troubleshooting
 
 Take a look at the [FAQ](docs/FAQ.md) if you have problems. Discovered a bug? Please create an issue here on GitHub!
-
-## Donate
-
-I am working hard on continuously developing and maintaining Lychee. Please consider making a donation via PayPal (from [our site](http://lychee.electerious.com/)) to keep the project going strong and me motivated.
