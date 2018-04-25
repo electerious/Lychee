@@ -30,6 +30,21 @@ album.getID = function() {
 }
 
 album.load = function(albumID, refresh = false) {
+    $('.content').sortable({
+    	stop: function(event, ui){
+    		let albumID = ui.item.data('album-id');
+    		let photoOrder = $('.content').children().map(function(){
+                return $(this).data('id');
+            }).get();
+            let params = {
+                albumID: albumID,
+				photoOrder: photoOrder
+            };
+            api.post('Album::setPosition', params, function(data) {
+            	if (data!==true) lychee.error(null, params, data)
+            })
+		}
+	});
 
 	password.get(albumID, function() {
 

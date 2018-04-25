@@ -344,6 +344,41 @@ final class Album {
 
 	}
 
+	public function setPosition(){
+		// Check dependencies
+		Validator::required(isset($_POST['photoOrder']), __METHOD__);
+
+		// Call plugins
+		Plugins::get()->activate(__METHOD__, 0, func_get_args());
+
+		$id_list = implode(',', $_POST['photoOrder']);
+		$indices = [];
+		$size = count(explode(',',$id_list));
+		for($i = 0; $i < $size; $i++){
+			$indices[$i] = $i;
+		}
+
+		$whens = implode(
+			"  ",
+			array_map(
+				function ($id, $value) {
+					return "WHEN {$id} THEN {$value}";
+				},
+				explode(',',$id_list),
+				$indices
+			)
+		);
+
+		$query  = Database::prepare(Database::get(), "UPDATE ? SET position = CASE id ? END WHERE id IN (?)", array(LYCHEE_TABLE_PHOTOS, $whens, $id_list));
+		$result = Database::execute(Database::get(), $query, __METHOD__, __LINE__);
+
+		// Call plugins
+		Plugins::get()->activate(__METHOD__, 1, func_get_args());
+
+		if ($result===false) return false;
+		return true;
+	}
+
 	/**
 	 * @return boolean Returns true when successful.
 	 */
