@@ -3,6 +3,9 @@
 namespace Lychee\Modules;
 
 use ZipArchive;
+use ZipStream;
+use ZipStream\Option\Archive as ArchiveOptions;
+
 
 final class Album {
 
@@ -239,14 +242,17 @@ final class Album {
 		// Escape title
 		$zipTitle = $this->cleanZipName($zipTitle);
 
-		$filename = LYCHEE_DATA . $zipTitle . '.zip';
+		//$filename = LYCHEE_DATA . $zipTitle . '.zip';
+        // Name zips by ID to ensure no collisions
+		$filename = LYCHEE_DATA . $this->albumIDs . '.zip';
 
-		// Create zip
-		$zip = new ZipArchive();
-		if ($zip->open($filename, ZIPARCHIVE::CREATE)!==TRUE) {
-			Log::error(Database::get(), __METHOD__, __LINE__, 'Could not create ZipArchive');
-			return false;
-		}
+		// Create zip stream
+        $opt = new ArchiveOptions();
+        $opt->setDeflateLevel(1);
+
+		header("Content-Type: application/zip");
+		header("Content-Disposition: attachment; filename=\"$zipTitle.zip\"");
+        $zip = new ZipStream\ZipStream("$zipTitle.zip", $opt);
 
 		// Add photos to zip
 		switch($this->albumIDs) {
@@ -260,17 +266,7 @@ final class Album {
 				break;
 		}
 
-		// Finish zip
-		$zip->close();
-
-		// Send zip
-		header("Content-Type: application/zip");
-		header("Content-Disposition: attachment; filename=\"$zipTitle.zip\"");
-		header("Content-Length: " . filesize($filename));
-		readfile($filename);
-
-		// Delete zip
-		unlink($filename);
+        $zip->finish();
 
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 1, func_get_args());
@@ -351,7 +347,8 @@ final class Album {
 			$files[] = $zipFileName;
 
 			// Add photo to zip
-			$zip->addFile($photo->url, $zipFileName);
+			//$zip->addFile($photo->url, $zipFileName);
+			$zip->addFileFromPath($zipFileName, $photo->url);
 
 		}
 

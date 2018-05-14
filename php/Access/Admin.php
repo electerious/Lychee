@@ -63,9 +63,9 @@ final class Admin extends Access {
 			case 'Album::getArchive':       self::getAlbumArchiveAction(); break;
 			case 'Photo::getArchive':       self::getPhotoArchiveAction(); break;
 
+            default:  self::fnNotFound($fn);
 		}
-
-		self::fnNotFound();
+		//self::fnNotFound($fn);
 
 	}
 
