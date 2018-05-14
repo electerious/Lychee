@@ -27,6 +27,7 @@ require(__DIR__ . '/helpers/getGraphHeader.php');
 require(__DIR__ . '/helpers/getHashedString.php');
 require(__DIR__ . '/helpers/hasPermissions.php');
 require(__DIR__ . '/helpers/search.php');
+require(__DIR__ . '/MyCLabs/Enum.php');
 
 // Define the called function
 if (isset($_POST['function']))     $fn = $_POST['function'];
