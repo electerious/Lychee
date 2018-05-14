@@ -36,7 +36,7 @@ final class Guest extends Access {
 
 		}
 
-		self::fnNotFound();
+		self::fnNotFound($fn);
 
 	}
 
