@@ -1,5 +1,7 @@
 # Lychee
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/electerious/Lychee.svg)](https://greenkeeper.io/)
+
 #### A great looking and easy-to-use photo-management-system.
 
 *Since the 1st of April 2018 this project has moved to it's own Organisation (https://github.com/LycheeOrg) where people are able to submit their fixes to it. We, the Organisation owners, want to thank electerious (Tobias Reich) for the opportunity to make this project live on.*
