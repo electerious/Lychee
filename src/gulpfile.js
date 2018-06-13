@@ -83,6 +83,7 @@ paths.main = {
 	],
 	scripts: [
 		'node_modules/jquery/dist/jquery.min.js',
+        'node_modules/jquery-ui-dist/jquery-ui.min.js',
 		'node_modules/mousetrap/mousetrap.min.js',
 		'node_modules/mousetrap/plugins/global-bind/mousetrap-global-bind.min.js',
 		'node_modules/basiccontext/dist/basicContext.min.js',

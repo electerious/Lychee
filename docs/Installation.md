@@ -27,7 +27,7 @@ You can also use the [direct download](https://github.com/electerious/Lychee/arc
 
 Change the permissions of `uploads/`, `data/` and all their subfolders. Sufficient read/write privileges are required.
 
-	chmod -R 777 uploads/ data/
+	chmod -R 750 uploads/ data/
 
 ### 4. Finish
 

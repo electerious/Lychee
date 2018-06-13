@@ -2,8 +2,10 @@
 
 #### A great looking and easy-to-use photo-management-system.
 
-![Lychee](http://l.electerious.com/uploads/big/c4b58cb87d95aeaed78fdca581cc908c.jpg)
-![Lychee](http://l.electerious.com/uploads/big/075ac5de5b5d6c593acbb700f0e1d739.jpg)
+*Since the 1st of April 2018 this project has moved to it's own Organisation (https://github.com/LycheeOrg) where people are able to submit their fixes to it. We, the Organisation owners, want to thank electerious (Tobias Reich) for the opportunity to make this project live on.*
+
+![Lychee](https://s.electerious.com/images/lychee/1.jpeg)
+![Lychee](https://s.electerious.com/images/lychee/2.jpeg)
 
 Lychee is a free photo-management tool, which runs on your server or web-space. Installing is a matter of seconds. Upload, manage and share photos like from a native application. Lychee comes with everything you need and all your photos are stored securely. Try the [Live Demo](http://ld.electerious.com) or read more on our [Website](http://lychee.electerious.com).
 
@@ -17,7 +19,7 @@ You can use Lychee right after the installation. Here are some advanced features
 
 ### Settings
 
-Sign in and click the gear on the top left corner to change your settings. If you want to edit them manually: MySQL details are stored in `data/config.php`. Other options and hidden settings are stored directly in the database. [Settings &#187;](docs/Settings.md)
+Sign in and click the gear in the top left corner to change your settings. If you want to edit them manually: MySQL details are stored in `data/config.php`. Other options and hidden settings are stored directly in the database. [Settings &#187;](docs/Settings.md)
 
 ### Update
 
@@ -29,7 +31,7 @@ Lychee is ready to use, right out of the box. If you want to contribute and edit
 
 ### Keyboard Shortcuts
 
-These shortcuts will help you to use Lychee even faster. [Keyboard Shortcuts &#187;](docs/Keyboard Shortcuts.md)
+These shortcuts will help you to use Lychee even faster. [Keyboard Shortcuts &#187;](docs/Keyboard%20Shortcuts.md)
 
 ### Dropbox import
 
@@ -45,13 +47,13 @@ Lychee uses [Imagick](http://www.imagemagick.org) when installed on your server.
 
 ### Docker
 
-Browse the [Docker Hub Registry](https://hub.docker.com/r/kdelfour/lychee-docker/) for various automated Lychee-Docker builds. We recommed to use [lychee-docker](https://hub.docker.com/r/kdelfour/lychee-docker/) by [kdelfour](https://github.com/kdelfour).
+Browse the [Docker Hub Registry](https://hub.docker.com/r/kdelfour/lychee-docker/) for various automated Lychee-Docker builds. We recommend using [lychee-docker](https://hub.docker.com/r/kdelfour/lychee-docker/) by [kdelfour](https://github.com/kdelfour).
 
 ### Plugins and Extensions
 
-The plugin-system of Lychee allows you to execute scripts, when a certain action fires. Plugins are hooks, which are injected directly into Lychee. [Plugin documentation &#187;](docs/Plugins.md)
+The plugin-system of Lychee allows you to execute scripts when a certain action fires. Plugins are hooks, which are injected directly into Lychee. [Plugin documentation &#187;](docs/Plugins.md)
 
-It's also possible to build extensions upon Lychee. The way to do so isn't documented and can change every time. We recommend to use the plugin-system, when possible.
+It's also possible to build extensions upon Lychee. The way to do so isn't documented and can change every time. We recommend using the plugin-system, when possible.
 
 Here's a list of all available Plugins and Extensions:
 
@@ -70,7 +72,3 @@ Here's a list of all available Plugins and Extensions:
 ## Troubleshooting
 
 Take a look at the [FAQ](docs/FAQ.md) if you have problems. Discovered a bug? Please create an issue here on GitHub!
-
-## Donate
-
-I am working hard on continuously developing and maintaining Lychee. Please consider making a donation via PayPal (from [our site](http://lychee.electerious.com/)) to keep the project going strong and me motivated.

@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS `?` (
   `album` bigint(20) unsigned NOT NULL,
   `checksum` char(40) DEFAULT NULL,
   `medium` tinyint(1) NOT NULL DEFAULT '0',
+  `position` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `Index_album` (`album`),
   KEY `Index_star` (`star`)
