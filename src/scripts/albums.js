@@ -16,7 +16,14 @@ albums.load = function() {
 
 	if (albums.json===null) {
 
-		api.post('Albums::get', {}, function(data) {
+		params = {}
+		filterParams = filter.getFilterParams ()
+		if (filterParams !== null)
+		{
+			params.filterParams = filterParams;
+		}
+
+		api.post('Albums::get', params, function(data) {
 
 			let waitTime = 0
 

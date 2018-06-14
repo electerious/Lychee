@@ -15,7 +15,14 @@ view.albums = {
 
 	title: function() {
 
-		lychee.setTitle('Albums', false)
+		if (filter.isFilterActive())
+		{
+			lychee.setTitle('Albums (filtered)', false)
+		}
+		else
+		{
+			lychee.setTitle('Albums', false)
+		}
 
 	},
 
@@ -114,24 +121,35 @@ view.album = {
 
 		if ((visible.album() || !album.json.init) && !visible.photo()) {
 
+			title = '';
+			editable = false;
+
 			switch (album.getID()) {
 				case 'f':
-					lychee.setTitle('Starred', false)
+					title = 'Starred'
 					break
 				case 's':
-					lychee.setTitle('Public', false)
+					title = 'Public'
 					break
 				case 'r':
-					lychee.setTitle('Recent', false)
+					title = 'Recent'
 					break
 				case '0':
-					lychee.setTitle('Unsorted', false)
+					title = 'Unsorted'
 					break
 				default:
-					if (album.json.init) sidebar.changeAttr('title', album.json.title)
-					lychee.setTitle(album.json.title, true)
+					title = album.json.title
+					editable = true
 					break
 			}
+
+			if (filter.isFilterActive())
+			{
+				title += " (filtered)"
+			}
+
+			if (editable && album.json.init) sidebar.changeAttr('title', title)
+			lychee.setTitle(title, editable)
 
 		}
 
@@ -147,7 +165,10 @@ view.album = {
 
 				// Build photos
 				$.each(album.json.content, function() {
-					photosData += build.photo(this)
+					if (filter.checkPhoto (this))
+					{
+						photosData += build.photo(this)
+					}
 				})
 
 			}
