@@ -60,8 +60,11 @@ if (!empty($fn)) {
 	}
 
 	// Check if user is logged
-	if ((isset($_SESSION['login'])&&$_SESSION['login']===true)&&
-		(isset($_SESSION['identifier'])&&$_SESSION['identifier']===Settings::get()['identifier'])) {
+	$status = (isset($_SESSION['login'])&&$_SESSION['login']===true)&&
+		(isset($_SESSION['identifier'])&&$_SESSION['identifier']===Settings::get()['identifier']);
+
+	// Use identifier to access api
+	if ($status || ($_POST['identifier']===Settings::get()['identifier'])) {
 
 		/**
 		 * Admin Access
