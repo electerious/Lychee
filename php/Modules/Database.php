@@ -80,10 +80,16 @@ final class Database {
 	 * @return object|false Returns the connection when successful.
 	 */
 	public static function connect($host = 'localhost', $user, $password) {
-
-		// Open a new connection to the MySQL server
-		$connection = @new Mysqli($host, $user, $password);
-
+        
+        // Load the database settings from the environment variables passed to the docker container
+        $host = getenv('MYSQL_HOST');
+        $dbname = getenv('MYSQL_DB_NAME');
+        $user = getenv('MYSQL_USER');
+        $password = getenv('MYSQL_PASSWORD');
+        $port = getenv('MYSQL_PORT');
+        
+        $connection = @new \mysqli($host, $user, $password, $dbname, $port);
+        
 		// Check if the connection was successful
 		if ($connection->connect_errno) return false;
 
@@ -125,7 +131,10 @@ final class Database {
 	 * @return boolean Returns true when successful.
 	 */
 	public static function createDatabase($connection, $name = 'lychee') {
-
+        
+        // Override whatever the user fills in with whatever is in the settings file.
+        $name = getenv('MYSQL_DB_NAME');
+        
 		// Check dependencies
 		Validator::required(isset($connection), __METHOD__);
 

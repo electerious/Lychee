@@ -1,7 +1,7 @@
 <?php
 
 // Define root
-define('LYCHEE', substr(__DIR__, 0, -3));
+define('LYCHEE', __DIR__ . '/../');
 
 // Define status
 define('LYCHEE_STATUS_NOCONFIG', 0);

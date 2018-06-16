@@ -1,0 +1,22 @@
+# If you want to have the image pushed to your private registry, put it here.
+#REGISTRY="docker-registry.mydomain.org:5000"
+
+# If you want to hav the image be pushed to your public dockerhub, just use your username instead
+#REGISTRY="myUsername"
+
+# If you don't uncomment one of the REGISTRY options above, then the image just won't get pushed.
+
+# Set the name for this in your registry. You probably want to leave this as lychee
+PROJECT_NAME="lychee"
+
+
+# Specify where you want your volume data. 
+VOLUME_DIR="$HOME/lychee-volume"
+
+
+# Specify the database details.
+MYSQL_HOST="lychee.mydomain.com"
+MYSQL_DB_NAME="lychee"
+MYSQL_USER="lychee"
+MYSQL_PASSWORD="myPassword"
+MYSQL_PORT=3306
