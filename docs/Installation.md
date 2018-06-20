@@ -9,7 +9,6 @@ To use Lychee without restrictions, we recommend to increase the values of the f
 
 	max_execution_time = 200
 	post_max_size = 100M
-	upload_max_size = 100M
 	upload_max_filesize = 20M
 	memory_limit = 256M
 	
