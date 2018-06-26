@@ -42,7 +42,6 @@ final class Photo {
 	 * @return string|false ID of the added photo.
 	 */
 	public function add(array $files, $albumID = 0, $returnOnError = false) {
-
 		// Check permissions
 		if (hasPermissions(LYCHEE_UPLOADS)===false||
 			hasPermissions(LYCHEE_UPLOADS_BIG)===false||
@@ -84,6 +83,7 @@ final class Photo {
 				break;
 
 		}
+
 
 		// Only process the first photo in the array
 		$file = $files[0];
@@ -131,8 +131,15 @@ final class Photo {
 			Response::error('Photo format not supported!');
 		}
 
-		// Verify image
-		$type = @exif_imagetype($file['tmp_name']);
+    // Verify image
+    if (!function_exists("exif_imagetype")) {
+      Log::error(Database::get(), __METHOD__, __LINE__, 'EXIF library not loaded. Make sure exif is enabled in php.ini');
+      if ($returnOnError===true) return false;
+			Response::error('EXIF library not loaded on the server!');
+    }
+
+    $type = @exif_imagetype($file['tmp_name']);
+   
 		if (!in_array($type, self::$validTypes, true)) {
 			Log::error(Database::get(), __METHOD__, __LINE__, 'Photo type not supported');
 			if ($returnOnError===true) return false;
