@@ -25,7 +25,7 @@ function getGraphHeader($photoID) {
 
 	$parseUrl = parse_url('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
 	$url      = '//' . $parseUrl['host'] . $parseUrl['path'] . '?' . $parseUrl['query'];
-	$picture  = '//' . $parseUrl['host'] . $parseUrl['path'] . '/../uploads/' . $dir . '/' . $row->url;
+	$picture  = 'http://' . $parseUrl['host'] . '/uploads/' . $dir . '/' . $row->url;
 
 	$url     = htmlentities($url);
 	$picture = htmlentities($picture);
@@ -39,9 +39,11 @@ function getGraphHeader($photoID) {
 	$return .= '<link rel="image_src" type="image/jpeg" href="' . $picture . '">';
 
 	$return .= '<!-- Twitter Meta Data -->';
-	$return .= '<meta name="twitter:card" content="photo">';
+	$return .= '<meta name="twitter:card" content="summary_large_image">';
 	$return .= '<meta name="twitter:title" content="' . $row->title . '">';
-	$return .= '<meta name="twitter:image:src" content="' . $picture . '">';
+	$return .= '<meta name="twitter:description" content="' . $row->description . ' - via Lychee">';
+	$return .= '<meta name="twitter:image" content="' . $picture . '">';
+	$return .= '<meta name="twitter:image:alt" content="' . $row->description . ' - via Lychee">';
 
 	$return .= '<!-- Facebook Meta Data -->';
 	$return .= '<meta property="og:title" content="' . $row->title . '">';

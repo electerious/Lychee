@@ -5,4 +5,3 @@ Disallow: /docs/
 Disallow: /php/
 Disallow: /plugins/
 Disallow: /src/
-Disallow: /uploads/
