@@ -230,7 +230,7 @@ final class Photo {
 			}
 
 			// Create Medium
-			if ($this->createMedium($path, $photo_name, $info['width'], $info['height'])) $medium = 1;
+			if ($this->createMedium($path, $photo_name, $info['type'], $info['width'], $info['height'])) $medium = 1;
 			else $medium = 0;
 
 			// Set thumb url
@@ -386,7 +386,7 @@ final class Photo {
 	 * Photo must be big enough and Imagick must be installed and activated.
 	 * @return boolean Returns true when successful.
 	 */
-	private function createMedium($url, $filename, $width, $height) {
+	private function createMedium($url, $filename, $type, $width, $height) {
 
 		// Excepts the following:
 		// (string) $url = Path to the photo-file
@@ -446,12 +446,29 @@ final class Photo {
 			$medium->destroy();
 
 		} else {
+			$newUrl = LYCHEE_UPLOADS_MEDIUM . $filename;
 
-			// Photo too small or
-			// Medium is deactivated or
-			// Imagick not installed
-			$error = true;
+			// Create image
+                        $newHeight = $newWidth/($width/$height);
+			$medium   = imagecreatetruecolor($newWidth, $newHeight);
 
+			// Create new image
+			switch($type) {
+				case 'image/jpeg': $sourceImg = imagecreatefromjpeg($url); break;
+				case 'image/png':  $sourceImg = imagecreatefrompng($url); break;
+				case 'image/gif':  $sourceImg = imagecreatefromgif($url); break;
+				default:           Log::error(Database::get(), __METHOD__, __LINE__, 'Type of photo is not supported');
+				                   return false;
+				                   break;
+			}
+
+			// Create retina thumb
+			imagecopyresampled($medium, $sourceImg, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+			imagejpeg($medium, $newUrl, $quality);
+			imagedestroy($medium);
+
+			// Free memory
+			imagedestroy($sourceImg);
 		}
 
 		// Call plugins
