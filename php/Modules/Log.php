@@ -34,7 +34,7 @@ final class Log {
 		$sysstamp = time();
 
 		// Save in database
-		$query  = Database::prepare($connection, "INSERT INTO ? (time, type, function, line, text) VALUES ('?', '?', '?', '?', '?')", array(LYCHEE_TABLE_LOG, $sysstamp, $type, $function, $line, $text));
+		$query  = Database::prepare($connection, "INSERT INTO ? (time, type, `function`, line, text) VALUES ('?', '?', '?', '?', '?')", array(LYCHEE_TABLE_LOG, $sysstamp, $type, $function, $line, $text));
 		$result = Database::execute($connection, $query, null, null);
 
 		if ($result===false) return false;

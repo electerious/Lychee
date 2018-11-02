@@ -32,7 +32,7 @@ if ((isset($_SESSION['login'])&&$_SESSION['login']===true)&&
 	(isset($_SESSION['identifier'])&&$_SESSION['identifier']===Settings::get()['identifier'])) {
 
 	// Result
-	$query  = Database::prepare(Database::get(), "SELECT FROM_UNIXTIME(time), type, function, line, text FROM ?", array(LYCHEE_TABLE_LOG));
+	$query  = Database::prepare(Database::get(), "SELECT FROM_UNIXTIME(time), type, `function`, line, text FROM ?", array(LYCHEE_TABLE_LOG));
 	$result = Database::get()->query($query);
 
 	// Output
