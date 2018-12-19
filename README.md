@@ -7,7 +7,7 @@
 ![Lychee](https://s.electerious.com/images/lychee/1.jpeg)
 ![Lychee](https://s.electerious.com/images/lychee/2.jpeg)
 
-Lychee is a free photo-management tool, which runs on your server or web-space. Installing is a matter of seconds. Upload, manage and share photos like from a native application. Lychee comes with everything you need and all your photos are stored securely. Try the [Live Demo](http://ld.electerious.com) or read more on our [Website](http://lychee.electerious.com).
+Lychee is a free photo-management tool, which runs on your server or web-space. Installing is a matter of seconds. Upload, manage and share photos like from a native application. Lychee comes with everything you need and all your photos are stored securely. Read more on our [website](http://lychee.electerious.com).
 
 ## Installation
 
