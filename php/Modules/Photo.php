@@ -396,9 +396,11 @@ final class Photo {
 
 		// Call plugins
 		Plugins::get()->activate(__METHOD__, 0, func_get_args());
+		// Get settings
+		$settings = Settings::get();
 
 		// Quality of medium-photo
-		$quality = 90;
+		$quality = isset($settings['mediumQuality']) ? $settings['mediumQuality'] : 90;
 
 		// Set to true when creation of medium-photo failed
 		$error = false;
@@ -406,8 +408,8 @@ final class Photo {
 		// Size of the medium-photo
 		// When changing these values,
 		// also change the size detection in the front-end
-		$newWidth  = 1920;
-		$newHeight = 1080;
+		$newWidth  = isset($settings['mediumWidth']) ? $settings['mediumWidth'] : 1920;
+		$newHeight = isset($settings['mediumHeight']) ? $settings['mediumHeight'] : 1080;
 
 		// Check permissions
 		if (hasPermissions(LYCHEE_UPLOADS_MEDIUM)===false) {
