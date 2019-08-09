@@ -40,7 +40,7 @@ To backup your Lychee installation you need to do the following steps:
 	- INSERT INTO lychee_settings_backup SELECT * FROM lychee_settings;
 
 #### Can I use my existing folder-structure?
-No. Lychee has it's own folder-structure and database. Please upload or import all your photos to use them.
+No. Lychee has its own folder-structure and database. Please upload or import all your photos to use them.
 
 #### Can I upload videos?
 No. Video support is not planned.
