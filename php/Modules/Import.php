@@ -59,11 +59,30 @@ final class Import {
 
 			// Verify image
 			$type = @exif_imagetype($url);
-			if (!in_array($type, Photo::$validTypes, true)) {
-				$error = true;
-				Log::error(Database::get(), __METHOD__, __LINE__, 'Photo type not supported (' . $url . ')');
-				continue;
+
+			if ($type !== false) {
+				if (!in_array($type, Photo::$validTypes, true)) {
+					$error = true;
+					Log::error(Database::get(), __METHOD__, __LINE__, 'Photo type not supported (' . $url . ')');
+					continue;
+				}
+			} else {
+				// when exif_imagetype fails, make one more attempt to detect mime type using getimagesize:
+				$type2 = @getimagesize($url);
+
+				if (isset($type2['mime'])) {
+					if (!in_array($type2['mime'], Photo::$validTypes2, true)) {
+						$error = true;
+						Log::error(Database::get(), __METHOD__, __LINE__, 'Photo type not supported (' . $url . ')');
+						continue;
+					}
+				} else {
+					$error = true;
+					Log::error(Database::get(), __METHOD__, __LINE__, 'Photo type not supported (' . $url . ')');
+					continue;
+				}
 			}
+
 
 			$filename = pathinfo($url, PATHINFO_FILENAME) . $extension;
 			$tmp_name = LYCHEE_DATA . $filename;
