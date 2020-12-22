@@ -137,6 +137,7 @@ if ((isset($_SESSION['login'])&&$_SESSION['login']===true)&&
 	echo('Imagick Version: ' . $imagickVersion . PHP_EOL);
 	echo('GD Version:      ' . $gdVersion['GD Version'] . PHP_EOL);
 	echo('Plugins:         ' . implode($settings['plugins'], ', ') . PHP_EOL);
+	echo('Server Addr:     ' . $_SERVER['SERVER_ADDR'] . PHP_EOL );
 
 } else {
 
